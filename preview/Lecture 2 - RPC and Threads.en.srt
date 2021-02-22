@@ -1,0 +1,7592 @@
+1
+00:00:01,199 --> 00:00:03,199
+yes okay good
+
+2
+00:00:03,199 --> 00:00:05,839
+uh okay so the topic for today is uh
+
+3
+00:00:05,839 --> 00:00:07,120
+threats in rpc
+
+4
+00:00:07,120 --> 00:00:10,719
+uh this is our second lecture in uh 6824
+
+5
+00:00:10,719 --> 00:00:12,400
+uh and we're going to mostly look at
+
+6
+00:00:12,400 --> 00:00:15,759
+threats and rpc in the context of go
+
+7
+00:00:15,759 --> 00:00:17,359
+programming language that we're using in
+
+8
+00:00:17,359 --> 00:00:19,279
+the labs and in fact
+
+9
+00:00:19,279 --> 00:00:21,520
+most of this lecture is really tailored
+
+10
+00:00:21,520 --> 00:00:22,880
+uh towards
+
+11
+00:00:22,880 --> 00:00:26,320
+helping you do go programming for
+
+12
+00:00:26,320 --> 00:00:30,160
+the labs that's all you've done
+
+13
+00:00:30,160 --> 00:00:32,800
+uh hopefully the tutorial and uh did the
+
+14
+00:00:32,800 --> 00:00:34,800
+crawler exercise which we'll uh discuss
+
+15
+00:00:34,800 --> 00:00:36,640
+in quite a bit of detail uh later in the
+
+16
+00:00:36,640 --> 00:00:37,600
+lecture
+
+17
+00:00:37,600 --> 00:00:39,520
+but before jumping into the details let
+
+18
+00:00:39,520 --> 00:00:41,280
+me you know do a little bit more of cold
+
+19
+00:00:41,280 --> 00:00:41,840
+calling
+
+20
+00:00:41,840 --> 00:00:44,000
+to break the ice and get people to ask
+
+21
+00:00:44,000 --> 00:00:45,120
+questions
+
+22
+00:00:45,120 --> 00:00:47,440
+uh so maybe you can answer the question
+
+23
+00:00:47,440 --> 00:00:48,399
+you know where are you
+
+24
+00:00:48,399 --> 00:00:50,800
+and how did you enjoy the tutorial what
+
+25
+00:00:50,800 --> 00:00:52,399
+is your first impressions of
+
+26
+00:00:52,399 --> 00:00:55,840
+go maybe i'll uh how about
+
+27
+00:00:55,840 --> 00:01:01,670
+even development
+
+28
+00:01:01,680 --> 00:01:04,720
+i'm batman i'm in newton which is uh on
+
+29
+00:01:04,720 --> 00:01:06,560
+the outskirts of greater boston
+
+30
+00:01:06,560 --> 00:01:08,479
+um tutorial was interesting it was my
+
+31
+00:01:08,479 --> 00:01:10,240
+first exposure to
+
+32
+00:01:10,240 --> 00:01:10,640
+you know a non-object
+
+33
+00:01:10,640 --> 00:01:13,600
+non-object-oriented language um so it's
+
+34
+00:01:13,600 --> 00:01:14,880
+uh it's kind of a change a
+
+35
+00:01:14,880 --> 00:01:16,880
+change in framework that that was
+
+36
+00:01:16,880 --> 00:01:19,360
+interesting to adapt to
+
+37
+00:01:19,360 --> 00:01:28,310
+how about uh brandon wall
+
+38
+00:01:28,320 --> 00:01:30,880
+brandon are you there yeah i'm sorry i
+
+39
+00:01:30,880 --> 00:01:31,600
+was just finding
+
+40
+00:01:31,600 --> 00:01:32,880
+the mute button sorry what was the
+
+41
+00:01:32,880 --> 00:01:34,720
+question i just joined oh yeah
+
+42
+00:01:34,720 --> 00:01:35,920
+where are you and what is your first
+
+43
+00:01:35,920 --> 00:01:38,159
+impressions of go um
+
+44
+00:01:38,159 --> 00:01:40,320
+yeah it's i had used go before for an
+
+45
+00:01:40,320 --> 00:01:41,600
+internship but it's my first time
+
+46
+00:01:41,600 --> 00:01:42,000
+actually
+
+47
+00:01:42,000 --> 00:01:43,759
+dealing with the concurrency stuff i
+
+48
+00:01:43,759 --> 00:01:45,520
+like like really working with go routine
+
+49
+00:01:45,520 --> 00:01:46,240
+so
+
+50
+00:01:46,240 --> 00:01:49,040
+um kind of initially was like tricky to
+
+51
+00:01:49,040 --> 00:01:50,320
+think through like
+
+52
+00:01:50,320 --> 00:01:53,119
+um like as soon as the main thread ends
+
+53
+00:01:53,119 --> 00:01:55,280
+all to go routines are ended so kind of
+
+54
+00:01:55,280 --> 00:01:56,640
+working through those early kind of
+
+55
+00:01:56,640 --> 00:01:58,159
+conceptual issues but it's it's
+
+56
+00:01:58,159 --> 00:01:58,799
+interesting
+
+57
+00:01:58,799 --> 00:02:00,799
+to kind of think through okay how about
+
+58
+00:02:00,799 --> 00:02:13,110
+the conor prisby
+
+59
+00:02:13,120 --> 00:02:19,030
+connor are you there
+
+60
+00:02:19,040 --> 00:02:22,400
+oh yeah maybe try somebody else uh dory
+
+61
+00:02:22,400 --> 00:02:27,030
+shin
+
+62
+00:02:27,040 --> 00:02:30,080
+hi uh i'm in cambridge right now and
+
+63
+00:02:30,080 --> 00:02:31,920
+i found go to be real uh pretty
+
+64
+00:02:31,920 --> 00:02:33,200
+interesting i thought like
+
+65
+00:02:33,200 --> 00:02:34,640
+go through like the first part of the
+
+66
+00:02:34,640 --> 00:02:36,239
+tutorial i like
+
+67
+00:02:36,239 --> 00:02:37,599
+like learning about the for loops and
+
+68
+00:02:37,599 --> 00:02:39,599
+the way they do for loops i thought that
+
+69
+00:02:39,599 --> 00:02:40,959
+was pretty interesting and like
+
+70
+00:02:40,959 --> 00:02:42,959
+the way it's kind of structured i think
+
+71
+00:02:42,959 --> 00:02:44,959
+that i like
+
+72
+00:02:44,959 --> 00:02:48,080
+the threads and um i found to be
+
+73
+00:02:48,080 --> 00:02:49,519
+a little bit like more difficult about
+
+74
+00:02:49,519 --> 00:02:51,120
+like when it ended and like
+
+75
+00:02:51,120 --> 00:02:53,440
+when um like sometimes like the function
+
+76
+00:02:53,440 --> 00:02:55,040
+would end before all the routines like
+
+77
+00:02:55,040 --> 00:02:55,920
+ended so
+
+78
+00:02:55,920 --> 00:02:58,080
+that was like interesting to think about
+
+79
+00:02:58,080 --> 00:02:59,440
+and like i learned more about that so
+
+80
+00:02:59,440 --> 00:03:01,680
+it's pretty cool i liked it
+
+81
+00:03:01,680 --> 00:03:03,280
+well i hope all of you going to have a
+
+82
+00:03:03,280 --> 00:03:04,720
+very positive experience
+
+83
+00:03:04,720 --> 00:03:08,400
+with go uh in the semester
+
+84
+00:03:08,400 --> 00:03:10,800
+um and uh so let me say a little bit
+
+85
+00:03:10,800 --> 00:03:11,680
+like you know
+
+86
+00:03:11,680 --> 00:03:15,360
+why go um in principle you know there
+
+87
+00:03:15,360 --> 00:03:16,159
+are a lot of
+
+88
+00:03:16,159 --> 00:03:17,440
+programming languages that you could
+
+89
+00:03:17,440 --> 00:03:18,959
+have used for doing distributed
+
+90
+00:03:18,959 --> 00:03:20,560
+programming and goals are absolutely not
+
+91
+00:03:20,560 --> 00:03:21,760
+the only one
+
+92
+00:03:21,760 --> 00:03:24,560
+but some reasons why we uh why we chose
+
+93
+00:03:24,560 --> 00:03:26,319
+go in a24
+
+94
+00:03:26,319 --> 00:03:28,000
+uh you know first of all it has good
+
+95
+00:03:28,000 --> 00:03:30,239
+support
+
+96
+00:03:30,239 --> 00:03:33,519
+for frets and rpc
+
+97
+00:03:33,519 --> 00:03:36,799
+and those two are very important for
+
+98
+00:03:36,799 --> 00:03:38,319
+distributed programming
+
+99
+00:03:38,319 --> 00:03:41,680
+so it makes sense to you know ghost is a
+
+100
+00:03:41,680 --> 00:03:42,959
+good match for that
+
+101
+00:03:42,959 --> 00:03:44,560
+second reason that we like it a lot is
+
+102
+00:03:44,560 --> 00:03:46,239
+you know they have a garbage collector
+
+103
+00:03:46,239 --> 00:03:48,319
+and if you do a shared memory style
+
+104
+00:03:48,319 --> 00:03:51,120
+parallelism where multiple threads share
+
+105
+00:03:51,120 --> 00:03:54,319
+a structure or a variable then having a
+
+106
+00:03:54,319 --> 00:03:55,439
+garbage collector
+
+107
+00:03:55,439 --> 00:03:57,040
+is nice because then the frets don't
+
+108
+00:03:57,040 --> 00:03:58,959
+have to decide who's the last
+
+109
+00:03:58,959 --> 00:04:00,720
+fret that actually has a reference to
+
+110
+00:04:00,720 --> 00:04:02,640
+this memory and should therefore be
+
+111
+00:04:02,640 --> 00:04:03,599
+allocated
+
+112
+00:04:03,599 --> 00:04:05,360
+the guards collector just takes care of
+
+113
+00:04:05,360 --> 00:04:06,799
+all those problems
+
+114
+00:04:06,799 --> 00:04:12,869
+so that's convenient let's type safe
+
+115
+00:04:12,879 --> 00:04:16,720
+uh it is simple it's a
+
+116
+00:04:16,720 --> 00:04:18,400
+reasonable simple programming language
+
+117
+00:04:18,400 --> 00:04:19,840
+quite easy to learn
+
+118
+00:04:19,840 --> 00:04:21,759
+and in fact you know ideas hopefully you
+
+119
+00:04:21,759 --> 00:04:22,960
+got that experience with doing the go
+
+120
+00:04:22,960 --> 00:04:24,320
+tutorial that you know once you do the
+
+121
+00:04:24,320 --> 00:04:25,919
+go tutorial you mostly you know you got
+
+122
+00:04:25,919 --> 00:04:27,360
+most of go
+
+123
+00:04:27,360 --> 00:04:29,919
+um and then finally it actually has a
+
+124
+00:04:29,919 --> 00:04:32,320
+compiler so it's compiled
+
+125
+00:04:32,320 --> 00:04:35,440
+unlike python or uh
+
+126
+00:04:35,440 --> 00:04:37,600
+you know actually the compiler produces
+
+127
+00:04:37,600 --> 00:04:39,440
+actually youtube code and so the runtime
+
+128
+00:04:39,440 --> 00:04:40,840
+overhead is not as
+
+129
+00:04:40,840 --> 00:04:44,240
+large um i guess sort of the final
+
+130
+00:04:44,240 --> 00:04:44,960
+reason why
+
+131
+00:04:44,960 --> 00:04:47,520
+you're from e24 is in uh it goes because
+
+132
+00:04:47,520 --> 00:04:48,400
+i enjoy
+
+133
+00:04:48,400 --> 00:04:51,360
+writing go programs and so that may be
+
+134
+00:04:51,360 --> 00:04:54,080
+also an important reason
+
+135
+00:04:54,080 --> 00:04:56,160
+um so what i'm going to do is i'm going
+
+136
+00:04:56,160 --> 00:04:57,199
+to talk a little bit about
+
+137
+00:04:57,199 --> 00:05:00,479
+threads in general rpc in general and
+
+138
+00:05:00,479 --> 00:05:01,919
+you know talk a little bit about
+
+139
+00:05:01,919 --> 00:05:04,720
+uh different aspects of programming with
+
+140
+00:05:04,720 --> 00:05:05,520
+threads
+
+141
+00:05:05,520 --> 00:05:08,160
+some of this is pretty tutorial uh if
+
+142
+00:05:08,160 --> 00:05:10,400
+you have seen this before uh
+
+143
+00:05:10,400 --> 00:05:12,479
+you know my apologies i'm going to go
+
+144
+00:05:12,479 --> 00:05:13,840
+reasonably quickly through it
+
+145
+00:05:13,840 --> 00:05:15,680
+it's definitely not a comprehensive
+
+146
+00:05:15,680 --> 00:05:17,680
+introduction to concurrent programming
+
+147
+00:05:17,680 --> 00:05:19,600
+but just hopefully enough to remind you
+
+148
+00:05:19,600 --> 00:05:20,720
+what the issues are
+
+149
+00:05:20,720 --> 00:05:22,800
+and what you should look out for and
+
+150
+00:05:22,800 --> 00:05:24,080
+we'll hopefully spend some time
+
+151
+00:05:24,080 --> 00:05:26,400
+uh quite a bit of time on the crawler
+
+152
+00:05:26,400 --> 00:05:27,759
+and so
+
+153
+00:05:27,759 --> 00:05:29,840
+i'll share you uh the solution that i
+
+154
+00:05:29,840 --> 00:05:31,360
+have two solutions one using channels
+
+155
+00:05:31,360 --> 00:05:32,479
+and one's using
+
+156
+00:05:32,479 --> 00:05:34,240
+new texas and we'll go through both of
+
+157
+00:05:34,240 --> 00:05:36,000
+them
+
+158
+00:05:36,000 --> 00:05:44,870
+any questions so far before i dive in
+
+159
+00:05:44,880 --> 00:05:49,990
+okay let me get started with frets
+
+160
+00:05:50,000 --> 00:05:51,840
+so fred is basically short hands off the
+
+161
+00:05:51,840 --> 00:05:57,350
+threat of execution
+
+162
+00:05:57,360 --> 00:06:00,720
+uh in uh go a friend is called the go
+
+163
+00:06:00,720 --> 00:06:01,520
+routine
+
+164
+00:06:01,520 --> 00:06:03,520
+uh but everybody else basically in the
+
+165
+00:06:03,520 --> 00:06:06,080
+world goes uh calls a threat of threat
+
+166
+00:06:06,080 --> 00:06:07,520
+and so the way you think about it is
+
+167
+00:06:07,520 --> 00:06:09,520
+that like when you uh
+
+168
+00:06:09,520 --> 00:06:12,400
+do go run now the go will create a
+
+169
+00:06:12,400 --> 00:06:12,960
+process
+
+170
+00:06:12,960 --> 00:06:15,680
+you know on your operating system and
+
+171
+00:06:15,680 --> 00:06:17,280
+inside of that process is you know the
+
+172
+00:06:17,280 --> 00:06:20,000
+goal runtime system
+
+173
+00:06:20,000 --> 00:06:21,759
+when go starts it actually has one
+
+174
+00:06:21,759 --> 00:06:23,759
+thread of execution in the main fret
+
+175
+00:06:23,759 --> 00:06:25,840
+and but then it has primitives to create
+
+176
+00:06:25,840 --> 00:06:27,360
+new threads and so you can think about
+
+177
+00:06:27,360 --> 00:06:28,720
+this those are many many threads of
+
+178
+00:06:28,720 --> 00:06:30,000
+execution
+
+179
+00:06:30,000 --> 00:06:32,639
+you know running in parallel and you can
+
+180
+00:06:32,639 --> 00:06:34,160
+think about a single thread as basically
+
+181
+00:06:34,160 --> 00:06:34,880
+sort of a
+
+182
+00:06:34,880 --> 00:06:37,440
+sequential program running so the
+
+183
+00:06:37,440 --> 00:06:38,560
+program has a
+
+184
+00:06:38,560 --> 00:06:42,400
+program counter has its own stack
+
+185
+00:06:42,400 --> 00:06:47,749
+it has its own set of registers
+
+186
+00:06:47,759 --> 00:06:49,280
+and so this behaves like a sequential
+
+187
+00:06:49,280 --> 00:06:51,280
+program like you can
+
+188
+00:06:51,280 --> 00:06:53,039
+execute structure one then extrusion two
+
+189
+00:06:53,039 --> 00:06:54,560
+then structure three and four you're
+
+190
+00:06:54,560 --> 00:06:54,880
+gonna
+
+191
+00:06:54,880 --> 00:06:56,800
+make a procedure call allocate memory on
+
+192
+00:06:56,800 --> 00:06:58,000
+the stack i don't know
+
+193
+00:06:58,000 --> 00:07:00,000
+return from a procedure call do a
+
+194
+00:07:00,000 --> 00:07:01,039
+recursive call
+
+195
+00:07:01,039 --> 00:07:02,479
+all sorts of standards if you want to
+
+196
+00:07:02,479 --> 00:07:03,840
+tell your programming it's just like
+
+197
+00:07:03,840 --> 00:07:05,759
+happens about a as a sequential thread
+
+198
+00:07:05,759 --> 00:07:07,919
+basically
+
+199
+00:07:07,919 --> 00:07:10,080
+um the interesting thing is that you
+
+200
+00:07:10,080 --> 00:07:11,759
+know the threads may actually share
+
+201
+00:07:11,759 --> 00:07:12,720
+memory
+
+202
+00:07:12,720 --> 00:07:16,080
+uh with other threads
+
+203
+00:07:16,080 --> 00:07:18,960
+since uh all the threads are running in
+
+204
+00:07:18,960 --> 00:07:20,240
+the same address space
+
+205
+00:07:20,240 --> 00:07:22,080
+uh the same operating system address
+
+206
+00:07:22,080 --> 00:07:24,720
+space or the same process address space
+
+207
+00:07:24,720 --> 00:07:27,599
+uh they can actually share uh memory so
+
+208
+00:07:27,599 --> 00:07:29,360
+one thread can write
+
+209
+00:07:29,360 --> 00:07:31,680
+to location say you know 10 and then
+
+210
+00:07:31,680 --> 00:07:32,960
+another thread can actually read that
+
+211
+00:07:32,960 --> 00:07:33,759
+location 10.
+
+212
+00:07:33,759 --> 00:07:35,120
+and so that way they can actually
+
+213
+00:07:35,120 --> 00:07:38,870
+communicate information
+
+214
+00:07:38,880 --> 00:07:41,840
+one way to think about a fret 2 is to
+
+215
+00:07:41,840 --> 00:07:43,039
+think about it as a sort of an
+
+216
+00:07:43,039 --> 00:07:45,199
+abstraction that you know supported by
+
+217
+00:07:45,199 --> 00:07:47,199
+the run time and the runtime has a
+
+218
+00:07:47,199 --> 00:07:49,440
+number of operations on a threat so one
+
+219
+00:07:49,440 --> 00:07:50,400
+operation
+
+220
+00:07:50,400 --> 00:07:52,560
+uh you know what i've seen many times if
+
+221
+00:07:52,560 --> 00:07:53,759
+you've seen that many times is to
+
+222
+00:07:53,759 --> 00:07:55,039
+actually start a fraction of a creative
+
+223
+00:07:55,039 --> 00:07:56,960
+threat you know this is the goal
+
+224
+00:07:56,960 --> 00:08:00,479
+uh synthetic you know the go uh keyword
+
+225
+00:08:00,479 --> 00:08:04,160
+uh a thread can exit and generally this
+
+226
+00:08:04,160 --> 00:08:05,520
+means the axis is actually sort of
+
+227
+00:08:05,520 --> 00:08:07,520
+implicit like when the threat returns
+
+228
+00:08:07,520 --> 00:08:11,110
+uh uh from its
+
+229
+00:08:11,120 --> 00:08:13,680
+if uh you create a function using go uh
+
+230
+00:08:13,680 --> 00:08:14,240
+the go
+
+231
+00:08:14,240 --> 00:08:16,080
+uh keyword and you know you return out
+
+232
+00:08:16,080 --> 00:08:17,919
+of the function then implicitly the
+
+233
+00:08:17,919 --> 00:08:19,599
+thread actually exits
+
+234
+00:08:19,599 --> 00:08:21,680
+um the go runtime also has a couple
+
+235
+00:08:21,680 --> 00:08:23,440
+other uh sort of under the hoods
+
+236
+00:08:23,440 --> 00:08:25,039
+operations if you will
+
+237
+00:08:25,039 --> 00:08:27,599
+one it can actually stop a threat for
+
+238
+00:08:27,599 --> 00:08:29,360
+example if a threat writes to
+
+239
+00:08:29,360 --> 00:08:32,000
+a channel and there's no reader on the
+
+240
+00:08:32,000 --> 00:08:33,120
+channel yet then
+
+241
+00:08:33,120 --> 00:08:35,440
+the threat might get blocked and so the
+
+242
+00:08:35,440 --> 00:08:37,279
+go runtime sort of stops the threat you
+
+243
+00:08:37,279 --> 00:08:38,959
+know puts it aside
+
+244
+00:08:38,959 --> 00:08:40,159
+so that it can actually run another
+
+245
+00:08:40,159 --> 00:08:42,320
+thread on that on the processor
+
+246
+00:08:42,320 --> 00:08:44,800
+uh and then maybe later on resumes that
+
+247
+00:08:44,800 --> 00:08:45,600
+thread so
+
+248
+00:08:45,600 --> 00:08:47,839
+there's a third you know final primitive
+
+249
+00:08:47,839 --> 00:08:49,920
+that actually is resumed for this
+
+250
+00:08:49,920 --> 00:08:51,519
+and really what it means to stop resume
+
+251
+00:08:51,519 --> 00:08:52,959
+thread is basically taking the state of
+
+252
+00:08:52,959 --> 00:08:54,880
+the thread like the program counter
+
+253
+00:08:54,880 --> 00:08:56,800
+the stack pointer in the registration
+
+254
+00:08:56,800 --> 00:08:58,480
+put it inside
+
+255
+00:08:58,480 --> 00:09:00,000
+run another you know thread on the
+
+256
+00:09:00,000 --> 00:09:01,920
+processor and then at some point you
+
+257
+00:09:01,920 --> 00:09:03,440
+know decided to resume the processor
+
+258
+00:09:03,440 --> 00:09:04,720
+which means basically loading the
+
+259
+00:09:04,720 --> 00:09:06,320
+program count at the stack pointer and
+
+260
+00:09:06,320 --> 00:09:08,000
+the registers back into the process so
+
+261
+00:09:08,000 --> 00:09:08,399
+that
+
+262
+00:09:08,399 --> 00:09:11,040
+we started running so that's sort of a
+
+263
+00:09:11,040 --> 00:09:12,800
+very mechanical view
+
+264
+00:09:12,800 --> 00:09:19,030
+of what a thread is
+
+265
+00:09:19,040 --> 00:09:21,120
+so why you have threads in the first
+
+266
+00:09:21,120 --> 00:09:22,880
+place that seems like an important point
+
+267
+00:09:22,880 --> 00:09:23,519
+to
+
+268
+00:09:23,519 --> 00:09:27,990
+discuss
+
+269
+00:09:28,000 --> 00:09:29,440
+because in some ways the only thing the
+
+270
+00:09:29,440 --> 00:09:31,360
+threads do is make your life more
+
+271
+00:09:31,360 --> 00:09:33,839
+complicated as a programmer
+
+272
+00:09:33,839 --> 00:09:35,360
+like writing sequential code is actually
+
+273
+00:09:35,360 --> 00:09:37,519
+just easier than writing parallel code
+
+274
+00:09:37,519 --> 00:09:39,519
+and the main reason to have it and the
+
+275
+00:09:39,519 --> 00:09:42,480
+main reason we care a lot about it in
+
+276
+00:09:42,480 --> 00:09:49,750
+684 is to express a concurrency
+
+277
+00:09:49,760 --> 00:09:51,519
+and sort of three different you know
+
+278
+00:09:51,519 --> 00:09:52,880
+sort of two or two or three different
+
+279
+00:09:52,880 --> 00:09:53,360
+types of
+
+280
+00:09:53,360 --> 00:09:54,880
+currency that we actually care about so
+
+281
+00:09:54,880 --> 00:09:56,560
+you know think about our you know
+
+282
+00:09:56,560 --> 00:09:58,560
+process we've got our run time
+
+283
+00:09:58,560 --> 00:10:01,680
+with our threads running uh you know one
+
+284
+00:10:01,680 --> 00:10:03,040
+type of concurrency that we care a lot
+
+285
+00:10:03,040 --> 00:10:08,630
+about is io concurrency
+
+286
+00:10:08,640 --> 00:10:10,399
+so one of these threads you know that is
+
+287
+00:10:10,399 --> 00:10:12,240
+running here it might actually make a
+
+288
+00:10:12,240 --> 00:10:12,959
+network call
+
+289
+00:10:12,959 --> 00:10:15,120
+you know connect to another machine on
+
+290
+00:10:15,120 --> 00:10:16,079
+the network
+
+291
+00:10:16,079 --> 00:10:17,600
+uh you know to implement a distributed
+
+292
+00:10:17,600 --> 00:10:20,079
+application not like mapreduce
+
+293
+00:10:20,079 --> 00:10:23,279
+uh and you know as it makes the uh
+
+294
+00:10:23,279 --> 00:10:24,720
+call you know it's gonna be blocked you
+
+295
+00:10:24,720 --> 00:10:26,320
+know waiting for a response and while
+
+296
+00:10:26,320 --> 00:10:27,600
+it's blocked and they're waiting for a
+
+297
+00:10:27,600 --> 00:10:28,320
+response
+
+298
+00:10:28,320 --> 00:10:29,920
+everything will be nice to actually run
+
+299
+00:10:29,920 --> 00:10:32,240
+some other threads uh so that way you
+
+300
+00:10:32,240 --> 00:10:33,120
+know they're
+
+301
+00:10:33,120 --> 00:10:35,200
+sort of more we're done for example we
+
+302
+00:10:35,200 --> 00:10:36,720
+want to issue multiple requests to
+
+303
+00:10:36,720 --> 00:10:38,160
+multiple machines
+
+304
+00:10:38,160 --> 00:10:40,000
+uh sort of roughly in parallel you know
+
+305
+00:10:40,000 --> 00:10:41,839
+we can just do that we fire her off one
+
+306
+00:10:41,839 --> 00:10:43,760
+bill routine and fire another coaching
+
+307
+00:10:43,760 --> 00:10:45,040
+another go routine that all
+
+308
+00:10:45,040 --> 00:10:46,640
+kind of send and make connections to
+
+309
+00:10:46,640 --> 00:10:48,720
+other remote machines
+
+310
+00:10:48,720 --> 00:10:50,000
+that's one reason that we care a lot
+
+311
+00:10:50,000 --> 00:10:52,480
+about it io concurrency the second
+
+312
+00:10:52,480 --> 00:10:54,079
+reason that we care about it is you know
+
+313
+00:10:54,079 --> 00:11:03,190
+it allows for multi-core parallelism
+
+314
+00:11:03,200 --> 00:11:05,680
+so we have you know multiple cores in
+
+315
+00:11:05,680 --> 00:11:07,600
+our you know
+
+316
+00:11:07,600 --> 00:11:09,920
+computer or a processor then you know we
+
+317
+00:11:09,920 --> 00:11:10,720
+can have
+
+318
+00:11:10,720 --> 00:11:12,720
+one fret running on the one go routine
+
+319
+00:11:12,720 --> 00:11:14,720
+running on one core and another thread
+
+320
+00:11:14,720 --> 00:11:16,320
+or another go routine running on another
+
+321
+00:11:16,320 --> 00:11:16,880
+course just
+
+322
+00:11:16,880 --> 00:11:19,040
+straight in parallel and as for example
+
+323
+00:11:19,040 --> 00:11:20,959
+we implemented like a key value servers
+
+324
+00:11:20,959 --> 00:11:23,040
+then we could process
+
+325
+00:11:23,040 --> 00:11:24,480
+requests for different keys and the key
+
+326
+00:11:24,480 --> 00:11:26,160
+value servers used on different course
+
+327
+00:11:26,160 --> 00:11:28,000
+completely parallel you know increasing
+
+328
+00:11:28,000 --> 00:11:31,360
+our uh throughput so those are the two
+
+329
+00:11:31,360 --> 00:11:33,279
+main reasons that we care a lot about
+
+330
+00:11:33,279 --> 00:11:36,480
+uh precursory uh by threats there's a
+
+331
+00:11:36,480 --> 00:11:37,519
+sort of a third reason
+
+332
+00:11:37,519 --> 00:11:40,829
+you know there's a little bit of
+
+333
+00:11:40,839 --> 00:11:43,680
+convenience
+
+334
+00:11:43,680 --> 00:11:45,120
+there's going to be numerous cases in
+
+335
+00:11:45,120 --> 00:11:46,959
+the lab for example where we want to
+
+336
+00:11:46,959 --> 00:11:49,760
+uh have something happen periodically
+
+337
+00:11:49,760 --> 00:11:51,519
+maybe every second or every 200
+
+338
+00:11:51,519 --> 00:11:52,320
+milliseconds
+
+339
+00:11:52,320 --> 00:11:54,560
+and we can just launch a thread for that
+
+340
+00:11:54,560 --> 00:11:56,160
+or a go routine for that you just sleep
+
+341
+00:11:56,160 --> 00:11:57,760
+for 200 milliseconds you know does what
+
+342
+00:11:57,760 --> 00:11:58,720
+it needs to do and then
+
+343
+00:11:58,720 --> 00:11:59,920
+it goes back to sleep for 200
+
+344
+00:11:59,920 --> 00:12:01,920
+milliseconds and so it's convenient to
+
+345
+00:12:01,920 --> 00:12:03,120
+sort of have these
+
+346
+00:12:03,120 --> 00:12:04,880
+uh sort of background activities that
+
+347
+00:12:04,880 --> 00:12:06,560
+need to be done periodically and you can
+
+348
+00:12:06,560 --> 00:12:08,320
+express that using uh threats of course
+
+349
+00:12:08,320 --> 00:12:09,519
+you can express them in other ways the
+
+350
+00:12:09,519 --> 00:12:10,720
+threads are actually uh
+
+351
+00:12:10,720 --> 00:12:14,240
+convenient another question that comes
+
+352
+00:12:14,240 --> 00:12:14,560
+up
+
+353
+00:12:14,560 --> 00:12:16,639
+uh often and i think came up in some of
+
+354
+00:12:16,639 --> 00:12:18,240
+the lecture questions so today like how
+
+355
+00:12:18,240 --> 00:12:19,920
+many threads did you create
+
+356
+00:12:19,920 --> 00:12:22,160
+and i think the go designers the way
+
+357
+00:12:22,160 --> 00:12:23,600
+they want you to think about it is that
+
+358
+00:12:23,600 --> 00:12:24,959
+you should create as many threads as you
+
+359
+00:12:24,959 --> 00:12:26,240
+need
+
+360
+00:12:26,240 --> 00:12:28,160
+they're definitely not free they tie up
+
+361
+00:12:28,160 --> 00:12:29,680
+some memory because you know you have to
+
+362
+00:12:29,680 --> 00:12:30,720
+have a stack
+
+363
+00:12:30,720 --> 00:12:32,639
+uh there's a performance overhead we're
+
+364
+00:12:32,639 --> 00:12:33,839
+starting them
+
+365
+00:12:33,839 --> 00:12:35,760
+but you should think about them as very
+
+366
+00:12:35,760 --> 00:12:37,120
+lightweight
+
+367
+00:12:37,120 --> 00:12:38,880
+and so you should be encouraging or
+
+368
+00:12:38,880 --> 00:12:40,560
+you're encouraged to create
+
+369
+00:12:40,560 --> 00:12:44,560
+threads as you go any
+
+370
+00:12:44,560 --> 00:12:46,480
+questions about sort of this basic
+
+371
+00:12:46,480 --> 00:12:54,949
+reason for why to have friends
+
+372
+00:12:54,959 --> 00:12:57,680
+okay let me uh then you know as i said i
+
+373
+00:12:57,680 --> 00:12:58,639
+mentioned earlier
+
+374
+00:12:58,639 --> 00:13:03,190
+uh frets actually have challenges
+
+375
+00:13:03,200 --> 00:13:05,120
+for programming refresh has challenges
+
+376
+00:13:05,120 --> 00:13:06,399
+so let me talk a little bit about the
+
+377
+00:13:06,399 --> 00:13:07,600
+challenges
+
+378
+00:13:07,600 --> 00:13:09,360
+i'm not going to go in great amount of
+
+379
+00:13:09,360 --> 00:13:10,639
+depth here uh
+
+380
+00:13:10,639 --> 00:13:12,480
+i assume that you know there's a they
+
+381
+00:13:12,480 --> 00:13:13,920
+all make sense and they'll become more
+
+382
+00:13:13,920 --> 00:13:14,560
+clear if we
+
+383
+00:13:14,560 --> 00:13:16,639
+look at some of the examples and
+
+384
+00:13:16,639 --> 00:13:18,560
+probably the the main reason
+
+385
+00:13:18,560 --> 00:13:20,639
+uh that you know fred's actually are
+
+386
+00:13:20,639 --> 00:13:21,920
+challenging is that you can have race
+
+387
+00:13:21,920 --> 00:13:30,710
+conditions
+
+388
+00:13:30,720 --> 00:13:33,279
+and just like a basic example of a race
+
+389
+00:13:33,279 --> 00:13:35,120
+condition let's say you have two frets
+
+390
+00:13:35,120 --> 00:13:37,360
+you know here's t1
+
+391
+00:13:37,360 --> 00:13:40,880
+is t2 and they share
+
+392
+00:13:40,880 --> 00:13:43,040
+variable n let's say the initial value
+
+393
+00:13:43,040 --> 00:13:45,360
+is zero
+
+394
+00:13:45,360 --> 00:13:47,440
+and they both execute you know both
+
+395
+00:13:47,440 --> 00:13:48,800
+frets execute the statement
+
+396
+00:13:48,800 --> 00:13:50,800
+the form you know adds you know the
+
+397
+00:13:50,800 --> 00:13:52,800
+increment and by one
+
+398
+00:13:52,800 --> 00:13:53,839
+now of course you know you might think
+
+399
+00:13:53,839 --> 00:13:55,920
+that statement is an atomic operation or
+
+400
+00:13:55,920 --> 00:13:57,279
+like something that is indivisible but
+
+401
+00:13:57,279 --> 00:13:59,279
+it isn't right i mean there's a go
+
+402
+00:13:59,279 --> 00:14:00,959
+statement that gets compiled you know to
+
+403
+00:14:00,959 --> 00:14:02,880
+whatever instructions the processor is
+
+404
+00:14:02,880 --> 00:14:03,839
+executing
+
+405
+00:14:03,839 --> 00:14:05,360
+and so we cannot assume that that's an
+
+406
+00:14:05,360 --> 00:14:07,120
+atomic instruction and in fact
+
+407
+00:14:07,120 --> 00:14:09,440
+you know uh it's uh it could consist of
+
+408
+00:14:09,440 --> 00:14:10,560
+basically like a load
+
+409
+00:14:10,560 --> 00:14:13,279
+you know to which stores the end the
+
+410
+00:14:13,279 --> 00:14:14,399
+content of end into
+
+411
+00:14:14,399 --> 00:14:16,160
+a register then increment register and
+
+412
+00:14:16,160 --> 00:14:17,760
+then you know sort of register back into
+
+413
+00:14:17,760 --> 00:14:19,040
+memory
+
+414
+00:14:19,040 --> 00:14:21,040
+and so if you're very unlucky you know
+
+415
+00:14:21,040 --> 00:14:23,279
+if the two threads basically try to
+
+416
+00:14:23,279 --> 00:14:25,360
+both execute this particular instruction
+
+417
+00:14:25,360 --> 00:14:26,639
+then we can have a very
+
+418
+00:14:26,639 --> 00:14:28,639
+you know unfortunate sequence of events
+
+419
+00:14:28,639 --> 00:14:30,800
+where like both frets
+
+420
+00:14:30,800 --> 00:14:34,240
+you perform the load instruction
+
+421
+00:14:34,240 --> 00:14:36,720
+you load the variable in you know
+
+422
+00:14:36,720 --> 00:14:38,480
+registered let's say r0
+
+423
+00:14:38,480 --> 00:14:42,470
+you know here also in r0
+
+424
+00:14:42,480 --> 00:14:47,910
+now they increment it so r0 becomes one
+
+425
+00:14:47,920 --> 00:14:50,399
+and then they write it back you know to
+
+426
+00:14:50,399 --> 00:14:50,959
+you know
+
+427
+00:14:50,959 --> 00:14:52,320
+they do restore instruction that
+
+428
+00:14:52,320 --> 00:14:54,000
+actually results you know stores results
+
+429
+00:14:54,000 --> 00:14:55,279
+back into the variable n
+
+430
+00:14:55,279 --> 00:14:59,040
+in memory and uh so if this happens at
+
+431
+00:14:59,040 --> 00:14:59,920
+this particular
+
+432
+00:14:59,920 --> 00:15:02,320
+uh in this scenario where you know this
+
+433
+00:15:02,320 --> 00:15:04,079
+happens to be like truly concurrently
+
+434
+00:15:04,079 --> 00:15:06,000
+you know what is the value of n after
+
+435
+00:15:06,000 --> 00:15:11,430
+these two threads that both in increment
+
+436
+00:15:11,440 --> 00:15:14,639
+just one yeah it's one and what what is
+
+437
+00:15:14,639 --> 00:15:15,040
+this
+
+438
+00:15:15,040 --> 00:15:16,639
+value supposed to be or what would you
+
+439
+00:15:16,639 --> 00:15:22,150
+expect it to be
+
+440
+00:15:22,160 --> 00:15:24,240
+two yeah expect it to be two right and
+
+441
+00:15:24,240 --> 00:15:25,920
+so one is definitely not equal to two
+
+442
+00:15:25,920 --> 00:15:26,399
+and
+
+443
+00:15:26,399 --> 00:15:29,920
+uh there's a bug uh and so
+
+444
+00:15:29,920 --> 00:15:31,360
+and this is like you know the sort of
+
+445
+00:15:31,360 --> 00:15:33,279
+the heart of race conditions uh
+
+446
+00:15:33,279 --> 00:15:35,360
+which uh is not you know if in an
+
+447
+00:15:35,360 --> 00:15:36,560
+unforced uh
+
+448
+00:15:36,560 --> 00:15:38,399
+an unfortunate sequence of events where
+
+449
+00:15:38,399 --> 00:15:40,399
+threats share you know state
+
+450
+00:15:40,399 --> 00:15:42,399
+uh the updates actually might not be
+
+451
+00:15:42,399 --> 00:15:43,920
+reflected correctly
+
+452
+00:15:43,920 --> 00:15:45,199
+and of course most of the time this will
+
+453
+00:15:45,199 --> 00:15:46,800
+work out fine because you just have to
+
+454
+00:15:46,800 --> 00:15:48,320
+be in the sort of very
+
+455
+00:15:48,320 --> 00:15:51,360
+uh sort of this very specific case
+
+456
+00:15:51,360 --> 00:15:52,959
+before it shows up
+
+457
+00:15:52,959 --> 00:15:54,959
+so for example i think one uh one of you
+
+458
+00:15:54,959 --> 00:15:56,560
+reported like oh i
+
+459
+00:15:56,560 --> 00:15:58,480
+didn't have my walks or my race you know
+
+460
+00:15:58,480 --> 00:16:00,560
+my walks in order
+
+461
+00:16:00,560 --> 00:16:02,800
+and oh my program just worked fine and
+
+462
+00:16:02,800 --> 00:16:04,560
+that's actually the the real
+
+463
+00:16:04,560 --> 00:16:05,759
+issue with race conditions they
+
+464
+00:16:05,759 --> 00:16:07,680
+typically just work fine but sometimes
+
+465
+00:16:07,680 --> 00:16:09,519
+it goes wrong
+
+466
+00:16:09,519 --> 00:16:12,320
+so the two ways to address race
+
+467
+00:16:12,320 --> 00:16:13,519
+conditions
+
+468
+00:16:13,519 --> 00:16:17,749
+the first way is to avoid sharing
+
+469
+00:16:17,759 --> 00:16:20,880
+don't share variables and
+
+470
+00:16:20,880 --> 00:16:22,480
+this is one style of programming that
+
+471
+00:16:22,480 --> 00:16:23,920
+you know go encourages
+
+472
+00:16:23,920 --> 00:16:25,519
+by using channels you know channels you
+
+473
+00:16:25,519 --> 00:16:27,199
+just communicate values but you don't
+
+474
+00:16:27,199 --> 00:16:28,800
+really directly share memory
+
+475
+00:16:28,800 --> 00:16:32,079
+so that's one way of doing it another so
+
+476
+00:16:32,079 --> 00:16:33,600
+avoid sharing is one big approach the
+
+477
+00:16:33,600 --> 00:16:38,550
+other approach is actually to use locks
+
+478
+00:16:38,560 --> 00:16:40,320
+you know to maybe make a sequence of
+
+479
+00:16:40,320 --> 00:16:42,480
+instructions an atomic operation
+
+480
+00:16:42,480 --> 00:16:43,839
+now we'll talk a lot more about that in
+
+481
+00:16:43,839 --> 00:16:46,000
+a second uh one of the things that i
+
+482
+00:16:46,000 --> 00:16:47,600
+want to point out that is really cool
+
+483
+00:16:47,600 --> 00:16:48,160
+about
+
+484
+00:16:48,160 --> 00:16:50,639
+what is usual tool is go actually have a
+
+485
+00:16:50,639 --> 00:16:52,560
+race detector
+
+486
+00:16:52,560 --> 00:16:54,800
+and you know most of the labs that you
+
+487
+00:16:54,800 --> 00:16:56,160
+you were doing would encourage you to
+
+488
+00:16:56,160 --> 00:16:57,360
+basically run go
+
+489
+00:16:57,360 --> 00:17:00,560
+using the dash race flag and
+
+490
+00:17:00,560 --> 00:17:02,959
+that will actually not catch every
+
+491
+00:17:02,959 --> 00:17:04,559
+possible race but it does an extremely
+
+492
+00:17:04,559 --> 00:17:07,360
+good job of actually identifying races
+
+493
+00:17:07,360 --> 00:17:10,240
+and so you should by default run go with
+
+494
+00:17:10,240 --> 00:17:13,039
+the race detector enabled
+
+495
+00:17:13,039 --> 00:17:15,280
+okay so that's one challenge with reds
+
+496
+00:17:15,280 --> 00:17:16,559
+the second challenge with threats is
+
+497
+00:17:16,559 --> 00:17:19,439
+actually coordination
+
+498
+00:17:19,439 --> 00:17:22,400
+so it's often the case that one has to
+
+499
+00:17:22,400 --> 00:17:24,000
+you know one friend must wait on another
+
+500
+00:17:24,000 --> 00:17:26,400
+fret before something is accomplished
+
+501
+00:17:26,400 --> 00:17:28,319
+uh you know the number of the go
+
+502
+00:17:28,319 --> 00:17:30,160
+exercises in the tutorial you know have
+
+503
+00:17:30,160 --> 00:17:31,200
+that kind of
+
+504
+00:17:31,200 --> 00:17:33,360
+form and there's two ways you know go
+
+505
+00:17:33,360 --> 00:17:34,799
+actually through primitives for
+
+506
+00:17:34,799 --> 00:17:37,360
+dealing with that one again channels you
+
+507
+00:17:37,360 --> 00:17:38,559
+know channels basically
+
+508
+00:17:38,559 --> 00:17:40,000
+allow you to communicate and to
+
+509
+00:17:40,000 --> 00:17:42,080
+coordinate at the same time
+
+510
+00:17:42,080 --> 00:17:44,320
+or uh you know which i'll talk a little
+
+511
+00:17:44,320 --> 00:17:46,080
+bit later about you know
+
+512
+00:17:46,080 --> 00:17:53,590
+condition variables
+
+513
+00:17:53,600 --> 00:17:55,200
+and both can be useful i'll talk a
+
+514
+00:17:55,200 --> 00:17:57,120
+little bit more about that uh and then
+
+515
+00:17:57,120 --> 00:17:58,320
+finally you know so the
+
+516
+00:17:58,320 --> 00:18:00,480
+final challenge uh big sort of
+
+517
+00:18:00,480 --> 00:18:03,039
+conceptual challenge is uh you can
+
+518
+00:18:03,039 --> 00:18:06,640
+get that lock so if one thread waits in
+
+519
+00:18:06,640 --> 00:18:06,880
+the
+
+520
+00:18:06,880 --> 00:18:09,840
+uh like t1 waits on t2 and t2 waits from
+
+521
+00:18:09,840 --> 00:18:10,799
+t1 you know
+
+522
+00:18:10,799 --> 00:18:12,160
+for example to release your lock or
+
+523
+00:18:12,160 --> 00:18:14,240
+before some other sequencing you can
+
+524
+00:18:14,240 --> 00:18:15,600
+basically sort what i call deadly
+
+525
+00:18:15,600 --> 00:18:16,400
+embrace
+
+526
+00:18:16,400 --> 00:18:18,240
+you know where both were waiting on the
+
+527
+00:18:18,240 --> 00:18:20,320
+other and as a result nothing makes for
+
+528
+00:18:20,320 --> 00:18:24,640
+progress uh the trivial way of getting
+
+529
+00:18:24,640 --> 00:18:25,760
+you know say deadlock
+
+530
+00:18:25,760 --> 00:18:27,600
+in a go would be you know you have a
+
+531
+00:18:27,600 --> 00:18:29,360
+single thread there's no other threads
+
+532
+00:18:29,360 --> 00:18:30,320
+at all
+
+533
+00:18:30,320 --> 00:18:35,029
+and you're right now to your channel
+
+534
+00:18:35,039 --> 00:18:37,039
+and that will block now that one thread
+
+535
+00:18:37,039 --> 00:18:38,160
+until somebody else
+
+536
+00:18:38,160 --> 00:18:39,520
+you know reads some other friend reads
+
+537
+00:18:39,520 --> 00:18:40,880
+from the channel but if there's no other
+
+538
+00:18:40,880 --> 00:18:42,559
+thread at all you know that will result
+
+539
+00:18:42,559 --> 00:18:43,760
+in a deadlock
+
+540
+00:18:43,760 --> 00:18:45,360
+this is like the simplest possible
+
+541
+00:18:45,360 --> 00:18:46,880
+deadlock possible
+
+542
+00:18:46,880 --> 00:18:50,000
+um and you know go actually will catch
+
+543
+00:18:50,000 --> 00:18:51,679
+this case and we'll run
+
+544
+00:18:51,679 --> 00:18:53,600
+a razor runtime error saying like no
+
+545
+00:18:53,600 --> 00:18:54,840
+frets can run you know you have a
+
+546
+00:18:54,840 --> 00:18:56,240
+deadlock
+
+547
+00:18:56,240 --> 00:18:57,600
+uh but there can be more complicated
+
+548
+00:18:57,600 --> 00:18:58,960
+deadlocks you know we're both involved
+
+549
+00:18:58,960 --> 00:19:00,320
+in multiple threads and
+
+550
+00:19:00,320 --> 00:19:02,240
+as you're going through the labs and in
+
+551
+00:19:02,240 --> 00:19:04,000
+the semester you i'm sure you'll run
+
+552
+00:19:04,000 --> 00:19:07,350
+into some
+
+553
+00:19:07,360 --> 00:19:09,840
+so take a little bit of a step back here
+
+554
+00:19:09,840 --> 00:19:10,880
+and think about
+
+555
+00:19:10,880 --> 00:19:13,360
+you know go for you know these
+
+556
+00:19:13,360 --> 00:19:15,039
+challenges
+
+557
+00:19:15,039 --> 00:19:20,160
+uh that i just talked about
+
+558
+00:19:20,160 --> 00:19:22,840
+roughly speaking uh goes sort of two
+
+559
+00:19:22,840 --> 00:19:24,480
+plans
+
+560
+00:19:24,480 --> 00:19:28,880
+to handle these concurrency challenges
+
+561
+00:19:28,880 --> 00:19:31,919
+and one plan is you know basically
+
+562
+00:19:31,919 --> 00:19:34,950
+around channels
+
+563
+00:19:34,960 --> 00:19:36,320
+and there's another plan basically
+
+564
+00:19:36,320 --> 00:19:39,840
+around locks
+
+565
+00:19:39,840 --> 00:19:51,430
+and condition variables
+
+566
+00:19:51,440 --> 00:19:54,799
+and the way i think about it uh you know
+
+567
+00:19:54,799 --> 00:19:56,320
+some people are quite dogmatic about
+
+568
+00:19:56,320 --> 00:19:57,840
+this i think one plan is better than the
+
+569
+00:19:57,840 --> 00:19:58,720
+other plan
+
+570
+00:19:58,720 --> 00:20:01,200
+uh my general approach here is like i
+
+571
+00:20:01,200 --> 00:20:02,799
+use what the plan that is most suitable
+
+572
+00:20:02,799 --> 00:20:04,640
+for the case that i'm looking at
+
+573
+00:20:04,640 --> 00:20:07,200
+uh or that i'm running into and
+
+574
+00:20:07,200 --> 00:20:08,240
+generally you know
+
+575
+00:20:08,240 --> 00:20:11,679
+i have no sharing uh and basically i
+
+576
+00:20:11,679 --> 00:20:13,919
+need two frets basically to communicate
+
+577
+00:20:13,919 --> 00:20:15,919
+but i don't really share any memory i
+
+578
+00:20:15,919 --> 00:20:18,000
+tend to use the channels
+
+579
+00:20:18,000 --> 00:20:20,080
+uh if there are two threads actually do
+
+580
+00:20:20,080 --> 00:20:21,840
+share memory uh because it's convenient
+
+581
+00:20:21,840 --> 00:20:23,440
+to share memory for example i write a
+
+582
+00:20:23,440 --> 00:20:25,200
+key value servers and i want to share
+
+583
+00:20:25,200 --> 00:20:27,520
+the key value table
+
+584
+00:20:27,520 --> 00:20:32,080
+then i use locks
+
+585
+00:20:32,080 --> 00:20:37,590
+and condition variables
+
+586
+00:20:37,600 --> 00:20:39,840
+uh and so uh you know my general
+
+587
+00:20:39,840 --> 00:20:41,679
+approach is not so to be dramatic and
+
+588
+00:20:41,679 --> 00:20:43,120
+you know take whatever approach you know
+
+589
+00:20:43,120 --> 00:20:44,799
+that actually is most convenient for
+
+590
+00:20:44,799 --> 00:20:48,159
+for the problem at hand um
+
+591
+00:20:48,159 --> 00:20:50,720
+the tutorial does a pretty good job of
+
+592
+00:20:50,720 --> 00:20:52,480
+actually uh
+
+593
+00:20:52,480 --> 00:20:54,400
+teaching you about uh channels mentioned
+
+594
+00:20:54,400 --> 00:20:56,159
+logs doesn't say much about condition
+
+595
+00:20:56,159 --> 00:20:56,960
+variables
+
+596
+00:20:56,960 --> 00:20:59,919
+uh so i i think it's worthwhile uh to
+
+597
+00:20:59,919 --> 00:21:01,039
+talk a little bit about condition
+
+598
+00:21:01,039 --> 00:21:02,000
+variables to
+
+599
+00:21:02,000 --> 00:21:04,559
+make sure that you're aware that they
+
+600
+00:21:04,559 --> 00:21:05,919
+exist
+
+601
+00:21:05,919 --> 00:21:07,760
+and i'm going to do that using a tiny
+
+602
+00:21:07,760 --> 00:21:09,200
+little example
+
+603
+00:21:09,200 --> 00:21:11,120
+to sort of illustrate the issues and
+
+604
+00:21:11,120 --> 00:21:14,159
+attending a little example is
+
+605
+00:21:14,159 --> 00:21:15,520
+we have a you know sort of a little bit
+
+606
+00:21:15,520 --> 00:21:17,280
+inspired uh as well
+
+607
+00:21:17,280 --> 00:21:19,280
+you know inspired by the labs you know
+
+608
+00:21:19,280 --> 00:21:21,039
+have a friend t1
+
+609
+00:21:21,039 --> 00:21:23,919
+uh and uh t1 needs to collect some
+
+610
+00:21:23,919 --> 00:21:25,840
+number of votes you know from remote
+
+611
+00:21:25,840 --> 00:21:26,559
+machines
+
+612
+00:21:26,559 --> 00:21:29,360
+and uh for example needs to decide that
+
+613
+00:21:29,360 --> 00:21:30,480
+it has a majority
+
+614
+00:21:30,480 --> 00:21:32,159
+uh so that it actually proceeds to
+
+615
+00:21:32,159 --> 00:21:33,760
+commit you know some value
+
+616
+00:21:33,760 --> 00:21:35,280
+and you'll see that later in like this
+
+617
+00:21:35,280 --> 00:21:37,120
+shows up in the raft lab uh
+
+618
+00:21:37,120 --> 00:21:39,760
+as one of the primitives that you need
+
+619
+00:21:39,760 --> 00:21:40,799
+uh and so
+
+620
+00:21:40,799 --> 00:21:43,280
+to do that you know the t1 will fork you
+
+621
+00:21:43,280 --> 00:21:44,320
+know other threats
+
+622
+00:21:44,320 --> 00:21:48,080
+you know let's say t2 and t2 amazingly
+
+623
+00:21:48,080 --> 00:21:50,159
+does something expensive like you know
+
+624
+00:21:50,159 --> 00:21:51,919
+talk to some remote machine to actually
+
+625
+00:21:51,919 --> 00:21:53,360
+get its vote
+
+626
+00:21:53,360 --> 00:21:55,200
+and then you know report back you know
+
+627
+00:21:55,200 --> 00:21:58,000
+that vote to t1 and t1 basically i need
+
+628
+00:21:58,000 --> 00:21:59,600
+to collect all the votes head them up
+
+629
+00:21:59,600 --> 00:22:02,240
+and then assume that their majority then
+
+630
+00:22:02,240 --> 00:22:04,240
+you know declare sort of victory
+
+631
+00:22:04,240 --> 00:22:06,000
+so this is a pretty straightforward
+
+632
+00:22:06,000 --> 00:22:07,840
+simple program but it gives you a little
+
+633
+00:22:07,840 --> 00:22:08,480
+bit of
+
+634
+00:22:08,480 --> 00:22:10,320
+allows me to illustrate you a couple of
+
+635
+00:22:10,320 --> 00:22:12,400
+issues so i'm going to switch
+
+636
+00:22:12,400 --> 00:22:16,710
+to another screen
+
+637
+00:22:16,720 --> 00:22:22,710
+can everybody see this
+
+638
+00:22:22,720 --> 00:22:26,559
+so here i have a very simple
+
+639
+00:22:26,559 --> 00:22:28,880
+uh implementation of this program uh the
+
+640
+00:22:28,880 --> 00:22:30,559
+vogue thing uh and again it's a little
+
+641
+00:22:30,559 --> 00:22:32,080
+bit of a toy example but just hopefully
+
+642
+00:22:32,080 --> 00:22:32,640
+gets the
+
+643
+00:22:32,640 --> 00:22:35,360
+points across uh the two variables
+
+644
+00:22:35,360 --> 00:22:36,320
+shared here
+
+645
+00:22:36,320 --> 00:22:38,480
+uh count and danish count accounts
+
+646
+00:22:38,480 --> 00:22:39,520
+number three
+
+647
+00:22:39,520 --> 00:22:41,679
+finish you know accounts when we're done
+
+648
+00:22:41,679 --> 00:22:42,880
+um
+
+649
+00:22:42,880 --> 00:22:45,039
+uh so you know there's a loop you know
+
+650
+00:22:45,039 --> 00:22:46,159
+going for 10
+
+651
+00:22:46,159 --> 00:22:49,360
+uh creating a go creating a
+
+652
+00:22:49,360 --> 00:22:52,799
+you know launching on
+
+653
+00:22:52,799 --> 00:22:54,960
+an anonymous function and an anonymous
+
+654
+00:22:54,960 --> 00:22:56,640
+function you know concurrently
+
+655
+00:22:56,640 --> 00:22:58,400
+you know calls this function request
+
+656
+00:22:58,400 --> 00:23:00,240
+vote the request basically you know
+
+657
+00:23:00,240 --> 00:23:02,559
+simulates you know doing a long
+
+658
+00:23:02,559 --> 00:23:04,240
+expensive operation on some remote
+
+659
+00:23:04,240 --> 00:23:05,679
+machine and the way it simulates it is
+
+660
+00:23:05,679 --> 00:23:07,120
+by just going to sleep
+
+661
+00:23:07,120 --> 00:23:09,039
+it walks for a little while then it
+
+662
+00:23:09,039 --> 00:23:10,640
+returns and then
+
+663
+00:23:10,640 --> 00:23:13,679
+you know the returns voted yes then you
+
+664
+00:23:13,679 --> 00:23:14,720
+know the count goes up
+
+665
+00:23:14,720 --> 00:23:16,480
+and we count the fact that actually we
+
+666
+00:23:16,480 --> 00:23:18,960
+had one more uh fred voting
+
+667
+00:23:18,960 --> 00:23:21,360
+and then we're done and so that's uh so
+
+668
+00:23:21,360 --> 00:23:22,960
+we fork off ten threads you know the
+
+669
+00:23:22,960 --> 00:23:24,640
+interview and request vote
+
+670
+00:23:24,640 --> 00:23:26,400
+and report the results and then at the
+
+671
+00:23:26,400 --> 00:23:28,159
+end we'll check if the
+
+672
+00:23:28,159 --> 00:23:30,000
+count is small revive you know we know
+
+673
+00:23:30,000 --> 00:23:31,280
+that we failed
+
+674
+00:23:31,280 --> 00:23:34,640
+uh we lost the election uh and if we uh
+
+675
+00:23:34,640 --> 00:23:36,880
+have votes equally larger than five you
+
+676
+00:23:36,880 --> 00:23:37,840
+know we basically
+
+677
+00:23:37,840 --> 00:23:39,280
+won the election right so this is sort
+
+678
+00:23:39,280 --> 00:23:41,440
+of the simple uh it's a very simple
+
+679
+00:23:41,440 --> 00:23:42,640
+program
+
+680
+00:23:42,640 --> 00:23:46,320
+uh does it all make sense let me run it
+
+681
+00:23:46,320 --> 00:23:48,840
+just for the
+
+682
+00:23:48,840 --> 00:23:52,149
+kicks
+
+683
+00:23:52,159 --> 00:23:55,600
+and you know we run it a couple times
+
+684
+00:23:55,600 --> 00:23:57,679
+sometimes we lose sometimes win you know
+
+685
+00:23:57,679 --> 00:23:59,120
+makes sense
+
+686
+00:23:59,120 --> 00:24:02,080
+um and so this program looks you know
+
+687
+00:24:02,080 --> 00:24:03,919
+working
+
+688
+00:24:03,919 --> 00:24:09,909
+and correct is it actually correct
+
+689
+00:24:09,919 --> 00:24:11,760
+sorry was the question uh whether this
+
+690
+00:24:11,760 --> 00:24:13,120
+program is actually correct
+
+691
+00:24:13,120 --> 00:24:16,880
+yeah it seems to produce results um
+
+692
+00:24:16,880 --> 00:24:20,400
+i i think there's a race condition isn't
+
+693
+00:24:20,400 --> 00:24:21,279
+there like you have
+
+694
+00:24:21,279 --> 00:24:22,720
+all of these different threads um
+
+695
+00:24:22,720 --> 00:24:24,159
+incrementing the count and finished
+
+696
+00:24:24,159 --> 00:24:25,039
+variables
+
+697
+00:24:25,039 --> 00:24:31,750
+yeah um and it's also um
+
+698
+00:24:31,760 --> 00:24:33,120
+it's not clear to me that finished
+
+699
+00:24:33,120 --> 00:24:35,279
+necessarily always reaches 10.
+
+700
+00:24:35,279 --> 00:24:38,559
+um is it possible that it doesn't
+
+701
+00:24:38,559 --> 00:24:40,720
+uh let me let me take this one one by
+
+702
+00:24:40,720 --> 00:24:42,080
+one and just go over to your first point
+
+703
+00:24:42,080 --> 00:24:44,080
+this is the one one hours after
+
+704
+00:24:44,080 --> 00:24:47,440
+uh you know clear house uh this is again
+
+705
+00:24:47,440 --> 00:24:49,039
+the fact you know we have two variables
+
+706
+00:24:49,039 --> 00:24:50,799
+here correct uh
+
+707
+00:24:50,799 --> 00:24:53,360
+you know uh count divinist they're
+
+708
+00:24:53,360 --> 00:24:54,960
+actually by different go routines so
+
+709
+00:24:54,960 --> 00:24:56,880
+this is immediately a red flag
+
+710
+00:24:56,880 --> 00:24:58,480
+it could be a serious problem here like
+
+711
+00:24:58,480 --> 00:25:00,080
+as soon as you have you know a variable
+
+712
+00:25:00,080 --> 00:25:01,760
+that has access to or modified
+
+713
+00:25:01,760 --> 00:25:03,520
+and by two different goal routines you
+
+714
+00:25:03,520 --> 00:25:05,200
+know there's got to be a problem
+
+715
+00:25:05,200 --> 00:25:06,480
+and so you know it's interesting to run
+
+716
+00:25:06,480 --> 00:25:08,400
+the race detector and see if it actually
+
+717
+00:25:08,400 --> 00:25:10,320
+catches it right
+
+718
+00:25:10,320 --> 00:25:13,120
+and as you expected you know to go the
+
+719
+00:25:13,120 --> 00:25:14,880
+race detector tells you exactly you know
+
+720
+00:25:14,880 --> 00:25:16,320
+there is indeed you know some problems
+
+721
+00:25:16,320 --> 00:25:18,000
+here with this uh program
+
+722
+00:25:18,000 --> 00:25:20,080
+and you know list the line numbers you
+
+723
+00:25:20,080 --> 00:25:22,640
+know where things actually can go wrong
+
+724
+00:25:22,640 --> 00:25:24,080
+uh so that gives you actually a pretty
+
+725
+00:25:24,080 --> 00:25:26,080
+good clue that something is not
+
+726
+00:25:26,080 --> 00:25:28,559
+up to snuff this program and so we're
+
+727
+00:25:28,559 --> 00:25:30,400
+gonna like repair it in small steps
+
+728
+00:25:30,400 --> 00:25:33,760
+and uh you know that will uh hopefully
+
+729
+00:25:33,760 --> 00:25:35,200
+shed some more light on
+
+730
+00:25:35,200 --> 00:25:37,679
+concurrent programming so let me you
+
+731
+00:25:37,679 --> 00:25:39,440
+know here's my second solution to this
+
+732
+00:25:39,440 --> 00:25:40,960
+program
+
+733
+00:25:40,960 --> 00:25:43,679
+uh and in this case um i'll talk about
+
+734
+00:25:43,679 --> 00:25:44,960
+channels in a little bit later because i
+
+735
+00:25:44,960 --> 00:25:46,720
+wanted to illustrate the
+
+736
+00:25:46,720 --> 00:25:49,600
+uh locks and condition variables first
+
+737
+00:25:49,600 --> 00:25:51,360
+because i've got less emphasis in the
+
+738
+00:25:51,360 --> 00:25:52,640
+tutorial
+
+739
+00:25:52,640 --> 00:25:55,679
+um so you know simple solution you know
+
+740
+00:25:55,679 --> 00:25:56,159
+you go
+
+741
+00:25:56,159 --> 00:25:58,880
+correct you introduce a lock uh the lock
+
+742
+00:25:58,880 --> 00:26:00,080
+is completely independent of the
+
+743
+00:26:00,080 --> 00:26:00,799
+variables
+
+744
+00:26:00,799 --> 00:26:03,919
+uh and uh and you follow some convention
+
+745
+00:26:03,919 --> 00:26:06,240
+which says like well this lock mu
+
+746
+00:26:06,240 --> 00:26:09,120
+protects counted finish and so whenever
+
+747
+00:26:09,120 --> 00:26:11,039
+you know you access and count the finish
+
+748
+00:26:11,039 --> 00:26:12,720
+and basically you have to wrap that into
+
+749
+00:26:12,720 --> 00:26:14,400
+a lock and an unlock statement and so
+
+750
+00:26:14,400 --> 00:26:15,360
+here we see two
+
+751
+00:26:15,360 --> 00:26:16,880
+like this is the go function because it
+
+752
+00:26:16,880 --> 00:26:18,880
+runs concurrently uh
+
+753
+00:26:18,880 --> 00:26:21,919
+and after you know the request code it's
+
+754
+00:26:21,919 --> 00:26:23,600
+about to update the vote and finish so
+
+755
+00:26:23,600 --> 00:26:25,120
+we take a lock out
+
+756
+00:26:25,120 --> 00:26:26,720
+and then go has this nice feature you
+
+757
+00:26:26,720 --> 00:26:29,039
+know uh called the defer statement
+
+758
+00:26:29,039 --> 00:26:32,320
+but if you exit the basic block you know
+
+759
+00:26:32,320 --> 00:26:34,630
+we'll
+
+760
+00:26:34,640 --> 00:26:36,559
+run the function that is uh declared by
+
+761
+00:26:36,559 --> 00:26:38,880
+the defer or that
+
+762
+00:26:38,880 --> 00:26:40,960
+after the key word deferred and so this
+
+763
+00:26:40,960 --> 00:26:42,400
+means like when we execute
+
+764
+00:26:42,400 --> 00:26:44,720
+we leave the go function here will
+
+765
+00:26:44,720 --> 00:26:46,400
+automatically unlock
+
+766
+00:26:46,400 --> 00:26:47,760
+this is convenient because then you
+
+767
+00:26:47,760 --> 00:26:50,159
+won't forget to unlock and so it's nice
+
+768
+00:26:50,159 --> 00:26:51,440
+to do that write a point where you do
+
+769
+00:26:51,440 --> 00:26:52,080
+the lock
+
+770
+00:26:52,080 --> 00:26:53,679
+and so you can write immediately before
+
+771
+00:26:53,679 --> 00:26:55,360
+it lock and then you don't have to worry
+
+772
+00:26:55,360 --> 00:26:55,679
+about
+
+773
+00:26:55,679 --> 00:26:57,279
+if there are multiple exit pass out of
+
+774
+00:26:57,279 --> 00:26:59,520
+the go routine or at a function
+
+775
+00:26:59,520 --> 00:27:03,200
+uh that you forget to unlock so now
+
+776
+00:27:03,200 --> 00:27:04,640
+you know we're basically in a critical
+
+777
+00:27:04,640 --> 00:27:06,480
+section where we hold the lock
+
+778
+00:27:06,480 --> 00:27:08,960
+we update vote and count and then of
+
+779
+00:27:08,960 --> 00:27:10,720
+course the function returns and unlocks
+
+780
+00:27:10,720 --> 00:27:13,919
+automatically and similarly at the
+
+781
+00:27:13,919 --> 00:27:16,799
+uh at the you know at the end you know
+
+782
+00:27:16,799 --> 00:27:17,679
+we gotta
+
+783
+00:27:17,679 --> 00:27:20,240
+uh every time we access you know count
+
+784
+00:27:20,240 --> 00:27:21,200
+to finish
+
+785
+00:27:21,200 --> 00:27:22,880
+uh since they share it you know we need
+
+786
+00:27:22,880 --> 00:27:24,880
+to surround it with locks and then you
+
+787
+00:27:24,880 --> 00:27:26,480
+know a simple way of doing it we could
+
+788
+00:27:26,480 --> 00:27:28,320
+have written d for unlocking or two in
+
+789
+00:27:28,320 --> 00:27:28,960
+the body
+
+790
+00:27:28,960 --> 00:27:31,760
+but we've been fine all right so we can
+
+791
+00:27:31,760 --> 00:27:34,159
+actually run this program
+
+792
+00:27:34,159 --> 00:27:37,279
+let's see yeah and so
+
+793
+00:27:37,279 --> 00:27:38,799
+we run it you know the race detector
+
+794
+00:27:38,799 --> 00:27:40,480
+seems to be happy uh so
+
+795
+00:27:40,480 --> 00:27:42,640
+hopefully we'll have a better program
+
+796
+00:27:42,640 --> 00:27:44,080
+all right
+
+797
+00:27:44,080 --> 00:27:46,159
+um so i just have a question here about
+
+798
+00:27:46,159 --> 00:27:47,120
+scoping
+
+799
+00:27:47,120 --> 00:27:48,480
+yeah so it seems that when we have the
+
+800
+00:27:48,480 --> 00:27:50,159
+anonymous function then we have this mu
+
+801
+00:27:50,159 --> 00:27:51,840
+and we have uh the count and we have the
+
+802
+00:27:51,840 --> 00:27:53,279
+finished and it seems that the anonymous
+
+803
+00:27:53,279 --> 00:27:55,200
+function has access to
+
+804
+00:27:55,200 --> 00:27:56,320
+that we're defined outside of the
+
+805
+00:27:56,320 --> 00:27:59,200
+function so how do looping rules work
+
+806
+00:27:59,200 --> 00:28:02,080
+yeah uh you're building any an anonymous
+
+807
+00:28:02,080 --> 00:28:02,559
+function
+
+808
+00:28:02,559 --> 00:28:04,240
+any variable that's you know used inside
+
+809
+00:28:04,240 --> 00:28:05,919
+of the function that's not declared
+
+810
+00:28:05,919 --> 00:28:07,120
+inside of the function
+
+811
+00:28:07,120 --> 00:28:09,760
+basically result uh points to variables
+
+812
+00:28:09,760 --> 00:28:11,840
+outside of the outer scope
+
+813
+00:28:11,840 --> 00:28:15,520
+so statically scoped what about the
+
+814
+00:28:15,520 --> 00:28:16,000
+scope
+
+815
+00:28:16,000 --> 00:28:19,830
+of uh like the mutex
+
+816
+00:28:19,840 --> 00:28:21,600
+how many times you have to declare that
+
+817
+00:28:21,600 --> 00:28:23,440
+or and what's the scope of it
+
+818
+00:28:23,440 --> 00:28:25,200
+i guess the scope of the the first
+
+819
+00:28:25,200 --> 00:28:26,720
+statement is this this block
+
+820
+00:28:26,720 --> 00:28:30,000
+one basic block you know i mean like
+
+821
+00:28:30,000 --> 00:28:32,559
+when you actually declare like the mutex
+
+822
+00:28:32,559 --> 00:28:36,159
+data structure i guess it's like any
+
+823
+00:28:36,159 --> 00:28:37,440
+other variable
+
+824
+00:28:37,440 --> 00:28:40,480
+it has the same scope as finish or count
+
+825
+00:28:40,480 --> 00:28:43,360
+so it applies to any variable declared
+
+826
+00:28:43,360 --> 00:28:45,039
+in the rest of the
+
+827
+00:28:45,039 --> 00:28:46,799
+yeah the way to think about it is that
+
+828
+00:28:46,799 --> 00:28:48,080
+uh the
+
+829
+00:28:48,080 --> 00:28:50,159
+the mutex is not directly associated
+
+830
+00:28:50,159 --> 00:28:51,840
+with any variable it's just a lock
+
+831
+00:28:51,840 --> 00:28:54,640
+you know it's like a name and it's up to
+
+832
+00:28:54,640 --> 00:28:56,559
+you as a programmer to decide like what
+
+833
+00:28:56,559 --> 00:29:01,269
+that lock protects
+
+834
+00:29:01,279 --> 00:29:04,559
+so they're two independent concepts
+
+835
+00:29:04,559 --> 00:29:07,200
+what happens what happens if you use i
+
+836
+00:29:07,200 --> 00:29:07,919
+in the um
+
+837
+00:29:07,919 --> 00:29:09,679
+go routine that won't work right you
+
+838
+00:29:09,679 --> 00:29:11,279
+need to pass that in
+
+839
+00:29:11,279 --> 00:29:12,720
+yeah so whatever yeah that's a good
+
+840
+00:29:12,720 --> 00:29:14,240
+question and then the number of number
+
+841
+00:29:14,240 --> 00:29:15,840
+of you asked that uh for email too so
+
+842
+00:29:15,840 --> 00:29:17,520
+what are you what happens to like if we
+
+843
+00:29:17,520 --> 00:29:18,399
+use i here
+
+844
+00:29:18,399 --> 00:29:20,720
+you know what you know do something with
+
+845
+00:29:20,720 --> 00:29:22,080
+it like whatever
+
+846
+00:29:22,080 --> 00:29:31,430
+count is i uh is this a good plan or not
+
+847
+00:29:31,440 --> 00:29:33,760
+what value of i will be using when this
+
+848
+00:29:33,760 --> 00:29:35,840
+fret actually happens to run
+
+849
+00:29:35,840 --> 00:29:37,919
+if the gold starts to function function
+
+850
+00:29:37,919 --> 00:29:39,200
+that will run at some point
+
+851
+00:29:39,200 --> 00:29:42,399
+what value of i will using whatever
+
+852
+00:29:42,399 --> 00:29:44,880
+i happens to be at the time which is
+
+853
+00:29:44,880 --> 00:29:45,440
+being
+
+854
+00:29:45,440 --> 00:29:48,240
+uh changed by the for loop outside yeah
+
+855
+00:29:48,240 --> 00:29:48,880
+correct so
+
+856
+00:29:48,880 --> 00:29:51,440
+you know so this is not so great that's
+
+857
+00:29:51,440 --> 00:29:53,039
+probably not what we intended right we
+
+858
+00:29:53,039 --> 00:29:54,720
+probably intended the eye that we
+
+859
+00:29:54,720 --> 00:29:56,080
+whatever for that particular loop
+
+860
+00:29:56,080 --> 00:29:58,080
+iteration right
+
+861
+00:29:58,080 --> 00:29:59,600
+so how do we want to if we don't have to
+
+862
+00:29:59,600 --> 00:30:01,600
+solve that how what would we do
+
+863
+00:30:01,600 --> 00:30:04,320
+you could um add it as a parameter to
+
+864
+00:30:04,320 --> 00:30:04,799
+that
+
+865
+00:30:04,799 --> 00:30:06,960
+function and pass it in so it gets
+
+866
+00:30:06,960 --> 00:30:08,480
+evaluated when you create to go
+
+867
+00:30:08,480 --> 00:30:10,480
+go routine yeah okay so we could write
+
+868
+00:30:10,480 --> 00:30:12,159
+this
+
+869
+00:30:12,159 --> 00:30:13,840
+and then pass it actually in right and
+
+870
+00:30:13,840 --> 00:30:15,440
+then a point what happens then at the
+
+871
+00:30:15,440 --> 00:30:16,960
+point we have to create
+
+872
+00:30:16,960 --> 00:30:19,840
+the go routine i is being captured and
+
+873
+00:30:19,840 --> 00:30:22,080
+then passed in
+
+874
+00:30:22,080 --> 00:30:25,919
+okay okay
+
+875
+00:30:25,919 --> 00:30:29,520
+um how are the local variables allocated
+
+876
+00:30:29,520 --> 00:30:31,840
+like if if captain finished are like
+
+877
+00:30:31,840 --> 00:30:34,000
+local variables wouldn't they like
+
+878
+00:30:34,000 --> 00:30:35,919
+be destroyed after the main function
+
+879
+00:30:35,919 --> 00:30:37,840
+exits or like if this wasn't made by
+
+880
+00:30:37,840 --> 00:30:39,440
+like another function what it's like
+
+881
+00:30:39,440 --> 00:30:41,360
+that hitting function exit before the
+
+882
+00:30:41,360 --> 00:30:42,720
+corrugation yeah
+
+883
+00:30:42,720 --> 00:30:44,640
+they're in principle allocated in stack
+
+884
+00:30:44,640 --> 00:30:45,840
+uh and
+
+885
+00:30:45,840 --> 00:30:47,200
+you know the room with the other
+
+886
+00:30:47,200 --> 00:30:49,120
+functions have just memory addresses
+
+887
+00:30:49,120 --> 00:30:50,399
+references to them
+
+888
+00:30:50,399 --> 00:30:51,919
+and so it's indeed the case it's main
+
+889
+00:30:51,919 --> 00:30:53,600
+returns then these
+
+890
+00:30:53,600 --> 00:30:55,760
+you know these stack allocated variables
+
+891
+00:30:55,760 --> 00:30:56,640
+are gone
+
+892
+00:30:56,640 --> 00:30:58,799
+so typically what you'll see is that in
+
+893
+00:30:58,799 --> 00:31:00,960
+a go program you would allocate them in
+
+894
+00:31:00,960 --> 00:31:02,799
+you know on the heap you know using new
+
+895
+00:31:02,799 --> 00:31:04,399
+like if you make a new truck
+
+896
+00:31:04,399 --> 00:31:06,000
+or whatever so would you get a
+
+897
+00:31:06,000 --> 00:31:08,080
+segmentation fault then or would it just
+
+898
+00:31:08,080 --> 00:31:13,509
+you would get air okay
+
+899
+00:31:13,519 --> 00:31:15,200
+i have a question i actually remember
+
+900
+00:31:15,200 --> 00:31:16,640
+this is the correct
+
+901
+00:31:16,640 --> 00:31:18,240
+uh like way to do it or not but instead
+
+902
+00:31:18,240 --> 00:31:20,640
+of passing it in would it be possible to
+
+903
+00:31:20,640 --> 00:31:22,880
+as the first line in the for loop do i
+
+904
+00:31:22,880 --> 00:31:24,880
+colon equals i
+
+905
+00:31:24,880 --> 00:31:26,960
+um and then you're like you have a i
+
+906
+00:31:26,960 --> 00:31:28,720
+don't know how the scoping works within
+
+907
+00:31:28,720 --> 00:31:31,120
+the like block of the for loop because i
+
+908
+00:31:31,120 --> 00:31:32,240
+think that should create
+
+909
+00:31:32,240 --> 00:31:35,120
+a new variable i that the go routine can
+
+910
+00:31:35,120 --> 00:31:36,559
+access that isn't being updated again
+
+911
+00:31:36,559 --> 00:31:38,000
+right you can do that
+
+912
+00:31:38,000 --> 00:31:39,360
+that can help instead of passing it in
+
+913
+00:31:39,360 --> 00:31:41,840
+it kind of makes it look ugly to me
+
+914
+00:31:41,840 --> 00:31:43,760
+okay well i i like the passing in but
+
+915
+00:31:43,760 --> 00:31:45,440
+that's another way of doing it i'll
+
+916
+00:31:45,440 --> 00:31:49,110
+show you an example later
+
+917
+00:31:49,120 --> 00:31:50,880
+uh so this summer somebody asked
+
+918
+00:31:50,880 --> 00:31:52,399
+actually you know do we get a
+
+919
+00:31:52,399 --> 00:31:54,480
+a segmentation fault we're not
+
+920
+00:31:54,480 --> 00:31:55,760
+immediately going to get a segmentation
+
+921
+00:31:55,760 --> 00:31:57,840
+fault i should take that back
+
+922
+00:31:57,840 --> 00:31:59,440
+because basically one thread will hold
+
+923
+00:31:59,440 --> 00:32:01,360
+still hold a reference and so the
+
+924
+00:32:01,360 --> 00:32:03,440
+garbage collector will not delete the
+
+925
+00:32:03,440 --> 00:32:04,799
+object yet
+
+926
+00:32:04,799 --> 00:32:06,720
+right only when the last thread actually
+
+927
+00:32:06,720 --> 00:32:09,519
+uh only when no fret holds a reference
+
+928
+00:32:09,519 --> 00:32:11,120
+you know the will the garbage collector
+
+929
+00:32:11,120 --> 00:32:12,480
+delete the object
+
+930
+00:32:12,480 --> 00:32:13,760
+and this is one of the cool things about
+
+931
+00:32:13,760 --> 00:32:15,279
+having garbage collected language and
+
+932
+00:32:15,279 --> 00:32:16,960
+shared memory programming
+
+933
+00:32:16,960 --> 00:32:18,080
+you don't have to worry about that
+
+934
+00:32:18,080 --> 00:32:21,190
+scenario
+
+935
+00:32:21,200 --> 00:32:24,559
+okay uh there's a
+
+936
+00:32:24,559 --> 00:32:27,760
+yeah uh would could this code like
+
+937
+00:32:27,760 --> 00:32:28,880
+deadlock
+
+938
+00:32:28,880 --> 00:32:31,120
+because like if we if like the go
+
+939
+00:32:31,120 --> 00:32:32,159
+routines
+
+940
+00:32:32,159 --> 00:32:34,159
+like the first four loop will exit and
+
+941
+00:32:34,159 --> 00:32:36,080
+then the second one will like
+
+942
+00:32:36,080 --> 00:32:40,559
+oh yeah no never mind okay
+
+943
+00:32:40,559 --> 00:32:42,320
+uh there are definitely some issues that
+
+944
+00:32:42,320 --> 00:32:43,760
+are not ideal yet so let me
+
+945
+00:32:43,760 --> 00:32:45,840
+actually talk about them uh one of them
+
+946
+00:32:45,840 --> 00:32:48,000
+is that like this particular loop
+
+947
+00:32:48,000 --> 00:32:49,360
+it's a little bit annoying right like
+
+948
+00:32:49,360 --> 00:32:51,039
+this this forward loop is there's
+
+949
+00:32:51,039 --> 00:32:52,480
+nothing else than waiting until count
+
+950
+00:32:52,480 --> 00:32:52,960
+reaches
+
+951
+00:32:52,960 --> 00:32:55,279
+five for finished and the way it does is
+
+952
+00:32:55,279 --> 00:32:56,080
+by just spinning
+
+953
+00:32:56,080 --> 00:32:58,399
+right so it just locks it locks it looks
+
+954
+00:32:58,399 --> 00:32:59,919
+at the value quickly unlocks it and
+
+955
+00:32:59,919 --> 00:33:01,519
+spins around again so it basically is
+
+956
+00:33:01,519 --> 00:33:02,960
+spinning on the processor doing really
+
+957
+00:33:02,960 --> 00:33:05,120
+nothing it'd be nice to express that in
+
+958
+00:33:05,120 --> 00:33:06,480
+a little bit better way so that like
+
+959
+00:33:06,480 --> 00:33:08,320
+basically the go can sort of give up the
+
+960
+00:33:08,320 --> 00:33:08,720
+core
+
+961
+00:33:08,720 --> 00:33:11,039
+again so that another threat can run and
+
+962
+00:33:11,039 --> 00:33:12,559
+so the way you can do that is using
+
+963
+00:33:12,559 --> 00:33:13,519
+condition variables
+
+964
+00:33:13,519 --> 00:33:15,279
+and so this is my the next
+
+965
+00:33:15,279 --> 00:33:17,200
+implementation
+
+966
+00:33:17,200 --> 00:33:19,919
+um uh or actually i'll show you one
+
+967
+00:33:19,919 --> 00:33:21,519
+other implementation well one way to do
+
+968
+00:33:21,519 --> 00:33:22,559
+that is a little bit not
+
+969
+00:33:22,559 --> 00:33:24,320
+you know not so nice as for example and
+
+970
+00:33:24,320 --> 00:33:25,840
+what somebody suggested this
+
+971
+00:33:25,840 --> 00:33:27,200
+um is to actually sleep for a little
+
+972
+00:33:27,200 --> 00:33:29,120
+while so instead of like
+
+973
+00:33:29,120 --> 00:33:31,760
+uh giving up the spinning like crazy
+
+974
+00:33:31,760 --> 00:33:33,200
+just sleep one and period
+
+975
+00:33:33,200 --> 00:33:35,519
+sleep for a period and then come back of
+
+976
+00:33:35,519 --> 00:33:36,799
+course the solution will work but the
+
+977
+00:33:36,799 --> 00:33:38,240
+downside of it is that you know how
+
+978
+00:33:38,240 --> 00:33:40,240
+how long should you sleep right you
+
+979
+00:33:40,240 --> 00:33:41,760
+really would like to be the case that
+
+980
+00:33:41,760 --> 00:33:43,120
+you know soon for example as this guy
+
+981
+00:33:43,120 --> 00:33:45,039
+reaches five uh
+
+982
+00:33:45,039 --> 00:33:47,039
+then you know you wake you know you
+
+983
+00:33:47,039 --> 00:33:48,720
+could wake up the this particular you
+
+984
+00:33:48,720 --> 00:33:50,000
+know the main thread
+
+985
+00:33:50,000 --> 00:33:52,559
+and so i was jumping ahead a little bit
+
+986
+00:33:52,559 --> 00:33:53,440
+but uh
+
+987
+00:33:53,440 --> 00:33:55,200
+so that's what condition variables are
+
+988
+00:33:55,200 --> 00:33:57,120
+for um
+
+989
+00:33:57,120 --> 00:33:58,720
+and you know here's a solution with
+
+990
+00:33:58,720 --> 00:34:00,640
+condition variables
+
+991
+00:34:00,640 --> 00:34:04,640
+uh so uh we allocated a new
+
+992
+00:34:04,640 --> 00:34:06,720
+condition here as a condition variable
+
+993
+00:34:06,720 --> 00:34:08,560
+is allocated it's associated with this
+
+994
+00:34:08,560 --> 00:34:09,440
+particular lock
+
+995
+00:34:09,440 --> 00:34:10,800
+we'll see in a second why this is
+
+996
+00:34:10,800 --> 00:34:12,879
+important and
+
+997
+00:34:12,879 --> 00:34:14,320
+you know basically the main thread what
+
+998
+00:34:14,320 --> 00:34:16,159
+it does now uh
+
+999
+00:34:16,159 --> 00:34:17,760
+it you know grabs the log because it
+
+1000
+00:34:17,760 --> 00:34:19,359
+needs to grab the lock to look at count
+
+1001
+00:34:19,359 --> 00:34:20,720
+and finished otherwise that could be
+
+1002
+00:34:20,720 --> 00:34:22,240
+race conditions
+
+1003
+00:34:22,240 --> 00:34:25,440
+and then if you know the condition is
+
+1004
+00:34:25,440 --> 00:34:26,320
+still not true
+
+1005
+00:34:26,320 --> 00:34:28,240
+it just calls weight on this condition
+
+1006
+00:34:28,240 --> 00:34:29,520
+variable
+
+1007
+00:34:29,520 --> 00:34:31,760
+and what that does is actually that
+
+1008
+00:34:31,760 --> 00:34:33,839
+atomically goes to sleep
+
+1009
+00:34:33,839 --> 00:34:35,839
+as well as releasing the lock that is
+
+1010
+00:34:35,839 --> 00:34:37,520
+associated with the condition variable
+
+1011
+00:34:37,520 --> 00:34:38,960
+you know since you know mu is actually
+
+1012
+00:34:38,960 --> 00:34:40,399
+really associated with the condition
+
+1013
+00:34:40,399 --> 00:34:41,119
+variable
+
+1014
+00:34:41,119 --> 00:34:44,879
+can't wait basically unlocks the
+
+1015
+00:34:44,879 --> 00:34:48,079
+lock and goes to sleep in an atomic
+
+1016
+00:34:48,079 --> 00:34:49,440
+operation
+
+1017
+00:34:49,440 --> 00:34:51,599
+and when it returns you know from count
+
+1018
+00:34:51,599 --> 00:34:52,960
+weight it will actually hold the lock
+
+1019
+00:34:52,960 --> 00:34:53,839
+again
+
+1020
+00:34:53,839 --> 00:34:56,159
+so the caller knows we're absolutely
+
+1021
+00:34:56,159 --> 00:34:57,920
+sure that if conjugate returns it will
+
+1022
+00:34:57,920 --> 00:34:59,359
+actually held the lock again
+
+1023
+00:34:59,359 --> 00:35:01,040
+and so it's safe again to look at count
+
+1024
+00:35:01,040 --> 00:35:03,760
+and finish and then call wait again
+
+1025
+00:35:03,760 --> 00:35:06,320
+okay so basically you know this friend
+
+1026
+00:35:06,320 --> 00:35:07,760
+will go to sleep
+
+1027
+00:35:07,760 --> 00:35:10,880
+um and then the go routines that you
+
+1028
+00:35:10,880 --> 00:35:11,200
+know
+
+1029
+00:35:11,200 --> 00:35:12,960
+are collecting the votes you know the
+
+1030
+00:35:12,960 --> 00:35:14,240
+same code as before
+
+1031
+00:35:14,240 --> 00:35:17,040
+my lock and unlock or defer to unlock
+
+1032
+00:35:17,040 --> 00:35:18,240
+and then when you're done
+
+1033
+00:35:18,240 --> 00:35:20,480
+you know updating count to finish uh
+
+1034
+00:35:20,480 --> 00:35:21,680
+there are two primitives on the
+
+1035
+00:35:21,680 --> 00:35:23,440
+condition variable one is signal and one
+
+1036
+00:35:23,440 --> 00:35:24,880
+is broadcast
+
+1037
+00:35:24,880 --> 00:35:27,520
+and broadcast basically uh sigma wakes
+
+1038
+00:35:27,520 --> 00:35:29,280
+up one waiter and broadcast weights of
+
+1039
+00:35:29,280 --> 00:35:30,000
+all waiters
+
+1040
+00:35:30,000 --> 00:35:31,760
+you know there's only one waiter here so
+
+1041
+00:35:31,760 --> 00:35:34,720
+we could have used either one of them
+
+1042
+00:35:34,720 --> 00:35:36,720
+and so basically when it reaches you
+
+1043
+00:35:36,720 --> 00:35:39,200
+know five you know at some point or ten
+
+1044
+00:35:39,200 --> 00:35:41,200
+then you know the so every time finish
+
+1045
+00:35:41,200 --> 00:35:43,680
+is incremented you know the
+
+1046
+00:35:43,680 --> 00:35:45,520
+main thread will be woken up you can
+
+1047
+00:35:45,520 --> 00:35:46,800
+check the condition
+
+1048
+00:35:46,800 --> 00:35:50,160
+and then keep going okay
+
+1049
+00:35:50,160 --> 00:35:51,760
+so this is convenient sort of you can
+
+1050
+00:35:51,760 --> 00:35:53,280
+think about condition variables as a
+
+1051
+00:35:53,280 --> 00:35:55,520
+coordination primitive you know between
+
+1052
+00:35:55,520 --> 00:35:57,280
+uh two different threads and they're
+
+1053
+00:35:57,280 --> 00:35:58,480
+particularly convenient when you're
+
+1054
+00:35:58,480 --> 00:35:59,599
+actually using locks
+
+1055
+00:35:59,599 --> 00:36:01,599
+you know for to protect your shared
+
+1056
+00:36:01,599 --> 00:36:10,470
+state
+
+1057
+00:36:10,480 --> 00:36:14,160
+so here's the same uh implementation
+
+1058
+00:36:14,160 --> 00:36:17,760
+uh of this program using channels uh
+
+1059
+00:36:17,760 --> 00:36:20,000
+and more or less works the same way
+
+1060
+00:36:20,000 --> 00:36:21,920
+except of course no locks
+
+1061
+00:36:21,920 --> 00:36:25,040
+uh but the main thread creates a channel
+
+1062
+00:36:25,040 --> 00:36:27,760
+passes the the go routine the anonymous
+
+1063
+00:36:27,760 --> 00:36:28,640
+function
+
+1064
+00:36:28,640 --> 00:36:30,079
+that's being created as a separate
+
+1065
+00:36:30,079 --> 00:36:32,320
+thread and writes basically the request
+
+1066
+00:36:32,320 --> 00:36:34,240
+vote to the channel and then the main
+
+1067
+00:36:34,240 --> 00:36:35,920
+thread basically blocks here correct
+
+1068
+00:36:35,920 --> 00:36:38,400
+when it starts reading from the channel
+
+1069
+00:36:38,400 --> 00:36:39,680
+once it actually get something where
+
+1070
+00:36:39,680 --> 00:36:41,119
+something is written to the channel will
+
+1071
+00:36:41,119 --> 00:36:42,079
+unblock
+
+1072
+00:36:42,079 --> 00:36:44,240
+you know look at the value and if it's
+
+1073
+00:36:44,240 --> 00:36:45,280
+true and add up
+
+1074
+00:36:45,280 --> 00:36:47,440
+and uh ottawa and always increments
+
+1075
+00:36:47,440 --> 00:36:48,800
+finish
+
+1076
+00:36:48,800 --> 00:36:50,720
+and what's going on here correct is we
+
+1077
+00:36:50,720 --> 00:36:52,160
+don't need locks because count and
+
+1078
+00:36:52,160 --> 00:36:54,240
+finish are not shared there's only one
+
+1079
+00:36:54,240 --> 00:36:55,760
+thread that actually updates
+
+1080
+00:36:55,760 --> 00:36:57,520
+uh count and finish and that's the main
+
+1081
+00:36:57,520 --> 00:36:58,960
+thread
+
+1082
+00:36:58,960 --> 00:37:03,200
+okay um the
+
+1083
+00:37:03,200 --> 00:37:06,400
+uh and this this you know the the name
+
+1084
+00:37:06,400 --> 00:37:08,800
+the the sort of request that threats you
+
+1085
+00:37:08,800 --> 00:37:11,040
+know all basically just write to this uh
+
+1086
+00:37:11,040 --> 00:37:12,720
+channel they write concurrently perhaps
+
+1087
+00:37:12,720 --> 00:37:14,640
+to the channel but the channels are one
+
+1088
+00:37:14,640 --> 00:37:15,839
+of the things that go that actually
+
+1089
+00:37:15,839 --> 00:37:17,520
+frets save so multiple threads can
+
+1090
+00:37:17,520 --> 00:37:21,109
+actually write to the channel
+
+1091
+00:37:21,119 --> 00:37:24,240
+um any questions about this
+
+1092
+00:37:24,240 --> 00:37:27,750
+about the solution
+
+1093
+00:37:27,760 --> 00:37:29,599
+what was the thing about like having a
+
+1094
+00:37:29,599 --> 00:37:30,960
+buffer
+
+1095
+00:37:30,960 --> 00:37:34,480
+for the channel yeah so uh normally when
+
+1096
+00:37:34,480 --> 00:37:36,800
+you write into the channel and nobody's
+
+1097
+00:37:36,800 --> 00:37:38,480
+reading from the channel or no thread is
+
+1098
+00:37:38,480 --> 00:37:40,240
+reading from the channel then the center
+
+1099
+00:37:40,240 --> 00:37:43,510
+will immediately be blocked
+
+1100
+00:37:43,520 --> 00:37:46,240
+you can specify that the channel has a
+
+1101
+00:37:46,240 --> 00:37:49,040
+buffer of a of 10 or 20
+
+1102
+00:37:49,040 --> 00:37:51,040
+and uh that allows the channel to have
+
+1103
+00:37:51,040 --> 00:37:52,800
+multiple values
+
+1104
+00:37:52,800 --> 00:37:56,320
+in in eight to four labs i've never used
+
+1105
+00:37:56,320 --> 00:37:59,040
+uh buffered channels and one of two
+
+1106
+00:37:59,040 --> 00:38:00,320
+three times i did it you know i
+
+1107
+00:38:00,320 --> 00:38:01,119
+regretted it
+
+1108
+00:38:01,119 --> 00:38:04,240
+so in general i i don't use it
+
+1109
+00:38:04,240 --> 00:38:07,119
+but this is a really important point uh
+
+1110
+00:38:07,119 --> 00:38:08,720
+this but this program is actually still
+
+1111
+00:38:08,720 --> 00:38:10,000
+not very good
+
+1112
+00:38:10,000 --> 00:38:14,000
+um so for example when uh
+
+1113
+00:38:14,000 --> 00:38:15,520
+you know it doesn't matter in practice
+
+1114
+00:38:15,520 --> 00:38:17,440
+in this particular example but it's not
+
+1115
+00:38:17,440 --> 00:38:20,240
+in in in some collapse if we could bite
+
+1116
+00:38:20,240 --> 00:38:20,960
+you
+
+1117
+00:38:20,960 --> 00:38:23,359
+uh as soon as it reaches count five what
+
+1118
+00:38:23,359 --> 00:38:27,750
+will happen
+
+1119
+00:38:27,760 --> 00:38:30,560
+it stops listening for um this new
+
+1120
+00:38:30,560 --> 00:38:31,119
+channel
+
+1121
+00:38:31,119 --> 00:38:33,040
+so any other threads um are just going
+
+1122
+00:38:33,040 --> 00:38:34,880
+to be blocked yeah so basically this
+
+1123
+00:38:34,880 --> 00:38:36,240
+means like if the first five
+
+1124
+00:38:36,240 --> 00:38:38,880
+threads voted uh yes then the next five
+
+1125
+00:38:38,880 --> 00:38:39,599
+threads will be
+
+1126
+00:38:39,599 --> 00:38:42,720
+blocked in this channel correct you know
+
+1127
+00:38:42,720 --> 00:38:44,960
+they'll be hanging around
+
+1128
+00:38:44,960 --> 00:38:47,680
+uh and uh in this case it won't be a
+
+1129
+00:38:47,680 --> 00:38:49,040
+problem because as most of you guys
+
+1130
+00:38:49,040 --> 00:38:50,880
+have most observed like that if the main
+
+1131
+00:38:50,880 --> 00:38:53,040
+thread exits it actually cleans up all
+
+1132
+00:38:53,040 --> 00:38:54,800
+the other threads too
+
+1133
+00:38:54,800 --> 00:38:56,480
+uh but for example if this would be a
+
+1134
+00:38:56,480 --> 00:38:58,000
+long running surface
+
+1135
+00:38:58,000 --> 00:39:00,000
+uh this would be not good basically
+
+1136
+00:39:00,000 --> 00:39:01,440
+we're leaking threats here you know
+
+1137
+00:39:01,440 --> 00:39:03,040
+they're sitting blocked on the side
+
+1138
+00:39:03,040 --> 00:39:05,280
+uh doing nothing uh in that channel and
+
+1139
+00:39:05,280 --> 00:39:06,880
+so that's quite inconvenient
+
+1140
+00:39:06,880 --> 00:39:08,720
+and uh this is something to watch out
+
+1141
+00:39:08,720 --> 00:39:11,359
+for uh and this showed up in the crawler
+
+1142
+00:39:11,359 --> 00:39:12,840
+i think for many uh people in uh and
+
+1143
+00:39:12,840 --> 00:39:14,640
+[Music]
+
+1144
+00:39:14,640 --> 00:39:17,119
+there's the flip side of this is that if
+
+1145
+00:39:17,119 --> 00:39:18,000
+the main threat
+
+1146
+00:39:18,000 --> 00:39:19,599
+enters too early before any of the
+
+1147
+00:39:19,599 --> 00:39:21,839
+request votes are done uh then you also
+
+1148
+00:39:21,839 --> 00:39:22,560
+have a problem
+
+1149
+00:39:22,560 --> 00:39:23,839
+and so there's this management of
+
+1150
+00:39:23,839 --> 00:39:25,760
+threats that actually is
+
+1151
+00:39:25,760 --> 00:39:28,880
+often a tricky issue
+
+1152
+00:39:28,880 --> 00:39:30,160
+is there a way to kill the thread
+
+1153
+00:39:30,160 --> 00:39:33,520
+without um exiting from me
+
+1154
+00:39:33,520 --> 00:39:36,640
+uh well you can send it a variable or a
+
+1155
+00:39:36,640 --> 00:39:37,520
+value on some
+
+1156
+00:39:37,520 --> 00:39:40,240
+channels saying like please exit but you
+
+1157
+00:39:40,240 --> 00:39:47,910
+have to coordinate it yourself
+
+1158
+00:39:47,920 --> 00:39:49,920
+i want to go back to one of the things
+
+1159
+00:39:49,920 --> 00:39:53,510
+that actually is cool about
+
+1160
+00:39:53,520 --> 00:39:58,800
+condition variables is that um
+
+1161
+00:39:58,800 --> 00:40:00,000
+in principle you might think that the
+
+1162
+00:40:00,000 --> 00:40:02,160
+same issue exists here uh
+
+1163
+00:40:02,160 --> 00:40:04,960
+where like this fred actually runs and
+
+1164
+00:40:04,960 --> 00:40:05,920
+uh
+
+1165
+00:40:05,920 --> 00:40:09,040
+in this thread and
+
+1166
+00:40:09,040 --> 00:40:10,880
+it might get blocked like example if you
+
+1167
+00:40:10,880 --> 00:40:12,480
+know we reached you know five
+
+1168
+00:40:12,480 --> 00:40:14,079
+you know this main thread will you know
+
+1169
+00:40:14,079 --> 00:40:16,160
+perceive doing its thing
+
+1170
+00:40:16,160 --> 00:40:18,000
+uh while the other guys are still maybe
+
+1171
+00:40:18,000 --> 00:40:20,000
+actually sitting in here
+
+1172
+00:40:20,000 --> 00:40:22,720
+uh but notice these in this case they
+
+1173
+00:40:22,720 --> 00:40:24,400
+won't be blocked uh
+
+1174
+00:40:24,400 --> 00:40:26,800
+because you know well grab the lock then
+
+1175
+00:40:26,800 --> 00:40:28,640
+you know does the thing does a broadcast
+
+1176
+00:40:28,640 --> 00:40:30,000
+and the broadcast is actually not a
+
+1177
+00:40:30,000 --> 00:40:31,280
+blocking operation so
+
+1178
+00:40:31,280 --> 00:40:32,800
+unlike you know writing to a channel
+
+1179
+00:40:32,800 --> 00:40:34,560
+that is a blocking operation if nobody
+
+1180
+00:40:34,560 --> 00:40:35,440
+is listening
+
+1181
+00:40:35,440 --> 00:40:37,280
+the con broadcast is not a blocking
+
+1182
+00:40:37,280 --> 00:40:39,359
+operation so this actually works out in
+
+1183
+00:40:39,359 --> 00:40:40,880
+this particular program you know by
+
+1184
+00:40:40,880 --> 00:40:41,839
+itself
+
+1185
+00:40:41,839 --> 00:40:49,109
+correctly okay
+
+1186
+00:40:49,119 --> 00:40:52,000
+okay good any further questions about
+
+1187
+00:40:52,000 --> 00:40:52,800
+you know these
+
+1188
+00:40:52,800 --> 00:41:00,390
+two examples just to do
+
+1189
+00:41:00,400 --> 00:41:03,920
+okay then let's talk about the crawler
+
+1190
+00:41:03,920 --> 00:41:07,920
+and so the crawler is also a more
+
+1191
+00:41:07,920 --> 00:41:09,280
+realistic example of concurrent
+
+1192
+00:41:09,280 --> 00:41:14,470
+programming
+
+1193
+00:41:14,480 --> 00:41:17,760
+yeah and just to remind you um uh
+
+1194
+00:41:17,760 --> 00:41:20,880
+you know basically the idea is that you
+
+1195
+00:41:20,880 --> 00:41:23,040
+know you start out with a url for some
+
+1196
+00:41:23,040 --> 00:41:24,160
+web page
+
+1197
+00:41:24,160 --> 00:41:26,319
+uh you fetch you know that just defects
+
+1198
+00:41:26,319 --> 00:41:28,800
+the webpage so it might have more urls
+
+1199
+00:41:28,800 --> 00:41:31,040
+and you basically proceed you know then
+
+1200
+00:41:31,040 --> 00:41:32,480
+fetching those web pages
+
+1201
+00:41:32,480 --> 00:41:34,160
+you know looking at those urls and you
+
+1202
+00:41:34,160 --> 00:41:35,680
+keep going
+
+1203
+00:41:35,680 --> 00:41:37,520
+the idea is to crawl basically the whole
+
+1204
+00:41:37,520 --> 00:41:39,280
+internet you know for all the web pages
+
+1205
+00:41:39,280 --> 00:41:39,920
+that are
+
+1206
+00:41:39,920 --> 00:41:42,720
+exist and of course you know some urls
+
+1207
+00:41:42,720 --> 00:41:43,520
+might point back
+
+1208
+00:41:43,520 --> 00:41:45,440
+to a web page that you already visited
+
+1209
+00:41:45,440 --> 00:41:47,920
+and so the goal is to actually not visit
+
+1210
+00:41:47,920 --> 00:41:48,720
+the
+
+1211
+00:41:48,720 --> 00:41:52,230
+same webpage twice
+
+1212
+00:41:52,240 --> 00:41:53,599
+and so the goal of the exercise is a
+
+1213
+00:41:53,599 --> 00:41:56,560
+couple of goals that you want to achieve
+
+1214
+00:41:56,560 --> 00:42:03,040
+one is io concurrency
+
+1215
+00:42:03,040 --> 00:42:05,520
+the defense operation is uh may take a
+
+1216
+00:42:05,520 --> 00:42:07,200
+long time you know maybe it's a
+
+1217
+00:42:07,200 --> 00:42:08,480
+web page that sits on the other side of
+
+1218
+00:42:08,480 --> 00:42:10,560
+the world your uh maybe goes over slow
+
+1219
+00:42:10,560 --> 00:42:11,359
+networks
+
+1220
+00:42:11,359 --> 00:42:13,200
+and while your one thread is sort of
+
+1221
+00:42:13,200 --> 00:42:14,400
+fetching that page you know you would
+
+1222
+00:42:14,400 --> 00:42:16,160
+like to be able to fetch other
+
+1223
+00:42:16,160 --> 00:42:19,359
+uh other uh other pages
+
+1224
+00:42:19,359 --> 00:42:21,680
+another goal is this correctness goal or
+
+1225
+00:42:21,680 --> 00:42:22,880
+you know performance goal
+
+1226
+00:42:22,880 --> 00:42:24,800
+namely you know if that's one affect
+
+1227
+00:42:24,800 --> 00:42:30,000
+your url once
+
+1228
+00:42:30,000 --> 00:42:31,839
+and you know presumably you'd also like
+
+1229
+00:42:31,839 --> 00:42:33,119
+to exploit multiple cores
+
+1230
+00:42:33,119 --> 00:42:35,200
+you know if you have multiple course you
+
+1231
+00:42:35,200 --> 00:42:42,230
+can do more comparable
+
+1232
+00:42:42,240 --> 00:42:46,319
+okay so uh what i'd like to
+
+1233
+00:42:46,319 --> 00:42:49,440
+do uh before actually uh
+
+1234
+00:42:49,440 --> 00:42:51,119
+talking about the current solutions
+
+1235
+00:42:51,119 --> 00:42:52,800
+first let me show you
+
+1236
+00:42:52,800 --> 00:42:55,839
+uh a simple serial solution uh so that
+
+1237
+00:42:55,839 --> 00:42:59,040
+we uh
+
+1238
+00:42:59,040 --> 00:43:10,829
+have something to talk about as a
+
+1239
+00:43:10,839 --> 00:43:12,160
+baseline
+
+1240
+00:43:12,160 --> 00:43:14,720
+so uh something i have free solutions in
+
+1241
+00:43:14,720 --> 00:43:15,200
+here
+
+1242
+00:43:15,200 --> 00:43:18,950
+so you just
+
+1243
+00:43:18,960 --> 00:43:27,359
+run them go run a serial solution
+
+1244
+00:43:27,359 --> 00:43:29,359
+one with mutexes and one with channels
+
+1245
+00:43:29,359 --> 00:43:32,000
+uh you know you see that
+
+1246
+00:43:32,000 --> 00:43:33,280
+more or less they produce the same
+
+1247
+00:43:33,280 --> 00:43:35,200
+result you know two found one missing
+
+1248
+00:43:35,200 --> 00:43:36,560
+two found
+
+1249
+00:43:36,560 --> 00:43:38,160
+the only difference is that the order of
+
+1250
+00:43:38,160 --> 00:43:39,520
+the output is slightly different once in
+
+1251
+00:43:39,520 --> 00:43:41,119
+a while and of course it has to do with
+
+1252
+00:43:41,119 --> 00:43:43,750
+concurrency
+
+1253
+00:43:43,760 --> 00:43:47,839
+okay so the main function
+
+1254
+00:43:47,839 --> 00:43:50,720
+calls in serial with the starting url
+
+1255
+00:43:50,720 --> 00:43:51,599
+the fetcher
+
+1256
+00:43:51,599 --> 00:43:55,040
+and then an empty map and then
+
+1257
+00:43:55,040 --> 00:43:56,800
+the serial solution is basically a sort
+
+1258
+00:43:56,800 --> 00:43:58,400
+of standard
+
+1259
+00:43:58,400 --> 00:44:01,520
+sequential recursive solution we'll
+
+1260
+00:44:01,520 --> 00:44:02,160
+first check
+
+1261
+00:44:02,160 --> 00:44:03,920
+if we already visited the url that's
+
+1262
+00:44:03,920 --> 00:44:05,599
+passed into us
+
+1263
+00:44:05,599 --> 00:44:07,040
+if we did then we returned immediately
+
+1264
+00:44:07,040 --> 00:44:08,960
+otherwise we mark it as visit
+
+1265
+00:44:08,960 --> 00:44:10,720
+we'll fetch the url that gives us a
+
+1266
+00:44:10,720 --> 00:44:12,400
+bunch of new urls
+
+1267
+00:44:12,400 --> 00:44:14,800
+uh we look through all the urls and call
+
+1268
+00:44:14,800 --> 00:44:15,599
+basically zero
+
+1269
+00:44:15,599 --> 00:44:17,359
+again right and this is your sequential
+
+1270
+00:44:17,359 --> 00:44:19,680
+solution actually what i expected
+
+1271
+00:44:19,680 --> 00:44:21,760
+and you know your goal was to basically
+
+1272
+00:44:21,760 --> 00:44:24,079
+write a current version of this
+
+1273
+00:44:24,079 --> 00:44:27,599
+um and so uh uh
+
+1274
+00:44:27,599 --> 00:44:28,880
+what i like to do is actually to make
+
+1275
+00:44:28,880 --> 00:44:30,720
+the class a little bit interactive uh i
+
+1276
+00:44:30,720 --> 00:44:32,800
+want to go switch over to breakout rooms
+
+1277
+00:44:32,800 --> 00:44:35,520
+and what we're going to do is basically
+
+1278
+00:44:35,520 --> 00:44:36,560
+put
+
+1279
+00:44:36,560 --> 00:44:38,960
+four to five of you in a single breakout
+
+1280
+00:44:38,960 --> 00:44:39,920
+room
+
+1281
+00:44:39,920 --> 00:44:42,319
+for about 10 minutes and i would like
+
+1282
+00:44:42,319 --> 00:44:43,599
+you to do is
+
+1283
+00:44:43,599 --> 00:44:45,280
+share your solution with each other and
+
+1284
+00:44:45,280 --> 00:44:46,880
+discuss it so maybe
+
+1285
+00:44:46,880 --> 00:44:49,599
+the best way to go about it is that one
+
+1286
+00:44:49,599 --> 00:44:50,319
+of you
+
+1287
+00:44:50,319 --> 00:44:52,480
+you know you get into the room one of
+
+1288
+00:44:52,480 --> 00:44:53,520
+the persons in the room
+
+1289
+00:44:53,520 --> 00:44:55,359
+you know basically screen shares their
+
+1290
+00:44:55,359 --> 00:44:58,079
+solution and discusses you know one the
+
+1291
+00:44:58,079 --> 00:45:00,000
+issues that he or she ran into
+
+1292
+00:45:00,000 --> 00:45:01,760
+and other people can comment or share
+
+1293
+00:45:01,760 --> 00:45:03,839
+other solutions and just to get into the
+
+1294
+00:45:03,839 --> 00:45:05,119
+discussion and meet some other students
+
+1295
+00:45:05,119 --> 00:45:07,359
+in the class
+
+1296
+00:45:07,359 --> 00:45:11,589
+any questions about that
+
+1297
+00:45:11,599 --> 00:45:15,520
+okay good uh let me go back to
+
+1298
+00:45:15,520 --> 00:45:17,760
+sharing my screen again can everybody
+
+1299
+00:45:17,760 --> 00:45:21,510
+see my screen again
+
+1300
+00:45:21,520 --> 00:45:29,109
+yep looks good good good thank you
+
+1301
+00:45:29,119 --> 00:45:32,079
+okay so hopefully that was interesting
+
+1302
+00:45:32,079 --> 00:45:33,040
+um
+
+1303
+00:45:33,040 --> 00:45:35,760
+and let me you know talk about you know
+
+1304
+00:45:35,760 --> 00:45:36,319
+the
+
+1305
+00:45:36,319 --> 00:45:39,359
+solutions that i have uh they're posted
+
+1306
+00:45:39,359 --> 00:45:40,240
+on the schedule page
+
+1307
+00:45:40,240 --> 00:45:43,760
+if you haven't uh uh you can look
+
+1308
+00:45:43,760 --> 00:45:46,720
+uh concurrently with me if you want to
+
+1309
+00:45:46,720 --> 00:45:47,920
+um
+
+1310
+00:45:47,920 --> 00:45:49,520
+there should you know let me walk
+
+1311
+00:45:49,520 --> 00:45:50,960
+through the
+
+1312
+00:45:50,960 --> 00:45:52,240
+new text version first and then i'll
+
+1313
+00:45:52,240 --> 00:45:54,480
+walk through the
+
+1314
+00:45:54,480 --> 00:45:59,040
+channel one second uh so here's the
+
+1315
+00:45:59,040 --> 00:46:01,839
+the mutex one the mutex one uh
+
+1316
+00:46:01,839 --> 00:46:03,119
+declaration struct
+
+1317
+00:46:03,119 --> 00:46:04,800
+you know with that has both the map and
+
+1318
+00:46:04,800 --> 00:46:06,480
+the mutex and
+
+1319
+00:46:06,480 --> 00:46:08,480
+the map needs to be protected by mutex
+
+1320
+00:46:08,480 --> 00:46:09,680
+because there's gonna be concurrent
+
+1321
+00:46:09,680 --> 00:46:11,359
+access to the map
+
+1322
+00:46:11,359 --> 00:46:13,359
+so map by itself is not fred say it's up
+
+1323
+00:46:13,359 --> 00:46:15,280
+to the programmer to actually make the
+
+1324
+00:46:15,280 --> 00:46:18,640
+map fret safe and the control mutex one
+
+1325
+00:46:18,640 --> 00:46:20,640
+works sort of similar to the serial one
+
+1326
+00:46:20,640 --> 00:46:22,319
+except for whenever their start stage
+
+1327
+00:46:22,319 --> 00:46:24,079
+basically takes a walk out now so we'll
+
+1328
+00:46:24,079 --> 00:46:26,000
+take the lock you know we look at the
+
+1329
+00:46:26,000 --> 00:46:28,240
+if the url already has been fetched if
+
+1330
+00:46:28,240 --> 00:46:29,040
+it hasn't been fed
+
+1331
+00:46:29,040 --> 00:46:31,280
+the market has now been fetched or
+
+1332
+00:46:31,280 --> 00:46:34,000
+hasn't been fetched and we're in lock
+
+1333
+00:46:34,000 --> 00:46:36,000
+and we kept this already valued to
+
+1334
+00:46:36,000 --> 00:46:38,480
+decide whether we should return or not
+
+1335
+00:46:38,480 --> 00:46:41,920
+and then uh you know we this go routine
+
+1336
+00:46:41,920 --> 00:46:44,880
+starts fetching uh a page it gets a
+
+1337
+00:46:44,880 --> 00:46:46,480
+bunch of urls back
+
+1338
+00:46:46,480 --> 00:46:50,079
+and then for every uh url back uh
+
+1339
+00:46:50,079 --> 00:46:52,480
+it creates a new go routine here on this
+
+1340
+00:46:52,480 --> 00:46:53,440
+side
+
+1341
+00:46:53,440 --> 00:46:55,920
+uh passes in the url that that go
+
+1342
+00:46:55,920 --> 00:46:57,440
+routine is supposed to
+
+1343
+00:46:57,440 --> 00:47:00,560
+fetch and crawl uh
+
+1344
+00:47:00,560 --> 00:47:02,160
+the only sort of other interesting thing
+
+1345
+00:47:02,160 --> 00:47:04,079
+here uh
+
+1346
+00:47:04,079 --> 00:47:06,079
+is that it uses something called weight
+
+1347
+00:47:06,079 --> 00:47:08,000
+group and weight group is a very
+
+1348
+00:47:08,000 --> 00:47:09,760
+convenient primitive to keep track how
+
+1349
+00:47:09,760 --> 00:47:10,000
+many
+
+1350
+00:47:10,000 --> 00:47:12,160
+threads you still have active and when
+
+1351
+00:47:12,160 --> 00:47:13,359
+you can terminate
+
+1352
+00:47:13,359 --> 00:47:14,640
+and this was a really sort of a big
+
+1353
+00:47:14,640 --> 00:47:16,079
+issue in this particular assignment that
+
+1354
+00:47:16,079 --> 00:47:17,839
+if you terminated too early then you
+
+1355
+00:47:17,839 --> 00:47:18,480
+didn't crawl
+
+1356
+00:47:18,480 --> 00:47:20,800
+the web pages and so you need to keep
+
+1357
+00:47:20,800 --> 00:47:23,200
+track of whether you're
+
+1358
+00:47:23,200 --> 00:47:24,640
+whether there's still outstanding web
+
+1359
+00:47:24,640 --> 00:47:26,319
+pages to be crawled uh saying weight
+
+1360
+00:47:26,319 --> 00:47:28,000
+group does it very easily
+
+1361
+00:47:28,000 --> 00:47:29,520
+uh basically every time you call a
+
+1362
+00:47:29,520 --> 00:47:32,160
+friend you call uh ad
+
+1363
+00:47:32,160 --> 00:47:34,640
+and then when the threat terminates uh
+
+1364
+00:47:34,640 --> 00:47:35,680
+you call
+
+1365
+00:47:35,680 --> 00:47:38,000
+done and you know you could conveniently
+
+1366
+00:47:38,000 --> 00:47:39,839
+do that in the defer statement
+
+1367
+00:47:39,839 --> 00:47:41,680
+and then the main thread that is waiting
+
+1368
+00:47:41,680 --> 00:47:43,040
+for all the frequency terminal just
+
+1369
+00:47:43,040 --> 00:47:44,720
+cause weight and weight will return
+
+1370
+00:47:44,720 --> 00:47:47,200
+until every fret that was started for
+
+1371
+00:47:47,200 --> 00:47:48,960
+every every add one
+
+1372
+00:47:48,960 --> 00:47:50,559
+if all those threads actually have been
+
+1373
+00:47:50,559 --> 00:47:53,280
+uh exited
+
+1374
+00:47:53,280 --> 00:47:56,640
+so that's the mutex
+
+1375
+00:47:56,640 --> 00:48:00,069
+version
+
+1376
+00:48:00,079 --> 00:48:01,839
+and you can think about sync weight as
+
+1377
+00:48:01,839 --> 00:48:03,359
+sort of being internally implemented
+
+1378
+00:48:03,359 --> 00:48:03,920
+using
+
+1379
+00:48:03,920 --> 00:48:07,119
+a condition variable
+
+1380
+00:48:07,119 --> 00:48:10,319
+okay let me look at the uh
+
+1381
+00:48:10,319 --> 00:48:14,160
+the channel version uh so here's the
+
+1382
+00:48:14,160 --> 00:48:15,920
+channel version is basically sort of
+
+1383
+00:48:15,920 --> 00:48:19,040
+working organized as the mapreduce
+
+1384
+00:48:19,040 --> 00:48:22,000
+uh lab where there's a coordinator and
+
+1385
+00:48:22,000 --> 00:48:23,359
+workers
+
+1386
+00:48:23,359 --> 00:48:26,640
+and so uh we start off you know we start
+
+1387
+00:48:26,640 --> 00:48:29,119
+off creating a coordinated thread
+
+1388
+00:48:29,119 --> 00:48:30,960
+and the way we do that actually is we
+
+1389
+00:48:30,960 --> 00:48:32,319
+make a channel
+
+1390
+00:48:32,319 --> 00:48:34,400
+and then we pass the channel into the
+
+1391
+00:48:34,400 --> 00:48:36,319
+coordinator uh the coordinator of course
+
+1392
+00:48:36,319 --> 00:48:38,000
+has to start with a url the beginning
+
+1393
+00:48:38,000 --> 00:48:39,200
+url so we need to
+
+1394
+00:48:39,200 --> 00:48:40,640
+supply that on the channel that's the
+
+1395
+00:48:40,640 --> 00:48:42,240
+most convenient thing to do as we'll see
+
+1396
+00:48:42,240 --> 00:48:43,440
+in a second
+
+1397
+00:48:43,440 --> 00:48:45,440
+uh but you know to send it on the
+
+1398
+00:48:45,440 --> 00:48:46,880
+channel we basically have to create a go
+
+1399
+00:48:46,880 --> 00:48:48,000
+routine because otherwise
+
+1400
+00:48:48,000 --> 00:48:50,400
+you know we deadlock here so we and this
+
+1401
+00:48:50,400 --> 00:48:51,680
+is our typical thing we
+
+1402
+00:48:51,680 --> 00:48:53,599
+could go to just to send that value on
+
+1403
+00:48:53,599 --> 00:48:54,960
+the channel
+
+1404
+00:48:54,960 --> 00:48:58,079
+so let's look at the coordinator
+
+1405
+00:48:58,079 --> 00:49:00,800
+here's the coordinator it doesn't use
+
+1406
+00:49:00,800 --> 00:49:02,079
+any locks at all
+
+1407
+00:49:02,079 --> 00:49:03,839
+because you know the the data structures
+
+1408
+00:49:03,839 --> 00:49:05,200
+that uh
+
+1409
+00:49:05,200 --> 00:49:06,720
+uh there's no data structures actually
+
+1410
+00:49:06,720 --> 00:49:08,400
+being shared like fetched
+
+1411
+00:49:08,400 --> 00:49:09,680
+you know the map that actually keeps
+
+1412
+00:49:09,680 --> 00:49:12,000
+track of which uh urls has manufactured
+
+1413
+00:49:12,000 --> 00:49:14,839
+is actually only accessed within the
+
+1414
+00:49:14,839 --> 00:49:16,319
+coordinator
+
+1415
+00:49:16,319 --> 00:49:18,000
+so the coordinator got a you know when
+
+1416
+00:49:18,000 --> 00:49:19,520
+we called it initially
+
+1417
+00:49:19,520 --> 00:49:22,800
+uh we got a it has a one url
+
+1418
+00:49:22,800 --> 00:49:25,200
+it checks the fetch map and then for
+
+1419
+00:49:25,200 --> 00:49:26,800
+every url
+
+1420
+00:49:26,800 --> 00:49:29,119
+then it goes basically you know cycles
+
+1421
+00:49:29,119 --> 00:49:30,880
+through reach the
+
+1422
+00:49:30,880 --> 00:49:32,960
+channel using a range statement and
+
+1423
+00:49:32,960 --> 00:49:34,480
+basically what this does is it just
+
+1424
+00:49:34,480 --> 00:49:36,319
+keeps reading the channel and just grabs
+
+1425
+00:49:36,319 --> 00:49:38,000
+the next value it gives an x value grabs
+
+1426
+00:49:38,000 --> 00:49:40,079
+the next value so basically it grabs the
+
+1427
+00:49:40,079 --> 00:49:42,319
+url we know there's one in it because
+
+1428
+00:49:42,319 --> 00:49:43,280
+you know we put it on
+
+1429
+00:49:43,280 --> 00:49:46,400
+when we created it and then for that url
+
+1430
+00:49:46,400 --> 00:49:48,000
+we sort of roughly do the same thing
+
+1431
+00:49:48,000 --> 00:49:51,119
+as the uh
+
+1432
+00:49:51,119 --> 00:49:54,400
+concurrent as the mutex one uh
+
+1433
+00:49:54,400 --> 00:49:56,480
+you know we see if the url has already
+
+1434
+00:49:56,480 --> 00:49:57,760
+been fetched
+
+1435
+00:49:57,760 --> 00:50:00,240
+if it hasn't been such then we're done
+
+1436
+00:50:00,240 --> 00:50:01,359
+otherwise we'll create
+
+1437
+00:50:01,359 --> 00:50:07,030
+a go worker to actually fetch that url
+
+1438
+00:50:07,040 --> 00:50:08,880
+and we keep track of how many
+
+1439
+00:50:08,880 --> 00:50:11,280
+outstanding workers we have so n is
+
+1440
+00:50:11,280 --> 00:50:12,880
+counting the number of workers and only
+
+1441
+00:50:12,880 --> 00:50:14,160
+when n is zero
+
+1442
+00:50:14,160 --> 00:50:17,520
+uh do we terminate the coordinator
+
+1443
+00:50:17,520 --> 00:50:19,599
+uh to make sure that basically we have
+
+1444
+00:50:19,599 --> 00:50:20,800
+fetched all the
+
+1445
+00:50:20,800 --> 00:50:22,480
+web pages that we're supposed to be
+
+1446
+00:50:22,480 --> 00:50:24,960
+affecting so let's look at the worker
+
+1447
+00:50:24,960 --> 00:50:26,480
+worker basically calls fetch you know
+
+1448
+00:50:26,480 --> 00:50:27,920
+this of course not happens completely in
+
+1449
+00:50:27,920 --> 00:50:31,119
+parallel with any other workers
+
+1450
+00:50:31,119 --> 00:50:34,079
+if it actually fetches some url from
+
+1451
+00:50:34,079 --> 00:50:34,400
+that
+
+1452
+00:50:34,400 --> 00:50:36,000
+webpage it basically writes all those
+
+1453
+00:50:36,000 --> 00:50:37,920
+urls to the channel
+
+1454
+00:50:37,920 --> 00:50:40,000
+and so the coordinator will get all
+
+1455
+00:50:40,000 --> 00:50:41,440
+those channels through its range
+
+1456
+00:50:41,440 --> 00:50:43,119
+statement
+
+1457
+00:50:43,119 --> 00:50:44,880
+and then when it's done you know writing
+
+1458
+00:50:44,880 --> 00:50:47,440
+all the urls through the channel
+
+1459
+00:50:47,440 --> 00:50:50,400
+then the coordinator uh the worker exits
+
+1460
+00:50:50,400 --> 00:50:51,440
+and that will
+
+1461
+00:50:51,440 --> 00:50:54,720
+you know at some point uh decrease
+
+1462
+00:50:54,720 --> 00:50:58,790
+you know and and then at the end
+
+1463
+00:50:58,800 --> 00:51:02,319
+and that's it basically okay
+
+1464
+00:51:02,319 --> 00:51:04,559
+so those are the two solutions uh any
+
+1465
+00:51:04,559 --> 00:51:12,630
+questions about these
+
+1466
+00:51:12,640 --> 00:51:15,910
+is it all clear
+
+1467
+00:51:15,920 --> 00:51:18,640
+there is a question in chat ah okay uh
+
+1468
+00:51:18,640 --> 00:51:19,520
+let me
+
+1469
+00:51:19,520 --> 00:51:32,710
+get my chat list back backup
+
+1470
+00:51:32,720 --> 00:51:36,240
+okay so the question is when ch has a
+
+1471
+00:51:36,240 --> 00:51:38,319
+value in it and all other threads be
+
+1472
+00:51:38,319 --> 00:51:41,839
+idle uh it is the case that
+
+1473
+00:51:41,839 --> 00:51:44,160
+the since this is not a buffer channel
+
+1474
+00:51:44,160 --> 00:51:45,680
+that you know there's going to be only
+
+1475
+00:51:45,680 --> 00:51:48,079
+one request in the channel at the time
+
+1476
+00:51:48,079 --> 00:51:50,640
+and so all the frets you know will be
+
+1477
+00:51:50,640 --> 00:51:54,000
+appending to the channel one by one
+
+1478
+00:51:54,000 --> 00:51:55,599
+but doesn't that make the program
+
+1479
+00:51:55,599 --> 00:51:57,440
+sequential because no two threads are
+
+1480
+00:51:57,440 --> 00:51:58,480
+running in parallel
+
+1481
+00:51:58,480 --> 00:52:00,640
+except the main thread and one well the
+
+1482
+00:52:00,640 --> 00:52:01,520
+the fetchish
+
+1483
+00:52:01,520 --> 00:52:04,240
+will still happen in parallel and those
+
+1484
+00:52:04,240 --> 00:52:05,920
+are presumably the expensive operation
+
+1485
+00:52:05,920 --> 00:52:09,520
+right those go out across the internet
+
+1486
+00:52:09,520 --> 00:52:13,910
+got it thank you
+
+1487
+00:52:13,920 --> 00:52:16,839
+okay let me switch back to my other
+
+1488
+00:52:16,839 --> 00:52:19,359
+screen and
+
+1489
+00:52:19,359 --> 00:52:21,520
+talk a little bit about rpc since that's
+
+1490
+00:52:21,520 --> 00:52:23,520
+the other thing tool that you need
+
+1491
+00:52:23,520 --> 00:52:27,589
+for the labs
+
+1492
+00:52:27,599 --> 00:52:29,359
+i'm not going to say a ton about it but
+
+1493
+00:52:29,359 --> 00:52:31,520
+there's a
+
+1494
+00:52:31,520 --> 00:52:34,319
+rpc which stands for remote procedure
+
+1495
+00:52:34,319 --> 00:52:41,589
+call
+
+1496
+00:52:41,599 --> 00:52:44,720
+and basically the goal you know the goal
+
+1497
+00:52:44,720 --> 00:52:45,680
+of an
+
+1498
+00:52:45,680 --> 00:52:48,079
+ipc system uh like the one that go has
+
+1499
+00:52:48,079 --> 00:52:50,000
+is to make sort of rpcs
+
+1500
+00:52:50,000 --> 00:52:52,640
+behave roughly similar to procedural
+
+1501
+00:52:52,640 --> 00:52:53,440
+calls
+
+1502
+00:52:53,440 --> 00:52:54,880
+local procedure calls that you execute
+
+1503
+00:52:54,880 --> 00:52:57,200
+on the stack right and so
+
+1504
+00:52:57,200 --> 00:52:58,880
+the goal is that for example if you have
+
+1505
+00:52:58,880 --> 00:53:01,040
+a client in rpc
+
+1506
+00:53:01,040 --> 00:53:03,440
+terminology the caller is typically
+
+1507
+00:53:03,440 --> 00:53:05,680
+called the client and the
+
+1508
+00:53:05,680 --> 00:53:08,079
+the callee is called the server saying
+
+1509
+00:53:08,079 --> 00:53:09,680
+you have a function in
+
+1510
+00:53:09,680 --> 00:53:11,920
+you know fn you know we're calling with
+
+1511
+00:53:11,920 --> 00:53:13,200
+x and y
+
+1512
+00:53:13,200 --> 00:53:15,119
+and then at the server there's the
+
+1513
+00:53:15,119 --> 00:53:18,470
+implementation of this function
+
+1514
+00:53:18,480 --> 00:53:20,800
+and so there's a function n whatever x
+
+1515
+00:53:20,800 --> 00:53:21,520
+comma y
+
+1516
+00:53:21,520 --> 00:53:25,280
+int and you know it returns
+
+1517
+00:53:25,280 --> 00:53:26,720
+you know whatever does some computation
+
+1518
+00:53:26,720 --> 00:53:30,000
+but maybe use this returns
+
+1519
+00:53:30,000 --> 00:53:33,190
+uh x plus y
+
+1520
+00:53:33,200 --> 00:53:36,160
+right and so uh what we like to like to
+
+1521
+00:53:36,160 --> 00:53:37,680
+have happen or like the model that we
+
+1522
+00:53:37,680 --> 00:53:38,559
+would like to
+
+1523
+00:53:38,559 --> 00:53:40,480
+sort ourselves to think about is that
+
+1524
+00:53:40,480 --> 00:53:42,160
+when the client calls this function
+
+1525
+00:53:42,160 --> 00:53:45,200
+uh fn uh the rpc system will
+
+1526
+00:53:45,200 --> 00:53:46,559
+make sure that there's an infra
+
+1527
+00:53:46,559 --> 00:53:48,079
+corresponding amount of information
+
+1528
+00:53:48,079 --> 00:53:49,760
+happening on the server side
+
+1529
+00:53:49,760 --> 00:53:52,079
+uh passes the arguments x and y you know
+
+1530
+00:53:52,079 --> 00:53:53,040
+to the server
+
+1531
+00:53:53,040 --> 00:53:55,839
+the code runs on the server uh it you
+
+1532
+00:53:55,839 --> 00:53:56,319
+know
+
+1533
+00:53:56,319 --> 00:53:59,119
+returns a result you know you see and
+
+1534
+00:53:59,119 --> 00:54:00,400
+that result is then
+
+1535
+00:54:00,400 --> 00:54:02,960
+communicated back to the client and you
+
+1536
+00:54:02,960 --> 00:54:04,480
+know and and then
+
+1537
+00:54:04,480 --> 00:54:07,119
+fn will resume and will return and the
+
+1538
+00:54:07,119 --> 00:54:08,400
+client will return uh
+
+1539
+00:54:08,400 --> 00:54:11,280
+we'll resume with you know the x plus y
+
+1540
+00:54:11,280 --> 00:54:11,760
+in
+
+1541
+00:54:11,760 --> 00:54:14,559
+the value of x plus y and z right so
+
+1542
+00:54:14,559 --> 00:54:15,920
+this looks like you know even though the
+
+1543
+00:54:15,920 --> 00:54:17,040
+programs are running on different
+
+1544
+00:54:17,040 --> 00:54:17,839
+computers
+
+1545
+00:54:17,839 --> 00:54:18,960
+you know they're not sort of a hard
+
+1546
+00:54:18,960 --> 00:54:21,280
+boundary here uh it looks like you know
+
+1547
+00:54:21,280 --> 00:54:23,119
+they they uh make sort of regular
+
+1548
+00:54:23,119 --> 00:54:24,800
+procedure calls
+
+1549
+00:54:24,800 --> 00:54:26,640
+um and we'll see in a second that
+
+1550
+00:54:26,640 --> 00:54:28,240
+actually uh
+
+1551
+00:54:28,240 --> 00:54:29,839
+we can make a lot of similarities but
+
+1552
+00:54:29,839 --> 00:54:31,280
+it's possible to make them very behave
+
+1553
+00:54:31,280 --> 00:54:32,079
+very similar
+
+1554
+00:54:32,079 --> 00:54:33,520
+but we'll see there's also a sort of a
+
+1555
+00:54:33,520 --> 00:54:35,119
+fundamental difference that actually has
+
+1556
+00:54:35,119 --> 00:54:37,920
+to really do with distributed computing
+
+1557
+00:54:37,920 --> 00:54:39,200
+but before getting there let me first
+
+1558
+00:54:39,200 --> 00:54:39,680
+sort of
+
+1559
+00:54:39,680 --> 00:54:43,119
+uh sketch out how you can make this work
+
+1560
+00:54:43,119 --> 00:54:44,400
+and this is sort of roughly you know
+
+1561
+00:54:44,400 --> 00:54:46,319
+what go does too so
+
+1562
+00:54:46,319 --> 00:54:47,839
+so the way you know to think about it is
+
+1563
+00:54:47,839 --> 00:54:50,240
+that when the client
+
+1564
+00:54:50,240 --> 00:54:53,440
+near our program and when the client
+
+1565
+00:54:53,440 --> 00:54:54,559
+calls the function f
+
+1566
+00:54:54,559 --> 00:54:58,000
+n with x and y in it uh what it does is
+
+1567
+00:54:58,000 --> 00:54:59,440
+actually calls something what's called a
+
+1568
+00:54:59,440 --> 00:55:01,280
+stop
+
+1569
+00:55:01,280 --> 00:55:02,880
+and the stop is basically a local
+
+1570
+00:55:02,880 --> 00:55:04,880
+function you know called f n
+
+1571
+00:55:04,880 --> 00:55:07,440
+and with the two arguments declared with
+
+1572
+00:55:07,440 --> 00:55:08,240
+x and y
+
+1573
+00:55:08,240 --> 00:55:11,359
+and basically what the stop does
+
+1574
+00:55:11,359 --> 00:55:13,359
+you think this is a stop procedure and
+
+1575
+00:55:13,359 --> 00:55:14,880
+what the stop procedure basically does
+
+1576
+00:55:14,880 --> 00:55:15,280
+it
+
+1577
+00:55:15,280 --> 00:55:18,240
+builds a message uh you know saying you
+
+1578
+00:55:18,240 --> 00:55:20,240
+know which function needs to be called
+
+1579
+00:55:20,240 --> 00:55:22,160
+you know the arguments of the function
+
+1580
+00:55:22,160 --> 00:55:23,520
+you know the types of the fun
+
+1581
+00:55:23,520 --> 00:55:25,680
+of those arguments the values of these
+
+1582
+00:55:25,680 --> 00:55:26,559
+arguments
+
+1583
+00:55:26,559 --> 00:55:29,599
+et cetera et cetera and then uh
+
+1584
+00:55:29,599 --> 00:55:32,000
+what the uh stuff does actually it sends
+
+1585
+00:55:32,000 --> 00:55:32,960
+it over to network
+
+1586
+00:55:32,960 --> 00:55:35,200
+you know to a corresponding stub at the
+
+1587
+00:55:35,200 --> 00:55:38,870
+server
+
+1588
+00:55:38,880 --> 00:55:41,920
+so the server receives this message
+
+1589
+00:55:41,920 --> 00:55:44,559
+and basically you know takes this
+
+1590
+00:55:44,559 --> 00:55:45,920
+message
+
+1591
+00:55:45,920 --> 00:55:48,799
+and then marshall or marshall this is a
+
+1592
+00:55:48,799 --> 00:55:49,280
+the
+
+1593
+00:55:49,280 --> 00:55:50,880
+term that's being used to basically
+
+1594
+00:55:50,880 --> 00:55:52,559
+convert uh
+
+1595
+00:55:52,559 --> 00:55:56,000
+values uh from sort of to bite arrays
+
+1596
+00:55:56,000 --> 00:55:57,359
+and from by the rays back
+
+1597
+00:55:57,359 --> 00:56:00,160
+to values and then calls you know this
+
+1598
+00:56:00,160 --> 00:56:01,119
+function
+
+1599
+00:56:01,119 --> 00:56:06,160
+fn at the server here's our fnx
+
+1600
+00:56:06,160 --> 00:56:09,349
+blah blah blah
+
+1601
+00:56:09,359 --> 00:56:10,640
+all right so the stub basically calls
+
+1602
+00:56:10,640 --> 00:56:12,480
+the function the function returns back
+
+1603
+00:56:12,480 --> 00:56:15,119
+into this stuff this stuff marshalls you
+
+1604
+00:56:15,119 --> 00:56:16,799
+know the response value
+
+1605
+00:56:16,799 --> 00:56:19,920
+like the z x plus y
+
+1606
+00:56:19,920 --> 00:56:24,000
+um and since the back you know to the
+
+1607
+00:56:24,000 --> 00:56:25,760
+climb stop and the client stop is still
+
+1608
+00:56:25,760 --> 00:56:27,280
+waiting so basically the client stuff
+
+1609
+00:56:27,280 --> 00:56:28,720
+the way it actually works it sends out
+
+1610
+00:56:28,720 --> 00:56:30,160
+the request and then waits for the
+
+1611
+00:56:30,160 --> 00:56:31,839
+response and so when the response comes
+
+1612
+00:56:31,839 --> 00:56:32,720
+back in
+
+1613
+00:56:32,720 --> 00:56:37,990
+you know it unmarshals
+
+1614
+00:56:38,000 --> 00:56:39,680
+and then you know returns the value to
+
+1615
+00:56:39,680 --> 00:56:41,520
+the clients right so basically
+
+1616
+00:56:41,520 --> 00:56:44,880
+these two stops uh sort of make a
+
+1617
+00:56:44,880 --> 00:56:46,559
+remote procedure called look like a
+
+1618
+00:56:46,559 --> 00:56:48,000
+regular procedure called you know for
+
+1619
+00:56:48,000 --> 00:56:50,400
+almost you can't tell
+
+1620
+00:56:50,400 --> 00:56:53,440
+and the key uh and
+
+1621
+00:56:53,440 --> 00:56:54,640
+these stops are generally you know
+
+1622
+00:56:54,640 --> 00:56:56,640
+automatically generated and so the
+
+1623
+00:56:56,640 --> 00:56:57,680
+compiler and like
+
+1624
+00:56:57,680 --> 00:56:58,960
+in case of the cocoa powder that will
+
+1625
+00:56:58,960 --> 00:57:01,200
+generate these stuff for you uh
+
+1626
+00:57:01,200 --> 00:57:03,599
+and uh do the uh marshalling and then
+
+1627
+00:57:03,599 --> 00:57:06,160
+marshall your arguments for you
+
+1628
+00:57:06,160 --> 00:57:09,599
+um and um and that's how it goes
+
+1629
+00:57:09,599 --> 00:57:12,960
+also so when you're doing it from the
+
+1630
+00:57:12,960 --> 00:57:14,559
+server to the client there's also
+
+1631
+00:57:14,559 --> 00:57:16,640
+another stub again
+
+1632
+00:57:16,640 --> 00:57:18,720
+you basically return back to that first
+
+1633
+00:57:18,720 --> 00:57:19,839
+stop so
+
+1634
+00:57:19,839 --> 00:57:22,000
+this stop this makes a procedure call to
+
+1635
+00:57:22,000 --> 00:57:24,000
+basically calls the procedure fm
+
+1636
+00:57:24,000 --> 00:57:25,920
+that procedure returns right into the
+
+1637
+00:57:25,920 --> 00:57:27,119
+stop because the stop
+
+1638
+00:57:27,119 --> 00:57:29,200
+called it oh it's the same stuff that it
+
+1639
+00:57:29,200 --> 00:57:30,240
+goes in
+
+1640
+00:57:30,240 --> 00:57:34,799
+exactly got it okay
+
+1641
+00:57:34,799 --> 00:57:37,200
+okay so uh let me show you sort of how
+
+1642
+00:57:37,200 --> 00:57:43,270
+this plays out inside of go
+
+1643
+00:57:43,280 --> 00:57:46,880
+and by showing you a very simple
+
+1644
+00:57:46,880 --> 00:57:49,910
+key value server
+
+1645
+00:57:49,920 --> 00:57:51,520
+and you'll see you know it doesn't look
+
+1646
+00:57:51,520 --> 00:57:53,119
+exactly what our procedure calls but it
+
+1647
+00:57:53,119 --> 00:57:53,359
+is
+
+1648
+00:57:53,359 --> 00:57:56,960
+pretty close uh so the typical thing is
+
+1649
+00:57:56,960 --> 00:57:58,480
+that you know you actually declare
+
+1650
+00:57:58,480 --> 00:58:00,960
+a typical convention for the main goal
+
+1651
+00:58:00,960 --> 00:58:05,109
+is that you declare
+
+1652
+00:58:05,119 --> 00:58:06,960
+the arguments as trucks and so we're
+
+1653
+00:58:06,960 --> 00:58:08,799
+going to implement two procedures
+
+1654
+00:58:08,799 --> 00:58:10,559
+two remote procedures one is put and one
+
+1655
+00:58:10,559 --> 00:58:12,880
+is get and put is basically
+
+1656
+00:58:12,880 --> 00:58:14,720
+fruit rx is the arguments to the put
+
+1657
+00:58:14,720 --> 00:58:16,160
+input replies the response
+
+1658
+00:58:16,160 --> 00:58:18,079
+similarly and there's a get rx with the
+
+1659
+00:58:18,079 --> 00:58:20,559
+request or the arguments to the request
+
+1660
+00:58:20,559 --> 00:58:24,000
+get procedure and then reply and so let
+
+1661
+00:58:24,000 --> 00:58:25,200
+me first look at the server
+
+1662
+00:58:25,200 --> 00:58:27,119
+so here's our two functions you know
+
+1663
+00:58:27,119 --> 00:58:28,319
+actually the
+
+1664
+00:58:28,319 --> 00:58:29,599
+two functions that we're going to be
+
+1665
+00:58:29,599 --> 00:58:31,760
+calling on the server
+
+1666
+00:58:31,760 --> 00:58:34,000
+um i think i'll skip down for that for a
+
+1667
+00:58:34,000 --> 00:58:35,200
+second
+
+1668
+00:58:35,200 --> 00:58:41,270
+so maybe actually you know
+
+1669
+00:58:41,280 --> 00:58:43,119
+let me talk about them a little bit so
+
+1670
+00:58:43,119 --> 00:58:45,280
+this is the client site
+
+1671
+00:58:45,280 --> 00:58:47,680
+so the client calls a function get and
+
+1672
+00:58:47,680 --> 00:58:48,559
+uh what
+
+1673
+00:58:48,559 --> 00:58:51,119
+inside of get you know you this function
+
+1674
+00:58:51,119 --> 00:58:52,640
+actually connects to the server i'll see
+
+1675
+00:58:52,640 --> 00:58:54,319
+in a second what that means
+
+1676
+00:58:54,319 --> 00:58:56,799
+um it fills in the arguments it
+
+1677
+00:58:56,799 --> 00:58:58,559
+allocates a response and then calls this
+
+1678
+00:58:58,559 --> 00:58:59,520
+procedure client
+
+1679
+00:58:59,520 --> 00:59:01,280
+it calls call you can think about this
+
+1680
+00:59:01,280 --> 00:59:02,799
+as a generic stun
+
+1681
+00:59:02,799 --> 00:59:04,240
+that basically takes the method that
+
+1682
+00:59:04,240 --> 00:59:05,920
+needs to be called on the server and the
+
+1683
+00:59:05,920 --> 00:59:07,680
+arguments and the reply and so call
+
+1684
+00:59:07,680 --> 00:59:09,040
+always has three arguments
+
+1685
+00:59:09,040 --> 00:59:13,119
+the method the argument and the response
+
+1686
+00:59:13,119 --> 00:59:15,920
+and then call internally we'll send
+
+1687
+00:59:15,920 --> 00:59:17,839
+marshall the arguments
+
+1688
+00:59:17,839 --> 00:59:20,160
+send the message to the server over the
+
+1689
+00:59:20,160 --> 00:59:21,119
+connection
+
+1690
+00:59:21,119 --> 00:59:23,520
+and wait for the response the reply when
+
+1691
+00:59:23,520 --> 00:59:25,280
+the replies comes in the reply structure
+
+1692
+00:59:25,280 --> 00:59:26,000
+will be filled in
+
+1693
+00:59:26,000 --> 00:59:28,319
+by the call stub and then when that's
+
+1694
+00:59:28,319 --> 00:59:30,839
+done then return out of the call
+
+1695
+00:59:30,839 --> 00:59:33,599
+call and basically put looks exactly the
+
+1696
+00:59:33,599 --> 00:59:36,230
+same way
+
+1697
+00:59:36,240 --> 00:59:38,400
+great and so on the server side let's
+
+1698
+00:59:38,400 --> 00:59:40,160
+see how that is implemented
+
+1699
+00:59:40,160 --> 00:59:43,200
+the server has a key value map this is
+
+1700
+00:59:43,200 --> 00:59:46,720
+nothing else than a regular go map
+
+1701
+00:59:46,720 --> 00:59:50,069
+and
+
+1702
+00:59:50,079 --> 00:59:51,760
+let me see actually the key values
+
+1703
+00:59:51,760 --> 00:59:55,349
+trucked
+
+1704
+00:59:55,359 --> 00:59:58,789
+i declared it somewhere
+
+1705
+00:59:58,799 --> 01:00:01,280
+oh sorry it's right above it so there's
+
+1706
+01:00:01,280 --> 01:00:02,640
+a structure called kv
+
+1707
+01:00:02,640 --> 01:00:04,960
+that actually has a mutex and a map in
+
+1708
+01:00:04,960 --> 01:00:06,640
+it and the map is like where we're going
+
+1709
+01:00:06,640 --> 01:00:10,160
+to do the put and get operations on
+
+1710
+01:00:10,160 --> 01:00:12,319
+and there's another little preamble that
+
+1711
+01:00:12,319 --> 01:00:14,079
+you need to sort of write you know to
+
+1712
+01:00:14,079 --> 01:00:16,240
+sort of set up a server uh but here it
+
+1713
+01:00:16,240 --> 01:00:17,680
+is uh
+
+1714
+01:00:17,680 --> 01:00:20,480
+you know you basically uh allocate a new
+
+1715
+01:00:20,480 --> 01:00:21,040
+server
+
+1716
+01:00:21,040 --> 01:00:23,359
+object and then this is sort of the key
+
+1717
+01:00:23,359 --> 01:00:24,319
+operation
+
+1718
+01:00:24,319 --> 01:00:28,799
+rpc register kv will register basically
+
+1719
+01:00:28,799 --> 01:00:30,960
+all the methods that are implemented on
+
+1720
+01:00:30,960 --> 01:00:32,319
+the key fee struct
+
+1721
+01:00:32,319 --> 01:00:36,480
+with the rpc server with one twist
+
+1722
+01:00:36,480 --> 01:00:40,839
+the method only the capital named
+
+1723
+01:00:40,839 --> 01:00:42,720
+uh only the
+
+1724
+01:00:42,720 --> 01:00:44,960
+the methods with the capital uh will
+
+1725
+01:00:44,960 --> 01:00:46,000
+actually be reported
+
+1726
+01:00:46,000 --> 01:00:49,040
+and so basically go uses capital names
+
+1727
+01:00:49,040 --> 01:00:50,000
+to indicate
+
+1728
+01:00:50,000 --> 01:00:53,040
+public you know methods and uh a method
+
+1729
+01:00:53,040 --> 01:00:54,640
+with a small
+
+1730
+01:00:54,640 --> 01:00:57,920
+small caps is in private method so only
+
+1731
+01:00:57,920 --> 01:00:59,680
+you know basically rpc register
+
+1732
+01:00:59,680 --> 01:01:02,640
+exports only capitalized methods so for
+
+1733
+01:01:02,640 --> 01:01:04,319
+example here's a method below here's our
+
+1734
+01:01:04,319 --> 01:01:05,200
+get method
+
+1735
+01:01:05,200 --> 01:01:08,079
+you know it has a capital letter and by
+
+1736
+01:01:08,079 --> 01:01:09,680
+calling register that method is now
+
+1737
+01:01:09,680 --> 01:01:11,280
+callable by a client that connects to
+
+1738
+01:01:11,280 --> 01:01:13,910
+this server
+
+1739
+01:01:13,920 --> 01:01:15,680
+so the server internally you know
+
+1740
+01:01:15,680 --> 01:01:18,640
+basically uh it creates a tcp connection
+
+1741
+01:01:18,640 --> 01:01:21,599
+uh and waits on the tcp connection to to
+
+1742
+01:01:21,599 --> 01:01:23,440
+get a request or a new
+
+1743
+01:01:23,440 --> 01:01:24,640
+connection request for the tcp
+
+1744
+01:01:24,640 --> 01:01:27,359
+connection and then calls rpc
+
+1745
+01:01:27,359 --> 01:01:30,400
+servcom to serve that tcp connection and
+
+1746
+01:01:30,400 --> 01:01:31,280
+basically
+
+1747
+01:01:31,280 --> 01:01:33,200
+every message that comes in over that
+
+1748
+01:01:33,200 --> 01:01:34,319
+you know connection
+
+1749
+01:01:34,319 --> 01:01:36,079
+it will automatically find the right
+
+1750
+01:01:36,079 --> 01:01:38,000
+method you know that is associated with
+
+1751
+01:01:38,000 --> 01:01:38,880
+the message
+
+1752
+01:01:38,880 --> 01:01:41,040
+and called that method with the
+
+1753
+01:01:41,040 --> 01:01:42,640
+unmarshaled arguments and
+
+1754
+01:01:42,640 --> 01:01:46,160
+marshall's reply so for example if the
+
+1755
+01:01:46,160 --> 01:01:48,000
+client calls get you know connects to it
+
+1756
+01:01:48,000 --> 01:01:49,440
+double call
+
+1757
+01:01:49,440 --> 01:01:51,599
+makes this connection into existence and
+
+1758
+01:01:51,599 --> 01:01:52,799
+then if the client calls
+
+1759
+01:01:52,799 --> 01:01:55,599
+call with a get then this get function
+
+1760
+01:01:55,599 --> 01:01:57,200
+will be run
+
+1761
+01:01:57,200 --> 01:01:58,640
+and as you can see in the get function
+
+1762
+01:01:58,640 --> 01:02:00,079
+first thing it does it actually takes a
+
+1763
+01:02:00,079 --> 01:02:01,839
+walk out because
+
+1764
+01:02:01,839 --> 01:02:04,319
+multiple clients could be calling the
+
+1765
+01:02:04,319 --> 01:02:06,000
+server and so there will be multiple go
+
+1766
+01:02:06,000 --> 01:02:08,000
+routines running at the same time
+
+1767
+01:02:08,000 --> 01:02:10,960
+perhaps invoking get and put and so they
+
+1768
+01:02:10,960 --> 01:02:12,480
+will manipulating the
+
+1769
+01:02:12,480 --> 01:02:14,559
+the map concurrently and so we need to
+
+1770
+01:02:14,559 --> 01:02:15,920
+make sure that you know those
+
+1771
+01:02:15,920 --> 01:02:19,039
+uh that is done in an atomic way
+
+1772
+01:02:19,039 --> 01:02:22,480
+and so therefore use locks so the get
+
+1773
+01:02:22,480 --> 01:02:23,200
+function
+
+1774
+01:02:23,200 --> 01:02:26,000
+looks up the key into the map it looks
+
+1775
+01:02:26,000 --> 01:02:26,480
+the key
+
+1776
+01:02:26,480 --> 01:02:28,000
+looks of the key in the map and returns
+
+1777
+01:02:28,000 --> 01:02:29,920
+basically the value
+
+1778
+01:02:29,920 --> 01:02:32,079
+if there's no entry in the map it will
+
+1779
+01:02:32,079 --> 01:02:33,280
+return error
+
+1780
+01:02:33,280 --> 01:02:35,599
+no key otherwise it will return the
+
+1781
+01:02:35,599 --> 01:02:36,400
+appropriate
+
+1782
+01:02:36,400 --> 01:02:39,680
+value and that's it and so on the server
+
+1783
+01:02:39,680 --> 01:02:41,599
+side when this get function returns
+
+1784
+01:02:41,599 --> 01:02:44,559
+it will marshal its response sends
+
+1785
+01:02:44,559 --> 01:02:46,319
+response back to the client the client
+
+1786
+01:02:46,319 --> 01:02:46,880
+will
+
+1787
+01:02:46,880 --> 01:02:48,480
+cite of it will unmarshal it and
+
+1788
+01:02:48,480 --> 01:02:52,789
+actually return it to the caller
+
+1789
+01:02:52,799 --> 01:02:54,720
+okay since that makes sense so that's
+
+1790
+01:02:54,720 --> 01:02:56,480
+sort of a
+
+1791
+01:02:56,480 --> 01:03:08,549
+dirt simple key value server in action
+
+1792
+01:03:08,559 --> 01:03:10,640
+okay i want to make one more point which
+
+1793
+01:03:10,640 --> 01:03:11,839
+is an important point
+
+1794
+01:03:11,839 --> 01:03:15,599
+and in the end
+
+1795
+01:03:15,599 --> 01:03:17,119
+what's important to think about is what
+
+1796
+01:03:17,119 --> 01:03:18,960
+the rfpc semantics are
+
+1797
+01:03:18,960 --> 01:03:30,079
+under failures
+
+1798
+01:03:30,079 --> 01:03:32,640
+um and so the different types of
+
+1799
+01:03:32,640 --> 01:03:34,400
+semantics possible
+
+1800
+01:03:34,400 --> 01:03:37,680
+something is called at least once
+
+1801
+01:03:37,680 --> 01:03:39,359
+and this all has to do with like what
+
+1802
+01:03:39,359 --> 01:03:42,079
+does the client do if the server fails
+
+1803
+01:03:42,079 --> 01:03:44,000
+so let's say the client sends the
+
+1804
+01:03:44,000 --> 01:03:46,880
+request the server crashes
+
+1805
+01:03:46,880 --> 01:03:50,160
+and uh of course now at some point the
+
+1806
+01:03:50,160 --> 01:03:51,119
+client will time out
+
+1807
+01:03:51,119 --> 01:03:52,559
+and just doesn't know whether the
+
+1808
+01:03:52,559 --> 01:03:54,000
+operation actually happened or not
+
+1809
+01:03:54,000 --> 01:03:55,280
+happened
+
+1810
+01:03:55,280 --> 01:03:58,400
+and at least once rpc semantics it means
+
+1811
+01:03:58,400 --> 01:04:00,480
+that the client will automatically retry
+
+1812
+01:04:00,480 --> 01:04:02,480
+and will keep going until the next has
+
+1813
+01:04:02,480 --> 01:04:05,910
+executed at least once
+
+1814
+01:04:05,920 --> 01:04:07,520
+uh the downside of course of at least
+
+1815
+01:04:07,520 --> 01:04:09,119
+once is that you know the same operation
+
+1816
+01:04:09,119 --> 01:04:11,039
+might be executed multiple times so
+
+1817
+01:04:11,039 --> 01:04:12,799
+example if you do a put you know the put
+
+1818
+01:04:12,799 --> 01:04:14,400
+might be actually executed multiple
+
+1819
+01:04:14,400 --> 01:04:17,359
+times in at least one rpc system
+
+1820
+01:04:17,359 --> 01:04:18,880
+so that's not appropriate for many
+
+1821
+01:04:18,880 --> 01:04:21,280
+applications so another
+
+1822
+01:04:21,280 --> 01:04:23,280
+type of semantics that's common in rpc
+
+1823
+01:04:23,280 --> 01:04:27,839
+systems is it most wants
+
+1824
+01:04:27,839 --> 01:04:30,319
+so the corresponding survey request
+
+1825
+01:04:30,319 --> 01:04:32,079
+actually executed either
+
+1826
+01:04:32,079 --> 01:04:35,200
+uh zero times or once
+
+1827
+01:04:35,200 --> 01:04:37,920
+but no more than once and the way you
+
+1828
+01:04:37,920 --> 01:04:39,520
+know that is typically implemented is by
+
+1829
+01:04:39,520 --> 01:04:40,960
+filtering duplicates and you will
+
+1830
+01:04:40,960 --> 01:04:42,000
+actually be doing that
+
+1831
+01:04:42,000 --> 01:04:46,079
+in uh in later labs
+
+1832
+01:04:46,079 --> 01:04:47,520
+that could could be the case that
+
+1833
+01:04:47,520 --> 01:04:48,799
+actually both requests actually come
+
+1834
+01:04:48,799 --> 01:04:49,599
+through
+
+1835
+01:04:49,599 --> 01:04:51,839
+uh maybe the network is like a temporary
+
+1836
+01:04:51,839 --> 01:04:53,119
+petition then the server actually gets
+
+1837
+01:04:53,119 --> 01:04:54,640
+both requests and the server has to
+
+1838
+01:04:54,640 --> 01:04:55,520
+arrange that
+
+1839
+01:04:55,520 --> 01:04:58,640
+it detects a recent request and doesn't
+
+1840
+01:04:58,640 --> 01:05:01,359
+execute it twice
+
+1841
+01:05:01,359 --> 01:05:04,079
+now of course ideally you might actually
+
+1842
+01:05:04,079 --> 01:05:05,920
+want exactly once
+
+1843
+01:05:05,920 --> 01:05:07,440
+because that's actually what your normal
+
+1844
+01:05:07,440 --> 01:05:08,960
+procedure call would be due right like
+
+1845
+01:05:08,960 --> 01:05:10,480
+if you call a procedure in uh
+
+1846
+01:05:10,480 --> 01:05:12,240
+your server in a normal sequential
+
+1847
+01:05:12,240 --> 01:05:13,760
+program it actually executes exactly
+
+1848
+01:05:13,760 --> 01:05:15,520
+once it's never possible to be at least
+
+1849
+01:05:15,520 --> 01:05:15,920
+once
+
+1850
+01:05:15,920 --> 01:05:18,000
+at most once this turns out to be
+
+1851
+01:05:18,000 --> 01:05:20,160
+actually very hard to arrange
+
+1852
+01:05:20,160 --> 01:05:22,400
+uh this requires you know uh you
+
+1853
+01:05:22,400 --> 01:05:24,720
+basically have to maintain state on disk
+
+1854
+01:05:24,720 --> 01:05:27,359
+uh and so the tent tends to be expensive
+
+1855
+01:05:27,359 --> 01:05:29,039
+and in fact you know in practice very
+
+1856
+01:05:29,039 --> 01:05:31,440
+few rpc systems are exactly once
+
+1857
+01:05:31,440 --> 01:05:32,799
+although in the labs you're going to
+
+1858
+01:05:32,799 --> 01:05:34,559
+build actually one in lab three
+
+1859
+01:05:34,559 --> 01:05:36,000
+you're gonna actually build an rpc
+
+1860
+01:05:36,000 --> 01:05:38,960
+system that's basically exactly once
+
+1861
+01:05:38,960 --> 01:05:42,000
+okay in practice
+
+1862
+01:05:42,000 --> 01:05:45,920
+goes rpc system is at most wants so if
+
+1863
+01:05:45,920 --> 01:05:46,960
+you do a call
+
+1864
+01:05:46,960 --> 01:05:48,559
+and you do the call across the tcp
+
+1865
+01:05:48,559 --> 01:05:50,319
+channel the tcp channel will make sure
+
+1866
+01:05:50,319 --> 01:05:52,000
+that there are no duplicates
+
+1867
+01:05:52,000 --> 01:05:55,280
+uh and so and the rfpc system
+
+1868
+01:05:55,280 --> 01:05:58,000
+uh will either execute once or none at
+
+1869
+01:05:58,000 --> 01:05:58,319
+all
+
+1870
+01:05:58,319 --> 01:06:01,520
+and then in the case and return an error
+
+1871
+01:06:01,520 --> 01:06:02,960
+uh and then of course the application
+
+1872
+01:06:02,960 --> 01:06:04,880
+may retry but now it's the application's
+
+1873
+01:06:04,880 --> 01:06:06,000
+responsibility to
+
+1874
+01:06:06,000 --> 01:06:07,119
+uh deal with the problems with
+
+1875
+01:06:07,119 --> 01:06:10,559
+duplication and failed messages
+
+1876
+01:06:10,559 --> 01:06:12,799
+okay so here's the sort of the key point
+
+1877
+01:06:12,799 --> 01:06:15,440
+correct the fact that there are failures
+
+1878
+01:06:15,440 --> 01:06:18,880
+basically makes you know rpcs
+
+1879
+01:06:18,880 --> 01:06:21,359
+not identical to procedure calls so even
+
+1880
+01:06:21,359 --> 01:06:22,960
+though the goal is to make them look as
+
+1881
+01:06:22,960 --> 01:06:24,079
+similar as possible
+
+1882
+01:06:24,079 --> 01:06:25,920
+they're actually not identical and
+
+1883
+01:06:25,920 --> 01:06:27,520
+really the thing that exposes the
+
+1884
+01:06:27,520 --> 01:06:28,480
+differences
+
+1885
+01:06:28,480 --> 01:06:31,440
+is the the failures or the survey
+
+1886
+01:06:31,440 --> 01:06:35,430
+crashing
+
+1887
+01:06:35,440 --> 01:06:37,760
+any quick questions about this quick
+
+1888
+01:06:37,760 --> 01:06:46,960
+intro for rpc
+
+1889
+01:06:46,960 --> 01:06:48,960
+okay if not then i'm going to stop the
+
+1890
+01:06:48,960 --> 01:06:50,720
+lecture here so that people that need to
+
+1891
+01:06:50,720 --> 01:06:52,000
+go or students that need to go to the
+
+1892
+01:06:52,000 --> 01:06:53,599
+next class they can go to the next class
+
+1893
+01:06:53,599 --> 01:06:55,359
+i'll be hanging around so if there's any
+
+1894
+01:06:55,359 --> 01:06:58,880
+more questions i'll be happy to uh
+
+1895
+01:06:58,880 --> 01:07:00,799
+to answer them and i'll stick around for
+
+1896
+01:07:00,799 --> 01:07:03,119
+a little while
+
+1897
+01:07:03,119 --> 01:07:05,119
+in the meantime enjoy lab one and good
+
+1898
+01:07:05,119 --> 01:07:08,640
+luck with it
+
