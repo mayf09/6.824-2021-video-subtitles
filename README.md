@@ -1,6 +1,6 @@
 # 项目说明
 
-为麻省理工操作系统课程（[6.824/Spring 2021](https://pdos.csail.mit.edu/6.824/2021/schedule.html)）视频，提供中英文字幕。
+为麻省理工操作系统课程（[6.824/Spring 2021](https://pdos.csail.mit.edu/6.824/schedule.html)）视频，提供中英文字幕。
 
 视频已搬运到 [B站](https://www.bilibili.com/video/BV16f4y1z7kn/)，欢迎观看学习。
 
