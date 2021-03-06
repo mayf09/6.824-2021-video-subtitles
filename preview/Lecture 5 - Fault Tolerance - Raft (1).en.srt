@@ -1,0 +1,9704 @@
+1
+00:00:00,640 --> 00:00:03,280
+so the topic for today is uh
+
+2
+00:00:03,280 --> 00:00:07,190
+raft uh
+
+3
+00:00:07,200 --> 00:00:09,120
+replication formula protocol uh that
+
+4
+00:00:09,120 --> 00:00:10,880
+we'll discuss in quite a bit of detail
+
+5
+00:00:10,880 --> 00:00:12,960
+uh in fact uh we're gonna spend multiple
+
+6
+00:00:12,960 --> 00:00:14,480
+lectures on it um
+
+7
+00:00:14,480 --> 00:00:16,000
+and one because it's sort of one of the
+
+8
+00:00:16,000 --> 00:00:18,320
+core elements of uh
+
+9
+00:00:18,320 --> 00:00:21,840
+examples of uh distributed replication
+
+10
+00:00:21,840 --> 00:00:22,960
+protocol
+
+11
+00:00:22,960 --> 00:00:25,359
+so uh today i've been emotionally
+
+12
+00:00:25,359 --> 00:00:26,640
+focusing
+
+13
+00:00:26,640 --> 00:00:28,800
+on you know the material that is
+
+14
+00:00:28,800 --> 00:00:32,800
+necessary for labs 2a and 2b
+
+15
+00:00:32,800 --> 00:00:35,120
+so the election of the leader as well as
+
+16
+00:00:35,120 --> 00:00:37,040
+you know pushing the logs around
+
+17
+00:00:37,040 --> 00:00:42,709
+and then next week
+
+18
+00:00:42,719 --> 00:00:45,920
+we're focusing more on 2c and 2d mainly
+
+19
+00:00:45,920 --> 00:00:47,760
+the snapshots
+
+20
+00:00:47,760 --> 00:00:50,239
+uh and the lock compaction and you know
+
+21
+00:00:50,239 --> 00:00:52,000
+gives us opportunity to scan the other
+
+22
+00:00:52,000 --> 00:00:52,719
+aspect of
+
+23
+00:00:52,719 --> 00:00:55,039
+raft in fact we'll talk about rap one
+
+24
+00:00:55,039 --> 00:00:56,079
+more time
+
+25
+00:00:56,079 --> 00:00:59,520
+in the week after uh we'll have a
+
+26
+00:00:59,520 --> 00:01:03,189
+q a lecture
+
+27
+00:01:03,199 --> 00:01:06,159
+on uh you know two a and two b and so
+
+28
+00:01:06,159 --> 00:01:06,720
+we'll
+
+29
+00:01:06,720 --> 00:01:08,479
+talk about the actual solutions to the
+
+30
+00:01:08,479 --> 00:01:10,560
+labs uh to a introduce
+
+31
+00:01:10,560 --> 00:01:14,080
+okay so that's the plan uh and so i'm
+
+32
+00:01:14,080 --> 00:01:15,280
+gonna just dive in
+
+33
+00:01:15,280 --> 00:01:18,320
+uh with uh with the starting point for
+
+34
+00:01:18,320 --> 00:01:19,600
+today
+
+35
+00:01:19,600 --> 00:01:22,400
+the place probably to start is to
+
+36
+00:01:22,400 --> 00:01:23,040
+observe
+
+37
+00:01:23,040 --> 00:01:26,080
+that in some of the previous
+
+38
+00:01:26,080 --> 00:01:28,080
+case studies of replicated systems we've
+
+39
+00:01:28,080 --> 00:01:32,069
+seen in sort of a pattern
+
+40
+00:01:32,079 --> 00:01:36,000
+uh you know you look at gfs mapreduce
+
+41
+00:01:36,000 --> 00:01:40,079
+virtual fmft they all have uh
+
+42
+00:01:40,079 --> 00:01:42,399
+a single point of failure so even though
+
+43
+00:01:42,399 --> 00:01:44,799
+you know they're replicated systems
+
+44
+00:01:44,799 --> 00:01:46,320
+and they do replication for fault
+
+45
+00:01:46,320 --> 00:01:47,840
+tolerance
+
+46
+00:01:47,840 --> 00:01:50,000
+uh all of them actually have a single
+
+47
+00:01:50,000 --> 00:01:51,600
+point of failure
+
+48
+00:01:51,600 --> 00:01:53,680
+you know in the case of you know my
+
+49
+00:01:53,680 --> 00:01:58,789
+producer was the coordinator
+
+50
+00:01:58,799 --> 00:02:02,560
+in the case of gdfs you know the master
+
+51
+00:02:02,560 --> 00:02:05,200
+that hands out the leases for example
+
+52
+00:02:05,200 --> 00:02:05,759
+and
+
+53
+00:02:05,759 --> 00:02:09,599
+you know in the vm
+
+54
+00:02:09,599 --> 00:02:11,360
+fte case it's the storage server or
+
+55
+00:02:11,360 --> 00:02:15,430
+really the tester set server
+
+56
+00:02:15,440 --> 00:02:19,440
+and the reason you know why
+
+57
+00:02:19,440 --> 00:02:20,959
+as we discussed in the previous lecture
+
+58
+00:02:20,959 --> 00:02:22,560
+the reasons that actually there are you
+
+59
+00:02:22,560 --> 00:02:23,680
+know single machines instead of
+
+60
+00:02:23,680 --> 00:02:24,959
+replicated machines
+
+61
+00:02:24,959 --> 00:02:34,830
+is to avoid you know the split brain
+
+62
+00:02:34,840 --> 00:02:36,800
+syndrome
+
+63
+00:02:36,800 --> 00:02:38,560
+and you know for many systems you know
+
+64
+00:02:38,560 --> 00:02:40,640
+sort of i mean one way in this sort of a
+
+65
+00:02:40,640 --> 00:02:41,840
+bummer correct we're building a high
+
+66
+00:02:41,840 --> 00:02:43,440
+performance you know we're building uh
+
+67
+00:02:43,440 --> 00:02:45,440
+fault very fall tolerance systems
+
+68
+00:02:45,440 --> 00:02:47,599
+and and on all these designs actually we
+
+69
+00:02:47,599 --> 00:02:48,800
+do actually still have
+
+70
+00:02:48,800 --> 00:02:50,160
+sort of a single point of failure even
+
+71
+00:02:50,160 --> 00:02:51,920
+though our replication is used for many
+
+72
+00:02:51,920 --> 00:02:54,480
+other aspects of these system designs
+
+73
+00:02:54,480 --> 00:02:56,480
+and for many of the systems that we
+
+74
+00:02:56,480 --> 00:02:57,680
+talked so far about
+
+75
+00:02:57,680 --> 00:03:00,800
+you know this uh to avoid this
+
+76
+00:03:00,800 --> 00:03:02,640
+split brain center syndrome and actually
+
+77
+00:03:02,640 --> 00:03:04,319
+introduce a single point of failure or
+
+78
+00:03:04,319 --> 00:03:06,159
+maintain a single point of failure those
+
+79
+00:03:06,159 --> 00:03:06,480
+are
+
+80
+00:03:06,480 --> 00:03:09,280
+perfectly acceptable in many cases
+
+81
+00:03:09,280 --> 00:03:10,720
+because in many of these cases like if
+
+82
+00:03:10,720 --> 00:03:11,440
+the
+
+83
+00:03:11,440 --> 00:03:14,560
+the stored server or you know the master
+
+84
+00:03:14,560 --> 00:03:15,360
+goes down
+
+85
+00:03:15,360 --> 00:03:18,080
+you know hopefully uh it will it's only
+
+86
+00:03:18,080 --> 00:03:19,680
+a single machine so the chance is going
+
+87
+00:03:19,680 --> 00:03:21,360
+down the smaller than you know any out
+
+88
+00:03:21,360 --> 00:03:22,959
+of the chunk servers
+
+89
+00:03:22,959 --> 00:03:24,959
+and uh you know probably there's
+
+90
+00:03:24,959 --> 00:03:26,720
+somebody ready you know to be beefed up
+
+91
+00:03:26,720 --> 00:03:28,000
+you know in the case that the master
+
+92
+00:03:28,000 --> 00:03:28,560
+goes down
+
+93
+00:03:28,560 --> 00:03:29,920
+comes back up and can really make sure
+
+94
+00:03:29,920 --> 00:03:32,239
+there's only one master online
+
+95
+00:03:32,239 --> 00:03:34,319
+uh so uh you know many many
+
+96
+00:03:34,319 --> 00:03:36,080
+circumstances is perfectly fine you know
+
+97
+00:03:36,080 --> 00:03:37,840
+it will lead maybe to in a very short
+
+98
+00:03:37,840 --> 00:03:39,280
+day in time
+
+99
+00:03:39,280 --> 00:03:40,879
+but you know in some systems you know
+
+100
+00:03:40,879 --> 00:03:42,799
+that's really nice what are really nice
+
+101
+00:03:42,799 --> 00:03:44,239
+is actually if this
+
+102
+00:03:44,239 --> 00:03:45,680
+we didn't even have to have two single
+
+103
+00:03:45,680 --> 00:03:47,200
+points of failure basically we could
+
+104
+00:03:47,200 --> 00:03:49,120
+reduce downtime even further
+
+105
+00:03:49,120 --> 00:03:52,400
+uh and uh uh and
+
+106
+00:03:52,400 --> 00:03:55,680
+and increase up down and so uh
+
+107
+00:03:55,680 --> 00:03:58,000
+and that's really where uh you know the
+
+108
+00:03:58,000 --> 00:03:59,680
+protocols of the style protocols that
+
+109
+00:03:59,680 --> 00:04:01,599
+raft you know fits into uh
+
+110
+00:04:01,599 --> 00:04:04,799
+come into play but just before
+
+111
+00:04:04,799 --> 00:04:06,400
+diving into or talking about sort of the
+
+112
+00:04:06,400 --> 00:04:08,000
+key ideas in the protocol
+
+113
+00:04:08,000 --> 00:04:10,560
+let's remind ourselves why you know this
+
+114
+00:04:10,560 --> 00:04:12,400
+sort of single point of failure
+
+115
+00:04:12,400 --> 00:04:14,879
+leads or you know why actually
+
+116
+00:04:14,879 --> 00:04:15,840
+replicating
+
+117
+00:04:15,840 --> 00:04:17,919
+uh the sort of crucial single point of
+
+118
+00:04:17,919 --> 00:04:19,600
+failures like the test and set server
+
+119
+00:04:19,600 --> 00:04:22,400
+can lead you know to this split brain uh
+
+120
+00:04:22,400 --> 00:04:23,520
+problem
+
+121
+00:04:23,520 --> 00:04:25,840
+uh and so you might think you know why
+
+122
+00:04:25,840 --> 00:04:27,440
+did not replicate you know the single
+
+123
+00:04:27,440 --> 00:04:28,080
+point of failure
+
+124
+00:04:28,080 --> 00:04:31,440
+too so let's try to do that and then
+
+125
+00:04:31,440 --> 00:04:32,720
+we'll quickly see what
+
+126
+00:04:32,720 --> 00:04:34,800
+the the problem is so let's replicate
+
+127
+00:04:34,800 --> 00:04:48,070
+the test and set server
+
+128
+00:04:48,080 --> 00:04:51,840
+um and so so let's do a simple
+
+129
+00:04:51,840 --> 00:04:53,759
+you know just a straightforward case and
+
+130
+00:04:53,759 --> 00:04:54,880
+we'll just have
+
+131
+00:04:54,880 --> 00:04:58,080
+one replicated one test asset server
+
+132
+00:04:58,080 --> 00:05:00,800
+that's one and here we have s2 that's
+
+133
+00:05:00,800 --> 00:05:02,400
+the other replicated test
+
+134
+00:05:02,400 --> 00:05:04,720
+set server and just remind correctly
+
+135
+00:05:04,720 --> 00:05:07,039
+like test and set
+
+136
+00:05:07,039 --> 00:05:09,680
+it takes an argument new and the returns
+
+137
+00:05:09,680 --> 00:05:12,629
+the old value
+
+138
+00:05:12,639 --> 00:05:14,560
+and the goal is that if two clients at
+
+139
+00:05:14,560 --> 00:05:16,639
+the same time call test a set you know
+
+140
+00:05:16,639 --> 00:05:17,840
+one wins you know gets
+
+141
+00:05:17,840 --> 00:05:20,800
+basically uh falls back as the old value
+
+142
+00:05:20,800 --> 00:05:22,000
+and the other one will lose because it
+
+143
+00:05:22,000 --> 00:05:24,560
+will get true back as the
+
+144
+00:05:24,560 --> 00:05:27,280
+as the old value so let's just see how
+
+145
+00:05:27,280 --> 00:05:28,880
+this might work play out so we have a
+
+146
+00:05:28,880 --> 00:05:29,680
+client
+
+147
+00:05:29,680 --> 00:05:32,639
+that calls test and set and you know
+
+148
+00:05:32,639 --> 00:05:39,030
+communicates with the first server
+
+149
+00:05:39,040 --> 00:05:42,469
+[Music]
+
+150
+00:05:42,479 --> 00:05:44,800
+and we don't really know actually it
+
+151
+00:05:44,800 --> 00:05:46,080
+doesn't get the response for the second
+
+152
+00:05:46,080 --> 00:05:48,160
+server
+
+153
+00:05:48,160 --> 00:05:49,919
+so there's sort of two cases now correct
+
+154
+00:05:49,919 --> 00:05:52,080
+where you know why
+
+155
+00:05:52,080 --> 00:05:53,840
+if s2 doesn't respond you know there's
+
+156
+00:05:53,840 --> 00:05:55,360
+two possible reasons why that could be
+
+157
+00:05:55,360 --> 00:05:56,400
+the case
+
+158
+00:05:56,400 --> 00:06:00,560
+so one case could be s2 didn't respond
+
+159
+00:06:00,560 --> 00:06:06,080
+because s2 failed
+
+160
+00:06:06,080 --> 00:06:08,319
+and in some cases and that's really what
+
+161
+00:06:08,319 --> 00:06:09,280
+we'd like to be
+
+162
+00:06:09,280 --> 00:06:12,000
+doing is that at that point basically c1
+
+163
+00:06:12,000 --> 00:06:13,280
+just declares victory
+
+164
+00:06:13,280 --> 00:06:15,039
+you know since you know nobody else can
+
+165
+00:06:15,039 --> 00:06:17,440
+actually see observe you know the value
+
+166
+00:06:17,440 --> 00:06:17,759
+at
+
+167
+00:06:17,759 --> 00:06:20,240
+s2 uh you know we should be done we
+
+168
+00:06:20,240 --> 00:06:22,720
+could proceed
+
+169
+00:06:22,720 --> 00:06:24,240
+but the problem is that there's the
+
+170
+00:06:24,240 --> 00:06:27,919
+second case and the second case is that
+
+171
+00:06:27,919 --> 00:06:31,670
+there's a network partition
+
+172
+00:06:31,680 --> 00:06:34,800
+there's a network vacation between c1
+
+173
+00:06:34,800 --> 00:06:37,919
+and c and s2
+
+174
+00:06:37,919 --> 00:06:41,759
+so in that case really c1 cannot proceed
+
+175
+00:06:41,759 --> 00:06:43,600
+because there could be another client
+
+176
+00:06:43,600 --> 00:06:44,960
+you know c2
+
+177
+00:06:44,960 --> 00:06:48,319
+and actually communicating with s2
+
+178
+00:06:48,319 --> 00:06:51,360
+and uh and it would be terrible correct
+
+179
+00:06:51,360 --> 00:06:53,280
+if c1 proceeds in this case
+
+180
+00:06:53,280 --> 00:06:55,680
+because you know it might then update s1
+
+181
+00:06:55,680 --> 00:06:56,319
+uh
+
+182
+00:06:56,319 --> 00:06:58,800
+get basically the false value think it
+
+183
+00:06:58,800 --> 00:06:59,520
+succeeds
+
+184
+00:06:59,520 --> 00:07:02,639
+at the same time s2 communicates with s2
+
+185
+00:07:02,639 --> 00:07:04,160
+and also succeeds during the test and
+
+186
+00:07:04,160 --> 00:07:06,160
+set and so now we're violating the
+
+187
+00:07:06,160 --> 00:07:09,440
+our contract of the test and set so this
+
+188
+00:07:09,440 --> 00:07:10,960
+is this issue of this split brain
+
+189
+00:07:10,960 --> 00:07:13,039
+like when there's a network petition we
+
+190
+00:07:13,039 --> 00:07:14,840
+can end up in a situation
+
+191
+00:07:14,840 --> 00:07:18,240
+where both servers are up and running
+
+192
+00:07:18,240 --> 00:07:19,599
+and serving different subsets of the
+
+193
+00:07:19,599 --> 00:07:21,120
+clients and thereby violating the
+
+194
+00:07:21,120 --> 00:07:23,039
+contract with the specification of the
+
+195
+00:07:23,039 --> 00:07:25,440
+system that we're building and the real
+
+196
+00:07:25,440 --> 00:07:27,759
+challenging part here is that c1 just
+
+197
+00:07:27,759 --> 00:07:29,440
+cannot tell the difference between these
+
+198
+00:07:29,440 --> 00:07:32,309
+two situations
+
+199
+00:07:32,319 --> 00:07:36,070
+it doesn't know
+
+200
+00:07:36,080 --> 00:07:39,599
+where it actually is you know s2 is not
+
+201
+00:07:39,599 --> 00:07:41,199
+reachable because it failed or because
+
+202
+00:07:41,199 --> 00:07:43,280
+of the network position
+
+203
+00:07:43,280 --> 00:07:45,759
+and so that's sort of the uh conundrum
+
+204
+00:07:45,759 --> 00:07:46,879
+uh
+
+205
+00:07:46,879 --> 00:07:49,360
+that that you know that's behind all
+
+206
+00:07:49,360 --> 00:07:51,039
+this uh the the these
+
+207
+00:07:51,039 --> 00:07:52,800
+previous systems and why they sort of
+
+208
+00:07:52,800 --> 00:07:54,160
+use this single
+
+209
+00:07:54,160 --> 00:07:56,000
+uh why they don't replicate you know
+
+210
+00:07:56,000 --> 00:07:57,759
+these critical services
+
+211
+00:07:57,759 --> 00:08:01,440
+that need to be up to avoid you know the
+
+212
+00:08:01,440 --> 00:08:04,960
+to avoid the uh split brain syndrome
+
+213
+00:08:04,960 --> 00:08:08,479
+so what what can be done about this
+
+214
+00:08:08,479 --> 00:08:10,400
+and really the key problem here like if
+
+215
+00:08:10,400 --> 00:08:11,840
+i can do what can we do about network
+
+216
+00:08:11,840 --> 00:08:13,120
+petitions
+
+217
+00:08:13,120 --> 00:08:15,120
+how could we handle them and so there's
+
+218
+00:08:15,120 --> 00:08:16,720
+a key idea
+
+219
+00:08:16,720 --> 00:08:20,400
+that uh sits in raft and in many other
+
+220
+00:08:20,400 --> 00:08:25,120
+protocols that underlies
+
+221
+00:08:25,120 --> 00:08:27,919
+basically the solution or the why those
+
+222
+00:08:27,919 --> 00:08:28,800
+protocols actually
+
+223
+00:08:28,800 --> 00:08:31,120
+might succeed and really what it is you
+
+224
+00:08:31,120 --> 00:08:32,640
+know in sort of a nutshell
+
+225
+00:08:32,640 --> 00:08:37,670
+it is this majority rule
+
+226
+00:08:37,680 --> 00:08:39,120
+and just to give the example in the
+
+227
+00:08:39,120 --> 00:08:40,560
+context of the testing sets on your
+
+228
+00:08:40,560 --> 00:08:41,279
+server
+
+229
+00:08:41,279 --> 00:08:43,039
+uh instead of actually running the
+
+230
+00:08:43,039 --> 00:08:45,440
+server with two replicas which
+
+231
+00:08:45,440 --> 00:08:47,839
+i conveniently did i'm going to run it
+
+232
+00:08:47,839 --> 00:08:49,200
+with three
+
+233
+00:08:49,200 --> 00:08:54,480
+so i'm going to have sn1 s2 and s3
+
+234
+00:08:54,480 --> 00:08:55,920
+and the rule now is going to be that
+
+235
+00:08:55,920 --> 00:08:58,880
+like a server can a client can
+
+236
+00:08:58,880 --> 00:09:01,200
+consider an operation to exceed it if it
+
+237
+00:09:01,200 --> 00:09:02,800
+at least can update a majority of the
+
+238
+00:09:02,800 --> 00:09:04,480
+servers
+
+239
+00:09:04,480 --> 00:09:06,160
+so in this case you know we can send you
+
+240
+00:09:06,160 --> 00:09:07,440
+know messages if you want for the doing
+
+241
+00:09:07,440 --> 00:09:09,040
+testing set we said the message to s2
+
+242
+00:09:09,040 --> 00:09:10,480
+for doing the test and set
+
+243
+00:09:10,480 --> 00:09:12,640
+then we get back positive responses you
+
+244
+00:09:12,640 --> 00:09:14,320
+know from both of them
+
+245
+00:09:14,320 --> 00:09:16,320
+like a false in both the case then we'll
+
+246
+00:09:16,320 --> 00:09:18,080
+return uh false to
+
+247
+00:09:18,080 --> 00:09:19,120
+actually the application and the
+
+248
+00:09:19,120 --> 00:09:20,839
+application considered the testing set
+
+249
+00:09:20,839 --> 00:09:22,800
+succeeded
+
+250
+00:09:22,800 --> 00:09:24,240
+and of course we do it also to the third
+
+251
+00:09:24,240 --> 00:09:25,760
+one but the third one made actually you
+
+252
+00:09:25,760 --> 00:09:26,080
+know
+
+253
+00:09:26,080 --> 00:09:27,839
+the message actually might not arrive or
+
+254
+00:09:27,839 --> 00:09:29,440
+the server might be down we don't really
+
+255
+00:09:29,440 --> 00:09:30,080
+know but
+
+256
+00:09:30,080 --> 00:09:32,640
+actually we don't really care which is
+
+257
+00:09:32,640 --> 00:09:34,720
+because consider the following situation
+
+258
+00:09:34,720 --> 00:09:37,680
+scenario where we have the second client
+
+259
+00:09:37,680 --> 00:09:39,839
+also trying to do a testing set
+
+260
+00:09:39,839 --> 00:09:41,920
+well to be able to succeed it has to
+
+261
+00:09:41,920 --> 00:09:43,760
+talk to rep the majority
+
+262
+00:09:43,760 --> 00:09:47,360
+of the servers so whatever majority is
+
+263
+00:09:47,360 --> 00:09:48,399
+going to talk to
+
+264
+00:09:48,399 --> 00:09:51,600
+it is going to include either s1 or s2
+
+265
+00:09:51,600 --> 00:09:53,519
+and for s1 and a2 both of these
+
+266
+00:09:53,519 --> 00:09:55,040
+operations actually have to succeed
+
+267
+00:09:55,040 --> 00:09:58,240
+by sc1 so s2
+
+268
+00:09:58,240 --> 00:10:01,760
+or c2 will always observe the result of
+
+269
+00:10:01,760 --> 00:10:03,040
+c1's
+
+270
+00:10:03,040 --> 00:10:16,829
+operation because they're sort of an
+
+271
+00:10:16,839 --> 00:10:21,829
+overlap
+
+272
+00:10:21,839 --> 00:10:24,800
+yeah and we'll see basically in uh raft
+
+273
+00:10:24,800 --> 00:10:26,160
+this is exactly the same thing as
+
+274
+00:10:26,160 --> 00:10:27,440
+roughly what's going on right
+
+275
+00:10:27,440 --> 00:10:30,800
+like when a leader uh accepts or
+
+276
+00:10:30,800 --> 00:10:34,800
+a enter the an operation in the
+
+277
+00:10:34,800 --> 00:10:36,320
+in a log of the majority of the
+
+278
+00:10:36,320 --> 00:10:38,160
+followers then it means that a
+
+279
+00:10:38,160 --> 00:10:39,440
+subsequent leader that's going to come
+
+280
+00:10:39,440 --> 00:10:40,720
+out in the next term
+
+281
+00:10:40,720 --> 00:10:42,480
+you know will also try to acquire a
+
+282
+00:10:42,480 --> 00:10:43,839
+majority to get the
+
+283
+00:10:43,839 --> 00:10:46,320
+voted as the leader and as part of that
+
+284
+00:10:46,320 --> 00:10:46,880
+voting
+
+285
+00:10:46,880 --> 00:10:48,720
+you know there's going to be one server
+
+286
+00:10:48,720 --> 00:10:50,800
+one follower that actually has seen the
+
+287
+00:10:50,800 --> 00:10:52,079
+last operation
+
+288
+00:10:52,079 --> 00:10:55,600
+uh performed by the last leader
+
+289
+00:10:55,600 --> 00:10:57,200
+and so that is going to basically build
+
+290
+00:10:57,200 --> 00:11:01,120
+a building stone on which we can build
+
+291
+00:11:01,120 --> 00:11:03,839
+these fault tolerance services that can
+
+292
+00:11:03,839 --> 00:11:05,519
+handle network petitions
+
+293
+00:11:05,519 --> 00:11:09,920
+and failures or servers
+
+294
+00:11:09,920 --> 00:11:13,760
+while still achieving strong consistency
+
+295
+00:11:13,760 --> 00:11:15,279
+another way to you know think about this
+
+296
+00:11:15,279 --> 00:11:17,760
+majority business is that
+
+297
+00:11:17,760 --> 00:11:21,279
+uh if the network petitions um
+
+298
+00:11:21,279 --> 00:11:24,160
+there can be only one uh petition that
+
+299
+00:11:24,160 --> 00:11:25,120
+has a majority
+
+300
+00:11:25,120 --> 00:11:26,320
+you know there can be no other
+
+301
+00:11:26,320 --> 00:11:29,279
+prediction that has a minority and so
+
+302
+00:11:29,279 --> 00:11:31,040
+only the partition that actually has the
+
+303
+00:11:31,040 --> 00:11:35,190
+majority uh can actually proceed
+
+304
+00:11:35,200 --> 00:11:38,000
+another way of saying that another
+
+305
+00:11:38,000 --> 00:11:39,120
+implication of that is
+
+306
+00:11:39,120 --> 00:11:40,880
+it could also be the case there there is
+
+307
+00:11:40,880 --> 00:11:42,800
+a uh there are multiple petitions
+
+308
+00:11:42,800 --> 00:11:45,040
+and there's no majority anywhere and in
+
+309
+00:11:45,040 --> 00:11:46,959
+that particular case you know the system
+
+310
+00:11:46,959 --> 00:11:50,560
+you can just not proceed and uh
+
+311
+00:11:50,560 --> 00:11:52,399
+and clients talking to it basically have
+
+312
+00:11:52,399 --> 00:11:54,399
+to wait until you know the network is
+
+313
+00:11:54,399 --> 00:11:56,399
+healed enough that at least there's one
+
+314
+00:11:56,399 --> 00:11:57,600
+that there's going to be at least one
+
+315
+00:11:57,600 --> 00:12:02,310
+partition with a majority of services
+
+316
+00:12:02,320 --> 00:12:05,760
+um the another sort of
+
+317
+00:12:05,760 --> 00:12:08,079
+quick observation here is that uh of
+
+318
+00:12:08,079 --> 00:12:09,360
+course you may want to get
+
+319
+00:12:09,360 --> 00:12:10,720
+this particular scheme that i just
+
+320
+00:12:10,720 --> 00:12:12,079
+described the free service only
+
+321
+00:12:12,079 --> 00:12:13,360
+tolerates one
+
+322
+00:12:13,360 --> 00:12:14,800
+server going down correct there's two
+
+323
+00:12:14,800 --> 00:12:17,040
+servers going down nobody can actually
+
+324
+00:12:17,040 --> 00:12:18,560
+obtain a majority and so therefore
+
+325
+00:12:18,560 --> 00:12:20,480
+nobody can actually no client can
+
+326
+00:12:20,480 --> 00:12:21,440
+actually
+
+327
+00:12:21,440 --> 00:12:24,079
+get the operation through clearly it's
+
+328
+00:12:24,079 --> 00:12:25,839
+easier to extend this idea
+
+329
+00:12:25,839 --> 00:12:27,519
+by what's typically called like doing
+
+330
+00:12:27,519 --> 00:12:29,040
+two two f plus one
+
+331
+00:12:29,040 --> 00:12:32,240
+replication so if you want to tolerate
+
+332
+00:12:32,240 --> 00:12:34,959
+f faults instead of one uh you need two
+
+333
+00:12:34,959 --> 00:12:36,880
+plus f one for the server a server so
+
+334
+00:12:36,880 --> 00:12:38,639
+that at least you have always a minority
+
+335
+00:12:38,639 --> 00:12:41,760
+the majority if f fails and so in the
+
+336
+00:12:41,760 --> 00:12:42,959
+case of you know here
+
+337
+00:12:42,959 --> 00:12:44,560
+f is one and so we're running with three
+
+338
+00:12:44,560 --> 00:12:46,240
+servers if you want f to be
+
+339
+00:12:46,240 --> 00:12:48,079
+two you have five servers et cetera et
+
+340
+00:12:48,079 --> 00:12:51,760
+cetera you want ftb free you have seven
+
+341
+00:12:51,760 --> 00:12:54,880
+okay one other uh
+
+342
+00:12:54,880 --> 00:12:56,560
+thing that's maybe important to point
+
+343
+00:12:56,560 --> 00:12:58,320
+out and i came up a lot in the questions
+
+344
+00:12:58,320 --> 00:13:00,560
+you know what is actually the majority
+
+345
+00:13:00,560 --> 00:13:01,519
+uh and
+
+346
+00:13:01,519 --> 00:13:04,399
+the majority is the majority of all the
+
+347
+00:13:04,399 --> 00:13:05,200
+services
+
+348
+00:13:05,200 --> 00:13:07,360
+that are there you know both the up up
+
+349
+00:13:07,360 --> 00:13:09,120
+ones in the down ones
+
+350
+00:13:09,120 --> 00:13:10,639
+and so when you take a majority you
+
+351
+00:13:10,639 --> 00:13:12,000
+don't take the majority of the two if
+
+352
+00:13:12,000 --> 00:13:13,200
+they're only two alive you take a
+
+353
+00:13:13,200 --> 00:13:18,829
+majority of all the servers in the
+
+354
+00:13:18,839 --> 00:13:20,000
+system
+
+355
+00:13:20,000 --> 00:13:22,399
+any questions about this sort of key
+
+356
+00:13:22,399 --> 00:13:23,200
+idea
+
+357
+00:13:23,200 --> 00:13:26,079
+of can there be an even number of
+
+358
+00:13:26,079 --> 00:13:28,000
+servers like if you have four servers
+
+359
+00:13:28,000 --> 00:13:29,440
+with the majority of them be
+
+360
+00:13:29,440 --> 00:13:31,839
+three yeah if the uh and we'll see that
+
+361
+00:13:31,839 --> 00:13:34,560
+in the complications correct in uh
+
+362
+00:13:34,560 --> 00:13:36,800
+in a graph that you know if you know the
+
+363
+00:13:36,800 --> 00:13:38,480
+number of servers is reduced from seven
+
+364
+00:13:38,480 --> 00:13:40,240
+to six and because one is down and you
+
+365
+00:13:40,240 --> 00:13:41,440
+still want to proceed
+
+366
+00:13:41,440 --> 00:13:43,360
+you need a majority but you still need
+
+367
+00:13:43,360 --> 00:13:44,800
+you know four servers to actually
+
+368
+00:13:44,800 --> 00:13:46,959
+proceed
+
+369
+00:13:46,959 --> 00:13:48,399
+but if you can get the four servers then
+
+370
+00:13:48,399 --> 00:13:54,550
+you can keep them going
+
+371
+00:13:54,560 --> 00:13:58,399
+okay um any other questions so i also
+
+372
+00:13:58,399 --> 00:13:58,880
+have a
+
+373
+00:13:58,880 --> 00:14:00,880
+question about the majority so does the
+
+374
+00:14:00,880 --> 00:14:03,760
+majority consider the server itself
+
+375
+00:14:03,760 --> 00:14:06,240
+so supposing raft that's like the server
+
+376
+00:14:06,240 --> 00:14:07,920
+itself considering this
+
+377
+00:14:07,920 --> 00:14:09,839
+yeah yeah it's part of it so like you
+
+378
+00:14:09,839 --> 00:14:11,839
+know often as we see in a raspberry the
+
+379
+00:14:11,839 --> 00:14:13,199
+leader vote immediately versus
+
+380
+00:14:13,199 --> 00:14:15,920
+effort itself or the candidate votes for
+
+381
+00:14:15,920 --> 00:14:16,480
+itself
+
+382
+00:14:16,480 --> 00:14:18,399
+and in the leader when it depends you
+
+383
+00:14:18,399 --> 00:14:19,519
+know to its own log it
+
+384
+00:14:19,519 --> 00:14:28,829
+counts that as one so it's part of it
+
+385
+00:14:28,839 --> 00:14:32,240
+okay um so
+
+386
+00:14:32,240 --> 00:14:35,839
+there's quite a number of protocols
+
+387
+00:14:35,839 --> 00:14:39,680
+using this idea
+
+388
+00:14:39,680 --> 00:14:42,000
+and sometimes this idea is referred to
+
+389
+00:14:42,000 --> 00:14:42,800
+as quorums
+
+390
+00:14:42,800 --> 00:14:48,470
+or quorum protocols
+
+391
+00:14:48,480 --> 00:14:51,519
+um for the obvious reason
+
+392
+00:14:51,519 --> 00:14:54,800
+uh and there were sort of two you know
+
+393
+00:14:54,800 --> 00:14:56,320
+the state of the art for a long time
+
+394
+00:14:56,320 --> 00:14:59,120
+until like in the early 90s or late 80s
+
+395
+00:14:59,120 --> 00:15:01,120
+was there's basically no protocol so
+
+396
+00:15:01,120 --> 00:15:02,399
+basically we were always in the
+
+397
+00:15:02,399 --> 00:15:03,920
+situation of like this
+
+398
+00:15:03,920 --> 00:15:06,399
+single point of failure uh and then in
+
+399
+00:15:06,399 --> 00:15:08,079
+the early 90s there were two protocols
+
+400
+00:15:08,079 --> 00:15:11,279
+okay we came were invented roughly at
+
+401
+00:15:11,279 --> 00:15:12,240
+the same time
+
+402
+00:15:12,240 --> 00:15:13,760
+one is called paxus which is mentioned
+
+403
+00:15:13,760 --> 00:15:15,360
+in the paper quite a bit
+
+404
+00:15:15,360 --> 00:15:17,680
+and the other one is called view stamped
+
+405
+00:15:17,680 --> 00:15:23,670
+replication
+
+406
+00:15:23,680 --> 00:15:26,160
+sometimes called vr and these were these
+
+407
+00:15:26,160 --> 00:15:27,199
+were invented around
+
+408
+00:15:27,199 --> 00:15:30,320
+around 99. um
+
+409
+00:15:30,320 --> 00:15:32,800
+they didn't actually get much attention
+
+410
+00:15:32,800 --> 00:15:34,160
+at that point in time
+
+411
+00:15:34,160 --> 00:15:35,759
+because people didn't really have a
+
+412
+00:15:35,759 --> 00:15:38,000
+pressing knee to be able to sort of
+
+413
+00:15:38,000 --> 00:15:41,360
+completely you know fault alone systems
+
+414
+00:15:41,360 --> 00:15:43,920
+but that changed in the last 15 years so
+
+415
+00:15:43,920 --> 00:15:44,560
+in the last
+
+416
+00:15:44,560 --> 00:15:52,829
+15 years with much use of these
+
+417
+00:15:52,839 --> 00:15:56,710
+protocols
+
+418
+00:15:56,720 --> 00:15:59,120
+uh and uh in effect you know certain
+
+419
+00:15:59,120 --> 00:16:01,440
+interesting observations
+
+420
+00:16:01,440 --> 00:16:05,590
+in the last 15 years
+
+421
+00:16:05,600 --> 00:16:07,519
+and that's basically sort of 15 years
+
+422
+00:16:07,519 --> 00:16:08,720
+after these protocols were
+
+423
+00:16:08,720 --> 00:16:10,959
+invented so basically they sat on the
+
+424
+00:16:10,959 --> 00:16:13,040
+table or said on the shelf for 15 years
+
+425
+00:16:13,040 --> 00:16:13,600
+until
+
+426
+00:16:13,600 --> 00:16:15,040
+people actually had a real use case for
+
+427
+00:16:15,040 --> 00:16:17,040
+that
+
+428
+00:16:17,040 --> 00:16:20,240
+the protocol that we're going to be uh
+
+429
+00:16:20,240 --> 00:16:21,680
+mostly we're going to be implementing in
+
+430
+00:16:21,680 --> 00:16:22,880
+the lab and we're going to discuss in
+
+431
+00:16:22,880 --> 00:16:24,320
+the lecture and which is the topic of
+
+432
+00:16:24,320 --> 00:16:25,040
+the paper
+
+433
+00:16:25,040 --> 00:16:26,800
+is you know falls in this you know
+
+434
+00:16:26,800 --> 00:16:30,959
+lineage of protocol and it's called raft
+
+435
+00:16:30,959 --> 00:16:33,759
+uh and it was i think it was came about
+
+436
+00:16:33,759 --> 00:16:36,240
+or was written up in 2014 the papers
+
+437
+00:16:36,240 --> 00:16:37,920
+from 2014
+
+438
+00:16:37,920 --> 00:16:39,360
+and this is one of the more sort of
+
+439
+00:16:39,360 --> 00:16:40,720
+complete descriptions you know it
+
+440
+00:16:40,720 --> 00:16:42,320
+touches on a lot of different aspects if
+
+441
+00:16:42,320 --> 00:16:43,279
+you're going to build a complete
+
+442
+00:16:43,279 --> 00:16:44,880
+replicated state machine
+
+443
+00:16:44,880 --> 00:16:47,519
+um and explains those clearly that's one
+
+444
+00:16:47,519 --> 00:16:49,440
+of the reasons why we're using it for
+
+445
+00:16:49,440 --> 00:16:50,959
+the labs and you know for this
+
+446
+00:16:50,959 --> 00:16:55,829
+particular lecture
+
+447
+00:16:55,839 --> 00:16:57,759
+any any questions about sort of the sort
+
+448
+00:16:57,759 --> 00:16:59,519
+of the history here around
+
+449
+00:16:59,519 --> 00:17:03,189
+protocols
+
+450
+00:17:03,199 --> 00:17:11,270
+before i dive into raft
+
+451
+00:17:11,280 --> 00:17:14,789
+okay
+
+452
+00:17:14,799 --> 00:17:18,240
+so before actually diving into rap let
+
+453
+00:17:18,240 --> 00:17:19,679
+me first sort of talk a little bit about
+
+454
+00:17:19,679 --> 00:17:20,160
+how
+
+455
+00:17:20,160 --> 00:17:22,079
+you one would use raf to build a
+
+456
+00:17:22,079 --> 00:17:24,400
+replicated state machine
+
+457
+00:17:24,400 --> 00:17:27,439
+because that's in the end our end goal
+
+458
+00:17:27,439 --> 00:17:30,480
+and that will help uh reasoning about
+
+459
+00:17:30,480 --> 00:17:31,679
+you know what draft actually should be
+
+460
+00:17:31,679 --> 00:17:34,480
+doing for us and so
+
+461
+00:17:34,480 --> 00:17:36,640
+the basic way you would use raft and
+
+462
+00:17:36,640 --> 00:17:39,679
+we'll actually do this in lab 3
+
+463
+00:17:39,679 --> 00:17:43,590
+is let's say you have a server
+
+464
+00:17:43,600 --> 00:17:45,520
+and the raft is basically nothing else
+
+465
+00:17:45,520 --> 00:17:46,880
+in a library
+
+466
+00:17:46,880 --> 00:17:49,280
+and so in uh in our setting it's going
+
+467
+00:17:49,280 --> 00:17:50,400
+to be go package
+
+468
+00:17:50,400 --> 00:17:52,720
+and you know you can write a replicated
+
+469
+00:17:52,720 --> 00:17:54,480
+state machine by basically importing
+
+470
+00:17:54,480 --> 00:17:55,280
+that package
+
+471
+00:17:55,280 --> 00:17:59,440
+so here's we got you know here's a raft
+
+472
+00:17:59,440 --> 00:18:02,789
+at the bottom
+
+473
+00:18:02,799 --> 00:18:06,400
+and you know you build a server you know
+
+474
+00:18:06,400 --> 00:18:07,280
+using raft
+
+475
+00:18:07,280 --> 00:18:09,760
+and so for example in uh lab 3 we're
+
+476
+00:18:09,760 --> 00:18:11,200
+going to build a
+
+477
+00:18:11,200 --> 00:18:14,480
+key value server using graft
+
+478
+00:18:14,480 --> 00:18:18,720
+and clients talk you know to
+
+479
+00:18:18,720 --> 00:18:23,909
+the key value servers
+
+480
+00:18:23,919 --> 00:18:25,840
+and you know it's a bit you know put and
+
+481
+00:18:25,840 --> 00:18:29,120
+get operations
+
+482
+00:18:29,120 --> 00:18:31,200
+and the key value servers when it
+
+483
+00:18:31,200 --> 00:18:32,720
+receives you know one of these put and
+
+484
+00:18:32,720 --> 00:18:34,000
+get operations
+
+485
+00:18:34,000 --> 00:18:37,520
+it basically hands it off to raft and so
+
+486
+00:18:37,520 --> 00:18:39,679
+it basically puts it to the raft and
+
+487
+00:18:39,679 --> 00:18:40,880
+actually sticks it in a
+
+488
+00:18:40,880 --> 00:18:43,600
+what we'll see in much more detail uh
+
+489
+00:18:43,600 --> 00:18:45,679
+it'll put it in the log
+
+490
+00:18:45,679 --> 00:18:47,039
+i'll actually draw this slightly
+
+491
+00:18:47,039 --> 00:18:48,880
+differently
+
+492
+00:18:48,880 --> 00:18:54,549
+so appends it to the log
+
+493
+00:18:54,559 --> 00:18:56,559
+actually defends it to the end of the
+
+494
+00:18:56,559 --> 00:18:57,760
+log
+
+495
+00:18:57,760 --> 00:18:59,679
+and then raf internally is going to talk
+
+496
+00:18:59,679 --> 00:19:01,520
+to other servers to basically replicate
+
+497
+00:19:01,520 --> 00:19:02,960
+that log
+
+498
+00:19:02,960 --> 00:19:05,760
+and so here are some other servers
+
+499
+00:19:05,760 --> 00:19:07,280
+they're basically structured in exactly
+
+500
+00:19:07,280 --> 00:19:08,880
+the same way you know they have a raft
+
+501
+00:19:08,880 --> 00:19:11,039
+library component
+
+502
+00:19:11,039 --> 00:19:13,840
+and the key value server like in many
+
+503
+00:19:13,840 --> 00:19:15,120
+other replicated state machines that
+
+504
+00:19:15,120 --> 00:19:16,480
+we've seen
+
+505
+00:19:16,480 --> 00:19:20,160
+you know they're identical empty value
+
+506
+00:19:20,160 --> 00:19:21,039
+servers
+
+507
+00:19:21,039 --> 00:19:22,720
+and we're going to play the same game as
+
+508
+00:19:22,720 --> 00:19:24,400
+i know the other previous replicated
+
+509
+00:19:24,400 --> 00:19:25,520
+state machines we're seeing we're going
+
+510
+00:19:25,520 --> 00:19:27,360
+to basically feeding operations to the
+
+511
+00:19:27,360 --> 00:19:30,799
+key value servers in the same order
+
+512
+00:19:30,799 --> 00:19:33,039
+everywhere and as a result you know the
+
+513
+00:19:33,039 --> 00:19:35,280
+key replicas all apply the operations in
+
+514
+00:19:35,280 --> 00:19:36,559
+exactly the same order
+
+515
+00:19:36,559 --> 00:19:39,679
+you know we should say the same uh key
+
+516
+00:19:39,679 --> 00:19:41,120
+value stores being built
+
+517
+00:19:41,120 --> 00:19:44,000
+right so we have a key value store here
+
+518
+00:19:44,000 --> 00:19:45,360
+whatever key 20
+
+519
+00:19:45,360 --> 00:19:47,360
+that's some value we're applying the
+
+520
+00:19:47,360 --> 00:19:49,120
+updates to this you know table uh
+
+521
+00:19:49,120 --> 00:19:50,640
+exactly in the same order and all their
+
+522
+00:19:50,640 --> 00:19:52,480
+replicas you know things should be uh
+
+523
+00:19:52,480 --> 00:19:53,919
+should be good right we're going to have
+
+524
+00:19:53,919 --> 00:19:56,000
+identical replicas
+
+525
+00:19:56,000 --> 00:19:58,320
+so the way the raft is structured is
+
+526
+00:19:58,320 --> 00:20:00,080
+that one of the replicas is the leader
+
+527
+00:20:00,080 --> 00:20:00,720
+so
+
+528
+00:20:00,720 --> 00:20:02,720
+let me in this for convenience you know
+
+529
+00:20:02,720 --> 00:20:04,080
+that's going to be the first one on
+
+530
+00:20:04,080 --> 00:20:05,840
+this side and then just actually the
+
+531
+00:20:05,840 --> 00:20:08,799
+clients do talk to the leader
+
+532
+00:20:08,799 --> 00:20:13,039
+and then what happens next is that the
+
+533
+00:20:13,039 --> 00:20:16,080
+uh so the client talks to one of the
+
+534
+00:20:16,080 --> 00:20:18,000
+leader that leave the kv server the kv
+
+535
+00:20:18,000 --> 00:20:19,120
+server
+
+536
+00:20:19,120 --> 00:20:22,480
+appends a log entry uh to uh the raft
+
+537
+00:20:22,480 --> 00:20:22,960
+log
+
+538
+00:20:22,960 --> 00:20:24,720
+of the leader and then you know
+
+539
+00:20:24,720 --> 00:20:26,240
+basically communicates
+
+540
+00:20:26,240 --> 00:20:29,760
+you know with the other raft libraries
+
+541
+00:20:29,760 --> 00:20:31,360
+and those raft lighters do exactly the
+
+542
+00:20:31,360 --> 00:20:32,799
+same thing basically they append
+
+543
+00:20:32,799 --> 00:20:34,480
+you know the operation you know to the
+
+544
+00:20:34,480 --> 00:20:36,240
+log
+
+545
+00:20:36,240 --> 00:20:39,830
+to their logs
+
+546
+00:20:39,840 --> 00:20:42,320
+and send the response back you know to
+
+547
+00:20:42,320 --> 00:20:43,760
+the
+
+548
+00:20:43,760 --> 00:20:46,960
+leader and
+
+549
+00:20:46,960 --> 00:20:49,200
+you know of course you know all this
+
+550
+00:20:49,200 --> 00:20:50,320
+state is stored
+
+551
+00:20:50,320 --> 00:20:52,000
+you know the log and some other stage
+
+552
+00:20:52,000 --> 00:20:54,000
+stored on disk so that you know if any
+
+553
+00:20:54,000 --> 00:20:55,360
+one of them fails
+
+554
+00:20:55,360 --> 00:20:57,840
+uh they at least have the last part of
+
+555
+00:20:57,840 --> 00:20:59,120
+their log you know still
+
+556
+00:20:59,120 --> 00:21:02,880
+available and uh can build from there
+
+557
+00:21:02,880 --> 00:21:05,520
+so once you know basically and we'll
+
+558
+00:21:05,520 --> 00:21:07,039
+talk a little bit more in detail but you
+
+559
+00:21:07,039 --> 00:21:07,520
+know once
+
+560
+00:21:07,520 --> 00:21:09,679
+the the entry or the log entry is
+
+561
+00:21:09,679 --> 00:21:11,919
+replicated on you know free servers
+
+562
+00:21:11,919 --> 00:21:14,000
+then they can actually be delivered in
+
+563
+00:21:14,000 --> 00:21:18,159
+order you know to the key value server
+
+564
+00:21:18,159 --> 00:21:20,880
+so the every committed operation there
+
+565
+00:21:20,880 --> 00:21:22,640
+every log has an index or every
+
+566
+00:21:22,640 --> 00:21:24,400
+operation has an index zero or actually
+
+567
+00:21:24,400 --> 00:21:26,799
+one two three four whatever
+
+568
+00:21:26,799 --> 00:21:27,840
+in order and they're going to be
+
+569
+00:21:27,840 --> 00:21:29,520
+delivered in order to the key value
+
+570
+00:21:29,520 --> 00:21:31,120
+server so once an operator is committed
+
+571
+00:21:31,120 --> 00:21:32,480
+you know it's going to be delivered
+
+572
+00:21:32,480 --> 00:21:34,320
+to the key value server the key value
+
+573
+00:21:34,320 --> 00:21:36,080
+server performs the operation
+
+574
+00:21:36,080 --> 00:21:39,360
+maybe updates you know the uh key value
+
+575
+00:21:39,360 --> 00:21:40,000
+table
+
+576
+00:21:40,000 --> 00:21:41,760
+and then sends actually the leader alone
+
+577
+00:21:41,760 --> 00:21:44,720
+sends a response back to the client
+
+578
+00:21:44,720 --> 00:21:46,240
+so that's sort of roughly the sequence
+
+579
+00:21:46,240 --> 00:21:48,559
+of events that happens so
+
+580
+00:21:48,559 --> 00:21:50,240
+client sends requests to the leader
+
+581
+00:21:50,240 --> 00:21:52,080
+neither put insurgency in raft
+
+582
+00:21:52,080 --> 00:21:54,320
+draft you know chit chats with the other
+
+583
+00:21:54,320 --> 00:21:56,000
+servers
+
+584
+00:21:56,000 --> 00:21:58,720
+once you know it's replicated on enough
+
+585
+00:21:58,720 --> 00:21:59,679
+machines
+
+586
+00:21:59,679 --> 00:22:01,679
+then you know the it's considered to be
+
+587
+00:22:01,679 --> 00:22:03,600
+committed and we'll talk a little bit
+
+588
+00:22:03,600 --> 00:22:03,919
+more
+
+589
+00:22:03,919 --> 00:22:06,159
+precisely what committed it means and
+
+590
+00:22:06,159 --> 00:22:06,960
+then uh
+
+591
+00:22:06,960 --> 00:22:08,480
+uncommitted operation is delivered to
+
+592
+00:22:08,480 --> 00:22:11,600
+the key value servers and then
+
+593
+00:22:11,600 --> 00:22:13,200
+they execute the operation and respond
+
+594
+00:22:13,200 --> 00:22:14,559
+to the client or delete the response to
+
+595
+00:22:14,559 --> 00:22:17,350
+the client
+
+596
+00:22:17,360 --> 00:22:24,149
+so what happens on the failure
+
+597
+00:22:24,159 --> 00:22:28,000
+on a failure uh the uh when
+
+598
+00:22:28,000 --> 00:22:31,270
+a new leader is elected
+
+599
+00:22:31,280 --> 00:22:32,880
+and it will take over the role of the
+
+600
+00:22:32,880 --> 00:22:34,960
+old leader and so for example like in
+
+601
+00:22:34,960 --> 00:22:36,400
+this particular picture again it might
+
+602
+00:22:36,400 --> 00:22:37,600
+be the case that
+
+603
+00:22:37,600 --> 00:22:41,120
+uh you know this leader crashes
+
+604
+00:22:41,120 --> 00:22:43,280
+uh and you know this becomes the new
+
+605
+00:22:43,280 --> 00:22:44,720
+leader in the next term
+
+606
+00:22:44,720 --> 00:22:46,799
+let's see exactly what that means and
+
+607
+00:22:46,799 --> 00:22:48,799
+then the clients basically fail over you
+
+608
+00:22:48,799 --> 00:22:49,679
+know they will see
+
+609
+00:22:49,679 --> 00:22:51,280
+they don't get a response so they will
+
+610
+00:22:51,280 --> 00:22:52,880
+time out and they fail
+
+611
+00:22:52,880 --> 00:22:55,360
+over to uh the second leader the new
+
+612
+00:22:55,360 --> 00:22:56,000
+leader
+
+613
+00:22:56,000 --> 00:22:58,559
+and basically retry their operation and
+
+614
+00:22:58,559 --> 00:23:00,400
+so they insert you know that new leader
+
+615
+00:23:00,400 --> 00:23:01,840
+will take their operation
+
+616
+00:23:01,840 --> 00:23:04,159
+insert it back into raft you know the
+
+617
+00:23:04,159 --> 00:23:06,000
+same things happens as before
+
+618
+00:23:06,000 --> 00:23:08,000
+and maybe this time we get lucky and we
+
+619
+00:23:08,000 --> 00:23:09,600
+execute the operation without any
+
+620
+00:23:09,600 --> 00:23:11,679
+failures
+
+621
+00:23:11,679 --> 00:23:12,880
+now if you think a little bit carefully
+
+622
+00:23:12,880 --> 00:23:14,960
+about this that does mean that
+
+623
+00:23:14,960 --> 00:23:17,360
+a client operation might end up twice in
+
+624
+00:23:17,360 --> 00:23:19,280
+the log right because it actually may be
+
+625
+00:23:19,280 --> 00:23:20,240
+the case that the first time it
+
+626
+00:23:20,240 --> 00:23:21,520
+succeeded but just didn't get the
+
+627
+00:23:21,520 --> 00:23:22,559
+response
+
+628
+00:23:22,559 --> 00:23:24,320
+and so it doesn't know that it succeeded
+
+629
+00:23:24,320 --> 00:23:26,159
+we'll retry you know this
+
+630
+00:23:26,159 --> 00:23:28,960
+new leader will put the log put the new
+
+631
+00:23:28,960 --> 00:23:29,520
+up
+
+632
+00:23:29,520 --> 00:23:31,600
+the retract operation also in the log
+
+633
+00:23:31,600 --> 00:23:32,559
+and it will pop out
+
+634
+00:23:32,559 --> 00:23:38,789
+you know at some point you know at
+
+635
+00:23:38,799 --> 00:23:42,080
+a duplicate and so as you will see later
+
+636
+00:23:42,080 --> 00:23:42,559
+in
+
+637
+00:23:42,559 --> 00:23:46,480
+in the um lab 3 actually it turns out
+
+638
+00:23:46,480 --> 00:23:47,360
+that the
+
+639
+00:23:47,360 --> 00:23:49,200
+you know the lab you need to do
+
+640
+00:23:49,200 --> 00:23:51,440
+duplication to
+
+641
+00:23:51,440 --> 00:24:00,870
+detect duplicates
+
+642
+00:24:00,880 --> 00:24:02,480
+but that's mostly an issue for lab free
+
+643
+00:24:02,480 --> 00:24:04,559
+so it's not going to be a main issue for
+
+644
+00:24:04,559 --> 00:24:06,080
+now but it's just important to know
+
+645
+00:24:06,080 --> 00:24:07,520
+you know that sort of this is the sort
+
+646
+00:24:07,520 --> 00:24:09,360
+of general style
+
+647
+00:24:09,360 --> 00:24:10,960
+in which you know your one would
+
+648
+00:24:10,960 --> 00:24:13,360
+actually use rav to build a replicated
+
+649
+00:24:13,360 --> 00:24:18,880
+state machine
+
+650
+00:24:18,880 --> 00:24:21,919
+any questions uh about sort of the
+
+651
+00:24:21,919 --> 00:24:23,440
+how to use your app for replicated state
+
+652
+00:24:23,440 --> 00:24:25,600
+machines do you have a question in the
+
+653
+00:24:25,600 --> 00:24:26,400
+chat
+
+654
+00:24:26,400 --> 00:24:29,679
+yeah ah what's the typical number of
+
+655
+00:24:29,679 --> 00:24:34,320
+clients contacting the leader um
+
+656
+00:24:34,320 --> 00:24:36,640
+uh well there could be many there's no
+
+657
+00:24:36,640 --> 00:24:37,919
+real limit
+
+658
+00:24:37,919 --> 00:24:41,039
+uh on it what you will see you know it
+
+659
+00:24:41,039 --> 00:24:42,400
+could be the case that a single
+
+660
+00:24:42,400 --> 00:24:43,760
+machine can i mean maybe that's
+
+661
+00:24:43,760 --> 00:24:45,440
+implicitly what the question is
+
+662
+00:24:45,440 --> 00:24:46,640
+it could be the case that a single
+
+663
+00:24:46,640 --> 00:24:48,400
+leader you know can just not tolerate
+
+664
+00:24:48,400 --> 00:24:49,840
+the
+
+665
+00:24:49,840 --> 00:24:52,159
+is not capable of handling that many
+
+666
+00:24:52,159 --> 00:24:53,520
+clients and so
+
+667
+00:24:53,520 --> 00:24:55,760
+uh what happens then is that basically
+
+668
+00:24:55,760 --> 00:24:57,360
+the service gets charted you know you
+
+669
+00:24:57,360 --> 00:24:58,400
+shard the key
+
+670
+00:24:58,400 --> 00:25:00,640
+key value servers in multiple raft
+
+671
+00:25:00,640 --> 00:25:01,679
+groups
+
+672
+00:25:01,679 --> 00:25:03,440
+so for example shard one would be one
+
+673
+00:25:03,440 --> 00:25:05,600
+raft instance chart two rear draft
+
+674
+00:25:05,600 --> 00:25:06,240
+instance
+
+675
+00:25:06,240 --> 00:25:07,840
+chart three with your raft instance and
+
+676
+00:25:07,840 --> 00:25:09,200
+the client's gonna talk to the
+
+677
+00:25:09,200 --> 00:25:10,400
+appropriate
+
+678
+00:25:10,400 --> 00:25:13,919
+uh chart to be uh to apply their
+
+679
+00:25:13,919 --> 00:25:15,600
+operations and then that way we
+
+680
+00:25:15,600 --> 00:25:18,400
+can scale the server to many clients in
+
+681
+00:25:18,400 --> 00:25:22,870
+fact that is what lab4 does
+
+682
+00:25:22,880 --> 00:25:24,559
+how does the client know how to
+
+683
+00:25:24,559 --> 00:25:26,000
+communicate with the new leader after
+
+684
+00:25:26,000 --> 00:25:27,600
+the old leader fails
+
+685
+00:25:27,600 --> 00:25:29,440
+the client basically has a list of all
+
+686
+00:25:29,440 --> 00:25:31,679
+the servers that are in the system
+
+687
+00:25:31,679 --> 00:25:33,360
+so in this case we're running with three
+
+688
+00:25:33,360 --> 00:25:34,880
+servers everybody agrees they're only
+
+689
+00:25:34,880 --> 00:25:36,000
+free servers in the world
+
+690
+00:25:36,000 --> 00:25:38,000
+the clients know about the free servers
+
+691
+00:25:38,000 --> 00:25:39,200
+and uh
+
+692
+00:25:39,200 --> 00:25:42,640
+they try one randomly and if that is not
+
+693
+00:25:42,640 --> 00:25:44,159
+the client it will redirect
+
+694
+00:25:44,159 --> 00:25:45,600
+if that's not the leader it will
+
+695
+00:25:45,600 --> 00:25:47,520
+redirect the client to the appropriate
+
+696
+00:25:47,520 --> 00:25:50,870
+one the actual leader
+
+697
+00:25:50,880 --> 00:25:54,070
+yeah the answer is
+
+698
+00:25:54,080 --> 00:25:56,880
+do we assume the servers are like in a
+
+699
+00:25:56,880 --> 00:25:58,080
+geographically closed look
+
+700
+00:25:58,080 --> 00:25:59,840
+like close to each other or could they
+
+701
+00:25:59,840 --> 00:26:02,640
+be they could in principle be far apart
+
+702
+00:26:02,640 --> 00:26:05,039
+uh there's no real uh restriction on
+
+703
+00:26:05,039 --> 00:26:05,919
+that side
+
+704
+00:26:05,919 --> 00:26:07,679
+uh the only issue of course is if the
+
+705
+00:26:07,679 --> 00:26:09,279
+client if the servers are very spread
+
+706
+00:26:09,279 --> 00:26:10,640
+around the world
+
+707
+00:26:10,640 --> 00:26:13,120
+the delays to actually you know getting
+
+708
+00:26:13,120 --> 00:26:14,240
+a lock
+
+709
+00:26:14,240 --> 00:26:15,679
+record dependent you know will take a
+
+710
+00:26:15,679 --> 00:26:18,000
+little while and so the delays will be
+
+711
+00:26:18,000 --> 00:26:22,789
+long
+
+712
+00:26:22,799 --> 00:26:25,520
+what is the log entry being executed in
+
+713
+00:26:25,520 --> 00:26:27,919
+the kv storage
+
+714
+00:26:27,919 --> 00:26:30,960
+one uh once it's committed
+
+715
+00:26:30,960 --> 00:26:34,080
+uh by raft so once raf has decided that
+
+716
+00:26:34,080 --> 00:26:35,679
+you know all the enough replicas have
+
+717
+00:26:35,679 --> 00:26:37,279
+received it and it's now
+
+718
+00:26:37,279 --> 00:26:39,279
+no way possible that one has to back out
+
+719
+00:26:39,279 --> 00:26:40,640
+of that operation
+
+720
+00:26:40,640 --> 00:26:43,279
+then uh it's handed out to the key value
+
+721
+00:26:43,279 --> 00:26:45,600
+server
+
+722
+00:26:45,600 --> 00:26:48,240
+so the leader will first like execute
+
+723
+00:26:48,240 --> 00:26:48,960
+this command
+
+724
+00:26:48,960 --> 00:26:51,120
+and the leader will tell the followers
+
+725
+00:26:51,120 --> 00:26:52,880
+that this command is committed and then
+
+726
+00:26:52,880 --> 00:26:54,080
+the following
+
+727
+00:26:54,080 --> 00:26:56,000
+uh the leader knows well as soon as the
+
+728
+00:26:56,000 --> 00:26:57,039
+leader knows that the operation is
+
+729
+00:26:57,039 --> 00:26:58,559
+committed excellent can hand it off to
+
+730
+00:26:58,559 --> 00:27:00,480
+his key value server let me
+
+731
+00:27:00,480 --> 00:27:02,640
+let's talk about it right now and i'll
+
+732
+00:27:02,640 --> 00:27:05,039
+go in more detail as we go
+
+733
+00:27:05,039 --> 00:27:06,880
+so a little bit more of an overview of
+
+734
+00:27:06,880 --> 00:27:08,240
+the protocol so
+
+735
+00:27:08,240 --> 00:27:10,320
+previous board was sort of an overview
+
+736
+00:27:10,320 --> 00:27:12,320
+of how you use raft
+
+737
+00:27:12,320 --> 00:27:14,400
+to build and replicate the state machine
+
+738
+00:27:14,400 --> 00:27:15,760
+now let's look at the
+
+739
+00:27:15,760 --> 00:27:17,760
+raft itself a little bit in more detail
+
+740
+00:27:17,760 --> 00:27:20,159
+so we hear some timelines we've got a
+
+741
+00:27:20,159 --> 00:27:21,440
+leader
+
+742
+00:27:21,440 --> 00:27:24,480
+we've got two followers
+
+743
+00:27:24,480 --> 00:27:26,880
+so we're running the three uh the
+
+744
+00:27:26,880 --> 00:27:29,279
+client's gonna talks to the leader
+
+745
+00:27:29,279 --> 00:27:32,480
+uh the
+
+746
+00:27:32,480 --> 00:27:35,840
+leader has a log you know of all the
+
+747
+00:27:35,840 --> 00:27:37,520
+for the get operations you know when it
+
+748
+00:27:37,520 --> 00:27:39,279
+gets a new one you know appends it you
+
+749
+00:27:39,279 --> 00:27:41,840
+know to the end of the log
+
+750
+00:27:41,840 --> 00:27:44,399
+then it actually sends it you know sends
+
+751
+00:27:44,399 --> 00:27:45,600
+the log entries
+
+752
+00:27:45,600 --> 00:27:48,960
+to the new log entries you know through
+
+753
+00:27:48,960 --> 00:27:55,909
+the followers
+
+754
+00:27:55,919 --> 00:27:57,600
+and you know let's say you know that
+
+755
+00:27:57,600 --> 00:27:59,279
+follower two here's follower one
+
+756
+00:27:59,279 --> 00:28:01,120
+new follower two follower one actually
+
+757
+00:28:01,120 --> 00:28:02,960
+he receives this log entry everything is
+
+758
+00:28:02,960 --> 00:28:05,120
+okay it hence it to the end of the log
+
+759
+00:28:05,120 --> 00:28:07,360
+uh it sends basically an act back saying
+
+760
+00:28:07,360 --> 00:28:09,360
+yes you know i appended it
+
+761
+00:28:09,360 --> 00:28:12,720
+and at this point you know in
+
+762
+00:28:12,720 --> 00:28:16,159
+the raft view of the world uh two uh
+
+763
+00:28:16,159 --> 00:28:19,520
+servers actually have the log entry and
+
+764
+00:28:19,520 --> 00:28:20,000
+so
+
+765
+00:28:20,000 --> 00:28:21,679
+raft actually the leader can actually
+
+766
+00:28:21,679 --> 00:28:23,840
+commit the log entry
+
+767
+00:28:23,840 --> 00:28:28,080
+and so at this point you know the uh
+
+768
+00:28:28,080 --> 00:28:31,440
+the the leader can actually hand off
+
+769
+00:28:31,440 --> 00:28:32,799
+that request that they just
+
+770
+00:28:32,799 --> 00:28:34,080
+received they can actually hand it off
+
+771
+00:28:34,080 --> 00:28:36,720
+to the kv server
+
+772
+00:28:36,720 --> 00:28:38,480
+and the way actually the lab does this
+
+773
+00:28:38,480 --> 00:28:40,559
+or the lab infrastructure does this is
+
+774
+00:28:40,559 --> 00:28:41,440
+that basically
+
+775
+00:28:41,440 --> 00:28:44,640
+we have a channel a go channel uh
+
+776
+00:28:44,640 --> 00:28:47,440
+one single go channel where basically
+
+777
+00:28:47,440 --> 00:28:47,760
+the
+
+778
+00:28:47,760 --> 00:28:50,159
+graph go routines and the wrap go
+
+779
+00:28:50,159 --> 00:28:51,360
+routine that actually decides that a
+
+780
+00:28:51,360 --> 00:28:52,399
+particular
+
+781
+00:28:52,399 --> 00:28:54,480
+operation is committed it just sends
+
+782
+00:28:54,480 --> 00:28:56,799
+that operation on the
+
+783
+00:28:56,799 --> 00:28:58,640
+apply channel so that the key value
+
+784
+00:28:58,640 --> 00:29:01,440
+servers can actually apply it
+
+785
+00:29:01,440 --> 00:29:03,840
+now at some point later uh so notice at
+
+786
+00:29:03,840 --> 00:29:04,720
+this point
+
+787
+00:29:04,720 --> 00:29:07,600
+the the leader basically uh has
+
+788
+00:29:07,600 --> 00:29:09,600
+committed the operation
+
+789
+00:29:09,600 --> 00:29:11,360
+and it's perfectly safe for the leader
+
+790
+00:29:11,360 --> 00:29:13,440
+to commit this operation
+
+791
+00:29:13,440 --> 00:29:15,919
+because a majority of the servers
+
+792
+00:29:15,919 --> 00:29:17,440
+actually the majority of the peers
+
+793
+00:29:17,440 --> 00:29:18,799
+actually have received the operation
+
+794
+00:29:18,799 --> 00:29:20,399
+correct so there's even if there was a
+
+795
+00:29:20,399 --> 00:29:21,440
+failure
+
+796
+00:29:21,440 --> 00:29:23,840
+and we elect a new leader that's the
+
+797
+00:29:23,840 --> 00:29:25,360
+case that that leader or
+
+798
+00:29:25,360 --> 00:29:27,039
+one of the servers that is remaining
+
+799
+00:29:27,039 --> 00:29:29,120
+actually has the last operation
+
+800
+00:29:29,120 --> 00:29:32,080
+that was uh appended to the log by the
+
+801
+00:29:32,080 --> 00:29:33,600
+previous leader
+
+802
+00:29:33,600 --> 00:29:35,679
+so everything is good uh of course
+
+803
+00:29:35,679 --> 00:29:36,640
+really the last guy
+
+804
+00:29:36,640 --> 00:29:38,320
+you know the first follower will also at
+
+805
+00:29:38,320 --> 00:29:40,480
+some point respond and
+
+806
+00:29:40,480 --> 00:29:43,840
+you know say yes so this point
+
+807
+00:29:43,840 --> 00:29:45,840
+basically from the point of view of the
+
+808
+00:29:45,840 --> 00:29:47,760
+leader the operation is committed
+
+809
+00:29:47,760 --> 00:29:49,200
+except the followers don't really know
+
+810
+00:29:49,200 --> 00:29:51,679
+it yet because the followers you know
+
+811
+00:29:51,679 --> 00:29:54,080
+they only know that you know they got it
+
+812
+00:29:54,080 --> 00:29:56,000
+and that the leader probably has it
+
+813
+00:29:56,000 --> 00:29:58,559
+um but they you know they don't really
+
+814
+00:29:58,559 --> 00:29:59,120
+know
+
+815
+00:29:59,120 --> 00:30:01,200
+and so what actually happens is that uh
+
+816
+00:30:01,200 --> 00:30:02,640
+the subsequent operation
+
+817
+00:30:02,640 --> 00:30:04,480
+you know when the another client request
+
+818
+00:30:04,480 --> 00:30:06,480
+comes in uh the leader will append
+
+819
+00:30:06,480 --> 00:30:08,320
+another log entry and
+
+820
+00:30:08,320 --> 00:30:10,960
+basically sends you know a new operation
+
+821
+00:30:10,960 --> 00:30:12,320
+or a new append entry
+
+822
+00:30:12,320 --> 00:30:14,240
+you know to the followers and that
+
+823
+00:30:14,240 --> 00:30:15,919
+append entry
+
+824
+00:30:15,919 --> 00:30:18,720
+does basically two things it you know
+
+825
+00:30:18,720 --> 00:30:20,799
+provides the new log entry for the new
+
+826
+00:30:20,799 --> 00:30:21,440
+operation
+
+827
+00:30:21,440 --> 00:30:23,039
+but it also confirms that all the
+
+828
+00:30:23,039 --> 00:30:24,559
+preceding uh
+
+829
+00:30:24,559 --> 00:30:26,240
+operations or you know tells us which
+
+830
+00:30:26,240 --> 00:30:27,600
+operations actually have committed so
+
+831
+00:30:27,600 --> 00:30:28,480
+far
+
+832
+00:30:28,480 --> 00:30:30,640
+and so when f1 and f2 receive you know
+
+833
+00:30:30,640 --> 00:30:31,919
+these
+
+834
+00:30:31,919 --> 00:30:35,120
+this operation this rpc they know
+
+835
+00:30:35,120 --> 00:30:37,360
+that the operation has been permitted by
+
+836
+00:30:37,360 --> 00:30:38,240
+the leader
+
+837
+00:30:38,240 --> 00:30:39,919
+and therefore at that point they can
+
+838
+00:30:39,919 --> 00:30:42,320
+also deliver it you know through their
+
+839
+00:30:42,320 --> 00:30:44,880
+key value instance and know that this
+
+840
+00:30:44,880 --> 00:30:50,399
+operation is committed
+
+841
+00:30:50,399 --> 00:30:53,440
+um i i had a quick question so
+
+842
+00:30:53,440 --> 00:30:56,720
+um so when
+
+843
+00:30:56,720 --> 00:30:59,760
+the leader sends an operation over
+
+844
+00:30:59,760 --> 00:31:03,279
+uh and a server replies
+
+845
+00:31:03,279 --> 00:31:05,120
+does that mean that that means it's in
+
+846
+00:31:05,120 --> 00:31:06,320
+the log right
+
+847
+00:31:06,320 --> 00:31:09,200
+yes but what happens if you get a
+
+848
+00:31:09,200 --> 00:31:10,159
+majority like
+
+849
+00:31:10,159 --> 00:31:12,240
+you know a slight majority and then one
+
+850
+00:31:12,240 --> 00:31:14,000
+of those logs like one of the servers
+
+851
+00:31:14,000 --> 00:31:14,799
+crash
+
+852
+00:31:14,799 --> 00:31:16,960
+like our logs the logs have to be in
+
+853
+00:31:16,960 --> 00:31:18,480
+storage like in disk
+
+854
+00:31:18,480 --> 00:31:20,320
+yep so that's a very good question
+
+855
+00:31:20,320 --> 00:31:21,679
+correct so the the
+
+856
+00:31:21,679 --> 00:31:24,159
+every change to the log you know this if
+
+857
+00:31:24,159 --> 00:31:25,519
+you look at the wrap paper in detail
+
+858
+00:31:25,519 --> 00:31:26,000
+here
+
+859
+00:31:26,000 --> 00:31:29,360
+the some state is uh
+
+860
+00:31:29,360 --> 00:31:32,000
+must be stable and log is one of those
+
+861
+00:31:32,000 --> 00:31:33,279
+pieces of information that must be
+
+862
+00:31:33,279 --> 00:31:33,760
+stable
+
+863
+00:31:33,760 --> 00:31:35,760
+as well as the term number and a bunch
+
+864
+00:31:35,760 --> 00:31:37,039
+of other things
+
+865
+00:31:37,039 --> 00:31:40,080
+and so if a server crashes uh
+
+866
+00:31:40,080 --> 00:31:42,720
+no big no big deal really because you
+
+867
+00:31:42,720 --> 00:31:44,399
+know the majority of the servers does
+
+868
+00:31:44,399 --> 00:31:45,200
+have that
+
+869
+00:31:45,200 --> 00:31:48,480
+entry on their disk and when they come
+
+870
+00:31:48,480 --> 00:31:52,950
+back up they'll find it
+
+871
+00:31:52,960 --> 00:31:56,080
+i asked we have a question yeah so
+
+872
+00:31:56,080 --> 00:31:59,440
+what happens if for example follower one
+
+873
+00:31:59,440 --> 00:32:00,000
+replies
+
+874
+00:32:00,000 --> 00:32:03,200
+with yes and the leader commits
+
+875
+00:32:03,200 --> 00:32:06,799
+uh just before it sends the next
+
+876
+00:32:06,799 --> 00:32:08,559
+command to the remaining followers to
+
+877
+00:32:08,559 --> 00:32:10,880
+also commit it crashes
+
+878
+00:32:10,880 --> 00:32:12,480
+now the remaining followers don't know
+
+879
+00:32:12,480 --> 00:32:13,840
+that they need to commit because the
+
+880
+00:32:13,840 --> 00:32:15,840
+leader has crashed
+
+881
+00:32:15,840 --> 00:32:18,640
+so wouldn't this cause problems then
+
+882
+00:32:18,640 --> 00:32:19,440
+we'll commit it
+
+883
+00:32:19,440 --> 00:32:21,200
+right because one follower will have it
+
+884
+00:32:21,200 --> 00:32:22,480
+in his log
+
+885
+00:32:22,480 --> 00:32:24,000
+and as we'll see in the leader election
+
+886
+00:32:24,000 --> 00:32:26,399
+rules it will become the leader
+
+887
+00:32:26,399 --> 00:32:29,519
+and uh and it will propagate that depend
+
+888
+00:32:29,519 --> 00:32:30,960
+entry you know to the other
+
+889
+00:32:30,960 --> 00:32:33,919
+servers and then they will apply it to
+
+890
+00:32:33,919 --> 00:32:34,720
+okay
+
+891
+00:32:34,720 --> 00:32:38,399
+okay thanks okay so that brings me maybe
+
+892
+00:32:38,399 --> 00:32:40,159
+this is a good you know sort of segue to
+
+893
+00:32:40,159 --> 00:32:42,320
+the next topic like why logs
+
+894
+00:32:42,320 --> 00:32:46,240
+and just last few questions
+
+895
+00:32:46,240 --> 00:32:48,960
+all about that yeah i actually as a
+
+896
+00:32:48,960 --> 00:32:50,799
+follow-up to the last question
+
+897
+00:32:50,799 --> 00:32:53,760
+um so the server crashing like after it
+
+898
+00:32:53,760 --> 00:32:55,519
+has like consensus
+
+899
+00:32:55,519 --> 00:32:58,559
+uh crashing right like right before
+
+900
+00:32:58,559 --> 00:32:59,919
+committing
+
+901
+00:32:59,919 --> 00:33:02,960
+it could delay committing right
+
+902
+00:33:02,960 --> 00:33:05,840
+what do you mean with committing so so
+
+903
+00:33:05,840 --> 00:33:07,360
+um
+
+904
+00:33:07,360 --> 00:33:09,360
+like after it has consensus on a change
+
+905
+00:33:09,360 --> 00:33:11,760
+right after it has a majority
+
+906
+00:33:11,760 --> 00:33:14,799
+um it can
+
+907
+00:33:14,799 --> 00:33:17,440
+like the paper said you sort you
+
+908
+00:33:17,440 --> 00:33:18,080
+essentially
+
+909
+00:33:18,080 --> 00:33:20,799
+tell other ones like other servers you
+
+910
+00:33:20,799 --> 00:33:22,880
+tell them okay this is ready for
+
+911
+00:33:22,880 --> 00:33:24,799
+or sorry it's committed it's ready for
+
+912
+00:33:24,799 --> 00:33:26,480
+like um
+
+913
+00:33:26,480 --> 00:33:28,640
+like execution right into the state
+
+914
+00:33:28,640 --> 00:33:29,600
+mission
+
+915
+00:33:29,600 --> 00:33:32,880
+um so if it crashes before it tells all
+
+916
+00:33:32,880 --> 00:33:34,240
+your servers that it's ready for
+
+917
+00:33:34,240 --> 00:33:35,679
+execution
+
+918
+00:33:35,679 --> 00:33:38,559
+it could delay execution right it could
+
+919
+00:33:38,559 --> 00:33:40,399
+delay execution well i don't okay so
+
+920
+00:33:40,399 --> 00:33:42,480
+first of all if the leader fails at that
+
+921
+00:33:42,480 --> 00:33:44,000
+point nothing happens correct like at
+
+922
+00:33:44,000 --> 00:33:45,600
+least the clients can't you know proceed
+
+923
+00:33:45,600 --> 00:33:47,440
+with any other more operations
+
+924
+00:33:47,440 --> 00:33:49,120
+and so basically the if you want to wait
+
+925
+00:33:49,120 --> 00:33:50,480
+to think about it at that point sort of
+
+926
+00:33:50,480 --> 00:33:52,240
+wrap reconfigures itself
+
+927
+00:33:52,240 --> 00:33:55,039
+and likes a new leader and that's going
+
+928
+00:33:55,039 --> 00:33:55,840
+to be you know
+
+929
+00:33:55,840 --> 00:33:57,600
+f1 or f2 you know one of the two is
+
+930
+00:33:57,600 --> 00:33:58,720
+going to be the new leader and the other
+
+931
+00:33:58,720 --> 00:34:00,720
+one is going to be the follower right
+
+932
+00:34:00,720 --> 00:34:02,799
+and one of the two actually has received
+
+933
+00:34:02,799 --> 00:34:05,440
+you know the append entry that the
+
+934
+00:34:05,440 --> 00:34:06,960
+leader might already have committed in
+
+935
+00:34:06,960 --> 00:34:09,599
+fact it's kv might already have executed
+
+936
+00:34:09,599 --> 00:34:11,200
+no problem correct because one of them
+
+937
+00:34:11,200 --> 00:34:13,919
+has it that one will become the leader
+
+938
+00:34:13,919 --> 00:34:15,359
+as we'll see later with the leader
+
+939
+00:34:15,359 --> 00:34:16,720
+election rules
+
+940
+00:34:16,720 --> 00:34:18,800
+and that one will you know submit it to
+
+941
+00:34:18,800 --> 00:34:20,000
+its kv server
+
+942
+00:34:20,000 --> 00:34:21,760
+and we'll replicate it you know to the
+
+943
+00:34:21,760 --> 00:34:23,839
+other follower and then it will apply it
+
+944
+00:34:23,839 --> 00:34:25,040
+to its kv server
+
+945
+00:34:25,040 --> 00:34:26,639
+so in the end right they all will apply
+
+946
+00:34:26,639 --> 00:34:28,800
+all the operations in the same order
+
+947
+00:34:28,800 --> 00:34:31,280
+i i i agree like eventually it'll happen
+
+948
+00:34:31,280 --> 00:34:32,560
+but it could be delayed
+
+949
+00:34:32,560 --> 00:34:39,349
+right yeah could be delayed absolutely
+
+950
+00:34:39,359 --> 00:34:40,960
+the new lens has a complete log to all
+
+951
+00:34:40,960 --> 00:34:42,879
+the followers uh
+
+952
+00:34:42,879 --> 00:34:45,839
+it will just it will the way it works is
+
+953
+00:34:45,839 --> 00:34:47,599
+actually uh it will try to send the end
+
+954
+00:34:47,599 --> 00:34:48,639
+of his log
+
+955
+00:34:48,639 --> 00:34:50,639
+uh if one of the followers doesn't
+
+956
+00:34:50,639 --> 00:34:51,919
+recognize the end of the log it will
+
+957
+00:34:51,919 --> 00:34:52,639
+back off
+
+958
+00:34:52,639 --> 00:34:54,879
+and you know send more and more you know
+
+959
+00:34:54,879 --> 00:34:55,919
+earlier entries
+
+960
+00:34:55,919 --> 00:34:58,880
+we'll talk about it later but uh in the
+
+961
+00:34:58,880 --> 00:35:00,640
+end it could be the case that the leader
+
+962
+00:35:00,640 --> 00:35:02,640
+will replay its complete log to
+
+963
+00:35:02,640 --> 00:35:04,079
+one of the followers if one of the
+
+964
+00:35:04,079 --> 00:35:07,599
+followers has missed all the log entries
+
+965
+00:35:07,599 --> 00:35:11,190
+i gotta get me back to walks
+
+966
+00:35:11,200 --> 00:35:14,320
+so one reason you might wonder why
+
+967
+00:35:14,320 --> 00:35:16,240
+you have logs at all is because like the
+
+968
+00:35:16,240 --> 00:35:18,160
+the kv server you know it has a database
+
+969
+00:35:18,160 --> 00:35:20,000
+too correct you know it has a table with
+
+970
+00:35:20,000 --> 00:35:21,280
+all its information
+
+971
+00:35:21,280 --> 00:35:23,200
+uh and so why do we need actually you
+
+972
+00:35:23,200 --> 00:35:24,640
+know sort of this information twice
+
+973
+00:35:24,640 --> 00:35:27,119
+one's in the logs and one's in the
+
+974
+00:35:27,119 --> 00:35:29,440
+uh kp uh table and so a couple of
+
+975
+00:35:29,440 --> 00:35:30,640
+reasons for that
+
+976
+00:35:30,640 --> 00:35:33,520
+uh one yeah so you know a couple that
+
+977
+00:35:33,520 --> 00:35:34,800
+already came up in the questions
+
+978
+00:35:34,800 --> 00:35:35,599
+basically
+
+979
+00:35:35,599 --> 00:35:44,000
+one for retransmission
+
+980
+00:35:44,000 --> 00:35:46,720
+so when the leader you know sends one of
+
+981
+00:35:46,720 --> 00:35:48,480
+these append entries you know to one of
+
+982
+00:35:48,480 --> 00:35:49,839
+the followers that message might get
+
+983
+00:35:49,839 --> 00:35:50,480
+lost
+
+984
+00:35:50,480 --> 00:35:52,240
+and so the leader must be able to
+
+985
+00:35:52,240 --> 00:35:53,680
+re-transmit it so you need to keep a
+
+986
+00:35:53,680 --> 00:35:54,160
+record
+
+987
+00:35:54,160 --> 00:35:57,520
+of all the uh log entries that uh
+
+988
+00:35:57,520 --> 00:36:00,560
+that are sort of in flight uh
+
+989
+00:36:00,560 --> 00:36:02,000
+second reason you know it's probably the
+
+990
+00:36:02,000 --> 00:36:03,440
+primary reason first is like we need
+
+991
+00:36:03,440 --> 00:36:04,880
+order
+
+992
+00:36:04,880 --> 00:36:08,560
+and every uh attempt operation or every
+
+993
+00:36:08,560 --> 00:36:10,640
+uh command must be delivered in the same
+
+994
+00:36:10,640 --> 00:36:11,359
+order
+
+995
+00:36:11,359 --> 00:36:14,400
+at the same uh and all the replicas
+
+996
+00:36:14,400 --> 00:36:16,320
+and the log is a very convenient way for
+
+997
+00:36:16,320 --> 00:36:18,640
+us to actually maintain that order
+
+998
+00:36:18,640 --> 00:36:21,119
+so the second reason we transmission uh
+
+999
+00:36:21,119 --> 00:36:22,560
+the third reason is we need a
+
+1000
+00:36:22,560 --> 00:36:25,270
+persistence
+
+1001
+00:36:25,280 --> 00:36:26,720
+you know one of the followers might
+
+1002
+00:36:26,720 --> 00:36:28,560
+crash uh
+
+1003
+00:36:28,560 --> 00:36:30,079
+where actually all of them might crash
+
+1004
+00:36:30,079 --> 00:36:31,599
+and then they come up again
+
+1005
+00:36:31,599 --> 00:36:33,040
+and you know we still need to be in a
+
+1006
+00:36:33,040 --> 00:36:34,079
+position that we can basically
+
+1007
+00:36:34,079 --> 00:36:35,680
+retransmit log entries
+
+1008
+00:36:35,680 --> 00:36:39,280
+to bring everybody up to date and uh so
+
+1009
+00:36:39,280 --> 00:36:42,560
+the log must also be persistent uh
+
+1010
+00:36:42,560 --> 00:36:45,280
+and finally we need sort of space for
+
+1011
+00:36:45,280 --> 00:36:46,960
+tentative operations or tentatively
+
+1012
+00:36:46,960 --> 00:36:47,920
+committed
+
+1013
+00:36:47,920 --> 00:36:51,200
+with retentive commands uh
+
+1014
+00:36:51,200 --> 00:36:53,520
+so as we noted earlier that came up in
+
+1015
+00:36:53,520 --> 00:36:54,720
+the earlier questions
+
+1016
+00:36:54,720 --> 00:36:58,079
+when uh the leader sends an operation to
+
+1017
+00:36:58,079 --> 00:36:58,880
+a follower
+
+1018
+00:36:58,880 --> 00:37:00,160
+the following actor doesn't really know
+
+1019
+00:37:00,160 --> 00:37:01,440
+at that point whether that operation
+
+1020
+00:37:01,440 --> 00:37:03,040
+will be committed so it just must stick
+
+1021
+00:37:03,040 --> 00:37:04,400
+around for a little while
+
+1022
+00:37:04,400 --> 00:37:06,079
+until it actually learns whether that
+
+1023
+00:37:06,079 --> 00:37:07,760
+operation is committed and so we need
+
+1024
+00:37:07,760 --> 00:37:09,040
+some space for these standard dev
+
+1025
+00:37:09,040 --> 00:37:10,560
+operations and the log is a confusing
+
+1026
+00:37:10,560 --> 00:37:13,280
+place to actually do that
+
+1027
+00:37:13,280 --> 00:37:16,000
+um in the end you know what will happen
+
+1028
+00:37:16,000 --> 00:37:16,400
+correct
+
+1029
+00:37:16,400 --> 00:37:22,000
+is that the logs are identical
+
+1030
+00:37:22,000 --> 00:37:28,470
+on all servers
+
+1031
+00:37:28,480 --> 00:37:31,280
+uh you know they may be out of sync you
+
+1032
+00:37:31,280 --> 00:37:32,560
+know during periods of time
+
+1033
+00:37:32,560 --> 00:37:34,560
+uh you know one might have more entries
+
+1034
+00:37:34,560 --> 00:37:36,079
+than other logs
+
+1035
+00:37:36,079 --> 00:37:37,599
+but like if we sort of keep running the
+
+1036
+00:37:37,599 --> 00:37:39,599
+system and then stop the clients
+
+1037
+00:37:39,599 --> 00:37:41,920
+then at some point in time uh all the
+
+1038
+00:37:41,920 --> 00:37:43,920
+logs will be completely identical
+
+1039
+00:37:43,920 --> 00:37:45,920
+and that means that basically those uh
+
+1040
+00:37:45,920 --> 00:37:47,440
+since they're all half the same order
+
+1041
+00:37:47,440 --> 00:37:48,320
+all the operations
+
+1042
+00:37:48,320 --> 00:37:49,839
+all the operations will be fed you know
+
+1043
+00:37:49,839 --> 00:37:52,000
+to decline that the kv servers in the
+
+1044
+00:37:52,000 --> 00:37:52,720
+same order
+
+1045
+00:37:52,720 --> 00:37:54,800
+and the adk features will end up in the
+
+1046
+00:37:54,800 --> 00:37:57,280
+same state
+
+1047
+00:37:57,280 --> 00:38:03,510
+okay
+
+1048
+00:38:03,520 --> 00:38:05,280
+okay let me talk a little bit about an
+
+1049
+00:38:05,280 --> 00:38:17,109
+individual log entry
+
+1050
+00:38:17,119 --> 00:38:19,040
+so really you know whatever we're going
+
+1051
+00:38:19,040 --> 00:38:20,640
+to draw many pictures like this where
+
+1052
+00:38:20,640 --> 00:38:22,800
+you know there's a bunch of log entries
+
+1053
+00:38:22,800 --> 00:38:24,160
+you know starting zero
+
+1054
+00:38:24,160 --> 00:38:27,200
+one two blah blah blah blah uh and if we
+
+1055
+00:38:27,200 --> 00:38:29,200
+look inside of one of these log entries
+
+1056
+00:38:29,200 --> 00:38:32,400
+you know there's gonna be a command
+
+1057
+00:38:32,400 --> 00:38:33,760
+which we're mostly going to sort of
+
+1058
+00:38:33,760 --> 00:38:34,800
+ignore we're not going to really think
+
+1059
+00:38:34,800 --> 00:38:36,400
+about much about it at all and that's
+
+1060
+00:38:36,400 --> 00:38:37,359
+the thing that's actually being
+
+1061
+00:38:37,359 --> 00:38:38,720
+delivered to the application so that's
+
+1062
+00:38:38,720 --> 00:38:40,000
+for example the putin or the get
+
+1063
+00:38:40,000 --> 00:38:41,280
+operation
+
+1064
+00:38:41,280 --> 00:38:44,160
+with its arguments and then the second
+
+1065
+00:38:44,160 --> 00:38:48,950
+thing that's in there is a term
+
+1066
+00:38:48,960 --> 00:38:55,190
+and this is basically the leader's term
+
+1067
+00:38:55,200 --> 00:38:56,960
+so the term in which this particular
+
+1068
+00:38:56,960 --> 00:38:58,560
+command actually was appended
+
+1069
+00:38:58,560 --> 00:39:01,920
+to the log and one way you can think
+
+1070
+00:39:01,920 --> 00:39:02,480
+about this
+
+1071
+00:39:02,480 --> 00:39:05,359
+is that basically the term identifies
+
+1072
+00:39:05,359 --> 00:39:07,280
+uniquely the leader that appended
+
+1073
+00:39:07,280 --> 00:39:10,000
+uh the operation to the log because
+
+1074
+00:39:10,000 --> 00:39:10,960
+during every term
+
+1075
+00:39:10,960 --> 00:39:14,000
+there's only one single leader and so
+
+1076
+00:39:14,000 --> 00:39:15,520
+the term id you really
+
+1077
+00:39:15,520 --> 00:39:18,960
+basically implicitly uh uh signals you
+
+1078
+00:39:18,960 --> 00:39:19,680
+know what
+
+1079
+00:39:19,680 --> 00:39:21,760
+who the leader was actually appended to
+
+1080
+00:39:21,760 --> 00:39:23,760
+the uh
+
+1081
+00:39:23,760 --> 00:39:27,040
+to that that log entry uh
+
+1082
+00:39:27,040 --> 00:39:28,640
+the number that goes along here so if
+
+1083
+00:39:28,640 --> 00:39:30,400
+this is n or maybe like let me
+
+1084
+00:39:30,400 --> 00:39:33,760
+use i here uh you know that's the log
+
+1085
+00:39:33,760 --> 00:39:38,870
+index
+
+1086
+00:39:38,880 --> 00:39:41,280
+so the combination of the log index plus
+
+1087
+00:39:41,280 --> 00:39:42,880
+a term number basically uniquely
+
+1088
+00:39:42,880 --> 00:39:44,560
+identifies the content of that
+
+1089
+00:39:44,560 --> 00:39:46,800
+particular entry there could be no
+
+1090
+00:39:46,800 --> 00:39:49,119
+uh two log entries that have the same
+
+1091
+00:39:49,119 --> 00:39:50,480
+index the same term
+
+1092
+00:39:50,480 --> 00:39:52,640
+and have different commands uh because
+
+1093
+00:39:52,640 --> 00:39:54,640
+only a single leader you know could have
+
+1094
+00:39:54,640 --> 00:39:55,599
+been in charge
+
+1095
+00:39:55,599 --> 00:39:58,240
+in that particular term and that uh
+
+1096
+00:39:58,240 --> 00:40:00,079
+leader you know commits you know attends
+
+1097
+00:40:00,079 --> 00:40:03,430
+operations
+
+1098
+00:40:03,440 --> 00:40:05,599
+uh will um commit a log interest be
+
+1099
+00:40:05,599 --> 00:40:06,720
+overwritten yeah they might get
+
+1100
+00:40:06,720 --> 00:40:07,359
+overwritten
+
+1101
+00:40:07,359 --> 00:40:09,440
+we'll talk about it later but that's
+
+1102
+00:40:09,440 --> 00:40:12,470
+certainly possible
+
+1103
+00:40:12,480 --> 00:40:15,680
+um okay so you know if we look at this
+
+1104
+00:40:15,680 --> 00:40:17,200
+uh picture sort of there are two things
+
+1105
+00:40:17,200 --> 00:40:17,520
+that
+
+1106
+00:40:17,520 --> 00:40:19,440
+uh and just part of the i guess an
+
+1107
+00:40:19,440 --> 00:40:20,960
+answer to this question
+
+1108
+00:40:20,960 --> 00:40:22,560
+there are two things that need to happen
+
+1109
+00:40:22,560 --> 00:40:25,990
+we need to elect leaders
+
+1110
+00:40:26,000 --> 00:40:29,040
+for a particular term
+
+1111
+00:40:29,040 --> 00:40:34,230
+and we need to actually ensure that the
+
+1112
+00:40:34,240 --> 00:40:39,119
+ensure logs become identical
+
+1113
+00:40:39,119 --> 00:40:41,520
+and we have failures and we have leader
+
+1114
+00:40:41,520 --> 00:40:44,309
+changes
+
+1115
+00:40:44,319 --> 00:40:45,599
+and so we're going to talk about both of
+
+1116
+00:40:45,599 --> 00:40:47,440
+these topics uh
+
+1117
+00:40:47,440 --> 00:40:49,520
+and we're going to start with leader
+
+1118
+00:40:49,520 --> 00:40:50,960
+election and then
+
+1119
+00:40:50,960 --> 00:40:53,760
+talk about the making uh launch
+
+1120
+00:40:53,760 --> 00:40:54,400
+identical
+
+1121
+00:40:54,400 --> 00:41:02,870
+a little bit later okay election
+
+1122
+00:41:02,880 --> 00:41:06,160
+election is really the topic of uh
+
+1123
+00:41:06,160 --> 00:41:07,680
+and you know really the stories are some
+
+1124
+00:41:07,680 --> 00:41:09,040
+ways you know straightforward you know
+
+1125
+00:41:09,040 --> 00:41:10,319
+we have
+
+1126
+00:41:10,319 --> 00:41:12,319
+you know say here we are a system of
+
+1127
+00:41:12,319 --> 00:41:13,920
+three entries we have
+
+1128
+00:41:13,920 --> 00:41:17,839
+uh a leader in you know term 10
+
+1129
+00:41:17,839 --> 00:41:19,520
+we have a follower in term 10 so we're
+
+1130
+00:41:19,520 --> 00:41:21,200
+sort of stable situation
+
+1131
+00:41:21,200 --> 00:41:23,839
+and another follower in term 10 and
+
+1132
+00:41:23,839 --> 00:41:24,880
+let's say the
+
+1133
+00:41:24,880 --> 00:41:27,440
+leader crashes or you know gets
+
+1134
+00:41:27,440 --> 00:41:29,280
+petitioned you know from network so
+
+1135
+00:41:29,280 --> 00:41:31,920
+you know can't talk anymore what will
+
+1136
+00:41:31,920 --> 00:41:33,599
+happen is that
+
+1137
+00:41:33,599 --> 00:41:36,720
+the followers will start an election and
+
+1138
+00:41:36,720 --> 00:41:38,560
+the reason they start an election is
+
+1139
+00:41:38,560 --> 00:41:39,680
+because they're missing heartbeats from
+
+1140
+00:41:39,680 --> 00:41:47,030
+the leader
+
+1141
+00:41:47,040 --> 00:41:49,440
+you know the job of the leader is to
+
+1142
+00:41:49,440 --> 00:41:50,480
+periodically
+
+1143
+00:41:50,480 --> 00:41:53,359
+uh in a sort of fixed interval uh send
+
+1144
+00:41:53,359 --> 00:41:54,079
+uh
+
+1145
+00:41:54,079 --> 00:41:57,119
+an append entry to the followers
+
+1146
+00:41:57,119 --> 00:41:59,040
+uh you know normally you know that might
+
+1147
+00:41:59,040 --> 00:42:01,119
+be happening because you know a lot of
+
+1148
+00:42:01,119 --> 00:42:03,280
+clients are active and so the
+
+1149
+00:42:03,280 --> 00:42:04,720
+followers continuously get the pen
+
+1150
+00:42:04,720 --> 00:42:07,359
+entries uh but if the leader doesn't
+
+1151
+00:42:07,359 --> 00:42:10,480
+receive any commands from the uh
+
+1152
+00:42:10,480 --> 00:42:12,560
+clients then it actually supposed to
+
+1153
+00:42:12,560 --> 00:42:14,160
+send in a heartbeat
+
+1154
+00:42:14,160 --> 00:42:16,400
+periodically and telling the basically
+
+1155
+00:42:16,400 --> 00:42:17,280
+to inform
+
+1156
+00:42:17,280 --> 00:42:19,760
+the followers that actually is still the
+
+1157
+00:42:19,760 --> 00:42:20,880
+leader
+
+1158
+00:42:20,880 --> 00:42:22,800
+and the heartbeat basically takes the
+
+1159
+00:42:22,800 --> 00:42:25,119
+form of a normal append entry
+
+1160
+00:42:25,119 --> 00:42:28,319
+except no new log entries um and so the
+
+1161
+00:42:28,319 --> 00:42:29,599
+leader just tells us
+
+1162
+00:42:29,599 --> 00:42:31,200
+later just tells the heartbeat like you
+
+1163
+00:42:31,200 --> 00:42:32,880
+know my log is you know
+
+1164
+00:42:32,880 --> 00:42:35,760
+this long uh and uh this is my last
+
+1165
+00:42:35,760 --> 00:42:36,560
+entry
+
+1166
+00:42:36,560 --> 00:42:39,440
+uh and if you know those match and then
+
+1167
+00:42:39,440 --> 00:42:41,680
+everything is good
+
+1168
+00:42:41,680 --> 00:42:44,160
+so if the leader fails then after a
+
+1169
+00:42:44,160 --> 00:42:45,520
+couple of heartbeats
+
+1170
+00:42:45,520 --> 00:42:46,800
+and we'll talk a little bit more in
+
+1171
+00:42:46,800 --> 00:42:48,640
+detail about this um
+
+1172
+00:42:48,640 --> 00:42:52,160
+there will be an election timeout
+
+1173
+00:42:52,160 --> 00:42:57,190
+so the followers have a timer running
+
+1174
+00:42:57,200 --> 00:42:59,280
+and and they reset that timer every time
+
+1175
+00:42:59,280 --> 00:43:01,920
+they get a heartbeat or a pen entry
+
+1176
+00:43:01,920 --> 00:43:04,480
+uh but if they don't receive uh any
+
+1177
+00:43:04,480 --> 00:43:06,000
+heartbeats or repent entries
+
+1178
+00:43:06,000 --> 00:43:07,599
+then at some point in time after this
+
+1179
+00:43:07,599 --> 00:43:09,280
+election time out the
+
+1180
+00:43:09,280 --> 00:43:11,839
+timer goes off and at that point a
+
+1181
+00:43:11,839 --> 00:43:13,280
+follower starts an election
+
+1182
+00:43:13,280 --> 00:43:14,720
+and just as let's assume that the first
+
+1183
+00:43:14,720 --> 00:43:17,599
+follower reaches that point first
+
+1184
+00:43:17,599 --> 00:43:19,359
+and what it will do it will you know
+
+1185
+00:43:19,359 --> 00:43:21,359
+send it will increase its term number so
+
+1186
+00:43:21,359 --> 00:43:24,400
+we'll set the term number to 11.
+
+1187
+00:43:24,400 --> 00:43:27,200
+uh it will you know talk to itself if
+
+1188
+00:43:27,200 --> 00:43:27,839
+you will
+
+1189
+00:43:27,839 --> 00:43:31,040
+and uh be part of the uh
+
+1190
+00:43:31,040 --> 00:43:33,280
+and will vote for itself and then you
+
+1191
+00:43:33,280 --> 00:43:34,160
+know we'll
+
+1192
+00:43:34,160 --> 00:43:36,160
+contact you know the other uh follower
+
+1193
+00:43:36,160 --> 00:43:37,839
+and we'll also try to contact the leader
+
+1194
+00:43:37,839 --> 00:43:39,920
+presumably the leader you let's say the
+
+1195
+00:43:39,920 --> 00:43:41,119
+leader is down so the leader doesn't
+
+1196
+00:43:41,119 --> 00:43:41,920
+respond
+
+1197
+00:43:41,920 --> 00:43:44,400
+but the second follower does respond and
+
+1198
+00:43:44,400 --> 00:43:45,920
+so at that point it gets two votes you
+
+1199
+00:43:45,920 --> 00:43:47,119
+know one from itself and
+
+1200
+00:43:47,119 --> 00:43:49,119
+one from the follower and in that point
+
+1201
+00:43:49,119 --> 00:43:50,640
+actually it becomes the new leader it
+
+1202
+00:43:50,640 --> 00:43:56,150
+becomes the leader for term 11.
+
+1203
+00:43:56,160 --> 00:43:57,359
+and then it you know start thinking
+
+1204
+00:43:57,359 --> 00:43:58,960
+basically clients fall over to that
+
+1205
+00:43:58,960 --> 00:43:59,520
+leader
+
+1206
+00:43:59,520 --> 00:44:00,720
+and you know the things you just
+
+1207
+00:44:00,720 --> 00:44:03,359
+proceeded as before
+
+1208
+00:44:03,359 --> 00:44:06,640
+okay now uh maybe it's
+
+1209
+00:44:06,640 --> 00:44:08,319
+slightly there's a couple problems that
+
+1210
+00:44:08,319 --> 00:44:10,079
+you might worry about but one of them
+
+1211
+00:44:10,079 --> 00:44:12,800
+could be the following situation we uh
+
+1212
+00:44:12,800 --> 00:44:13,920
+it turns out there was a network
+
+1213
+00:44:13,920 --> 00:44:14,720
+petition between
+
+1214
+00:44:14,720 --> 00:44:16,880
+leader 10 we're the leader for term 10
+
+1215
+00:44:16,880 --> 00:44:18,720
+and the followers for term 10.
+
+1216
+00:44:18,720 --> 00:44:20,480
+and so at some point that network you
+
+1217
+00:44:20,480 --> 00:44:22,319
+know partition heals
+
+1218
+00:44:22,319 --> 00:44:24,400
+and so maybe there are client requests
+
+1219
+00:44:24,400 --> 00:44:26,000
+you know coming in still to
+
+1220
+00:44:26,000 --> 00:44:29,200
+uh the leader for leader for term two
+
+1221
+00:44:29,200 --> 00:44:30,079
+and ten
+
+1222
+00:44:30,079 --> 00:44:32,480
+and uh now of course now it looks like
+
+1223
+00:44:32,480 --> 00:44:34,720
+oops we might have actually two
+
+1224
+00:44:34,720 --> 00:44:37,760
+uh leaders and we're back into the split
+
+1225
+00:44:37,760 --> 00:44:40,480
+syndrome problem that turns out not to
+
+1226
+00:44:40,480 --> 00:44:41,680
+be the case
+
+1227
+00:44:41,680 --> 00:44:43,760
+because when the leader tries to
+
+1228
+00:44:43,760 --> 00:44:44,880
+actually
+
+1229
+00:44:44,880 --> 00:44:46,319
+you know send a pen entries to the
+
+1230
+00:44:46,319 --> 00:44:50,000
+followers to followers that are now
+
+1231
+00:44:50,000 --> 00:44:52,800
+in term 11 they will just reject you
+
+1232
+00:44:52,800 --> 00:44:53,680
+know those
+
+1233
+00:44:53,680 --> 00:44:55,920
+append entries and they will tell the
+
+1234
+00:44:55,920 --> 00:44:57,680
+old leader that you know too bad
+
+1235
+00:44:57,680 --> 00:45:01,200
+you know uh he's not the leader anymore
+
+1236
+00:45:01,200 --> 00:45:02,640
+in fact they'll send a message back you
+
+1237
+00:45:02,640 --> 00:45:04,400
+know saying no
+
+1238
+00:45:04,400 --> 00:45:07,520
+i cannot do the append and
+
+1239
+00:45:07,520 --> 00:45:11,760
+here is my current uh term number eleven
+
+1240
+00:45:11,760 --> 00:45:13,920
+uh the leader receives that sees that
+
+1241
+00:45:13,920 --> 00:45:15,520
+the term number eleven is bigger than
+
+1242
+00:45:15,520 --> 00:45:16,800
+this term number ten
+
+1243
+00:45:16,800 --> 00:45:18,800
+and basically steps down as leader and
+
+1244
+00:45:18,800 --> 00:45:20,480
+becomes a follower
+
+1245
+00:45:20,480 --> 00:45:23,440
+and they take up another election or you
+
+1246
+00:45:23,440 --> 00:45:24,319
+know to basically
+
+1247
+00:45:24,319 --> 00:45:26,640
+become part of a term that has all three
+
+1248
+00:45:26,640 --> 00:45:27,359
+of them
+
+1249
+00:45:27,359 --> 00:45:29,119
+but it basically and there's no chance
+
+1250
+00:45:29,119 --> 00:45:31,280
+of a split brain problem
+
+1251
+00:45:31,280 --> 00:45:33,200
+because you just can't actually get any
+
+1252
+00:45:33,200 --> 00:45:35,680
+operations through
+
+1253
+00:45:35,680 --> 00:45:42,710
+so no split brain
+
+1254
+00:45:42,720 --> 00:45:44,000
+and the reason that we avoid the split
+
+1255
+00:45:44,000 --> 00:45:45,920
+brain is because of this majority rule
+
+1256
+00:45:45,920 --> 00:45:51,430
+as well as these term numbers
+
+1257
+00:45:51,440 --> 00:45:53,359
+okay that's of course not the only
+
+1258
+00:45:53,359 --> 00:45:54,640
+problem
+
+1259
+00:45:54,640 --> 00:45:59,440
+that we might have another challenge
+
+1260
+00:45:59,440 --> 00:46:03,760
+is we might end up
+
+1261
+00:46:03,760 --> 00:46:09,030
+with a split vote
+
+1262
+00:46:09,040 --> 00:46:10,800
+so like it was a particular picture you
+
+1263
+00:46:10,800 --> 00:46:12,480
+know we had their leader maybe
+
+1264
+00:46:12,480 --> 00:46:14,560
+you know he was leader in 10 his
+
+1265
+00:46:14,560 --> 00:46:16,400
+petition of the network
+
+1266
+00:46:16,400 --> 00:46:19,440
+uh here are our two followers
+
+1267
+00:46:19,440 --> 00:46:23,520
+in ten and
+
+1268
+00:46:23,520 --> 00:46:25,200
+uh and if we're not careful you know
+
+1269
+00:46:25,200 --> 00:46:26,960
+maybe they will actually start you know
+
+1270
+00:46:26,960 --> 00:46:29,520
+elections very close to each other
+
+1271
+00:46:29,520 --> 00:46:31,760
+and so you know f10 you know votes for
+
+1272
+00:46:31,760 --> 00:46:32,720
+itself
+
+1273
+00:46:32,720 --> 00:46:35,119
+uh the first leah followed follow folks
+
+1274
+00:46:35,119 --> 00:46:36,640
+himself the second leader
+
+1275
+00:46:36,640 --> 00:46:38,640
+of the second follower vote for itself
+
+1276
+00:46:38,640 --> 00:46:40,079
+then you know they sent
+
+1277
+00:46:40,079 --> 00:46:43,119
+you know uh vote requests you know with
+
+1278
+00:46:43,119 --> 00:46:44,079
+each other
+
+1279
+00:46:44,079 --> 00:46:47,040
+and uh the rule is that you know you can
+
+1280
+00:46:47,040 --> 00:46:48,319
+vote
+
+1281
+00:46:48,319 --> 00:46:54,710
+one vote per term
+
+1282
+00:46:54,720 --> 00:46:56,640
+so when you know the first follower has
+
+1283
+00:46:56,640 --> 00:46:58,240
+voted for itself you know it has voted
+
+1284
+00:46:58,240 --> 00:46:59,680
+for itself and so when it receives the
+
+1285
+00:46:59,680 --> 00:47:01,520
+second vote request it actually cannot
+
+1286
+00:47:01,520 --> 00:47:02,800
+vote for that folk request because it
+
+1287
+00:47:02,800 --> 00:47:04,960
+already voted for itself
+
+1288
+00:47:04,960 --> 00:47:06,640
+uh and so at this point we're going to
+
+1289
+00:47:06,640 --> 00:47:08,079
+have split votes like this guy is going
+
+1290
+00:47:08,079 --> 00:47:08,960
+to have one vote
+
+1291
+00:47:08,960 --> 00:47:11,280
+and this guy is going to have one phone
+
+1292
+00:47:11,280 --> 00:47:12,960
+and it won't do anything
+
+1293
+00:47:12,960 --> 00:47:14,880
+uh and but at some point again you know
+
+1294
+00:47:14,880 --> 00:47:16,079
+later the
+
+1295
+00:47:16,079 --> 00:47:19,440
+there will be a timeout and then this
+
+1296
+00:47:19,440 --> 00:47:21,359
+process starts again
+
+1297
+00:47:21,359 --> 00:47:23,040
+and of course you know as part of that
+
+1298
+00:47:23,040 --> 00:47:24,480
+process you know this is
+
+1299
+00:47:24,480 --> 00:47:26,480
+election eleven election eleven resulted
+
+1300
+00:47:26,480 --> 00:47:27,760
+in twelve it will actually go to
+
+1301
+00:47:27,760 --> 00:47:28,640
+election number twelve
+
+1302
+00:47:28,640 --> 00:47:31,599
+twelve and you know start trying to try
+
+1303
+00:47:31,599 --> 00:47:33,599
+to do this again
+
+1304
+00:47:33,599 --> 00:47:35,440
+now if you're not careful correct uh
+
+1305
+00:47:35,440 --> 00:47:37,599
+this could just happen over and over and
+
+1306
+00:47:37,599 --> 00:47:38,960
+over endlessly
+
+1307
+00:47:38,960 --> 00:47:40,720
+you know basically every time you know
+
+1308
+00:47:40,720 --> 00:47:42,000
+the two followers
+
+1309
+00:47:42,000 --> 00:47:43,440
+roughly at the same time start this
+
+1310
+00:47:43,440 --> 00:47:44,720
+election then you know we're not going
+
+1311
+00:47:44,720 --> 00:47:45,040
+to
+
+1312
+00:47:45,040 --> 00:47:47,280
+make foreign progress and so we need to
+
+1313
+00:47:47,280 --> 00:47:48,559
+avoid this problem
+
+1314
+00:47:48,559 --> 00:47:51,440
+uh is that the election timers are
+
+1315
+00:47:51,440 --> 00:48:08,309
+randomized
+
+1316
+00:48:08,319 --> 00:48:11,920
+um and so when uh the
+
+1317
+00:48:11,920 --> 00:48:13,359
+followers you know set their election
+
+1318
+00:48:13,359 --> 00:48:15,599
+timer uh in
+
+1319
+00:48:15,599 --> 00:48:17,599
+the paper they uh talk about like
+
+1320
+00:48:17,599 --> 00:48:20,880
+picking a value between 150 milliseconds
+
+1321
+00:48:20,880 --> 00:48:24,319
+and 300 milliseconds a random number in
+
+1322
+00:48:24,319 --> 00:48:25,520
+that interval
+
+1323
+00:48:25,520 --> 00:48:28,000
+and every time you know these uh
+
+1324
+00:48:28,000 --> 00:48:28,720
+followers and
+
+1325
+00:48:28,720 --> 00:48:30,880
+basically reset their election time out
+
+1326
+00:48:30,880 --> 00:48:32,640
+they pick a new number a random number
+
+1327
+00:48:32,640 --> 00:48:34,240
+in that interval and
+
+1328
+00:48:34,240 --> 00:48:36,319
+only when that timer then goes off they
+
+1329
+00:48:36,319 --> 00:48:38,079
+run the election
+
+1330
+00:48:38,079 --> 00:48:41,200
+and if basically you know the if
+
+1331
+00:48:41,200 --> 00:48:43,040
+you know this interval is wide enough
+
+1332
+00:48:43,040 --> 00:48:45,280
+the it's unlikely that like the first
+
+1333
+00:48:45,280 --> 00:48:46,800
+person or the first follower that
+
+1334
+00:48:46,800 --> 00:48:48,240
+actually gets the
+
+1335
+00:48:48,240 --> 00:48:50,720
+the first uh follower whose election
+
+1336
+00:48:50,720 --> 00:48:52,720
+time runs out
+
+1337
+00:48:52,720 --> 00:48:54,640
+you know the the interval is wide enough
+
+1338
+00:48:54,640 --> 00:48:56,079
+that you know
+
+1339
+00:48:56,079 --> 00:48:57,440
+there's a good chance that it actually
+
+1340
+00:48:57,440 --> 00:48:58,720
+will succeed you know completing the
+
+1341
+00:48:58,720 --> 00:48:59,599
+complete election
+
+1342
+00:48:59,599 --> 00:49:03,280
+before the second uh timer goes up
+
+1343
+00:49:03,280 --> 00:49:05,920
+for another follower and so this avoids
+
+1344
+00:49:05,920 --> 00:49:07,040
+you know this sort of
+
+1345
+00:49:07,040 --> 00:49:09,040
+endless split vote you know we might get
+
+1346
+00:49:09,040 --> 00:49:10,720
+unlucky and we get maybe one or two
+
+1347
+00:49:10,720 --> 00:49:11,680
+split votes
+
+1348
+00:49:11,680 --> 00:49:13,440
+but like over time you know that has to
+
+1349
+00:49:13,440 --> 00:49:15,119
+be the case that uh
+
+1350
+00:49:15,119 --> 00:49:20,230
+we in the end will succeed
+
+1351
+00:49:20,240 --> 00:49:21,920
+there are a couple sort of and this is
+
+1352
+00:49:21,920 --> 00:49:23,760
+important maybe for the lab too
+
+1353
+00:49:23,760 --> 00:49:26,400
+there's sort of a couple pressures on
+
+1354
+00:49:26,400 --> 00:49:32,790
+these election timeouts
+
+1355
+00:49:32,800 --> 00:49:35,920
+um you don't want to pick an election
+
+1356
+00:49:35,920 --> 00:49:37,520
+timeout that is too
+
+1357
+00:49:37,520 --> 00:49:42,079
+uh short right because if it's too short
+
+1358
+00:49:42,079 --> 00:49:45,040
+for example shorter than a heartbeat and
+
+1359
+00:49:45,040 --> 00:49:46,640
+you know you might lose one message and
+
+1360
+00:49:46,640 --> 00:49:47,839
+immediately you start running
+
+1361
+00:49:47,839 --> 00:49:51,040
+an election and nothing bad happens uh
+
+1362
+00:49:51,040 --> 00:49:52,400
+because you know you know we'll elect a
+
+1363
+00:49:52,400 --> 00:49:53,760
+new leader you will go through the new
+
+1364
+00:49:53,760 --> 00:49:55,520
+term and all that kind of stuff
+
+1365
+00:49:55,520 --> 00:49:57,920
+but basically you know the during this
+
+1366
+00:49:57,920 --> 00:50:00,160
+election the system is actually not uh
+
+1367
+00:50:00,160 --> 00:50:01,760
+usable right the clients are actually
+
+1368
+00:50:01,760 --> 00:50:04,400
+blocked so you don't want to
+
+1369
+00:50:04,400 --> 00:50:07,839
+unnecessarily cause elections um and so
+
+1370
+00:50:07,839 --> 00:50:09,119
+one of the things you want to do is
+
+1371
+00:50:09,119 --> 00:50:13,040
+basically probably spit take a a
+
+1372
+00:50:13,040 --> 00:50:14,960
+value that's at least bigger than a few
+
+1373
+00:50:14,960 --> 00:50:21,750
+times and then a few heartbeats
+
+1374
+00:50:21,760 --> 00:50:24,960
+perhaps maybe in a data center you know
+
+1375
+00:50:24,960 --> 00:50:25,599
+we'll take a few
+
+1376
+00:50:25,599 --> 00:50:28,480
+milliseconds sort of to do an rpc and we
+
+1377
+00:50:28,480 --> 00:50:29,200
+may want to
+
+1378
+00:50:29,200 --> 00:50:30,880
+wait at least you know so maybe three
+
+1379
+00:50:30,880 --> 00:50:32,880
+four rpc around good time so that we get
+
+1380
+00:50:32,880 --> 00:50:34,079
+a chance to
+
+1381
+00:50:34,079 --> 00:50:37,200
+uh retry an rpc uh
+
+1382
+00:50:37,200 --> 00:50:38,960
+uh without actually having the election
+
+1383
+00:50:38,960 --> 00:50:40,880
+timer go off and sort of recover from
+
+1384
+00:50:40,880 --> 00:50:44,309
+like temporary network fields
+
+1385
+00:50:44,319 --> 00:50:46,319
+then you know we want to presumably add
+
+1386
+00:50:46,319 --> 00:50:48,079
+you know some random value
+
+1387
+00:50:48,079 --> 00:50:52,319
+to that uh grand valley to avoid
+
+1388
+00:50:52,319 --> 00:50:55,440
+you know the split votes and so one
+
+1389
+00:50:55,440 --> 00:50:56,559
+hand you know we want to make that
+
+1390
+00:50:56,559 --> 00:50:58,400
+random value as big as possible right
+
+1391
+00:50:58,400 --> 00:50:59,920
+because we make it big then
+
+1392
+00:50:59,920 --> 00:51:01,200
+there are very little chance that
+
+1393
+00:51:01,200 --> 00:51:04,400
+actually we will run into a split vote
+
+1394
+00:51:04,400 --> 00:51:07,760
+problem but the other hand if we do that
+
+1395
+00:51:07,760 --> 00:51:09,200
+then there's a chance that you know the
+
+1396
+00:51:09,200 --> 00:51:11,119
+system may be down for a longer period
+
+1397
+00:51:11,119 --> 00:51:12,960
+of time we might pick a big value for
+
+1398
+00:51:12,960 --> 00:51:13,359
+the
+
+1399
+00:51:13,359 --> 00:51:16,000
+election timeout and that means downtime
+
+1400
+00:51:16,000 --> 00:51:18,960
+from the point of view of the clients
+
+1401
+00:51:18,960 --> 00:51:21,520
+so we want to keep this you know short
+
+1402
+00:51:21,520 --> 00:51:26,870
+enough
+
+1403
+00:51:26,880 --> 00:51:36,400
+that the downtime is short and the paper
+
+1404
+00:51:36,400 --> 00:51:38,160
+in linden eval section does quite a bit
+
+1405
+00:51:38,160 --> 00:51:38,720
+of work
+
+1406
+00:51:38,720 --> 00:51:40,400
+on sort of elevating you know what are
+
+1407
+00:51:40,400 --> 00:51:41,760
+some reasonable values
+
+1408
+00:51:41,760 --> 00:51:43,280
+uh for their particular setting and then
+
+1409
+00:51:43,280 --> 00:51:45,440
+that's how they got to the 150 to 300
+
+1410
+00:51:45,440 --> 00:51:46,640
+milliseconds
+
+1411
+00:51:46,640 --> 00:51:47,839
+in the lab we're going to be originally
+
+1412
+00:51:47,839 --> 00:51:50,559
+generous uh you know basically if you
+
+1413
+00:51:50,559 --> 00:51:52,800
+recover within a second you're more or
+
+1414
+00:51:52,800 --> 00:51:55,440
+less going to be good
+
+1415
+00:51:55,440 --> 00:52:02,390
+with the referred for our test cases
+
+1416
+00:52:02,400 --> 00:52:04,800
+okay i want to make one more uh point
+
+1417
+00:52:04,800 --> 00:52:06,480
+about the uh
+
+1418
+00:52:06,480 --> 00:52:10,400
+uh uh about the elections
+
+1419
+00:52:10,400 --> 00:52:13,680
+um so you know another scenario that is
+
+1420
+00:52:13,680 --> 00:52:15,119
+sort of important to consider is
+
+1421
+00:52:15,119 --> 00:52:17,280
+uh you know we have a follower we have a
+
+1422
+00:52:17,280 --> 00:52:19,359
+leader the leader goes down
+
+1423
+00:52:19,359 --> 00:52:21,680
+so there was 10 this was 10. you have to
+
+1424
+00:52:21,680 --> 00:52:25,109
+follow 10.
+
+1425
+00:52:25,119 --> 00:52:26,800
+and we already talked a little bit about
+
+1426
+00:52:26,800 --> 00:52:28,640
+it when
+
+1427
+00:52:28,640 --> 00:52:30,880
+let's say this guy goes first it votes
+
+1428
+00:52:30,880 --> 00:52:33,119
+for itself
+
+1429
+00:52:33,119 --> 00:52:36,800
+uh and you know we the protocol records
+
+1430
+00:52:36,800 --> 00:52:37,359
+you know
+
+1431
+00:52:37,359 --> 00:52:41,760
+uh unstable storage why who it voted for
+
+1432
+00:52:41,760 --> 00:52:44,720
+so the record you know records on the so
+
+1433
+00:52:44,720 --> 00:52:45,119
+this
+
+1434
+00:52:45,119 --> 00:52:47,520
+follower one this is follower two will
+
+1435
+00:52:47,520 --> 00:52:48,160
+record
+
+1436
+00:52:48,160 --> 00:52:51,280
+yeah it voted for in term 11 you know
+
+1437
+00:52:51,280 --> 00:52:51,839
+for
+
+1438
+00:52:51,839 --> 00:52:55,109
+fallout 1.
+
+1439
+00:52:55,119 --> 00:52:59,040
+why is it recorded on stable storage
+
+1440
+00:52:59,040 --> 00:53:00,559
+and why does the follower need to
+
+1441
+00:53:00,559 --> 00:53:05,589
+remember that
+
+1442
+00:53:05,599 --> 00:53:14,000
+that it voted in term 11 for itself
+
+1443
+00:53:14,000 --> 00:53:16,640
+uh this way it doesn't vote twice if it
+
+1444
+00:53:16,640 --> 00:53:17,040
+uh
+
+1445
+00:53:17,040 --> 00:53:20,240
+fails yeah it might crash right like
+
+1446
+00:53:20,240 --> 00:53:21,920
+right here
+
+1447
+00:53:21,920 --> 00:53:25,280
+uh and uh come back up
+
+1448
+00:53:25,280 --> 00:53:27,839
+uh and it should remember that it and
+
+1449
+00:53:27,839 --> 00:53:28,800
+somebody might have
+
+1450
+00:53:28,800 --> 00:53:29,920
+let's say it was actually there's
+
+1451
+00:53:29,920 --> 00:53:32,160
+referred one guy in here you know a
+
+1452
+00:53:32,160 --> 00:53:33,839
+follower or whatever free
+
+1453
+00:53:33,839 --> 00:53:35,839
+uh and it already voted for follower of
+
+1454
+00:53:35,839 --> 00:53:37,280
+three uh
+
+1455
+00:53:37,280 --> 00:53:39,280
+then uh it can actually not change in
+
+1456
+00:53:39,280 --> 00:53:40,839
+mind
+
+1457
+00:53:40,839 --> 00:53:43,760
+right uh and so because in the end we at
+
+1458
+00:53:43,760 --> 00:53:45,599
+the end of the term we need to have
+
+1459
+00:53:45,599 --> 00:53:47,760
+we have to be in a position that per
+
+1460
+00:53:47,760 --> 00:53:48,800
+term there's only
+
+1461
+00:53:48,800 --> 00:53:52,559
+one leader and never never two and so
+
+1462
+00:53:52,559 --> 00:53:55,839
+to ensure that you know every follower
+
+1463
+00:53:55,839 --> 00:53:57,520
+must remember for which candidate it
+
+1464
+00:53:57,520 --> 00:54:07,829
+voted and never change its mind
+
+1465
+00:54:07,839 --> 00:54:09,359
+okay i guess there's a whole discussion
+
+1466
+00:54:09,359 --> 00:54:12,160
+in the chat about uh
+
+1467
+00:54:12,160 --> 00:54:14,400
+the timeout numbers and in relation to
+
+1468
+00:54:14,400 --> 00:54:16,160
+the lab uh so
+
+1469
+00:54:16,160 --> 00:54:17,920
+people can look there uh if they are
+
+1470
+00:54:17,920 --> 00:54:20,800
+confused about this or otherwise
+
+1471
+00:54:20,800 --> 00:54:22,400
+we can talk about elections a little bit
+
+1472
+00:54:22,400 --> 00:54:23,680
+more because this is about the last
+
+1473
+00:54:23,680 --> 00:54:25,359
+thing i want to say about
+
+1474
+00:54:25,359 --> 00:54:36,950
+elections any questions about elections
+
+1475
+00:54:36,960 --> 00:54:40,319
+a bit more general question so
+
+1476
+00:54:40,319 --> 00:54:42,240
+in like the figure two of the lab that
+
+1477
+00:54:42,240 --> 00:54:43,520
+says that for each
+
+1478
+00:54:43,520 --> 00:54:46,640
+um server you're storing like the
+
+1479
+00:54:46,640 --> 00:54:49,680
+current term and then who it voted for
+
+1480
+00:54:49,680 --> 00:54:52,160
+but not the like current state of the
+
+1481
+00:54:52,160 --> 00:54:54,400
+server like if it's candidate or
+
+1482
+00:54:54,400 --> 00:54:57,440
+a follower or leader
+
+1483
+00:54:57,440 --> 00:55:00,480
+so i'm wondering how they like is that
+
+1484
+00:55:00,480 --> 00:55:01,440
+implied or
+
+1485
+00:55:01,440 --> 00:55:03,520
+is there another way to figure that out
+
+1486
+00:55:03,520 --> 00:55:05,119
+uh i guess
+
+1487
+00:55:05,119 --> 00:55:07,040
+when you come back up you come back up
+
+1488
+00:55:07,040 --> 00:55:09,119
+as a follower
+
+1489
+00:55:09,119 --> 00:55:12,640
+and you know you start an election
+
+1490
+00:55:12,640 --> 00:55:15,040
+uh and then that will in the end you
+
+1491
+00:55:15,040 --> 00:55:16,079
+know at the end of the election you know
+
+1492
+00:55:16,079 --> 00:55:18,240
+what you are
+
+1493
+00:55:18,240 --> 00:55:23,990
+you either a follower or the leader
+
+1494
+00:55:24,000 --> 00:55:25,920
+i see okay thank you does this make
+
+1495
+00:55:25,920 --> 00:55:27,599
+sense
+
+1496
+00:55:27,599 --> 00:55:31,520
+one warning about uh figure two uh
+
+1497
+00:55:31,520 --> 00:55:33,040
+both really positive and then this may a
+
+1498
+00:55:33,040 --> 00:55:35,520
+negative statement uh
+
+1499
+00:55:35,520 --> 00:55:37,119
+anywhere in the figure two when it says
+
+1500
+00:55:37,119 --> 00:55:39,119
+like you know you should do this
+
+1501
+00:55:39,119 --> 00:55:41,760
+you should really do it uh so you cannot
+
+1502
+00:55:41,760 --> 00:55:42,160
+admit
+
+1503
+00:55:42,160 --> 00:55:44,079
+any detail that actually is a figure two
+
+1504
+00:55:44,079 --> 00:55:45,680
+uh if you do that then undoubtedly
+
+1505
+00:55:45,680 --> 00:55:48,480
+you're gonna fail some of the test cases
+
+1506
+00:55:48,480 --> 00:55:50,799
+unfortunately figure 2 is not complete
+
+1507
+00:55:50,799 --> 00:55:52,480
+and so you still will have to do some
+
+1508
+00:55:52,480 --> 00:55:53,280
+thinking
+
+1509
+00:55:53,280 --> 00:55:54,799
+so particularly like figure 2 doesn't
+
+1510
+00:55:54,799 --> 00:55:56,480
+really say that much about like how the
+
+1511
+00:55:56,480 --> 00:55:57,599
+replies are handled
+
+1512
+00:55:57,599 --> 00:55:59,760
+of the voter rpc and the penta
+
+1513
+00:55:59,760 --> 00:56:01,280
+proceeding and so
+
+1514
+00:56:01,280 --> 00:56:02,640
+you will have to do some thinking sort
+
+1515
+00:56:02,640 --> 00:56:04,960
+of to fill in the missing details
+
+1516
+00:56:04,960 --> 00:56:08,400
+uh and so uh so there's two points here
+
+1517
+00:56:08,400 --> 00:56:09,920
+like figure two
+
+1518
+00:56:09,920 --> 00:56:11,680
+anything that's in there you better deal
+
+1519
+00:56:11,680 --> 00:56:13,040
+with it and
+
+1520
+00:56:13,040 --> 00:56:14,400
+but there still might be things missing
+
+1521
+00:56:14,400 --> 00:56:15,839
+that you will have to resolve for
+
+1522
+00:56:15,839 --> 00:56:20,630
+yourself
+
+1523
+00:56:20,640 --> 00:56:26,150
+you'll be looking at figure 2 a lot
+
+1524
+00:56:26,160 --> 00:56:28,160
+so from the description of the election
+
+1525
+00:56:28,160 --> 00:56:30,240
+process there seems to be uh
+
+1526
+00:56:30,240 --> 00:56:32,240
+like even for lab two a which deals only
+
+1527
+00:56:32,240 --> 00:56:33,599
+with election there seems to be some
+
+1528
+00:56:33,599 --> 00:56:35,200
+state that we need to store on
+
+1529
+00:56:35,200 --> 00:56:36,079
+persistence
+
+1530
+00:56:36,079 --> 00:56:38,319
+yeah so like for example like who you
+
+1531
+00:56:38,319 --> 00:56:39,440
+voted for and
+
+1532
+00:56:39,440 --> 00:56:42,079
+uh the term number yeah but when you
+
+1533
+00:56:42,079 --> 00:56:43,440
+look at the code of lab lab2
+
+1534
+00:56:43,440 --> 00:56:45,440
+uh all of the code that has to do with
+
+1535
+00:56:45,440 --> 00:56:47,280
+saving the persistent state it says
+
+1536
+00:56:47,280 --> 00:56:48,960
+above it lab to c
+
+1537
+00:56:48,960 --> 00:56:51,680
+so is it that it's not that crucial
+
+1538
+00:56:51,680 --> 00:56:53,440
+maybe to care about persistent
+
+1539
+00:56:53,440 --> 00:56:56,000
+storage or should we absolutely start
+
+1540
+00:56:56,000 --> 00:56:57,280
+implementing
+
+1541
+00:56:57,280 --> 00:56:59,599
+these stories yeah i think in the first
+
+1542
+00:56:59,599 --> 00:57:00,880
+couple tests we don't actually crash
+
+1543
+00:57:00,880 --> 00:57:02,559
+machines
+
+1544
+00:57:02,559 --> 00:57:04,880
+and so therefore it's not important and
+
+1545
+00:57:04,880 --> 00:57:06,400
+until you see we're definitely crashing
+
+1546
+00:57:06,400 --> 00:57:08,000
+machines
+
+1547
+00:57:08,000 --> 00:57:13,359
+okay awesome thank you
+
+1548
+00:57:13,359 --> 00:57:17,440
+okay how are we doing
+
+1549
+00:57:17,440 --> 00:57:25,109
+everybody on on board
+
+1550
+00:57:25,119 --> 00:57:28,960
+okay here we go uh next step okay so
+
+1551
+00:57:28,960 --> 00:57:32,400
+uh one important uh thing to realize and
+
+1552
+00:57:32,400 --> 00:57:33,599
+you know this came up earlier in the
+
+1553
+00:57:33,599 --> 00:57:34,400
+questions and
+
+1554
+00:57:34,400 --> 00:57:36,319
+i want to hit that now that topic hard
+
+1555
+00:57:36,319 --> 00:57:38,839
+is that logs may diverge
+
+1556
+00:57:38,839 --> 00:57:48,069
+verge
+
+1557
+00:57:48,079 --> 00:57:50,400
+and they can be quite dramatic but just
+
+1558
+00:57:50,400 --> 00:57:52,079
+let's get into it
+
+1559
+00:57:52,079 --> 00:57:54,799
+for just a basic understanding and then
+
+1560
+00:57:54,799 --> 00:57:56,720
+uh
+
+1561
+00:57:56,720 --> 00:57:58,400
+discussing more details so let's do a
+
+1562
+00:57:58,400 --> 00:57:59,920
+couple simple examples
+
+1563
+00:57:59,920 --> 00:58:02,079
+uh so i'm gonna write things and using
+
+1564
+00:58:02,079 --> 00:58:03,520
+the following notation i'm gonna have
+
+1565
+00:58:03,520 --> 00:58:05,839
+three servers
+
+1566
+00:58:05,839 --> 00:58:08,240
+as before but i'm going to cut all the
+
+1567
+00:58:08,240 --> 00:58:09,359
+timeline business
+
+1568
+00:58:09,359 --> 00:58:15,670
+and just like draw the logs
+
+1569
+00:58:15,680 --> 00:58:18,789
+and you know we have
+
+1570
+00:58:18,799 --> 00:58:21,280
+indexes so let's say these are indexes
+
+1571
+00:58:21,280 --> 00:58:22,400
+you know there's a
+
+1572
+00:58:22,400 --> 00:58:23,839
+preceding part to it where we're talking
+
+1573
+00:58:23,839 --> 00:58:27,359
+about 10 11 12.
+
+1574
+00:58:27,359 --> 00:58:30,319
+and so you know there's an uh term entry
+
+1575
+00:58:30,319 --> 00:58:30,720
+in each
+
+1576
+00:58:30,720 --> 00:58:32,799
+one of them so let's say all three
+
+1577
+00:58:32,799 --> 00:58:33,839
+servers
+
+1578
+00:58:33,839 --> 00:58:37,040
+uh committed or appended an operation in
+
+1579
+00:58:37,040 --> 00:58:41,670
+uh term three to index uh 10
+
+1580
+00:58:41,680 --> 00:58:45,040
+and you know uh and same thing happens
+
+1581
+00:58:45,040 --> 00:58:49,030
+in uh
+
+1582
+00:58:49,040 --> 00:58:51,200
+with index for 11. so one way to think
+
+1583
+00:58:51,200 --> 00:58:52,559
+one way you could get this correct is
+
+1584
+00:58:52,559 --> 00:58:54,480
+that server one would be the leader
+
+1585
+00:58:54,480 --> 00:58:56,559
+server one appends it to its own log you
+
+1586
+00:58:56,559 --> 00:58:59,280
+know then replicates it to s2 and s3
+
+1587
+00:58:59,280 --> 00:59:01,599
+same thing happens for index 11 then in
+
+1588
+00:59:01,599 --> 00:59:03,200
+x you know 12 maybe you know they're
+
+1589
+00:59:03,200 --> 00:59:04,079
+also successful
+
+1590
+00:59:04,079 --> 00:59:07,680
+invents one operation in that index you
+
+1591
+00:59:07,680 --> 00:59:09,760
+know for each term so that's turn three
+
+1592
+00:59:09,760 --> 00:59:12,640
+but then it crashes right and so now
+
+1593
+00:59:12,640 --> 00:59:14,319
+we're in a situation where
+
+1594
+00:59:14,319 --> 00:59:18,240
+uh one uh server actually has an extra
+
+1595
+00:59:18,240 --> 00:59:20,640
+log entry in its log and the other ones
+
+1596
+00:59:20,640 --> 00:59:22,079
+uh don't or maybe they will
+
+1597
+00:59:22,079 --> 00:59:24,319
+one of them has it too but they are
+
+1598
+00:59:24,319 --> 00:59:26,319
+definitely not identical
+
+1599
+00:59:26,319 --> 00:59:28,079
+so that's a simple case correct like
+
+1600
+00:59:28,079 --> 00:59:29,599
+nothing really particularly especially
+
+1601
+00:59:29,599 --> 00:59:30,240
+going on
+
+1602
+00:59:30,240 --> 00:59:31,760
+but there's much more interesting cases
+
+1603
+00:59:31,760 --> 00:59:33,599
+you know going on so
+
+1604
+00:59:33,599 --> 00:59:36,400
+another case could be you know one
+
+1605
+00:59:36,400 --> 00:59:37,119
+server
+
+1606
+00:59:37,119 --> 00:59:40,960
+again s1 there we go same scenarios s2
+
+1607
+00:59:40,960 --> 00:59:44,240
+s3 and
+
+1608
+00:59:44,240 --> 00:59:54,390
+let's say we have the following logs
+
+1609
+00:59:54,400 --> 00:59:57,760
+so this is the situation we have in in
+
+1610
+00:59:57,760 --> 01:00:01,200
+index 10. we have entries
+
+1611
+01:00:01,200 --> 01:00:04,319
+at all servers for term three
+
+1612
+01:00:04,319 --> 01:00:06,559
+in index 11 the first server has no
+
+1613
+01:00:06,559 --> 01:00:08,000
+entry
+
+1614
+01:00:08,000 --> 01:00:10,319
+the other two have an entry for term
+
+1615
+01:00:10,319 --> 01:00:11,680
+three and then
+
+1616
+01:00:11,680 --> 01:00:14,640
+last one number 12 you know we have
+
+1617
+01:00:14,640 --> 01:00:15,839
+entries in
+
+1618
+01:00:15,839 --> 01:00:19,599
+uh index four at servers two and three
+
+1619
+01:00:19,599 --> 01:00:22,240
+with term numbers four and five so the
+
+1620
+01:00:22,240 --> 01:00:23,280
+first question that we need to ask
+
+1621
+01:00:23,280 --> 01:00:26,240
+ourselves is this possible
+
+1622
+01:00:26,240 --> 01:00:29,440
+can raft end up producing uh
+
+1623
+01:00:29,440 --> 01:00:31,920
+logs in this way the you know where the
+
+1624
+01:00:31,920 --> 01:00:32,960
+in this in the same
+
+1625
+01:00:32,960 --> 01:00:35,040
+log entry we have two different term
+
+1626
+01:00:35,040 --> 01:00:36,400
+numbers
+
+1627
+01:00:36,400 --> 01:00:38,400
+and same log index um yeah that's
+
+1628
+01:00:38,400 --> 01:00:41,190
+possible
+
+1629
+01:00:41,200 --> 01:00:45,040
+um so basically um it looks like
+
+1630
+01:00:45,040 --> 01:00:47,119
+so like what is an area that produced
+
+1631
+01:00:47,119 --> 01:00:49,040
+yeah so it looks like um
+
+1632
+01:00:49,040 --> 01:00:52,720
+server two or server three was um
+
+1633
+01:00:52,720 --> 01:00:56,480
+the leader for term three and then um
+
+1634
+01:00:56,480 --> 01:00:59,520
+got some logs out to server one um and
+
+1635
+01:00:59,520 --> 01:01:00,480
+then
+
+1636
+01:01:00,480 --> 01:01:03,760
+shared another log with um only one of
+
+1637
+01:01:03,760 --> 01:01:05,040
+the two servers
+
+1638
+01:01:05,040 --> 01:01:08,160
+after which point it went down um
+
+1639
+01:01:08,160 --> 01:01:12,240
+and then s2 got elected as leader for
+
+1640
+01:01:12,240 --> 01:01:14,240
+term two which is still possible because
+
+1641
+01:01:14,240 --> 01:01:15,280
+its log is like
+
+1642
+01:01:15,280 --> 01:01:17,760
+up to date as as up to date as uh the
+
+1643
+01:01:17,760 --> 01:01:18,640
+others
+
+1644
+01:01:18,640 --> 01:01:21,359
+um and then again just to make sure so
+
+1645
+01:01:21,359 --> 01:01:23,520
+s2 got elected for term
+
+1646
+01:01:23,520 --> 01:01:27,359
+four right yes okay okay not term two
+
+1647
+01:01:27,359 --> 01:01:29,520
+okay so s2 gets elected for term four
+
+1648
+01:01:29,520 --> 01:01:30,960
+yeah yeah yeah and then
+
+1649
+01:01:30,960 --> 01:01:33,599
+using s1 as a backup basically as the
+
+1650
+01:01:33,599 --> 01:01:35,839
+follower
+
+1651
+01:01:35,839 --> 01:01:39,040
+uh yes i think yep
+
+1652
+01:01:39,040 --> 01:01:41,119
+um and then s3 gets elected for term
+
+1653
+01:01:41,119 --> 01:01:42,720
+five before s2 can
+
+1654
+01:01:42,720 --> 01:01:44,720
+put anything in the logs yeah another
+
+1655
+01:01:44,720 --> 01:01:46,559
+way to saying it like maybe s2 crashed
+
+1656
+01:01:46,559 --> 01:01:47,200
+right away
+
+1657
+01:01:47,200 --> 01:01:49,760
+right after uh i got elected to turn
+
+1658
+01:01:49,760 --> 01:01:50,640
+four
+
+1659
+01:01:50,640 --> 01:01:53,920
+and uh so then there's a timeout then
+
+1660
+01:01:53,920 --> 01:01:55,680
+let's say s3 was partitioned but now
+
+1661
+01:01:55,680 --> 01:01:58,000
+it's back uh and at apple point
+
+1662
+01:01:58,000 --> 01:02:01,599
+uh it will become uh it will it can come
+
+1663
+01:02:01,599 --> 01:02:02,160
+into
+
+1664
+01:02:02,160 --> 01:02:06,319
+turn five correct yeah
+
+1665
+01:02:06,319 --> 01:02:08,400
+okay good so that's possible so it turns
+
+1666
+01:02:08,400 --> 01:02:10,160
+out there are quite a bit of wild
+
+1667
+01:02:10,160 --> 01:02:12,400
+variations uh possible so if we
+
+1668
+01:02:12,400 --> 01:02:16,079
+like look at the uh
+
+1669
+01:02:16,079 --> 01:02:18,960
+so here's the figure six uh for figure
+
+1670
+01:02:18,960 --> 01:02:20,880
+seven sorry from the homework
+
+1671
+01:02:20,880 --> 01:02:27,510
+uh and um
+
+1672
+01:02:27,520 --> 01:02:30,640
+uh and uh and the homework asked
+
+1673
+01:02:30,640 --> 01:02:32,480
+basically questions about the forum
+
+1674
+01:02:32,480 --> 01:02:35,200
+uh like well what happens like this guy
+
+1675
+01:02:35,200 --> 01:02:36,319
+in the figure 6 itself
+
+1676
+01:02:36,319 --> 01:02:38,640
+figure 7 whatever it is i think it's
+
+1677
+01:02:38,640 --> 01:02:39,599
+figure 7.
+
+1678
+01:02:39,599 --> 01:02:43,200
+um the the scenario is being discussed
+
+1679
+01:02:43,200 --> 01:02:44,640
+is like this the guy becomes the
+
+1680
+01:02:44,640 --> 01:02:46,720
+top one becomes new leader and in the
+
+1681
+01:02:46,720 --> 01:02:48,400
+homework we ask the question like what
+
+1682
+01:02:48,400 --> 01:02:49,200
+happens if
+
+1683
+01:02:49,200 --> 01:02:52,720
+this uh leader just goes away and
+
+1684
+01:02:52,720 --> 01:02:55,039
+what are the possible outcomes you know
+
+1685
+01:02:55,039 --> 01:02:56,480
+and the possible outcomes like
+
+1686
+01:02:56,480 --> 01:03:00,000
+are so for every uh log index
+
+1687
+01:03:00,000 --> 01:03:01,760
+you know the question is which one gets
+
+1688
+01:03:01,760 --> 01:03:06,069
+rejected
+
+1689
+01:03:06,079 --> 01:03:11,029
+which one will be accepted for sure
+
+1690
+01:03:11,039 --> 01:03:16,240
+and which ones depends
+
+1691
+01:03:16,240 --> 01:03:17,599
+and i think this is an important thing
+
+1692
+01:03:17,599 --> 01:03:19,760
+exercise to do because uh once we
+
+1693
+01:03:19,760 --> 01:03:21,520
+sort of understand what our log entries
+
+1694
+01:03:21,520 --> 01:03:22,799
+are possible what are possible outcomes
+
+1695
+01:03:22,799 --> 01:03:23,599
+you know it will
+
+1696
+01:03:23,599 --> 01:03:25,359
+really firm up like our understanding
+
+1697
+01:03:25,359 --> 01:03:27,119
+about how a raft actually is supposed to
+
+1698
+01:03:27,119 --> 01:03:28,480
+be operating
+
+1699
+01:03:28,480 --> 01:03:30,079
+what i'd like to do is like do a quick
+
+1700
+01:03:30,079 --> 01:03:32,480
+breakout room and
+
+1701
+01:03:32,480 --> 01:03:36,480
+i'd like you to identify uh
+
+1702
+01:03:36,480 --> 01:03:38,640
+two possible outcomes uh that not
+
+1703
+01:03:38,640 --> 01:03:40,240
+guaranteed
+
+1704
+01:03:40,240 --> 01:03:44,319
+uh in uh in the corresponding scenario
+
+1705
+01:03:44,319 --> 01:03:47,359
+so uh let me let's take a a
+
+1706
+01:03:47,359 --> 01:03:49,039
+quick breakout room here section here
+
+1707
+01:03:49,039 --> 01:03:50,640
+and let's try to figure out the answer
+
+1708
+01:03:50,640 --> 01:03:53,119
+to the homework question
+
+1709
+01:03:53,119 --> 01:04:07,109
+in five minutes
+
+1710
+01:04:07,119 --> 01:04:13,280
+let me actually make you
+
+1711
+01:04:13,280 --> 01:04:19,270
+participants
+
+1712
+01:04:19,280 --> 01:04:52,829
+host i'll get new york
+
+1713
+01:04:52,839 --> 01:07:12,829
+okay
+
+1714
+01:07:12,839 --> 01:11:52,830
+okay
+
+1715
+01:11:52,840 --> 01:11:58,149
+um
+
+1716
+01:11:58,159 --> 01:12:10,229
+the main ones
+
+1717
+01:12:10,239 --> 01:12:15,270
+okay can everybody hear me again
+
+1718
+01:12:15,280 --> 01:12:18,640
+can i get a positive signal yes
+
+1719
+01:12:18,640 --> 01:12:22,239
+okay super okay uh so i hope
+
+1720
+01:12:22,239 --> 01:12:25,040
+everybody uh got a uh had a good time
+
+1721
+01:12:25,040 --> 01:12:26,000
+discussing this
+
+1722
+01:12:26,000 --> 01:12:29,120
+um and so let's uh so this is really
+
+1723
+01:12:29,120 --> 01:12:31,679
+this question about log divergence
+
+1724
+01:12:31,679 --> 01:12:33,520
+and you know we see here correct in this
+
+1725
+01:12:33,520 --> 01:12:35,120
+figure there are pretty wild
+
+1726
+01:12:35,120 --> 01:12:38,320
+variations in
+
+1727
+01:12:38,320 --> 01:12:40,400
+what can happen and these are all
+
+1728
+01:12:40,400 --> 01:12:42,080
+possible as you know the
+
+1729
+01:12:42,080 --> 01:12:43,600
+caption of the figure explains they're
+
+1730
+01:12:43,600 --> 01:12:46,159
+all possible
+
+1731
+01:12:46,159 --> 01:12:49,199
+scenarios so
+
+1732
+01:12:49,199 --> 01:12:51,120
+the question in the homework and just to
+
+1733
+01:12:51,120 --> 01:12:52,640
+quickly review that i'm sure most of you
+
+1734
+01:12:52,640 --> 01:12:53,920
+already uh
+
+1735
+01:12:53,920 --> 01:12:56,480
+i don't think we can see your screen oh
+
+1736
+01:12:56,480 --> 01:12:57,920
+how do you do that
+
+1737
+01:12:57,920 --> 01:13:01,600
+uh that's because i forgot to click yes
+
+1738
+01:13:01,600 --> 01:13:10,450
+okay let me fix that i appreciate that
+
+1739
+01:13:10,460 --> 01:13:14,550
+[Music]
+
+1740
+01:13:14,560 --> 01:13:18,880
+okay ready to see my screen
+
+1741
+01:13:18,880 --> 01:13:21,360
+yeah okay okay thank you sorry for that
+
+1742
+01:13:21,360 --> 01:13:22,400
+okay so
+
+1743
+01:13:22,400 --> 01:13:25,679
+uh so going back to this caption of
+
+1744
+01:13:25,679 --> 01:13:27,440
+figure seven figure seven explains like
+
+1745
+01:13:27,440 --> 01:13:29,600
+these are possible situations
+
+1746
+01:13:29,600 --> 01:13:31,280
+and you know what we want to figure out
+
+1747
+01:13:31,280 --> 01:13:32,320
+you know before talking about the
+
+1748
+01:13:32,320 --> 01:13:34,960
+details about how the logs get repaired
+
+1749
+01:13:34,960 --> 01:13:37,199
+uh you know what actually is possible so
+
+1750
+01:13:37,199 --> 01:13:39,280
+assume that actually this top guy
+
+1751
+01:13:39,280 --> 01:13:42,640
+did not get elected uh leader
+
+1752
+01:13:42,640 --> 01:13:45,440
+uh you know in the caption of the in the
+
+1753
+01:13:45,440 --> 01:13:47,120
+figure but like basically what what
+
+1754
+01:13:47,120 --> 01:13:49,040
+outcomes are possible and they're going
+
+1755
+01:13:49,040 --> 01:13:50,400
+to be what i mean with that
+
+1756
+01:13:50,400 --> 01:13:52,800
+is like for example we look at f you
+
+1757
+01:13:52,800 --> 01:13:54,880
+know it has a two
+
+1758
+01:13:54,880 --> 01:13:57,440
+an index of an entry from term two in
+
+1759
+01:13:57,440 --> 01:13:59,120
+index four
+
+1760
+01:13:59,120 --> 01:14:00,880
+and the question that we want to ask and
+
+1761
+01:14:00,880 --> 01:14:02,400
+understand is uh
+
+1762
+01:14:02,400 --> 01:14:04,320
+the clear this is possible because this
+
+1763
+01:14:04,320 --> 01:14:05,679
+could have happened you know what will
+
+1764
+01:14:05,679 --> 01:14:06,880
+happen next
+
+1765
+01:14:06,880 --> 01:14:08,800
+you know is it possible that this entry
+
+1766
+01:14:08,800 --> 01:14:10,800
+will survive
+
+1767
+01:14:10,800 --> 01:14:12,480
+so when we reconfigure we're like the
+
+1768
+01:14:12,480 --> 01:14:14,320
+leader basically you know logs getting
+
+1769
+01:14:14,320 --> 01:14:14,719
+being
+
+1770
+01:14:14,719 --> 01:14:16,640
+you know put together in uh or
+
+1771
+01:14:16,640 --> 01:14:18,320
+synchronized where you know
+
+1772
+01:14:18,320 --> 01:14:19,760
+the leaders force the logs to be
+
+1773
+01:14:19,760 --> 01:14:21,920
+identical is there a scenario in which
+
+1774
+01:14:21,920 --> 01:14:22,640
+actually the
+
+1775
+01:14:22,640 --> 01:14:26,840
+log entry the entry from term two will
+
+1776
+01:14:26,840 --> 01:14:29,840
+survive
+
+1777
+01:14:29,840 --> 01:14:33,040
+no no correct this will definitely be
+
+1778
+01:14:33,040 --> 01:14:34,239
+rejected correct
+
+1779
+01:14:34,239 --> 01:14:37,600
+and why is that the case um
+
+1780
+01:14:37,600 --> 01:14:39,840
+there is entries from term six that are
+
+1781
+01:14:39,840 --> 01:14:41,520
+already committed
+
+1782
+01:14:41,520 --> 01:14:44,880
+um until f1 i will never be elected
+
+1783
+01:14:44,880 --> 01:14:46,640
+yeah everyone will never be elected and
+
+1784
+01:14:46,640 --> 01:14:47,920
+so somebody else will be elected and
+
+1785
+01:14:47,920 --> 01:14:49,440
+nobody has a two in
+
+1786
+01:14:49,440 --> 01:14:51,520
+term two in index four so it will be
+
+1787
+01:14:51,520 --> 01:14:54,840
+overwritten with value will be
+
+1788
+01:14:54,840 --> 01:14:58,310
+overwritten
+
+1789
+01:14:58,320 --> 01:15:01,600
+um there will be a four over and yeah
+
+1790
+01:15:01,600 --> 01:15:03,440
+there will be this will become a four
+
+1791
+01:15:03,440 --> 01:15:05,520
+right so when later on when we talk
+
+1792
+01:15:05,520 --> 01:15:06,640
+about sort of walk you know
+
+1793
+01:15:06,640 --> 01:15:08,000
+synchronization or
+
+1794
+01:15:08,000 --> 01:15:10,320
+forcing logs on the followers it has to
+
+1795
+01:15:10,320 --> 01:15:11,360
+be the case that
+
+1796
+01:15:11,360 --> 01:15:14,719
+this two turns into four at f good
+
+1797
+01:15:14,719 --> 01:15:17,440
+uh so so this also answers sort of a
+
+1798
+01:15:17,440 --> 01:15:19,280
+second question like you know
+
+1799
+01:15:19,280 --> 01:15:22,560
+the entry from the index
+
+1800
+01:15:22,560 --> 01:15:24,239
+four from term four is definitely going
+
+1801
+01:15:24,239 --> 01:15:26,880
+to be accepted
+
+1802
+01:15:26,880 --> 01:15:30,560
+uh okay then maybe more interesting is
+
+1803
+01:15:30,560 --> 01:15:33,679
+uh this question about depends
+
+1804
+01:15:33,679 --> 01:15:35,440
+you know uh so we know at least one
+
+1805
+01:15:35,440 --> 01:15:37,520
+entry term that definitely got rejected
+
+1806
+01:15:37,520 --> 01:15:38,800
+we know one term they're definitely
+
+1807
+01:15:38,800 --> 01:15:39,920
+going to accept it
+
+1808
+01:15:39,920 --> 01:15:42,080
+and you know are there any sort of in
+
+1809
+01:15:42,080 --> 01:15:44,400
+terms and indexes any states that may be
+
+1810
+01:15:44,400 --> 01:15:47,830
+possibly accepted
+
+1811
+01:15:47,840 --> 01:15:52,080
+the seventh maybe yeah the sevens
+
+1812
+01:15:52,080 --> 01:15:55,040
+so when would the sevens not be accepted
+
+1813
+01:15:55,040 --> 01:15:56,640
+okay so the easy case scenario is the
+
+1814
+01:15:56,640 --> 01:15:58,239
+second will be accepted correct because
+
+1815
+01:15:58,239 --> 01:15:59,840
+d gets executed later
+
+1816
+01:15:59,840 --> 01:16:02,000
+and then it will force it log on
+
+1817
+01:16:02,000 --> 01:16:03,120
+everybody else
+
+1818
+01:16:03,120 --> 01:16:04,400
+right so that's the case where seven
+
+1819
+01:16:04,400 --> 01:16:06,080
+gets accepted when they get the seven
+
+1820
+01:16:06,080 --> 01:16:08,560
+getting rejected
+
+1821
+01:16:08,560 --> 01:16:11,679
+if c gets selected later and then d
+
+1822
+01:16:11,679 --> 01:16:14,960
+is down and it is overwritten
+
+1823
+01:16:14,960 --> 01:16:18,880
+yeah so d goes down c becomes leader
+
+1824
+01:16:18,880 --> 01:16:20,880
+and then see these log entries are being
+
+1825
+01:16:20,880 --> 01:16:22,159
+pushed on everybody else
+
+1826
+01:16:22,159 --> 01:16:25,199
+entries and then whenever d and
+
+1827
+01:16:25,199 --> 01:16:26,880
+so then that we're going to be turn
+
+1828
+01:16:26,880 --> 01:16:28,159
+seven correct and at some point that
+
+1829
+01:16:28,159 --> 01:16:28,960
+would be longer
+
+1830
+01:16:28,960 --> 01:16:31,199
+and every d comes back up you know it's
+
+1831
+01:16:31,199 --> 01:16:32,159
+you know entries are going to be
+
+1832
+01:16:32,159 --> 01:16:33,040
+overwritten
+
+1833
+01:16:33,040 --> 01:16:36,390
+all right
+
+1834
+01:16:36,400 --> 01:16:38,640
+so seven is definitely possible but not
+
+1835
+01:16:38,640 --> 01:16:40,080
+guaranteed
+
+1836
+01:16:40,080 --> 01:16:42,800
+in the other case uh i had a question
+
+1837
+01:16:42,800 --> 01:16:44,159
+eight could become leader
+
+1838
+01:16:44,159 --> 01:16:47,430
+two right
+
+1839
+01:16:47,440 --> 01:16:50,480
+a yeah uh
+
+1840
+01:16:50,480 --> 01:16:52,560
+if yeah a group get leader if c and d
+
+1841
+01:16:52,560 --> 01:16:54,950
+are down
+
+1842
+01:16:54,960 --> 01:16:56,880
+well d and d don't even have to be down
+
+1843
+01:16:56,880 --> 01:16:58,960
+for it to be elected later right
+
+1844
+01:16:58,960 --> 01:17:01,199
+it just has to happen if it's the first
+
+1845
+01:17:01,199 --> 01:17:03,760
+one
+
+1846
+01:17:03,760 --> 01:17:06,000
+the longer is log correct if the term if
+
+1847
+01:17:06,000 --> 01:17:07,679
+the two terms are equal at the end then
+
+1848
+01:17:07,679 --> 01:17:09,760
+you pick the longest law
+
+1849
+01:17:09,760 --> 01:17:13,040
+um but um
+
+1850
+01:17:13,040 --> 01:17:15,840
+i think if if a is the first one to call
+
+1851
+01:17:15,840 --> 01:17:16,800
+for an election
+
+1852
+01:17:16,800 --> 01:17:21,430
+right like potentially b
+
+1853
+01:17:21,440 --> 01:17:24,320
+f right if c and d are down they could
+
+1854
+01:17:24,320 --> 01:17:26,080
+win the election
+
+1855
+01:17:26,080 --> 01:17:28,320
+but if they're alive can't it also still
+
+1856
+01:17:28,320 --> 01:17:30,239
+win the election
+
+1857
+01:17:30,239 --> 01:17:33,440
+ah so let's say c okay let's d
+
+1858
+01:17:33,440 --> 01:17:35,040
+is down let's do that for sure correct
+
+1859
+01:17:35,040 --> 01:17:36,239
+because we know the d will win the
+
+1860
+01:17:36,239 --> 01:17:39,430
+election period
+
+1861
+01:17:39,440 --> 01:17:41,920
+does it have to like we know we know we
+
+1862
+01:17:41,920 --> 01:17:45,040
+know it won't get a vote from d right
+
+1863
+01:17:45,040 --> 01:17:48,480
+for sure but
+
+1864
+01:17:48,480 --> 01:17:51,920
+but does it have to win well what do we
+
+1865
+01:17:51,920 --> 01:17:54,229
+think
+
+1866
+01:17:54,239 --> 01:17:56,960
+i i don't know what if a received vote
+
+1867
+01:17:56,960 --> 01:17:57,360
+from
+
+1868
+01:17:57,360 --> 01:18:00,560
+b e and f first and then receive the
+
+1869
+01:18:00,560 --> 01:18:01,199
+role from
+
+1870
+01:18:01,199 --> 01:18:04,709
+the done
+
+1871
+01:18:04,719 --> 01:18:06,239
+yeah yeah you can get the majority
+
+1872
+01:18:06,239 --> 01:18:18,870
+correct without actually d participating
+
+1873
+01:18:18,880 --> 01:18:20,560
+even if the participated in the election
+
+1874
+01:18:20,560 --> 01:18:21,920
+it's possible for
+
+1875
+01:18:21,920 --> 01:18:28,790
+a to get the majority votes right
+
+1876
+01:18:28,800 --> 01:18:34,630
+yes i think we just answered that
+
+1877
+01:18:34,640 --> 01:18:36,880
+is it isn't there a mechanism though
+
+1878
+01:18:36,880 --> 01:18:38,320
+where
+
+1879
+01:18:38,320 --> 01:18:41,520
+if a candidate sees a
+
+1880
+01:18:41,520 --> 01:18:43,920
+message from a another server with a
+
+1881
+01:18:43,920 --> 01:18:48,870
+higher term number like stands down
+
+1882
+01:18:48,880 --> 01:18:51,840
+yes from a higher term number but a has
+
+1883
+01:18:51,840 --> 01:18:56,790
+if d is down
+
+1884
+01:18:56,800 --> 01:18:58,480
+it doesn't have to be down right you
+
+1885
+01:18:58,480 --> 01:18:59,920
+just have to get them first
+
+1886
+01:18:59,920 --> 01:19:06,070
+yes yeah
+
+1887
+01:19:06,080 --> 01:19:07,760
+but it will step down when it gets to
+
+1888
+01:19:07,760 --> 01:19:09,199
+vote from seven or
+
+1889
+01:19:09,199 --> 01:19:12,640
+uh d wait are you sure about that
+
+1890
+01:19:12,640 --> 01:19:16,400
+because i don't think so um
+
+1891
+01:19:16,400 --> 01:19:20,159
+well okay so if d at some point will uh
+
+1892
+01:19:20,159 --> 01:19:21,440
+depends they're gonna start racing
+
+1893
+01:19:21,440 --> 01:19:23,600
+correct the
+
+1894
+01:19:23,600 --> 01:19:26,239
+the uh okay let me actually this is a
+
+1895
+01:19:26,239 --> 01:19:27,679
+very important topic and so i don't want
+
+1896
+01:19:27,679 --> 01:19:28,320
+to do it in
+
+1897
+01:19:28,320 --> 01:19:31,679
+10 seconds and let me come back to this
+
+1898
+01:19:31,679 --> 01:19:33,679
+at the start of the next lecture okay
+
+1899
+01:19:33,679 --> 01:19:39,189
+this is a great point to stop
+
+1900
+01:19:39,199 --> 01:19:41,440
+i think the state machine on in figure 4
+
+1901
+01:19:41,440 --> 01:19:43,520
+clarifies it like a candidate goes back
+
+1902
+01:19:43,520 --> 01:19:43,840
+to
+
+1903
+01:19:43,840 --> 01:19:46,560
+follower if discovers a higher term so
+
+1904
+01:19:46,560 --> 01:19:47,120
+if
+
+1905
+01:19:47,120 --> 01:19:49,600
+if d wasn't down it will go back to
+
+1906
+01:19:49,600 --> 01:19:50,640
+follower it won't
+
+1907
+01:19:50,640 --> 01:19:54,640
+try to elect itself wait but i thought
+
+1908
+01:19:54,640 --> 01:19:57,040
+that it would only go back to a follower
+
+1909
+01:19:57,040 --> 01:19:57,760
+state
+
+1910
+01:19:57,760 --> 01:20:00,800
+if it received an append entries from
+
+1911
+01:20:00,800 --> 01:20:04,719
+a current leader like a request vote
+
+1912
+01:20:04,719 --> 01:20:08,480
+is not the same so it's worth
+
+1913
+01:20:08,480 --> 01:20:09,840
+knowing that there's a difference
+
+1914
+01:20:09,840 --> 01:20:11,679
+between the term number that a server is
+
+1915
+01:20:11,679 --> 01:20:12,400
+at
+
+1916
+01:20:12,400 --> 01:20:14,800
+and the term of the most recent entry in
+
+1917
+01:20:14,800 --> 01:20:15,760
+the log
+
+1918
+01:20:15,760 --> 01:20:19,120
+oh yes like server a
+
+1919
+01:20:19,120 --> 01:20:21,760
+can have most recent entering the log b
+
+1920
+01:20:21,760 --> 01:20:22,320
+six
+
+1921
+01:20:22,320 --> 01:20:25,440
+the term six but have its current term
+
+1922
+01:20:25,440 --> 01:20:25,840
+number
+
+1923
+01:20:25,840 --> 01:20:28,159
+be seven and the term number can
+
+1924
+01:20:28,159 --> 01:20:30,000
+actually be arbitrarily high
+
+1925
+01:20:30,000 --> 01:20:32,800
+yes correct that's that's correct and so
+
+1926
+01:20:32,800 --> 01:20:33,840
+a could
+
+1927
+01:20:33,840 --> 01:20:37,040
+start term eight and then get elected in
+
+1928
+01:20:37,040 --> 01:20:38,320
+term eight
+
+1929
+01:20:38,320 --> 01:20:41,920
+and that and whatever d tells it doesn't
+
+1930
+01:20:41,920 --> 01:20:42,960
+matter because
+
+1931
+01:20:42,960 --> 01:20:45,520
+if b's most recent term is seven eight
+
+1932
+01:20:45,520 --> 01:20:47,280
+won't go back to follower because
+
+1933
+01:20:47,280 --> 01:20:50,719
+it's a higher term than seven oh i see
+
+1934
+01:20:50,719 --> 01:20:52,880
+so it could be a higher term arbitrary
+
+1935
+01:20:52,880 --> 01:20:54,159
+thought
+
+1936
+01:20:54,159 --> 01:20:58,159
+could could a go into um
+
+1937
+01:20:58,159 --> 01:21:01,679
+into term seven its own term seven
+
+1938
+01:21:01,679 --> 01:21:04,960
+if d was like partition like
+
+1939
+01:21:04,960 --> 01:21:06,560
+if there was a network petition and it
+
+1940
+01:21:06,560 --> 01:21:08,960
+didn't know about d
+
+1941
+01:21:08,960 --> 01:21:11,199
+wait i feel confused like even if it
+
+1942
+01:21:11,199 --> 01:21:12,320
+does know about d
+
+1943
+01:21:12,320 --> 01:21:18,950
+why does that matter it shouldn't matter
+
+1944
+01:21:18,960 --> 01:21:21,199
+like if if a promotes itself to
+
+1945
+01:21:21,199 --> 01:21:23,040
+candidate and then
+
+1946
+01:21:23,040 --> 01:21:26,480
+sends out a a request
+
+1947
+01:21:26,480 --> 01:21:29,679
+a vote request um then
+
+1948
+01:21:29,679 --> 01:21:33,120
+like d could come back and say like oh
+
+1949
+01:21:33,120 --> 01:21:36,239
+well my latest log entry was at this
+
+1950
+01:21:36,239 --> 01:21:38,239
+index for term seven
+
+1951
+01:21:38,239 --> 01:21:41,520
+um but i don't think that hey
+
+1952
+01:21:41,520 --> 01:21:44,159
+wait actually it doesn't even say that
+
+1953
+01:21:44,159 --> 01:21:44,880
+right in
+
+1954
+01:21:44,880 --> 01:21:48,560
+in the response to a request vote rpc
+
+1955
+01:21:48,560 --> 01:21:50,480
+basically says like its current term
+
+1956
+01:21:50,480 --> 01:21:52,000
+which would be seven
+
+1957
+01:21:52,000 --> 01:21:54,960
+which matches a's because that wait
+
+1958
+01:21:54,960 --> 01:21:56,159
+that's our hypothesis
+
+1959
+01:21:56,159 --> 01:21:58,960
+and then um yeah if a started the
+
+1960
+01:21:58,960 --> 01:22:00,000
+election it will be
+
+1961
+01:22:00,000 --> 01:22:04,310
+turned seven
+
+1962
+01:22:04,320 --> 01:22:06,960
+but a diva will not vote for eight yes
+
+1963
+01:22:06,960 --> 01:22:08,320
+that's true
+
+1964
+01:22:08,320 --> 01:22:11,120
+but i don't know i think it's totally
+
+1965
+01:22:11,120 --> 01:22:11,920
+fine if d
+
+1966
+01:22:11,920 --> 01:22:15,520
+is alive and gives a a response
+
+1967
+01:22:15,520 --> 01:22:18,400
+to a's vote request like i don't think
+
+1968
+01:22:18,400 --> 01:22:18,800
+that
+
+1969
+01:22:18,800 --> 01:22:22,159
+deters a from being a candidate
+
+1970
+01:22:22,159 --> 01:22:24,239
+um someone just put in the chat i think
+
+1971
+01:22:24,239 --> 01:22:25,199
+the answer to that
+
+1972
+01:22:25,199 --> 01:22:27,840
+so like grant said that as soon as d
+
+1973
+01:22:27,840 --> 01:22:29,600
+rejects the vote
+
+1974
+01:22:29,600 --> 01:22:32,719
+um a will revert to being a follower
+
+1975
+01:22:32,719 --> 01:22:33,760
+because it will realize
+
+1976
+01:22:33,760 --> 01:22:36,480
+that it has a lower term number but okay
+
+1977
+01:22:36,480 --> 01:22:37,120
+so
+
+1978
+01:22:37,120 --> 01:22:39,760
+not necessarily because again the
+
+1979
+01:22:39,760 --> 01:22:41,360
+remember that the most recent term
+
+1980
+01:22:41,360 --> 01:22:43,760
+on their log is not the same thing as
+
+1981
+01:22:43,760 --> 01:22:44,960
+the most recent term
+
+1982
+01:22:44,960 --> 01:22:48,239
+that the server keeps track of you can
+
+1983
+01:22:48,239 --> 01:22:50,159
+have a higher current term
+
+1984
+01:22:50,159 --> 01:22:52,480
+than the most recent thing on the log
+
+1985
+01:22:52,480 --> 01:22:53,199
+and so if
+
+1986
+01:22:53,199 --> 01:22:56,400
+a tries to elect itself in term seven
+
+1987
+01:22:56,400 --> 01:22:59,840
+yes when it tries to contact d it will
+
+1988
+01:22:59,840 --> 01:23:00,560
+give up
+
+1989
+01:23:00,560 --> 01:23:02,320
+but if a tries to lock itself in term
+
+1990
+01:23:02,320 --> 01:23:04,320
+eight which it would if it's already
+
+1991
+01:23:04,320 --> 01:23:05,120
+seen that these
+
+1992
+01:23:05,120 --> 01:23:08,719
+has reached term seven then
+
+1993
+01:23:08,719 --> 01:23:12,000
+like a can get elected wait but
+
+1994
+01:23:12,000 --> 01:23:14,480
+if d is if we assume that d is in term
+
+1995
+01:23:14,480 --> 01:23:15,360
+seven
+
+1996
+01:23:15,360 --> 01:23:18,800
+um like if a tries to elect itself for
+
+1997
+01:23:18,800 --> 01:23:20,080
+term seven
+
+1998
+01:23:20,080 --> 01:23:23,120
+then the we don't actually hit this case
+
+1999
+01:23:23,120 --> 01:23:24,000
+because
+
+2000
+01:23:24,000 --> 01:23:25,840
+um if the rpc request a response
+
+2001
+01:23:25,840 --> 01:23:27,280
+contains a term which is strictly
+
+2002
+01:23:27,280 --> 01:23:28,800
+greater than the current term you give
+
+2003
+01:23:28,800 --> 01:23:30,239
+up but if they're the same
+
+2004
+01:23:30,239 --> 01:23:31,840
+then it doesn't matter it will just
+
+2005
+01:23:31,840 --> 01:23:34,000
+proceed as normal
+
+2006
+01:23:34,000 --> 01:23:36,080
+that's great yes that's it do you get
+
+2007
+01:23:36,080 --> 01:23:37,520
+entries get replaced by
+
+2008
+01:23:37,520 --> 01:23:40,719
+whatever a is telling it so
+
+2009
+01:23:40,719 --> 01:23:44,080
+uh at the end of section uh
+
+2010
+01:23:44,080 --> 01:23:45,960
+like the election restriction section
+
+2011
+01:23:45,960 --> 01:23:48,239
+5.4.1
+
+2012
+01:23:48,239 --> 01:23:50,000
+graph determines which of the two logs
+
+2013
+01:23:50,000 --> 01:23:51,840
+is more up-to-date by comparing the
+
+2014
+01:23:51,840 --> 01:23:53,679
+index and term of the last entries in
+
+2015
+01:23:53,679 --> 01:23:55,600
+the log
+
+2016
+01:23:55,600 --> 01:23:59,199
+so wouldn't that mean that d has to
+
+2017
+01:23:59,199 --> 01:24:02,480
+become the leader if we're comparing no
+
+2018
+01:24:02,480 --> 01:24:05,280
+because d just does vote no but other
+
+2019
+01:24:05,280 --> 01:24:09,270
+people might vote yes
+
+2020
+01:24:09,280 --> 01:24:15,590
+okay so what about
+
+2021
+01:24:15,600 --> 01:24:19,280
+go ahead uh what about the case where e
+
+2022
+01:24:19,280 --> 01:24:22,000
+runs for election in term five for
+
+2023
+01:24:22,000 --> 01:24:22,639
+example or
+
+2024
+01:24:22,639 --> 01:24:26,080
+five yeah and then it gets a vote from d
+
+2025
+01:24:26,080 --> 01:24:28,320
+saying no it would then update its term
+
+2026
+01:24:28,320 --> 01:24:30,320
+right and stop running
+
+2027
+01:24:30,320 --> 01:24:32,080
+okay hold on like this so you're
+
+2028
+01:24:32,080 --> 01:24:33,360
+thinking about
+
+2029
+01:24:33,360 --> 01:24:36,239
+he's starting an election for five yeah
+
+2030
+01:24:36,239 --> 01:24:38,080
+and if it gets a response from
+
+2031
+01:24:38,080 --> 01:24:40,080
+almost anybody it's gonna see that it's
+
+2032
+01:24:40,080 --> 01:24:41,199
+behind in a term
+
+2033
+01:24:41,199 --> 01:24:43,600
+right so it does update its term in that
+
+2034
+01:24:43,600 --> 01:24:44,560
+case right
+
+2035
+01:24:44,560 --> 01:24:46,239
+it's not going to append so another way
+
+2036
+01:24:46,239 --> 01:24:47,520
+to ask this question who can become
+
+2037
+01:24:47,520 --> 01:24:48,719
+leader
+
+2038
+01:24:48,719 --> 01:24:50,560
+right in this you know from this you
+
+2039
+01:24:50,560 --> 01:24:51,920
+know whatever from these
+
+2040
+01:24:51,920 --> 01:24:57,750
+six abc through f who can become leader
+
+2041
+01:24:57,760 --> 01:25:01,120
+can what f become leader no all of them
+
+2042
+01:25:01,120 --> 01:25:03,360
+are up
+
+2043
+01:25:03,360 --> 01:25:06,629
+can he become leader
+
+2044
+01:25:06,639 --> 01:25:08,880
+um also no the only ones that can become
+
+2045
+01:25:08,880 --> 01:25:10,000
+leader are a c
+
+2046
+01:25:10,000 --> 01:25:14,470
+and d that's correct
+
+2047
+01:25:14,480 --> 01:25:17,669
+possible leader
+
+2048
+01:25:17,679 --> 01:25:20,719
+but can can a become a leader if d
+
+2049
+01:25:20,719 --> 01:25:23,360
+is alive because because the because the
+
+2050
+01:25:23,360 --> 01:25:24,080
+safety
+
+2051
+01:25:24,080 --> 01:25:26,639
+section says that the rpc the request
+
+2052
+01:25:26,639 --> 01:25:29,600
+for rpc implements the restriction that
+
+2053
+01:25:29,600 --> 01:25:32,159
+it it compares the last log entries and
+
+2054
+01:25:32,159 --> 01:25:34,320
+the one with the highest log entry
+
+2055
+01:25:34,320 --> 01:25:37,120
+should become the leader no i i only
+
+2056
+01:25:37,120 --> 01:25:37,520
+think
+
+2057
+01:25:37,520 --> 01:25:40,560
+it it doesn't vote for someone
+
+2058
+01:25:40,560 --> 01:25:44,880
+exactly so like they will never vote for
+
+2059
+01:25:44,880 --> 01:25:45,440
+a
+
+2060
+01:25:45,440 --> 01:25:47,600
+right or for anything else that's
+
+2061
+01:25:47,600 --> 01:25:48,719
+exactly right
+
+2062
+01:25:48,719 --> 01:25:51,360
+i mean it's also not true that like if
+
+2063
+01:25:51,360 --> 01:25:52,159
+you have an
+
+2064
+01:25:52,159 --> 01:25:55,199
+entry in a higher term than
+
+2065
+01:25:55,199 --> 01:25:58,000
+another node that like you're actually
+
+2066
+01:25:58,000 --> 01:25:58,800
+sort of like
+
+2067
+01:25:58,800 --> 01:26:01,760
+better right because um i mean you can
+
+2068
+01:26:01,760 --> 01:26:02,080
+be
+
+2069
+01:26:02,080 --> 01:26:04,960
+like becoming leader and trying to
+
+2070
+01:26:04,960 --> 01:26:05,600
+append
+
+2071
+01:26:05,600 --> 01:26:07,760
+entries into the log but they like don't
+
+2072
+01:26:07,760 --> 01:26:09,360
+go through so
+
+2073
+01:26:09,360 --> 01:26:12,480
+well d is like when you go through okay
+
+2074
+01:26:12,480 --> 01:26:12,719
+v
+
+2075
+01:26:12,719 --> 01:26:15,120
+is live correct devoted against a
+
+2076
+01:26:15,120 --> 01:26:16,239
+becomes leader d
+
+2077
+01:26:16,239 --> 01:26:20,639
+a actually tries to uh well if
+
+2078
+01:26:20,639 --> 01:26:23,120
+a won't contact d if actually didn't
+
+2079
+01:26:23,120 --> 01:26:27,669
+vote for it
+
+2080
+01:26:27,679 --> 01:26:31,270
+and so they would just proceed
+
+2081
+01:26:31,280 --> 01:26:34,159
+so why could d have logs in term seven
+
+2082
+01:26:34,159 --> 01:26:38,149
+if it's not the leader in term seven
+
+2083
+01:26:38,159 --> 01:26:39,600
+d must have been the leader in term
+
+2084
+01:26:39,600 --> 01:26:41,760
+seven correct
+
+2085
+01:26:41,760 --> 01:26:44,320
+yeah i agree otherwise it would have no
+
+2086
+01:26:44,320 --> 01:26:56,870
+log entries
+
+2087
+01:26:56,880 --> 01:27:01,440
+i think i forgot so in this case was d
+
+2088
+01:27:01,440 --> 01:27:05,520
+um was d a leader
+
+2089
+01:27:05,520 --> 01:27:08,400
+in term seven who got disconnected and
+
+2090
+01:27:08,400 --> 01:27:08,800
+then
+
+2091
+01:27:08,800 --> 01:27:10,880
+the new leader got elected the one at
+
+2092
+01:27:10,880 --> 01:27:12,639
+the top
+
+2093
+01:27:12,639 --> 01:27:16,000
+yeah i think so actually let me take it
+
+2094
+01:27:16,000 --> 01:27:16,880
+back i don't really
+
+2095
+01:27:16,880 --> 01:27:18,560
+remember exactly the sequence i didn't
+
+2096
+01:27:18,560 --> 01:27:20,800
+really pay attention much to the top guy
+
+2097
+01:27:20,800 --> 01:27:23,920
+uh but i presume that is the case it
+
+2098
+01:27:23,920 --> 01:27:24,960
+does say that he's
+
+2099
+01:27:24,960 --> 01:27:26,960
+leader for term eight and that means
+
+2100
+01:27:26,960 --> 01:27:28,239
+like
+
+2101
+01:27:28,239 --> 01:27:32,960
+right on that log
+
+2102
+01:27:32,960 --> 01:27:34,639
+i think the case we're looking at the
+
+2103
+01:27:34,639 --> 01:27:36,400
+one where a has a higher
+
+2104
+01:27:36,400 --> 01:27:38,080
+term number than d is a the
+
+2105
+01:27:38,080 --> 01:27:39,679
+contradiction case and the safety
+
+2106
+01:27:39,679 --> 01:27:40,400
+argument they
+
+2107
+01:27:40,400 --> 01:27:42,320
+mentioned like i think they proved that
+
+2108
+01:27:42,320 --> 01:27:46,000
+this is not possible
+
+2109
+01:27:46,000 --> 01:27:49,280
+what is thought possible like that um
+
+2110
+01:27:49,280 --> 01:27:52,639
+a could be elected be missing an entry
+
+2111
+01:27:52,639 --> 01:27:54,480
+and have a higher term than d which is
+
+2112
+01:27:54,480 --> 01:27:56,159
+the case here i think there's a
+
+2113
+01:27:56,159 --> 01:27:58,000
+like the step proof that this is a
+
+2114
+01:27:58,000 --> 01:27:59,520
+contradiction
+
+2115
+01:27:59,520 --> 01:28:01,679
+i don't think so i think it's totally
+
+2116
+01:28:01,679 --> 01:28:03,760
+fine for it to be elected leader
+
+2117
+01:28:03,760 --> 01:28:05,840
+yeah i think the i think the safety
+
+2118
+01:28:05,840 --> 01:28:07,280
+proof says that
+
+2119
+01:28:07,280 --> 01:28:10,400
+a future leader cannot have
+
+2120
+01:28:10,400 --> 01:28:13,520
+needs to have all of the log
+
+2121
+01:28:13,520 --> 01:28:16,239
+committed committed yeah and seven is
+
+2122
+01:28:16,239 --> 01:28:17,199
+not committed
+
+2123
+01:28:17,199 --> 01:28:19,440
+exactly there's a whole bunch of
+
+2124
+01:28:19,440 --> 01:28:20,480
+operations here that they're not
+
+2125
+01:28:20,480 --> 01:28:22,080
+committed correct they're just tentative
+
+2126
+01:28:22,080 --> 01:28:22,719
+and so
+
+2127
+01:28:22,719 --> 01:28:24,719
+anything can happen to them and nothing
+
+2128
+01:28:24,719 --> 01:28:27,360
+wrong will happen in the end
+
+2129
+01:28:27,360 --> 01:28:29,120
+and the reason that the whole committed
+
+2130
+01:28:29,120 --> 01:28:31,280
+thing works is because
+
+2131
+01:28:31,280 --> 01:28:33,920
+if it's committed then more than than
+
+2132
+01:28:33,920 --> 01:28:35,120
+the majority have
+
+2133
+01:28:35,120 --> 01:28:37,040
+those entries and so someone who doesn't
+
+2134
+01:28:37,040 --> 01:28:38,480
+have the committed entries could never
+
+2135
+01:28:38,480 --> 01:28:39,440
+become elected
+
+2136
+01:28:39,440 --> 01:28:41,679
+right that's correct yes that's exactly
+
+2137
+01:28:41,679 --> 01:28:49,350
+right
+
+2138
+01:28:49,360 --> 01:28:52,080
+yeah they discussed like yeah like in
+
+2139
+01:28:52,080 --> 01:28:53,360
+terms of
+
+2140
+01:28:53,360 --> 01:28:55,280
+only someone who has all the committed
+
+2141
+01:28:55,280 --> 01:28:57,520
+entries can get elected i think it gets
+
+2142
+01:28:57,520 --> 01:29:00,480
+more complicated with you know within
+
+2143
+01:29:00,480 --> 01:29:02,080
+the people who have all the committed
+
+2144
+01:29:02,080 --> 01:29:04,960
+entries which ones can't get elected
+
+2145
+01:29:04,960 --> 01:29:07,360
+that's yeah it's always it doesn't
+
+2146
+01:29:07,360 --> 01:29:19,270
+matter
+
+2147
+01:29:19,280 --> 01:29:23,040
+are not committed then here right uh
+
+2148
+01:29:23,040 --> 01:29:26,719
+so these two fours those are not
+
+2149
+01:29:26,719 --> 01:29:29,840
+the the first the first two fours those
+
+2150
+01:29:29,840 --> 01:29:30,400
+are
+
+2151
+01:29:30,400 --> 01:29:32,239
+where what's your question they will be
+
+2152
+01:29:32,239 --> 01:29:34,239
+committed yeah those would be committed
+
+2153
+01:29:34,239 --> 01:29:36,000
+but then everything after wouldn't be
+
+2154
+01:29:36,000 --> 01:29:38,639
+yeah those two fives will be committed
+
+2155
+01:29:38,639 --> 01:29:39,440
+two six
+
+2156
+01:29:39,440 --> 01:29:42,629
+and the two seconds
+
+2157
+01:29:42,639 --> 01:29:44,800
+oh okay you only need exactly half
+
+2158
+01:29:44,800 --> 01:29:45,760
+that's okay
+
+2159
+01:29:45,760 --> 01:29:48,719
+exactly half is okay okay oh you need
+
+2160
+01:29:48,719 --> 01:29:50,840
+another one over half
+
+2161
+01:29:50,840 --> 01:29:53,679
+four yeah so the fives and six wouldn't
+
+2162
+01:29:53,679 --> 01:29:55,280
+be committed
+
+2163
+01:29:55,280 --> 01:29:57,199
+oh but you have the oh you have the
+
+2164
+01:29:57,199 --> 01:29:58,560
+other leader right yeah
+
+2165
+01:29:58,560 --> 01:30:01,120
+yeah okay oh let's not forget about
+
+2166
+01:30:01,120 --> 01:30:02,080
+those right
+
+2167
+01:30:02,080 --> 01:30:05,679
+i got it okay
+
+2168
+01:30:05,679 --> 01:30:07,360
+i'll i'll come back to this at the
+
+2169
+01:30:07,360 --> 01:30:08,400
+beginning of the next lecture because
+
+2170
+01:30:08,400 --> 01:30:08,880
+some
+
+2171
+01:30:08,880 --> 01:30:10,080
+some of you probably have to run to
+
+2172
+01:30:10,080 --> 01:30:12,080
+another class uh
+
+2173
+01:30:12,080 --> 01:30:14,480
+but uh i'll come back to this uh if you
+
+2174
+01:30:14,480 --> 01:30:15,679
+have more questions feel free to stick
+
+2175
+01:30:15,679 --> 01:30:16,239
+around
+
+2176
+01:30:16,239 --> 01:30:22,950
+uh and you know we'll resume this
+
+2177
+01:30:22,960 --> 01:30:26,159
+um can you say the log duplication
+
+2178
+01:30:26,159 --> 01:30:28,880
+um again when could there be log
+
+2179
+01:30:28,880 --> 01:30:31,750
+duplication
+
+2180
+01:30:31,760 --> 01:30:34,480
+what i meant is that the leader at some
+
+2181
+01:30:34,480 --> 01:30:34,880
+point
+
+2182
+01:30:34,880 --> 01:30:41,830
+forces its log on the followers
+
+2183
+01:30:41,840 --> 01:30:44,400
+i think i think you meant it on some of
+
+2184
+01:30:44,400 --> 01:30:45,199
+the previous
+
+2185
+01:30:45,199 --> 01:30:48,320
+slides uh okay so maybe yeah maybe uh
+
+2186
+01:30:48,320 --> 01:30:50,480
+again one way i can't remember what i
+
+2187
+01:30:50,480 --> 01:30:51,679
+said
+
+2188
+01:30:51,679 --> 01:30:55,199
+sorry uh it is
+
+2189
+01:30:55,199 --> 01:31:00,830
+it is a little more maybe a little more
+
+2190
+01:31:00,840 --> 01:31:09,590
+um
+
+2191
+01:31:09,600 --> 01:31:13,600
+oh it says they're deleted duplicates
+
+2192
+01:31:13,600 --> 01:31:15,760
+detect duplicates oh yeah the technical
+
+2193
+01:31:15,760 --> 01:31:16,639
+difficulties
+
+2194
+01:31:16,639 --> 01:31:19,840
+yeah yeah this is uh this is not a raft
+
+2195
+01:31:19,840 --> 01:31:22,080
+issue correct this is really uh a kv
+
+2196
+01:31:22,080 --> 01:31:25,920
+uh key value service issue uh where
+
+2197
+01:31:25,920 --> 01:31:28,639
+uh a client request you know might be a
+
+2198
+01:31:28,639 --> 01:31:30,000
+client may uh
+
+2199
+01:31:30,000 --> 01:31:32,400
+okay the client might not get a response
+
+2200
+01:31:32,400 --> 01:31:33,600
+uh even though
+
+2201
+01:31:33,600 --> 01:31:34,880
+you know that request actually went
+
+2202
+01:31:34,880 --> 01:31:37,120
+through a raft because what happened is
+
+2203
+01:31:37,120 --> 01:31:38,719
+that the leader maybe applied the
+
+2204
+01:31:38,719 --> 01:31:39,360
+operation
+
+2205
+01:31:39,360 --> 01:31:41,360
+to its state but before it responded to
+
+2206
+01:31:41,360 --> 01:31:43,760
+the client it crashed
+
+2207
+01:31:43,760 --> 01:31:46,639
+so the client will retry and will send
+
+2208
+01:31:46,639 --> 01:31:48,080
+this request to the new leader
+
+2209
+01:31:48,080 --> 01:31:49,920
+the new lender will run it for raft and
+
+2210
+01:31:49,920 --> 01:31:52,480
+it will pop out of raft again
+
+2211
+01:31:52,480 --> 01:31:54,639
+and so it has to be the case that the kv
+
+2212
+01:31:54,639 --> 01:31:58,080
+server does duplicate detection
+
+2213
+01:31:58,080 --> 01:31:59,840
+also this is like only if the client
+
+2214
+01:31:59,840 --> 01:32:01,679
+didn't get the response i did yesterday
+
+2215
+01:32:01,679 --> 01:32:02,239
+exactly
+
+2216
+01:32:02,239 --> 01:32:05,840
+yeah exactly okay okay i see thank you
+
+2217
+01:32:05,840 --> 01:32:07,280
+yeah then there will be no you will do
+
+2218
+01:32:07,280 --> 01:32:12,159
+this in lab three
+
+2219
+01:32:12,159 --> 01:32:14,639
+um i think i also asked this question
+
+2220
+01:32:14,639 --> 01:32:16,000
+during the lecture but i
+
+2221
+01:32:16,000 --> 01:32:17,280
+don't think i fully understood the
+
+2222
+01:32:17,280 --> 01:32:20,480
+answers so i'll just repeat the question
+
+2223
+01:32:20,480 --> 01:32:24,239
+the question is that um so you said that
+
+2224
+01:32:24,239 --> 01:32:26,480
+the way commits work is that once the
+
+2225
+01:32:26,480 --> 01:32:29,520
+leader commits it waits for a new client
+
+2226
+01:32:29,520 --> 01:32:32,480
+uh message and then it just appends that
+
+2227
+01:32:32,480 --> 01:32:34,239
+message to the log entry and sends an
+
+2228
+01:32:34,239 --> 01:32:35,199
+append entry
+
+2229
+01:32:35,199 --> 01:32:37,440
+to the remaining followers with an
+
+2230
+01:32:37,440 --> 01:32:38,800
+additional message saying that they
+
+2231
+01:32:38,800 --> 01:32:40,480
+should also commit all the previous
+
+2232
+01:32:40,480 --> 01:32:41,679
+entries correct
+
+2233
+01:32:41,679 --> 01:32:43,440
+yeah there's indirectly the protocol the
+
+2234
+01:32:43,440 --> 01:32:44,880
+staff correct right
+
+2235
+01:32:44,880 --> 01:32:48,080
+so my question is that what if uh the
+
+2236
+01:32:48,080 --> 01:32:50,560
+leader commits all the entries
+
+2237
+01:32:50,560 --> 01:32:53,040
+and right before it is able to send this
+
+2238
+01:32:53,040 --> 01:32:54,960
+message to the remaining followers
+
+2239
+01:32:54,960 --> 01:32:57,679
+the leader crashes uh it cannot commit
+
+2240
+01:32:57,679 --> 01:32:59,199
+until it has a majority
+
+2241
+01:32:59,199 --> 01:33:01,280
+uh response from all the from the
+
+2242
+01:33:01,280 --> 01:33:03,679
+majority of the followers
+
+2243
+01:33:03,679 --> 01:33:06,880
+i see so it at first like
+
+2244
+01:33:06,880 --> 01:33:08,960
+even it sticks us through it log but
+
+2245
+01:33:08,960 --> 01:33:10,400
+doesn't actually deliver to the
+
+2246
+01:33:10,400 --> 01:33:13,840
+kv servers yet i see so it waits
+
+2247
+01:33:13,840 --> 01:33:15,760
+from a reply of commit from all the
+
+2248
+01:33:15,760 --> 01:33:17,360
+remaining followers and then it
+
+2249
+01:33:17,360 --> 01:33:19,360
+recommends its own
+
+2250
+01:33:19,360 --> 01:33:22,080
+yeah okay okay so there's a basically
+
+2251
+01:33:22,080 --> 01:33:22,960
+there's this variable
+
+2252
+01:33:22,960 --> 01:33:25,040
+last applied or commit index correct
+
+2253
+01:33:25,040 --> 01:33:26,719
+that is actually maintaining
+
+2254
+01:33:26,719 --> 01:33:29,280
+it only increases the commit index and
+
+2255
+01:33:29,280 --> 01:33:30,880
+once it receives a response from the
+
+2256
+01:33:30,880 --> 01:33:32,800
+majority of the followers
+
+2257
+01:33:32,800 --> 01:33:34,239
+and all of the followers say that they
+
+2258
+01:33:34,239 --> 01:33:36,000
+have committed their own
+
+2259
+01:33:36,000 --> 01:33:37,440
+uh like they have committed the log
+
+2260
+01:33:37,440 --> 01:33:39,920
+entries on their own servers
+
+2261
+01:33:39,920 --> 01:33:41,679
+they will commit their log entries once
+
+2262
+01:33:41,679 --> 01:33:44,080
+they know that the
+
+2263
+01:33:44,080 --> 01:33:48,310
+leader actually has committed it
+
+2264
+01:33:48,320 --> 01:33:50,159
+right so that's my question like how
+
+2265
+01:33:50,159 --> 01:33:51,760
+would they know if the leader is unable
+
+2266
+01:33:51,760 --> 01:33:53,280
+to send that message to the remaining
+
+2267
+01:33:53,280 --> 01:33:53,679
+file
+
+2268
+01:33:53,679 --> 01:33:55,360
+well yeah so then you know we basically
+
+2269
+01:33:55,360 --> 01:33:57,120
+we end in situations that we just saw in
+
+2270
+01:33:57,120 --> 01:33:58,320
+this figure seven
+
+2271
+01:33:58,320 --> 01:33:59,679
+there's going to be tentative log
+
+2272
+01:33:59,679 --> 01:34:02,639
+entries in uh their logs
+
+2273
+01:34:02,639 --> 01:34:05,280
+and uh depending who becomes the new
+
+2274
+01:34:05,280 --> 01:34:05,760
+leader
+
+2275
+01:34:05,760 --> 01:34:07,440
+and what the log situation is you know
+
+2276
+01:34:07,440 --> 01:34:09,120
+that operation may get committed or may
+
+2277
+01:34:09,120 --> 01:34:11,440
+not get committed
+
+2278
+01:34:11,440 --> 01:34:15,520
+i see okay yeah thank you
+
+2279
+01:34:15,520 --> 01:34:18,080
+hi i had a follow-up question on this so
+
+2280
+01:34:18,080 --> 01:34:18,719
+it says
+
+2281
+01:34:18,719 --> 01:34:22,080
+uh the leader pushes a login entry it
+
+2282
+01:34:22,080 --> 01:34:25,040
+gets accepted by majority but it crashes
+
+2283
+01:34:25,040 --> 01:34:25,520
+then
+
+2284
+01:34:25,520 --> 01:34:28,000
+later on uh this log entry can be
+
+2285
+01:34:28,000 --> 01:34:28,880
+committed right
+
+2286
+01:34:28,880 --> 01:34:31,360
+by some other leader it can it also may
+
+2287
+01:34:31,360 --> 01:34:32,639
+not
+
+2288
+01:34:32,639 --> 01:34:35,280
+yeah but say if it's get committed then
+
+2289
+01:34:35,280 --> 01:34:35,679
+uh
+
+2290
+01:34:35,679 --> 01:34:37,760
+how does the new leader know who was the
+
+2291
+01:34:37,760 --> 01:34:38,719
+client who
+
+2292
+01:34:38,719 --> 01:34:40,800
+requested for this log entry or how will
+
+2293
+01:34:40,800 --> 01:34:43,440
+this client be qualified
+
+2294
+01:34:43,440 --> 01:34:53,189
+in their
+
+2295
+01:34:53,199 --> 01:34:54,880
+okay so there's a really question about
+
+2296
+01:34:54,880 --> 01:34:56,320
+like actually how the kv server is
+
+2297
+01:34:56,320 --> 01:34:56,960
+actually
+
+2298
+01:34:56,960 --> 01:35:00,000
+stored in information uh with raft uh so
+
+2299
+01:35:00,000 --> 01:35:02,080
+the scenario is client talked to the
+
+2300
+01:35:02,080 --> 01:35:03,679
+leader the
+
+2301
+01:35:03,679 --> 01:35:06,639
+uh the client uh the leader actually
+
+2302
+01:35:06,639 --> 01:35:08,080
+committed
+
+2303
+01:35:08,080 --> 01:35:10,480
+did execute this operation or not it did
+
+2304
+01:35:10,480 --> 01:35:11,119
+not no it
+
+2305
+01:35:11,119 --> 01:35:13,679
+didn't it did not so then one of the
+
+2306
+01:35:13,679 --> 01:35:14,800
+followers later
+
+2307
+01:35:14,800 --> 01:35:18,320
+uh uh will uh get this operation
+
+2308
+01:35:18,320 --> 01:35:21,040
+maybe apply it uh it won't send a
+
+2309
+01:35:21,040 --> 01:35:22,239
+response because it doesn't even know
+
+2310
+01:35:22,239 --> 01:35:23,440
+about the client
+
+2311
+01:35:23,440 --> 01:35:25,360
+uh but the client will retry right
+
+2312
+01:35:25,360 --> 01:35:26,480
+because it actually hasn't gotten
+
+2313
+01:35:26,480 --> 01:35:27,199
+response
+
+2314
+01:35:27,199 --> 01:35:28,880
+it will contact the new leader and
+
+2315
+01:35:28,880 --> 01:35:30,239
+basically enter uh
+
+2316
+01:35:30,239 --> 01:35:32,560
+the same operation in the in the raft
+
+2317
+01:35:32,560 --> 01:35:33,360
+again
+
+2318
+01:35:33,360 --> 01:35:36,480
+and it will pop out again and then
+
+2319
+01:35:36,480 --> 01:35:38,960
+the server will send the as we'll see in
+
+2320
+01:35:38,960 --> 01:35:40,320
+the lab three it will send the last
+
+2321
+01:35:40,320 --> 01:35:40,960
+response
+
+2322
+01:35:40,960 --> 01:35:43,119
+in fact the servers remember the last
+
+2323
+01:35:43,119 --> 01:35:47,430
+value that they sent back
+
+2324
+01:35:47,440 --> 01:35:51,600
+okay um so if there's a get request you
+
+2325
+01:35:51,600 --> 01:35:54,080
+know the first get request is executed
+
+2326
+01:35:54,080 --> 01:35:56,000
+there's no response to be sent back that
+
+2327
+01:35:56,000 --> 01:35:57,679
+get request actually but you will store
+
+2328
+01:35:57,679 --> 01:35:58,639
+the response
+
+2329
+01:35:58,639 --> 01:36:01,840
+in the in the kv in the kv server will
+
+2330
+01:36:01,840 --> 01:36:03,520
+remember the response
+
+2331
+01:36:03,520 --> 01:36:05,600
+so when it's easy to duplicate and then
+
+2332
+01:36:05,600 --> 01:36:07,920
+then we'll send the response
+
+2333
+01:36:07,920 --> 01:36:09,440
+so there will be duplicate detection
+
+2334
+01:36:09,440 --> 01:36:13,199
+table that includes the response
+
+2335
+01:36:13,199 --> 01:36:16,870
+okay yeah makes sense thanks
+
+2336
+01:36:16,880 --> 01:36:20,480
+so welcome i was a little bit curious i
+
+2337
+01:36:20,480 --> 01:36:21,199
+think i asked
+
+2338
+01:36:21,199 --> 01:36:23,600
+uh roughly this in my question uh like
+
+2339
+01:36:23,600 --> 01:36:25,040
+pre-lecture questions well
+
+2340
+01:36:25,040 --> 01:36:27,679
+uh like how raft compares to other like
+
+2341
+01:36:27,679 --> 01:36:29,440
+consensus algorithms in terms of
+
+2342
+01:36:29,440 --> 01:36:32,000
+uh like optimizations you could do and
+
+2343
+01:36:32,000 --> 01:36:33,520
+like as an example i was thinking the
+
+2344
+01:36:33,520 --> 01:36:34,159
+only thing i could
+
+2345
+01:36:34,159 --> 01:36:36,400
+sort of think of was uh batching yeah
+
+2346
+01:36:36,400 --> 01:36:38,159
+and it seemed like raft is like
+
+2347
+01:36:38,159 --> 01:36:39,920
+perfect for batching because the leader
+
+2348
+01:36:39,920 --> 01:36:41,440
+could just like put you know more than
+
+2349
+01:36:41,440 --> 01:36:42,960
+one entry on its log wait a little bit
+
+2350
+01:36:42,960 --> 01:36:44,000
+before sending its next
+
+2351
+01:36:44,000 --> 01:36:45,920
+entries then send the defend entries
+
+2352
+01:36:45,920 --> 01:36:47,280
+with whatever batched
+
+2353
+01:36:47,280 --> 01:36:50,159
+set of uh operations or whatever it
+
+2354
+01:36:50,159 --> 01:36:52,159
+wants the the replicas to do
+
+2355
+01:36:52,159 --> 01:36:54,159
+uh just trying to figure out like what
+
+2356
+01:36:54,159 --> 01:36:55,440
+what are some of the deficiencies of
+
+2357
+01:36:55,440 --> 01:36:56,159
+raft like
+
+2358
+01:36:56,159 --> 01:36:58,159
+from a performance point of view well
+
+2359
+01:36:58,159 --> 01:36:59,280
+rav does not do
+
+2360
+01:36:59,280 --> 01:37:01,520
+that shape right and you know maybe you
+
+2361
+01:37:01,520 --> 01:37:03,040
+could but i'm going to make the vertical
+
+2362
+01:37:03,040 --> 01:37:03,840
+more complicated
+
+2363
+01:37:03,840 --> 01:37:06,639
+and so they decided i guess okay i guess
+
+2364
+01:37:06,639 --> 01:37:08,000
+the way i happen to have written
+
+2365
+01:37:08,000 --> 01:37:10,880
+my like raft lab code like i sort of did
+
+2366
+01:37:10,880 --> 01:37:11,520
+batching
+
+2367
+01:37:11,520 --> 01:37:13,199
+implicitly because i would just wait a
+
+2368
+01:37:13,199 --> 01:37:15,040
+little bit sometimes before sending a
+
+2369
+01:37:15,040 --> 01:37:16,000
+pen entry so
+
+2370
+01:37:16,000 --> 01:37:17,440
+i guess it felt like you don't really
+
+2371
+01:37:17,440 --> 01:37:19,040
+need to do anything other than just like
+
+2372
+01:37:19,040 --> 01:37:20,880
+maybe wait if you feel like it before
+
+2373
+01:37:20,880 --> 01:37:24,310
+yeah you can have multiple ones
+
+2374
+01:37:24,320 --> 01:37:27,830
+so yeah it's like
+
+2375
+01:37:27,840 --> 01:37:31,199
+yeah um
+
+2376
+01:37:31,199 --> 01:37:33,440
+i think it all comes down to performance
+
+2377
+01:37:33,440 --> 01:37:34,639
+so you know there's a whole bunch of
+
+2378
+01:37:34,639 --> 01:37:36,239
+optimizations that rap doesn't do you
+
+2379
+01:37:36,239 --> 01:37:37,520
+know that some other systems do
+
+2380
+01:37:37,520 --> 01:37:38,880
+like you know for example you might be
+
+2381
+01:37:38,880 --> 01:37:40,239
+able to commute to your operations
+
+2382
+01:37:40,239 --> 01:37:41,760
+because it doesn't even matter
+
+2383
+01:37:41,760 --> 01:37:43,840
+uh in what order you do them uh so
+
+2384
+01:37:43,840 --> 01:37:46,080
+there's a slew of optimizations
+
+2385
+01:37:46,080 --> 01:37:47,679
+and around this basically do none of
+
+2386
+01:37:47,679 --> 01:37:51,350
+that okay
+
+2387
+01:37:51,360 --> 01:37:53,360
+thanks and it may be perfectly fine for
+
+2388
+01:37:53,360 --> 01:37:55,040
+like the use case correct
+
+2389
+01:37:55,040 --> 01:37:59,270
+all right
+
+2390
+01:37:59,280 --> 01:38:01,440
+um you mentioned something a couple of
+
+2391
+01:38:01,440 --> 01:38:02,800
+minutes ago that
+
+2392
+01:38:02,800 --> 01:38:05,199
+log entry could be lost so is it
+
+2393
+01:38:05,199 --> 01:38:06,800
+possible that like a client request
+
+2394
+01:38:06,800 --> 01:38:08,480
+could never be executed but the draft
+
+2395
+01:38:08,480 --> 01:38:09,600
+guarantees that
+
+2396
+01:38:09,600 --> 01:38:12,000
+all the servers will execute the same
+
+2397
+01:38:12,000 --> 01:38:14,840
+set of block entries in the same
+
+2398
+01:38:14,840 --> 01:38:16,080
+sequence
+
+2399
+01:38:16,080 --> 01:38:18,320
+uh so like that means draft does not
+
+2400
+01:38:18,320 --> 01:38:19,760
+cannot be usable for like all
+
+2401
+01:38:19,760 --> 01:38:21,360
+applications if we can
+
+2402
+01:38:21,360 --> 01:38:24,800
+only if we can afford uh
+
+2403
+01:38:24,800 --> 01:38:28,400
+some lost requests well
+
+2404
+01:38:28,400 --> 01:38:29,920
+you know we have to assume that you know
+
+2405
+01:38:29,920 --> 01:38:32,480
+the responses from the
+
+2406
+01:38:32,480 --> 01:38:34,560
+from the raf servers as a whole correct
+
+2407
+01:38:34,560 --> 01:38:36,800
+the kv servers plus raft may get lost
+
+2408
+01:38:36,800 --> 01:38:37,280
+anyway
+
+2409
+01:38:37,280 --> 01:38:39,520
+because the network gets lost natural
+
+2410
+01:38:39,520 --> 01:38:41,440
+network may lost responses so the client
+
+2411
+01:38:41,440 --> 01:38:44,000
+has to be able to repeat
+
+2412
+01:38:44,000 --> 01:38:48,560
+we call it must recent uh must return
+
+2413
+01:38:48,560 --> 01:38:50,400
+i see i see so like when it actually
+
+2414
+01:38:50,400 --> 01:38:52,800
+commits a log entry and executes it
+
+2415
+01:38:52,800 --> 01:38:54,960
+it replies to the client that it did
+
+2416
+01:38:54,960 --> 01:38:55,920
+actually do that
+
+2417
+01:38:55,920 --> 01:38:57,520
+yeah yeah so this is like a little bit
+
+2418
+01:38:57,520 --> 01:38:58,960
+earlier we talked about this the the
+
+2419
+01:38:58,960 --> 01:39:00,480
+duplicate detection table the duplicate
+
+2420
+01:39:00,480 --> 01:39:02,000
+detection table has
+
+2421
+01:39:02,000 --> 01:39:04,320
+uh the response that was sent or was
+
+2422
+01:39:04,320 --> 01:39:06,159
+constructed in response to executing
+
+2423
+01:39:06,159 --> 01:39:13,679
+that operation
+
+2424
+01:39:13,679 --> 01:39:18,149
+any further questions
+
+2425
+01:39:18,159 --> 01:39:21,119
+okay thank you so much hi welcome it's
+
+2426
+01:39:21,119 --> 01:39:24,159
+great to have so many questions
+
