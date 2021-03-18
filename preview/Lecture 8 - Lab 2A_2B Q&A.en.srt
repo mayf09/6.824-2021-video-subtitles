@@ -1,0 +1,10220 @@
+1
+00:00:03,199 --> 00:00:03,679
+okay
+
+2
+00:00:03,679 --> 00:00:08,470
+good afternoon uh soundcheck
+
+3
+00:00:08,480 --> 00:00:10,559
+yep we can hear you all good okay okay
+
+4
+00:00:10,559 --> 00:00:12,480
+great uh good afternoon good evening
+
+5
+00:00:12,480 --> 00:00:13,200
+good morning
+
+6
+00:00:13,200 --> 00:00:16,000
+wherever you are um so today i want to
+
+7
+00:00:16,000 --> 00:00:17,440
+talk about uh lab
+
+8
+00:00:17,440 --> 00:00:19,840
+two a and b and this is really a
+
+9
+00:00:19,840 --> 00:00:21,520
+question and answering session
+
+10
+00:00:21,520 --> 00:00:24,400
+uh so feel free to interrupt any time uh
+
+11
+00:00:24,400 --> 00:00:26,160
+ask questions as much as you like
+
+12
+00:00:26,160 --> 00:00:28,880
+uh it's really uh this today's lecture
+
+13
+00:00:28,880 --> 00:00:30,320
+is really dedicated to
+
+14
+00:00:30,320 --> 00:00:35,360
+to your questions i summarized uh
+
+15
+00:00:35,360 --> 00:00:37,120
+many of the questions that came up or
+
+16
+00:00:37,120 --> 00:00:38,800
+either once or multiple times in the
+
+17
+00:00:38,800 --> 00:00:40,559
+email on the on the right side here of
+
+18
+00:00:40,559 --> 00:00:41,040
+this
+
+19
+00:00:41,040 --> 00:00:44,399
+on the board and hopefully
+
+20
+00:00:44,399 --> 00:00:48,559
+we'll get through them as i uh
+
+21
+00:00:48,559 --> 00:00:52,239
+walk through uh my solutions and
+
+22
+00:00:52,239 --> 00:00:55,520
+so i'm gonna basically cover four topics
+
+23
+00:00:55,520 --> 00:00:57,920
+related to the solution one i'm going to
+
+24
+00:00:57,920 --> 00:01:00,640
+first talk a little bit about voting
+
+25
+00:01:00,640 --> 00:01:02,640
+where like the voting code basically the
+
+26
+00:01:02,640 --> 00:01:07,990
+heartbeats
+
+27
+00:01:08,000 --> 00:01:10,840
+and then i'll talk about start and
+
+28
+00:01:10,840 --> 00:01:17,109
+commit
+
+29
+00:01:17,119 --> 00:01:19,759
+and this sort of follows i think the
+
+30
+00:01:19,759 --> 00:01:21,520
+suggestion that we made in the lab like
+
+31
+00:01:21,520 --> 00:01:22,799
+how you should get started like first
+
+32
+00:01:22,799 --> 00:01:24,479
+get go voting to work you know then get
+
+33
+00:01:24,479 --> 00:01:25,600
+heartbeats to work once you've got
+
+34
+00:01:25,600 --> 00:01:26,560
+heartbeat to work
+
+35
+00:01:26,560 --> 00:01:27,920
+you can actually start taking commands
+
+36
+00:01:27,920 --> 00:01:29,840
+from clients and then of course in the
+
+37
+00:01:29,840 --> 00:01:30,240
+end
+
+38
+00:01:30,240 --> 00:01:32,079
+you got to commit them to supply them on
+
+39
+00:01:32,079 --> 00:01:33,280
+the applied channel
+
+40
+00:01:33,280 --> 00:01:34,560
+so this is roughly the order that i'm
+
+41
+00:01:34,560 --> 00:01:36,320
+planning to go through but again feel
+
+42
+00:01:36,320 --> 00:01:36,799
+free to
+
+43
+00:01:36,799 --> 00:01:40,560
+interrupt at any particular time um
+
+44
+00:01:40,560 --> 00:01:43,360
+so before diving or looking at my
+
+45
+00:01:43,360 --> 00:01:45,119
+particular solutions or the solutions i
+
+46
+00:01:45,119 --> 00:01:46,079
+wrote this year
+
+47
+00:01:46,079 --> 00:01:48,159
+i want to talk a little bit about
+
+48
+00:01:48,159 --> 00:01:49,759
+debugging because that was the
+
+49
+00:01:49,759 --> 00:01:51,600
+probably the question that came up most
+
+50
+00:01:51,600 --> 00:01:55,040
+in the the um
+
+51
+00:01:55,040 --> 00:01:56,719
+in all your in the submission in the
+
+52
+00:01:56,719 --> 00:01:58,079
+submitted questions
+
+53
+00:01:58,079 --> 00:01:59,680
+so let me talk a little bit at a very
+
+54
+00:01:59,680 --> 00:02:02,719
+high level about debugging
+
+55
+00:02:02,719 --> 00:02:06,079
+um and this is a clearly a topic
+
+56
+00:02:06,079 --> 00:02:07,680
+that we could spend a whole lecture on
+
+57
+00:02:07,680 --> 00:02:09,280
+uh and
+
+58
+00:02:09,280 --> 00:02:11,520
+uh but i'm just gonna give you sort of
+
+59
+00:02:11,520 --> 00:02:13,360
+my high level approach that you know i
+
+60
+00:02:13,360 --> 00:02:14,319
+typically use
+
+61
+00:02:14,319 --> 00:02:17,520
+to address uh um you know to basically
+
+62
+00:02:17,520 --> 00:02:19,120
+pass the labs
+
+63
+00:02:19,120 --> 00:02:21,040
+and basically start to have i just
+
+64
+00:02:21,040 --> 00:02:22,560
+always start basically with running the
+
+65
+00:02:22,560 --> 00:02:25,670
+first test case
+
+66
+00:02:25,680 --> 00:02:27,120
+and of course if i have not written any
+
+67
+00:02:27,120 --> 00:02:28,800
+code i'm going to fail it
+
+68
+00:02:28,800 --> 00:02:30,400
+but at least now i have some you know
+
+69
+00:02:30,400 --> 00:02:32,959
+starting point where i can uh
+
+70
+00:02:32,959 --> 00:02:35,120
+start writing some code for and so you
+
+71
+00:02:35,120 --> 00:02:36,480
+know think about the first test case you
+
+72
+00:02:36,480 --> 00:02:37,040
+know start
+
+73
+00:02:37,040 --> 00:02:39,840
+writing uh look at the hints and write
+
+74
+00:02:39,840 --> 00:02:40,959
+some code
+
+75
+00:02:40,959 --> 00:02:43,840
+and while writing the code um yeah i
+
+76
+00:02:43,840 --> 00:02:44,720
+found it you know
+
+77
+00:02:44,720 --> 00:02:47,760
+convenient uh in this lab to or at least
+
+78
+00:02:47,760 --> 00:02:49,440
+the set of labs actually any lap in the
+
+79
+00:02:49,440 --> 00:02:51,040
+824 to
+
+80
+00:02:51,040 --> 00:02:57,270
+log all messages
+
+81
+00:02:57,280 --> 00:02:59,280
+and you know typically use you know that
+
+82
+00:02:59,280 --> 00:03:00,319
+dprinf
+
+83
+00:03:00,319 --> 00:03:03,920
+function in neutral logo and i'm pretty
+
+84
+00:03:03,920 --> 00:03:06,400
+pretty systematic of logging messages
+
+85
+00:03:06,400 --> 00:03:08,879
+and the reason that i do this uh uh
+
+86
+00:03:08,879 --> 00:03:10,720
+isn't for debugging purposes
+
+87
+00:03:10,720 --> 00:03:14,080
+um and so i'll write encode
+
+88
+00:03:14,080 --> 00:03:16,480
+run the test code fails write some code
+
+89
+00:03:16,480 --> 00:03:17,280
+to actually
+
+90
+00:03:17,280 --> 00:03:20,480
+try to pass the test case and uh
+
+91
+00:03:20,480 --> 00:03:21,840
+you know there's sort of two scenarios
+
+92
+00:03:21,840 --> 00:03:23,920
+you know one you know i pass
+
+93
+00:03:23,920 --> 00:03:25,680
+which then i immediately move on to the
+
+94
+00:03:25,680 --> 00:03:27,360
+next you know test case
+
+95
+00:03:27,360 --> 00:03:30,959
+or i fail um and
+
+96
+00:03:30,959 --> 00:03:34,400
+in that case um the first thing i do
+
+97
+00:03:34,400 --> 00:03:35,920
+is you know study the test case a little
+
+98
+00:03:35,920 --> 00:03:38,319
+bit more in detail and try to figure out
+
+99
+00:03:38,319 --> 00:03:40,000
+like what actually the test case is
+
+100
+00:03:40,000 --> 00:03:42,480
+trying to test
+
+101
+00:03:42,480 --> 00:03:44,480
+and you know the name of the test case
+
+102
+00:03:44,480 --> 00:03:46,080
+is often very suggestive of
+
+103
+00:03:46,080 --> 00:03:47,440
+like what the particular scenario or
+
+104
+00:03:47,440 --> 00:03:49,519
+what sort of sets of scenarios uh
+
+105
+00:03:49,519 --> 00:03:51,920
+the test case is trying to cover and
+
+106
+00:03:51,920 --> 00:03:53,680
+then i try to sort of formulate for
+
+107
+00:03:53,680 --> 00:03:54,400
+myself
+
+108
+00:03:54,400 --> 00:03:56,720
+and hypothesis is not why you know my
+
+109
+00:03:56,720 --> 00:03:57,439
+code might not
+
+110
+00:03:57,439 --> 00:04:00,560
+you know test that past that test case
+
+111
+00:04:00,560 --> 00:04:03,040
+um and so basically this is sort of a
+
+112
+00:04:03,040 --> 00:04:05,360
+moment of like reflection and thinking
+
+113
+00:04:05,360 --> 00:04:10,390
+uh and uh
+
+114
+00:04:10,400 --> 00:04:12,480
+to sort of like understand what the
+
+115
+00:04:12,480 --> 00:04:14,080
+constructing my head the scenario that
+
+116
+00:04:14,080 --> 00:04:15,599
+you know seems to fit the test case you
+
+117
+00:04:15,599 --> 00:04:16,799
+know think about my code
+
+118
+00:04:16,799 --> 00:04:19,280
+or whether that actually uh could be
+
+119
+00:04:19,280 --> 00:04:20,880
+your problem and once i have a sort of a
+
+120
+00:04:20,880 --> 00:04:22,560
+hypothesis then the next thing to do is
+
+121
+00:04:22,560 --> 00:04:23,919
+like study you know basically
+
+122
+00:04:23,919 --> 00:04:27,280
+try to confirm uh the hypothesis
+
+123
+00:04:27,280 --> 00:04:29,600
+uh whether you know my explanation of ry
+
+124
+00:04:29,600 --> 00:04:31,040
+and passing the test case might be
+
+125
+00:04:31,040 --> 00:04:33,199
+uh right or wrong and so to do that then
+
+126
+00:04:33,199 --> 00:04:36,870
+basically i study the log
+
+127
+00:04:36,880 --> 00:04:39,440
+so if i have a print you know a trace of
+
+128
+00:04:39,440 --> 00:04:40,880
+all the messages you know being sent to
+
+129
+00:04:40,880 --> 00:04:42,639
+the part of the protocol
+
+130
+00:04:42,639 --> 00:04:45,759
+i can look at the you know trace and you
+
+131
+00:04:45,759 --> 00:04:46,080
+know
+
+132
+00:04:46,080 --> 00:04:48,080
+to see you know where things go wrong
+
+133
+00:04:48,080 --> 00:04:49,600
+and sort of work where our back works
+
+134
+00:04:49,600 --> 00:04:50,240
+and
+
+135
+00:04:50,240 --> 00:04:53,199
+you know in that way sort of test and
+
+136
+00:04:53,199 --> 00:04:54,160
+refine
+
+137
+00:04:54,160 --> 00:04:56,240
+my hypothesis about why my code you know
+
+138
+00:04:56,240 --> 00:04:57,840
+might be wrong
+
+139
+00:04:57,840 --> 00:04:59,919
+um sometimes you know that might you
+
+140
+00:04:59,919 --> 00:05:01,120
+require uh
+
+141
+00:05:01,120 --> 00:05:03,440
+you know going back and basically run
+
+142
+00:05:03,440 --> 00:05:05,039
+the test datacast to basically get more
+
+143
+00:05:05,039 --> 00:05:05,759
+detailed
+
+144
+00:05:05,759 --> 00:05:08,800
+uh log output although uh
+
+145
+00:05:08,800 --> 00:05:11,360
+early on i tend to be very systematic
+
+146
+00:05:11,360 --> 00:05:12,720
+and you know don't really have to add
+
+147
+00:05:12,720 --> 00:05:14,400
+any uh print statements but
+
+148
+00:05:14,400 --> 00:05:17,520
+in some cases that's necessary um and
+
+149
+00:05:17,520 --> 00:05:17,840
+then
+
+150
+00:05:17,840 --> 00:05:18,880
+you know that gives me that more
+
+151
+00:05:18,880 --> 00:05:20,160
+information and i can sort of really
+
+152
+00:05:20,160 --> 00:05:21,120
+zoom in
+
+153
+00:05:21,120 --> 00:05:24,720
+on a scenario that you know my
+
+154
+00:05:24,720 --> 00:05:26,960
+code doesn't handle and once i sort of
+
+155
+00:05:26,960 --> 00:05:28,479
+have a hypothesis
+
+156
+00:05:28,479 --> 00:05:30,320
+i've verified with the log that there
+
+157
+00:05:30,320 --> 00:05:32,160
+are indeed that hypothesis seems to be
+
+158
+00:05:32,160 --> 00:05:34,400
+correct and that is a source or a bug in
+
+159
+00:05:34,400 --> 00:05:35,520
+my code
+
+160
+00:05:35,520 --> 00:05:39,600
+i can just go fix the code
+
+161
+00:05:39,600 --> 00:05:43,120
+and then run the test case and so
+
+162
+00:05:43,120 --> 00:05:45,440
+this is the iterative process run test
+
+163
+00:05:45,440 --> 00:05:46,960
+case
+
+164
+00:05:46,960 --> 00:05:50,080
+you fail study test case and study log
+
+165
+00:05:50,080 --> 00:05:51,680
+you know to formulate hypothesis
+
+166
+00:05:51,680 --> 00:05:53,600
+you know try to confirm the hypothesis
+
+167
+00:05:53,600 --> 00:05:55,520
+and then move on uh fix the code and
+
+168
+00:05:55,520 --> 00:05:57,120
+then move on to the next one
+
+169
+00:05:57,120 --> 00:05:58,400
+uh and that tends to be reasonable
+
+170
+00:05:58,400 --> 00:06:00,319
+systematic in this um
+
+171
+00:06:00,319 --> 00:06:02,400
+um and so for example often i will
+
+172
+00:06:02,400 --> 00:06:03,919
+actually write down in a
+
+173
+00:06:03,919 --> 00:06:05,440
+in some file and text file what my
+
+174
+00:06:05,440 --> 00:06:07,280
+hypothesis is and sort of try to collect
+
+175
+00:06:07,280 --> 00:06:08,240
+evidence
+
+176
+00:06:08,240 --> 00:06:11,360
+or counter evidence you know to either
+
+177
+00:06:11,360 --> 00:06:13,120
+prove or disprove my hypothesis i really
+
+178
+00:06:13,120 --> 00:06:13,520
+have a
+
+179
+00:06:13,520 --> 00:06:17,039
+good reason to fix the code
+
+180
+00:06:17,039 --> 00:06:18,400
+i think you know any approach that
+
+181
+00:06:18,400 --> 00:06:20,080
+basically is not very systematic you
+
+182
+00:06:20,080 --> 00:06:21,280
+know for example you know you think
+
+183
+00:06:21,280 --> 00:06:22,960
+something is not really 100 right
+
+184
+00:06:22,960 --> 00:06:24,400
+you know maybe you'll change that and
+
+185
+00:06:24,400 --> 00:06:26,240
+then see if you pass the test cases
+
+186
+00:06:26,240 --> 00:06:28,880
+uh tends to be not work that well i
+
+187
+00:06:28,880 --> 00:06:31,680
+think that takes a lot of time
+
+188
+00:06:31,680 --> 00:06:34,080
+because you might be wrong or and worse
+
+189
+00:06:34,080 --> 00:06:35,440
+you might be wrong and actually pass the
+
+190
+00:06:35,440 --> 00:06:37,039
+test case and think you're right
+
+191
+00:06:37,039 --> 00:06:38,479
+uh but it turned out like you know
+
+192
+00:06:38,479 --> 00:06:40,080
+basically you just shifted the bug from
+
+193
+00:06:40,080 --> 00:06:41,840
+one corner to another corner and it will
+
+194
+00:06:41,840 --> 00:06:44,479
+show up later again
+
+195
+00:06:44,479 --> 00:06:47,280
+so at a very high level uh this is the
+
+196
+00:06:47,280 --> 00:06:48,400
+sort of the approach
+
+197
+00:06:48,400 --> 00:06:52,000
+uh that i take um and you can see what
+
+198
+00:06:52,000 --> 00:06:52,319
+the
+
+199
+00:06:52,319 --> 00:06:54,080
+the key here is really logging the
+
+200
+00:06:54,080 --> 00:06:55,520
+messages
+
+201
+00:06:55,520 --> 00:06:58,880
+um any questions
+
+202
+00:06:58,880 --> 00:07:02,000
+or comments on
+
+203
+00:07:02,000 --> 00:07:04,160
+this this approach and i know it's a
+
+204
+00:07:04,160 --> 00:07:05,440
+very high level but at least give you
+
+205
+00:07:05,440 --> 00:07:06,960
+some sense about like how i approach
+
+206
+00:07:06,960 --> 00:07:07,919
+this
+
+207
+00:07:07,919 --> 00:07:10,560
+uh so the messages here are the rpc yes
+
+208
+00:07:10,560 --> 00:07:11,520
+all the rpcs
+
+209
+00:07:11,520 --> 00:07:15,670
+okay
+
+210
+00:07:15,680 --> 00:07:18,720
+okay so uh so some so do another quick
+
+211
+00:07:18,720 --> 00:07:19,440
+question yeah
+
+212
+00:07:19,440 --> 00:07:22,240
+go ahead sir so what's a good like
+
+213
+00:07:22,240 --> 00:07:22,880
+approach
+
+214
+00:07:22,880 --> 00:07:25,520
+for deciding the granularity of what to
+
+215
+00:07:25,520 --> 00:07:26,880
+log and what not to log
+
+216
+00:07:26,880 --> 00:07:29,199
+ah that's a very good exact great
+
+217
+00:07:29,199 --> 00:07:30,960
+question i was hoping someone was asking
+
+218
+00:07:30,960 --> 00:07:33,840
+um i tend to be logged things on the
+
+219
+00:07:33,840 --> 00:07:34,800
+pretty fine grain
+
+220
+00:07:34,800 --> 00:07:37,919
+uh glamour nelly and log everything and
+
+221
+00:07:37,919 --> 00:07:42,000
+uh then i use you know whatever i
+
+222
+00:07:42,000 --> 00:07:44,160
+pulled uh you know basically log in an
+
+223
+00:07:44,160 --> 00:07:45,199
+editor or uh
+
+224
+00:07:45,199 --> 00:07:47,520
+and you use unix utilities like crap to
+
+225
+00:07:47,520 --> 00:07:48,720
+basically pull out the things that are
+
+226
+00:07:48,720 --> 00:07:50,560
+actually really interested in
+
+227
+00:07:50,560 --> 00:07:52,400
+um and the reason i'm doing that is you
+
+228
+00:07:52,400 --> 00:07:53,680
+know just you know sometimes i don't
+
+229
+00:07:53,680 --> 00:07:55,280
+know about level granularity
+
+230
+00:07:55,280 --> 00:07:58,560
+uh i want to study something and uh
+
+231
+00:07:58,560 --> 00:07:59,919
+i don't want to go back and run the test
+
+232
+00:07:59,919 --> 00:08:01,599
+case again and i just collect everything
+
+233
+00:08:01,599 --> 00:08:02,479
+and then you know
+
+234
+00:08:02,479 --> 00:08:04,160
+filter the stuff out that i don't that i
+
+235
+00:08:04,160 --> 00:08:06,560
+care about and this brings me on
+
+236
+00:08:06,560 --> 00:08:09,680
+uh so some people write quite a bit of
+
+237
+00:08:09,680 --> 00:08:10,960
+infrastructure
+
+238
+00:08:10,960 --> 00:08:13,520
+for debugging uh the using the logs or
+
+239
+00:08:13,520 --> 00:08:14,879
+making logs more
+
+240
+00:08:14,879 --> 00:08:18,080
+easier to uh understand
+
+241
+00:08:18,080 --> 00:08:20,160
+i'm pretty primitive you know deep train
+
+242
+00:08:20,160 --> 00:08:22,000
+f and lots of information
+
+243
+00:08:22,000 --> 00:08:24,879
+although the i i structure my printouts
+
+244
+00:08:24,879 --> 00:08:25,120
+in
+
+245
+00:08:25,120 --> 00:08:27,039
+sort of a clear manner so like i can see
+
+246
+00:08:27,039 --> 00:08:29,520
+what the source what the destination is
+
+247
+00:08:29,520 --> 00:08:32,880
+and what the the rpc itself is and so i
+
+248
+00:08:32,880 --> 00:08:33,680
+can sort of
+
+249
+00:08:33,680 --> 00:08:37,919
+figure uh grab the filter very quickly
+
+250
+00:08:37,919 --> 00:08:40,000
+because all the text lines have a
+
+251
+00:08:40,000 --> 00:08:42,560
+particular format
+
+252
+00:08:42,560 --> 00:08:44,800
+some people spent quite a bit of time
+
+253
+00:08:44,800 --> 00:08:47,120
+building some infrastructure to
+
+254
+00:08:47,120 --> 00:08:49,200
+make it all easier i think one of the
+
+255
+00:08:49,200 --> 00:08:50,160
+tas the
+
+256
+00:08:50,160 --> 00:08:53,040
+jose when he took the class he actually
+
+257
+00:08:53,040 --> 00:08:53,600
+built some
+
+258
+00:08:53,600 --> 00:08:54,880
+software to make a decision with a
+
+259
+00:08:54,880 --> 00:08:56,320
+little bit of a pearl screen a python
+
+260
+00:08:56,320 --> 00:08:57,839
+script sex make it easier to actually
+
+261
+00:08:57,839 --> 00:08:58,959
+partial walks and
+
+262
+00:08:58,959 --> 00:09:00,880
+i thought it may be interesting to see
+
+263
+00:09:00,880 --> 00:09:02,080
+what he did
+
+264
+00:09:02,080 --> 00:09:04,880
+so i'm gonna stop sharing and then ask
+
+265
+00:09:04,880 --> 00:09:05,920
+jose to share
+
+266
+00:09:05,920 --> 00:09:09,040
+and maybe demo like how his uh log
+
+267
+00:09:09,040 --> 00:09:12,320
+uh structure works sorry uh i have a
+
+268
+00:09:12,320 --> 00:09:14,160
+follow-up question yeah
+
+269
+00:09:14,160 --> 00:09:17,120
+so how do you make the debugging prints
+
+270
+00:09:17,120 --> 00:09:18,800
+go into a log rather than
+
+271
+00:09:18,800 --> 00:09:21,680
+the standard out oh usually bigger than
+
+272
+00:09:21,680 --> 00:09:24,080
+to an an output to a
+
+273
+00:09:24,080 --> 00:09:27,680
+file so so do you just pipe everything
+
+274
+00:09:27,680 --> 00:09:28,640
+into a file
+
+275
+00:09:28,640 --> 00:09:31,200
+yes i pipe everything into a file got it
+
+276
+00:09:31,200 --> 00:09:35,030
+thank you
+
+277
+00:09:35,040 --> 00:09:36,720
+so i guess you just closed a screen and
+
+278
+00:09:36,720 --> 00:09:38,399
+jose go ahead
+
+279
+00:09:38,399 --> 00:09:40,640
+you can hear me again yeah i can hear
+
+280
+00:09:40,640 --> 00:09:42,320
+you okay awesome
+
+281
+00:09:42,320 --> 00:09:45,279
+um so yeah as i kind of agree you know a
+
+282
+00:09:45,279 --> 00:09:47,200
+bunch of points i i this
+
+283
+00:09:47,200 --> 00:09:48,959
+thing is very similar to like how franz
+
+284
+00:09:48,959 --> 00:09:50,640
+was describing them pretty aggressive
+
+285
+00:09:50,640 --> 00:09:51,360
+vloggers i
+
+286
+00:09:51,360 --> 00:09:54,640
+try to kind of just lock every single
+
+287
+00:09:54,640 --> 00:09:55,279
+event
+
+288
+00:09:55,279 --> 00:09:58,399
+that is going on and again i also have
+
+289
+00:09:58,399 --> 00:09:59,519
+like a kind of like a
+
+290
+00:09:59,519 --> 00:10:02,560
+format that i follow and what i'm gonna
+
+291
+00:10:02,560 --> 00:10:04,000
+show is kind of how
+
+292
+00:10:04,000 --> 00:10:06,480
+went about making my life easier going
+
+293
+00:10:06,480 --> 00:10:08,399
+and passing through the logs
+
+294
+00:10:08,399 --> 00:10:12,079
+the high level idea is i do very simple
+
+295
+00:10:12,079 --> 00:10:13,680
+structuring in go
+
+296
+00:10:13,680 --> 00:10:15,839
+and then i usually dump that the
+
+297
+00:10:15,839 --> 00:10:18,000
+standard out or to a file and then i use
+
+298
+00:10:18,000 --> 00:10:20,320
+python scripts to actually do the kind
+
+299
+00:10:20,320 --> 00:10:21,839
+of like all the coloring and the
+
+300
+00:10:21,839 --> 00:10:22,880
+structuring
+
+301
+00:10:22,880 --> 00:10:25,839
+since that's much easier to do in python
+
+302
+00:10:25,839 --> 00:10:27,920
+than in that it got
+
+303
+00:10:27,920 --> 00:10:31,120
+and so here's for example what i get out
+
+304
+00:10:31,120 --> 00:10:32,000
+of when i run
+
+305
+00:10:32,000 --> 00:10:34,160
+a testing go so when i enable the
+
+306
+00:10:34,160 --> 00:10:35,200
+verbosity
+
+307
+00:10:35,200 --> 00:10:37,360
+i just get like an output that looks
+
+308
+00:10:37,360 --> 00:10:38,720
+something like this
+
+309
+00:10:38,720 --> 00:10:41,200
+and here what i'm logging is kind of
+
+310
+00:10:41,200 --> 00:10:42,880
+like the number of milliseconds
+
+311
+00:10:42,880 --> 00:10:44,880
+is the first column and that's fairly
+
+312
+00:10:44,880 --> 00:10:46,399
+useful when you are trying to debug
+
+313
+00:10:46,399 --> 00:10:49,040
+timer events things like that or trying
+
+314
+00:10:49,040 --> 00:10:50,079
+to see how long
+
+315
+00:10:50,079 --> 00:10:52,560
+an rpc takes to fail then the second
+
+316
+00:10:52,560 --> 00:10:53,200
+column
+
+317
+00:10:53,200 --> 00:10:56,079
+is what i like to call topics they are
+
+318
+00:10:56,079 --> 00:10:58,000
+not levels because they are no
+
+319
+00:10:58,000 --> 00:10:59,440
+there's no hierarchy between them
+
+320
+00:10:59,440 --> 00:11:01,360
+they're just related to different events
+
+321
+00:11:01,360 --> 00:11:03,360
+incredi probably a lot of you by now
+
+322
+00:11:03,360 --> 00:11:03,920
+have
+
+323
+00:11:03,920 --> 00:11:05,920
+realized that in rather there's a lot of
+
+324
+00:11:05,920 --> 00:11:07,120
+things going on
+
+325
+00:11:07,120 --> 00:11:09,360
+like timers there's elections there's
+
+326
+00:11:09,360 --> 00:11:10,160
+like logs
+
+327
+00:11:10,160 --> 00:11:12,240
+things being applied communication with
+
+328
+00:11:12,240 --> 00:11:13,519
+the state machine
+
+329
+00:11:13,519 --> 00:11:15,279
+and all of those events happen with the
+
+330
+00:11:15,279 --> 00:11:17,040
+slightly different frequencies
+
+331
+00:11:17,040 --> 00:11:19,920
+so if you want to later just like select
+
+332
+00:11:19,920 --> 00:11:20,720
+some of them
+
+333
+00:11:20,720 --> 00:11:23,680
+or like decide to ignore the more versed
+
+334
+00:11:23,680 --> 00:11:24,399
+ones
+
+335
+00:11:24,399 --> 00:11:26,880
+it's really handy to just have like that
+
+336
+00:11:26,880 --> 00:11:27,760
+um
+
+337
+00:11:27,760 --> 00:11:29,600
+category there and then the third column
+
+338
+00:11:29,600 --> 00:11:31,120
+probably a lot of you have
+
+339
+00:11:31,120 --> 00:11:33,680
+something like this is which server like
+
+340
+00:11:33,680 --> 00:11:35,360
+who is saying this message because
+
+341
+00:11:35,360 --> 00:11:36,720
+without that it's really hard to
+
+342
+00:11:36,720 --> 00:11:38,800
+question about what is going on
+
+343
+00:11:38,800 --> 00:11:40,800
+and the rest is just like a free form
+
+344
+00:11:40,800 --> 00:11:42,079
+message that explains
+
+345
+00:11:42,079 --> 00:11:44,480
+kind of like what this message is about
+
+346
+00:11:44,480 --> 00:11:46,959
+and even though this is kind of just the
+
+347
+00:11:46,959 --> 00:11:50,480
+very initial test that you run the one
+
+348
+00:11:50,480 --> 00:11:50,880
+that
+
+349
+00:11:50,880 --> 00:11:53,200
+just tests that you can do an election
+
+350
+00:11:53,200 --> 00:11:54,320
+you actually have to like
+
+351
+00:11:54,320 --> 00:11:57,120
+read to follow what the logic is going
+
+352
+00:11:57,120 --> 00:11:58,079
+on here
+
+353
+00:11:58,079 --> 00:12:00,959
+so the way i made this easier and kind
+
+354
+00:12:00,959 --> 00:12:01,920
+of like first
+
+355
+00:12:01,920 --> 00:12:04,000
+approach and this is what i did when i
+
+356
+00:12:04,000 --> 00:12:06,000
+took the class was just
+
+357
+00:12:06,000 --> 00:12:08,720
+convert all the topics into colors like
+
+358
+00:12:08,720 --> 00:12:09,200
+most
+
+359
+00:12:09,200 --> 00:12:11,519
+modern terminals supports like wide
+
+360
+00:12:11,519 --> 00:12:12,480
+array of
+
+361
+00:12:12,480 --> 00:12:15,839
+color support and again by doing this in
+
+362
+00:12:15,839 --> 00:12:17,839
+python you can use some fantastic
+
+363
+00:12:17,839 --> 00:12:18,800
+libraries
+
+364
+00:12:18,800 --> 00:12:20,720
+that do all the heavy lifting so you
+
+365
+00:12:20,720 --> 00:12:22,720
+don't have to get in the
+
+366
+00:12:22,720 --> 00:12:25,680
+in the width of doing this and here i
+
+367
+00:12:25,680 --> 00:12:27,360
+just have included different events with
+
+368
+00:12:27,360 --> 00:12:28,560
+different colors
+
+369
+00:12:28,560 --> 00:12:30,880
+and as you get more familiar with the
+
+370
+00:12:30,880 --> 00:12:33,040
+colors for example here all the timers
+
+371
+00:12:33,040 --> 00:12:34,480
+events are in gray so
+
+372
+00:12:34,480 --> 00:12:36,480
+maybe they are easier to ignore or we
+
+373
+00:12:36,480 --> 00:12:37,600
+are looking for
+
+374
+00:12:37,600 --> 00:12:40,000
+when someone is voting we can look at
+
+375
+00:12:40,000 --> 00:12:42,720
+like xi'an which is related to votes
+
+376
+00:12:42,720 --> 00:12:46,000
+and that like will just encode visually
+
+377
+00:12:46,000 --> 00:12:47,120
+things that are
+
+378
+00:12:47,120 --> 00:12:49,440
+much easier to pick up like for example
+
+379
+00:12:49,440 --> 00:12:51,279
+here jello is when we enact
+
+380
+00:12:51,279 --> 00:12:53,920
+elect a new leader we still have to
+
+381
+00:12:53,920 --> 00:12:54,720
+decide
+
+382
+00:12:54,720 --> 00:12:57,920
+who is saying what and in order to do
+
+383
+00:12:57,920 --> 00:12:58,320
+that
+
+384
+00:12:58,320 --> 00:13:00,880
+what i incorporated just having
+
+385
+00:13:00,880 --> 00:13:02,320
+different columns
+
+386
+00:13:02,320 --> 00:13:05,120
+and again what i'm doing is just running
+
+387
+00:13:05,120 --> 00:13:06,000
+here like what i'm doing
+
+388
+00:13:06,000 --> 00:13:08,639
+just running this standard test script
+
+389
+00:13:08,639 --> 00:13:10,240
+and then just piping that
+
+390
+00:13:10,240 --> 00:13:13,279
+into like the the script that i wrote in
+
+391
+00:13:13,279 --> 00:13:15,200
+this case i'm specifying that i have
+
+392
+00:13:15,200 --> 00:13:16,720
+three columns because of like three
+
+393
+00:13:16,720 --> 00:13:18,480
+peers in this test case
+
+394
+00:13:18,480 --> 00:13:20,880
+and i have now decided to ignore the
+
+395
+00:13:20,880 --> 00:13:21,839
+timer
+
+396
+00:13:21,839 --> 00:13:23,920
+like the events with the timer topic
+
+397
+00:13:23,920 --> 00:13:25,839
+because there are like too many of them
+
+398
+00:13:25,839 --> 00:13:27,440
+and if time in logic is working we
+
+399
+00:13:27,440 --> 00:13:29,279
+probably don't need them to debug what
+
+400
+00:13:29,279 --> 00:13:30,560
+is going on
+
+401
+00:13:30,560 --> 00:13:33,200
+and if you look at this law compared to
+
+402
+00:13:33,200 --> 00:13:35,200
+what we the plaintext log
+
+403
+00:13:35,200 --> 00:13:37,680
+is fairly easy to see that what's going
+
+404
+00:13:37,680 --> 00:13:38,320
+on is like
+
+405
+00:13:38,320 --> 00:13:40,560
+three servers are starting the last one
+
+406
+00:13:40,560 --> 00:13:42,480
+is becoming a candidate the other two
+
+407
+00:13:42,480 --> 00:13:43,920
+are voting for that
+
+408
+00:13:43,920 --> 00:13:45,920
+it's becoming a leader as soon as it
+
+409
+00:13:45,920 --> 00:13:47,519
+gets the first vote and then it just
+
+410
+00:13:47,519 --> 00:13:50,560
+heartbeats through the rest of the test
+
+411
+00:13:50,560 --> 00:13:52,480
+and there's nothing else to to look at
+
+412
+00:13:52,480 --> 00:13:55,760
+here but now again when compared to
+
+413
+00:13:55,760 --> 00:13:57,920
+this it's kind of like an order of
+
+414
+00:13:57,920 --> 00:13:59,760
+magnitude easier to pick up what is
+
+415
+00:13:59,760 --> 00:14:00,720
+going on
+
+416
+00:14:00,720 --> 00:14:02,800
+and as you tweak that to your liking it
+
+417
+00:14:02,800 --> 00:14:05,120
+becomes more and more efficient
+
+418
+00:14:05,120 --> 00:14:08,320
+and as you move to like harder tests
+
+419
+00:14:08,320 --> 00:14:10,240
+a lot of you have probably have had to
+
+420
+00:14:10,240 --> 00:14:11,600
+look at the logs of the
+
+421
+00:14:11,600 --> 00:14:15,040
+backup test in the 2b lab
+
+422
+00:14:15,040 --> 00:14:17,360
+there will be lots and lots of events
+
+423
+00:14:17,360 --> 00:14:18,720
+going on and even
+
+424
+00:14:18,720 --> 00:14:20,639
+kind of even if you love what you need
+
+425
+00:14:20,639 --> 00:14:23,519
+it might become like a daunting task
+
+426
+00:14:23,519 --> 00:14:26,000
+going through like thousands of lines of
+
+427
+00:14:26,000 --> 00:14:28,160
+vlogs just searching for the point
+
+428
+00:14:28,160 --> 00:14:30,000
+of failure and trying to reason of
+
+429
+00:14:30,000 --> 00:14:32,480
+what's going on
+
+430
+00:14:32,480 --> 00:14:36,079
+again if we look just like make this
+
+431
+00:14:36,079 --> 00:14:38,959
+a kind of like a simpler format to
+
+432
+00:14:38,959 --> 00:14:40,240
+visualize
+
+433
+00:14:40,240 --> 00:14:42,480
+we can quickly see what's going on we
+
+434
+00:14:42,480 --> 00:14:43,519
+just have like
+
+435
+00:14:43,519 --> 00:14:46,160
+five different servers that are starting
+
+436
+00:14:46,160 --> 00:14:48,320
+the first one is becoming a candidate
+
+437
+00:14:48,320 --> 00:14:50,240
+the other ones are voting for it
+
+438
+00:14:50,240 --> 00:14:51,760
+becoming a leader
+
+439
+00:14:51,760 --> 00:14:54,079
+and by looking at the different columns
+
+440
+00:14:54,079 --> 00:14:55,360
+we can see for example all
+
+441
+00:14:55,360 --> 00:14:57,839
+like purple encodes whenever something
+
+442
+00:14:57,839 --> 00:14:59,920
+is committed or applied so we can see
+
+443
+00:14:59,920 --> 00:15:00,480
+that
+
+444
+00:15:00,480 --> 00:15:03,600
+a new entry is received and
+
+445
+00:15:03,600 --> 00:15:05,839
+these these servers are receiving it and
+
+446
+00:15:05,839 --> 00:15:06,720
+because
+
+447
+00:15:06,720 --> 00:15:10,399
+backup 2 has like a very very bold log
+
+448
+00:15:10,399 --> 00:15:13,360
+i have and a lot of drop rpcs i'm also
+
+449
+00:15:13,360 --> 00:15:14,880
+ignoring
+
+450
+00:15:14,880 --> 00:15:17,680
+those topics here and as the test goes
+
+451
+00:15:17,680 --> 00:15:18,399
+on
+
+452
+00:15:18,399 --> 00:15:20,079
+we're gonna start reasoning about what's
+
+453
+00:15:20,079 --> 00:15:22,480
+going on it's also fairly helpful
+
+454
+00:15:22,480 --> 00:15:24,639
+to just have like some print statements
+
+455
+00:15:24,639 --> 00:15:26,560
+or like the bug statements in the test
+
+456
+00:15:26,560 --> 00:15:27,199
+code you
+
+457
+00:15:27,199 --> 00:15:29,680
+just can modify there to know what the
+
+458
+00:15:29,680 --> 00:15:31,680
+test is doing for example here the test
+
+459
+00:15:31,680 --> 00:15:32,399
+detects
+
+460
+00:15:32,399 --> 00:15:35,920
+that the first server seo is the leader
+
+461
+00:15:35,920 --> 00:15:39,040
+and then this connects s2 through s4
+
+462
+00:15:39,040 --> 00:15:40,240
+which are like this
+
+463
+00:15:40,240 --> 00:15:42,720
+3 on the right side and that's pretty
+
+464
+00:15:42,720 --> 00:15:43,759
+much what happens
+
+465
+00:15:43,759 --> 00:15:46,079
+we just get like a stream of entries
+
+466
+00:15:46,079 --> 00:15:48,079
+that won't be committed because there's
+
+467
+00:15:48,079 --> 00:15:49,680
+only two servers
+
+468
+00:15:49,680 --> 00:15:51,759
+that can talk to each other and then
+
+469
+00:15:51,759 --> 00:15:53,440
+after a while
+
+470
+00:15:53,440 --> 00:15:55,440
+we see that the first two are now
+
+471
+00:15:55,440 --> 00:15:57,519
+disconnected and the
+
+472
+00:15:57,519 --> 00:15:59,920
+the three on the right are reconnected
+
+473
+00:15:59,920 --> 00:16:00,560
+and now
+
+474
+00:16:00,560 --> 00:16:03,360
+they can form a majority and that's what
+
+475
+00:16:03,360 --> 00:16:04,720
+we will see like the
+
+476
+00:16:04,720 --> 00:16:06,639
+the last one becomes a candidate
+
+477
+00:16:06,639 --> 00:16:08,160
+achieves a majority
+
+478
+00:16:08,160 --> 00:16:11,440
+and kind of repeatedly we see this color
+
+479
+00:16:11,440 --> 00:16:12,959
+pattern of like green
+
+480
+00:16:12,959 --> 00:16:15,519
+and purple kind of like this staircase
+
+481
+00:16:15,519 --> 00:16:17,120
+signifying that oh yeah it's
+
+482
+00:16:17,120 --> 00:16:20,160
+receiving an entry and propagating it
+
+483
+00:16:20,160 --> 00:16:22,160
+through the other servers and the
+
+484
+00:16:22,160 --> 00:16:24,480
+disconnected servers here convert into a
+
+485
+00:16:24,480 --> 00:16:25,519
+candidate
+
+486
+00:16:25,519 --> 00:16:27,519
+and hopefully i've convinced you by now
+
+487
+00:16:27,519 --> 00:16:28,800
+by just
+
+488
+00:16:28,800 --> 00:16:30,959
+slightly changing the the presentation
+
+489
+00:16:30,959 --> 00:16:32,720
+of your logs kind of like the
+
+490
+00:16:32,720 --> 00:16:35,360
+mental effort to like go through them
+
+491
+00:16:35,360 --> 00:16:37,199
+can significantly decrease
+
+492
+00:16:37,199 --> 00:16:39,279
+and even though this is like really
+
+493
+00:16:39,279 --> 00:16:40,639
+fancy there's
+
+494
+00:16:40,639 --> 00:16:43,600
+not a lot of like fancy code going on i
+
+495
+00:16:43,600 --> 00:16:44,639
+just use
+
+496
+00:16:44,639 --> 00:16:47,839
+some of the self python libraries mainly
+
+497
+00:16:47,839 --> 00:16:48,720
+reads
+
+498
+00:16:48,720 --> 00:16:51,519
+and kind of all fits in about like a
+
+499
+00:16:51,519 --> 00:16:52,560
+hundred lines of
+
+500
+00:16:52,560 --> 00:16:56,480
+python script and if you're interested i
+
+501
+00:16:56,480 --> 00:16:58,560
+wrote like a blog post that will be
+
+502
+00:16:58,560 --> 00:17:01,519
+linking on the website on piazza about
+
+503
+00:17:01,519 --> 00:17:04,640
+kind of like the these steps to build a
+
+504
+00:17:04,640 --> 00:17:06,319
+tool like this and kind of how
+
+505
+00:17:06,319 --> 00:17:08,400
+it all fit together so like some like
+
+506
+00:17:08,400 --> 00:17:09,600
+design decisions
+
+507
+00:17:09,600 --> 00:17:12,480
+related to that and if anyone has like
+
+508
+00:17:12,480 --> 00:17:13,199
+any questions
+
+509
+00:17:13,199 --> 00:17:23,350
+specific to this happy to answer them
+
+510
+00:17:23,360 --> 00:17:26,720
+any questions for jose um yeah i have a
+
+511
+00:17:26,720 --> 00:17:28,480
+question more about like general
+
+512
+00:17:28,480 --> 00:17:32,320
+logging so i know that i had some bugs
+
+513
+00:17:32,320 --> 00:17:35,679
+that when i put in the logging they were
+
+514
+00:17:35,679 --> 00:17:37,280
+no longer there
+
+515
+00:17:37,280 --> 00:17:40,400
+um because of some timing issue
+
+516
+00:17:40,400 --> 00:17:43,120
+or perhaps a concurrency issue so what
+
+517
+00:17:43,120 --> 00:17:45,280
+what do we do then
+
+518
+00:17:45,280 --> 00:17:48,000
+uh okay so there's a couple things i do
+
+519
+00:17:48,000 --> 00:17:49,120
+uh first of all
+
+520
+00:17:49,120 --> 00:17:50,880
+one reason i log it's sort of a fine
+
+521
+00:17:50,880 --> 00:17:52,880
+grain always at the same level of
+
+522
+00:17:52,880 --> 00:17:53,679
+granularity
+
+523
+00:17:53,679 --> 00:17:56,000
+and the fine-grained levelity so that i
+
+524
+00:17:56,000 --> 00:17:57,280
+always have a trace with everything
+
+525
+00:17:57,280 --> 00:18:00,240
+and i generally don't have to go back
+
+526
+00:18:00,240 --> 00:18:01,039
+the other
+
+527
+00:18:01,039 --> 00:18:04,480
+thing to do is i do run the test many
+
+528
+00:18:04,480 --> 00:18:05,600
+many many times and
+
+529
+00:18:05,600 --> 00:18:08,480
+they save all logs and then once i hit
+
+530
+00:18:08,480 --> 00:18:09,600
+the wrong one
+
+531
+00:18:09,600 --> 00:18:11,919
+once i hit a bug then you know i study
+
+532
+00:18:11,919 --> 00:18:16,710
+that particular log
+
+533
+00:18:16,720 --> 00:18:18,160
+and so for example if i run something
+
+534
+00:18:18,160 --> 00:18:20,080
+overnight i just you know save all the
+
+535
+00:18:20,080 --> 00:18:21,840
+logs from all the runs overnight and
+
+536
+00:18:21,840 --> 00:18:22,160
+then
+
+537
+00:18:22,160 --> 00:18:30,310
+grab the one that narrow field
+
+538
+00:18:30,320 --> 00:18:32,960
+any further questions on the topic of
+
+539
+00:18:32,960 --> 00:18:39,270
+logging
+
+540
+00:18:39,280 --> 00:18:42,880
+okay good let me uh proceed uh
+
+541
+00:18:42,880 --> 00:18:44,240
+but before again you know looking at
+
+542
+00:18:44,240 --> 00:18:45,520
+code i want to talk a little bit about
+
+543
+00:18:45,520 --> 00:18:46,880
+the structure
+
+544
+00:18:46,880 --> 00:18:49,440
+uh that my particular solution has and
+
+545
+00:18:49,440 --> 00:18:50,880
+this is definitely not the only
+
+546
+00:18:50,880 --> 00:18:51,520
+structure
+
+547
+00:18:51,520 --> 00:18:52,799
+you can do it in many many different
+
+548
+00:18:52,799 --> 00:18:55,120
+ways and you're you're free to actually
+
+549
+00:18:55,120 --> 00:18:56,880
+do it in many different ways
+
+550
+00:18:56,880 --> 00:18:59,039
+and the fact that every year when i
+
+551
+00:18:59,039 --> 00:19:01,200
+teach class you know i actually
+
+552
+00:19:01,200 --> 00:19:04,559
+try to rewrite write implement the labs
+
+553
+00:19:04,559 --> 00:19:05,039
+again
+
+554
+00:19:05,039 --> 00:19:06,640
+and often experiment with you know
+
+555
+00:19:06,640 --> 00:19:08,640
+different types of ways of implementing
+
+556
+00:19:08,640 --> 00:19:09,520
+it
+
+557
+00:19:09,520 --> 00:19:12,400
+uh so the one i'll share you uh with you
+
+558
+00:19:12,400 --> 00:19:13,200
+today
+
+559
+00:19:13,200 --> 00:19:15,840
+is one that i wrote over iap you know
+
+560
+00:19:15,840 --> 00:19:16,960
+sort of getting ready
+
+561
+00:19:16,960 --> 00:19:19,679
+for a24 uh and then it has the following
+
+562
+00:19:19,679 --> 00:19:20,640
+structure
+
+563
+00:19:20,640 --> 00:19:22,960
+it's a pretty standard structure uh you
+
+564
+00:19:22,960 --> 00:19:25,520
+know like so let me just draw a box
+
+565
+00:19:25,520 --> 00:19:28,640
+you know signifying the raft library
+
+566
+00:19:28,640 --> 00:19:32,640
+uh you know there's two basically
+
+567
+00:19:32,640 --> 00:19:35,120
+api calls grade one start to sort of
+
+568
+00:19:35,120 --> 00:19:35,760
+initiate
+
+569
+00:19:35,760 --> 00:19:39,200
+um uh in append entries and
+
+570
+00:19:39,200 --> 00:19:41,760
+to initiate a logging operation in one
+
+571
+00:19:41,760 --> 00:19:43,760
+to actually
+
+572
+00:19:43,760 --> 00:19:46,400
+uh and output you know that those come
+
+573
+00:19:46,400 --> 00:19:48,480
+through the applied channel
+
+574
+00:19:48,480 --> 00:19:51,760
+um and then uh in you know the one
+
+575
+00:19:51,760 --> 00:19:53,280
+documentation i'll be showing you how
+
+576
+00:19:53,280 --> 00:19:53,760
+basically
+
+577
+00:19:53,760 --> 00:19:56,960
+one essentially one structure you know
+
+578
+00:19:56,960 --> 00:19:59,200
+the raft structure
+
+579
+00:19:59,200 --> 00:20:01,520
+that basically has all the state of the
+
+580
+00:20:01,520 --> 00:20:02,480
+uh
+
+581
+00:20:02,480 --> 00:20:05,440
+of the ref library you know the all the
+
+582
+00:20:05,440 --> 00:20:07,280
+sort of variables that are in the figure
+
+583
+00:20:07,280 --> 00:20:08,159
+two
+
+584
+00:20:08,159 --> 00:20:10,799
+and basically i have one lock on this
+
+585
+00:20:10,799 --> 00:20:13,430
+guy
+
+586
+00:20:13,440 --> 00:20:16,720
+and uh basically all my uh so i use
+
+587
+00:20:16,720 --> 00:20:18,960
+quite coarse grained locking you know my
+
+588
+00:20:18,960 --> 00:20:20,640
+rpc handlers all my
+
+589
+00:20:20,640 --> 00:20:23,520
+uh you know start uh take basically just
+
+590
+00:20:23,520 --> 00:20:24,480
+one lock
+
+591
+00:20:24,480 --> 00:20:26,240
+uh do whatever the stuff they need to be
+
+592
+00:20:26,240 --> 00:20:27,840
+do do and then
+
+593
+00:20:27,840 --> 00:20:30,880
+release the lock um so there's a couple
+
+594
+00:20:30,880 --> 00:20:31,679
+frets
+
+595
+00:20:31,679 --> 00:20:33,919
+that's sort of running around one of
+
+596
+00:20:33,919 --> 00:20:35,679
+course is the ticker threat you know
+
+597
+00:20:35,679 --> 00:20:36,480
+that we sort of
+
+598
+00:20:36,480 --> 00:20:40,320
+gave you uh and you know that just wait
+
+599
+00:20:40,320 --> 00:20:41,760
+as i'll show you in a second that will
+
+600
+00:20:41,760 --> 00:20:43,200
+wait for you know some number of
+
+601
+00:20:43,200 --> 00:20:43,840
+milliseconds
+
+602
+00:20:43,840 --> 00:20:46,960
+you know 50 milliseconds and then
+
+603
+00:20:46,960 --> 00:20:48,799
+run and then check you know periodically
+
+604
+00:20:48,799 --> 00:20:50,799
+if any uh timeout election time
+
+605
+00:20:50,799 --> 00:20:52,320
+has gone off and then does whatever
+
+606
+00:20:52,320 --> 00:20:53,919
+needs to be done
+
+607
+00:20:53,919 --> 00:20:56,880
+uh i have one fret dedicated to writing
+
+608
+00:20:56,880 --> 00:20:58,000
+on the apply channel
+
+609
+00:20:58,000 --> 00:20:59,919
+and so no other thread actually arrives
+
+610
+00:20:59,919 --> 00:21:01,360
+to the apply channel there's only a
+
+611
+00:21:01,360 --> 00:21:02,240
+single one
+
+612
+00:21:02,240 --> 00:21:04,159
+and it basically sleeps on a condition
+
+613
+00:21:04,159 --> 00:21:07,190
+variable
+
+614
+00:21:07,200 --> 00:21:11,120
+and so when for example a new account
+
+615
+00:21:11,120 --> 00:21:13,039
+entry comes in from the
+
+616
+00:21:13,039 --> 00:21:16,559
+leader and the commit uh
+
+617
+00:21:16,559 --> 00:21:19,039
+index goes up then you know the thread
+
+618
+00:21:19,039 --> 00:21:20,240
+that thread will
+
+619
+00:21:20,240 --> 00:21:22,080
+uh wake up on the signal on the
+
+620
+00:21:22,080 --> 00:21:23,679
+condition variable that will wake up the
+
+621
+00:21:23,679 --> 00:21:24,720
+thread that actually
+
+622
+00:21:24,720 --> 00:21:26,240
+looks at the applied that writes in the
+
+623
+00:21:26,240 --> 00:21:28,320
+applied channel it will grab whatever
+
+624
+00:21:28,320 --> 00:21:31,039
+you know entries out of the log and you
+
+625
+00:21:31,039 --> 00:21:34,400
+know stick them on the apply channel
+
+626
+00:21:34,400 --> 00:21:37,600
+um and uh so
+
+627
+00:21:37,600 --> 00:21:38,720
+that's one and the reason i have a
+
+628
+00:21:38,720 --> 00:21:39,919
+single thread is that of course you
+
+629
+00:21:39,919 --> 00:21:40,960
+can't hold locks
+
+630
+00:21:40,960 --> 00:21:43,039
+while riding across the applied channel
+
+631
+00:21:43,039 --> 00:21:44,159
+at least you know might
+
+632
+00:21:44,159 --> 00:21:47,280
+cause you some problems later um and so
+
+633
+00:21:47,280 --> 00:21:48,320
+i just have a single thread that
+
+634
+00:21:48,320 --> 00:21:49,280
+actually arrives on the
+
+635
+00:21:49,280 --> 00:21:53,679
+applied channel then uh
+
+636
+00:21:53,679 --> 00:21:56,159
+the there's of course you know number of
+
+637
+00:21:56,159 --> 00:21:57,600
+things coming in from the outside you
+
+638
+00:21:57,600 --> 00:21:58,400
+know require
+
+639
+00:21:58,400 --> 00:22:00,720
+messages coming in and of course each
+
+640
+00:22:00,720 --> 00:22:02,799
+message or each rpc you know starts its
+
+641
+00:22:02,799 --> 00:22:04,159
+own thread so like go
+
+642
+00:22:04,159 --> 00:22:06,400
+well the rpc library will basically
+
+643
+00:22:06,400 --> 00:22:07,679
+start a thread for every incoming
+
+644
+00:22:07,679 --> 00:22:08,640
+message
+
+645
+00:22:08,640 --> 00:22:11,120
+and basically the way i process every
+
+646
+00:22:11,120 --> 00:22:12,240
+incoming messages
+
+647
+00:22:12,240 --> 00:22:13,679
+the first thing it grabs the log on the
+
+648
+00:22:13,679 --> 00:22:15,760
+route structure it reads and writes you
+
+649
+00:22:15,760 --> 00:22:17,280
+know the graph structure and then when
+
+650
+00:22:17,280 --> 00:22:17,760
+it's done
+
+651
+00:22:17,760 --> 00:22:20,880
+it releases the the log and maybe uh
+
+652
+00:22:20,880 --> 00:22:23,039
+lock and maybe in between it will uh
+
+653
+00:22:23,039 --> 00:22:24,080
+update you know or
+
+654
+00:22:24,080 --> 00:22:27,840
+signal on the condition variable too
+
+655
+00:22:27,840 --> 00:22:29,280
+then you know of course like start
+
+656
+00:22:29,280 --> 00:22:31,440
+itself you know runs on the particular
+
+657
+00:22:31,440 --> 00:22:32,720
+fret
+
+658
+00:22:32,720 --> 00:22:34,720
+so it jumps into the raft library you
+
+659
+00:22:34,720 --> 00:22:36,000
+know does the same thing you know
+
+660
+00:22:36,000 --> 00:22:37,039
+acquire the lock
+
+661
+00:22:37,039 --> 00:22:42,950
+and then let me uh
+
+662
+00:22:42,960 --> 00:22:45,280
+you know appended to the the log in the
+
+663
+00:22:45,280 --> 00:22:46,640
+log structure
+
+664
+00:22:46,640 --> 00:22:48,960
+and then sends off you know the center
+
+665
+00:22:48,960 --> 00:22:51,039
+piece the append rpcs
+
+666
+00:22:51,039 --> 00:22:53,600
+and uh since i want to do the append
+
+667
+00:22:53,600 --> 00:22:54,799
+rpcs in parallel
+
+668
+00:22:54,799 --> 00:22:57,440
+um basically what the way it works is
+
+669
+00:22:57,440 --> 00:22:58,799
+that you know for every
+
+670
+00:22:58,799 --> 00:23:02,559
+rpc i start a separate thread
+
+671
+00:23:02,559 --> 00:23:04,480
+and that art and that thread actually is
+
+672
+00:23:04,480 --> 00:23:05,919
+responsible for you know
+
+673
+00:23:05,919 --> 00:23:09,440
+sending it reserving the response and
+
+674
+00:23:09,440 --> 00:23:10,960
+in the response you know doing any
+
+675
+00:23:10,960 --> 00:23:12,880
+updating that is necessary to the wrath
+
+676
+00:23:12,880 --> 00:23:13,760
+structure so
+
+677
+00:23:13,760 --> 00:23:15,440
+the response handler or when the
+
+678
+00:23:15,440 --> 00:23:17,760
+response comes in uh you know we'll grab
+
+679
+00:23:17,760 --> 00:23:19,039
+the
+
+680
+00:23:19,039 --> 00:23:21,840
+raft lock and then do whatever update
+
+681
+00:23:21,840 --> 00:23:23,520
+netflix here to the raft state and then
+
+682
+00:23:23,520 --> 00:23:25,280
+release the lock
+
+683
+00:23:25,280 --> 00:23:27,679
+so uh so there's a bunch of threads
+
+684
+00:23:27,679 --> 00:23:28,720
+quite a number of threads that can be
+
+685
+00:23:28,720 --> 00:23:30,320
+running around correct because our
+
+686
+00:23:30,320 --> 00:23:32,159
+messaging may be late you know and so
+
+687
+00:23:32,159 --> 00:23:33,600
+there may be many many many
+
+688
+00:23:33,600 --> 00:23:37,200
+uh threads here and there might be you
+
+689
+00:23:37,200 --> 00:23:38,240
+know multiple starts
+
+690
+00:23:38,240 --> 00:23:39,440
+there might be start out standing
+
+691
+00:23:39,440 --> 00:23:40,880
+instead of maybe multiple threads there
+
+692
+00:23:40,880 --> 00:23:42,480
+and of course the ticker you know also
+
+693
+00:23:42,480 --> 00:23:45,669
+will start
+
+694
+00:23:45,679 --> 00:23:47,440
+may send heartbeats and those art beats
+
+695
+00:23:47,440 --> 00:23:49,440
+you know again you know turn into
+
+696
+00:23:49,440 --> 00:23:52,720
+a separate thread but all those threads
+
+697
+00:23:52,720 --> 00:23:54,559
+are basically
+
+698
+00:23:54,559 --> 00:23:57,760
+serialized by the raft lock or my raft
+
+699
+00:23:57,760 --> 00:24:08,630
+lock serializers
+
+700
+00:24:08,640 --> 00:24:11,120
+and so when i create print log messages
+
+701
+00:24:11,120 --> 00:24:12,480
+you know of course that is inside you
+
+702
+00:24:12,480 --> 00:24:12,880
+know
+
+703
+00:24:12,880 --> 00:24:15,440
+done while holding the raft lock and
+
+704
+00:24:15,440 --> 00:24:17,279
+since you know sort of every fret runs
+
+705
+00:24:17,279 --> 00:24:18,559
+one by one
+
+706
+00:24:18,559 --> 00:24:20,640
+uh you know all the log messages over
+
+707
+00:24:20,640 --> 00:24:22,000
+make a lot of sense you know they
+
+708
+00:24:22,000 --> 00:24:25,120
+they're all serialized too uh
+
+709
+00:24:25,120 --> 00:24:29,360
+similarly i make our c handlers
+
+710
+00:24:29,360 --> 00:24:32,640
+atomic or serialized
+
+711
+00:24:32,640 --> 00:24:35,520
+uh so no fine grain locking uh and that
+
+712
+00:24:35,520 --> 00:24:37,279
+helps and i'll talk about it in a in a
+
+713
+00:24:37,279 --> 00:24:38,080
+second
+
+714
+00:24:38,080 --> 00:24:39,679
+and then the only sort of thing that you
+
+715
+00:24:39,679 --> 00:24:41,039
+know you that you have to be a little
+
+716
+00:24:41,039 --> 00:24:42,799
+bit careful with if you do sort of this
+
+717
+00:24:42,799 --> 00:24:44,159
+coarse grained walking
+
+718
+00:24:44,159 --> 00:24:46,880
+is that you can get into deadlocks and
+
+719
+00:24:46,880 --> 00:24:48,240
+particularly you can have a deadlock if
+
+720
+00:24:48,240 --> 00:24:50,640
+you hold blocks across rpc's and so
+
+721
+00:24:50,640 --> 00:24:58,470
+i never hold no locks across rpcs
+
+722
+00:24:58,480 --> 00:25:00,559
+and that is partially achieved you're as
+
+723
+00:25:00,559 --> 00:25:01,600
+it is as
+
+724
+00:25:01,600 --> 00:25:03,039
+achieved as a side effect of really
+
+725
+00:25:03,039 --> 00:25:06,480
+starting a new thread for every rpc
+
+726
+00:25:06,480 --> 00:25:08,960
+so that's sort of the overall structure
+
+727
+00:25:08,960 --> 00:25:09,919
+uh
+
+728
+00:25:09,919 --> 00:25:12,240
+of you know by this particular solution
+
+729
+00:25:12,240 --> 00:25:14,400
+that i'll share in a second with you
+
+730
+00:25:14,400 --> 00:25:17,440
+again other structures are possible but
+
+731
+00:25:17,440 --> 00:25:20,400
+hopefully this gives you some some ideas
+
+732
+00:25:20,400 --> 00:25:22,799
+any questions about this
+
+733
+00:25:22,799 --> 00:25:25,760
+what were the threads on the right on
+
+734
+00:25:25,760 --> 00:25:27,679
+the right these guys
+
+735
+00:25:27,679 --> 00:25:30,799
+yeah uh those are the incoming messages
+
+736
+00:25:30,799 --> 00:25:34,880
+so like a paint rpc a penta rpc
+
+737
+00:25:34,880 --> 00:25:36,960
+a request or a vote request like i think
+
+738
+00:25:36,960 --> 00:25:40,390
+the only two
+
+739
+00:25:40,400 --> 00:25:43,760
+so i also have a question
+
+740
+00:25:43,760 --> 00:25:47,200
+what's the is there a benefit of having
+
+741
+00:25:47,200 --> 00:25:48,640
+a single thread
+
+742
+00:25:48,640 --> 00:25:50,960
+uh sleeping on the condition variable
+
+743
+00:25:50,960 --> 00:25:52,240
+and then
+
+744
+00:25:52,240 --> 00:25:55,200
+having only that thread uh a thread
+
+745
+00:25:55,200 --> 00:25:57,120
+sending to apply channel
+
+746
+00:25:57,120 --> 00:26:00,880
+compared to having each rpc thread
+
+747
+00:26:00,880 --> 00:26:03,679
+uh sent to the applied channel uh well
+
+748
+00:26:03,679 --> 00:26:05,279
+everything has to go in order from the
+
+749
+00:26:05,279 --> 00:26:06,480
+apply channel correct
+
+750
+00:26:06,480 --> 00:26:09,760
+so the whole log that you made but since
+
+751
+00:26:09,760 --> 00:26:11,440
+in the wrath structure has to be
+
+752
+00:26:11,440 --> 00:26:13,440
+sent on the applied channel exactly in
+
+753
+00:26:13,440 --> 00:26:16,400
+order as the entries are in the log
+
+754
+00:26:16,400 --> 00:26:18,400
+and so that's just more easier to do i
+
+755
+00:26:18,400 --> 00:26:21,039
+find it easier to do with a single
+
+756
+00:26:21,039 --> 00:26:23,200
+thread because that thread basically
+
+757
+00:26:23,200 --> 00:26:24,559
+goes through the wrath log and just
+
+758
+00:26:24,559 --> 00:26:26,240
+sticks from there one by one the entries
+
+759
+00:26:26,240 --> 00:26:26,880
+on to the
+
+760
+00:26:26,880 --> 00:26:29,279
+apply channel and there's no further
+
+761
+00:26:29,279 --> 00:26:31,919
+coordination necessary
+
+762
+00:26:31,919 --> 00:26:34,960
+that makes sense okay yeah so like
+
+763
+00:26:34,960 --> 00:26:39,120
+we all you know this goes like
+
+764
+00:26:39,120 --> 00:26:42,400
+up into the surface that actually uses
+
+765
+00:26:42,400 --> 00:26:45,590
+the raft library
+
+766
+00:26:45,600 --> 00:26:48,640
+okay so one more word about uh
+
+767
+00:26:48,640 --> 00:26:51,039
+just a fine grained uh versus coarse
+
+768
+00:26:51,039 --> 00:26:52,000
+grained
+
+769
+00:26:52,000 --> 00:26:55,760
+uh some of you uh like a common mistake
+
+770
+00:26:55,760 --> 00:26:57,760
+uh early on you know when you haven't
+
+771
+00:26:57,760 --> 00:26:59,200
+done that much you know
+
+772
+00:26:59,200 --> 00:27:02,320
+apparel programming uh you might like
+
+773
+00:27:02,320 --> 00:27:02,640
+you know
+
+774
+00:27:02,640 --> 00:27:06,000
+if you have your ipc struct
+
+775
+00:27:06,000 --> 00:27:08,480
+you know maybe you have like the log and
+
+776
+00:27:08,480 --> 00:27:09,520
+some other fields
+
+777
+00:27:09,520 --> 00:27:11,679
+and you know some people or sometimes
+
+778
+00:27:11,679 --> 00:27:13,360
+you know there's a temptation
+
+779
+00:27:13,360 --> 00:27:15,520
+or not unreasonable you also have
+
+780
+00:27:15,520 --> 00:27:16,799
+multiple locks
+
+781
+00:27:16,799 --> 00:27:21,909
+so instead of having a single
+
+782
+00:27:21,919 --> 00:27:24,960
+lock or even half a single one
+
+783
+00:27:24,960 --> 00:27:36,549
+but not hold it for a long time
+
+784
+00:27:36,559 --> 00:27:40,000
+and um and i think in general
+
+785
+00:27:40,000 --> 00:27:41,600
+that minds reasoning about the code a
+
+786
+00:27:41,600 --> 00:27:43,520
+little bit hard uh so
+
+787
+00:27:43,520 --> 00:27:45,120
+uh so example a common thing that you
+
+788
+00:27:45,120 --> 00:27:46,880
+know that you might do
+
+789
+00:27:46,880 --> 00:27:48,559
+then it's like if you have an rpc
+
+790
+00:27:48,559 --> 00:27:50,159
+handler like like this some request
+
+791
+00:27:50,159 --> 00:27:52,480
+handler
+
+792
+00:27:52,480 --> 00:27:57,039
+you know whatever args reply
+
+793
+00:27:57,039 --> 00:27:58,880
+i'm just sketching this out you know and
+
+794
+00:27:58,880 --> 00:28:00,000
+you might you know something you might
+
+795
+00:28:00,000 --> 00:28:03,520
+do like you know whatever you walk
+
+796
+00:28:03,520 --> 00:28:06,399
+um do something you know with arguments
+
+797
+00:28:06,399 --> 00:28:08,480
+maybe you know update some state
+
+798
+00:28:08,480 --> 00:28:11,039
+you know in the graph structure then do
+
+799
+00:28:11,039 --> 00:28:14,630
+a new unlock
+
+800
+00:28:14,640 --> 00:28:16,799
+then maybe do some other stuff that is
+
+801
+00:28:16,799 --> 00:28:18,480
+not maybe directly related to the
+
+802
+00:28:18,480 --> 00:28:19,840
+wrath structure and then basically maybe
+
+803
+00:28:19,840 --> 00:28:23,350
+grab the log again
+
+804
+00:28:23,360 --> 00:28:25,279
+and then you know whatever update and
+
+805
+00:28:25,279 --> 00:28:27,200
+read maybe the wrath structure again and
+
+806
+00:28:27,200 --> 00:28:27,679
+then the
+
+807
+00:28:27,679 --> 00:28:30,240
+unlock and all you're sort of in a
+
+808
+00:28:30,240 --> 00:28:31,039
+single
+
+809
+00:28:31,039 --> 00:28:35,909
+rpc handler and
+
+810
+00:28:35,919 --> 00:28:37,919
+just as a thought exercise you know what
+
+811
+00:28:37,919 --> 00:28:39,919
+is risky about this
+
+812
+00:28:39,919 --> 00:28:42,960
+sort of style of fine grade walking no
+
+813
+00:28:42,960 --> 00:28:44,320
+i know this is a little bit artificial
+
+814
+00:28:44,320 --> 00:28:46,559
+but you know there's a reasonable common
+
+815
+00:28:46,559 --> 00:28:50,080
+uh uh sort of early mistake that you
+
+816
+00:28:50,080 --> 00:28:53,830
+know you might make
+
+817
+00:28:53,840 --> 00:28:55,039
+you have to like recheck your
+
+818
+00:28:55,039 --> 00:28:57,679
+assumptions before
+
+819
+00:28:57,679 --> 00:29:00,159
+locking again every time right yeah you
+
+820
+00:29:00,159 --> 00:29:00,880
+know basically
+
+821
+00:29:00,880 --> 00:29:03,760
+this executes atomically this executes
+
+822
+00:29:03,760 --> 00:29:04,640
+atomically
+
+823
+00:29:04,640 --> 00:29:06,880
+but lots of things can happen in between
+
+824
+00:29:06,880 --> 00:29:08,720
+right so for example new rpcs might have
+
+825
+00:29:08,720 --> 00:29:10,880
+been coming in
+
+826
+00:29:10,880 --> 00:29:12,720
+and they might be running two and they
+
+827
+00:29:12,720 --> 00:29:14,399
+might actually have been updating the
+
+828
+00:29:14,399 --> 00:29:17,760
+graphs struct or draft state between you
+
+829
+00:29:17,760 --> 00:29:20,240
+know these two critical sections
+
+830
+00:29:20,240 --> 00:29:22,880
+between one and two uh and so by the
+
+831
+00:29:22,880 --> 00:29:23,679
+time you know to
+
+832
+00:29:23,679 --> 00:29:25,919
+the you start running critical section
+
+833
+00:29:25,919 --> 00:29:27,360
+two the wrath structure might be
+
+834
+00:29:27,360 --> 00:29:28,799
+completely different
+
+835
+00:29:28,799 --> 00:29:31,840
+and make completely different content
+
+836
+00:29:31,840 --> 00:29:34,159
+and uh so to avoid you know those kind
+
+837
+00:29:34,159 --> 00:29:35,440
+of situations
+
+838
+00:29:35,440 --> 00:29:37,520
+uh you know my general approach is to
+
+839
+00:29:37,520 --> 00:29:39,120
+basically you know basically have this
+
+840
+00:29:39,120 --> 00:29:39,840
+to be
+
+841
+00:29:39,840 --> 00:29:43,120
+one critical one critical section so i
+
+842
+00:29:43,120 --> 00:29:44,159
+don't have to recheck
+
+843
+00:29:44,159 --> 00:29:46,640
+in any i don't have to reset the state
+
+844
+00:29:46,640 --> 00:29:51,430
+at the new when the second uh
+
+845
+00:29:51,440 --> 00:29:53,600
+critical section starts does that make
+
+846
+00:29:53,600 --> 00:29:56,230
+sense
+
+847
+00:29:56,240 --> 00:29:58,159
+and this problem shows up in different
+
+848
+00:29:58,159 --> 00:29:59,440
+you know
+
+849
+00:29:59,440 --> 00:30:01,200
+or this problem can show up in sort of
+
+850
+00:30:01,200 --> 00:30:03,440
+different uh fashion in different ways
+
+851
+00:30:03,440 --> 00:30:05,279
+uh but any sort of underlying problem is
+
+852
+00:30:05,279 --> 00:30:06,480
+always the same you know if you do a lot
+
+853
+00:30:06,480 --> 00:30:07,679
+of fine-grained blocking you're going to
+
+854
+00:30:07,679 --> 00:30:08,000
+have
+
+855
+00:30:08,000 --> 00:30:10,159
+additional interleavings that you have
+
+856
+00:30:10,159 --> 00:30:11,039
+to consider
+
+857
+00:30:11,039 --> 00:30:13,840
+and make sure that you don't have uh
+
+858
+00:30:13,840 --> 00:30:15,039
+incorrect
+
+859
+00:30:15,039 --> 00:30:17,360
+uh interleavings that result in
+
+860
+00:30:17,360 --> 00:30:20,830
+incorrect uh
+
+861
+00:30:20,840 --> 00:30:22,080
+behavior
+
+862
+00:30:22,080 --> 00:30:24,880
+i want to ask is it but it's not
+
+863
+00:30:24,880 --> 00:30:25,840
+possible to
+
+864
+00:30:25,840 --> 00:30:28,880
+avoid rechecking conditions after you
+
+865
+00:30:28,880 --> 00:30:29,919
+send an rpc
+
+866
+00:30:29,919 --> 00:30:33,520
+right inside the rpc thread
+
+867
+00:30:33,520 --> 00:30:36,399
+uh yeah you you cannot hold the lock
+
+868
+00:30:36,399 --> 00:30:38,080
+while sending correct so like you should
+
+869
+00:30:38,080 --> 00:30:38,399
+not
+
+870
+00:30:38,399 --> 00:30:40,399
+you know here you should not call
+
+871
+00:30:40,399 --> 00:30:41,440
+whatever you know
+
+872
+00:30:41,440 --> 00:30:45,120
+send our pc uh because you can't do that
+
+873
+00:30:45,120 --> 00:30:46,480
+while holding a lock because they can
+
+874
+00:30:46,480 --> 00:30:48,000
+easily result in deadlock correct you
+
+875
+00:30:48,000 --> 00:30:49,840
+holding the lock you send it to a peer
+
+876
+00:30:49,840 --> 00:30:50,559
+and rpc
+
+877
+00:30:50,559 --> 00:30:52,159
+while still holding the lock the peer
+
+878
+00:30:52,159 --> 00:30:54,880
+actually sends an rpc to you
+
+879
+00:30:54,880 --> 00:30:56,960
+uh but you're holding you know the the
+
+880
+00:30:56,960 --> 00:30:59,039
+your the leader already holds the lock
+
+881
+00:30:59,039 --> 00:31:00,640
+on the rx structure so the response
+
+882
+00:31:00,640 --> 00:31:01,440
+cannot be
+
+883
+00:31:01,440 --> 00:31:03,840
+uh processed and maybe you know the two
+
+884
+00:31:03,840 --> 00:31:05,600
+are interdependent
+
+885
+00:31:05,600 --> 00:31:09,590
+and then you have a deadlock
+
+886
+00:31:09,600 --> 00:31:12,480
+one thing that's worth noting is um
+
+887
+00:31:12,480 --> 00:31:14,080
+something i saw some people doing
+
+888
+00:31:14,080 --> 00:31:16,720
+is that they spin off a thread they have
+
+889
+00:31:16,720 --> 00:31:18,399
+to send an rpc
+
+890
+00:31:18,399 --> 00:31:20,880
+in that thread they take the lock to
+
+891
+00:31:20,880 --> 00:31:22,960
+prepare the arguments for the rbc
+
+892
+00:31:22,960 --> 00:31:25,279
+and then they send the rpc without block
+
+893
+00:31:25,279 --> 00:31:27,760
+and you can do that but it's often
+
+894
+00:31:27,760 --> 00:31:30,000
+um there's often fewer interleavings if
+
+895
+00:31:30,000 --> 00:31:32,320
+you generate the arguments for the rpc
+
+896
+00:31:32,320 --> 00:31:34,240
+before you split off the thread that
+
+897
+00:31:34,240 --> 00:31:38,549
+actually uh sends it
+
+898
+00:31:38,559 --> 00:31:40,159
+good point we'll see we'll show this
+
+899
+00:31:40,159 --> 00:31:42,399
+will show up in a second actually and
+
+900
+00:31:42,399 --> 00:31:45,600
+but doesn't that cause so sometimes it's
+
+901
+00:31:45,600 --> 00:31:47,840
+actually depending on the implementation
+
+902
+00:31:47,840 --> 00:31:49,519
+i think it's beneficial for
+
+903
+00:31:49,519 --> 00:31:53,039
+other rpcs to see the changes like um
+
+904
+00:31:53,039 --> 00:31:55,440
+for example if other rpcs made progress
+
+905
+00:31:55,440 --> 00:31:57,279
+you want to start off from the most
+
+906
+00:31:57,279 --> 00:32:00,240
+recent last log index
+
+907
+00:32:00,240 --> 00:32:03,279
+uh perhaps you know
+
+908
+00:32:03,279 --> 00:32:04,799
+it depends on exactly you know what you
+
+909
+00:32:04,799 --> 00:32:06,480
+do uh
+
+910
+00:32:06,480 --> 00:32:09,600
+like how your implementation works uh
+
+911
+00:32:09,600 --> 00:32:11,840
+i i don't do that at least i don't think
+
+912
+00:32:11,840 --> 00:32:12,960
+i do what you're
+
+913
+00:32:12,960 --> 00:32:15,679
+suggesting when i send an rpc to all the
+
+914
+00:32:15,679 --> 00:32:16,960
+peers all the peers are going to get
+
+915
+00:32:16,960 --> 00:32:19,919
+exactly the same arguments
+
+916
+00:32:19,919 --> 00:32:26,310
+and no changes in between
+
+917
+00:32:26,320 --> 00:32:29,440
+okay good uh so okay let me then uh
+
+918
+00:32:29,440 --> 00:32:30,640
+talk a little bit about the uh
+
+919
+00:32:30,640 --> 00:32:33,200
+implementation uh can people read
+
+920
+00:32:33,200 --> 00:32:36,240
+uh can people read the screen sorry i
+
+921
+00:32:36,240 --> 00:32:37,760
+will follow
+
+922
+00:32:37,760 --> 00:32:40,559
+yeah uh so i think you mentioned that we
+
+923
+00:32:40,559 --> 00:32:42,320
+shouldn't lock around sending
+
+924
+00:32:42,320 --> 00:32:46,000
+things over the ply channel uh
+
+925
+00:32:46,000 --> 00:32:49,519
+yes uh although i'm let me
+
+926
+00:32:49,519 --> 00:32:52,640
+you know it's risky uh because like
+
+927
+00:32:52,640 --> 00:32:54,000
+while you're holding the lock
+
+928
+00:32:54,000 --> 00:32:55,279
+correct and you send on the apply
+
+929
+00:32:55,279 --> 00:32:57,039
+channel you might also block i'm sending
+
+930
+00:32:57,039 --> 00:32:58,960
+on the apply channel because
+
+931
+00:32:58,960 --> 00:33:02,320
+the service you know must the other site
+
+932
+00:33:02,320 --> 00:33:04,159
+must be reading correct before you're in
+
+933
+00:33:04,159 --> 00:33:05,440
+block
+
+934
+00:33:05,440 --> 00:33:06,559
+of course if you have buffered and
+
+935
+00:33:06,559 --> 00:33:07,679
+unbuffered you know that changes a
+
+936
+00:33:07,679 --> 00:33:08,799
+little bit but let's say we have
+
+937
+00:33:08,799 --> 00:33:11,039
+not a buffer channel but just a an
+
+938
+00:33:11,039 --> 00:33:12,799
+unbuffered channel
+
+939
+00:33:12,799 --> 00:33:15,830
+and so the reader
+
+940
+00:33:15,840 --> 00:33:18,640
+if there's no reader then this writer
+
+941
+00:33:18,640 --> 00:33:20,640
+will block
+
+942
+00:33:20,640 --> 00:33:23,360
+and maybe holding the lock and that
+
+943
+00:33:23,360 --> 00:33:24,000
+might be
+
+944
+00:33:24,000 --> 00:33:26,799
+you know may lead to problems later and
+
+945
+00:33:26,799 --> 00:33:28,480
+lead to deadlocks
+
+946
+00:33:28,480 --> 00:33:31,600
+um on that
+
+947
+00:33:31,600 --> 00:33:34,960
+um isn't this all right like like the
+
+948
+00:33:34,960 --> 00:33:37,039
+applied channel will never
+
+949
+00:33:37,039 --> 00:33:41,440
+like the client who's calling raft
+
+950
+00:33:41,440 --> 00:33:43,200
+won't ever hold the lock right they're
+
+951
+00:33:43,200 --> 00:33:44,480
+like ah
+
+952
+00:33:44,480 --> 00:33:46,880
+you don't not not true actually here's
+
+953
+00:33:46,880 --> 00:33:47,760
+our sort of
+
+954
+00:33:47,760 --> 00:33:50,480
+service quick sitting on top calling
+
+955
+00:33:50,480 --> 00:33:51,039
+start
+
+956
+00:33:51,039 --> 00:33:54,159
+and reading from the apply channel
+
+957
+00:33:54,159 --> 00:33:56,320
+uh but it's called start and start is
+
+958
+00:33:56,320 --> 00:33:57,760
+because you know depending on how you do
+
+959
+00:33:57,760 --> 00:33:59,200
+it you know start as a thread you know
+
+960
+00:33:59,200 --> 00:34:01,200
+jumps into with that thread into the
+
+961
+00:34:01,200 --> 00:34:02,320
+raft library and
+
+962
+00:34:02,320 --> 00:34:03,760
+at least in my implementation the first
+
+963
+00:34:03,760 --> 00:34:05,840
+thing that the start function does is
+
+964
+00:34:05,840 --> 00:34:10,230
+actually wrap the raft lock
+
+965
+00:34:10,240 --> 00:34:12,800
+and it can't grab the lock raft lock if
+
+966
+00:34:12,800 --> 00:34:13,359
+it actually
+
+967
+00:34:13,359 --> 00:34:15,280
+the the apply thread is already hauling
+
+968
+00:34:15,280 --> 00:34:16,399
+it's trying to get something on the
+
+969
+00:34:16,399 --> 00:34:17,440
+applied channel
+
+970
+00:34:17,440 --> 00:34:18,960
+but the service now won't read from the
+
+971
+00:34:18,960 --> 00:34:20,399
+applied channel depending on how you set
+
+972
+00:34:20,399 --> 00:34:20,879
+it up
+
+973
+00:34:20,879 --> 00:34:22,399
+but i mean as you're saying there is a
+
+974
+00:34:22,399 --> 00:34:23,679
+risk here you just got to be a little
+
+975
+00:34:23,679 --> 00:34:24,960
+bit careful
+
+976
+00:34:24,960 --> 00:34:27,119
+so would the solution be just to like
+
+977
+00:34:27,119 --> 00:34:28,560
+create a new thread
+
+978
+00:34:28,560 --> 00:34:30,720
+i yes there's all kinds of possible
+
+979
+00:34:30,720 --> 00:34:32,240
+solutions here i'm just like
+
+980
+00:34:32,240 --> 00:34:34,159
+warning you that you know they're
+
+981
+00:34:34,159 --> 00:34:35,520
+alerting you that you have to think a
+
+982
+00:34:35,520 --> 00:34:37,280
+little bit about how you arrange
+
+983
+00:34:37,280 --> 00:34:40,710
+this
+
+984
+00:34:40,720 --> 00:34:44,240
+okay what isn't is that
+
+985
+00:34:44,240 --> 00:34:46,240
+me using a single thread not sufficient
+
+986
+00:34:46,240 --> 00:34:48,000
+because the thread that
+
+987
+00:34:48,000 --> 00:34:49,760
+puts it onto the ply channel will still
+
+988
+00:34:49,760 --> 00:34:51,280
+be looking at date
+
+989
+00:34:51,280 --> 00:34:52,960
+right so won't it still need to acquire
+
+990
+00:34:52,960 --> 00:34:54,399
+the lock
+
+991
+00:34:54,399 --> 00:34:57,200
+okay so okay let me back off in here but
+
+992
+00:34:57,200 --> 00:34:58,320
+it's easier to see that there are
+
+993
+00:34:58,320 --> 00:34:59,440
+deadlocks here correct
+
+994
+00:34:59,440 --> 00:35:01,119
+like if you're in the apply channel
+
+995
+00:35:01,119 --> 00:35:02,400
+you're not reading from the apply
+
+996
+00:35:02,400 --> 00:35:03,599
+channel because you're
+
+997
+00:35:03,599 --> 00:35:06,720
+causing you're calling start like maybe
+
+998
+00:35:06,720 --> 00:35:10,160
+again because and start can run
+
+999
+00:35:10,160 --> 00:35:11,920
+because the guy actually don't hold the
+
+1000
+00:35:11,920 --> 00:35:14,320
+lock but he can't actually unlock
+
+1001
+00:35:14,320 --> 00:35:15,440
+because he can't write to the fly
+
+1002
+00:35:15,440 --> 00:35:18,160
+channel because there's no reader
+
+1003
+00:35:18,160 --> 00:35:19,280
+you know there's easy to construct
+
+1004
+00:35:19,280 --> 00:35:20,480
+scenarios where you can get into
+
+1005
+00:35:20,480 --> 00:35:21,920
+deadlocks of course you can avoid all
+
+1006
+00:35:21,920 --> 00:35:22,800
+these deadlocks
+
+1007
+00:35:22,800 --> 00:35:24,400
+that's the whole goal and one way to
+
+1008
+00:35:24,400 --> 00:35:25,839
+avoiding these deadlocks is actually not
+
+1009
+00:35:25,839 --> 00:35:28,839
+to hold the lock while rewriting on the
+
+1010
+00:35:28,839 --> 00:35:31,200
+channel
+
+1011
+00:35:31,200 --> 00:35:34,320
+there are other ways of doing it too
+
+1012
+00:35:34,320 --> 00:35:35,599
+i just i'm telling you in my
+
+1013
+00:35:35,599 --> 00:35:37,200
+implementation you know i find it
+
+1014
+00:35:37,200 --> 00:35:38,640
+convenient not to have
+
+1015
+00:35:38,640 --> 00:35:40,400
+uh the whole box while riding on a
+
+1016
+00:35:40,400 --> 00:35:42,839
+channel i think in general it's bad
+
+1017
+00:35:42,839 --> 00:35:50,230
+practice
+
+1018
+00:35:50,240 --> 00:35:56,390
+okay back to code
+
+1019
+00:35:56,400 --> 00:35:58,560
+okay good so uh i'm going to show you
+
+1020
+00:35:58,560 --> 00:36:00,320
+one particular implementation and again
+
+1021
+00:36:00,320 --> 00:36:02,560
+uh you know this is an invitation that i
+
+1022
+00:36:02,560 --> 00:36:03,520
+wrote over
+
+1023
+00:36:03,520 --> 00:36:05,280
+january to get ready for the class so
+
+1024
+00:36:05,280 --> 00:36:06,560
+there's nothing particularly special
+
+1025
+00:36:06,560 --> 00:36:07,119
+about it
+
+1026
+00:36:07,119 --> 00:36:10,560
+uh purely for myself and i'm sure
+
+1027
+00:36:10,560 --> 00:36:11,839
+you know there are things about uh you
+
+1028
+00:36:11,839 --> 00:36:13,839
+know that you were to violently object
+
+1029
+00:36:13,839 --> 00:36:14,560
+to
+
+1030
+00:36:14,560 --> 00:36:16,240
+uh but you know it gives you a sense you
+
+1031
+00:36:16,240 --> 00:36:18,880
+know what i did so here i go
+
+1032
+00:36:18,880 --> 00:36:21,520
+uh so in terms of the rash structure i i
+
+1033
+00:36:21,520 --> 00:36:22,320
+basically you know
+
+1034
+00:36:22,320 --> 00:36:24,560
+copy figure two uh as you will see in
+
+1035
+00:36:24,560 --> 00:36:26,079
+the code there's going to be a lot of
+
+1036
+00:36:26,079 --> 00:36:27,839
+figure two in the code
+
+1037
+00:36:27,839 --> 00:36:30,240
+uh and you know the here is the the main
+
+1038
+00:36:30,240 --> 00:36:31,440
+thing that probably the main thing to
+
+1039
+00:36:31,440 --> 00:36:33,200
+point out is like here's the big mutex
+
+1040
+00:36:33,200 --> 00:36:34,880
+and this is the wrath lock that
+
+1041
+00:36:34,880 --> 00:36:36,880
+my code will acquire or release all over
+
+1042
+00:36:36,880 --> 00:36:39,760
+the place but in a very course great
+
+1043
+00:36:39,760 --> 00:36:41,920
+and the rest is just you know exactly as
+
+1044
+00:36:41,920 --> 00:36:43,599
+you expect you know the persistence day
+
+1045
+00:36:43,599 --> 00:36:45,440
+the volatile state the leader stage and
+
+1046
+00:36:45,440 --> 00:36:47,119
+some snapshot state i won't talk much
+
+1047
+00:36:47,119 --> 00:36:48,720
+about snapchat at all since you know
+
+1048
+00:36:48,720 --> 00:36:49,839
+that's what we do for
+
+1049
+00:36:49,839 --> 00:36:53,040
+friday um and that's
+
+1050
+00:36:53,040 --> 00:36:56,560
+basically it uh then uh the interesting
+
+1051
+00:36:56,560 --> 00:36:58,160
+i'm just going to go bottom off sort of
+
+1052
+00:36:58,160 --> 00:36:59,040
+like in the beginning
+
+1053
+00:36:59,040 --> 00:37:01,440
+you know what happens so at some point
+
+1054
+00:37:01,440 --> 00:37:11,430
+the tester uh
+
+1055
+00:37:11,440 --> 00:37:15,750
+uh the tester will uh
+
+1056
+00:37:15,760 --> 00:37:19,359
+call make right and uh here's my uh
+
+1057
+00:37:19,359 --> 00:37:23,760
+basically the the make uh call
+
+1058
+00:37:23,760 --> 00:37:27,200
+it constructs you know the raf state uh
+
+1059
+00:37:27,200 --> 00:37:28,560
+you know apply channel the condition
+
+1060
+00:37:28,560 --> 00:37:30,480
+variable that i mentioned
+
+1061
+00:37:30,480 --> 00:37:33,200
+uh it sets itself to a follower it's an
+
+1062
+00:37:33,200 --> 00:37:35,359
+election timeout
+
+1063
+00:37:35,359 --> 00:37:37,040
+and i'll talk about that in a second you
+
+1064
+00:37:37,040 --> 00:37:38,560
+know initially some other parts
+
+1065
+00:37:38,560 --> 00:37:41,920
+you know make an empty log and uh then
+
+1066
+00:37:41,920 --> 00:37:43,520
+basically forks have two
+
+1067
+00:37:43,520 --> 00:37:46,320
+uh go routines one is the applier that's
+
+1068
+00:37:46,320 --> 00:37:46,640
+the
+
+1069
+00:37:46,640 --> 00:37:48,000
+the fret that actually arrives on the
+
+1070
+00:37:48,000 --> 00:37:50,400
+applied channel and then i got my the
+
+1071
+00:37:50,400 --> 00:37:52,560
+ticker that we basically gave you
+
+1072
+00:37:52,560 --> 00:37:55,359
+uh to uh that basically runs the ticker
+
+1073
+00:37:55,359 --> 00:37:57,440
+code
+
+1074
+00:37:57,440 --> 00:37:59,920
+um so nothing particularly exciting
+
+1075
+00:37:59,920 --> 00:38:01,680
+going on here
+
+1076
+00:38:01,680 --> 00:38:05,119
+so let's look at the ticker code
+
+1077
+00:38:05,119 --> 00:38:06,560
+some people ask you know should you
+
+1078
+00:38:06,560 --> 00:38:09,520
+structure everything in a single file
+
+1079
+00:38:09,520 --> 00:38:11,760
+multiple files of course it's all up to
+
+1080
+00:38:11,760 --> 00:38:13,440
+you what actually is most convenient for
+
+1081
+00:38:13,440 --> 00:38:15,200
+you to actually you know find your code
+
+1082
+00:38:15,200 --> 00:38:15,920
+in this case
+
+1083
+00:38:15,920 --> 00:38:17,680
+i structured in multiple files and a
+
+1084
+00:38:17,680 --> 00:38:20,160
+half basically vodogo
+
+1085
+00:38:20,160 --> 00:38:24,950
+deals with all the election part
+
+1086
+00:38:24,960 --> 00:38:29,440
+so let's look at the ticker uh
+
+1087
+00:38:29,440 --> 00:38:31,440
+so the ticker basically runs every 50
+
+1088
+00:38:31,440 --> 00:38:32,560
+milliseconds
+
+1089
+00:38:32,560 --> 00:38:35,359
+and uh it calls this function tick and
+
+1090
+00:38:35,359 --> 00:38:36,240
+the function tick is
+
+1091
+00:38:36,240 --> 00:38:39,040
+like right up here uh it grips you know
+
+1092
+00:38:39,040 --> 00:38:40,079
+you'll see that
+
+1093
+00:38:40,079 --> 00:38:42,320
+all over the place it grabs the raft
+
+1094
+00:38:42,320 --> 00:38:43,200
+lock
+
+1095
+00:38:43,200 --> 00:38:45,359
+calls the user's defer to make sure that
+
+1096
+00:38:45,359 --> 00:38:46,560
+like no matter where
+
+1097
+00:38:46,560 --> 00:38:49,040
+i leave the function the lock actually
+
+1098
+00:38:49,040 --> 00:38:50,560
+will be released
+
+1099
+00:38:50,560 --> 00:38:53,040
+um and then you know checks what it is
+
+1100
+00:38:53,040 --> 00:38:53,839
+the leader
+
+1101
+00:38:53,839 --> 00:38:56,240
+uh and if it's a leader does one thing
+
+1102
+00:38:56,240 --> 00:38:57,680
+it's not a leader that means that's a
+
+1103
+00:38:57,680 --> 00:38:58,480
+follower
+
+1104
+00:38:58,480 --> 00:39:00,720
+and it just checks whether actually the
+
+1105
+00:39:00,720 --> 00:39:02,400
+election time
+
+1106
+00:39:02,400 --> 00:39:05,040
+has passed and so basically the way i
+
+1107
+00:39:05,040 --> 00:39:06,800
+compute that is like i get the current
+
+1108
+00:39:06,800 --> 00:39:07,599
+time
+
+1109
+00:39:07,599 --> 00:39:10,160
+uh and see if the current time is
+
+1110
+00:39:10,160 --> 00:39:11,520
+actually past the
+
+1111
+00:39:11,520 --> 00:39:15,200
+uh if now is now past the uh election
+
+1112
+00:39:15,200 --> 00:39:17,359
+time
+
+1113
+00:39:17,359 --> 00:39:18,960
+and if that is the case i'll start the
+
+1114
+00:39:18,960 --> 00:39:20,560
+election and
+
+1115
+00:39:20,560 --> 00:39:23,119
+uh or well first i'll set the election
+
+1116
+00:39:23,119 --> 00:39:23,920
+time out again
+
+1117
+00:39:23,920 --> 00:39:26,560
+uh as required by figure two and then
+
+1118
+00:39:26,560 --> 00:39:29,990
+they'll start the election
+
+1119
+00:39:30,000 --> 00:39:31,200
+in terms of setting the election
+
+1120
+00:39:31,200 --> 00:39:33,119
+timeouts like the the first thing you
+
+1121
+00:39:33,119 --> 00:39:34,079
+know the way
+
+1122
+00:39:34,079 --> 00:39:36,480
+uh i do it you know i the election
+
+1123
+00:39:36,480 --> 00:39:38,079
+timeout is set to one second which is
+
+1124
+00:39:38,079 --> 00:39:39,599
+sort of i got from
+
+1125
+00:39:39,599 --> 00:39:42,400
+uh i can hold on a second on the l
+
+1126
+00:39:42,400 --> 00:39:42,960
+there's a
+
+1127
+00:39:42,960 --> 00:39:46,720
+good reason uh from the chat the
+
+1128
+00:39:46,720 --> 00:39:50,800
+the uh the selection diameter is one
+
+1129
+00:39:50,800 --> 00:39:51,280
+second
+
+1130
+00:39:51,280 --> 00:39:52,960
+and then of course you know you need to
+
+1131
+00:39:52,960 --> 00:39:54,480
+randomize you know the
+
+1132
+00:39:54,480 --> 00:39:57,359
+appears across the interval and i use an
+
+1133
+00:39:57,359 --> 00:40:00,480
+interval from 0 to 300 milliseconds
+
+1134
+00:40:00,480 --> 00:40:02,720
+and i add that to the election timeout
+
+1135
+00:40:02,720 --> 00:40:04,400
+and so basically every peer
+
+1136
+00:40:04,400 --> 00:40:06,160
+likely has to have has a slightly
+
+1137
+00:40:06,160 --> 00:40:08,079
+different election time out
+
+1138
+00:40:08,079 --> 00:40:11,359
+and so uh they will call uh take at
+
+1139
+00:40:11,359 --> 00:40:12,160
+different spec
+
+1140
+00:40:12,160 --> 00:40:14,720
+stages and you know with a bit of luck
+
+1141
+00:40:14,720 --> 00:40:16,400
+uh only one or a few
+
+1142
+00:40:16,400 --> 00:40:19,200
+actually will start the election i i
+
+1143
+00:40:19,200 --> 00:40:20,560
+have a question
+
+1144
+00:40:20,560 --> 00:40:23,599
+so you're only like
+
+1145
+00:40:23,599 --> 00:40:25,760
+checking every like 50 milliseconds
+
+1146
+00:40:25,760 --> 00:40:27,040
+right doesn't that lead to like
+
+1147
+00:40:27,040 --> 00:40:29,280
+contested like elections
+
+1148
+00:40:29,280 --> 00:40:31,359
+like because you're essentially like it
+
+1149
+00:40:31,359 --> 00:40:33,119
+doesn't this like limit
+
+1150
+00:40:33,119 --> 00:40:36,319
+like you know you technically can
+
+1151
+00:40:36,319 --> 00:40:40,079
+like get for anywhere from three to like
+
+1152
+00:40:40,079 --> 00:40:43,040
+zero to three hundred right like no i
+
+1153
+00:40:43,040 --> 00:40:44,319
+could get from one second
+
+1154
+00:40:44,319 --> 00:40:47,760
+to 300 from one second to any value
+
+1155
+00:40:47,760 --> 00:40:48,640
+between
+
+1156
+00:40:48,640 --> 00:40:51,200
+1000 milliseconds and 1300 milliseconds
+
+1157
+00:40:51,200 --> 00:40:52,640
+right so
+
+1158
+00:40:52,640 --> 00:40:54,960
+um but at the end of the day like
+
+1159
+00:40:54,960 --> 00:40:56,079
+because you're like
+
+1160
+00:40:56,079 --> 00:40:57,920
+only checking every 50 milliseconds
+
+1161
+00:40:57,920 --> 00:40:59,599
+doesn't that just give it like
+
+1162
+00:40:59,599 --> 00:41:01,280
+right it gives us more coarse grain but
+
+1163
+00:41:01,280 --> 00:41:03,680
+it's good enough okay
+
+1164
+00:41:03,680 --> 00:41:05,920
+uh i mean basically two constraints here
+
+1165
+00:41:05,920 --> 00:41:06,800
+correct you know
+
+1166
+00:41:06,800 --> 00:41:09,520
+you don't want to be too slow and uh
+
+1167
+00:41:09,520 --> 00:41:10,319
+because that
+
+1168
+00:41:10,319 --> 00:41:12,000
+means that you're takes a long time
+
+1169
+00:41:12,000 --> 00:41:13,760
+before you start a new election and you
+
+1170
+00:41:13,760 --> 00:41:14,640
+don't want to be too
+
+1171
+00:41:14,640 --> 00:41:16,720
+fast because you know then you start too
+
+1172
+00:41:16,720 --> 00:41:18,640
+many elections and you need to allow for
+
+1173
+00:41:18,640 --> 00:41:20,079
+some time for an election
+
+1174
+00:41:20,079 --> 00:41:22,240
+to lose some you know some votes may get
+
+1175
+00:41:22,240 --> 00:41:23,119
+delayed
+
+1176
+00:41:23,119 --> 00:41:25,760
+and you don't want to restart it before
+
+1177
+00:41:25,760 --> 00:41:27,359
+you know you have
+
+1178
+00:41:27,359 --> 00:41:29,040
+before the candidate has a chance to
+
+1179
+00:41:29,040 --> 00:41:30,640
+sort of do a couple rounds of
+
+1180
+00:41:30,640 --> 00:41:34,800
+communication with the followers
+
+1181
+00:41:34,800 --> 00:41:36,319
+okay so somebody here people are
+
+1182
+00:41:36,319 --> 00:41:38,640
+speculating about my capital l
+
+1183
+00:41:38,640 --> 00:41:40,880
+uh this was just an experiment you know
+
+1184
+00:41:40,880 --> 00:41:41,680
+for uh
+
+1185
+00:41:41,680 --> 00:41:43,359
+this implementation i followed the
+
+1186
+00:41:43,359 --> 00:41:44,800
+convention and i probably broke it in
+
+1187
+00:41:44,800 --> 00:41:45,839
+some places but i followed the
+
+1188
+00:41:45,839 --> 00:41:48,160
+conception that
+
+1189
+00:41:48,160 --> 00:41:52,079
+if uh the caller the kali assumes that
+
+1190
+00:41:52,079 --> 00:41:52,640
+the lock
+
+1191
+00:41:52,640 --> 00:41:55,440
+is held then i put a capital l behind
+
+1192
+00:41:55,440 --> 00:41:56,800
+the function
+
+1193
+00:41:56,800 --> 00:41:59,119
+so start election assumes that the
+
+1194
+00:41:59,119 --> 00:42:00,960
+caller actually has required the lock
+
+1195
+00:42:00,960 --> 00:42:02,560
+and basically any function that starts
+
+1196
+00:42:02,560 --> 00:42:04,560
+with an l has that particular you know
+
+1197
+00:42:04,560 --> 00:42:08,160
+assumes that convention and so this is
+
+1198
+00:42:08,160 --> 00:42:09,280
+purely
+
+1199
+00:42:09,280 --> 00:42:11,839
+a coding prevention for myself and i
+
+1200
+00:42:11,839 --> 00:42:12,880
+thought it was sort of interesting to
+
+1201
+00:42:12,880 --> 00:42:14,880
+try that out for this implementation
+
+1202
+00:42:14,880 --> 00:42:17,200
+and not always do that but i just did it
+
+1203
+00:42:17,200 --> 00:42:20,550
+in this one
+
+1204
+00:42:20,560 --> 00:42:23,520
+any questions or should we look at the
+
+1205
+00:42:23,520 --> 00:42:28,470
+election part
+
+1206
+00:42:28,480 --> 00:42:30,560
+okay well then let's look at the
+
+1207
+00:42:30,560 --> 00:42:32,319
+election part and
+
+1208
+00:42:32,319 --> 00:42:35,200
+you'll see uh here start election so you
+
+1209
+00:42:35,200 --> 00:42:36,640
+know it doesn't require a lock right
+
+1210
+00:42:36,640 --> 00:42:38,160
+because i assume a lot of the
+
+1211
+00:42:38,160 --> 00:42:40,880
+uh caller holds it and basically just
+
+1212
+00:42:40,880 --> 00:42:42,079
+follows figure two
+
+1213
+00:42:42,079 --> 00:42:44,240
+you know so first you know the rule is
+
+1214
+00:42:44,240 --> 00:42:46,319
+you have to increment the current term
+
+1215
+00:42:46,319 --> 00:42:48,800
+by one so i do that i set the state to
+
+1216
+00:42:48,800 --> 00:42:49,359
+candidate
+
+1217
+00:42:49,359 --> 00:42:51,760
+and also uh dictated by figure two
+
+1218
+00:42:51,760 --> 00:42:52,720
+basically
+
+1219
+00:42:52,720 --> 00:42:55,440
+uh i record uh that i voted for myself
+
+1220
+00:42:55,440 --> 00:42:57,520
+this is also part of figure two
+
+1221
+00:42:57,520 --> 00:43:00,240
+uh and then you know this is for lab c
+
+1222
+00:43:00,240 --> 00:43:02,000
+you know to see you already know
+
+1223
+00:43:02,000 --> 00:43:03,839
+that like whenever you change basically
+
+1224
+00:43:03,839 --> 00:43:05,680
+state that should be persisted
+
+1225
+00:43:05,680 --> 00:43:08,000
+you have to persist as right afters and
+
+1226
+00:43:08,000 --> 00:43:08,960
+so
+
+1227
+00:43:08,960 --> 00:43:11,200
+so that's it and basically here you see
+
+1228
+00:43:11,200 --> 00:43:12,480
+my debugging messages
+
+1229
+00:43:12,480 --> 00:43:14,960
+uh like you know what jose says you know
+
+1230
+00:43:14,960 --> 00:43:16,800
+i always have to source at the beginning
+
+1231
+00:43:16,800 --> 00:43:19,200
+and this you know simplifies my life and
+
+1232
+00:43:19,200 --> 00:43:20,960
+i have a bunch of other sort of
+
+1233
+00:43:20,960 --> 00:43:22,560
+uh i don't have a perl script or a
+
+1234
+00:43:22,560 --> 00:43:24,480
+python script as nicely as jose but i
+
+1235
+00:43:24,480 --> 00:43:25,440
+have a bunch of sort of
+
+1236
+00:43:25,440 --> 00:43:27,839
+unique scripts that i use to parse the
+
+1237
+00:43:27,839 --> 00:43:28,640
+log and
+
+1238
+00:43:28,640 --> 00:43:32,240
+print and process it um and then you
+
+1239
+00:43:32,240 --> 00:43:32,880
+know we
+
+1240
+00:43:32,880 --> 00:43:35,119
+call request votes and request closes
+
+1241
+00:43:35,119 --> 00:43:36,400
+right up here
+
+1242
+00:43:36,400 --> 00:43:38,480
+uh and we'll see in a second you know
+
+1243
+00:43:38,480 --> 00:43:39,920
+how this is all gonna work out but
+
+1244
+00:43:39,920 --> 00:43:40,800
+basically
+
+1245
+00:43:40,800 --> 00:43:44,960
+it has a cell set you know we construct
+
+1246
+00:43:44,960 --> 00:43:46,079
+the arguments once
+
+1247
+00:43:46,079 --> 00:43:49,200
+you know up front and
+
+1248
+00:43:49,200 --> 00:43:51,920
+let me so let's look at the recursive
+
+1249
+00:43:51,920 --> 00:43:53,119
+arguments
+
+1250
+00:43:53,119 --> 00:43:56,160
+uh and basically your your data here and
+
+1251
+00:43:56,160 --> 00:43:58,400
+you know basically it contains exactly
+
+1252
+00:43:58,400 --> 00:44:00,960
+uh you know what you know basically
+
+1253
+00:44:00,960 --> 00:44:02,560
+figure two says that you contain the
+
+1254
+00:44:02,560 --> 00:44:03,680
+term the candidate id
+
+1255
+00:44:03,680 --> 00:44:06,400
+the last log index and the last log term
+
+1256
+00:44:06,400 --> 00:44:06,880
+uh
+
+1257
+00:44:06,880 --> 00:44:09,440
+and sustain struck in i one thing maybe
+
+1258
+00:44:09,440 --> 00:44:11,359
+worth pointing out is i do
+
+1259
+00:44:11,359 --> 00:44:13,680
+try to write these string functions that
+
+1260
+00:44:13,680 --> 00:44:14,720
+you know allow
+
+1261
+00:44:14,720 --> 00:44:16,400
+uh go you know when you're typing
+
+1262
+00:44:16,400 --> 00:44:17,839
+percent v you know we'll call that
+
+1263
+00:44:17,839 --> 00:44:19,440
+string function on destruct
+
+1264
+00:44:19,440 --> 00:44:21,520
+and so that allows you to format you
+
+1265
+00:44:21,520 --> 00:44:22,880
+know the
+
+1266
+00:44:22,880 --> 00:44:25,280
+uh the structure the request in a sort
+
+1267
+00:44:25,280 --> 00:44:26,640
+of a nice way
+
+1268
+00:44:26,640 --> 00:44:29,040
+and again that helps with me that helps
+
+1269
+00:44:29,040 --> 00:44:30,640
+me processing my log
+
+1270
+00:44:30,640 --> 00:44:34,000
+and so basically every request argument
+
+1271
+00:44:34,000 --> 00:44:34,880
+that i have i
+
+1272
+00:44:34,880 --> 00:44:37,839
+print in one standard way and again to
+
+1273
+00:44:37,839 --> 00:44:45,670
+simplify log processing
+
+1274
+00:44:45,680 --> 00:44:49,839
+okay back to starting elections so
+
+1275
+00:44:49,839 --> 00:44:50,720
+multiple
+
+1276
+00:44:50,720 --> 00:44:52,640
+uh followers who start at the same time
+
+1277
+00:44:52,640 --> 00:44:54,800
+you know they become uh one of them is
+
+1278
+00:44:54,800 --> 00:44:56,480
+hopefully starts first it becomes
+
+1279
+00:44:56,480 --> 00:44:58,880
+candidate and it does request votes
+
+1280
+00:44:58,880 --> 00:45:00,640
+and here i construct you know the
+
+1281
+00:45:00,640 --> 00:45:03,599
+arguments i put the current term in here
+
+1282
+00:45:03,599 --> 00:45:05,119
+it was going to be one if this is the
+
+1283
+00:45:05,119 --> 00:45:06,720
+first time for the election you know who
+
+1284
+00:45:06,720 --> 00:45:07,440
+i am
+
+1285
+00:45:07,440 --> 00:45:09,520
+what my last log index is you know which
+
+1286
+00:45:09,520 --> 00:45:10,560
+presumably is
+
+1287
+00:45:10,560 --> 00:45:14,480
+zero uh or one whatever the uh
+
+1288
+00:45:14,480 --> 00:45:16,960
+yeah it's going to be zero i guess and
+
+1289
+00:45:16,960 --> 00:45:18,000
+then uh
+
+1290
+00:45:18,000 --> 00:45:21,680
+the uh term in that entry which is the
+
+1291
+00:45:21,680 --> 00:45:24,480
+term zero uh because you know what we're
+
+1292
+00:45:24,480 --> 00:45:25,760
+doing correct is we're running an
+
+1293
+00:45:25,760 --> 00:45:26,800
+election for one
+
+1294
+00:45:26,800 --> 00:45:29,760
+and we need to show what the previous
+
+1295
+00:45:29,760 --> 00:45:33,040
+ones were
+
+1296
+00:45:33,040 --> 00:45:35,839
+okay so then here this is sort of my
+
+1297
+00:45:35,839 --> 00:45:38,640
+standard way of you know sending our pcs
+
+1298
+00:45:38,640 --> 00:45:41,119
+i just go for all the peers skipping
+
+1299
+00:45:41,119 --> 00:45:42,240
+myself
+
+1300
+00:45:42,240 --> 00:45:43,760
+uh of course i have to count that i
+
+1301
+00:45:43,760 --> 00:45:45,280
+voted for myself so i said the number of
+
+1302
+00:45:45,280 --> 00:45:46,480
+votes to one
+
+1303
+00:45:46,480 --> 00:45:50,240
+and then i basically fork off an art and
+
+1304
+00:45:50,240 --> 00:45:51,760
+fred that basically is going to do
+
+1305
+00:45:51,760 --> 00:45:54,000
+actually the sending the rpc to each
+
+1306
+00:45:54,000 --> 00:45:55,520
+individual peer
+
+1307
+00:45:55,520 --> 00:45:57,280
+the first argument is the peer to which
+
+1308
+00:45:57,280 --> 00:45:59,280
+the rpc is sent they all get the same
+
+1309
+00:45:59,280 --> 00:46:00,160
+arguments
+
+1310
+00:46:00,160 --> 00:46:01,680
+and also pass in the address of the
+
+1311
+00:46:01,680 --> 00:46:03,359
+votes so they can
+
+1312
+00:46:03,359 --> 00:46:07,829
+have a shared vote count
+
+1313
+00:46:07,839 --> 00:46:10,960
+any questions about this so
+
+1314
+00:46:10,960 --> 00:46:13,599
+for request votes the the lock is being
+
+1315
+00:46:13,599 --> 00:46:14,000
+held
+
+1316
+00:46:14,000 --> 00:46:17,680
+and then you're sending the yeah so rpc
+
+1317
+00:46:17,680 --> 00:46:19,839
+yeah so in uh request code here is the
+
+1318
+00:46:19,839 --> 00:46:22,000
+lock actually held
+
+1319
+00:46:22,000 --> 00:46:25,599
+inside of this function no right because
+
+1320
+00:46:25,599 --> 00:46:26,960
+it's a new thread
+
+1321
+00:46:26,960 --> 00:46:28,240
+yeah it's a difference it doesn't hold
+
+1322
+00:46:28,240 --> 00:46:29,760
+the lock and you see my naming
+
+1323
+00:46:29,760 --> 00:46:31,040
+convention hints at that because it
+
+1324
+00:46:31,040 --> 00:46:35,510
+doesn't have an l there
+
+1325
+00:46:35,520 --> 00:46:38,480
+okay so reuse request votes and the
+
+1326
+00:46:38,480 --> 00:46:40,160
+request folds when it actually
+
+1327
+00:46:40,160 --> 00:46:42,319
+starts running it has no locks because
+
+1328
+00:46:42,319 --> 00:46:43,359
+only the
+
+1329
+00:46:43,359 --> 00:46:45,040
+you know the parent held the lock and
+
+1330
+00:46:45,040 --> 00:46:46,400
+this guy this thread actually hasn't
+
+1331
+00:46:46,400 --> 00:46:47,440
+acquired the lock yet
+
+1332
+00:46:47,440 --> 00:46:51,030
+right so it does not have lock
+
+1333
+00:46:51,040 --> 00:46:53,839
+oh so yeah so so basically one fret runs
+
+1334
+00:46:53,839 --> 00:46:54,560
+for
+
+1335
+00:46:54,560 --> 00:46:56,079
+each of these request codes for each
+
+1336
+00:46:56,079 --> 00:46:59,520
+peer it allocates a reply structure and
+
+1337
+00:46:59,520 --> 00:47:01,440
+then basically it sends off you know the
+
+1338
+00:47:01,440 --> 00:47:03,440
+rpc right and this is all done without
+
+1339
+00:47:03,440 --> 00:47:04,880
+holding the lock
+
+1340
+00:47:04,880 --> 00:47:06,640
+and then at some point we get a response
+
+1341
+00:47:06,640 --> 00:47:07,920
+back
+
+1342
+00:47:07,920 --> 00:47:09,599
+and then at that point in the response
+
+1343
+00:47:09,599 --> 00:47:11,280
+handler i grab the log right at the
+
+1344
+00:47:11,280 --> 00:47:11,920
+beginning
+
+1345
+00:47:11,920 --> 00:47:14,480
+and do whatever response handling that
+
+1346
+00:47:14,480 --> 00:47:17,109
+is necessary
+
+1347
+00:47:17,119 --> 00:47:19,839
+and as you can see yeah all right i you
+
+1348
+00:47:19,839 --> 00:47:20,160
+said
+
+1349
+00:47:20,160 --> 00:47:22,079
+earlier that you shouldn't hold the lock
+
+1350
+00:47:22,079 --> 00:47:24,160
+when you're doing like uh um
+
+1351
+00:47:24,160 --> 00:47:26,000
+when you're doing a rpc call you mean
+
+1352
+00:47:26,000 --> 00:47:28,160
+like basically it's okay to
+
+1353
+00:47:28,160 --> 00:47:30,480
+it's okay for the rpc call itself in the
+
+1354
+00:47:30,480 --> 00:47:32,960
+rpc call to do to hold a lock but not
+
+1355
+00:47:32,960 --> 00:47:34,079
+like while you're calling
+
+1356
+00:47:34,079 --> 00:47:36,000
+yeah no not across this like why you're
+
+1357
+00:47:36,000 --> 00:47:37,520
+sitting
+
+1358
+00:47:37,520 --> 00:47:39,680
+sending it over to network but it's okay
+
+1359
+00:47:39,680 --> 00:47:41,760
+if you're doing it within the rpc
+
+1360
+00:47:41,760 --> 00:47:43,599
+well even the reply handler like think
+
+1361
+00:47:43,599 --> 00:47:45,200
+about this is like basically the reply
+
+1362
+00:47:45,200 --> 00:47:46,000
+handler running
+
+1363
+00:47:46,000 --> 00:47:48,000
+like so the response came back and now
+
+1364
+00:47:48,000 --> 00:47:49,359
+there's a reply and now you have to
+
+1365
+00:47:49,359 --> 00:47:52,000
+process the reply
+
+1366
+00:47:52,000 --> 00:47:53,680
+no i'm talking about like say in the
+
+1367
+00:47:53,680 --> 00:47:55,920
+request vote like the capital r
+
+1368
+00:47:55,920 --> 00:47:59,200
+requests capital v votes that's okay to
+
+1369
+00:47:59,200 --> 00:48:00,079
+hold locks
+
+1370
+00:48:00,079 --> 00:48:02,800
+in there at least right where you want
+
+1371
+00:48:02,800 --> 00:48:03,599
+to hold watch i
+
+1372
+00:48:03,599 --> 00:48:06,640
+am actually like so like capsule request
+
+1373
+00:48:06,640 --> 00:48:09,440
+votes here yeah that's what i'm talking
+
+1374
+00:48:09,440 --> 00:48:10,319
+about
+
+1375
+00:48:10,319 --> 00:48:14,480
+this one no like the function here
+
+1376
+00:48:14,480 --> 00:48:16,960
+so it's request vote but it's uh i think
+
+1377
+00:48:16,960 --> 00:48:17,680
+it's
+
+1378
+00:48:17,680 --> 00:48:21,990
+capsule r yeah
+
+1379
+00:48:22,000 --> 00:48:24,640
+so like you probably have a method right
+
+1380
+00:48:24,640 --> 00:48:26,880
+it's the rpc call i think it means the
+
+1381
+00:48:26,880 --> 00:48:28,640
+rpc on the receiver side
+
+1382
+00:48:28,640 --> 00:48:31,599
+okay yeah seriously yeah yeah we'll look
+
+1383
+00:48:31,599 --> 00:48:32,880
+at it in a second of course that will
+
+1384
+00:48:32,880 --> 00:48:34,079
+you know it runs on the completely you
+
+1385
+00:48:34,079 --> 00:48:34,960
+know way to think about it
+
+1386
+00:48:34,960 --> 00:48:36,319
+it runs on a totally different machine
+
+1387
+00:48:36,319 --> 00:48:38,800
+there we go there you go yeah yeah
+
+1388
+00:48:38,800 --> 00:48:40,880
+absolutely so so basically it's two
+
+1389
+00:48:40,880 --> 00:48:42,400
+places where i hold the lock like in the
+
+1390
+00:48:42,400 --> 00:48:42,960
+handler
+
+1391
+00:48:42,960 --> 00:48:46,839
+in the request handler and in the reply
+
+1392
+00:48:46,839 --> 00:48:48,480
+handler
+
+1393
+00:48:48,480 --> 00:48:51,440
+okay thank you sorry sorry for being
+
+1394
+00:48:51,440 --> 00:48:52,640
+confused
+
+1395
+00:48:52,640 --> 00:48:56,079
+i'm glad we clarified that um okay so
+
+1396
+00:48:56,079 --> 00:48:58,160
+uh grab block then put a print statement
+
+1397
+00:48:58,160 --> 00:49:00,240
+in the log so that i can know what later
+
+1398
+00:49:00,240 --> 00:49:01,520
+on i can study it
+
+1399
+00:49:01,520 --> 00:49:02,880
+and then you know of course you know the
+
+1400
+00:49:02,880 --> 00:49:04,559
+basic checks you know that you know
+
+1401
+00:49:04,559 --> 00:49:07,119
+you're uh actually figure 2 doesn't
+
+1402
+00:49:07,119 --> 00:49:08,400
+really say much about it
+
+1403
+00:49:08,400 --> 00:49:10,640
+but you know this is the rule that
+
+1404
+00:49:10,640 --> 00:49:13,359
+applies to all
+
+1405
+00:49:13,359 --> 00:49:16,559
+servers correct if the term is bigger
+
+1406
+00:49:16,559 --> 00:49:18,880
+then the reply term is better than the
+
+1407
+00:49:18,880 --> 00:49:19,920
+current term
+
+1408
+00:49:19,920 --> 00:49:22,720
+then uh you gotta switch to the follower
+
+1409
+00:49:22,720 --> 00:49:23,200
+state
+
+1410
+00:49:23,200 --> 00:49:26,720
+and uh to the term of the uh
+
+1411
+00:49:26,720 --> 00:49:28,160
+the person that responded to you so
+
+1412
+00:49:28,160 --> 00:49:30,319
+we'll look at that in a second
+
+1413
+00:49:30,319 --> 00:49:32,640
+uh so that basically you know if this
+
+1414
+00:49:32,640 --> 00:49:33,839
+was the candidate
+
+1415
+00:49:33,839 --> 00:49:35,200
+and it was talking to a peer that
+
+1416
+00:49:35,200 --> 00:49:36,720
+actually was in a higher term and
+
+1417
+00:49:36,720 --> 00:49:37,920
+basically backs off
+
+1418
+00:49:37,920 --> 00:49:41,829
+and becomes a follower
+
+1419
+00:49:41,839 --> 00:49:45,520
+um okay so uh if
+
+1420
+00:49:45,520 --> 00:49:47,440
+you know the follower responded saying
+
+1421
+00:49:47,440 --> 00:49:49,040
+that i'm granting you my vote
+
+1422
+00:49:49,040 --> 00:49:51,599
+then i increment you know numerous votes
+
+1423
+00:49:51,599 --> 00:49:52,960
+the shared vote guide by one
+
+1424
+00:49:52,960 --> 00:49:54,720
+it's just totally safe to do correct
+
+1425
+00:49:54,720 --> 00:49:56,319
+because you know i'm holding the raft
+
+1426
+00:49:56,319 --> 00:49:57,040
+lock
+
+1427
+00:49:57,040 --> 00:50:00,000
+and so this is a serialized so multiple
+
+1428
+00:50:00,000 --> 00:50:00,319
+the
+
+1429
+00:50:00,319 --> 00:50:01,440
+thing that will happen correct is
+
+1430
+00:50:01,440 --> 00:50:03,359
+multiple responses will come back
+
+1431
+00:50:03,359 --> 00:50:05,440
+they may run in parallel but they will
+
+1432
+00:50:05,440 --> 00:50:09,270
+be serialized because of the raft lock
+
+1433
+00:50:09,280 --> 00:50:11,760
+so add up the votes if the vote is
+
+1434
+00:50:11,760 --> 00:50:13,119
+longer than the
+
+1435
+00:50:13,119 --> 00:50:15,200
+you know if i have a majority of the
+
+1436
+00:50:15,200 --> 00:50:16,400
+votes then
+
+1437
+00:50:16,400 --> 00:50:20,240
+and if i'm still in the same term as the
+
+1438
+00:50:20,240 --> 00:50:22,640
+start when i started out actually uh
+
+1439
+00:50:22,640 --> 00:50:23,839
+running the election
+
+1440
+00:50:23,839 --> 00:50:25,839
+then i'm going to become a leader and
+
+1441
+00:50:25,839 --> 00:50:27,760
+i'll send out you know the first round
+
+1442
+00:50:27,760 --> 00:50:29,359
+of heartbeats which i'll look in in a
+
+1443
+00:50:29,359 --> 00:50:31,990
+second
+
+1444
+00:50:32,000 --> 00:50:33,839
+so i want to look at two things let's
+
+1445
+00:50:33,839 --> 00:50:35,119
+see what become leader is
+
+1446
+00:50:35,119 --> 00:50:36,559
+become leader you know it's right up
+
+1447
+00:50:36,559 --> 00:50:39,200
+here uh you know has capital l
+
+1448
+00:50:39,200 --> 00:50:41,119
+because it's you know already holds a
+
+1449
+00:50:41,119 --> 00:50:42,720
+lock it basically sets the state
+
+1450
+00:50:42,720 --> 00:50:45,680
+to the leader state um and it
+
+1451
+00:50:45,680 --> 00:50:47,920
+initializes the next index
+
+1452
+00:50:47,920 --> 00:50:49,680
+and the next index as i said in the last
+
+1453
+00:50:49,680 --> 00:50:51,280
+lecture is basically a guess and it's an
+
+1454
+00:50:51,280 --> 00:50:52,240
+optimistic guess
+
+1455
+00:50:52,240 --> 00:50:54,160
+and uh you know i just set it to
+
+1456
+00:50:54,160 --> 00:50:56,640
+whatever my last index is plus one
+
+1457
+00:50:56,640 --> 00:50:58,240
+so basically i'm assuming that all the
+
+1458
+00:50:58,240 --> 00:51:00,319
+followers are up to date
+
+1459
+00:51:00,319 --> 00:51:01,680
+and if they're not you know we'll see
+
+1460
+00:51:01,680 --> 00:51:03,920
+later they will back off
+
+1461
+00:51:03,920 --> 00:51:07,040
+okay i'll back off uh
+
+1462
+00:51:07,040 --> 00:51:10,640
+on the append entry sorry i reply
+
+1463
+00:51:10,640 --> 00:51:12,880
+okay good all right so that's become
+
+1464
+00:51:12,880 --> 00:51:14,000
+leader uh
+
+1465
+00:51:14,000 --> 00:51:17,510
+let me look at new term
+
+1466
+00:51:17,520 --> 00:51:19,760
+uh it's a new term is nothing really you
+
+1467
+00:51:19,760 --> 00:51:21,280
+know too exciting it basically says i
+
+1468
+00:51:21,280 --> 00:51:22,480
+can go go to the next
+
+1469
+00:51:22,480 --> 00:51:25,599
+uh term that is supplied by the
+
+1470
+00:51:25,599 --> 00:51:28,319
+uh caller uh i said voted for to minus
+
+1471
+00:51:28,319 --> 00:51:29,920
+one because you know i haven't voted yet
+
+1472
+00:51:29,920 --> 00:51:32,000
+in this term and i change to
+
+1473
+00:51:32,000 --> 00:51:34,319
+my state to follower because this is you
+
+1474
+00:51:34,319 --> 00:51:35,920
+know state that needs to be persistent i
+
+1475
+00:51:35,920 --> 00:51:41,349
+call persist
+
+1476
+00:51:41,359 --> 00:51:43,200
+okay so this is sort of the candidate
+
+1477
+00:51:43,200 --> 00:51:47,430
+site and now we want to look at the
+
+1478
+00:51:47,440 --> 00:51:50,640
+follower site or perhaps another
+
+1479
+00:51:50,640 --> 00:51:51,920
+candidate that's also running an
+
+1480
+00:51:51,920 --> 00:51:55,200
+election in uh in parallel
+
+1481
+00:51:55,200 --> 00:51:58,400
+so uh so here's the request vote handler
+
+1482
+00:51:58,400 --> 00:52:00,000
+and this is sort of running so this is
+
+1483
+00:52:00,000 --> 00:52:01,440
+the piece of code that runs on the other
+
+1484
+00:52:01,440 --> 00:52:01,920
+machine
+
+1485
+00:52:01,920 --> 00:52:05,040
+if you will correct where uh what i just
+
+1486
+00:52:05,040 --> 00:52:06,319
+was confused about a little bit
+
+1487
+00:52:06,319 --> 00:52:09,119
+uh in answering that question and you
+
+1488
+00:52:09,119 --> 00:52:09,599
+know you just
+
+1489
+00:52:09,599 --> 00:52:11,599
+see the first thing it does uh this is a
+
+1490
+00:52:11,599 --> 00:52:13,359
+revoked by the rpc library system
+
+1491
+00:52:13,359 --> 00:52:14,079
+correct and
+
+1492
+00:52:14,079 --> 00:52:15,440
+with its own thread and the first thing
+
+1493
+00:52:15,440 --> 00:52:17,440
+it does it actually grabs the lock on
+
+1494
+00:52:17,440 --> 00:52:18,000
+the
+
+1495
+00:52:18,000 --> 00:52:21,200
+raft structure and then basically you
+
+1496
+00:52:21,200 --> 00:52:22,480
+know this follows
+
+1497
+00:52:22,480 --> 00:52:25,280
+literally the rules uh figure two you
+
+1498
+00:52:25,280 --> 00:52:26,960
+know this is the rule for all servers
+
+1499
+00:52:26,960 --> 00:52:30,240
+correct if the uh term the argument
+
+1500
+00:52:30,240 --> 00:52:31,760
+determine the argument is higher than my
+
+1501
+00:52:31,760 --> 00:52:32,480
+current term
+
+1502
+00:52:32,480 --> 00:52:34,319
+then i should switch you know to this
+
+1503
+00:52:34,319 --> 00:52:35,520
+new term uh
+
+1504
+00:52:35,520 --> 00:52:39,200
+and uh that's it uh
+
+1505
+00:52:39,200 --> 00:52:41,280
+then here's sort of the you know the
+
+1506
+00:52:41,280 --> 00:52:42,800
+interesting piece correct this is all
+
+1507
+00:52:42,800 --> 00:52:44,480
+related to figure 8c
+
+1508
+00:52:44,480 --> 00:52:46,880
+what it means to be or not hc figure
+
+1509
+00:52:46,880 --> 00:52:47,599
+seven
+
+1510
+00:52:47,599 --> 00:52:49,760
+uh what it means to be up to date right
+
+1511
+00:52:49,760 --> 00:52:51,200
+you can only become a leader
+
+1512
+00:52:51,200 --> 00:52:54,160
+if you're up to date uh so i compute you
+
+1513
+00:52:54,160 --> 00:52:54,640
+know the
+
+1514
+00:52:54,640 --> 00:52:57,760
+up to date function uh and uh
+
+1515
+00:52:57,760 --> 00:52:59,599
+and that's basically based on the last
+
+1516
+00:52:59,599 --> 00:53:02,880
+index or in the term in the last index
+
+1517
+00:53:02,880 --> 00:53:05,920
+and so it says up to date is uh if my
+
+1518
+00:53:05,920 --> 00:53:07,920
+of our the term in the arguments is
+
+1519
+00:53:07,920 --> 00:53:09,440
+equal to my term
+
+1520
+00:53:09,440 --> 00:53:12,800
+in the uh
+
+1521
+00:53:12,800 --> 00:53:15,680
+the call the caller the candidate has a
+
+1522
+00:53:15,680 --> 00:53:17,839
+last login that is equal or higher to my
+
+1523
+00:53:17,839 --> 00:53:18,319
+index
+
+1524
+00:53:18,319 --> 00:53:20,160
+so basically to turn to equal the longer
+
+1525
+00:53:20,160 --> 00:53:21,920
+the log should win
+
+1526
+00:53:21,920 --> 00:53:24,960
+um and or uh if
+
+1527
+00:53:24,960 --> 00:53:26,800
+you know the candidate x is in higher
+
+1528
+00:53:26,800 --> 00:53:28,880
+term period then he always wins
+
+1529
+00:53:28,880 --> 00:53:32,000
+the candidate wins so that means to be
+
+1530
+00:53:32,000 --> 00:53:33,599
+up to date so compute up to date
+
+1531
+00:53:33,599 --> 00:53:34,960
+and then basically go through the
+
+1532
+00:53:34,960 --> 00:53:36,800
+different cases if the term is smaller
+
+1533
+00:53:36,800 --> 00:53:38,000
+than the current term
+
+1534
+00:53:38,000 --> 00:53:41,599
+that means that the caller is behind
+
+1535
+00:53:41,599 --> 00:53:44,079
+and so i vote granted to false and then
+
+1536
+00:53:44,079 --> 00:53:46,319
+in the other case if i haven't voted
+
+1537
+00:53:46,319 --> 00:53:48,880
+uh or i voted you know already voted for
+
+1538
+00:53:48,880 --> 00:53:50,240
+this candidate
+
+1539
+00:53:50,240 --> 00:53:52,960
+and you know uh the candidate is up to
+
+1540
+00:53:52,960 --> 00:53:53,599
+date
+
+1541
+00:53:53,599 --> 00:53:58,150
+then i get my vote and
+
+1542
+00:53:58,160 --> 00:54:01,990
+and reset the election timeout
+
+1543
+00:54:02,000 --> 00:54:04,480
+so why why is this this second case here
+
+1544
+00:54:04,480 --> 00:54:08,829
+the or the r voted for is rx candidate
+
+1545
+00:54:08,839 --> 00:54:13,349
+id
+
+1546
+00:54:13,359 --> 00:54:17,680
+because um the the candidate may resend
+
+1547
+00:54:17,680 --> 00:54:20,640
+uh maybe their pc was delayed yeah we're
+
+1548
+00:54:20,640 --> 00:54:23,920
+delayed or actually never made it right
+
+1549
+00:54:23,920 --> 00:54:24,640
+and so
+
+1550
+00:54:24,640 --> 00:54:27,280
+uh you know this is basically checking
+
+1551
+00:54:27,280 --> 00:54:29,200
+uh so this allows me to vote twice for
+
+1552
+00:54:29,200 --> 00:54:30,640
+the same candidate
+
+1553
+00:54:30,640 --> 00:54:33,440
+but i can't vote for any other candidate
+
+1554
+00:54:33,440 --> 00:54:34,240
+okay
+
+1555
+00:54:34,240 --> 00:54:36,240
+so just to double check the logic uh
+
+1556
+00:54:36,240 --> 00:54:37,359
+here so
+
+1557
+00:54:37,359 --> 00:54:40,400
+if we have the candidate has a term that
+
+1558
+00:54:40,400 --> 00:54:42,079
+is bigger than the current term
+
+1559
+00:54:42,079 --> 00:54:44,079
+uh we obviously have to convert the
+
+1560
+00:54:44,079 --> 00:54:46,000
+follower and update the term to the term
+
+1561
+00:54:46,000 --> 00:54:47,200
+of the candidate
+
+1562
+00:54:47,200 --> 00:54:49,760
+but we don't automatically grant them
+
+1563
+00:54:49,760 --> 00:54:50,240
+vote
+
+1564
+00:54:50,240 --> 00:54:53,520
+unless uh their log is at least is up to
+
+1565
+00:54:53,520 --> 00:54:58,390
+date
+
+1566
+00:54:58,400 --> 00:55:01,440
+i'm also wondering is voted for ever
+
+1567
+00:55:01,440 --> 00:55:03,440
+reset to minus one
+
+1568
+00:55:03,440 --> 00:55:06,640
+yep when they go to new term ever always
+
+1569
+00:55:06,640 --> 00:55:09,440
+i knew said it always whenever you go to
+
+1570
+00:55:09,440 --> 00:55:10,480
+the new term
+
+1571
+00:55:10,480 --> 00:55:12,880
+oh okay i said to the only one it's one
+
+1572
+00:55:12,880 --> 00:55:17,109
+place where this happens
+
+1573
+00:55:17,119 --> 00:55:24,789
+any questions
+
+1574
+00:55:24,799 --> 00:55:26,079
+so this gives you probably a reasonable
+
+1575
+00:55:26,079 --> 00:55:27,520
+good sense about the overall structure
+
+1576
+00:55:27,520 --> 00:55:28,079
+and basically
+
+1577
+00:55:28,079 --> 00:55:29,680
+everything else follows sort of roughly
+
+1578
+00:55:29,680 --> 00:55:31,680
+the same structure
+
+1579
+00:55:31,680 --> 00:55:35,040
+and so let's go back and uh go here so
+
+1580
+00:55:35,040 --> 00:55:35,520
+let's see
+
+1581
+00:55:35,520 --> 00:55:37,040
+you know let's assume this guy actually
+
+1582
+00:55:37,040 --> 00:55:38,799
+the leader or the candidate wins the
+
+1583
+00:55:38,799 --> 00:55:40,079
+election
+
+1584
+00:55:40,079 --> 00:55:43,200
+uh so it started the election let me go
+
+1585
+00:55:43,200 --> 00:55:46,319
+trades back so we started the election
+
+1586
+00:55:46,319 --> 00:55:49,520
+uh we requested the votes uh
+
+1587
+00:55:49,520 --> 00:55:53,280
+and we won the election and we became
+
+1588
+00:55:53,280 --> 00:55:53,920
+the leader
+
+1589
+00:55:53,920 --> 00:55:56,000
+and then the first thing that the figure
+
+1590
+00:55:56,000 --> 00:55:57,520
+2 tells you to do is like send a
+
+1591
+00:55:57,520 --> 00:55:59,359
+heartbeat to every
+
+1592
+00:55:59,359 --> 00:56:02,400
+uh peer
+
+1593
+00:56:02,400 --> 00:56:04,319
+and so basically this is you know going
+
+1594
+00:56:04,319 --> 00:56:06,400
+to be the standard code for sending a
+
+1595
+00:56:06,400 --> 00:56:08,240
+pants
+
+1596
+00:56:08,240 --> 00:56:10,079
+in fact you know the heartbeat code is
+
+1597
+00:56:10,079 --> 00:56:11,520
+identical to this
+
+1598
+00:56:11,520 --> 00:56:14,400
+append entry code except you know the
+
+1599
+00:56:14,400 --> 00:56:16,400
+heartbeats often will may have a null
+
+1600
+00:56:16,400 --> 00:56:18,240
+entry or no entries in the log that is
+
+1601
+00:56:18,240 --> 00:56:19,280
+being sent to the
+
+1602
+00:56:19,280 --> 00:56:23,270
+followers
+
+1603
+00:56:23,280 --> 00:56:25,200
+okay so send the pens follows the same
+
+1604
+00:56:25,200 --> 00:56:27,839
+structure as in votes
+
+1605
+00:56:27,839 --> 00:56:30,799
+you know go cycle over all the peers and
+
+1606
+00:56:30,799 --> 00:56:32,160
+if appears not equal to me
+
+1607
+00:56:32,160 --> 00:56:36,150
+then basically send it to the pen
+
+1608
+00:56:36,160 --> 00:56:41,200
+uh yeah and so here is the centipede
+
+1609
+00:56:41,200 --> 00:56:44,799
+um and uh you know basically
+
+1610
+00:56:44,799 --> 00:56:47,200
+we're keeping track correct of who what
+
+1611
+00:56:47,200 --> 00:56:48,240
+the the next
+
+1612
+00:56:48,240 --> 00:56:51,040
+uh log entry that the peer uh should
+
+1613
+00:56:51,040 --> 00:56:51,440
+have
+
+1614
+00:56:51,440 --> 00:56:52,880
+you know we initialize it to an
+
+1615
+00:56:52,880 --> 00:56:55,200
+optimistic guest in equal drawers
+
+1616
+00:56:55,200 --> 00:56:56,559
+so basically in this case there's gonna
+
+1617
+00:56:56,559 --> 00:56:58,720
+be no log entries that are going to be
+
+1618
+00:56:58,720 --> 00:56:59,839
+sent
+
+1619
+00:56:59,839 --> 00:57:01,520
+so i can sort of skip all this stuff for
+
+1620
+00:57:01,520 --> 00:57:03,280
+now and we'll come back to it when we're
+
+1621
+00:57:03,280 --> 00:57:04,640
+looking actually
+
+1622
+00:57:04,640 --> 00:57:07,599
+at start i fill in the append entries
+
+1623
+00:57:07,599 --> 00:57:09,599
+arguments
+
+1624
+00:57:09,599 --> 00:57:12,240
+and we could look at the structure if
+
+1625
+00:57:12,240 --> 00:57:13,760
+you'd like to but you know it is exactly
+
+1626
+00:57:13,760 --> 00:57:15,359
+as in figure two
+
+1627
+00:57:15,359 --> 00:57:18,079
+uh maybe the only thing that is a little
+
+1628
+00:57:18,079 --> 00:57:18,480
+bit
+
+1629
+00:57:18,480 --> 00:57:19,520
+careful you've got to be a little bit
+
+1630
+00:57:19,520 --> 00:57:21,599
+careful about is um
+
+1631
+00:57:21,599 --> 00:57:24,400
+i allocate a slice you know to hold the
+
+1632
+00:57:24,400 --> 00:57:25,119
+entries
+
+1633
+00:57:25,119 --> 00:57:27,440
+that need to be sent in this particular
+
+1634
+00:57:27,440 --> 00:57:29,040
+case the number of entries is zero
+
+1635
+00:57:29,040 --> 00:57:30,799
+right uh because we're assuming that
+
+1636
+00:57:30,799 --> 00:57:32,079
+everybody is up to date
+
+1637
+00:57:32,079 --> 00:57:34,960
+and then i copy you know the uh part
+
+1638
+00:57:34,960 --> 00:57:36,079
+from the
+
+1639
+00:57:36,079 --> 00:57:39,280
+slices from the log in the raw structure
+
+1640
+00:57:39,280 --> 00:57:40,720
+to the
+
+1641
+00:57:40,720 --> 00:57:44,480
+uh to the entries in the arguments
+
+1642
+00:57:44,480 --> 00:57:47,200
+uh and so i have really my own copy at
+
+1643
+00:57:47,200 --> 00:57:47,839
+this point
+
+1644
+00:57:47,839 --> 00:57:50,640
+of the log uh there's a here a little
+
+1645
+00:57:50,640 --> 00:57:52,160
+bit of a danger correct that like slices
+
+1646
+00:57:52,160 --> 00:57:53,440
+share memory
+
+1647
+00:57:53,440 --> 00:57:56,799
+so this is why the copy needs to happen
+
+1648
+00:57:56,799 --> 00:57:58,640
+so i copy the entries out of the wrath
+
+1649
+00:57:58,640 --> 00:58:01,040
+structure that i hold the logon into my
+
+1650
+00:58:01,040 --> 00:58:02,559
+private argument
+
+1651
+00:58:02,559 --> 00:58:05,839
+structure and
+
+1652
+00:58:05,839 --> 00:58:07,839
+once that is done basically i send you
+
+1653
+00:58:07,839 --> 00:58:09,359
+know i started over function
+
+1654
+00:58:09,359 --> 00:58:12,400
+i'll go and go routine for every peer
+
+1655
+00:58:12,400 --> 00:58:15,599
+and in that you know go function
+
+1656
+00:58:15,599 --> 00:58:19,040
+in that function uh i send the rpc
+
+1657
+00:58:19,040 --> 00:58:20,799
+and then in the reply handler you know i
+
+1658
+00:58:20,799 --> 00:58:22,559
+grab the log there's the reply handler
+
+1659
+00:58:22,559 --> 00:58:24,480
+of the rpc i grab the log and then
+
+1660
+00:58:24,480 --> 00:58:25,920
+process the reply
+
+1661
+00:58:25,920 --> 00:58:30,309
+the append reply
+
+1662
+00:58:30,319 --> 00:58:34,390
+does this all make sense
+
+1663
+00:58:34,400 --> 00:58:37,680
+uh yeah does just yeah go ahead or maybe
+
+1664
+00:58:37,680 --> 00:58:39,119
+one by one
+
+1665
+00:58:39,119 --> 00:58:41,040
+one little question yeah so in center
+
+1666
+00:58:41,040 --> 00:58:42,480
+pins l
+
+1667
+00:58:42,480 --> 00:58:44,319
+we have uh we have the loop in which we
+
+1668
+00:58:44,319 --> 00:58:47,359
+call rf.sendapendo
+
+1669
+00:58:47,359 --> 00:58:50,400
+and we assume that lock is held through
+
+1670
+00:58:50,400 --> 00:58:53,280
+that call but we do the you know any
+
+1671
+00:58:53,280 --> 00:58:53,760
+thread
+
+1672
+00:58:53,760 --> 00:58:56,480
+at which point uh the thread let's go
+
+1673
+00:58:56,480 --> 00:58:58,640
+for the lock right
+
+1674
+00:58:58,640 --> 00:59:00,319
+okay so like there's an outer loop
+
+1675
+00:59:00,319 --> 00:59:01,839
+correct where somebody in the caller
+
+1676
+00:59:01,839 --> 00:59:03,760
+holds the lock and basically it calls
+
+1677
+00:59:03,760 --> 00:59:04,640
+you send a pin
+
+1678
+00:59:04,640 --> 00:59:06,480
+l you know n times correct where n is
+
+1679
+00:59:06,480 --> 00:59:08,559
+the number appears minus one
+
+1680
+00:59:08,559 --> 00:59:11,359
+and for every one of them uh for every
+
+1681
+00:59:11,359 --> 00:59:12,559
+iteration of that loop
+
+1682
+00:59:12,559 --> 00:59:14,319
+you know we're going to create a new go
+
+1683
+00:59:14,319 --> 00:59:16,640
+function that go function runs without
+
+1684
+00:59:16,640 --> 00:59:19,520
+holding the locks right so it will send
+
+1685
+00:59:19,520 --> 00:59:21,359
+its rpc without holding the locks and at
+
+1686
+00:59:21,359 --> 00:59:23,040
+the same time a new go function might be
+
+1687
+00:59:23,040 --> 00:59:24,720
+started by the caller
+
+1688
+00:59:24,720 --> 00:59:27,839
+that actually also is going to send rpc
+
+1689
+00:59:27,839 --> 00:59:29,920
+although send rpc is going parallel to
+
+1690
+00:59:29,920 --> 00:59:31,040
+the followers
+
+1691
+00:59:31,040 --> 00:59:33,280
+the followers respond and so all the
+
+1692
+00:59:33,280 --> 00:59:34,880
+responses come back in
+
+1693
+00:59:34,880 --> 00:59:37,200
+uh that will so that will return you
+
+1694
+00:59:37,200 --> 00:59:38,799
+know when a follower response comes in
+
+1695
+00:59:38,799 --> 00:59:41,119
+that returns from send rpc and then that
+
+1696
+00:59:41,119 --> 00:59:42,640
+point i'll grab block you know the
+
+1697
+00:59:42,640 --> 00:59:44,559
+process to reply
+
+1698
+00:59:44,559 --> 00:59:48,319
+now if if the caller was still busy
+
+1699
+00:59:48,319 --> 00:59:51,520
+sending uh our rpc's to the followers
+
+1700
+00:59:51,520 --> 00:59:53,200
+then basically you know the reply
+
+1701
+00:59:53,200 --> 00:59:54,640
+handler will block correct
+
+1702
+00:59:54,640 --> 00:59:57,680
+until the uh caller is done sending all
+
+1703
+00:59:57,680 --> 01:00:00,640
+the rpcs
+
+1704
+01:00:00,640 --> 01:00:04,079
+yeah so my question was uh i i
+
+1705
+01:00:04,079 --> 01:00:06,160
+assumed why that happens is because you
+
+1706
+01:00:06,160 --> 01:00:08,240
+had a we had a differ
+
+1707
+01:00:08,240 --> 01:00:11,440
+rf.lock like unlock that's why it
+
+1708
+01:00:11,440 --> 01:00:12,960
+doesn't hold the lock when it
+
+1709
+01:00:12,960 --> 01:00:16,160
+starts a new thread right or is that
+
+1710
+01:00:16,160 --> 01:00:17,839
+just
+
+1711
+01:00:17,839 --> 01:00:19,680
+when you start fret you don't hold any
+
+1712
+01:00:19,680 --> 01:00:21,040
+locks
+
+1713
+01:00:21,040 --> 01:00:23,680
+yeah yeah like whatever it is even if we
+
+1714
+01:00:23,680 --> 01:00:24,400
+don't have like
+
+1715
+01:00:24,400 --> 01:00:27,040
+uh that like even if we tried to hold
+
+1716
+01:00:27,040 --> 01:00:29,040
+the lock right before the goku
+
+1717
+01:00:29,040 --> 01:00:31,760
+it wouldn't hold it that's right yeah
+
+1718
+01:00:31,760 --> 01:00:34,789
+yeah correct okay
+
+1719
+01:00:34,799 --> 01:00:38,559
+i was sort of follow so in the uh
+
+1720
+01:00:38,559 --> 01:00:42,240
+if okay block uh where's the defer being
+
+1721
+01:00:42,240 --> 01:00:43,440
+like called from
+
+1722
+01:00:43,440 --> 01:00:46,000
+from the return statement of that method
+
+1723
+01:00:46,000 --> 01:00:47,599
+and when this block exits
+
+1724
+01:00:47,599 --> 01:00:50,160
+when this block exits then the the new
+
+1725
+01:00:50,160 --> 01:00:52,880
+unlock will be called
+
+1726
+01:00:52,880 --> 01:00:55,200
+so the deferred the defer is called and
+
+1727
+01:00:55,200 --> 01:00:56,720
+when the surrounding
+
+1728
+01:00:56,720 --> 01:00:59,839
+basic block exits oh not just return
+
+1729
+01:00:59,839 --> 01:01:00,880
+statements
+
+1730
+01:01:00,880 --> 01:01:02,079
+not just return statements that's
+
+1731
+01:01:02,079 --> 01:01:04,079
+correct okay
+
+1732
+01:01:04,079 --> 01:01:07,119
+cool yeah it's cool it's very handy can
+
+1733
+01:01:07,119 --> 01:01:08,480
+you repeat that so when does the
+
+1734
+01:01:08,480 --> 01:01:09,119
+difference
+
+1735
+01:01:09,119 --> 01:01:11,839
+like defer is called like so when this
+
+1736
+01:01:11,839 --> 01:01:13,599
+defer or this unlock
+
+1737
+01:01:13,599 --> 01:01:16,880
+runs when this basic block exits
+
+1738
+01:01:16,880 --> 01:01:19,200
+or returns or goes out whatever terminal
+
+1739
+01:01:19,200 --> 01:01:20,480
+you want to run so if you return from
+
+1740
+01:01:20,480 --> 01:01:21,760
+this basic block
+
+1741
+01:01:21,760 --> 01:01:27,109
+this unlock will happen
+
+1742
+01:01:27,119 --> 01:01:30,319
+um sorry why um you need to check if the
+
+1743
+01:01:30,319 --> 01:01:31,599
+current term is still
+
+1744
+01:01:31,599 --> 01:01:34,400
+the term that you thought you were in
+
+1745
+01:01:34,400 --> 01:01:36,079
+because some requests
+
+1746
+01:01:36,079 --> 01:01:38,319
+can be slow and you might receive a
+
+1747
+01:01:38,319 --> 01:01:39,440
+response
+
+1748
+01:01:39,440 --> 01:01:42,799
+yeah after a long time yep yeah okay
+
+1749
+01:01:42,799 --> 01:01:44,400
+so here there's all let's look at
+
+1750
+01:01:44,400 --> 01:01:45,680
+process append reply i think this is
+
+1751
+01:01:45,680 --> 01:01:48,160
+what you're asking like what does it do
+
+1752
+01:01:48,160 --> 01:01:50,079
+uh and we haven't looked at it yet so we
+
+1753
+01:01:50,079 --> 01:01:52,240
+can look at it
+
+1754
+01:01:52,240 --> 01:01:54,799
+uh and actually it is more complicated
+
+1755
+01:01:54,799 --> 01:01:56,640
+uh
+
+1756
+01:01:56,640 --> 01:01:58,240
+it follows you know the general rule for
+
+1757
+01:01:58,240 --> 01:02:00,480
+all service if the reply term is bigger
+
+1758
+01:02:00,480 --> 01:02:02,319
+than my current term then you know you i
+
+1759
+01:02:02,319 --> 01:02:04,160
+can switch to becoming a follower
+
+1760
+01:02:04,160 --> 01:02:06,799
+and you know go into a new term if it is
+
+1761
+01:02:06,799 --> 01:02:08,160
+actually equal to my term correct this
+
+1762
+01:02:08,160 --> 01:02:09,680
+is what you were asking
+
+1763
+01:02:09,680 --> 01:02:12,319
+uh like the if i if the reply comes in
+
+1764
+01:02:12,319 --> 01:02:14,240
+in the same term that i send it in
+
+1765
+01:02:14,240 --> 01:02:18,000
+you know my arcs term then i gonna do uh
+
+1766
+01:02:18,000 --> 01:02:19,280
+i have a different function that
+
+1767
+01:02:19,280 --> 01:02:21,280
+actually does all the processing
+
+1768
+01:02:21,280 --> 01:02:23,760
+assuming that at least the terms are
+
+1769
+01:02:23,760 --> 01:02:25,280
+matching
+
+1770
+01:02:25,280 --> 01:02:27,200
+oh sorry sorry i meant in the leader
+
+1771
+01:02:27,200 --> 01:02:29,680
+when it receives a response you have
+
+1772
+01:02:29,680 --> 01:02:32,480
+you had like a check for the timers yeah
+
+1773
+01:02:32,480 --> 01:02:34,319
+i'm basically having here too it's like
+
+1774
+01:02:34,319 --> 01:02:35,599
+the same check here
+
+1775
+01:02:35,599 --> 01:02:39,910
+i see i see okay
+
+1776
+01:02:39,920 --> 01:02:42,880
+uh okay so you know basically this is
+
+1777
+01:02:42,880 --> 01:02:44,480
+then the
+
+1778
+01:02:44,480 --> 01:02:47,920
+uh append entries
+
+1779
+01:02:47,920 --> 01:02:50,240
+reply code like so what the handler that
+
+1780
+01:02:50,240 --> 01:02:52,559
+runs in response to a reply
+
+1781
+01:02:52,559 --> 01:02:55,680
+we know that the term matches and
+
+1782
+01:02:55,680 --> 01:02:58,559
+we check reply success uh if reply
+
+1783
+01:02:58,559 --> 01:03:00,319
+success you know we
+
+1784
+01:03:00,319 --> 01:03:03,680
+update our match indexes and
+
+1785
+01:03:03,680 --> 01:03:07,280
+uh and next index
+
+1786
+01:03:07,280 --> 01:03:09,200
+following exactly the rules of figure
+
+1787
+01:03:09,200 --> 01:03:10,400
+two
+
+1788
+01:03:10,400 --> 01:03:13,760
+uh if there's a conflict valid you know
+
+1789
+01:03:13,760 --> 01:03:16,079
+then you know i process the conflict and
+
+1790
+01:03:16,079 --> 01:03:17,359
+so this is the piece of code that's
+
+1791
+01:03:17,359 --> 01:03:20,079
+going to deal with like backing off fast
+
+1792
+01:03:20,079 --> 01:03:23,680
+um and uh
+
+1793
+01:03:23,680 --> 01:03:25,760
+and in the if there's no conflict
+
+1794
+01:03:25,760 --> 01:03:27,599
+information available then i just back
+
+1795
+01:03:27,599 --> 01:03:30,559
+off by one
+
+1796
+01:03:30,559 --> 01:03:33,599
+okay is it a quick question about how we
+
+1797
+01:03:33,599 --> 01:03:35,520
+back off by one
+
+1798
+01:03:35,520 --> 01:03:38,799
+um is it not problem that
+
+1799
+01:03:38,799 --> 01:03:40,720
+i was i was thinking about this and i i
+
+1800
+01:03:40,720 --> 01:03:41,839
+think it wasn't true but i
+
+1801
+01:03:41,839 --> 01:03:44,880
+hadn't fully convinced myself um but
+
+1802
+01:03:44,880 --> 01:03:47,599
+isn't it possible that rf dot next index
+
+1803
+01:03:47,599 --> 01:03:48,079
+peer
+
+1804
+01:03:48,079 --> 01:03:51,280
+changed between when we sent it and when
+
+1805
+01:03:51,280 --> 01:03:51,839
+we're
+
+1806
+01:03:51,839 --> 01:03:54,640
+processing this response yeah you've got
+
+1807
+01:03:54,640 --> 01:03:55,359
+problematic
+
+1808
+01:03:55,359 --> 01:03:57,680
+to decrement kind of using a potential a
+
+1809
+01:03:57,680 --> 01:03:59,520
+value that's potentially changed
+
+1810
+01:03:59,520 --> 01:04:02,319
+uh probably not great because i think
+
+1811
+01:04:02,319 --> 01:04:03,280
+your risk
+
+1812
+01:04:03,280 --> 01:04:05,280
+your concern is valid uh because
+
+1813
+01:04:05,280 --> 01:04:06,559
+certainly you know the rap structure
+
+1814
+01:04:06,559 --> 01:04:08,160
+might have completely changed
+
+1815
+01:04:08,160 --> 01:04:10,960
+by the time this response comes in uh
+
+1816
+01:04:10,960 --> 01:04:12,400
+and in fact you know
+
+1817
+01:04:12,400 --> 01:04:16,079
+uh although unlikely of course because
+
+1818
+01:04:16,079 --> 01:04:17,760
+this is the response to the same peer
+
+1819
+01:04:17,760 --> 01:04:18,960
+correct
+
+1820
+01:04:18,960 --> 01:04:23,510
+um
+
+1821
+01:04:23,520 --> 01:04:25,440
+so there's a you know but i might have
+
+1822
+01:04:25,440 --> 01:04:27,039
+multiple rpcs outstanding to that
+
+1823
+01:04:27,039 --> 01:04:28,079
+particular peer
+
+1824
+01:04:28,079 --> 01:04:29,760
+and so those reply handlers you know
+
+1825
+01:04:29,760 --> 01:04:33,829
+might run in some order
+
+1826
+01:04:33,839 --> 01:04:36,000
+um so i have a question so why do we
+
+1827
+01:04:36,000 --> 01:04:37,839
+decrement the next index by one if
+
+1828
+01:04:37,839 --> 01:04:40,559
+there's no conflict
+
+1829
+01:04:40,559 --> 01:04:43,839
+um i think this
+
+1830
+01:04:43,839 --> 01:04:45,359
+has to do that maybe at some point i
+
+1831
+01:04:45,359 --> 01:04:47,520
+hadn't implemented conflict uh
+
+1832
+01:04:47,520 --> 01:04:51,270
+the conflict term stuff yet
+
+1833
+01:04:51,280 --> 01:04:52,960
+i i don't remember whether this actually
+
+1834
+01:04:52,960 --> 01:04:54,400
+is essential or not
+
+1835
+01:04:54,400 --> 01:04:57,839
+okay uh you know of course like you i've
+
+1836
+01:04:57,839 --> 01:04:59,760
+changed my code multiple times and
+
+1837
+01:04:59,760 --> 01:05:03,039
+you know as i go along implementing the
+
+1838
+01:05:03,039 --> 01:05:07,510
+in response to the test
+
+1839
+01:05:07,520 --> 01:05:09,599
+i don't think there's harm in it you
+
+1840
+01:05:09,599 --> 01:05:11,440
+know the only downside could be that i
+
+1841
+01:05:11,440 --> 01:05:13,200
+may send too many uh
+
+1842
+01:05:13,200 --> 01:05:16,160
+entries on the rpc or send more entries
+
+1843
+01:05:16,160 --> 01:05:18,480
+in the rpc that i really have to
+
+1844
+01:05:18,480 --> 01:05:24,309
+on the next depend okay
+
+1845
+01:05:24,319 --> 01:05:27,829
+okay any questions
+
+1846
+01:05:27,839 --> 01:05:29,839
+okay good let me talk a little bit about
+
+1847
+01:05:29,839 --> 01:05:30,960
+the
+
+1848
+01:05:30,960 --> 01:05:33,440
+commit so we might have learned correct
+
+1849
+01:05:33,440 --> 01:05:38,150
+that the follower actually has uh
+
+1850
+01:05:38,160 --> 01:05:40,000
+has committed some entries that we
+
+1851
+01:05:40,000 --> 01:05:41,920
+didn't know before and the match index
+
+1852
+01:05:41,920 --> 01:05:42,720
+is updated
+
+1853
+01:05:42,720 --> 01:05:46,240
+and so so basically i always check
+
+1854
+01:05:46,240 --> 01:05:48,720
+after you know processing reply whether
+
+1855
+01:05:48,720 --> 01:05:49,359
+i should
+
+1856
+01:05:49,359 --> 01:05:52,559
+advance you know the commit point
+
+1857
+01:05:52,559 --> 01:05:55,760
+uh and this is basically the you know
+
+1858
+01:05:55,760 --> 01:05:56,400
+the
+
+1859
+01:05:56,400 --> 01:05:58,400
+this code corresponds to the last bullet
+
+1860
+01:05:58,400 --> 01:06:00,720
+of the leaders in figure two
+
+1861
+01:06:00,720 --> 01:06:04,319
+uh and literally implements what
+
+1862
+01:06:04,319 --> 01:06:05,680
+actually is supposed to be happening
+
+1863
+01:06:05,680 --> 01:06:06,720
+there
+
+1864
+01:06:06,720 --> 01:06:08,880
+um and probably the only thing that is
+
+1865
+01:06:08,880 --> 01:06:10,319
+sort of interesting in here
+
+1866
+01:06:10,319 --> 01:06:13,440
+is this particular point
+
+1867
+01:06:13,440 --> 01:06:16,720
+and this has to do with figure eight
+
+1868
+01:06:16,720 --> 01:06:18,799
+regular the scenario is that you're a
+
+1869
+01:06:18,799 --> 01:06:20,799
+leader is not allowed to commit
+
+1870
+01:06:20,799 --> 01:06:23,359
+a previous term unless at least has
+
+1871
+01:06:23,359 --> 01:06:24,880
+committed one
+
+1872
+01:06:24,880 --> 01:06:27,760
+entry in its current term and so this is
+
+1873
+01:06:27,760 --> 01:06:29,520
+this is exactly that one check that is
+
+1874
+01:06:29,520 --> 01:06:32,400
+described as section 5.4 uh
+
+1875
+01:06:32,400 --> 01:06:34,880
+it checks whether the current log entry
+
+1876
+01:06:34,880 --> 01:06:35,440
+uh
+
+1877
+01:06:35,440 --> 01:06:37,920
+that i want about to be in the entry
+
+1878
+01:06:37,920 --> 01:06:40,000
+that i'm about to commit
+
+1879
+01:06:40,000 --> 01:06:41,359
+whether that actually has a term that's
+
+1880
+01:06:41,359 --> 01:06:42,720
+different than the current term and if
+
+1881
+01:06:42,720 --> 01:06:44,960
+that's the case i just skip it
+
+1882
+01:06:44,960 --> 01:06:47,599
+now happens if there's another log entry
+
+1883
+01:06:47,599 --> 01:06:49,200
+following that term
+
+1884
+01:06:49,200 --> 01:06:51,920
+in my term for which i have a majority
+
+1885
+01:06:51,920 --> 01:06:53,039
+of the votes
+
+1886
+01:06:53,039 --> 01:06:56,079
+then i'll basically commit that newer
+
+1887
+01:06:56,079 --> 01:06:56,480
+one
+
+1888
+01:06:56,480 --> 01:06:58,079
+and then automatically it will also
+
+1889
+01:06:58,079 --> 01:07:03,510
+commit the previous one
+
+1890
+01:07:03,520 --> 01:07:07,119
+so that's that figure eight problem
+
+1891
+01:07:07,119 --> 01:07:10,240
+and then i signaled the applier
+
+1892
+01:07:10,240 --> 01:07:13,760
+and the applier you know may run
+
+1893
+01:07:13,760 --> 01:07:16,079
+if there's actually you know let's look
+
+1894
+01:07:16,079 --> 01:07:17,280
+at the
+
+1895
+01:07:17,280 --> 01:07:20,799
+applier threat uh here's the applier for
+
+1896
+01:07:20,799 --> 01:07:22,000
+that
+
+1897
+01:07:22,000 --> 01:07:24,000
+i signally apply for it to wake it up
+
+1898
+01:07:24,000 --> 01:07:25,200
+when uh
+
+1899
+01:07:25,200 --> 01:07:28,400
+maybe advance the commit point uh
+
+1900
+01:07:28,400 --> 01:07:32,079
+it has a last applied first graph's log
+
+1901
+01:07:32,079 --> 01:07:33,599
+has last applied
+
+1902
+01:07:33,599 --> 01:07:35,520
+and then you know basically go through
+
+1903
+01:07:35,520 --> 01:07:37,200
+here and
+
+1904
+01:07:37,200 --> 01:07:39,599
+uh dusty check you know that is the rule
+
+1905
+01:07:39,599 --> 01:07:40,559
+for all servers
+
+1906
+01:07:40,559 --> 01:07:42,799
+you know when you commit something and
+
+1907
+01:07:42,799 --> 01:07:44,240
+it just you know follows that rule and
+
+1908
+01:07:44,240 --> 01:07:45,599
+then basically writes something to the
+
+1909
+01:07:45,599 --> 01:07:47,280
+applied channel and as you can see here
+
+1910
+01:07:47,280 --> 01:07:47,520
+i
+
+1911
+01:07:47,520 --> 01:07:49,119
+unlock before writing to the applied
+
+1912
+01:07:49,119 --> 01:07:51,039
+channel and
+
+1913
+01:07:51,039 --> 01:07:54,839
+uh then if there's nothing anymore to
+
+1914
+01:07:54,839 --> 01:07:57,599
+uh nothing more to
+
+1915
+01:07:57,599 --> 01:07:59,200
+supply in the earth on the applied
+
+1916
+01:07:59,200 --> 01:08:00,880
+channel i just do a weight on the
+
+1917
+01:08:00,880 --> 01:08:04,549
+condition variable
+
+1918
+01:08:04,559 --> 01:08:07,119
+and again different ways of writing this
+
+1919
+01:08:07,119 --> 01:08:10,160
+but this is the way i happen to do it so
+
+1920
+01:08:10,160 --> 01:08:11,440
+why are you using uh
+
+1921
+01:08:11,440 --> 01:08:14,400
+broadcast uh why instead of signal yeah
+
+1922
+01:08:14,400 --> 01:08:14,799
+no
+
+1923
+01:08:14,799 --> 01:08:17,359
+no good reason okay because there's only
+
+1924
+01:08:17,359 --> 01:08:18,239
+one
+
+1925
+01:08:18,239 --> 01:08:19,679
+there's only one listener yeah there's
+
+1926
+01:08:19,679 --> 01:08:21,520
+no harm you know broadcast signal will
+
+1927
+01:08:21,520 --> 01:08:24,080
+in this case do exactly the same thing
+
+1928
+01:08:24,080 --> 01:08:27,600
+um for the applier yeah
+
+1929
+01:08:27,600 --> 01:08:31,199
+um so i using a condition variable and
+
+1930
+01:08:31,199 --> 01:08:32,319
+it seems like
+
+1931
+01:08:32,319 --> 01:08:34,880
+like probably natural to do that is
+
+1932
+01:08:34,880 --> 01:08:36,960
+there any disadvantage to doing it
+
+1933
+01:08:36,960 --> 01:08:39,839
+um on it like on sleeping like sleeping
+
+1934
+01:08:39,839 --> 01:08:41,440
+for a time interval then
+
+1935
+01:08:41,440 --> 01:08:43,279
+like you know matching everything
+
+1936
+01:08:43,279 --> 01:08:44,719
+together
+
+1937
+01:08:44,719 --> 01:08:48,159
+um i i i
+
+1938
+01:08:48,159 --> 01:08:50,640
+i dislike code with random sleeps in
+
+1939
+01:08:50,640 --> 01:08:51,520
+them
+
+1940
+01:08:51,520 --> 01:08:53,040
+i think it was generally a bad style of
+
+1941
+01:08:53,040 --> 01:08:54,719
+writing code
+
+1942
+01:08:54,719 --> 01:08:58,159
+um and so i don't do that
+
+1943
+01:08:58,159 --> 01:09:00,159
+yeah the only place where i do sleep is
+
+1944
+01:09:00,159 --> 01:09:01,359
+in the ticker
+
+1945
+01:09:01,359 --> 01:09:02,960
+that's it and that's the way place where
+
+1946
+01:09:02,960 --> 01:09:04,640
+you have to so otherwise
+
+1947
+01:09:04,640 --> 01:09:08,000
+i should never do that actually that's
+
+1948
+01:09:08,000 --> 01:09:09,759
+is there any disadvantage to doing it
+
+1949
+01:09:09,759 --> 01:09:12,630
+with the ticker
+
+1950
+01:09:12,640 --> 01:09:15,040
+sorry is there any any disadvantage of
+
+1951
+01:09:15,040 --> 01:09:16,480
+like checking and like
+
+1952
+01:09:16,480 --> 01:09:18,640
+like updating like alongside with the
+
+1953
+01:09:18,640 --> 01:09:20,400
+ticker right like you have yeah
+
+1954
+01:09:20,400 --> 01:09:23,199
+there's you could do that uh i find that
+
+1955
+01:09:23,199 --> 01:09:24,400
+harder to reason about
+
+1956
+01:09:24,400 --> 01:09:26,400
+i i'd like to you know so like if one
+
+1957
+01:09:26,400 --> 01:09:27,759
+thread which charges this one thing and
+
+1958
+01:09:27,759 --> 01:09:29,679
+then the ticker fred in one thing
+
+1959
+01:09:29,679 --> 01:09:31,199
+uh you know i think there are people
+
+1960
+01:09:31,199 --> 01:09:32,319
+that basically do everything in the
+
+1961
+01:09:32,319 --> 01:09:33,040
+ticker
+
+1962
+01:09:33,040 --> 01:09:36,239
+thread and you know one
+
+1963
+01:09:36,239 --> 01:09:38,640
+for me is hard to reason about but
+
+1964
+01:09:38,640 --> 01:09:39,279
+that's
+
+1965
+01:09:39,279 --> 01:09:40,799
+more a question of you know personal
+
+1966
+01:09:40,799 --> 01:09:46,829
+taste than anything
+
+1967
+01:09:46,839 --> 01:09:49,199
+thanks
+
+1968
+01:09:49,199 --> 01:09:54,229
+okay
+
+1969
+01:09:54,239 --> 01:10:00,149
+any further questions
+
+1970
+01:10:00,159 --> 01:10:03,679
+okay i want to quickly look then at uh
+
+1971
+01:10:03,679 --> 01:10:05,199
+start because basically there's nothing
+
+1972
+01:10:05,199 --> 01:10:06,800
+really left to discuss anymore you know
+
+1973
+01:10:06,800 --> 01:10:08,080
+we talked basically about voting we
+
+1974
+01:10:08,080 --> 01:10:09,520
+talked about appending
+
+1975
+01:10:09,520 --> 01:10:11,120
+uh i haven't really discussed exactly
+
+1976
+01:10:11,120 --> 01:10:13,440
+what happens on the follower site when
+
+1977
+01:10:13,440 --> 01:10:14,480
+it gets in a
+
+1978
+01:10:14,480 --> 01:10:17,920
+pen request but
+
+1979
+01:10:17,920 --> 01:10:19,520
+basically follows figure two and if we
+
+1980
+01:10:19,520 --> 01:10:21,679
+have time left we can look at that too
+
+1981
+01:10:21,679 --> 01:10:24,800
+uh here's the start command
+
+1982
+01:10:24,800 --> 01:10:26,560
+uh so this is like the service calls
+
+1983
+01:10:26,560 --> 01:10:29,440
+this to append or an entry to
+
+1984
+01:10:29,440 --> 01:10:32,080
+the log and uh you know immediately
+
+1985
+01:10:32,080 --> 01:10:34,400
+grabs the log
+
+1986
+01:10:34,400 --> 01:10:35,920
+checks whether we're still deleted if
+
+1987
+01:10:35,920 --> 01:10:37,600
+not we'll return false
+
+1988
+01:10:37,600 --> 01:10:40,239
+otherwise we create an entry and we
+
+1989
+01:10:40,239 --> 01:10:42,480
+append it to the log
+
+1990
+01:10:42,480 --> 01:10:44,239
+and lock has to be persistent so we're
+
+1991
+01:10:44,239 --> 01:10:47,040
+persisted and then we send the applies
+
+1992
+01:10:47,040 --> 01:10:48,880
+and this is exactly the same or we sent
+
+1993
+01:10:48,880 --> 01:10:50,320
+the appends and this is exactly the same
+
+1994
+01:10:50,320 --> 01:10:54,390
+code as the heartbeats
+
+1995
+01:10:54,400 --> 01:10:56,719
+except in unlike in the heartbeats you
+
+1996
+01:10:56,719 --> 01:10:58,000
+know most likely now it's going to
+
+1997
+01:10:58,000 --> 01:10:59,360
+actually send the entry
+
+1998
+01:10:59,360 --> 01:11:01,440
+uh that is uh that just has been
+
+1999
+01:11:01,440 --> 01:11:05,189
+appended to the log
+
+2000
+01:11:05,199 --> 01:11:08,880
+okay um
+
+2001
+01:11:08,880 --> 01:11:10,719
+you noticed you know that probably many
+
+2002
+01:11:10,719 --> 01:11:12,000
+places have this log
+
+2003
+01:11:12,000 --> 01:11:15,120
+dot last index or log that something and
+
+2004
+01:11:15,120 --> 01:11:16,719
+that's because like sort of extracted
+
+2005
+01:11:16,719 --> 01:11:17,920
+the log away
+
+2006
+01:11:17,920 --> 01:11:20,960
+into its own structure
+
+2007
+01:11:20,960 --> 01:11:24,000
+um and here's the log actually it has
+
+2008
+01:11:24,000 --> 01:11:26,800
+just a log of entries a slice of entries
+
+2009
+01:11:26,800 --> 01:11:27,440
+and
+
+2010
+01:11:27,440 --> 01:11:30,080
+the index zero and this is really for
+
+2011
+01:11:30,080 --> 01:11:31,440
+part two d
+
+2012
+01:11:31,440 --> 01:11:33,440
+uh where basically you're going to cut
+
+2013
+01:11:33,440 --> 01:11:34,800
+up the beginning of the log
+
+2014
+01:11:34,800 --> 01:11:37,040
+the sort of global log and you need to
+
+2015
+01:11:37,040 --> 01:11:38,159
+keep track but the
+
+2016
+01:11:38,159 --> 01:11:40,159
+index you need to keep track of what the
+
+2017
+01:11:40,159 --> 01:11:41,679
+index is of the first entry that
+
+2018
+01:11:41,679 --> 01:11:44,400
+actually you have recorded in your log
+
+2019
+01:11:44,400 --> 01:11:46,080
+and you know to hide most of those
+
+2020
+01:11:46,080 --> 01:11:48,480
+details away you know basically have uh
+
+2021
+01:11:48,480 --> 01:11:51,120
+uh abstracted that way in this uh file
+
+2022
+01:11:51,120 --> 01:11:52,320
+log.go
+
+2023
+01:11:52,320 --> 01:11:53,840
+and there are basically functions for
+
+2024
+01:11:53,840 --> 01:11:55,360
+appending you know to get the start of
+
+2025
+01:11:55,360 --> 01:11:57,280
+the log you know to cut the end to cut
+
+2026
+01:11:57,280 --> 01:11:58,480
+the cut to start
+
+2027
+01:11:58,480 --> 01:12:00,159
+you know to get the slice out of it get
+
+2028
+01:12:00,159 --> 01:12:02,400
+the last index get the particular entry
+
+2029
+01:12:02,400 --> 01:12:04,960
+or get the last entry
+
+2030
+01:12:04,960 --> 01:12:07,920
+uh and that might be convenient for 2d
+
+2031
+01:12:07,920 --> 01:12:09,040
+although there's many other ways of
+
+2032
+01:12:09,040 --> 01:12:16,229
+doing it
+
+2033
+01:12:16,239 --> 01:12:18,400
+okay let me go back for a second to sort
+
+2034
+01:12:18,400 --> 01:12:19,600
+of some of the questions that people
+
+2035
+01:12:19,600 --> 01:12:20,800
+asked
+
+2036
+01:12:20,800 --> 01:12:23,360
+and uh i think hopefully i have answered
+
+2037
+01:12:23,360 --> 01:12:24,640
+many of them by now
+
+2038
+01:12:24,640 --> 01:12:27,920
+uh but if not um
+
+2039
+01:12:27,920 --> 01:12:30,719
+uh let me just review and quickly go
+
+2040
+01:12:30,719 --> 01:12:31,679
+through them
+
+2041
+01:12:31,679 --> 01:12:33,360
+uh so i think we talked quite
+
+2042
+01:12:33,360 --> 01:12:35,280
+extensively about the election timeout
+
+2043
+01:12:35,280 --> 01:12:37,120
+you know how to compute it how to check
+
+2044
+01:12:37,120 --> 01:12:38,960
+where the timeline is passed
+
+2045
+01:12:38,960 --> 01:12:43,360
+um uh the
+
+2046
+01:12:43,360 --> 01:12:45,600
+uh there was a question about always
+
+2047
+01:12:45,600 --> 01:12:47,199
+when receiving a message from leader
+
+2048
+01:12:47,199 --> 01:12:49,360
+you know i only reset it when i receive
+
+2049
+01:12:49,360 --> 01:12:50,719
+a message from the leader that actually
+
+2050
+01:12:50,719 --> 01:12:53,360
+is in my current term
+
+2051
+01:12:53,360 --> 01:12:56,800
+or in my new term if i become a follower
+
+2052
+01:12:56,800 --> 01:12:58,159
+but not you know for somebody that's
+
+2053
+01:12:58,159 --> 01:13:00,239
+behind in terms of terms
+
+2054
+01:13:00,239 --> 01:13:02,640
+uh when to send the append entries and
+
+2055
+01:13:02,640 --> 01:13:04,000
+under different ways of doing it
+
+2056
+01:13:04,000 --> 01:13:05,520
+you can do it only in the heartbeats you
+
+2057
+01:13:05,520 --> 01:13:07,120
+know some people have done that
+
+2058
+01:13:07,120 --> 01:13:09,600
+uh you can do so never send anything in
+
+2059
+01:13:09,600 --> 01:13:11,520
+start that's like i showed me
+
+2060
+01:13:11,520 --> 01:13:14,159
+as i showed in the code uh or sometimes
+
+2061
+01:13:14,159 --> 01:13:16,960
+you people do also do it in the response
+
+2062
+01:13:16,960 --> 01:13:19,679
+if for example the follower is behind
+
+2063
+01:13:19,679 --> 01:13:21,280
+you know send immediately the
+
+2064
+01:13:21,280 --> 01:13:24,880
+remaining entries uh i don't do that
+
+2065
+01:13:24,880 --> 01:13:26,640
+uh i never send anything in response
+
+2066
+01:13:26,640 --> 01:13:27,840
+although i had an implementation that
+
+2067
+01:13:27,840 --> 01:13:28,880
+does that
+
+2068
+01:13:28,880 --> 01:13:30,880
+uh the risk is that i think you swamped
+
+2069
+01:13:30,880 --> 01:13:32,000
+the follower in later
+
+2070
+01:13:32,000 --> 01:13:34,880
+laps or in uh you know tests for 2c and
+
+2071
+01:13:34,880 --> 01:13:36,239
+2d
+
+2072
+01:13:36,239 --> 01:13:39,760
+um you in only
+
+2073
+01:13:39,760 --> 01:13:42,080
+some people i think just send rp entries
+
+2074
+01:13:42,080 --> 01:13:43,679
+only in the heartbeat so that means like
+
+2075
+01:13:43,679 --> 01:13:44,719
+every
+
+2076
+01:13:44,719 --> 01:13:46,800
+uh you know if you you're not allowed to
+
+2077
+01:13:46,800 --> 01:13:48,239
+send a heartbeat more than ten times a
+
+2078
+01:13:48,239 --> 01:13:48,880
+second
+
+2079
+01:13:48,880 --> 01:13:51,600
+uh in the our rules of the game for the
+
+2080
+01:13:51,600 --> 01:13:52,480
+laughs
+
+2081
+01:13:52,480 --> 01:13:54,080
+so that means that you were gonna send
+
+2082
+01:13:54,080 --> 01:13:56,400
+uh our pen entries once every
+
+2083
+01:13:56,400 --> 01:13:58,320
+you know 100 milliseconds or maybe a
+
+2084
+01:13:58,320 --> 01:14:00,640
+little bit faster
+
+2085
+01:14:00,640 --> 01:14:04,560
+that may run into problems in lab
+
+2086
+01:14:04,560 --> 01:14:07,920
+3 where we actually see if you make
+
+2087
+01:14:07,920 --> 01:14:11,189
+fast enough progress
+
+2088
+01:14:11,199 --> 01:14:12,800
+so basically i do it in the heartbeats
+
+2089
+01:14:12,800 --> 01:14:15,520
+and i do it in start
+
+2090
+01:14:15,520 --> 01:14:16,880
+i think we talked quite extensively
+
+2091
+01:14:16,880 --> 01:14:19,040
+about debugging i've talked a bunch
+
+2092
+01:14:19,040 --> 01:14:20,400
+about code organization
+
+2093
+01:14:20,400 --> 01:14:21,840
+i think we talked quite a bit about
+
+2094
+01:14:21,840 --> 01:14:24,480
+concurrency um
+
+2095
+01:14:24,480 --> 01:14:25,840
+there's no more questions about like why
+
+2096
+01:14:25,840 --> 01:14:28,400
+three five seven servers and never more
+
+2097
+01:14:28,400 --> 01:14:30,159
+i think this is a the reason that is the
+
+2098
+01:14:30,159 --> 01:14:31,920
+case because that i think reflects how
+
+2099
+01:14:31,920 --> 01:14:34,000
+uh raft is actually used in practice and
+
+2100
+01:14:34,000 --> 01:14:35,920
+really that three five seven is a
+
+2101
+01:14:35,920 --> 01:14:37,520
+is based on the computation of knowing
+
+2102
+01:14:37,520 --> 01:14:39,920
+what the mean time between failures are
+
+2103
+01:14:39,920 --> 01:14:41,440
+right then in the raft paper it's
+
+2104
+01:14:41,440 --> 01:14:42,800
+assumed that the meantime between
+
+2105
+01:14:42,800 --> 01:14:44,400
+failures are rough you know a couple
+
+2106
+01:14:44,400 --> 01:14:46,239
+couple months so if you run with three
+
+2107
+01:14:46,239 --> 01:14:48,320
+servers and one goes down
+
+2108
+01:14:48,320 --> 01:14:50,159
+uh you know you have plenty of time to
+
+2109
+01:14:50,159 --> 01:14:51,360
+actually uh
+
+2110
+01:14:51,360 --> 01:14:53,520
+uh rebuild you know a third server and
+
+2111
+01:14:53,520 --> 01:14:55,520
+get it back online and so get back to
+
+2112
+01:14:55,520 --> 01:14:57,280
+three before hopefully the next failure
+
+2113
+01:14:57,280 --> 01:14:59,520
+happens
+
+2114
+01:14:59,520 --> 01:15:01,679
+so that's why you know there's a small
+
+2115
+01:15:01,679 --> 01:15:05,430
+number of servers
+
+2116
+01:15:05,440 --> 01:15:08,470
+um
+
+2117
+01:15:08,480 --> 01:15:09,679
+we talked a little bit about when to
+
+2118
+01:15:09,679 --> 01:15:11,760
+persist um
+
+2119
+01:15:11,760 --> 01:15:13,120
+there's a number of good questions about
+
+2120
+01:15:13,120 --> 01:15:14,960
+like you know what happens if you uh
+
+2121
+01:15:14,960 --> 01:15:18,159
+crash while writing to stable storage uh
+
+2122
+01:15:18,159 --> 01:15:20,640
+so you may write partial state and that
+
+2123
+01:15:20,640 --> 01:15:21,920
+would be a disaster
+
+2124
+01:15:21,920 --> 01:15:23,600
+and so typically what people do is
+
+2125
+01:15:23,600 --> 01:15:24,960
+actually they make sure that when they
+
+2126
+01:15:24,960 --> 01:15:26,400
+write to stable storage that is an
+
+2127
+01:15:26,400 --> 01:15:28,159
+atomic operation
+
+2128
+01:15:28,159 --> 01:15:29,760
+uh you know this does not show up in the
+
+2129
+01:15:29,760 --> 01:15:31,440
+tester because the tester basically sort
+
+2130
+01:15:31,440 --> 01:15:32,320
+of simulates
+
+2131
+01:15:32,320 --> 01:15:35,040
+uh persistent storage and basically
+
+2132
+01:15:35,040 --> 01:15:35,600
+updates
+
+2133
+01:15:35,600 --> 01:15:38,640
+the precision storage atomically but in
+
+2134
+01:15:38,640 --> 01:15:41,040
+a real system that actually has a disk
+
+2135
+01:15:41,040 --> 01:15:43,520
+uh you might like play a trick like the
+
+2136
+01:15:43,520 --> 01:15:45,280
+mapreduce library did where you
+
+2137
+01:15:45,280 --> 01:15:46,880
+automatically rename you first write it
+
+2138
+01:15:46,880 --> 01:15:48,400
+in temporary file until everything is
+
+2139
+01:15:48,400 --> 01:15:49,520
+written and then you atomic
+
+2140
+01:15:49,520 --> 01:15:52,640
+rename or use a lot right ahead logging
+
+2141
+01:15:52,640 --> 01:15:54,080
+system
+
+2142
+01:15:54,080 --> 01:15:56,719
+uh but yeah you have to uh that'd be a
+
+2143
+01:15:56,719 --> 01:15:58,560
+disaster if the
+
+2144
+01:15:58,560 --> 01:16:01,679
+uh the crash or the precision state the
+
+2145
+01:16:01,679 --> 01:16:04,960
+stable storage becomes inconsistent
+
+2146
+01:16:04,960 --> 01:16:07,040
+okay let me stop here so that like
+
+2147
+01:16:07,040 --> 01:16:08,480
+there's maybe a little bit more time to
+
+2148
+01:16:08,480 --> 01:16:09,920
+ask questions and of course i'll stay
+
+2149
+01:16:09,920 --> 01:16:10,560
+around
+
+2150
+01:16:10,560 --> 01:16:13,040
+and as always and i can answer more
+
+2151
+01:16:13,040 --> 01:16:13,920
+questions
+
+2152
+01:16:13,920 --> 01:16:16,320
+i see there's also a ton of uh
+
+2153
+01:16:16,320 --> 01:16:17,440
+discussion in the chat
+
+2154
+01:16:17,440 --> 01:16:19,520
+i'm not i'm unfortunately not able
+
+2155
+01:16:19,520 --> 01:16:20,719
+probably i didn't keep
+
+2156
+01:16:20,719 --> 01:16:27,270
+up with all of it uh
+
+2157
+01:16:27,280 --> 01:16:31,510
+okay good
+
+2158
+01:16:31,520 --> 01:16:35,280
+okay so yeah any more questions
+
+2159
+01:16:35,280 --> 01:16:38,880
+um i have a question about the log
+
+2160
+01:16:38,880 --> 01:16:42,159
+your in your code for the log
+
+2161
+01:16:42,159 --> 01:16:46,000
+the index zero it is
+
+2162
+01:16:46,000 --> 01:16:49,199
+um i guess in the underlying
+
+2163
+01:16:49,199 --> 01:16:52,560
+array what the start of the log
+
+2164
+01:16:52,560 --> 01:16:55,440
+is is that right so this is basically
+
+2165
+01:16:55,440 --> 01:16:55,760
+for
+
+2166
+01:16:55,760 --> 01:16:58,880
+lab2d not for uh no
+
+2167
+01:16:58,880 --> 01:17:01,199
+in lapse a b and c index zero would be
+
+2168
+01:17:01,199 --> 01:17:03,760
+altered always zero here
+
+2169
+01:17:03,760 --> 01:17:06,159
+and in lab 2d where you take snapshots
+
+2170
+01:17:06,159 --> 01:17:07,920
+you know the index 0 would know the
+
+2171
+01:17:07,920 --> 01:17:11,990
+index number of the snapshot
+
+2172
+01:17:12,000 --> 01:17:13,199
+because you're going to cut the
+
+2173
+01:17:13,199 --> 01:17:15,360
+beginning of the log
+
+2174
+01:17:15,360 --> 01:17:17,040
+okay so if you take a snapshot at the
+
+2175
+01:17:17,040 --> 01:17:18,640
+index 10 you know you're going to cut
+
+2176
+01:17:18,640 --> 01:17:20,239
+from zero through nine
+
+2177
+01:17:20,239 --> 01:17:23,600
+and index zero will be ten then oh see
+
+2178
+01:17:23,600 --> 01:17:24,239
+this is
+
+2179
+01:17:24,239 --> 01:17:26,000
+this is the end of the snapshot i see
+
+2180
+01:17:26,000 --> 01:17:28,830
+okay
+
+2181
+01:17:28,840 --> 01:17:32,080
+okay so basically everything through
+
+2182
+01:17:32,080 --> 01:17:34,239
+uh to until index zero is actually
+
+2183
+01:17:34,239 --> 01:17:35,840
+included in the snapshot so there's no
+
+2184
+01:17:35,840 --> 01:17:36,480
+reason to
+
+2185
+01:17:36,480 --> 01:17:38,159
+maintain that in that state anymore in
+
+2186
+01:17:38,159 --> 01:17:45,760
+the log
+
+2187
+01:17:45,760 --> 01:17:51,110
+any other questions
+
+2188
+01:17:51,120 --> 01:17:53,520
+i hope this was useful uh particularly
+
+2189
+01:17:53,520 --> 01:17:55,600
+still in time for you know
+
+2190
+01:17:55,600 --> 01:17:58,800
+2c and 2d and maybe
+
+2191
+01:17:58,800 --> 01:18:00,400
+there's some ideas here that might be
+
+2192
+01:18:00,400 --> 01:18:02,320
+useful for you in implementing those
+
+2193
+01:18:02,320 --> 01:18:05,669
+labs
+
+2194
+01:18:05,679 --> 01:18:10,000
+i have a question about like
+
+2195
+01:18:10,000 --> 01:18:11,679
+what kind of ranges for election
+
+2196
+01:18:11,679 --> 01:18:13,199
+timeouts people used
+
+2197
+01:18:13,199 --> 01:18:16,800
+um i think i use like
+
+2198
+01:18:16,800 --> 01:18:18,400
+you know the the lower the like the
+
+2199
+01:18:18,400 --> 01:18:21,280
+limit of like 100 milliseconds for the
+
+2200
+01:18:21,280 --> 01:18:24,000
+heartbeats and then timeout anywhere
+
+2201
+01:18:24,000 --> 01:18:26,880
+between like 300 and 700 milliseconds
+
+2202
+01:18:26,880 --> 01:18:29,840
+yep i don't know if that's like totally
+
+2203
+01:18:29,840 --> 01:18:31,199
+reasonable i use a little bigger number
+
+2204
+01:18:31,199 --> 01:18:32,000
+correct like the
+
+2205
+01:18:32,000 --> 01:18:33,520
+stranger we gave you is that you know
+
+2206
+01:18:33,520 --> 01:18:35,120
+you should be able to
+
+2207
+01:18:35,120 --> 01:18:38,400
+elect a leader in five seconds and
+
+2208
+01:18:38,400 --> 01:18:40,159
+that means you should count on and you
+
+2209
+01:18:40,159 --> 01:18:41,280
+know may have to run the election a
+
+2210
+01:18:41,280 --> 01:18:42,719
+couple times
+
+2211
+01:18:42,719 --> 01:18:44,640
+uh and so you know the numbers you pick
+
+2212
+01:18:44,640 --> 01:18:52,149
+seems reasonable
+
+2213
+01:18:52,159 --> 01:18:53,360
+any people that want to share a
+
+2214
+01:18:53,360 --> 01:18:55,679
+particular annoying bug that they have
+
+2215
+01:18:55,679 --> 01:18:56,480
+actually there were a number of
+
+2216
+01:18:56,480 --> 01:18:58,400
+questions where people are asking what
+
+2217
+01:18:58,400 --> 01:19:06,830
+is the most nasty bug that people have
+
+2218
+01:19:06,840 --> 01:19:11,110
+seen
+
+2219
+01:19:11,120 --> 01:19:13,840
+i had a pretty annoying bug in my
+
+2220
+01:19:13,840 --> 01:19:14,960
+implantation
+
+2221
+01:19:14,960 --> 01:19:18,719
+um i didn't take my own advice
+
+2222
+01:19:18,719 --> 01:19:21,520
+and sort of did a like weird
+
+2223
+01:19:21,520 --> 01:19:23,360
+implantation of a timer where i like
+
+2224
+01:19:23,360 --> 01:19:24,159
+spawn off
+
+2225
+01:19:24,159 --> 01:19:26,960
+a new thread to sleep or something and
+
+2226
+01:19:26,960 --> 01:19:29,199
+then send a message back at the end
+
+2227
+01:19:29,199 --> 01:19:31,679
+it was not particularly great design and
+
+2228
+01:19:31,679 --> 01:19:33,840
+i had two different timers one for
+
+2229
+01:19:33,840 --> 01:19:35,520
+uh heartbeats and one for election
+
+2230
+01:19:35,520 --> 01:19:38,159
+timers and i was forgetting to
+
+2231
+01:19:38,159 --> 01:19:41,120
+stop the one of those timers when the
+
+2232
+01:19:41,120 --> 01:19:42,239
+server shut down
+
+2233
+01:19:42,239 --> 01:19:43,679
+one of them was fine and one of them
+
+2234
+01:19:43,679 --> 01:19:45,760
+wasn't and that meant i would slowly
+
+2235
+01:19:45,760 --> 01:19:46,560
+gain
+
+2236
+01:19:46,560 --> 01:19:48,400
+like a number of go routines over the
+
+2237
+01:19:48,400 --> 01:19:50,239
+course of a long-running test
+
+2238
+01:19:50,239 --> 01:19:52,480
+until it ran out and the race detector
+
+2239
+01:19:52,480 --> 01:19:54,560
+crashed everything
+
+2240
+01:19:54,560 --> 01:19:56,239
+and it was incredibly embarrassing
+
+2241
+01:19:56,239 --> 01:19:58,239
+because it was literally just that i
+
+2242
+01:19:58,239 --> 01:19:59,040
+forgot to
+
+2243
+01:19:59,040 --> 01:20:03,040
+stop a timer so
+
+2244
+01:20:03,040 --> 01:20:04,719
+but it took a very long time to debug
+
+2245
+01:20:04,719 --> 01:20:06,239
+because i couldn't figure out
+
+2246
+01:20:06,239 --> 01:20:08,000
+i think i thought there was a bug in the
+
+2247
+01:20:08,000 --> 01:20:09,600
+lab rpc code and
+
+2248
+01:20:09,600 --> 01:20:12,639
+no there wasn't no there's probably no
+
+2249
+01:20:12,639 --> 01:20:14,960
+bugs in the lab rpc code it was just me
+
+2250
+01:20:14,960 --> 01:20:20,470
+misinterpreting data
+
+2251
+01:20:20,480 --> 01:20:22,639
+i'm talking about election timeouts i
+
+2252
+01:20:22,639 --> 01:20:23,840
+have a
+
+2253
+01:20:23,840 --> 01:20:27,280
+issue on uh where the
+
+2254
+01:20:27,280 --> 01:20:30,719
+one call is called from config.go uh
+
+2255
+01:20:30,719 --> 01:20:32,560
+that where it occasionally fails to
+
+2256
+01:20:32,560 --> 01:20:33,920
+reach agreement
+
+2257
+01:20:33,920 --> 01:20:36,159
+um i realized that if i increase my
+
+2258
+01:20:36,159 --> 01:20:38,080
+election timeouts to
+
+2259
+01:20:38,080 --> 01:20:40,080
+uh have like the random interval go up
+
+2260
+01:20:40,080 --> 01:20:42,719
+to like 1500 milliseconds it
+
+2261
+01:20:42,719 --> 01:20:45,600
+like greatly decreases the frequency at
+
+2262
+01:20:45,600 --> 01:20:46,960
+which this happens but
+
+2263
+01:20:46,960 --> 01:20:48,960
+i'm wondering if i should go even higher
+
+2264
+01:20:48,960 --> 01:20:50,800
+than that for the random interval that
+
+2265
+01:20:50,800 --> 01:20:54,159
+this is indicative of another bug i have
+
+2266
+01:20:54,159 --> 01:20:55,600
+i think it's indicative of another bug
+
+2267
+01:20:55,600 --> 01:20:57,199
+you have
+
+2268
+01:20:57,199 --> 01:20:59,280
+my first guess my gut you know of course
+
+2269
+01:20:59,280 --> 01:21:00,800
+i don't know for sure at all
+
+2270
+01:21:00,800 --> 01:21:02,320
+uh but like you don't have to be able to
+
+2271
+01:21:02,320 --> 01:21:05,830
+run with that kind of long timers
+
+2272
+01:21:05,840 --> 01:21:09,120
+to pass yeah
+
+2273
+01:21:09,120 --> 01:21:11,280
+most of the time when people are
+
+2274
+01:21:11,280 --> 01:21:12,960
+tweaking their timeouts it's not
+
+2275
+01:21:12,960 --> 01:21:14,880
+actually fixing their bugs it's just
+
+2276
+01:21:14,880 --> 01:21:19,110
+changing how often they show up
+
+2277
+01:21:19,120 --> 01:21:22,870
+okay thanks
+
+2278
+01:21:22,880 --> 01:21:24,960
+uh here's a bug in the channel on the
+
+2279
+01:21:24,960 --> 01:21:26,400
+chat channel this is a bug i had was
+
+2280
+01:21:26,400 --> 01:21:29,910
+that i forgot to initialize the channel
+
+2281
+01:21:29,920 --> 01:21:31,760
+how did how did that manifest itself as
+
+2282
+01:21:31,760 --> 01:21:34,070
+a bug
+
+2283
+01:21:34,080 --> 01:21:37,120
+oh like uh basically when i was sending
+
+2284
+01:21:37,120 --> 01:21:38,800
+something it wouldn't
+
+2285
+01:21:38,800 --> 01:21:42,000
+be able to receive it and i wondered
+
+2286
+01:21:42,000 --> 01:21:44,000
+what was going on it turns out it was
+
+2287
+01:21:44,000 --> 01:21:45,120
+just that it didn't ever
+
+2288
+01:21:45,120 --> 01:21:52,790
+initialize it so it's like a nil channel
+
+2289
+01:21:52,800 --> 01:21:54,080
+because i don't really know what the
+
+2290
+01:21:54,080 --> 01:21:55,760
+semantics are of writing to a new
+
+2291
+01:21:55,760 --> 01:21:56,480
+channel
+
+2292
+01:21:56,480 --> 01:21:58,159
+i can't recall the top my head i know
+
+2293
+01:21:58,159 --> 01:21:59,520
+the rules for that but i don't remember
+
+2294
+01:21:59,520 --> 01:22:01,520
+what the rule is
+
+2295
+01:22:01,520 --> 01:22:03,679
+do you have a comment on the previous
+
+2296
+01:22:03,679 --> 01:22:05,360
+point
+
+2297
+01:22:05,360 --> 01:22:07,360
+uh regard regarding the election
+
+2298
+01:22:07,360 --> 01:22:08,960
+timeouts and setting them high
+
+2299
+01:22:08,960 --> 01:22:12,719
+should we try and aim thus to set them
+
+2300
+01:22:12,719 --> 01:22:15,280
+a little bit low so that if there are
+
+2301
+01:22:15,280 --> 01:22:18,159
+any bugs we can expose them
+
+2302
+01:22:18,159 --> 01:22:20,880
+oh yeah i'm not not a bad i plan i think
+
+2303
+01:22:20,880 --> 01:22:22,480
+it's always good to like you know
+
+2304
+01:22:22,480 --> 01:22:23,920
+push the boundaries and see if you have
+
+2305
+01:22:23,920 --> 01:22:28,070
+any other box without working
+
+2306
+01:22:28,080 --> 01:22:29,520
+so the boundaries should be something
+
+2307
+01:22:29,520 --> 01:22:32,080
+akin to what the paper suggests
+
+2308
+01:22:32,080 --> 01:22:34,639
+a little bit higher uh because the the
+
+2309
+01:22:34,639 --> 01:22:36,239
+way we set up the tests are slightly
+
+2310
+01:22:36,239 --> 01:22:36,880
+different
+
+2311
+01:22:36,880 --> 01:22:39,600
+uh you know the in section of each uh
+
+2312
+01:22:39,600 --> 01:22:42,239
+has a discussion on this correct
+
+2313
+01:22:42,239 --> 01:22:45,440
+and actually the the rough paper kind of
+
+2314
+01:22:45,440 --> 01:22:46,880
+has like guidelines and even if they
+
+2315
+01:22:46,880 --> 01:22:49,040
+have like a specific value they
+
+2316
+01:22:49,040 --> 01:22:50,719
+set the value based on their guidelines
+
+2317
+01:22:50,719 --> 01:22:52,320
+and the guidelines said that you should
+
+2318
+01:22:52,320 --> 01:22:53,280
+have kind of
+
+2319
+01:22:53,280 --> 01:22:55,760
+elected a leader with like an order of
+
+2320
+01:22:55,760 --> 01:22:58,080
+magnitude more time than what the hybrid
+
+2321
+01:22:58,080 --> 01:22:58,960
+interval is yeah
+
+2322
+01:22:58,960 --> 01:23:01,440
+exactly right like 100 like for example
+
+2323
+01:23:01,440 --> 01:23:03,600
+like if you go to like 800 to a second
+
+2324
+01:23:03,600 --> 01:23:04,000
+like
+
+2325
+01:23:04,000 --> 01:23:06,480
+things will work out like it's fine even
+
+2326
+01:23:06,480 --> 01:23:08,159
+if those are high because
+
+2327
+01:23:08,159 --> 01:23:09,840
+that's kind of the guidelines it all
+
+2328
+01:23:09,840 --> 01:23:12,159
+changes because we just made you change
+
+2329
+01:23:12,159 --> 01:23:12,800
+the
+
+2330
+01:23:12,800 --> 01:23:14,639
+kind of like the innermost heartbeat
+
+2331
+01:23:14,639 --> 01:23:20,480
+frequency because of the rpc laptop
+
+2332
+01:23:20,480 --> 01:23:23,120
+uh sorry can i actually see the
+
+2333
+01:23:23,120 --> 01:23:24,400
+heartbeat timer
+
+2334
+01:23:24,400 --> 01:23:34,960
+in the code yeah sure
+
+2335
+01:23:34,960 --> 01:23:37,760
+basically you know every 50 milliseconds
+
+2336
+01:23:37,760 --> 01:23:40,320
+uh the ticker goes off
+
+2337
+01:23:40,320 --> 01:23:42,880
+the ticker calls tick and if i leader
+
+2338
+01:23:42,880 --> 01:23:44,560
+i'll basically send an rpc
+
+2339
+01:23:44,560 --> 01:23:49,440
+this comes down to basically a heartbeat
+
+2340
+01:23:49,440 --> 01:23:51,040
+so near my implementation every 50
+
+2341
+01:23:51,040 --> 01:23:56,870
+milliseconds i'm sending a heartbeat
+
+2342
+01:23:56,880 --> 01:24:00,159
+um i had a question i
+
+2343
+01:24:00,159 --> 01:24:04,320
+so i you were saying like um
+
+2344
+01:24:04,320 --> 01:24:06,480
+like it should be like timeout should be
+
+2345
+01:24:06,480 --> 01:24:08,320
+like an order of magnitude
+
+2346
+01:24:08,320 --> 01:24:11,760
+like greater than heartbeat right
+
+2347
+01:24:11,760 --> 01:24:14,400
+um but i started like playing to see how
+
+2348
+01:24:14,400 --> 01:24:16,000
+low it could get
+
+2349
+01:24:16,000 --> 01:24:18,639
+and you know i could like with a 100
+
+2350
+01:24:18,639 --> 01:24:20,639
+millisecond timeout
+
+2351
+01:24:20,639 --> 01:24:22,480
+you know it could go down to like three
+
+2352
+01:24:22,480 --> 01:24:23,920
+to 500
+
+2353
+01:24:23,920 --> 01:24:26,159
+milliseconds and still work like you
+
+2354
+01:24:26,159 --> 01:24:26,960
+know
+
+2355
+01:24:26,960 --> 01:24:28,800
+without without a hitch and i was
+
+2356
+01:24:28,800 --> 01:24:30,159
+wondering like
+
+2357
+01:24:30,159 --> 01:24:33,910
+is that like why
+
+2358
+01:24:33,920 --> 01:24:36,560
+like how how low you know how low can
+
+2359
+01:24:36,560 --> 01:24:38,080
+they get
+
+2360
+01:24:38,080 --> 01:24:40,080
+and why are we making them so much
+
+2361
+01:24:40,080 --> 01:24:41,760
+greater than the
+
+2362
+01:24:41,760 --> 01:24:44,000
+on the election timeout or then the
+
+2363
+01:24:44,000 --> 01:24:45,280
+heartbeat time
+
+2364
+01:24:45,280 --> 01:24:48,080
+because we need to we need to give the
+
+2365
+01:24:48,080 --> 01:24:49,840
+candidate a a shot
+
+2366
+01:24:49,840 --> 01:24:51,360
+actually becoming the leader and some of
+
+2367
+01:24:51,360 --> 01:24:52,960
+the messages might be delayed for a long
+
+2368
+01:24:52,960 --> 01:24:55,910
+time
+
+2369
+01:24:55,920 --> 01:24:59,280
+order dropped
+
+2370
+01:24:59,280 --> 01:25:02,800
+yeah i have a question i think i missed
+
+2371
+01:25:02,800 --> 01:25:03,600
+this part
+
+2372
+01:25:03,600 --> 01:25:07,280
+which is how your like which
+
+2373
+01:25:07,280 --> 01:25:09,520
+uh append entries you're sending from
+
+2374
+01:25:09,520 --> 01:25:11,760
+start and which one's from the heartbeat
+
+2375
+01:25:11,760 --> 01:25:14,800
+basically the same it's the same code
+
+2376
+01:25:14,800 --> 01:25:17,840
+okay there's no nothing different i only
+
+2377
+01:25:17,840 --> 01:25:19,280
+have one because if you look here at
+
+2378
+01:25:19,280 --> 01:25:21,120
+this you know here scent depends correct
+
+2379
+01:25:21,120 --> 01:25:24,480
+this is from the ticker yeah and
+
+2380
+01:25:24,480 --> 01:25:27,120
+if you look at the api code the start
+
+2381
+01:25:27,120 --> 01:25:27,920
+function
+
+2382
+01:25:27,920 --> 01:25:32,229
+calls the same function
+
+2383
+01:25:32,239 --> 01:25:34,880
+but in this case what which ones are
+
+2384
+01:25:34,880 --> 01:25:36,400
+like if you're sending all of them from
+
+2385
+01:25:36,400 --> 01:25:37,840
+start which ones are going to be sent
+
+2386
+01:25:37,840 --> 01:25:38,840
+from the
+
+2387
+01:25:38,840 --> 01:25:41,360
+ticker the ticker probably says mostly
+
+2388
+01:25:41,360 --> 01:25:42,159
+empty
+
+2389
+01:25:42,159 --> 01:25:45,679
+uh appends
+
+2390
+01:25:45,679 --> 01:25:49,840
+okay so the bulk are coming from start
+
+2391
+01:25:49,840 --> 01:25:53,120
+no warning is coming from the ticker
+
+2392
+01:25:53,120 --> 01:25:56,400
+or like the actual log entries oh the
+
+2393
+01:25:56,400 --> 01:25:59,040
+the the actual log rangers are are all
+
+2394
+01:25:59,040 --> 01:26:00,000
+sitting in the struct
+
+2395
+01:26:00,000 --> 01:26:02,159
+raft right so they're coming out they're
+
+2396
+01:26:02,159 --> 01:26:04,560
+abstract
+
+2397
+01:26:04,560 --> 01:26:06,239
+and if you look at start the only thing
+
+2398
+01:26:06,239 --> 01:26:08,159
+start does
+
+2399
+01:26:08,159 --> 01:26:10,159
+hold on let me go pull up start again
+
+2400
+01:26:10,159 --> 01:26:11,520
+because it's a good question
+
+2401
+01:26:11,520 --> 01:26:13,040
+like you pull startup basically it
+
+2402
+01:26:13,040 --> 01:26:16,080
+appends it to the log here
+
+2403
+01:26:16,080 --> 01:26:19,120
+right and that's all it does and like
+
+2404
+01:26:19,120 --> 01:26:20,560
+the only difference basically between
+
+2405
+01:26:20,560 --> 01:26:22,320
+ticker and start is that start actually
+
+2406
+01:26:22,320 --> 01:26:23,679
+appends something to the log and the
+
+2407
+01:26:23,679 --> 01:26:25,760
+ticker doesn't do that
+
+2408
+01:26:25,760 --> 01:26:28,400
+and send the pens basically grabs you
+
+2409
+01:26:28,400 --> 01:26:30,000
+know whatever
+
+2410
+01:26:30,000 --> 01:26:33,040
+so this is the loop for all of them so
+
+2411
+01:26:33,040 --> 01:26:40,070
+here's to an individual uh oops
+
+2412
+01:26:40,080 --> 01:26:41,760
+here's the individual one that is sent
+
+2413
+01:26:41,760 --> 01:26:44,400
+to one pier and it basically grabs the
+
+2414
+01:26:44,400 --> 01:26:44,880
+right
+
+2415
+01:26:44,880 --> 01:26:48,320
+log entries out of the uh
+
+2416
+01:26:48,320 --> 01:26:51,600
+log right here you're copying it out of
+
+2417
+01:26:51,600 --> 01:26:52,159
+the log
+
+2418
+01:26:52,159 --> 01:26:55,520
+into the rx entries and so if it's a
+
+2419
+01:26:55,520 --> 01:26:57,280
+heartbeat most likely this always be
+
+2420
+01:26:57,280 --> 01:26:58,960
+zero not always correct because you
+
+2421
+01:26:58,960 --> 01:27:00,000
+might the leader might
+
+2422
+01:27:00,000 --> 01:27:02,320
+the follower might have missed some but
+
+2423
+01:27:02,320 --> 01:27:04,800
+in the case when uh start calls this you
+
+2424
+01:27:04,800 --> 01:27:06,320
+know you will always be sending the
+
+2425
+01:27:06,320 --> 01:27:07,440
+thing that actually just has been
+
+2426
+01:27:07,440 --> 01:27:09,679
+appended
+
+2427
+01:27:09,679 --> 01:27:12,560
+okay because i i did it such that i'm
+
+2428
+01:27:12,560 --> 01:27:13,440
+sending everything
+
+2429
+01:27:13,440 --> 01:27:16,320
+in the heartbeats like all the entries
+
+2430
+01:27:16,320 --> 01:27:16,960
+and uh
+
+2431
+01:27:16,960 --> 01:27:19,360
+for some of the two css sometimes it'll
+
+2432
+01:27:19,360 --> 01:27:20,480
+like fail to reach agreement and i'm
+
+2433
+01:27:20,480 --> 01:27:22,000
+wondering if that's
+
+2434
+01:27:22,000 --> 01:27:23,920
+why because here you're it seems like
+
+2435
+01:27:23,920 --> 01:27:25,760
+the bulk of the entries are being sent
+
+2436
+01:27:25,760 --> 01:27:28,320
+in start no okay that might not be the
+
+2437
+01:27:28,320 --> 01:27:29,199
+reason why
+
+2438
+01:27:29,199 --> 01:27:32,239
+you uh i don't think it will affect
+
+2439
+01:27:32,239 --> 01:27:34,159
+reaching agreement it's probably not uh
+
+2440
+01:27:34,159 --> 01:27:35,600
+dependent on the number of entries you
+
+2441
+01:27:35,600 --> 01:27:37,199
+send in the uh
+
+2442
+01:27:37,199 --> 01:27:38,560
+the number of log entries you're sending
+
+2443
+01:27:38,560 --> 01:27:40,719
+in the append rpc
+
+2444
+01:27:40,719 --> 01:27:44,239
+no no yeah i was able to make it all the
+
+2445
+01:27:44,239 --> 01:27:44,639
+way
+
+2446
+01:27:44,639 --> 01:27:47,679
+through lab two with only ever sending
+
+2447
+01:27:47,679 --> 01:27:49,920
+um append entries from the heartbeat
+
+2448
+01:27:49,920 --> 01:27:51,040
+timer yeah
+
+2449
+01:27:51,040 --> 01:27:52,800
+but you will write problems and slow
+
+2450
+01:27:52,800 --> 01:27:55,280
+things down though
+
+2451
+01:27:55,280 --> 01:27:57,840
+yeah it can swing slows down to be clear
+
+2452
+01:27:57,840 --> 01:28:00,400
+i don't recommend doing this but like
+
+2453
+01:28:00,400 --> 01:28:02,000
+you can get through lab two with just
+
+2454
+01:28:02,000 --> 01:28:03,600
+sending from the heartbeats so yeah if
+
+2455
+01:28:03,600 --> 01:28:04,880
+you're running out through live streams
+
+2456
+01:28:04,880 --> 01:28:08,080
+that's nice um all right
+
+2457
+01:28:08,080 --> 01:28:10,080
+how do the timeouts work then or how do
+
+2458
+01:28:10,080 --> 01:28:12,239
+the limits on heartbeats work
+
+2459
+01:28:12,239 --> 01:28:14,719
+like are the limiter on heartbeats like
+
+2460
+01:28:14,719 --> 01:28:16,560
+the same as the limit on
+
+2461
+01:28:16,560 --> 01:28:18,800
+append entries rpc or are they counted
+
+2462
+01:28:18,800 --> 01:28:21,280
+differently
+
+2463
+01:28:21,280 --> 01:28:23,120
+the heartbeats are they're different you
+
+2464
+01:28:23,120 --> 01:28:24,880
+know you can send you know you have to
+
+2465
+01:28:24,880 --> 01:28:25,760
+send it you know
+
+2466
+01:28:25,760 --> 01:28:27,440
+principal assume that every start can
+
+2467
+01:28:27,440 --> 01:28:29,280
+result in an append entry
+
+2468
+01:28:29,280 --> 01:28:32,880
+call right um and but you're
+
+2469
+01:28:32,880 --> 01:28:34,320
+you're not allowed to send more than 10
+
+2470
+01:28:34,320 --> 01:28:36,080
+heartbeats how
+
+2471
+01:28:36,080 --> 01:28:39,120
+how do you like differentiate that on
+
+2472
+01:28:39,120 --> 01:28:40,000
+the test
+
+2473
+01:28:40,000 --> 01:28:43,120
+our beats have no entries most typically
+
+2474
+01:28:43,120 --> 01:28:46,800
+okay so you literally go in and check
+
+2475
+01:28:46,800 --> 01:28:48,719
+like oh we don't really literally check
+
+2476
+01:28:48,719 --> 01:28:49,920
+but we basically see
+
+2477
+01:28:49,920 --> 01:28:51,840
+if you make more progress than 10 times
+
+2478
+01:28:51,840 --> 01:28:53,760
+a second
+
+2479
+01:28:53,760 --> 01:28:55,600
+it's like one of the tests in lab 3
+
+2480
+01:28:55,600 --> 01:28:59,189
+checks if you go quick enough
+
+2481
+01:28:59,199 --> 01:29:02,629
+thanks
+
+2482
+01:29:02,639 --> 01:29:05,679
+exactly for this reason maybe a little
+
+2483
+01:29:05,679 --> 01:29:06,800
+bit annoying basically in the real
+
+2484
+01:29:06,800 --> 01:29:08,159
+application correct if you delete you
+
+2485
+01:29:08,159 --> 01:29:08,719
+know your
+
+2486
+01:29:08,719 --> 01:29:10,480
+pence you know by 10 mil by 50
+
+2487
+01:29:10,480 --> 01:29:12,960
+milliseconds before you do anything
+
+2488
+01:29:12,960 --> 01:29:14,800
+so if a client you know imagine a client
+
+2489
+01:29:14,800 --> 01:29:16,320
+submitting to your service you know
+
+2490
+01:29:16,320 --> 01:29:17,280
+basically it's going to get
+
+2491
+01:29:17,280 --> 01:29:20,320
+one uh append operation through every 50
+
+2492
+01:29:20,320 --> 01:29:22,719
+milliseconds
+
+2493
+01:29:22,719 --> 01:29:24,080
+that would be not a very desirable
+
+2494
+01:29:24,080 --> 01:29:29,590
+service to use
+
+2495
+01:29:29,600 --> 01:29:33,199
+um i had a question about accessing
+
+2496
+01:29:33,199 --> 01:29:36,800
+parts of the rf struct
+
+2497
+01:29:36,800 --> 01:29:40,000
+without luck so and send up center pen
+
+2498
+01:29:40,000 --> 01:29:41,040
+entries
+
+2499
+01:29:41,040 --> 01:29:44,719
+you are you're reading the peer um
+
+2500
+01:29:44,719 --> 01:29:48,229
+peers
+
+2501
+01:29:48,239 --> 01:29:51,440
+i guess slice but i know that it is
+
+2502
+01:29:51,440 --> 01:29:54,480
+it is static but there
+
+2503
+01:29:54,480 --> 01:29:58,000
+it could be that multiple threads
+
+2504
+01:29:58,000 --> 01:30:01,199
+read the same thing twice right
+
+2505
+01:30:01,199 --> 01:30:04,800
+so is is there a danger of the race
+
+2506
+01:30:04,800 --> 01:30:09,750
+detector complaining about this
+
+2507
+01:30:09,760 --> 01:30:13,750
+some echo sorry i'm sorry
+
+2508
+01:30:13,760 --> 01:30:17,270
+um
+
+2509
+01:30:17,280 --> 01:30:20,880
+so let me see uh so i guess i
+
+2510
+01:30:20,880 --> 01:30:23,600
+don't hold the lock on rf rf gears it's
+
+2511
+01:30:23,600 --> 01:30:25,600
+not the
+
+2512
+01:30:25,600 --> 01:30:28,080
+yeah yeah maybe the race protector is
+
+2513
+01:30:28,080 --> 01:30:30,400
+not complaining
+
+2514
+01:30:30,400 --> 01:30:31,760
+uh because i always run this with the
+
+2515
+01:30:31,760 --> 01:30:48,709
+race detector
+
+2516
+01:30:48,719 --> 01:30:50,480
+sorry was that question about whether
+
+2517
+01:30:50,480 --> 01:30:52,239
+iterating over peers could
+
+2518
+01:30:52,239 --> 01:30:56,239
+cause races yeah yeah right because yeah
+
+2519
+01:30:56,239 --> 01:30:59,840
+accesses it without holding the lock and
+
+2520
+01:30:59,840 --> 01:31:14,870
+right yeah
+
+2521
+01:31:14,880 --> 01:31:22,390
+rf.kill uh
+
+2522
+01:31:22,400 --> 01:31:24,320
+oh i guess it was just an obscure
+
+2523
+01:31:24,320 --> 01:31:26,000
+scenario if you kill it
+
+2524
+01:31:26,000 --> 01:31:27,920
+at the same time as doing something else
+
+2525
+01:31:27,920 --> 01:31:29,440
+i'm not sure
+
+2526
+01:31:29,440 --> 01:31:32,880
+well yeah modify
+
+2527
+01:31:32,880 --> 01:31:43,030
+it killed still doesn't modify peers
+
+2528
+01:31:43,040 --> 01:31:46,800
+yeah okay thank you could i see how you
+
+2529
+01:31:46,800 --> 01:31:48,480
+do the apply channel thing
+
+2530
+01:31:48,480 --> 01:31:49,840
+again you talked about it earlier how
+
+2531
+01:31:49,840 --> 01:31:51,679
+you needed to have a walk with the apply
+
+2532
+01:31:51,679 --> 01:31:53,360
+channel
+
+2533
+01:31:53,360 --> 01:31:56,560
+not a lock the opposite or sorry
+
+2534
+01:31:56,560 --> 01:31:59,600
+what is it uh a condition variable yeah
+
+2535
+01:31:59,600 --> 01:32:03,830
+not the condition variable yeah
+
+2536
+01:32:03,840 --> 01:32:07,199
+oh uh huh so yeah oh what do you do with
+
+2537
+01:32:07,199 --> 01:32:08,719
+the condition variable
+
+2538
+01:32:08,719 --> 01:32:11,840
+though i brought a signal on it so like
+
+2539
+01:32:11,840 --> 01:32:13,120
+when
+
+2540
+01:32:13,120 --> 01:32:17,280
+when the match index is updated and
+
+2541
+01:32:17,280 --> 01:32:19,440
+a new entry needs to be committed that
+
+2542
+01:32:19,440 --> 01:32:20,800
+thread will
+
+2543
+01:32:20,800 --> 01:32:23,840
+call signal and
+
+2544
+01:32:23,840 --> 01:32:26,080
+that will wake up the applier thread and
+
+2545
+01:32:26,080 --> 01:32:27,280
+apply a thread we'll see if there's
+
+2546
+01:32:27,280 --> 01:32:29,840
+anything that needs to be pushed on the
+
+2547
+01:32:29,840 --> 01:32:31,840
+apply channel which is the checks here
+
+2548
+01:32:31,840 --> 01:32:33,600
+and if so it will push it on the apply
+
+2549
+01:32:33,600 --> 01:32:34,800
+channel
+
+2550
+01:32:34,800 --> 01:32:37,760
+oh okay and if there's nothing to be
+
+2551
+01:32:37,760 --> 01:32:38,960
+pushed on your ply channel anymore it
+
+2552
+01:32:38,960 --> 01:32:40,560
+goes back to sleep
+
+2553
+01:32:40,560 --> 01:32:48,470
+okay
+
+2554
+01:32:48,480 --> 01:32:51,920
+okay maybe this is it
+
+2555
+01:32:51,920 --> 01:32:58,790
+for today
+
