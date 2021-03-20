@@ -1,0 +1,8952 @@
+1
+00:00:00,719 --> 00:00:03,040
+thank you okay good afternoon
+
+2
+00:00:03,040 --> 00:00:04,640
+good morning good evening good night
+
+3
+00:00:04,640 --> 00:00:06,160
+wherever you are
+
+4
+00:00:06,160 --> 00:00:08,639
+so today uh i want to talk about the
+
+5
+00:00:08,639 --> 00:00:09,679
+zookeeper
+
+6
+00:00:09,679 --> 00:00:12,799
+uh and with the this background the
+
+7
+00:00:12,799 --> 00:00:14,000
+paper that we uh
+
+8
+00:00:14,000 --> 00:00:15,679
+you know was assigned for today which is
+
+9
+00:00:15,679 --> 00:00:17,840
+from 2010.
+
+10
+00:00:17,840 --> 00:00:21,680
+um and um so this is going to be
+
+11
+00:00:21,680 --> 00:00:23,600
+referring back the last couple lectures
+
+12
+00:00:23,600 --> 00:00:25,439
+i think we dove in quite a bit of detail
+
+13
+00:00:25,439 --> 00:00:27,359
+into draft including uh
+
+14
+00:00:27,359 --> 00:00:30,320
+looking at code uh the lectures from now
+
+15
+00:00:30,320 --> 00:00:31,760
+on are going to be more
+
+16
+00:00:31,760 --> 00:00:35,600
+conceptual and exploring ideas
+
+17
+00:00:35,600 --> 00:00:37,360
+uh in distributed systems you know
+
+18
+00:00:37,360 --> 00:00:39,200
+through papers
+
+19
+00:00:39,200 --> 00:00:41,680
+and the zookeeper one is particularly
+
+20
+00:00:41,680 --> 00:00:42,320
+relevant
+
+21
+00:00:42,320 --> 00:00:45,440
+to us uh because it has a little bit of
+
+22
+00:00:45,440 --> 00:00:46,239
+a relationship
+
+23
+00:00:46,239 --> 00:00:49,600
+as we'll see with lab3 and so it will
+
+24
+00:00:49,600 --> 00:00:50,879
+allow us to talk about a little bit of
+
+25
+00:00:50,879 --> 00:00:52,399
+some properties of uh lottery and
+
+26
+00:00:52,399 --> 00:00:54,640
+particularly uh linearizability
+
+27
+00:00:54,640 --> 00:00:56,879
+uh but the zookeeper system uh more
+
+28
+00:00:56,879 --> 00:00:57,680
+importantly
+
+29
+00:00:57,680 --> 00:00:59,120
+it's interesting because one it's a
+
+30
+00:00:59,120 --> 00:01:04,469
+white media system
+
+31
+00:01:04,479 --> 00:01:08,230
+in practice
+
+32
+00:01:08,240 --> 00:01:11,760
+well beyond apache well beyond
+
+33
+00:01:11,760 --> 00:01:14,479
+yahoo there's an open source apache
+
+34
+00:01:14,479 --> 00:01:15,680
+project
+
+35
+00:01:15,680 --> 00:01:18,720
+that is still active uh
+
+36
+00:01:18,720 --> 00:01:19,920
+and what particularly what's interesting
+
+37
+00:01:19,920 --> 00:01:21,840
+about it uh for for us
+
+38
+00:01:21,840 --> 00:01:23,360
+uh in this lecture today is actually
+
+39
+00:01:23,360 --> 00:01:25,040
+high performance
+
+40
+00:01:25,040 --> 00:01:26,880
+and with high performance i mean much
+
+41
+00:01:26,880 --> 00:01:28,560
+higher performance than
+
+42
+00:01:28,560 --> 00:01:31,439
+uh what actually lab three is going to
+
+43
+00:01:31,439 --> 00:01:32,720
+be
+
+44
+00:01:32,720 --> 00:01:34,479
+uh and we'll talk a little bit talk
+
+45
+00:01:34,479 --> 00:01:36,400
+quite a bit of the detail about this
+
+46
+00:01:36,400 --> 00:01:38,159
+and there's sort of two reasons why it
+
+47
+00:01:38,159 --> 00:01:40,640
+is high performance one uh it is
+
+48
+00:01:40,640 --> 00:01:46,950
+declined operations are asynchronous
+
+49
+00:01:46,960 --> 00:01:48,399
+uh and really what high performance
+
+50
+00:01:48,399 --> 00:01:50,479
+forms here means is that we can
+
+51
+00:01:50,479 --> 00:01:52,880
+the system can process many more
+
+52
+00:01:52,880 --> 00:01:54,479
+operations per second so it's really a
+
+53
+00:01:54,479 --> 00:01:55,200
+throughput
+
+54
+00:01:55,200 --> 00:01:57,920
+metric uh and the second reason you know
+
+55
+00:01:57,920 --> 00:01:59,520
+it's high performance is because
+
+56
+00:01:59,520 --> 00:02:01,680
+uh it uh doesn't provide strong
+
+57
+00:02:01,680 --> 00:02:02,560
+consistency
+
+58
+00:02:02,560 --> 00:02:06,159
+uh so it doesn't uh it
+
+59
+00:02:06,159 --> 00:02:10,000
+has an instinct consistency
+
+60
+00:02:10,000 --> 00:02:13,120
+definition and it gives us some freedom
+
+61
+00:02:13,120 --> 00:02:15,280
+to execute basically read operations on
+
+62
+00:02:15,280 --> 00:02:16,319
+any replica
+
+63
+00:02:16,319 --> 00:02:19,680
+and therefore reconforms can scale
+
+64
+00:02:19,680 --> 00:02:21,360
+then the second aspect you know that is
+
+65
+00:02:21,360 --> 00:02:22,959
+interesting from zookeeper is
+
+66
+00:02:22,959 --> 00:02:25,200
+in addition to being high performance it
+
+67
+00:02:25,200 --> 00:02:26,319
+is sort of a generic
+
+68
+00:02:26,319 --> 00:02:35,190
+what they call a coordination server
+
+69
+00:02:35,200 --> 00:02:37,599
+and the the point being here is that you
+
+70
+00:02:37,599 --> 00:02:39,519
+know there are many applications
+
+71
+00:02:39,519 --> 00:02:42,640
+uh where you need to sort of keep track
+
+72
+00:02:42,640 --> 00:02:45,040
+of like who's part of this cluster and
+
+73
+00:02:45,040 --> 00:02:46,480
+who is the master
+
+74
+00:02:46,480 --> 00:02:49,519
+now so think about the mapreduce or if
+
+75
+00:02:49,519 --> 00:02:50,000
+you think about
+
+76
+00:02:50,000 --> 00:02:52,720
+the gfs that the master in gfs needs to
+
+77
+00:02:52,720 --> 00:02:54,640
+keep track or like for every chunk
+
+78
+00:02:54,640 --> 00:02:56,160
+you know who are the servers that
+
+79
+00:02:56,160 --> 00:02:57,440
+actually serve they cannot search the
+
+80
+00:02:57,440 --> 00:02:58,720
+chunker from whom the service
+
+81
+00:02:58,720 --> 00:03:01,840
+actually is the master and so tracking
+
+82
+00:03:01,840 --> 00:03:03,599
+that sort of configuration information
+
+83
+00:03:03,599 --> 00:03:05,120
+you know comes up in lots of different
+
+84
+00:03:05,120 --> 00:03:07,200
+distributed applications and zookeeper
+
+85
+00:03:07,200 --> 00:03:08,239
+is really designed
+
+86
+00:03:08,239 --> 00:03:09,840
+you know to support that kind of thing
+
+87
+00:03:09,840 --> 00:03:11,280
+so you can just sort of outsource all
+
+88
+00:03:11,280 --> 00:03:12,640
+the configuration management
+
+89
+00:03:12,640 --> 00:03:15,760
+uh to see zookeeper uh and then you know
+
+90
+00:03:15,760 --> 00:03:17,440
+focus the
+
+91
+00:03:17,440 --> 00:03:18,959
+rest of your application development on
+
+92
+00:03:18,959 --> 00:03:20,640
+other aspects of uh
+
+93
+00:03:20,640 --> 00:03:23,360
+your distributed system okay so that's
+
+94
+00:03:23,360 --> 00:03:24,480
+sort of a
+
+95
+00:03:24,480 --> 00:03:26,480
+brief introduction you know the the
+
+96
+00:03:26,480 --> 00:03:27,599
+topics that we're going to be talking
+
+97
+00:03:27,599 --> 00:03:30,149
+about
+
+98
+00:03:30,159 --> 00:03:31,840
+and as a huge role feel free to
+
+99
+00:03:31,840 --> 00:03:33,440
+interrupt at any time
+
+100
+00:03:33,440 --> 00:03:36,159
+uh uh or you know post something in the
+
+101
+00:03:36,159 --> 00:03:37,200
+chat message
+
+102
+00:03:37,200 --> 00:03:40,710
+let me actually pull up the chat
+
+103
+00:03:40,720 --> 00:03:44,319
+okay good uh so just to you know
+
+104
+00:03:44,319 --> 00:03:47,360
+just start from the basics zookeeper is
+
+105
+00:03:47,360 --> 00:03:58,630
+a replicated state machine
+
+106
+00:03:58,640 --> 00:04:00,640
+in the same way that there are the
+
+107
+00:04:00,640 --> 00:04:01,760
+replicated state machines that we've
+
+108
+00:04:01,760 --> 00:04:02,799
+been seeing
+
+109
+00:04:02,799 --> 00:04:05,200
+um and so let's just draw the usual
+
+110
+00:04:05,200 --> 00:04:06,000
+picture
+
+111
+00:04:06,000 --> 00:04:08,319
+uh we have some surface uh in this case
+
+112
+00:04:08,319 --> 00:04:09,680
+it's going to be you know zookeeper
+
+113
+00:04:09,680 --> 00:04:12,879
+and ck it
+
+114
+00:04:12,879 --> 00:04:14,959
+receives requests from clients say
+
+115
+00:04:14,959 --> 00:04:16,400
+create
+
+116
+00:04:16,400 --> 00:04:18,560
+you know create a z note uh and
+
+117
+00:04:18,560 --> 00:04:19,759
+basically the way
+
+118
+00:04:19,759 --> 00:04:23,759
+uh it interacts uh uh
+
+119
+00:04:23,759 --> 00:04:25,840
+to distribute these operations it has
+
+120
+00:04:25,840 --> 00:04:27,600
+sort of a separate library you know
+
+121
+00:04:27,600 --> 00:04:29,120
+think about this as the
+
+122
+00:04:29,120 --> 00:04:34,629
+raft library their case is called zap
+
+123
+00:04:34,639 --> 00:04:36,560
+basically you know the leader you know
+
+124
+00:04:36,560 --> 00:04:38,720
+sticks the
+
+125
+00:04:38,720 --> 00:04:41,040
+operation into uh you know the
+
+126
+00:04:41,040 --> 00:04:42,800
+equivalent of the wrath library dot you
+
+127
+00:04:42,800 --> 00:04:43,680
+know talks
+
+128
+00:04:43,680 --> 00:04:46,880
+you know to you know other
+
+129
+00:04:46,880 --> 00:04:50,320
+libraries on other peers uh
+
+130
+00:04:50,320 --> 00:04:52,720
+that basically creates you know a log
+
+131
+00:04:52,720 --> 00:04:54,160
+you know that combines with all these
+
+132
+00:04:54,160 --> 00:04:56,720
+operations and all these machines
+
+133
+00:04:56,720 --> 00:04:58,000
+and then the operations are out of the
+
+134
+00:04:58,000 --> 00:04:59,919
+log of feedback you know to the
+
+135
+00:04:59,919 --> 00:05:02,080
+throne so in our case would be the apply
+
+136
+00:05:02,080 --> 00:05:03,280
+channel
+
+137
+00:05:03,280 --> 00:05:05,759
+to the service the server supplies the
+
+138
+00:05:05,759 --> 00:05:07,199
+operation response to the client
+
+139
+00:05:07,199 --> 00:05:11,039
+and so we have basically running
+
+140
+00:05:11,039 --> 00:05:14,400
+and uh so far you know in
+
+141
+00:05:14,400 --> 00:05:16,080
+the labs you know we've been focusing
+
+142
+00:05:16,080 --> 00:05:18,080
+mostly you know lab two is all about you
+
+143
+00:05:18,080 --> 00:05:21,029
+know this part
+
+144
+00:05:21,039 --> 00:05:23,520
+implementing uh in our case raft so
+
+145
+00:05:23,520 --> 00:05:24,720
+instead of zap
+
+146
+00:05:24,720 --> 00:05:27,039
+and for the first order at a very high
+
+147
+00:05:27,039 --> 00:05:28,960
+level you know you can think about
+
+148
+00:05:28,960 --> 00:05:32,000
+zab just being another raft you know
+
+149
+00:05:32,000 --> 00:05:33,759
+providing sort of similar
+
+150
+00:05:33,759 --> 00:05:35,520
+guarantees although you know implemented
+
+151
+00:05:35,520 --> 00:05:37,600
+quite differently uh
+
+152
+00:05:37,600 --> 00:05:40,160
+you know it provides uh an order of all
+
+153
+00:05:40,160 --> 00:05:41,440
+the operations
+
+154
+00:05:41,440 --> 00:05:44,080
+despite uh failures network applications
+
+155
+00:05:44,080 --> 00:05:45,680
+et cetera et cetera it doesn't suffer
+
+156
+00:05:45,680 --> 00:05:46,720
+from split drain
+
+157
+00:05:46,720 --> 00:05:48,320
+brain all other sort of things that we
+
+158
+00:05:48,320 --> 00:05:50,160
+should associate with the
+
+159
+00:05:50,160 --> 00:05:53,600
+raft library um and
+
+160
+00:05:53,600 --> 00:05:55,199
+you know what we're going to be focusing
+
+161
+00:05:55,199 --> 00:05:57,600
+in lab 3 on is actually implementing a
+
+162
+00:05:57,600 --> 00:05:58,720
+service on top of it
+
+163
+00:05:58,720 --> 00:06:01,520
+and so this paper talks about the
+
+164
+00:06:01,520 --> 00:06:03,680
+discoordination services keeper and
+
+165
+00:06:03,680 --> 00:06:04,880
+we're going to actually implement in
+
+166
+00:06:04,880 --> 00:06:12,150
+live free the key value store
+
+167
+00:06:12,160 --> 00:06:13,919
+and the data structure is just the map
+
+168
+00:06:13,919 --> 00:06:16,639
+you know from keys to values
+
+169
+00:06:16,639 --> 00:06:18,400
+and so the operations that we're going
+
+170
+00:06:18,400 --> 00:06:22,469
+to be supporting are you know put in get
+
+171
+00:06:22,479 --> 00:06:23,919
+so the client submits put in get
+
+172
+00:06:23,919 --> 00:06:25,759
+operations you know to the
+
+173
+00:06:25,759 --> 00:06:27,600
+surface the server runs them through a
+
+174
+00:06:27,600 --> 00:06:29,039
+raft uh
+
+175
+00:06:29,039 --> 00:06:30,960
+and then applies them one by one to the
+
+176
+00:06:30,960 --> 00:06:33,440
+key value store
+
+177
+00:06:33,440 --> 00:06:34,720
+and in zookeepers you know the
+
+178
+00:06:34,720 --> 00:06:35,840
+structures are slightly different you
+
+179
+00:06:35,840 --> 00:06:38,080
+know there's a treaty of z nodes
+
+180
+00:06:38,080 --> 00:06:39,600
+uh but the basic operation is the
+
+181
+00:06:39,600 --> 00:06:41,199
+appliance the same you know
+
+182
+00:06:41,199 --> 00:06:44,479
+the the lower layer the lap or
+
+183
+00:06:44,479 --> 00:06:46,080
+the zap library or the rav library
+
+184
+00:06:46,080 --> 00:06:47,520
+orders all the operations they're
+
+185
+00:06:47,520 --> 00:06:49,039
+applied in the same order on all
+
+186
+00:06:49,039 --> 00:06:49,840
+replicas
+
+187
+00:06:49,840 --> 00:06:51,360
+because they're applied all in the same
+
+188
+00:06:51,360 --> 00:06:54,080
+order there's no non-determinism
+
+189
+00:06:54,080 --> 00:06:55,919
+the resulting state on each of the
+
+190
+00:06:55,919 --> 00:07:00,830
+replicas is going to be identical
+
+191
+00:07:00,840 --> 00:07:04,560
+okay so that's sort of the basic uh
+
+192
+00:07:04,560 --> 00:07:07,440
+setting of this paper and sort of also
+
+193
+00:07:07,440 --> 00:07:08,160
+the relation
+
+194
+00:07:08,160 --> 00:07:11,199
+part of the relationship between uh lab
+
+195
+00:07:11,199 --> 00:07:11,680
+free
+
+196
+00:07:11,680 --> 00:07:14,319
+and the zookeeper service itself i'm
+
+197
+00:07:14,319 --> 00:07:15,919
+mostly going to be talking in this
+
+198
+00:07:15,919 --> 00:07:16,720
+lecture on
+
+199
+00:07:16,720 --> 00:07:18,319
+focus on the zookeeper part itself and
+
+200
+00:07:18,319 --> 00:07:20,240
+not talk about zap
+
+201
+00:07:20,240 --> 00:07:21,680
+uh because you're going to assume you
+
+202
+00:07:21,680 --> 00:07:23,280
+know that's sort of similar to what
+
+203
+00:07:23,280 --> 00:07:24,400
+we're doing in lf
+
+204
+00:07:24,400 --> 00:07:28,309
+and what we're doing in lab two
+
+205
+00:07:28,319 --> 00:07:30,720
+okay um i want to talk a little bit
+
+206
+00:07:30,720 --> 00:07:31,440
+about
+
+207
+00:07:31,440 --> 00:07:33,840
+uh what kind of performance would you
+
+208
+00:07:33,840 --> 00:07:34,880
+observe
+
+209
+00:07:34,880 --> 00:07:37,599
+uh if you once you finished lab three
+
+210
+00:07:37,599 --> 00:07:38,560
+and
+
+211
+00:07:38,560 --> 00:07:40,560
+uh would measure you know how many putin
+
+212
+00:07:40,560 --> 00:07:42,240
+gets your operation can get through per
+
+213
+00:07:42,240 --> 00:07:44,720
+second uh because like one of the
+
+214
+00:07:44,720 --> 00:07:46,479
+achievements of this paper is this high
+
+215
+00:07:46,479 --> 00:07:48,639
+performance so let's think a little bit
+
+216
+00:07:48,639 --> 00:07:49,680
+about that
+
+217
+00:07:49,680 --> 00:07:51,199
+so let's assume you know there's a
+
+218
+00:07:51,199 --> 00:07:54,309
+operation coming in
+
+219
+00:07:54,319 --> 00:07:55,840
+and you know put that variation comes in
+
+220
+00:07:55,840 --> 00:07:57,039
+by the leader and so we're just going to
+
+221
+00:07:57,039 --> 00:07:58,720
+go for the normal case like the standard
+
+222
+00:07:58,720 --> 00:08:00,160
+case where everything is working no
+
+223
+00:08:00,160 --> 00:08:01,680
+network failures no partitions nothing
+
+224
+00:08:01,680 --> 00:08:03,520
+everything works out perfectly
+
+225
+00:08:03,520 --> 00:08:05,199
+here's the leader you know we've got two
+
+226
+00:08:05,199 --> 00:08:09,350
+followers
+
+227
+00:08:09,360 --> 00:08:11,280
+and you know just by now you know that
+
+228
+00:08:11,280 --> 00:08:13,440
+protocol you know probably inside out
+
+229
+00:08:13,440 --> 00:08:14,560
+you know the first thing of course it
+
+230
+00:08:14,560 --> 00:08:16,400
+happens like you would call the leader
+
+231
+00:08:16,400 --> 00:08:17,759
+call start
+
+232
+00:08:17,759 --> 00:08:20,879
+uh to start actually writes uh
+
+233
+00:08:20,879 --> 00:08:24,720
+the put operation to its uh
+
+234
+00:08:24,720 --> 00:08:26,720
+to the log in the leader and then the
+
+235
+00:08:26,720 --> 00:08:28,639
+leader you know propagates its log you
+
+236
+00:08:28,639 --> 00:08:29,680
+know to the other
+
+237
+00:08:29,680 --> 00:08:32,640
+followers and you know we saw it before
+
+238
+00:08:32,640 --> 00:08:34,640
+and that actually happens in parallel
+
+239
+00:08:34,640 --> 00:08:36,640
+but we're saying let me draw this
+
+240
+00:08:36,640 --> 00:08:38,839
+slightly differently
+
+241
+00:08:38,839 --> 00:08:42,000
+um basically it launches a bunch of rpcs
+
+242
+00:08:42,000 --> 00:08:44,720
+uh almost instantaneously to the
+
+243
+00:08:44,720 --> 00:08:45,680
+different
+
+244
+00:08:45,680 --> 00:08:47,920
+uh followers each follower of course you
+
+245
+00:08:47,920 --> 00:08:48,720
+know we'll
+
+246
+00:08:48,720 --> 00:08:50,399
+append the entry to its log so that
+
+247
+00:08:50,399 --> 00:08:51,760
+requires a right you know
+
+248
+00:08:51,760 --> 00:08:54,720
+persistent storage uh same thing here
+
+249
+00:08:54,720 --> 00:08:56,959
+and then they respond back
+
+250
+00:08:56,959 --> 00:08:59,600
+and so here's the response back and in
+
+251
+00:08:59,600 --> 00:09:00,320
+this case
+
+252
+00:09:00,320 --> 00:09:03,120
+if a majority has responded the leader
+
+253
+00:09:03,120 --> 00:09:04,880
+can actually apply the operation
+
+254
+00:09:04,880 --> 00:09:06,560
+so the leader will actually apply the
+
+255
+00:09:06,560 --> 00:09:08,240
+operation here for nut
+
+256
+00:09:08,240 --> 00:09:12,640
+indicator so do the put
+
+257
+00:09:12,640 --> 00:09:15,440
+and send the response back to the client
+
+258
+00:09:15,440 --> 00:09:16,560
+so what we're curious about
+
+259
+00:09:16,560 --> 00:09:20,240
+is like how many uh puts per second can
+
+260
+00:09:20,240 --> 00:09:20,959
+we actually get
+
+261
+00:09:20,959 --> 00:09:24,070
+you know in this
+
+262
+00:09:24,080 --> 00:09:27,760
+in this uh setting and i know we think
+
+263
+00:09:27,760 --> 00:09:29,120
+about it you know the uh
+
+264
+00:09:29,120 --> 00:09:31,120
+you know when you do grass grows you
+
+265
+00:09:31,120 --> 00:09:32,720
+know back of the envelope calculation we
+
+266
+00:09:32,720 --> 00:09:34,320
+don't really care exactly about the
+
+267
+00:09:34,320 --> 00:09:37,200
+the exact numbers but uh you know one
+
+268
+00:09:37,200 --> 00:09:38,399
+round trip
+
+269
+00:09:38,399 --> 00:09:40,560
+uh we need at least one round trip to
+
+270
+00:09:40,560 --> 00:09:42,160
+actually get the majority great leader
+
+271
+00:09:42,160 --> 00:09:43,760
+needs to talk to at least one follower
+
+272
+00:09:43,760 --> 00:09:45,200
+to actually maintain the majority so
+
+273
+00:09:45,200 --> 00:09:46,720
+we're going to have at least one round
+
+274
+00:09:46,720 --> 00:09:48,839
+trip
+
+275
+00:09:48,839 --> 00:09:52,310
+messaging
+
+276
+00:09:52,320 --> 00:09:56,240
+uh in uh then you sort of need to look
+
+277
+00:09:56,240 --> 00:09:58,000
+at the rights to stable storage because
+
+278
+00:09:58,000 --> 00:09:59,680
+those tend to be expensive
+
+279
+00:09:59,680 --> 00:10:01,120
+and you'll see you know in this case
+
+280
+00:10:01,120 --> 00:10:02,480
+we're going to have two rights there's
+
+281
+00:10:02,480 --> 00:10:03,680
+going to be one right at the leader
+
+282
+00:10:03,680 --> 00:10:05,200
+there's one right at the follower at
+
+283
+00:10:05,200 --> 00:10:07,200
+that point we have at least two nodes
+
+284
+00:10:07,200 --> 00:10:08,480
+that have a copy
+
+285
+00:10:08,480 --> 00:10:10,399
+so one of the things will be committed
+
+286
+00:10:10,399 --> 00:10:11,760
+uh
+
+287
+00:10:11,760 --> 00:10:14,320
+if no further failures uh and so
+
+288
+00:10:14,320 --> 00:10:15,360
+basically
+
+289
+00:10:15,360 --> 00:10:17,680
+you know to a minimum we're going to
+
+290
+00:10:17,680 --> 00:10:20,470
+need to write
+
+291
+00:10:20,480 --> 00:10:22,000
+so that's sort of the base and the best
+
+292
+00:10:22,000 --> 00:10:23,120
+you could do correct at least in the
+
+293
+00:10:23,120 --> 00:10:24,320
+sort of the simple scheme that we
+
+294
+00:10:24,320 --> 00:10:25,120
+discussed
+
+295
+00:10:25,120 --> 00:10:27,279
+discussed here there's a referendum we
+
+296
+00:10:27,279 --> 00:10:29,200
+can think about like what the cost is
+
+297
+00:10:29,200 --> 00:10:31,839
+um and in a round trip you know maybe it
+
+298
+00:10:31,839 --> 00:10:33,120
+was running in the data center networks
+
+299
+00:10:33,120 --> 00:10:34,480
+or not across the internet
+
+300
+00:10:34,480 --> 00:10:35,839
+you know maybe you know that actually
+
+301
+00:10:35,839 --> 00:10:39,990
+comes down to one millisecond
+
+302
+00:10:40,000 --> 00:10:41,519
+uh we're roughly in the neighborhood of
+
+303
+00:10:41,519 --> 00:10:43,040
+a millisecond maybe a little bit faster
+
+304
+00:10:43,040 --> 00:10:44,640
+but we really care about it as we'll see
+
+305
+00:10:44,640 --> 00:10:46,399
+in a second so we're going to do two
+
+306
+00:10:46,399 --> 00:10:48,800
+writes to stable storage
+
+307
+00:10:48,800 --> 00:10:50,399
+and rights actually two stable stores
+
+308
+00:10:50,399 --> 00:10:51,920
+tend to be expensive and you know
+
+309
+00:10:51,920 --> 00:10:53,440
+defensive coordination like what medium
+
+310
+00:10:53,440 --> 00:10:54,959
+or what technology you're using for
+
+311
+00:10:54,959 --> 00:10:56,880
+stable storage let's assume like we're
+
+312
+00:10:56,880 --> 00:10:58,560
+using ssds you know sort of pretty
+
+313
+00:10:58,560 --> 00:10:59,360
+typical
+
+314
+00:10:59,360 --> 00:11:01,040
+and then you know presumably one right
+
+315
+00:11:01,040 --> 00:11:02,480
+he's in the order of maybe two
+
+316
+00:11:02,480 --> 00:11:03,839
+milliseconds you know we got to really
+
+317
+00:11:03,839 --> 00:11:04,959
+make sure actually the right
+
+318
+00:11:04,959 --> 00:11:08,160
+ends up on the in the ssd so it probably
+
+319
+00:11:08,160 --> 00:11:09,600
+has to be a synchronous uh
+
+320
+00:11:09,600 --> 00:11:12,880
+right so it means like two milliseconds
+
+321
+00:11:12,880 --> 00:11:14,320
+for one right you know so two
+
+322
+00:11:14,320 --> 00:11:16,240
+right would be roughly you know four
+
+323
+00:11:16,240 --> 00:11:19,110
+milliseconds
+
+324
+00:11:19,120 --> 00:11:20,800
+so we added up you know it's going to be
+
+325
+00:11:20,800 --> 00:11:24,150
+five milliseconds
+
+326
+00:11:24,160 --> 00:11:27,920
+and so how many operations per second
+
+327
+00:11:27,920 --> 00:11:33,750
+just to see if anybody's still awake
+
+328
+00:11:36,870 --> 00:11:36,880
+200 yeah so there's gonna be 200 puts
+
+329
+00:11:36,880 --> 00:11:40,870
+per second
+
+330
+00:11:40,880 --> 00:11:42,320
+any questions about this doesn't make
+
+331
+00:11:42,320 --> 00:11:45,990
+sense
+
+332
+00:11:46,000 --> 00:11:49,040
+okay so now let's look at zookeeper
+
+333
+00:11:49,040 --> 00:11:50,959
+what's the round trip for in the rights
+
+334
+00:11:50,959 --> 00:11:53,839
+i'm sorry i missed it
+
+335
+00:11:53,839 --> 00:11:56,079
+we have the formula the right the right
+
+336
+00:11:56,079 --> 00:11:57,360
+there's no round trip there's one round
+
+337
+00:11:57,360 --> 00:11:57,680
+trip
+
+338
+00:11:57,680 --> 00:11:59,040
+correct to talk from the leader to the
+
+339
+00:11:59,040 --> 00:12:00,880
+follower and the two rights one at the
+
+340
+00:12:00,880 --> 00:12:02,399
+stable storage for the leader
+
+341
+00:12:02,399 --> 00:12:04,160
+and one at the stable store install a
+
+342
+00:12:04,160 --> 00:12:07,200
+stable storage of the follower
+
+343
+00:12:07,200 --> 00:12:09,200
+and the two rights add up to four the
+
+344
+00:12:09,200 --> 00:12:11,040
+round trip to roughly one millisecond so
+
+345
+00:12:11,040 --> 00:12:12,560
+the total is five
+
+346
+00:12:12,560 --> 00:12:17,030
+milliseconds for one put
+
+347
+00:12:17,040 --> 00:12:27,750
+okay let's look at zookeeper
+
+348
+00:12:27,760 --> 00:12:29,600
+and again the metric you know that the
+
+349
+00:12:29,600 --> 00:12:31,600
+paper is interested in is the throughput
+
+350
+00:12:31,600 --> 00:12:33,200
+throughput metric where basically the
+
+351
+00:12:33,200 --> 00:12:35,760
+clients have many many many clients
+
+352
+00:12:35,760 --> 00:12:39,120
+and uh they pump uh you know many
+
+353
+00:12:39,120 --> 00:12:41,360
+requests
+
+354
+00:12:41,360 --> 00:12:45,920
+to um to suit keeper as much as possible
+
+355
+00:12:45,920 --> 00:12:48,480
+and uh a pipeline pipeline them
+
+356
+00:12:48,480 --> 00:12:49,839
+aggressively
+
+357
+00:12:49,839 --> 00:12:52,959
+and so uh so let's see what the
+
+358
+00:12:52,959 --> 00:12:56,320
+results of that is and so let me pull up
+
+359
+00:12:56,320 --> 00:12:59,440
+you know the graph
+
+360
+00:12:59,440 --> 00:13:04,230
+of the paper
+
+361
+00:13:04,240 --> 00:13:06,480
+and you know look at that paper a little
+
+362
+00:13:06,480 --> 00:13:10,150
+and let the graph a little bit
+
+363
+00:13:10,160 --> 00:13:12,160
+so a couple things to presumably to
+
+364
+00:13:12,160 --> 00:13:13,680
+observe you know on the
+
+365
+00:13:13,680 --> 00:13:15,279
+x-axis is the percentage of read
+
+366
+00:13:15,279 --> 00:13:16,880
+requests as we'll see in a second you
+
+367
+00:13:16,880 --> 00:13:18,320
+know this is going to
+
+368
+00:13:18,320 --> 00:13:20,320
+be important uh to distinguish read from
+
+369
+00:13:20,320 --> 00:13:21,839
+write operations and so variety
+
+370
+00:13:21,839 --> 00:13:23,120
+operations are really operations that
+
+371
+00:13:23,120 --> 00:13:23,680
+modify
+
+372
+00:13:23,680 --> 00:13:25,360
+any right operation that modifies the
+
+373
+00:13:25,360 --> 00:13:27,120
+state and read operations or
+
+374
+00:13:27,120 --> 00:13:29,120
+operations don't modify the state at all
+
+375
+00:13:29,120 --> 00:13:30,399
+so in our uh
+
+376
+00:13:30,399 --> 00:13:32,160
+in lab three terms you know put would be
+
+377
+00:13:32,160 --> 00:13:34,160
+in a right operation and get
+
+378
+00:13:34,160 --> 00:13:37,760
+the read operation and on the y-axis
+
+379
+00:13:37,760 --> 00:13:39,680
+is the number of operations per second
+
+380
+00:13:39,680 --> 00:13:41,120
+and let's look at the case of free
+
+381
+00:13:41,120 --> 00:13:42,079
+servers
+
+382
+00:13:42,079 --> 00:13:43,519
+and so the first thing you're going to
+
+383
+00:13:43,519 --> 00:13:45,279
+notice is that
+
+384
+00:13:45,279 --> 00:13:48,639
+at zero reach so only write operations
+
+385
+00:13:48,639 --> 00:13:50,480
+so that wanted to modify the state you
+
+386
+00:13:50,480 --> 00:13:52,000
+know we get you know roughly
+
+387
+00:13:52,000 --> 00:13:55,600
+21 000
+
+388
+00:13:55,600 --> 00:13:58,399
+operations per second as throughput
+
+389
+00:13:58,399 --> 00:13:59,600
+right
+
+390
+00:13:59,600 --> 00:14:02,320
+and you know we look at you know if the
+
+391
+00:14:02,320 --> 00:14:04,079
+system only has reits
+
+392
+00:14:04,079 --> 00:14:05,440
+that actually gets a lot more you know
+
+393
+00:14:05,440 --> 00:14:07,440
+it gets up in the uh
+
+394
+00:14:07,440 --> 00:14:10,560
+you know whatever the 67 year age region
+
+395
+00:14:10,560 --> 00:14:12,720
+and in fact what really is going on is
+
+396
+00:14:12,720 --> 00:14:14,720
+that the number reads
+
+397
+00:14:14,720 --> 00:14:16,240
+for the pre-put in terms of read to
+
+398
+00:14:16,240 --> 00:14:25,430
+scales with the numerous servers
+
+399
+00:14:25,440 --> 00:14:29,600
+so uh the if your free servers
+
+400
+00:14:29,600 --> 00:14:31,040
+you know you get three times you know
+
+401
+00:14:31,040 --> 00:14:32,800
+the re-performance of one server if you
+
+402
+00:14:32,800 --> 00:14:34,720
+have five servers you get near the
+
+403
+00:14:34,720 --> 00:14:37,199
+uh five times the re-performance one
+
+404
+00:14:37,199 --> 00:14:38,000
+server
+
+405
+00:14:38,000 --> 00:14:39,360
+that's of course not true with rights
+
+406
+00:14:39,360 --> 00:14:40,880
+correct like in fact if you look at this
+
+407
+00:14:40,880 --> 00:14:41,360
+graph
+
+408
+00:14:41,360 --> 00:14:44,320
+you see that if with more servers the
+
+409
+00:14:44,320 --> 00:14:46,399
+right performance actually goes down
+
+410
+00:14:46,399 --> 00:14:48,720
+uh and you know the reason for that is
+
+411
+00:14:48,720 --> 00:14:49,519
+presumably
+
+412
+00:14:49,519 --> 00:14:52,240
+the uh the leader has to chat with more
+
+413
+00:14:52,240 --> 00:14:53,839
+servers to actually get this operation
+
+414
+00:14:53,839 --> 00:14:54,880
+through
+
+415
+00:14:54,880 --> 00:14:57,120
+and so when we're purely doing write
+
+416
+00:14:57,120 --> 00:14:58,079
+operations
+
+417
+00:14:58,079 --> 00:15:00,399
+uh we're actually limited and we cannot
+
+418
+00:15:00,399 --> 00:15:01,760
+get expect more performance than a
+
+419
+00:15:01,760 --> 00:15:03,120
+single server and the fact that the ad
+
+420
+00:15:03,120 --> 00:15:04,320
+servers are going to go
+
+421
+00:15:04,320 --> 00:15:07,350
+down in performance
+
+422
+00:15:07,360 --> 00:15:09,760
+and so this 21 000 you know per second
+
+423
+00:15:09,760 --> 00:15:11,040
+even for a single
+
+424
+00:15:11,040 --> 00:15:14,800
+uh uh for you know write operations
+
+425
+00:15:14,800 --> 00:15:17,040
+um with uh a configuration of free
+
+426
+00:15:17,040 --> 00:15:18,160
+servers you know there's an impressive
+
+427
+00:15:18,160 --> 00:15:20,079
+number like this quite a bit higher than
+
+428
+00:15:20,079 --> 00:15:21,040
+actually the
+
+429
+00:15:21,040 --> 00:15:22,880
+simple sort of calculations that we did
+
+430
+00:15:22,880 --> 00:15:24,720
+for uh lab three you know library will
+
+431
+00:15:24,720 --> 00:15:26,000
+never get in that will not
+
+432
+00:15:26,000 --> 00:15:29,040
+get close in the neighborhood at all um
+
+433
+00:15:29,040 --> 00:15:32,160
+and so you know we want to understand uh
+
+434
+00:15:32,160 --> 00:15:33,920
+we want to see in this design what did
+
+435
+00:15:33,920 --> 00:15:35,440
+the designers do to actually
+
+436
+00:15:35,440 --> 00:15:41,910
+get that kind of performance
+
+437
+00:15:41,920 --> 00:15:43,440
+and so the two as i mentioned earlier
+
+438
+00:15:43,440 --> 00:15:45,360
+there's sort of two key ideas
+
+439
+00:15:45,360 --> 00:15:48,240
+uh one everything is asynchronous or the
+
+440
+00:15:48,240 --> 00:15:49,680
+clients
+
+441
+00:15:49,680 --> 00:15:53,440
+can submit many operations to raft
+
+442
+00:15:53,440 --> 00:15:55,440
+or you know zookeeper sorry uh in a
+
+443
+00:15:55,440 --> 00:15:56,639
+single shot
+
+444
+00:15:56,639 --> 00:15:59,279
+uh so they're all pipelines so basically
+
+445
+00:15:59,279 --> 00:16:00,000
+when
+
+446
+00:16:00,000 --> 00:16:01,680
+the way to think about it the zookeeper
+
+447
+00:16:01,680 --> 00:16:03,040
+client basically says
+
+448
+00:16:03,040 --> 00:16:05,120
+please start executing this foot and
+
+449
+00:16:05,120 --> 00:16:07,600
+doesn't wait in the response
+
+450
+00:16:07,600 --> 00:16:09,120
+of the put that just you know
+
+451
+00:16:09,120 --> 00:16:10,639
+immediately issues the second put and
+
+452
+00:16:10,639 --> 00:16:11,839
+then the third and the fourth and the
+
+453
+00:16:11,839 --> 00:16:12,560
+fifth
+
+454
+00:16:12,560 --> 00:16:14,079
+and so for example a lot of these put
+
+455
+00:16:14,079 --> 00:16:15,839
+run will be batched all together maybe
+
+456
+00:16:15,839 --> 00:16:17,360
+even in a single message all be
+
+457
+00:16:17,360 --> 00:16:18,959
+transferred to the
+
+458
+00:16:18,959 --> 00:16:20,880
+leader and the leader will apply them
+
+459
+00:16:20,880 --> 00:16:23,040
+all at the same time
+
+460
+00:16:23,040 --> 00:16:24,800
+and in fact it will leader will write to
+
+461
+00:16:24,800 --> 00:16:26,560
+the persistent storage only once you
+
+462
+00:16:26,560 --> 00:16:28,320
+know for this whole batch of operations
+
+463
+00:16:28,320 --> 00:16:30,079
+so instead of having one right
+
+464
+00:16:30,079 --> 00:16:32,160
+or per operation you're going to have
+
+465
+00:16:32,160 --> 00:16:34,240
+one disk right for many many many
+
+466
+00:16:34,240 --> 00:16:35,120
+operations
+
+467
+00:16:35,120 --> 00:16:36,880
+and this is one reason you know they get
+
+468
+00:16:36,880 --> 00:16:39,759
+this uh you know very good performance
+
+469
+00:16:39,759 --> 00:16:42,240
+on write operations and then the second
+
+470
+00:16:42,240 --> 00:16:43,040
+thing
+
+471
+00:16:43,040 --> 00:16:46,399
+is they do something special for
+
+472
+00:16:46,399 --> 00:16:48,720
+read operations they allow read
+
+473
+00:16:48,720 --> 00:16:49,680
+operations
+
+474
+00:16:49,680 --> 00:16:57,030
+to be processed by any server
+
+475
+00:16:57,040 --> 00:16:58,720
+so instead of running all the operations
+
+476
+00:16:58,720 --> 00:17:00,240
+through the leader
+
+477
+00:17:00,240 --> 00:17:03,040
+they allow operations to actually be
+
+478
+00:17:03,040 --> 00:17:04,000
+processed by
+
+479
+00:17:04,000 --> 00:17:07,760
+any server so
+
+480
+00:17:07,760 --> 00:17:09,360
+and then the latter one i want to talk a
+
+481
+00:17:09,360 --> 00:17:10,880
+little bit more about it
+
+482
+00:17:10,880 --> 00:17:13,439
+uh and i think i wanted to think about
+
+483
+00:17:13,439 --> 00:17:13,919
+you know
+
+484
+00:17:13,919 --> 00:17:15,360
+could we do something similar like let's
+
+485
+00:17:15,360 --> 00:17:20,549
+say we want to do lab free
+
+486
+00:17:20,559 --> 00:17:22,799
+and we're going to do the same trick and
+
+487
+00:17:22,799 --> 00:17:24,559
+we want to look at
+
+488
+00:17:24,559 --> 00:17:30,390
+basically reads from
+
+489
+00:17:30,400 --> 00:17:33,280
+any machine or any pier i guess it's
+
+490
+00:17:33,280 --> 00:17:36,630
+just
+
+491
+00:17:36,640 --> 00:17:38,720
+so the picture would be as follows and
+
+492
+00:17:38,720 --> 00:17:40,640
+we have a leader
+
+493
+00:17:40,640 --> 00:17:43,520
+we have the two followers we just stick
+
+494
+00:17:43,520 --> 00:17:46,880
+to the case of three
+
+495
+00:17:46,880 --> 00:17:49,919
+and we have a client
+
+496
+00:17:49,919 --> 00:17:53,440
+and uh we're gonna like consider what
+
+497
+00:17:53,440 --> 00:17:55,360
+actually could happen
+
+498
+00:17:55,360 --> 00:17:57,200
+if you know we sort of easily follow
+
+499
+00:17:57,200 --> 00:17:58,640
+this strategy where we're gonna read
+
+500
+00:17:58,640 --> 00:18:01,280
+from anything so here's our client
+
+501
+00:18:01,280 --> 00:18:02,799
+the leaders actually you know when we do
+
+502
+00:18:02,799 --> 00:18:04,400
+books you know they all go through the
+
+503
+00:18:04,400 --> 00:18:07,200
+leader and so the client you know
+
+504
+00:18:07,200 --> 00:18:08,880
+basically does a read
+
+505
+00:18:08,880 --> 00:18:12,559
+and let's say you know this was done
+
+506
+00:18:12,559 --> 00:18:14,480
+and at the same time or roughly after
+
+507
+00:18:14,480 --> 00:18:16,880
+after the put was done the client issues
+
+508
+00:18:16,880 --> 00:18:19,760
+a get in the talks to one of the
+
+509
+00:18:19,760 --> 00:18:21,600
+followers an arbitrary one let's say
+
+510
+00:18:21,600 --> 00:18:23,440
+for this case it does not talk to the
+
+511
+00:18:23,440 --> 00:18:25,120
+leader and
+
+512
+00:18:25,120 --> 00:18:28,000
+then you know we're the follower
+
+513
+00:18:28,000 --> 00:18:29,039
+response
+
+514
+00:18:29,039 --> 00:18:31,760
+and the question is like what value does
+
+515
+00:18:31,760 --> 00:18:35,190
+the get observe
+
+516
+00:18:35,200 --> 00:18:36,799
+so what's the possible values you know
+
+517
+00:18:36,799 --> 00:18:38,480
+that the get can observe now let's say
+
+518
+00:18:38,480 --> 00:18:40,320
+that you know we're reading whatever
+
+519
+00:18:40,320 --> 00:18:43,280
+the key x and that initial the value of
+
+520
+00:18:43,280 --> 00:18:44,480
+x is zero
+
+521
+00:18:44,480 --> 00:18:48,160
+and this put actually put x to one
+
+522
+00:18:48,160 --> 00:18:49,840
+and what are the values that get can
+
+523
+00:18:49,840 --> 00:18:51,280
+actually return in
+
+524
+00:18:51,280 --> 00:18:54,830
+if we don't do anything particularly
+
+525
+00:18:54,840 --> 00:18:56,320
+special
+
+526
+00:18:56,320 --> 00:18:57,679
+um so just a question here about the
+
+527
+00:18:57,679 --> 00:18:59,840
+setup so uh if we're assuming that draft
+
+528
+00:18:59,840 --> 00:19:01,520
+is the infrastructure here
+
+529
+00:19:01,520 --> 00:19:03,679
+and get it's just another command then
+
+530
+00:19:03,679 --> 00:19:04,559
+wouldn't the
+
+531
+00:19:04,559 --> 00:19:06,480
+follower just redirect the client to the
+
+532
+00:19:06,480 --> 00:19:08,080
+leader to put the get request
+
+533
+00:19:08,080 --> 00:19:10,000
+through the leader no no so the goal is
+
+534
+00:19:10,000 --> 00:19:11,280
+correct we're not you know
+
+535
+00:19:11,280 --> 00:19:12,880
+we could do that there's a lot of things
+
+536
+00:19:12,880 --> 00:19:14,559
+we could do but like the the
+
+537
+00:19:14,559 --> 00:19:16,799
+we want to get this perfect scalability
+
+538
+00:19:16,799 --> 00:19:18,799
+so to get perfect scalability
+
+539
+00:19:18,799 --> 00:19:21,120
+the follower cannot talk to the leader
+
+540
+00:19:21,120 --> 00:19:22,880
+for read operations so basically read
+
+541
+00:19:22,880 --> 00:19:24,720
+operations are executed by
+
+542
+00:19:24,720 --> 00:19:27,679
+the individual followers um immediately
+
+543
+00:19:27,679 --> 00:19:29,200
+without no communication because that's
+
+544
+00:19:29,200 --> 00:19:30,480
+another way we're going to get perfect
+
+545
+00:19:30,480 --> 00:19:31,600
+scalability
+
+546
+00:19:31,600 --> 00:19:33,760
+so they're not even communicating with
+
+547
+00:19:33,760 --> 00:19:36,320
+yep so i'm just doing the native plan
+
+548
+00:19:36,320 --> 00:19:37,440
+let's say like our goal is to get
+
+549
+00:19:37,440 --> 00:19:39,280
+perfect scalability like you know
+
+550
+00:19:39,280 --> 00:19:40,400
+zookeeper does
+
+551
+00:19:40,400 --> 00:19:41,919
+and we want to understand like you know
+
+552
+00:19:41,919 --> 00:19:43,919
+is that difficult or easy or what does
+
+553
+00:19:43,919 --> 00:19:44,799
+that really mean
+
+554
+00:19:44,799 --> 00:19:46,000
+and so the first you know font
+
+555
+00:19:46,000 --> 00:19:47,600
+experiment is like we do absolutely
+
+556
+00:19:47,600 --> 00:19:48,080
+nothing
+
+557
+00:19:48,080 --> 00:19:50,000
+at the leaders the followers the
+
+558
+00:19:50,000 --> 00:19:51,200
+followers get the
+
+559
+00:19:51,200 --> 00:19:52,960
+read operation to execute it and return
+
+560
+00:19:52,960 --> 00:19:54,880
+the value awesome
+
+561
+00:19:54,880 --> 00:19:56,240
+and what can you know so another
+
+562
+00:19:56,240 --> 00:19:57,520
+question is what values can be returned
+
+563
+00:19:57,520 --> 00:19:58,160
+by the
+
+564
+00:19:58,160 --> 00:20:01,840
+again the client observe in this picture
+
+565
+00:20:01,840 --> 00:20:04,720
+can be either because maybe they put
+
+566
+00:20:04,720 --> 00:20:05,280
+then
+
+567
+00:20:05,280 --> 00:20:06,960
+then make it through the desk of the
+
+568
+00:20:06,960 --> 00:20:09,200
+leader yet yeah so it could be you know
+
+569
+00:20:09,200 --> 00:20:09,520
+so
+
+570
+00:20:09,520 --> 00:20:11,679
+you're either going to return zero or it
+
+571
+00:20:11,679 --> 00:20:12,559
+could return one
+
+572
+00:20:12,559 --> 00:20:16,640
+right so it can return stale data
+
+573
+00:20:16,640 --> 00:20:20,240
+it's a possibility um
+
+574
+00:20:20,240 --> 00:20:21,760
+what's uh let's say you know we do the
+
+575
+00:20:21,760 --> 00:20:23,360
+uh let's say it returns
+
+576
+00:20:23,360 --> 00:20:26,880
+uh one so this get you know returns one
+
+577
+00:20:26,880 --> 00:20:29,520
+use for uh a fat experiment and then the
+
+578
+00:20:29,520 --> 00:20:30,400
+client does another
+
+579
+00:20:30,400 --> 00:20:33,510
+get
+
+580
+00:20:33,520 --> 00:20:35,280
+i'm not going to say to where that get
+
+581
+00:20:35,280 --> 00:20:37,120
+is going uh
+
+582
+00:20:37,120 --> 00:20:40,870
+but you know um
+
+583
+00:20:40,880 --> 00:20:44,640
+and what values could we see
+
+584
+00:20:44,640 --> 00:20:47,280
+in response to that get assuming there
+
+585
+00:20:47,280 --> 00:20:49,039
+are no other rights it should be a one
+
+586
+00:20:49,039 --> 00:20:52,400
+right yeah unfortunately
+
+587
+00:20:52,400 --> 00:20:54,159
+because i have three servers if i had
+
+588
+00:20:54,159 --> 00:21:00,830
+five servers
+
+589
+00:21:00,840 --> 00:21:04,000
+uh why is it different
+
+590
+00:21:04,000 --> 00:21:07,200
+okay let's make it different
+
+591
+00:21:07,200 --> 00:21:09,440
+uh so certainly can return one correct
+
+592
+00:21:09,440 --> 00:21:11,280
+that we agree on that
+
+593
+00:21:11,280 --> 00:21:13,600
+because if the follower talks to the
+
+594
+00:21:13,600 --> 00:21:14,640
+second get request
+
+595
+00:21:14,640 --> 00:21:18,240
+you know talks to uh
+
+596
+00:21:18,240 --> 00:21:19,919
+a follower that actually has seen the
+
+597
+00:21:19,919 --> 00:21:22,080
+put operation which the majority of them
+
+598
+00:21:22,080 --> 00:21:23,440
+have seen the put operation we're going
+
+599
+00:21:23,440 --> 00:21:25,679
+to get a one back correct
+
+600
+00:21:25,679 --> 00:21:28,840
+and the real question is could it see a
+
+601
+00:21:28,840 --> 00:21:31,600
+zero
+
+602
+00:21:31,600 --> 00:21:34,799
+even though it observed the one earlier
+
+603
+00:21:34,799 --> 00:21:36,720
+i mean you could see a zero even in the
+
+604
+00:21:36,720 --> 00:21:38,799
+case of uh three servers right because
+
+605
+00:21:38,799 --> 00:21:40,640
+let's say that you have the majority of
+
+606
+00:21:40,640 --> 00:21:42,159
+servers okay let me let me do it first
+
+607
+00:21:42,159 --> 00:21:43,600
+the five case because it's simpler to
+
+608
+00:21:43,600 --> 00:21:46,630
+see
+
+609
+00:21:46,640 --> 00:21:49,280
+are we assuming that the client always
+
+610
+00:21:49,280 --> 00:21:50,559
+asks the same
+
+611
+00:21:50,559 --> 00:21:52,960
+peer or no there might be a little
+
+612
+00:21:52,960 --> 00:21:55,200
+network petition or a disconnection for
+
+613
+00:21:55,200 --> 00:21:56,799
+a brief period of time so you know
+
+614
+00:21:56,799 --> 00:21:58,559
+doesn't have to talk to the same peer as
+
+615
+00:21:58,559 --> 00:22:01,520
+last time correct yeah so in that case
+
+616
+00:22:01,520 --> 00:22:02,000
+uh
+
+617
+00:22:02,000 --> 00:22:04,480
+it can talk to a different peer who and
+
+618
+00:22:04,480 --> 00:22:06,720
+that peer may uh respond with zero
+
+619
+00:22:06,720 --> 00:22:08,880
+and that's consistent exactly so this is
+
+620
+00:22:08,880 --> 00:22:09,840
+possible
+
+621
+00:22:09,840 --> 00:22:11,679
+so you know we're gonna have to sort of
+
+622
+00:22:11,679 --> 00:22:12,880
+strange behavior correct in this
+
+623
+00:22:12,880 --> 00:22:14,240
+configuration where
+
+624
+00:22:14,240 --> 00:22:16,799
+you might see a recent you know in the
+
+625
+00:22:16,799 --> 00:22:18,000
+first case we might see actually a
+
+626
+00:22:18,000 --> 00:22:18,880
+recent value
+
+627
+00:22:18,880 --> 00:22:20,400
+and then we read actually something from
+
+628
+00:22:20,400 --> 00:22:28,070
+back you know back in time
+
+629
+00:22:28,080 --> 00:22:31,200
+yeah so we do nothing
+
+630
+00:22:31,200 --> 00:22:34,240
+special uh and we just like naively read
+
+631
+00:22:34,240 --> 00:22:36,000
+from any uh appeared and you know we
+
+632
+00:22:36,000 --> 00:22:37,440
+have sort of two side types of problems
+
+633
+00:22:37,440 --> 00:22:39,280
+i mean the get can return scale data and
+
+634
+00:22:39,280 --> 00:22:40,640
+the
+
+635
+00:22:40,640 --> 00:22:43,200
+the get return data even from back in
+
+636
+00:22:43,200 --> 00:22:44,799
+time
+
+637
+00:22:44,799 --> 00:22:48,400
+and so sorry wasn't this possible also
+
+638
+00:22:48,400 --> 00:22:49,760
+with three followers
+
+639
+00:22:49,760 --> 00:22:51,520
+because the majority was the leader and
+
+640
+00:22:51,520 --> 00:22:53,360
+one follower and you could ask the other
+
+641
+00:22:53,360 --> 00:22:55,440
+one
+
+642
+00:22:55,440 --> 00:22:58,480
+if you've seen the one in uh
+
+643
+00:22:58,480 --> 00:23:00,559
+yes it could be possible uh absolutely
+
+644
+00:23:00,559 --> 00:23:02,000
+the three would be possible too
+
+645
+00:23:02,000 --> 00:23:03,840
+i think v5 is much more clear that this
+
+646
+00:23:03,840 --> 00:23:06,830
+is possible
+
+647
+00:23:06,840 --> 00:23:09,919
+um okay
+
+648
+00:23:09,919 --> 00:23:13,919
+so uh so then we're gonna go back and
+
+649
+00:23:13,919 --> 00:23:15,280
+sort of think about a little bit of
+
+650
+00:23:15,280 --> 00:23:17,360
+this behavior correct you know returning
+
+651
+00:23:17,360 --> 00:23:18,400
+those values
+
+652
+00:23:18,400 --> 00:23:21,360
+is that okay and this is sort of an
+
+653
+00:23:21,360 --> 00:23:22,159
+interesting question
+
+654
+00:23:22,159 --> 00:23:23,600
+and it depends of course like what you
+
+655
+00:23:23,600 --> 00:23:25,440
+mean with correctness
+
+656
+00:23:25,440 --> 00:23:28,240
+uh and what you know if something's okay
+
+657
+00:23:28,240 --> 00:23:29,440
+it depends like what our correctness
+
+658
+00:23:29,440 --> 00:23:30,960
+definition is
+
+659
+00:23:30,960 --> 00:23:32,559
+and the correctness definition that
+
+660
+00:23:32,559 --> 00:23:34,000
+we've sort of been peddling you know for
+
+661
+00:23:34,000 --> 00:23:34,559
+the last
+
+662
+00:23:34,559 --> 00:23:35,919
+couple lectures or since the beginning
+
+663
+00:23:35,919 --> 00:23:38,080
+of the term is this notion of
+
+664
+00:23:38,080 --> 00:23:45,750
+linearizability
+
+665
+00:23:45,760 --> 00:23:49,039
+and roughly what that means
+
+666
+00:23:49,039 --> 00:23:51,840
+uh we talked a little bit about it in a
+
+667
+00:23:51,840 --> 00:23:52,480
+week ago
+
+668
+00:23:52,480 --> 00:23:53,919
+you know it behaves like a sort of a
+
+669
+00:23:53,919 --> 00:23:57,350
+single machine
+
+670
+00:23:57,360 --> 00:23:59,039
+that's the intuition that we've been
+
+671
+00:23:59,039 --> 00:24:00,960
+using since the beginning of the
+
+672
+00:24:00,960 --> 00:24:02,880
+semester
+
+673
+00:24:02,880 --> 00:24:04,320
+uh but you know the definition of
+
+674
+00:24:04,320 --> 00:24:05,919
+linearizability is a little bit more
+
+675
+00:24:05,919 --> 00:24:06,960
+precise
+
+676
+00:24:06,960 --> 00:24:09,039
+uh and sort of tries to nail down what
+
+677
+00:24:09,039 --> 00:24:10,880
+it means to behave like a single machine
+
+678
+00:24:10,880 --> 00:24:11,600
+and so
+
+679
+00:24:11,600 --> 00:24:12,799
+when something behaves like a single
+
+680
+00:24:12,799 --> 00:24:14,480
+machine you know first of all it has to
+
+681
+00:24:14,480 --> 00:24:16,240
+be the case that even if the operation
+
+682
+00:24:16,240 --> 00:24:17,279
+execute concurrently
+
+683
+00:24:17,279 --> 00:24:18,960
+you can sort of order them in a total
+
+684
+00:24:18,960 --> 00:24:21,360
+order so it's possible to construct the
+
+685
+00:24:21,360 --> 00:24:23,679
+total order
+
+686
+00:24:23,679 --> 00:24:25,919
+of all the operations because in the end
+
+687
+00:24:25,919 --> 00:24:27,440
+it's a single machine so
+
+688
+00:24:27,440 --> 00:24:28,720
+if it behaves as a single machine
+
+689
+00:24:28,720 --> 00:24:30,720
+there's only one machine virtual machine
+
+690
+00:24:30,720 --> 00:24:32,480
+that can actually uh
+
+691
+00:24:32,480 --> 00:24:35,360
+perform the operation so a total order
+
+692
+00:24:35,360 --> 00:24:37,360
+of apps
+
+693
+00:24:37,360 --> 00:24:39,679
+and there has to be some properties true
+
+694
+00:24:39,679 --> 00:24:41,600
+about that total order
+
+695
+00:24:41,600 --> 00:24:44,159
+and so one property that has to be true
+
+696
+00:24:44,159 --> 00:24:51,830
+is that the order matches real time
+
+697
+00:24:51,840 --> 00:24:53,919
+in real time really what i mean is that
+
+698
+00:24:53,919 --> 00:24:55,520
+if an operation completed
+
+699
+00:24:55,520 --> 00:24:58,880
+before another one started
+
+700
+00:24:58,880 --> 00:25:01,760
+then no that first operation has to go
+
+701
+00:25:01,760 --> 00:25:03,679
+before the second operation in the total
+
+702
+00:25:03,679 --> 00:25:05,679
+order
+
+703
+00:25:05,679 --> 00:25:08,240
+and then there's a third property that
+
+704
+00:25:08,240 --> 00:25:09,919
+the read
+
+705
+00:25:09,919 --> 00:25:15,039
+operation read op returns
+
+706
+00:25:15,039 --> 00:25:23,430
+value of last right
+
+707
+00:25:23,440 --> 00:25:24,559
+and that's sort of the official
+
+708
+00:25:24,559 --> 00:25:26,240
+definition of linearizability and you
+
+709
+00:25:26,240 --> 00:25:27,760
+can just think about this as sort of a
+
+710
+00:25:27,760 --> 00:25:28,000
+more
+
+711
+00:25:28,000 --> 00:25:30,960
+precise uh more precise statement of
+
+712
+00:25:30,960 --> 00:25:32,960
+this you know first thing this intuition
+
+713
+00:25:32,960 --> 00:25:34,720
+namely the whole thing behaves like a
+
+714
+00:25:34,720 --> 00:25:37,279
+single machine
+
+715
+00:25:37,279 --> 00:25:39,440
+now we want to go back and you know
+
+716
+00:25:39,440 --> 00:25:40,720
+think a little bit about
+
+717
+00:25:40,720 --> 00:25:43,679
+uh the scenarios that we had just on the
+
+718
+00:25:43,679 --> 00:25:44,640
+on this whiteboard
+
+719
+00:25:44,640 --> 00:25:46,960
+namely these two cases of scale data and
+
+720
+00:25:46,960 --> 00:25:47,919
+back in time
+
+721
+00:25:47,919 --> 00:25:50,039
+i think about the thinking whether
+
+722
+00:25:50,039 --> 00:25:52,720
+linearizability allows them
+
+723
+00:25:52,720 --> 00:25:55,440
+right and so let's first focus on the
+
+724
+00:25:55,440 --> 00:25:56,320
+first one
+
+725
+00:25:56,320 --> 00:25:57,919
+so we have a client one correctly for
+
+726
+00:25:57,919 --> 00:25:59,760
+you this the way you would like draw
+
+727
+00:25:59,760 --> 00:26:00,880
+this out and reason about
+
+728
+00:26:00,880 --> 00:26:02,720
+linearizability is you know you draw a
+
+729
+00:26:02,720 --> 00:26:04,240
+diagram for this form
+
+730
+00:26:04,240 --> 00:26:06,400
+where you know the left bar is the start
+
+731
+00:26:06,400 --> 00:26:07,919
+of the operation the right bar is the
+
+732
+00:26:07,919 --> 00:26:08,720
+acknowledgement
+
+733
+00:26:08,720 --> 00:26:09,840
+you know to the client that the
+
+734
+00:26:09,840 --> 00:26:12,000
+operation actually executed and in this
+
+735
+00:26:12,000 --> 00:26:13,520
+case you know we started saying
+
+736
+00:26:13,520 --> 00:26:16,960
+i want to put to x and i put the value
+
+737
+00:26:16,960 --> 00:26:18,159
+one
+
+738
+00:26:18,159 --> 00:26:20,640
+then we had another client or you know
+
+739
+00:26:20,640 --> 00:26:22,080
+the same client
+
+740
+00:26:22,080 --> 00:26:23,840
+let's do it draw another client you know
+
+741
+00:26:23,840 --> 00:26:25,679
+basically did the read and that reads
+
+742
+00:26:25,679 --> 00:26:26,480
+started
+
+743
+00:26:26,480 --> 00:26:30,400
+well past the put operation so this was
+
+744
+00:26:30,400 --> 00:26:31,120
+a get of
+
+745
+00:26:31,120 --> 00:26:34,480
+x and um we had one case where the get
+
+746
+00:26:34,480 --> 00:26:35,919
+of x actually returned to zero right
+
+747
+00:26:35,919 --> 00:26:36,559
+that was the
+
+748
+00:26:36,559 --> 00:26:39,679
+first possibility
+
+749
+00:26:39,679 --> 00:26:42,159
+and so that's what actually happened on
+
+750
+00:26:42,159 --> 00:26:43,679
+the previous board and now we want to
+
+751
+00:26:43,679 --> 00:26:44,640
+sort of think about this
+
+752
+00:26:44,640 --> 00:26:46,720
+is this execution allowed by
+
+753
+00:26:46,720 --> 00:26:48,559
+linearizability right this is the
+
+754
+00:26:48,559 --> 00:26:49,679
+correctness definition that we're
+
+755
+00:26:49,679 --> 00:26:52,159
+looking for and we want to see this uh
+
+756
+00:26:52,159 --> 00:26:55,200
+execution this order of operations
+
+757
+00:26:55,200 --> 00:26:56,720
+that happened in practice you know at
+
+758
+00:26:56,720 --> 00:26:58,240
+least we have seen that as possible in
+
+759
+00:26:58,240 --> 00:26:59,520
+practice is this allowed by
+
+760
+00:26:59,520 --> 00:27:00,720
+linearizability and that is our
+
+761
+00:27:00,720 --> 00:27:03,279
+correctness criteria
+
+762
+00:27:03,279 --> 00:27:11,909
+and is this a lot like your eyes melee
+
+763
+00:27:11,919 --> 00:27:14,960
+no no why not well
+
+764
+00:27:14,960 --> 00:27:18,159
+because the c2 client operation started
+
+765
+00:27:18,159 --> 00:27:18,799
+after the
+
+766
+00:27:18,799 --> 00:27:21,679
+c1 completed so in the total order you
+
+767
+00:27:21,679 --> 00:27:22,480
+have to have
+
+768
+00:27:22,480 --> 00:27:25,039
+put x1 and get x and it should be one
+
+769
+00:27:25,039 --> 00:27:27,039
+because it should read the last way
+
+770
+00:27:27,039 --> 00:27:28,640
+yeah so basically in the total order
+
+771
+00:27:28,640 --> 00:27:30,720
+that you construct you know this guy
+
+772
+00:27:30,720 --> 00:27:32,640
+you know this operation must be after
+
+773
+00:27:32,640 --> 00:27:34,240
+that operation
+
+774
+00:27:34,240 --> 00:27:36,880
+because it started later but then you
+
+775
+00:27:36,880 --> 00:27:38,640
+look you know that violates rule number
+
+776
+00:27:38,640 --> 00:27:40,000
+three correct
+
+777
+00:27:40,000 --> 00:27:41,840
+that the operation returns the value of
+
+778
+00:27:41,840 --> 00:27:43,039
+the last right that's actually not the
+
+779
+00:27:43,039 --> 00:27:44,559
+case it actually returns an
+
+780
+00:27:44,559 --> 00:27:46,840
+earlier value so this is not
+
+781
+00:27:46,840 --> 00:27:49,600
+linearizable
+
+782
+00:27:49,600 --> 00:27:52,870
+does that make sense
+
+783
+00:27:52,880 --> 00:27:54,320
+and of course this totally matches our
+
+784
+00:27:54,320 --> 00:27:56,159
+intuition right because this is a single
+
+785
+00:27:56,159 --> 00:27:57,600
+machine just could not have happened you
+
+786
+00:27:57,600 --> 00:27:59,279
+know you wrote a value to
+
+787
+00:27:59,279 --> 00:28:00,640
+the single machine and then you read it
+
+788
+00:28:00,640 --> 00:28:02,559
+back and it's certainly another value
+
+789
+00:28:02,559 --> 00:28:03,919
+it's actually previous value so there's
+
+790
+00:28:03,919 --> 00:28:06,080
+not a lot
+
+791
+00:28:06,080 --> 00:28:07,600
+okay let's do a second one like our
+
+792
+00:28:07,600 --> 00:28:09,760
+other example so we had a client one
+
+793
+00:28:09,760 --> 00:28:12,720
+again just to put i'm going to draw a
+
+794
+00:28:12,720 --> 00:28:13,360
+little bit
+
+795
+00:28:13,360 --> 00:28:15,279
+more compact because i don't have much
+
+796
+00:28:15,279 --> 00:28:16,559
+space
+
+797
+00:28:16,559 --> 00:28:20,480
+and you know we do uh put then we do
+
+798
+00:28:20,480 --> 00:28:23,440
+there's the read where the get we get
+
+799
+00:28:23,440 --> 00:28:24,640
+the room turns one
+
+800
+00:28:24,640 --> 00:28:26,960
+so we're not in the first case but in
+
+801
+00:28:26,960 --> 00:28:28,880
+the second and we're in another case
+
+802
+00:28:28,880 --> 00:28:35,669
+and then we have a gap that returns zero
+
+803
+00:28:35,679 --> 00:28:38,399
+and so that's the second sort of case
+
+804
+00:28:38,399 --> 00:28:39,919
+that we looked at correct at this
+
+805
+00:28:39,919 --> 00:28:42,320
+this picture you know the back in time
+
+806
+00:28:42,320 --> 00:28:43,440
+case
+
+807
+00:28:43,440 --> 00:28:44,960
+and again we can ask ourselves the same
+
+808
+00:28:44,960 --> 00:28:48,000
+question is this allowed
+
+809
+00:28:48,000 --> 00:28:53,269
+by linearizability
+
+810
+00:28:53,279 --> 00:28:56,240
+um no because the read wouldn't be
+
+811
+00:28:56,240 --> 00:28:56,960
+during the
+
+812
+00:28:56,960 --> 00:28:59,279
+valley of the last right yeah yeah it's
+
+813
+00:28:59,279 --> 00:29:00,000
+a pretty uh
+
+814
+00:29:00,000 --> 00:29:01,440
+straightforward observation correct you
+
+815
+00:29:01,440 --> 00:29:02,880
+know this is absolutely not the case in
+
+816
+00:29:02,880 --> 00:29:04,240
+fact it's almost simpler in the first
+
+817
+00:29:04,240 --> 00:29:05,679
+case because like even you know these
+
+818
+00:29:05,679 --> 00:29:07,760
+operations have to be in this order
+
+819
+00:29:07,760 --> 00:29:10,240
+uh but you know that you know could not
+
+820
+00:29:10,240 --> 00:29:12,399
+have happened but i would violate uh
+
+821
+00:29:12,399 --> 00:29:16,149
+rule three right
+
+822
+00:29:16,159 --> 00:29:18,240
+okay good so you know this is give you
+
+823
+00:29:18,240 --> 00:29:19,440
+some intimation of like you know what
+
+824
+00:29:19,440 --> 00:29:21,039
+linearizability means you know how you
+
+825
+00:29:21,039 --> 00:29:23,039
+reason about it and basically
+
+826
+00:29:23,039 --> 00:29:26,000
+uh if we don't do anything special and
+
+827
+00:29:26,000 --> 00:29:27,919
+we do this naive scheme
+
+828
+00:29:27,919 --> 00:29:29,600
+if you were implementing the lab free
+
+829
+00:29:29,600 --> 00:29:31,840
+and you followed this naive scheme
+
+830
+00:29:31,840 --> 00:29:34,000
+then uh you would not pass the test
+
+831
+00:29:34,000 --> 00:29:35,760
+because you know the test assume
+
+832
+00:29:35,760 --> 00:29:37,840
+or our goal in lab 3 is actually to
+
+833
+00:29:37,840 --> 00:29:40,159
+provide linearizability for putting gets
+
+834
+00:29:40,159 --> 00:29:42,159
+and so the scenarios like these ones are
+
+835
+00:29:42,159 --> 00:29:43,360
+just not allowed you know your
+
+836
+00:29:43,360 --> 00:29:45,440
+implementation has to be
+
+837
+00:29:45,440 --> 00:29:48,080
+in a way that these results cannot
+
+838
+00:29:48,080 --> 00:29:50,159
+appear
+
+839
+00:29:50,159 --> 00:29:53,679
+does that make sense so we're gonna in
+
+840
+00:29:53,679 --> 00:29:54,799
+lab three we're gonna
+
+841
+00:29:54,799 --> 00:29:58,000
+uh shoot for linearizability
+
+842
+00:29:58,000 --> 00:29:59,600
+and what is one easy way of getting
+
+843
+00:29:59,600 --> 00:30:02,630
+linearizability
+
+844
+00:30:02,640 --> 00:30:04,559
+how do we can ensure that putin gets
+
+845
+00:30:04,559 --> 00:30:08,640
+operational and linearizable
+
+846
+00:30:08,640 --> 00:30:10,480
+well i mean if you do actually only use
+
+847
+00:30:10,480 --> 00:30:11,840
+one machine
+
+848
+00:30:11,840 --> 00:30:14,480
+then it will be linearizable right yeah
+
+849
+00:30:14,480 --> 00:30:16,080
+so what's the easy solution
+
+850
+00:30:16,080 --> 00:30:17,760
+we run all the reads you know through
+
+851
+00:30:17,760 --> 00:30:19,520
+the leader correct
+
+852
+00:30:19,520 --> 00:30:21,760
+so basically an easy solution to get
+
+853
+00:30:21,760 --> 00:30:23,440
+linearizability and in fact that's what
+
+854
+00:30:23,440 --> 00:30:26,710
+we're going to be doing in lab3
+
+855
+00:30:26,720 --> 00:30:30,960
+lab3 what we're going to be doing is
+
+856
+00:30:30,960 --> 00:30:34,559
+you know reach or get operations
+
+857
+00:30:34,559 --> 00:30:37,840
+get ops go through the log so they go
+
+858
+00:30:37,840 --> 00:30:42,310
+through raft
+
+859
+00:30:42,320 --> 00:30:44,159
+and as you observe you know it seems you
+
+860
+00:30:44,159 --> 00:30:45,919
+know if they really go all through one
+
+861
+00:30:45,919 --> 00:30:46,480
+machine
+
+862
+00:30:46,480 --> 00:30:48,080
+well it's not they might not go through
+
+863
+00:30:48,080 --> 00:30:49,919
+all one machine the leader may change
+
+864
+00:30:49,919 --> 00:30:50,880
+over time
+
+865
+00:30:50,880 --> 00:30:52,480
+but we know that the leader is always
+
+866
+00:30:52,480 --> 00:30:54,000
+total order quicken that the log is
+
+867
+00:30:54,000 --> 00:30:54,960
+total awarded
+
+868
+00:30:54,960 --> 00:30:56,080
+and so we're going to be able to
+
+869
+00:30:56,080 --> 00:30:58,320
+construct you know a total order that
+
+870
+00:30:58,320 --> 00:30:59,440
+actually has
+
+871
+00:30:59,440 --> 00:31:00,960
+you know the order matches real time and
+
+872
+00:31:00,960 --> 00:31:02,320
+all the reads to return the values of
+
+873
+00:31:02,320 --> 00:31:03,039
+the
+
+874
+00:31:03,039 --> 00:31:05,360
+last right because basically the raft
+
+875
+00:31:05,360 --> 00:31:06,559
+protocol
+
+876
+00:31:06,559 --> 00:31:09,679
+will guarantee that all the entries in
+
+877
+00:31:09,679 --> 00:31:10,159
+the log
+
+878
+00:31:10,159 --> 00:31:13,200
+are in the total order right
+
+879
+00:31:13,200 --> 00:31:14,559
+and of course the rough protocol has to
+
+880
+00:31:14,559 --> 00:31:15,919
+do quite a bit of work to actually make
+
+881
+00:31:15,919 --> 00:31:16,960
+that all happen
+
+882
+00:31:16,960 --> 00:31:19,519
+and but despite you know network
+
+883
+00:31:19,519 --> 00:31:20,320
+failures
+
+884
+00:31:20,320 --> 00:31:23,760
+despite uh network uh um
+
+885
+00:31:23,760 --> 00:31:26,399
+splits you know the raf protocol will
+
+886
+00:31:26,399 --> 00:31:27,440
+guarantee us
+
+887
+00:31:27,440 --> 00:31:29,360
+that basically all the operations happen
+
+888
+00:31:29,360 --> 00:31:31,279
+in this in the total order
+
+889
+00:31:31,279 --> 00:31:32,559
+in fact you know the whole replicated
+
+890
+00:31:32,559 --> 00:31:34,080
+state machine approaches or based on
+
+891
+00:31:34,080 --> 00:31:35,519
+this idea correct that like all the
+
+892
+00:31:35,519 --> 00:31:36,960
+oxygen locks in the total order and
+
+893
+00:31:36,960 --> 00:31:38,720
+applied in the same order on all peers
+
+894
+00:31:38,720 --> 00:31:39,760
+and as a result
+
+895
+00:31:39,760 --> 00:31:42,000
+everything looks uh looks kind of like a
+
+896
+00:31:42,000 --> 00:31:43,360
+single machine
+
+897
+00:31:43,360 --> 00:31:45,360
+and so the easy way to solve this
+
+898
+00:31:45,360 --> 00:31:47,120
+problem is to run all the reads you know
+
+899
+00:31:47,120 --> 00:31:48,399
+through the
+
+900
+00:31:48,399 --> 00:31:50,799
+the leader uh whoever deletes at that
+
+901
+00:31:50,799 --> 00:31:52,080
+particular point of time and that will
+
+902
+00:31:52,080 --> 00:31:57,750
+give us linearizability
+
+903
+00:31:57,760 --> 00:31:59,039
+let me pause for a second here any
+
+904
+00:31:59,039 --> 00:32:02,070
+questions about this
+
+905
+00:32:02,080 --> 00:32:04,000
+uh sorry it matches real time it just
+
+906
+00:32:04,000 --> 00:32:05,600
+means that if operation one
+
+907
+00:32:05,600 --> 00:32:08,640
+ends before operation two starts
+
+908
+00:32:08,640 --> 00:32:11,279
+then one is before two yeah yeah that is
+
+909
+00:32:11,279 --> 00:32:12,159
+our
+
+910
+00:32:12,159 --> 00:32:13,840
+graph you know you will see that this
+
+911
+00:32:13,840 --> 00:32:15,200
+will happen automatically correct
+
+912
+00:32:15,200 --> 00:32:16,080
+because
+
+913
+00:32:16,080 --> 00:32:19,360
+the uh if the if an operation actually
+
+914
+00:32:19,360 --> 00:32:20,880
+completely finished it that must have
+
+915
+00:32:20,880 --> 00:32:22,559
+been the case that the leader responded
+
+916
+00:32:22,559 --> 00:32:24,480
+you know back to our client and then if
+
+917
+00:32:24,480 --> 00:32:26,240
+the client started the operation later
+
+918
+00:32:26,240 --> 00:32:28,080
+and must end up later in the law get
+
+919
+00:32:28,080 --> 00:32:30,630
+deleted
+
+920
+00:32:30,640 --> 00:32:33,440
+so this is going to be a practice true
+
+921
+00:32:33,440 --> 00:32:34,000
+and
+
+922
+00:32:34,000 --> 00:32:35,600
+also uh so just to double check and
+
+923
+00:32:35,600 --> 00:32:37,840
+maybe reiterate so the uh so in lab 3
+
+924
+00:32:37,840 --> 00:32:39,200
+all of the client requests are going to
+
+925
+00:32:39,200 --> 00:32:40,399
+be synchronous
+
+926
+00:32:40,399 --> 00:32:44,789
+you know so yes okay absolutely
+
+927
+00:32:44,799 --> 00:32:47,679
+okay good so uh you know one downside of
+
+928
+00:32:47,679 --> 00:32:48,000
+this
+
+929
+00:32:48,000 --> 00:32:49,760
+scheme you know that we would go back
+
+930
+00:32:49,760 --> 00:32:51,440
+actually if you read the raf paper very
+
+931
+00:32:51,440 --> 00:32:52,880
+carefully there's an optimization for
+
+932
+00:32:52,880 --> 00:32:54,559
+read-only operations
+
+933
+00:32:54,559 --> 00:32:57,120
+uh but even that optimization requires
+
+934
+00:32:57,120 --> 00:32:57,919
+some
+
+935
+00:32:57,919 --> 00:33:01,200
+uh some communication and so
+
+936
+00:33:01,200 --> 00:33:02,880
+like if we just follow this naive you
+
+937
+00:33:02,880 --> 00:33:04,240
+know this straightforward plan to
+
+938
+00:33:04,240 --> 00:33:06,080
+actually get linearizability
+
+939
+00:33:06,080 --> 00:33:09,440
+um you know does this what does that
+
+940
+00:33:09,440 --> 00:33:11,039
+mean for performance you know we go back
+
+941
+00:33:11,039 --> 00:33:12,399
+to sort of thinking about you know
+
+942
+00:33:12,399 --> 00:33:20,230
+contrasting into a zookeeper
+
+943
+00:33:20,240 --> 00:33:22,320
+yeah is for example the number read
+
+944
+00:33:22,320 --> 00:33:23,519
+operations is going to scale with the
+
+945
+00:33:23,519 --> 00:33:26,630
+number of servers
+
+946
+00:33:26,640 --> 00:33:29,120
+not because now everything has to pass
+
+947
+00:33:29,120 --> 00:33:30,399
+through the leader yes
+
+948
+00:33:30,399 --> 00:33:31,519
+exactly everything has gone for the
+
+949
+00:33:31,519 --> 00:33:33,600
+leader again so you know we're no matter
+
+950
+00:33:33,600 --> 00:33:35,679
+it's a little bit undesirable correct
+
+951
+00:33:35,679 --> 00:33:36,960
+and so it gives you an interesting
+
+952
+00:33:36,960 --> 00:33:38,000
+question is like
+
+953
+00:33:38,000 --> 00:33:39,760
+you know how is it possible that like
+
+954
+00:33:39,760 --> 00:33:41,440
+the um
+
+955
+00:33:41,440 --> 00:33:42,880
+super zookeeper gets this great
+
+956
+00:33:42,880 --> 00:33:44,640
+performance and like when you see that
+
+957
+00:33:44,640 --> 00:33:45,919
+the simple scheme reduction doesn't
+
+958
+00:33:45,919 --> 00:33:47,440
+really work
+
+959
+00:33:47,440 --> 00:33:50,399
+or at least violates linearizability and
+
+960
+00:33:50,399 --> 00:33:50,880
+so
+
+961
+00:33:50,880 --> 00:33:52,720
+one uh so we want to talk a little bit
+
+962
+00:33:52,720 --> 00:33:54,159
+and like to understand what doesn't
+
+963
+00:33:54,159 --> 00:33:54,640
+really
+
+964
+00:33:54,640 --> 00:33:57,840
+how does google get this um and so the
+
+965
+00:33:57,840 --> 00:33:59,600
+first thing to really realize and this
+
+966
+00:33:59,600 --> 00:34:02,000
+is the probably the most important part
+
+967
+00:34:02,000 --> 00:34:05,120
+is that a zookeeper
+
+968
+00:34:05,120 --> 00:34:08,240
+does not provide linearizability
+
+969
+00:34:08,240 --> 00:34:18,829
+it basically changes the correctness
+
+970
+00:34:18,839 --> 00:34:22,629
+definition
+
+971
+00:34:22,639 --> 00:34:25,919
+and so the zookeeper service is not
+
+972
+00:34:25,919 --> 00:34:27,839
+going to behave like a single machine
+
+973
+00:34:27,839 --> 00:34:30,159
+uh you know it's going to have results
+
+974
+00:34:30,159 --> 00:34:31,599
+that would never happen
+
+975
+00:34:31,599 --> 00:34:35,440
+on a single machine so the particular
+
+976
+00:34:35,440 --> 00:34:38,800
+so what is it what does it provide well
+
+977
+00:34:38,800 --> 00:34:51,750
+it does provide linearizable rights
+
+978
+00:34:51,760 --> 00:34:54,399
+so all the uh operations all the right
+
+979
+00:34:54,399 --> 00:34:55,919
+operations actually you know go through
+
+980
+00:34:55,919 --> 00:34:58,480
+the leader and you know go through the
+
+981
+00:34:58,480 --> 00:35:01,280
+log and are appended to the log every
+
+982
+00:35:01,280 --> 00:35:03,119
+appear in the same order and so they're
+
+983
+00:35:03,119 --> 00:35:04,400
+going to also be applied in the same
+
+984
+00:35:04,400 --> 00:35:06,079
+order so we still have this replicated
+
+985
+00:35:06,079 --> 00:35:07,280
+state machine
+
+986
+00:35:07,280 --> 00:35:10,240
+uh approach or where we apply all the
+
+987
+00:35:10,240 --> 00:35:11,520
+right operation all the operation to
+
+988
+00:35:11,520 --> 00:35:14,829
+change data into uh
+
+989
+00:35:14,839 --> 00:35:17,040
+uh
+
+990
+00:35:17,040 --> 00:35:20,400
+in the total war but uh there's a couple
+
+991
+00:35:20,400 --> 00:35:21,440
+more properties
+
+992
+00:35:21,440 --> 00:35:24,240
+uh so but it does not provide
+
+993
+00:35:24,240 --> 00:35:25,760
+linearizability for reads
+
+994
+00:35:25,760 --> 00:35:27,440
+instead it sort of provides two sort of
+
+995
+00:35:27,440 --> 00:35:29,280
+a different property
+
+996
+00:35:29,280 --> 00:35:32,480
+which is that all the operations appear
+
+997
+00:35:32,480 --> 00:35:36,470
+in fifo order
+
+998
+00:35:36,480 --> 00:35:40,390
+uh in five a client order
+
+999
+00:35:40,400 --> 00:35:41,520
+this partially has to do with the
+
+1000
+00:35:41,520 --> 00:35:43,680
+asynchrony you know the client may
+
+1001
+00:35:43,680 --> 00:35:44,000
+submit
+
+1002
+00:35:44,000 --> 00:35:47,440
+multiple requests uh one by one
+
+1003
+00:35:47,440 --> 00:35:50,640
+uh without waiting for a response and
+
+1004
+00:35:50,640 --> 00:35:52,880
+you know zookeeper will guarantee that
+
+1005
+00:35:52,880 --> 00:35:54,800
+if you submit you know if client one
+
+1006
+00:35:54,800 --> 00:35:57,440
+submitted a request and then client one
+
+1007
+00:35:57,440 --> 00:35:59,040
+submitted another request
+
+1008
+00:35:59,040 --> 00:36:02,240
+then that second request will appear uh
+
+1009
+00:36:02,240 --> 00:36:05,119
+later in uh the result will observe the
+
+1010
+00:36:05,119 --> 00:36:06,320
+result of the first
+
+1011
+00:36:06,320 --> 00:36:09,599
+operation um
+
+1012
+00:36:09,599 --> 00:36:12,079
+and so in particular you know rights go
+
+1013
+00:36:12,079 --> 00:36:23,589
+into client order
+
+1014
+00:36:23,599 --> 00:36:26,079
+and then reits have where all the action
+
+1015
+00:36:26,079 --> 00:36:30,230
+is where the instant properties are
+
+1016
+00:36:30,240 --> 00:36:33,599
+the reas observe
+
+1017
+00:36:33,599 --> 00:36:38,839
+last write okay so reads uh can we
+
+1018
+00:36:38,839 --> 00:36:40,000
+observe
+
+1019
+00:36:40,000 --> 00:36:50,870
+last write from same client
+
+1020
+00:36:50,880 --> 00:36:52,240
+and so this sort of makes sense you know
+
+1021
+00:36:52,240 --> 00:36:54,079
+basically this sort of says like
+
+1022
+00:36:54,079 --> 00:36:56,079
+you read your own rights yeah so if you
+
+1023
+00:36:56,079 --> 00:36:57,520
+do the right operation you immediately
+
+1024
+00:36:57,520 --> 00:36:59,040
+follow the read operation you see at
+
+1025
+00:36:59,040 --> 00:36:59,599
+least
+
+1026
+00:36:59,599 --> 00:37:02,640
+the the results of your own rights
+
+1027
+00:37:02,640 --> 00:37:05,040
+but for rights from other operations
+
+1028
+00:37:05,040 --> 00:37:07,040
+from other clients
+
+1029
+00:37:07,040 --> 00:37:08,880
+the zookeeper does not guarantee that
+
+1030
+00:37:08,880 --> 00:37:10,640
+property instead what it guarantees
+
+1031
+00:37:10,640 --> 00:37:13,119
+is that the read will observe some
+
+1032
+00:37:13,119 --> 00:37:16,470
+prefix
+
+1033
+00:37:16,480 --> 00:37:21,270
+of the log
+
+1034
+00:37:21,280 --> 00:37:23,760
+and uh so this means correct that you
+
+1035
+00:37:23,760 --> 00:37:24,800
+can actually see
+
+1036
+00:37:24,800 --> 00:37:29,430
+stale data
+
+1037
+00:37:29,440 --> 00:37:31,040
+because you may you know read from a
+
+1038
+00:37:31,040 --> 00:37:32,640
+follower and that follower
+
+1039
+00:37:32,640 --> 00:37:35,599
+has a prefix of the log but not like the
+
+1040
+00:37:35,599 --> 00:37:36,880
+last entries in the log
+
+1041
+00:37:36,880 --> 00:37:38,800
+because maybe it just got lagged likes
+
+1042
+00:37:38,800 --> 00:37:40,000
+behind a little bit
+
+1043
+00:37:40,000 --> 00:37:42,560
+uh and nevertheless that follower is
+
+1044
+00:37:42,560 --> 00:37:43,680
+allowed to
+
+1045
+00:37:43,680 --> 00:37:46,640
+return uh a value because you know the
+
+1046
+00:37:46,640 --> 00:37:47,680
+only thing that
+
+1047
+00:37:47,680 --> 00:37:49,920
+you know zookeeper is going to guarantee
+
+1048
+00:37:49,920 --> 00:37:51,520
+that actually you know reach observe
+
+1049
+00:37:51,520 --> 00:37:54,560
+uh a prefix of block
+
+1050
+00:37:54,560 --> 00:37:56,079
+so the operations can now go out of
+
+1051
+00:37:56,079 --> 00:37:58,160
+order you know once they in the log
+
+1052
+00:37:58,160 --> 00:38:01,200
+and you cancel reach can't like read
+
+1053
+00:38:01,200 --> 00:38:03,200
+uh operations out of the alarm in out of
+
+1054
+00:38:03,200 --> 00:38:04,880
+order it really has to be a prefix
+
+1055
+00:38:04,880 --> 00:38:07,520
+prefix of the log and then there's a
+
+1056
+00:38:07,520 --> 00:38:08,880
+second requirement
+
+1057
+00:38:08,880 --> 00:38:16,829
+that you cannot do no reads from the
+
+1058
+00:38:16,839 --> 00:38:18,160
+past
+
+1059
+00:38:18,160 --> 00:38:19,920
+and that really means like if you saw
+
+1060
+00:38:19,920 --> 00:38:22,800
+some prefix one
+
+1061
+00:38:22,800 --> 00:38:24,720
+and then you issue like a read style
+
+1062
+00:38:24,720 --> 00:38:25,920
+prefix one and then
+
+1063
+00:38:25,920 --> 00:38:28,560
+you read a second tweet then that second
+
+1064
+00:38:28,560 --> 00:38:28,960
+read
+
+1065
+00:38:28,960 --> 00:38:34,550
+has to see at least prefix one plus more
+
+1066
+00:38:34,560 --> 00:38:36,480
+and it might be no it might be just
+
+1067
+00:38:36,480 --> 00:38:38,640
+prefix one but it cannot go back in time
+
+1068
+00:38:38,640 --> 00:38:39,599
+so it cannot see
+
+1069
+00:38:39,599 --> 00:38:43,920
+a shorter prefix than prefix one
+
+1070
+00:38:43,920 --> 00:38:46,320
+and so this basically so so if we look
+
+1071
+00:38:46,320 --> 00:38:47,920
+back at this picture
+
+1072
+00:38:47,920 --> 00:38:51,599
+uh the zookeeper will allow this
+
+1073
+00:38:51,599 --> 00:38:54,079
+in certain cases namely if the two
+
+1074
+00:38:54,079 --> 00:38:54,640
+clients
+
+1075
+00:38:54,640 --> 00:38:58,320
+are different but it won't allow
+
+1076
+00:38:58,320 --> 00:39:00,400
+this up this you can never have back in
+
+1077
+00:39:00,400 --> 00:39:01,680
+time
+
+1078
+00:39:01,680 --> 00:39:05,520
+okay um so i have
+
+1079
+00:39:05,520 --> 00:39:07,680
+a question a conceptual one so we have
+
+1080
+00:39:07,680 --> 00:39:09,680
+these two consistency guarantees the
+
+1081
+00:39:09,680 --> 00:39:11,920
+linearizable rights and the fifo client
+
+1082
+00:39:11,920 --> 00:39:12,560
+order
+
+1083
+00:39:12,560 --> 00:39:14,240
+so if we ignore the second constraint
+
+1084
+00:39:14,240 --> 00:39:16,160
+for a second and if we only focus on the
+
+1085
+00:39:16,160 --> 00:39:17,119
+first one
+
+1086
+00:39:17,119 --> 00:39:19,040
+does it uh does the definition of
+
+1087
+00:39:19,040 --> 00:39:20,800
+linearizable rights actually make sense
+
+1088
+00:39:20,800 --> 00:39:22,880
+since the definition of linearizability
+
+1089
+00:39:22,880 --> 00:39:25,040
+depends on having a read operation and a
+
+1090
+00:39:25,040 --> 00:39:26,400
+right operation
+
+1091
+00:39:26,400 --> 00:39:29,680
+so yeah hold that thought for a second
+
+1092
+00:39:29,680 --> 00:39:33,280
+uh because the the the
+
+1093
+00:39:33,280 --> 00:39:34,960
+the way they define linearizable rights
+
+1094
+00:39:34,960 --> 00:39:36,400
+is not basically the rights are a total
+
+1095
+00:39:36,400 --> 00:39:36,880
+order
+
+1096
+00:39:36,880 --> 00:39:38,400
+uh and but there is a relationship
+
+1097
+00:39:38,400 --> 00:39:40,000
+between the reach and the right so hold
+
+1098
+00:39:40,000 --> 00:39:42,079
+that far for a second okay
+
+1099
+00:39:42,079 --> 00:39:43,839
+uh we'll come back we'll get to that in
+
+1100
+00:39:43,839 --> 00:39:45,200
+a in in a minute
+
+1101
+00:39:45,200 --> 00:39:47,680
+like in one board i want to make one
+
+1102
+00:39:47,680 --> 00:39:49,920
+board in between okay
+
+1103
+00:39:49,920 --> 00:39:53,680
+sounds good okay so
+
+1104
+00:39:53,680 --> 00:39:56,800
+just like uh let's look a little bit at
+
+1105
+00:39:56,800 --> 00:39:58,000
+how
+
+1106
+00:39:58,000 --> 00:39:59,440
+zookeeper actually provides these
+
+1107
+00:39:59,440 --> 00:40:01,920
+guarantees um
+
+1108
+00:40:01,920 --> 00:40:03,920
+and you know so if you get the intuition
+
+1109
+00:40:03,920 --> 00:40:06,400
+you know uh
+
+1110
+00:40:06,400 --> 00:40:08,160
+how you could implement this uh the
+
+1111
+00:40:08,160 --> 00:40:10,000
+paper section not very explicit about
+
+1112
+00:40:10,000 --> 00:40:11,200
+how they implement this
+
+1113
+00:40:11,200 --> 00:40:12,400
+and certainly i'm going to give you sort
+
+1114
+00:40:12,400 --> 00:40:15,440
+of a roughly best guess
+
+1115
+00:40:15,440 --> 00:40:20,950
+so there's a zookeeper client
+
+1116
+00:40:20,960 --> 00:40:23,440
+that runs on the client machine in
+
+1117
+00:40:23,440 --> 00:40:25,200
+lottery we call this is a clerk and so
+
+1118
+00:40:25,200 --> 00:40:26,319
+this is a piece of software
+
+1119
+00:40:26,319 --> 00:40:28,079
+library sort of that works collaborates
+
+1120
+00:40:28,079 --> 00:40:30,319
+you know with the service
+
+1121
+00:40:30,319 --> 00:40:32,960
+and uh in the zookeeper in the paper
+
+1122
+00:40:32,960 --> 00:40:33,680
+terminology
+
+1123
+00:40:33,680 --> 00:40:35,119
+basically it is the thing that has the
+
+1124
+00:40:35,119 --> 00:40:36,800
+session so
+
+1125
+00:40:36,800 --> 00:40:38,400
+when you join when a client wants to
+
+1126
+00:40:38,400 --> 00:40:40,000
+connect with the super servers you know
+
+1127
+00:40:40,000 --> 00:40:41,520
+it creates a session it connects you
+
+1128
+00:40:41,520 --> 00:40:41,839
+know
+
+1129
+00:40:41,839 --> 00:40:44,000
+using the session information to the
+
+1130
+00:40:44,000 --> 00:40:46,000
+leader and maintains you know state
+
+1131
+00:40:46,000 --> 00:40:49,440
+across the session so we have a leader
+
+1132
+00:40:49,440 --> 00:40:52,880
+uh in uh zookeeper as we'll see we have
+
+1133
+00:40:52,880 --> 00:40:54,640
+followers you know basically this is all
+
+1134
+00:40:54,640 --> 00:40:56,079
+sort of similar
+
+1135
+00:40:56,079 --> 00:40:58,240
+uh to what we're used to from lab you
+
+1136
+00:40:58,240 --> 00:40:59,280
+know two
+
+1137
+00:40:59,280 --> 00:41:01,599
+and you know does a client get issues
+
+1138
+00:41:01,599 --> 00:41:03,040
+right you know to the leader
+
+1139
+00:41:03,040 --> 00:41:04,800
+you know because the rights are going to
+
+1140
+00:41:04,800 --> 00:41:06,240
+be linearizable in fact the
+
+1141
+00:41:06,240 --> 00:41:08,000
+rights basically follow exactly sort of
+
+1142
+00:41:08,000 --> 00:41:09,599
+roughly the same strategy as
+
+1143
+00:41:09,599 --> 00:41:12,000
+in the raft library so there's going to
+
+1144
+00:41:12,000 --> 00:41:13,119
+be a log
+
+1145
+00:41:13,119 --> 00:41:15,359
+and in the log are all the rights are
+
+1146
+00:41:15,359 --> 00:41:16,720
+entered you know so whatever
+
+1147
+00:41:16,720 --> 00:41:18,319
+you know there's some slots let's say
+
+1148
+00:41:18,319 --> 00:41:20,000
+the leader you know pends this
+
+1149
+00:41:20,000 --> 00:41:22,640
+right you know in this particular uh
+
+1150
+00:41:22,640 --> 00:41:23,680
+index
+
+1151
+00:41:23,680 --> 00:41:26,000
+so this you know has an index uh and in
+
+1152
+00:41:26,000 --> 00:41:27,839
+the paper they refer to this index as
+
+1153
+00:41:27,839 --> 00:41:28,400
+the
+
+1154
+00:41:28,400 --> 00:41:31,680
+z x id
+
+1155
+00:41:31,680 --> 00:41:33,520
+so i think you can think about the cx
+
+1156
+00:41:33,520 --> 00:41:36,720
+basically as the index in the log
+
+1157
+00:41:36,720 --> 00:41:39,520
+and uh when the leader you know
+
+1158
+00:41:39,520 --> 00:41:40,560
+basically commits
+
+1159
+00:41:40,560 --> 00:41:43,599
+uh an entry uh right you know to the
+
+1160
+00:41:43,599 --> 00:41:46,480
+log you know it returns the zix id back
+
+1161
+00:41:46,480 --> 00:41:47,280
+to the client
+
+1162
+00:41:47,280 --> 00:41:50,480
+and so the client maintains that state
+
+1163
+00:41:50,480 --> 00:41:52,079
+so associated with the session is
+
+1164
+00:41:52,079 --> 00:41:54,720
+basically you know with cxids you know
+
+1165
+00:41:54,720 --> 00:42:00,829
+the cxid at the last right
+
+1166
+00:42:00,839 --> 00:42:02,800
+okay and so
+
+1167
+00:42:02,800 --> 00:42:06,000
+when the client later on does a read
+
+1168
+00:42:06,000 --> 00:42:07,280
+and the read you know it doesn't have to
+
+1169
+00:42:07,280 --> 00:42:08,480
+go to the leader because that was the
+
+1170
+00:42:08,480 --> 00:42:10,319
+whole goal to get more uh performance so
+
+1171
+00:42:10,319 --> 00:42:10,720
+maybe
+
+1172
+00:42:10,720 --> 00:42:13,359
+the read actually will go you know to
+
+1173
+00:42:13,359 --> 00:42:16,160
+one of the followers
+
+1174
+00:42:16,160 --> 00:42:19,440
+and but the read will be tagged with the
+
+1175
+00:42:19,440 --> 00:42:20,319
+cx id
+
+1176
+00:42:20,319 --> 00:42:22,079
+that of the last write that that
+
+1177
+00:42:22,079 --> 00:42:24,960
+particular client has done
+
+1178
+00:42:24,960 --> 00:42:27,119
+and so what does that mean well let's
+
+1179
+00:42:27,119 --> 00:42:29,440
+say this follower is behind correct and
+
+1180
+00:42:29,440 --> 00:42:31,599
+it has two entries but it hasn't
+
+1181
+00:42:31,599 --> 00:42:32,720
+actually observed
+
+1182
+00:42:32,720 --> 00:42:34,079
+you know the right yet because whatever
+
+1183
+00:42:34,079 --> 00:42:35,359
+the leader maybe committed it through
+
+1184
+00:42:35,359 --> 00:42:37,359
+this other follower
+
+1185
+00:42:37,359 --> 00:42:39,280
+and what happens in this case is that
+
+1186
+00:42:39,280 --> 00:42:41,599
+this read
+
+1187
+00:42:41,599 --> 00:42:42,800
+the follower won't really respond
+
+1188
+00:42:42,800 --> 00:42:44,400
+immediately instead you know it will
+
+1189
+00:42:44,400 --> 00:42:45,520
+wait
+
+1190
+00:42:45,520 --> 00:42:49,520
+until i've seen you know the z-axis id
+
+1191
+00:42:49,520 --> 00:42:51,440
+and as soon as you've seen the cxid it
+
+1192
+00:42:51,440 --> 00:42:56,470
+actually will respond
+
+1193
+00:42:56,480 --> 00:42:57,440
+now of course there's going to be
+
+1194
+00:42:57,440 --> 00:42:59,760
+another client uh
+
+1195
+00:42:59,760 --> 00:43:01,280
+and so maybe at some point that this
+
+1196
+00:43:01,280 --> 00:43:02,880
+right will come through
+
+1197
+00:43:02,880 --> 00:43:06,560
+uh and um and maybe now the read you
+
+1198
+00:43:06,560 --> 00:43:07,839
+know the client does another read
+
+1199
+00:43:07,839 --> 00:43:11,440
+and so it hasn't seen no any other zx
+
+1200
+00:43:11,440 --> 00:43:13,920
+uh and maybe like let me make one more
+
+1201
+00:43:13,920 --> 00:43:15,280
+follower
+
+1202
+00:43:15,280 --> 00:43:16,800
+let's say there's yet another follower
+
+1203
+00:43:16,800 --> 00:43:18,319
+and that actually has not observed you
+
+1204
+00:43:18,319 --> 00:43:18,720
+know
+
+1205
+00:43:18,720 --> 00:43:21,280
+that that final right yet or actually
+
+1206
+00:43:21,280 --> 00:43:22,720
+let me
+
+1207
+00:43:22,720 --> 00:43:24,560
+so there's going to be another let's say
+
+1208
+00:43:24,560 --> 00:43:26,000
+there's a other client
+
+1209
+00:43:26,000 --> 00:43:27,920
+that sticks in some other right that's
+
+1210
+00:43:27,920 --> 00:43:29,359
+the scenario i want to talk about
+
+1211
+00:43:29,359 --> 00:43:30,640
+so there was another client that
+
+1212
+00:43:30,640 --> 00:43:32,640
+actually appended a w
+
+1213
+00:43:32,640 --> 00:43:35,680
+after the cxe you know it is right here
+
+1214
+00:43:35,680 --> 00:43:37,440
+uh but it was not observed that
+
+1215
+00:43:37,440 --> 00:43:39,040
+particularly right you know what we have
+
+1216
+00:43:39,040 --> 00:43:40,079
+here
+
+1217
+00:43:40,079 --> 00:43:43,280
+is we got the
+
+1218
+00:43:43,280 --> 00:43:47,599
+uh we got the two slots we got the right
+
+1219
+00:43:47,599 --> 00:43:49,119
+but then the green ray hasn't really
+
+1220
+00:43:49,119 --> 00:43:50,240
+shown up
+
+1221
+00:43:50,240 --> 00:43:52,880
+at that particular follower so if the
+
+1222
+00:43:52,880 --> 00:43:54,319
+client now issues a second
+
+1223
+00:43:54,319 --> 00:43:55,760
+you know read and maybe that goes to the
+
+1224
+00:43:55,760 --> 00:43:58,240
+other follower you know it has the same
+
+1225
+00:43:58,240 --> 00:44:00,000
+zx id because it hasn't seen
+
+1226
+00:44:00,000 --> 00:44:02,000
+any new you know that client has not
+
+1227
+00:44:02,000 --> 00:44:03,920
+issued any new new reds
+
+1228
+00:44:03,920 --> 00:44:06,800
+it will arrive there you know that that
+
+1229
+00:44:06,800 --> 00:44:08,720
+that guy is allowed to respond
+
+1230
+00:44:08,720 --> 00:44:10,640
+immediately
+
+1231
+00:44:10,640 --> 00:44:13,839
+because it has you know seen the cxid of
+
+1232
+00:44:13,839 --> 00:44:14,880
+you know the
+
+1233
+00:44:14,880 --> 00:44:16,880
+block that has seen the last egg id of
+
+1234
+00:44:16,880 --> 00:44:18,319
+that particular client
+
+1235
+00:44:18,319 --> 00:44:19,920
+uh of course it misses you know some
+
+1236
+00:44:19,920 --> 00:44:21,920
+rights you know that from other clients
+
+1237
+00:44:21,920 --> 00:44:23,440
+that are already being processed by
+
+1238
+00:44:23,440 --> 00:44:25,520
+uh some majority of the servers but it
+
+1239
+00:44:25,520 --> 00:44:27,520
+is not required to return that data
+
+1240
+00:44:27,520 --> 00:44:30,160
+and so it can just return it and so this
+
+1241
+00:44:30,160 --> 00:44:32,160
+might actually return then in stale
+
+1242
+00:44:32,160 --> 00:44:34,880
+values but you know that is allowed by
+
+1243
+00:44:34,880 --> 00:44:37,040
+the definition of you know the zookeeper
+
+1244
+00:44:37,040 --> 00:44:40,240
+correctness guarantees um i professor i
+
+1245
+00:44:40,240 --> 00:44:41,119
+have a question
+
+1246
+00:44:41,119 --> 00:44:44,560
+yeah like first i i thought um
+
+1247
+00:44:44,560 --> 00:44:48,640
+i'm not sure but uh i understood the
+
+1248
+00:44:48,640 --> 00:44:50,640
+client reads like the session leads were
+
+1249
+00:44:50,640 --> 00:44:51,680
+sticky
+
+1250
+00:44:51,680 --> 00:44:53,760
+so they would like in general go to the
+
+1251
+00:44:53,760 --> 00:44:54,880
+same
+
+1252
+00:44:54,880 --> 00:44:58,069
+um
+
+1253
+00:44:58,079 --> 00:44:59,280
+yeah but you know of course you know
+
+1254
+00:44:59,280 --> 00:45:00,640
+there might be a little bit of you know
+
+1255
+00:45:00,640 --> 00:45:02,319
+might be a quick network petition
+
+1256
+00:45:02,319 --> 00:45:05,200
+or uh anything like it and so in between
+
+1257
+00:45:05,200 --> 00:45:06,880
+time you know the
+
+1258
+00:45:06,880 --> 00:45:09,839
+it might have switched to another server
+
+1259
+00:45:09,839 --> 00:45:10,480
+okay
+
+1260
+00:45:10,480 --> 00:45:13,599
+and then um in addition it turns out the
+
+1261
+00:45:13,599 --> 00:45:14,960
+zookeeper does actually do some load
+
+1262
+00:45:14,960 --> 00:45:15,760
+balancing
+
+1263
+00:45:15,760 --> 00:45:19,440
+uh so but nevertheless it can happen
+
+1264
+00:45:19,440 --> 00:45:20,480
+correct
+
+1265
+00:45:20,480 --> 00:45:24,000
+right um the other thing was you said
+
+1266
+00:45:24,000 --> 00:45:28,400
+right um always always go to a leader
+
+1267
+00:45:28,400 --> 00:45:32,240
+um and and then the leader
+
+1268
+00:45:32,240 --> 00:45:35,839
+um responded with the zx id
+
+1269
+00:45:35,839 --> 00:45:37,599
+doesn't the leader have to like first
+
+1270
+00:45:37,599 --> 00:45:39,920
+like reach consensus before responding
+
+1271
+00:45:39,920 --> 00:45:44,829
+or in this
+
+1272
+00:45:44,839 --> 00:45:46,400
+uh yes
+
+1273
+00:45:46,400 --> 00:45:48,560
+i guess so uh you know you just have to
+
+1274
+00:45:48,560 --> 00:45:49,920
+commit it because otherwise it's an
+
+1275
+00:45:49,920 --> 00:45:51,280
+uncommitted break
+
+1276
+00:45:51,280 --> 00:45:54,560
+uh uh so i think the exact protocol okay
+
+1277
+00:45:54,560 --> 00:45:56,880
+i'm abstracting away a little bit in the
+
+1278
+00:45:56,880 --> 00:45:58,319
+details of the protocol i'm just going
+
+1279
+00:45:58,319 --> 00:45:59,280
+to sketch
+
+1280
+00:45:59,280 --> 00:46:02,160
+how it works uh i believe you're right
+
+1281
+00:46:02,160 --> 00:46:03,280
+you know that uh
+
+1282
+00:46:03,280 --> 00:46:05,280
+it must return presumably after you know
+
+1283
+00:46:05,280 --> 00:46:08,319
+the entrance is really committed
+
+1284
+00:46:08,319 --> 00:46:12,160
+then um sorry last thing um you said it
+
+1285
+00:46:12,160 --> 00:46:13,680
+always goes to the leader but i think
+
+1286
+00:46:13,680 --> 00:46:15,280
+that the paper described like it could
+
+1287
+00:46:15,280 --> 00:46:17,040
+go to like followers or right go to a
+
+1288
+00:46:17,040 --> 00:46:18,240
+follower and then
+
+1289
+00:46:18,240 --> 00:46:19,839
+yeah but it then ends up at the leader
+
+1290
+00:46:19,839 --> 00:46:24,230
+correct
+
+1291
+00:46:24,240 --> 00:46:28,079
+thanks just to clarify when you say
+
+1292
+00:46:28,079 --> 00:46:30,880
+wait for zxid unlike for example the
+
+1293
+00:46:30,880 --> 00:46:31,760
+second follower
+
+1294
+00:46:31,760 --> 00:46:34,319
+or so second when we wait for zxid we're
+
+1295
+00:46:34,319 --> 00:46:36,079
+actually waiting for it to be committed
+
+1296
+00:46:36,079 --> 00:46:38,400
+right it's not sufficient to just get it
+
+1297
+00:46:38,400 --> 00:46:40,240
+it must be committed yeah
+
+1298
+00:46:40,240 --> 00:46:43,599
+got it wait but
+
+1299
+00:46:43,599 --> 00:46:45,839
+um what like it would have been
+
+1300
+00:46:45,839 --> 00:46:46,800
+committed
+
+1301
+00:46:46,800 --> 00:46:49,359
+by the time it was like like a client
+
+1302
+00:46:49,359 --> 00:46:50,240
+wouldn't get
+
+1303
+00:46:50,240 --> 00:46:53,280
+an uncommitted cxid correct like ever
+
+1304
+00:46:53,280 --> 00:46:56,000
+like oh yeah but just uh that's correct
+
+1305
+00:46:56,000 --> 00:46:56,480
+uh
+
+1306
+00:46:56,480 --> 00:47:01,200
+so if you know the this okay
+
+1307
+00:47:01,200 --> 00:47:03,040
+at this point when the follower sees
+
+1308
+00:47:03,040 --> 00:47:04,400
+this uh zx id
+
+1309
+00:47:04,400 --> 00:47:07,280
+and the right is in that particular cxid
+
+1310
+00:47:07,280 --> 00:47:08,640
+you know it must have been committed
+
+1311
+00:47:08,640 --> 00:47:09,920
+because you know the client could have
+
+1312
+00:47:09,920 --> 00:47:11,280
+not gotten that cx id
+
+1313
+00:47:11,280 --> 00:47:13,599
+unless you know that option of that g8id
+
+1314
+00:47:13,599 --> 00:47:17,270
+was committed
+
+1315
+00:47:17,280 --> 00:47:20,880
+thanks um also so when you
+
+1316
+00:47:20,880 --> 00:47:24,160
+say that uh from the read you you get
+
+1317
+00:47:24,160 --> 00:47:26,079
+stale data so like the last
+
+1318
+00:47:26,079 --> 00:47:28,800
+basically arrow uh but the client here
+
+1319
+00:47:28,800 --> 00:47:29,599
+in the read
+
+1320
+00:47:29,599 --> 00:47:32,400
+request it supplied the zx id within it
+
+1321
+00:47:32,400 --> 00:47:33,599
+so
+
+1322
+00:47:33,599 --> 00:47:36,240
+it's as if the client knowingly exactly
+
+1323
+00:47:36,240 --> 00:47:38,000
+wanted that location in the
+
+1324
+00:47:38,000 --> 00:47:41,920
+log that had zx id as its index
+
+1325
+00:47:41,920 --> 00:47:44,559
+so didn't it knowingly just request that
+
+1326
+00:47:44,559 --> 00:47:47,280
+prefix that specific prefix of the log
+
+1327
+00:47:47,280 --> 00:47:49,200
+no but it really says you know what this
+
+1328
+00:47:49,200 --> 00:47:51,200
+basically cxd says like
+
+1329
+00:47:51,200 --> 00:47:53,280
+it's basically a counter you know going
+
+1330
+00:47:53,280 --> 00:47:55,280
+back in time
+
+1331
+00:47:55,280 --> 00:47:57,839
+and uh so the zxz says like you know you
+
+1332
+00:47:57,839 --> 00:47:59,200
+have as a follower
+
+1333
+00:47:59,200 --> 00:48:01,359
+you have to return me a result that at
+
+1334
+00:48:01,359 --> 00:48:03,040
+least concludes the prefix
+
+1335
+00:48:03,040 --> 00:48:06,079
+of the log through cxid you might have
+
+1336
+00:48:06,079 --> 00:48:07,599
+more that'd be fine too
+
+1337
+00:48:07,599 --> 00:48:09,680
+but at least through cxid and this just
+
+1338
+00:48:09,680 --> 00:48:11,280
+stops that one case where you read back
+
+1339
+00:48:11,280 --> 00:48:12,000
+in time
+
+1340
+00:48:12,000 --> 00:48:15,990
+okay awesome thanks
+
+1341
+00:48:16,000 --> 00:48:19,599
+okay so now you might wonder
+
+1342
+00:48:19,599 --> 00:48:21,119
+uh you know so this clearly does not
+
+1343
+00:48:21,119 --> 00:48:23,040
+provide generalizability and one reason
+
+1344
+00:48:23,040 --> 00:48:24,720
+people are excited about linearizability
+
+1345
+00:48:24,720 --> 00:48:25,839
+is because it behaves like a single
+
+1346
+00:48:25,839 --> 00:48:27,520
+machine so it's easier to program right
+
+1347
+00:48:27,520 --> 00:48:29,119
+like you know you do a good you get to
+
+1348
+00:48:29,119 --> 00:48:30,319
+get you know you roughly know what
+
+1349
+00:48:30,319 --> 00:48:31,520
+you're going to get
+
+1350
+00:48:31,520 --> 00:48:35,040
+uh and then no pun intended uh but
+
+1351
+00:48:35,040 --> 00:48:37,520
+here you know you certainly have a model
+
+1352
+00:48:37,520 --> 00:48:38,960
+programming model that's different from
+
+1353
+00:48:38,960 --> 00:48:40,480
+a single machine
+
+1354
+00:48:40,480 --> 00:48:43,119
+and so uh you know how do you program
+
+1355
+00:48:43,119 --> 00:48:44,559
+with this thing
+
+1356
+00:48:44,559 --> 00:48:46,800
+and you know it turns out that basically
+
+1357
+00:48:46,800 --> 00:48:47,680
+these rules
+
+1358
+00:48:47,680 --> 00:48:49,200
+you know this correctness definition
+
+1359
+00:48:49,200 --> 00:48:51,200
+that you know zookeeper has
+
+1360
+00:48:51,200 --> 00:48:53,599
+are are basically you can think of those
+
+1361
+00:48:53,599 --> 00:48:54,880
+like they're good enough
+
+1362
+00:48:54,880 --> 00:48:56,880
+to actually do uh you know for the
+
+1363
+00:48:56,880 --> 00:48:59,599
+purpose kind of to help programming
+
+1364
+00:48:59,599 --> 00:49:01,119
+and so i want to talk a little bit about
+
+1365
+00:49:01,119 --> 00:49:12,309
+that
+
+1366
+00:49:12,319 --> 00:49:15,040
+so the real point is that you know with
+
+1367
+00:49:15,040 --> 00:49:16,400
+linearizability you know it's pretty
+
+1368
+00:49:16,400 --> 00:49:17,520
+clear that you know
+
+1369
+00:49:17,520 --> 00:49:19,599
+uh that helps programming and writes you
+
+1370
+00:49:19,599 --> 00:49:20,880
+know intuitive programs
+
+1371
+00:49:20,880 --> 00:49:22,000
+here things are going to be slightly
+
+1372
+00:49:22,000 --> 00:49:23,839
+different and we want to understand
+
+1373
+00:49:23,839 --> 00:49:25,119
+actually if you know things that work
+
+1374
+00:49:25,119 --> 00:49:26,160
+out well
+
+1375
+00:49:26,160 --> 00:49:28,880
+uh and or whether it is like just pain
+
+1376
+00:49:28,880 --> 00:49:30,160
+in the nectar program and just basically
+
+1377
+00:49:30,160 --> 00:49:32,240
+completely unusable
+
+1378
+00:49:32,240 --> 00:49:35,280
+um so so let's look at one of the key
+
+1379
+00:49:35,280 --> 00:49:36,400
+examples
+
+1380
+00:49:36,400 --> 00:49:40,319
+that i talked about in the paper um and
+
+1381
+00:49:40,319 --> 00:49:41,520
+the first thing i want to do is like
+
+1382
+00:49:41,520 --> 00:49:43,200
+basically ignore the sync operation
+
+1383
+00:49:43,200 --> 00:49:44,480
+because like you can make
+
+1384
+00:49:44,480 --> 00:49:47,040
+uh every operation actually linearizable
+
+1385
+00:49:47,040 --> 00:49:49,040
+by just issuing a sync
+
+1386
+00:49:49,040 --> 00:49:51,520
+like before you do the read uh but that
+
+1387
+00:49:51,520 --> 00:49:52,960
+of course you know makes everything very
+
+1388
+00:49:52,960 --> 00:49:54,079
+slow again and we're not going to get
+
+1389
+00:49:54,079 --> 00:49:55,839
+our performance advantage so
+
+1390
+00:49:55,839 --> 00:49:58,480
+basically we want to avoid doing syncs
+
+1391
+00:49:58,480 --> 00:50:00,000
+and so i'm just going to ignore things
+
+1392
+00:50:00,000 --> 00:50:00,559
+and like
+
+1393
+00:50:00,559 --> 00:50:02,160
+program as if you know we don't have
+
+1394
+00:50:02,160 --> 00:50:04,000
+scenes
+
+1395
+00:50:04,000 --> 00:50:05,440
+so let's look at the following
+
+1396
+00:50:05,440 --> 00:50:12,800
+operations so here's the right order
+
+1397
+00:50:12,800 --> 00:50:14,720
+so we do a couple operations and this is
+
+1398
+00:50:14,720 --> 00:50:16,880
+the case of the ready file so
+
+1399
+00:50:16,880 --> 00:50:20,240
+uh we issue a delete
+
+1400
+00:50:20,240 --> 00:50:23,349
+of the ready file
+
+1401
+00:50:23,359 --> 00:50:27,359
+so for example this is a a new
+
+1402
+00:50:27,359 --> 00:50:30,640
+uh master that becomes uh
+
+1403
+00:50:30,640 --> 00:50:33,760
+uh uh becomes the new of
+
+1404
+00:50:33,760 --> 00:50:36,240
+the new leader uh and so it needs to
+
+1405
+00:50:36,240 --> 00:50:36,880
+write the
+
+1406
+00:50:36,880 --> 00:50:39,119
+configuration information in it like you
+
+1407
+00:50:39,119 --> 00:50:41,839
+know who's uh who are part of the
+
+1408
+00:50:41,839 --> 00:50:44,240
+the the replicated state machine and who
+
+1409
+00:50:44,240 --> 00:50:45,920
+is the leader and so it writes you know
+
+1410
+00:50:45,920 --> 00:50:47,599
+some configuration files
+
+1411
+00:50:47,599 --> 00:50:50,880
+right f1
+
+1412
+00:50:50,880 --> 00:50:54,640
+write f2
+
+1413
+00:50:54,640 --> 00:50:57,839
+and then does it create stuff
+
+1414
+00:50:57,839 --> 00:51:02,309
+ready
+
+1415
+00:51:02,319 --> 00:51:05,119
+and then other followers might hear
+
+1416
+00:51:05,119 --> 00:51:05,760
+other
+
+1417
+00:51:05,760 --> 00:51:11,430
+this is the read order
+
+1418
+00:51:11,440 --> 00:51:15,599
+they can you know for example call if
+
+1419
+00:51:15,599 --> 00:51:22,480
+exists ready
+
+1420
+00:51:22,480 --> 00:51:24,400
+and so you give us this our operation
+
+1421
+00:51:24,400 --> 00:51:26,319
+exists and uh
+
+1422
+00:51:26,319 --> 00:51:29,599
+uh if uh ready exists then it will
+
+1423
+00:51:29,599 --> 00:51:31,200
+immediately return true
+
+1424
+00:51:31,200 --> 00:51:34,480
+uh and otherwise uh not and so you have
+
+1425
+00:51:34,480 --> 00:51:35,440
+to wait
+
+1426
+00:51:35,440 --> 00:51:37,119
+uh for one let's ignore that case for a
+
+1427
+00:51:37,119 --> 00:51:39,280
+second let's assume that you know the
+
+1428
+00:51:39,280 --> 00:51:41,440
+second client so here's the one one
+
+1429
+00:51:41,440 --> 00:51:42,880
+client did the right operation the
+
+1430
+00:51:42,880 --> 00:51:44,880
+second client does the read operations
+
+1431
+00:51:44,880 --> 00:51:48,079
+and then if it exists then
+
+1432
+00:51:48,079 --> 00:51:55,109
+the client reads f1 and then elite f2
+
+1433
+00:51:55,119 --> 00:51:58,480
+and so the thing that we you know
+
+1434
+00:51:58,480 --> 00:52:00,319
+we want to understand like you know what
+
+1435
+00:52:00,319 --> 00:52:01,680
+values could f1
+
+1436
+00:52:01,680 --> 00:52:11,750
+this read actually return
+
+1437
+00:52:11,760 --> 00:52:13,040
+and i think the thing that we worry
+
+1438
+00:52:13,040 --> 00:52:16,319
+about correct is it could return
+
+1439
+00:52:16,319 --> 00:52:18,160
+could have returned some result of a
+
+1440
+00:52:18,160 --> 00:52:25,589
+right that was done much earlier here
+
+1441
+00:52:25,599 --> 00:52:33,119
+and we must have observed this right
+
+1442
+00:52:33,119 --> 00:52:36,079
+i think the paper mentions that um the
+
+1443
+00:52:36,079 --> 00:52:37,760
+reader can watch
+
+1444
+00:52:37,760 --> 00:52:40,480
+certain things and be notified of
+
+1445
+00:52:40,480 --> 00:52:41,680
+changes
+
+1446
+00:52:41,680 --> 00:52:42,960
+yeah so let's assume that actually the
+
+1447
+00:52:42,960 --> 00:52:44,800
+file exists so create actually succeeds
+
+1448
+00:52:44,800 --> 00:52:45,920
+immediately so let's
+
+1449
+00:52:45,920 --> 00:52:49,119
+talk about the notifications in a second
+
+1450
+00:52:49,119 --> 00:52:52,480
+so this exists returns immediately
+
+1451
+00:52:52,480 --> 00:52:55,200
+no watch is involved it just exists and
+
+1452
+00:52:55,200 --> 00:52:55,839
+then we do
+
+1453
+00:52:55,839 --> 00:52:59,440
+that second client there's a read of f1
+
+1454
+00:52:59,440 --> 00:53:01,040
+um i think it shouldn't read whatever
+
+1455
+00:53:01,040 --> 00:53:03,200
+what was written by the first client
+
+1456
+00:53:03,200 --> 00:53:06,160
+because the operations are in fifo
+
+1457
+00:53:06,160 --> 00:53:09,680
+yeah yeah right so the i think the real
+
+1458
+00:53:09,680 --> 00:53:10,960
+thing that actually the
+
+1459
+00:53:10,960 --> 00:53:14,480
+that so if we
+
+1460
+00:53:14,480 --> 00:53:16,319
+saw this option what value correct like
+
+1461
+00:53:16,319 --> 00:53:17,760
+for some right earlier that would mean
+
+1462
+00:53:17,760 --> 00:53:19,200
+that we're reading back in time
+
+1463
+00:53:19,200 --> 00:53:22,240
+right and that is just not allowed
+
+1464
+00:53:22,240 --> 00:53:25,119
+you know the rules actually forbid that
+
+1465
+00:53:25,119 --> 00:53:26,079
+um
+
+1466
+00:53:26,079 --> 00:53:28,720
+this read you know must observe you know
+
+1467
+00:53:28,720 --> 00:53:29,200
+this
+
+1468
+00:53:29,200 --> 00:53:32,319
+uh that value of that write because this
+
+1469
+00:53:32,319 --> 00:53:33,599
+read the previous
+
+1470
+00:53:33,599 --> 00:53:36,160
+exists observed this right right so we
+
+1471
+00:53:36,160 --> 00:53:36,960
+know
+
+1472
+00:53:36,960 --> 00:53:39,440
+that you know this exist id must have
+
+1473
+00:53:39,440 --> 00:53:40,720
+seen the zx id
+
+1474
+00:53:40,720 --> 00:53:43,920
+corresponding by that create and so that
+
+1475
+00:53:43,920 --> 00:53:45,040
+means that this read
+
+1476
+00:53:45,040 --> 00:53:48,160
+will uh
+
+1477
+00:53:48,160 --> 00:53:51,280
+must you know uh must be sort of see the
+
+1478
+00:53:51,280 --> 00:53:51,760
+last
+
+1479
+00:53:51,760 --> 00:53:53,280
+right you know that was performed in the
+
+1480
+00:53:53,280 --> 00:53:55,040
+total order that preceded you know that
+
+1481
+00:53:55,040 --> 00:53:56,800
+particular create and so
+
+1482
+00:53:56,800 --> 00:53:59,359
+the the last right in that critical
+
+1483
+00:53:59,359 --> 00:54:01,040
+order before that is this particular
+
+1484
+00:54:01,040 --> 00:54:01,599
+right
+
+1485
+00:54:01,599 --> 00:54:03,200
+right because all the rights are
+
+1486
+00:54:03,200 --> 00:54:05,119
+actually linearizable
+
+1487
+00:54:05,119 --> 00:54:06,559
+and so it must be the case that this
+
+1488
+00:54:06,559 --> 00:54:09,200
+read f1 observes the result of the right
+
+1489
+00:54:09,200 --> 00:54:12,319
+one so this is nice correct because if
+
+1490
+00:54:12,319 --> 00:54:13,280
+like you know
+
+1491
+00:54:13,280 --> 00:54:15,040
+some new leader you know became the
+
+1492
+00:54:15,040 --> 00:54:17,440
+primary get raised configuration file
+
+1493
+00:54:17,440 --> 00:54:19,119
+you know we know for sure that actually
+
+1494
+00:54:19,119 --> 00:54:20,319
+we're going to see that last
+
+1495
+00:54:20,319 --> 00:54:22,000
+configuration trial that was created by
+
+1496
+00:54:22,000 --> 00:54:22,400
+that
+
+1497
+00:54:22,400 --> 00:54:25,839
+by that new leader
+
+1498
+00:54:25,839 --> 00:54:27,520
+so we see here an example that these
+
+1499
+00:54:27,520 --> 00:54:29,680
+rules are sort of carefully chosen
+
+1500
+00:54:29,680 --> 00:54:31,040
+uh that you know things that you might
+
+1501
+00:54:31,040 --> 00:54:32,880
+care about uh if you're writing a
+
+1502
+00:54:32,880 --> 00:54:34,240
+configuration service that actually
+
+1503
+00:54:34,240 --> 00:54:36,240
+certainly work out
+
+1504
+00:54:36,240 --> 00:54:39,440
+wait um sorry i i i
+
+1505
+00:54:39,440 --> 00:54:40,880
+might have not understood what you were
+
+1506
+00:54:40,880 --> 00:54:42,559
+saying before but
+
+1507
+00:54:42,559 --> 00:54:44,799
+in this case if it exists like if the
+
+1508
+00:54:44,799 --> 00:54:46,160
+checking exists ready
+
+1509
+00:54:46,160 --> 00:54:48,799
+couldn't it read like stuff before ready
+
+1510
+00:54:48,799 --> 00:54:52,160
+was deleted
+
+1511
+00:54:52,160 --> 00:54:53,680
+okay all the writes in your total order
+
+1512
+00:54:53,680 --> 00:54:55,040
+so this right is in total order that
+
+1513
+00:54:55,040 --> 00:54:56,400
+right is in total order the creator is
+
+1514
+00:54:56,400 --> 00:54:58,000
+in total order right right
+
+1515
+00:54:58,000 --> 00:54:59,920
+so this read here on the other side has
+
+1516
+00:54:59,920 --> 00:55:01,920
+observed that create
+
+1517
+00:55:01,920 --> 00:55:03,599
+so whatever read is going to do it's
+
+1518
+00:55:03,599 --> 00:55:05,040
+going to go back into the order correct
+
+1519
+00:55:05,040 --> 00:55:06,079
+and like
+
+1520
+00:55:06,079 --> 00:55:08,079
+observe the last right in that total
+
+1521
+00:55:08,079 --> 00:55:09,920
+order and the last right to f1 is this
+
+1522
+00:55:09,920 --> 00:55:10,480
+one
+
+1523
+00:55:10,480 --> 00:55:13,599
+but is it is exists right no existence
+
+1524
+00:55:13,599 --> 00:55:15,280
+is a read but exists observed this
+
+1525
+00:55:15,280 --> 00:55:16,720
+particular right
+
+1526
+00:55:16,720 --> 00:55:19,599
+oh you're saying it you cannot read it
+
+1527
+00:55:19,599 --> 00:55:20,960
+back in time correct like this is the
+
+1528
+00:55:20,960 --> 00:55:21,839
+whole goal
+
+1529
+00:55:21,839 --> 00:55:24,400
+right but how did we know that it that
+
+1530
+00:55:24,400 --> 00:55:25,760
+it observed that
+
+1531
+00:55:25,760 --> 00:55:27,920
+exactly i told you that i said like the
+
+1532
+00:55:27,920 --> 00:55:29,760
+file existed so it must be the case that
+
+1533
+00:55:29,760 --> 00:55:31,359
+it observed it
+
+1534
+00:55:31,359 --> 00:55:33,599
+it just returned true but it but it
+
+1535
+00:55:33,599 --> 00:55:37,670
+existed before you deleted it right
+
+1536
+00:55:37,680 --> 00:55:40,559
+yeah yeah yeah yeah but you know okay go
+
+1537
+00:55:40,559 --> 00:55:41,920
+back to the second let me okay this is
+
+1538
+00:55:41,920 --> 00:55:43,680
+the second case this is a good point uh
+
+1539
+00:55:43,680 --> 00:55:44,079
+let me
+
+1540
+00:55:44,079 --> 00:55:45,839
+uh talk about that so like there's
+
+1541
+00:55:45,839 --> 00:55:47,359
+another scenario
+
+1542
+00:55:47,359 --> 00:55:48,480
+i think this is the one you're worrying
+
+1543
+00:55:48,480 --> 00:55:50,319
+about that could have happened and this
+
+1544
+00:55:50,319 --> 00:55:52,880
+is where notifications come in
+
+1545
+00:55:52,880 --> 00:55:55,040
+so the list will agree that this is
+
+1546
+00:55:55,040 --> 00:55:56,160
+right correct
+
+1547
+00:55:56,160 --> 00:56:01,510
+so the second case more rules
+
+1548
+00:56:01,520 --> 00:56:04,799
+and this is indeed interesting i think
+
+1549
+00:56:04,799 --> 00:56:07,040
+the case what you're worried about is
+
+1550
+00:56:07,040 --> 00:56:09,520
+uh here's our reader again here's our
+
+1551
+00:56:09,520 --> 00:56:10,880
+writer again
+
+1552
+00:56:10,880 --> 00:56:15,430
+and the reader you know calls exists
+
+1553
+00:56:15,440 --> 00:56:18,470
+on ready
+
+1554
+00:56:18,480 --> 00:56:22,000
+and let's assume the file you know uh
+
+1555
+00:56:22,000 --> 00:56:24,319
+is there and you know it does a read of
+
+1556
+00:56:24,319 --> 00:56:26,400
+f1
+
+1557
+00:56:26,400 --> 00:56:28,240
+right almost same as in the previous
+
+1558
+00:56:28,240 --> 00:56:30,000
+scenario and now
+
+1559
+00:56:30,000 --> 00:56:31,599
+like you know there's some change in
+
+1560
+00:56:31,599 --> 00:56:33,680
+leadership you know there's uh the
+
+1561
+00:56:33,680 --> 00:56:36,319
+there's a crash uh you know recovery and
+
+1562
+00:56:36,319 --> 00:56:37,839
+all that kind of stuff is happening
+
+1563
+00:56:37,839 --> 00:56:41,040
+and so there's a new uh primary
+
+1564
+00:56:41,040 --> 00:56:46,150
+uh it deletes ready
+
+1565
+00:56:46,160 --> 00:56:50,950
+uh you know it writes f1
+
+1566
+00:56:50,960 --> 00:56:54,470
+it writes f2
+
+1567
+00:56:54,480 --> 00:57:01,190
+and it's um where it creates ready
+
+1568
+00:57:01,200 --> 00:57:05,270
+like as before
+
+1569
+00:57:05,280 --> 00:57:06,880
+and let's assume that this is like this
+
+1570
+00:57:06,880 --> 00:57:08,480
+reader a little bit delayed i don't know
+
+1571
+00:57:08,480 --> 00:57:10,720
+something else happens on the machine
+
+1572
+00:57:10,720 --> 00:57:15,270
+and you know now does the read of f2
+
+1573
+00:57:15,280 --> 00:57:16,559
+and i think this is the fair the
+
+1574
+00:57:16,559 --> 00:57:17,760
+question you're sort of asking about
+
+1575
+00:57:17,760 --> 00:57:19,760
+because this is war itself right
+
+1576
+00:57:19,760 --> 00:57:22,319
+because now uh there's a configuration
+
+1577
+00:57:22,319 --> 00:57:23,119
+change
+
+1578
+00:57:23,119 --> 00:57:24,720
+and if this configuration change gets
+
+1579
+00:57:24,720 --> 00:57:26,400
+slotted in the middle here
+
+1580
+00:57:26,400 --> 00:57:29,920
+right this read of f2 is going to return
+
+1581
+00:57:29,920 --> 00:57:32,480
+the the new configuration as opposed to
+
+1582
+00:57:32,480 --> 00:57:34,240
+the read of f1 that is going to return
+
+1583
+00:57:34,240 --> 00:57:35,359
+the old configuration
+
+1584
+00:57:35,359 --> 00:57:36,799
+and clearly things are going to be
+
+1585
+00:57:36,799 --> 00:57:38,559
+messed up
+
+1586
+00:57:38,559 --> 00:57:40,079
+that is not a scenario where we want to
+
+1587
+00:57:40,079 --> 00:57:42,799
+be in so it'll be a terrible outcome
+
+1588
+00:57:42,799 --> 00:57:45,680
+so and how does that actually you know
+
+1589
+00:57:45,680 --> 00:57:46,240
+get
+
+1590
+00:57:46,240 --> 00:57:48,079
+rectified or how does actually uh
+
+1591
+00:57:48,079 --> 00:57:50,079
+zookeeper deal with this well
+
+1592
+00:57:50,079 --> 00:57:52,960
+this is where the watchers come in uh
+
+1593
+00:57:52,960 --> 00:57:54,400
+you know the pictures i drew in the for
+
+1594
+00:57:54,400 --> 00:57:56,240
+future boards is not completely correct
+
+1595
+00:57:56,240 --> 00:57:57,920
+you know in addition to
+
+1596
+00:57:57,920 --> 00:58:00,160
+uh calling exist with this really it's
+
+1597
+00:58:00,160 --> 00:58:08,319
+going to say watch to true
+
+1598
+00:58:08,319 --> 00:58:11,520
+um and uh what that means
+
+1599
+00:58:11,520 --> 00:58:15,109
+is that this delete
+
+1600
+00:58:15,119 --> 00:58:16,960
+you know changes the ready file and we
+
+1601
+00:58:16,960 --> 00:58:19,520
+have now set a watch on the ready file
+
+1602
+00:58:19,520 --> 00:58:22,240
+and so when the uh ready file gets
+
+1603
+00:58:22,240 --> 00:58:22,960
+deleted
+
+1604
+00:58:22,960 --> 00:58:25,839
+you know by this new primary that
+
+1605
+00:58:25,839 --> 00:58:34,630
+actually results in a notification
+
+1606
+00:58:34,640 --> 00:58:36,880
+and there's a rule for this notification
+
+1607
+00:58:36,880 --> 00:58:38,559
+and the rule for the notification is
+
+1608
+00:58:38,559 --> 00:58:40,240
+that every notification
+
+1609
+00:58:40,240 --> 00:58:43,760
+will be delivered before you know uh
+
+1610
+00:58:43,760 --> 00:58:46,799
+rights that go after it and so
+
+1611
+00:58:46,799 --> 00:58:48,640
+what has to be the case that you know
+
+1612
+00:58:48,640 --> 00:58:52,079
+the uh this notification will be
+
+1613
+00:58:52,079 --> 00:58:56,319
+delivered before the write to f1
+
+1614
+00:58:56,319 --> 00:58:58,000
+so when so there's two possible
+
+1615
+00:58:58,000 --> 00:58:59,440
+scenarios correct the notification gets
+
+1616
+00:58:59,440 --> 00:59:00,000
+delivered
+
+1617
+00:59:00,000 --> 00:59:03,920
+here or the notification gets delivered
+
+1618
+00:59:03,920 --> 00:59:06,400
+like after the read of f2
+
+1619
+00:59:06,400 --> 00:59:12,150
+let me move that read of f2 slightly up
+
+1620
+00:59:12,160 --> 00:59:15,040
+or yeah so it's still happening sort of
+
+1621
+00:59:15,040 --> 00:59:15,760
+in time
+
+1622
+00:59:15,760 --> 00:59:18,480
+behind you know the write operation but
+
+1623
+00:59:18,480 --> 00:59:19,760
+the notification gets either delivered
+
+1624
+00:59:19,760 --> 00:59:20,160
+here
+
+1625
+00:59:20,160 --> 00:59:22,319
+depending on the delays or it's going to
+
+1626
+00:59:22,319 --> 00:59:24,079
+deliver to here
+
+1627
+00:59:24,079 --> 00:59:26,400
+sorry um what's the exact wording of
+
+1628
+00:59:26,400 --> 00:59:30,230
+that rule that allows this to happen
+
+1629
+00:59:30,240 --> 00:59:32,400
+uh basically i think one way to think
+
+1630
+00:59:32,400 --> 00:59:33,920
+about it the notification is like it was
+
+1631
+00:59:33,920 --> 00:59:36,160
+almost like a write operation
+
+1632
+00:59:36,160 --> 00:59:38,640
+and the followers you know implement it
+
+1633
+00:59:38,640 --> 00:59:39,280
+yeah
+
+1634
+00:59:39,280 --> 00:59:42,799
+so that the uh if your change happens to
+
+1635
+00:59:42,799 --> 00:59:44,319
+delete the notification goes off that
+
+1636
+00:59:44,319 --> 00:59:46,000
+notification is delivered to the client
+
+1637
+00:59:46,000 --> 00:59:51,510
+and with that zx id
+
+1638
+00:59:51,520 --> 00:59:52,960
+again the paper's not but i still don't
+
+1639
+00:59:52,960 --> 00:59:54,960
+understand why this guarantees that it
+
+1640
+00:59:54,960 --> 00:59:58,870
+can go like
+
+1641
+00:59:58,880 --> 01:00:02,559
+before wait so the valid places for it
+
+1642
+01:00:02,559 --> 01:00:03,520
+to be are
+
+1643
+01:00:03,520 --> 01:00:06,880
+um before the right of f1 and also
+
+1644
+01:00:06,880 --> 01:00:10,160
+like after the right of f2
+
+1645
+01:00:10,160 --> 01:00:12,960
+right the the notification is delivered
+
+1646
+01:00:12,960 --> 01:00:14,319
+after the the
+
+1647
+01:00:14,319 --> 01:00:17,119
+after the delete of ready and before the
+
+1648
+01:00:17,119 --> 01:00:17,520
+writes
+
+1649
+01:00:17,520 --> 01:00:19,280
+and before the rise of f1 and f2 are
+
+1650
+01:00:19,280 --> 01:00:21,440
+visible or end the create
+
+1651
+01:00:21,440 --> 01:00:26,829
+for that matter oh i see
+
+1652
+01:00:26,839 --> 01:00:30,150
+um
+
+1653
+01:00:30,160 --> 01:00:32,079
+that's just the rule zookeeper has to
+
+1654
+01:00:32,079 --> 01:00:33,440
+guarantee that
+
+1655
+01:00:33,440 --> 01:00:36,400
+okay okay so so that means there's two
+
+1656
+01:00:36,400 --> 01:00:37,599
+cases correct like the
+
+1657
+01:00:37,599 --> 01:00:38,960
+notification gets delivered before the
+
+1658
+01:00:38,960 --> 01:00:42,400
+read of f1 or after the read of f1
+
+1659
+01:00:42,400 --> 01:00:44,160
+if you deliver if it gets delivered
+
+1660
+01:00:44,160 --> 01:00:45,839
+after the read of f1
+
+1661
+01:00:45,839 --> 01:00:50,870
+of f2 is there a problem
+
+1662
+01:00:50,880 --> 01:00:52,880
+no no because then the read just
+
+1663
+01:00:52,880 --> 01:00:54,240
+happened before the writes
+
+1664
+01:00:54,240 --> 01:00:55,920
+yeah so everything is good so this is
+
+1665
+01:00:55,920 --> 01:00:57,680
+this this whole block is happening after
+
+1666
+01:00:57,680 --> 01:00:58,720
+the read of f2 is
+
+1667
+01:00:58,720 --> 01:01:03,190
+perfectly fine and about here
+
+1668
+01:01:03,200 --> 01:01:05,680
+um wait professor did you say that the
+
+1669
+01:01:05,680 --> 01:01:06,319
+watch
+
+1670
+01:01:06,319 --> 01:01:09,520
+is like a like write something
+
+1671
+01:01:09,520 --> 01:01:11,920
+well you can think about it the watch is
+
+1672
+01:01:11,920 --> 01:01:13,280
+not the right operation yeah i didn't
+
+1673
+01:01:13,280 --> 01:01:13,920
+mean to
+
+1674
+01:01:13,920 --> 01:01:15,280
+apply that but the right the watch is
+
+1675
+01:01:15,280 --> 01:01:17,760
+executed with the appropriate sort of zx
+
+1676
+01:01:17,760 --> 01:01:18,559
+id
+
+1677
+01:01:18,559 --> 01:01:20,319
+uh that's associated with that right
+
+1678
+01:01:20,319 --> 01:01:21,920
+with that modification
+
+1679
+01:01:21,920 --> 01:01:23,760
+those are local right the watches are
+
+1680
+01:01:23,760 --> 01:01:25,200
+you know yeah the watchers are local and
+
+1681
+01:01:25,200 --> 01:01:26,559
+so when they're executed
+
+1682
+01:01:26,559 --> 01:01:30,400
+uh the it's guaranteed you know that
+
+1683
+01:01:30,400 --> 01:01:32,720
+they have it happened at the right when
+
+1684
+01:01:32,720 --> 01:01:34,160
+the right is observed
+
+1685
+01:01:34,160 --> 01:01:36,160
+or the client sees that the watch is
+
+1686
+01:01:36,160 --> 01:01:38,240
+propagated with the cxid to the client
+
+1687
+01:01:38,240 --> 01:01:41,040
+and make sure that they're executed
+
+1688
+01:01:41,040 --> 01:01:44,230
+thanks
+
+1689
+01:01:44,240 --> 01:01:45,760
+again the papers are slightly vaped on
+
+1690
+01:01:45,760 --> 01:01:47,359
+exactly how it's implemented but you can
+
+1691
+01:01:47,359 --> 01:01:50,000
+imagine different scenarios
+
+1692
+01:01:50,000 --> 01:01:51,280
+but the more important point is like
+
+1693
+01:01:51,280 --> 01:01:52,880
+this rule is guaranteed okay so what
+
+1694
+01:01:52,880 --> 01:01:53,520
+happens if the
+
+1695
+01:01:53,520 --> 01:01:58,069
+notification is delivered here
+
+1696
+01:01:58,079 --> 01:01:59,440
+so the client is running correct you
+
+1697
+01:01:59,440 --> 01:02:01,119
+know it doesn't exist the read f1 and
+
+1698
+01:02:01,119 --> 01:02:06,240
+now this notification comes in then you
+
+1699
+01:02:06,240 --> 01:02:07,760
+have to restart probably yeah
+
+1700
+01:02:07,760 --> 01:02:14,789
+you have to restart
+
+1701
+01:02:14,799 --> 01:02:18,400
+okay so what we see here basically is
+
+1702
+01:02:18,400 --> 01:02:18,720
+that
+
+1703
+01:02:18,720 --> 01:02:20,240
+you know the the rules you know make
+
+1704
+01:02:20,240 --> 01:02:21,839
+programming definitely a little bit more
+
+1705
+01:02:21,839 --> 01:02:25,680
+uh difficult uh but not impossible
+
+1706
+01:02:25,680 --> 01:02:26,960
+right you know with a little bit of
+
+1707
+01:02:26,960 --> 01:02:29,119
+careful sort of uh programming you know
+
+1708
+01:02:29,119 --> 01:02:29,520
+you
+
+1709
+01:02:29,520 --> 01:02:31,200
+and understanding the rules you know you
+
+1710
+01:02:31,200 --> 01:02:33,039
+can actually get the desirable
+
+1711
+01:02:33,039 --> 01:02:34,960
+results that's probably the application
+
+1712
+01:02:34,960 --> 01:02:39,359
+wants what happens to the read f1 though
+
+1713
+01:02:39,359 --> 01:02:42,000
+what happens to read f1 you start all
+
+1714
+01:02:42,000 --> 01:02:42,960
+over
+
+1715
+01:02:42,960 --> 01:02:49,910
+oh including that all right
+
+1716
+01:02:49,920 --> 01:02:51,680
+as you'll see this is a trick that shows
+
+1717
+01:02:51,680 --> 01:02:53,359
+up in those recipes quite a bit right
+
+1718
+01:02:53,359 --> 01:02:54,079
+like this
+
+1719
+01:02:54,079 --> 01:02:56,960
+idea of actually uh you know bailing out
+
+1720
+01:02:56,960 --> 01:02:57,680
+and
+
+1721
+01:02:57,680 --> 01:03:00,799
+starting over again okay good
+
+1722
+01:03:00,799 --> 01:03:02,319
+uh so hopefully that gives you a sense
+
+1723
+01:03:02,319 --> 01:03:03,920
+that you know for two things
+
+1724
+01:03:03,920 --> 01:03:06,640
+there's sort of a even though you know
+
+1725
+01:03:06,640 --> 01:03:08,160
+one people one reason like people like
+
+1726
+01:03:08,160 --> 01:03:09,760
+linearizability is because it's very
+
+1727
+01:03:09,760 --> 01:03:11,440
+intuitive you know very easy to program
+
+1728
+01:03:11,440 --> 01:03:12,640
+with because everything behaves like a
+
+1729
+01:03:12,640 --> 01:03:13,599
+single machine
+
+1730
+01:03:13,599 --> 01:03:15,520
+but you know if you want fault tolerance
+
+1731
+01:03:15,520 --> 01:03:16,799
+scalability
+
+1732
+01:03:16,799 --> 01:03:17,839
+it's hard to get actually good
+
+1733
+01:03:17,839 --> 01:03:19,839
+performance and so one way to get good
+
+1734
+01:03:19,839 --> 01:03:21,520
+performance is to compromise on the
+
+1735
+01:03:21,520 --> 01:03:23,039
+consistency guarantee
+
+1736
+01:03:23,039 --> 01:03:25,039
+and in this case you know compromising
+
+1737
+01:03:25,039 --> 01:03:26,160
+linearizability
+
+1738
+01:03:26,160 --> 01:03:27,520
+and provide some other consistent
+
+1739
+01:03:27,520 --> 01:03:29,200
+guarantee and as we can see you know
+
+1740
+01:03:29,200 --> 01:03:30,319
+that's it
+
+1741
+01:03:30,319 --> 01:03:32,240
+complicates you know the the user
+
+1742
+01:03:32,240 --> 01:03:33,920
+experience or the programmer experience
+
+1743
+01:03:33,920 --> 01:03:35,920
+uh but you know these rules and
+
+1744
+01:03:35,920 --> 01:03:37,440
+zookeepers are carefully chosen
+
+1745
+01:03:37,440 --> 01:03:38,640
+so there's still you know things that
+
+1746
+01:03:38,640 --> 01:03:42,079
+can actually work out and
+
+1747
+01:03:42,079 --> 01:03:44,640
+it's doable so it is possible to get the
+
+1748
+01:03:44,640 --> 01:03:45,839
+right you know sort of
+
+1749
+01:03:45,839 --> 01:03:48,880
+uh guarantees so then
+
+1750
+01:03:48,880 --> 01:03:50,319
+there's another aspect to this
+
+1751
+01:03:50,319 --> 01:03:52,079
+programming model that i want to talk a
+
+1752
+01:03:52,079 --> 01:03:53,440
+little bit about now that is really
+
+1753
+01:03:53,440 --> 01:04:05,990
+related to the coordination service part
+
+1754
+01:04:06,000 --> 01:04:09,599
+and um and so the examples you know
+
+1755
+01:04:09,599 --> 01:04:11,359
+that you need to again what does it mean
+
+1756
+01:04:11,359 --> 01:04:14,240
+to be a coordination service
+
+1757
+01:04:14,240 --> 01:04:16,880
+one good example is probably the vm the
+
+1758
+01:04:16,880 --> 01:04:18,480
+virtual machine fault tolerance paper
+
+1759
+01:04:18,480 --> 01:04:19,920
+from a little while ago that we
+
+1760
+01:04:19,920 --> 01:04:24,839
+read and that had this test and set
+
+1761
+01:04:24,839 --> 01:04:27,039
+operation
+
+1762
+01:04:27,039 --> 01:04:28,400
+all right and the goal of the you know
+
+1763
+01:04:28,400 --> 01:04:29,839
+the test and set operation was basically
+
+1764
+01:04:29,839 --> 01:04:31,359
+to make sure that there's no split brain
+
+1765
+01:04:31,359 --> 01:04:33,680
+because basically two clients would run
+
+1766
+01:04:33,680 --> 01:04:35,520
+and one would win the test and set the
+
+1767
+01:04:35,520 --> 01:04:37,119
+other one wouldn't and as a result you
+
+1768
+01:04:37,119 --> 01:04:38,640
+know the the one that won the testing
+
+1769
+01:04:38,640 --> 01:04:39,520
+set
+
+1770
+01:04:39,520 --> 01:04:41,280
+could conclude you know that i'm that's
+
+1771
+01:04:41,280 --> 01:04:42,960
+going to be the primary
+
+1772
+01:04:42,960 --> 01:04:46,400
+and so that is sort of uh an example of
+
+1773
+01:04:46,400 --> 01:04:48,720
+a feature that a coordination service
+
+1774
+01:04:48,720 --> 01:04:51,520
+you know should be able to provide
+
+1775
+01:04:51,520 --> 01:04:54,000
+uh and i want to you know just to make
+
+1776
+01:04:54,000 --> 01:04:55,440
+that a little bit more concrete
+
+1777
+01:04:55,440 --> 01:04:59,039
+uh let's think about like what lab three
+
+1778
+01:04:59,039 --> 01:05:02,000
+could you get that with lab free you
+
+1779
+01:05:02,000 --> 01:05:02,319
+know
+
+1780
+01:05:02,319 --> 01:05:04,160
+basically sort of get this test and set
+
+1781
+01:05:04,160 --> 01:05:08,000
+type thing well
+
+1782
+01:05:08,000 --> 01:05:09,760
+uh so let's do a very simple case you
+
+1783
+01:05:09,760 --> 01:05:11,920
+know let's say we have
+
+1784
+01:05:11,920 --> 01:05:13,920
+uh here's our simple implementation of
+
+1785
+01:05:13,920 --> 01:05:17,270
+test and set
+
+1786
+01:05:17,280 --> 01:05:20,000
+and uh in lab 3 we only have put in get
+
+1787
+01:05:20,000 --> 01:05:21,599
+operations right there's no other
+
+1788
+01:05:21,599 --> 01:05:22,880
+operations so those are the two
+
+1789
+01:05:22,880 --> 01:05:24,559
+operations so like how wide you write
+
+1790
+01:05:24,559 --> 01:05:26,319
+this you know
+
+1791
+01:05:26,319 --> 01:05:29,760
+uh maybe you know we'll do a put
+
+1792
+01:05:29,760 --> 01:05:34,630
+you know to the key let's say master
+
+1793
+01:05:34,640 --> 01:05:37,280
+and we put my ip address in that we get
+
+1794
+01:05:37,280 --> 01:05:40,400
+p address of the color
+
+1795
+01:05:40,400 --> 01:05:43,359
+and then you know we do get you know and
+
+1796
+01:05:43,359 --> 01:05:45,599
+we say if the get
+
+1797
+01:05:45,599 --> 01:05:48,880
+on master is
+
+1798
+01:05:48,880 --> 01:05:55,510
+equal to my ip address
+
+1799
+01:05:55,520 --> 01:05:58,720
+uh then you know actus master or act as
+
+1800
+01:05:58,720 --> 01:06:02,390
+leader
+
+1801
+01:06:02,400 --> 01:06:04,160
+actually this is our you know naive
+
+1802
+01:06:04,160 --> 01:06:06,000
+implementation you know we don't don't
+
+1803
+01:06:06,000 --> 01:06:07,520
+have many other choices because we only
+
+1804
+01:06:07,520 --> 01:06:08,240
+have to put
+
+1805
+01:06:08,240 --> 01:06:10,000
+we only have to put in a get and this is
+
+1806
+01:06:10,000 --> 01:06:13,029
+how we're going to implement this
+
+1807
+01:06:13,039 --> 01:06:23,109
+will this do the desirable thing
+
+1808
+01:06:23,119 --> 01:06:26,079
+oh there's no atomicity between the put
+
+1809
+01:06:26,079 --> 01:06:27,440
+in the gap so
+
+1810
+01:06:27,440 --> 01:06:29,920
+maybe something has changed correct so
+
+1811
+01:06:29,920 --> 01:06:31,119
+basically there could be two clients
+
+1812
+01:06:31,119 --> 01:06:32,480
+correct they both could execute
+
+1813
+01:06:32,480 --> 01:06:36,400
+the both books at the same time um
+
+1814
+01:06:36,400 --> 01:06:40,160
+and uh and then observe uh
+
+1815
+01:06:40,160 --> 01:06:43,839
+you know the uh in the
+
+1816
+01:06:43,839 --> 01:06:45,200
+roughly they're doing it at the same
+
+1817
+01:06:45,200 --> 01:06:46,720
+time and the interleave you know
+
+1818
+01:06:46,720 --> 01:06:48,319
+correctly in both will actually return
+
+1819
+01:06:48,319 --> 01:06:49,920
+get you know with their particular ip
+
+1820
+01:06:49,920 --> 01:06:51,039
+address correct
+
+1821
+01:06:51,039 --> 01:06:57,109
+and so we can get two leaders
+
+1822
+01:06:57,119 --> 01:06:58,720
+and that's course not what we want so
+
+1823
+01:06:58,720 --> 01:07:00,640
+the the main point of this
+
+1824
+01:07:00,640 --> 01:07:02,960
+or an example is basically if you just
+
+1825
+01:07:02,960 --> 01:07:04,000
+have put and get
+
+1826
+01:07:04,000 --> 01:07:05,520
+it's going to be very hard to actually
+
+1827
+01:07:05,520 --> 01:07:07,440
+implement the test and set
+
+1828
+01:07:07,440 --> 01:07:09,039
+uh it turns out it's possible but it's
+
+1829
+01:07:09,039 --> 01:07:11,119
+very complex you know you use baker's
+
+1830
+01:07:11,119 --> 01:07:12,480
+algorithm you know you can basically
+
+1831
+01:07:12,480 --> 01:07:13,760
+probably do it but not gonna be
+
+1832
+01:07:13,760 --> 01:07:14,400
+ridiculous
+
+1833
+01:07:14,400 --> 01:07:17,280
+to do that in a distributed system and
+
+1834
+01:07:17,280 --> 01:07:18,160
+so
+
+1835
+01:07:18,160 --> 01:07:21,200
+what zookeeper does uh it just provides
+
+1836
+01:07:21,200 --> 01:07:22,480
+some additional
+
+1837
+01:07:22,480 --> 01:07:26,240
+uh help to build these sort of type of
+
+1838
+01:07:26,240 --> 01:07:27,520
+primitives
+
+1839
+01:07:27,520 --> 01:07:30,960
+and we'll see you in a second um
+
+1840
+01:07:30,960 --> 01:07:32,240
+the other thing that you know presumably
+
+1841
+01:07:32,240 --> 01:07:34,079
+what you want to know and that library
+
+1842
+01:07:34,079 --> 01:07:35,280
+does not provide any
+
+1843
+01:07:35,280 --> 01:07:37,119
+uh support for if you're sort of a
+
+1844
+01:07:37,119 --> 01:07:38,960
+configuration service or coordination
+
+1845
+01:07:38,960 --> 01:07:39,920
+service is that
+
+1846
+01:07:39,920 --> 01:07:41,680
+you want to know when somebody goes down
+
+1847
+01:07:41,680 --> 01:07:43,280
+you know for example you want to observe
+
+1848
+01:07:43,280 --> 01:07:45,520
+that like if the leader goes down like
+
+1849
+01:07:45,520 --> 01:07:47,200
+somebody the other parties would like to
+
+1850
+01:07:47,200 --> 01:07:49,200
+know like is the leader down so that we
+
+1851
+01:07:49,200 --> 01:07:51,680
+could choose a new one if he needed to
+
+1852
+01:07:51,680 --> 01:07:53,440
+and so uh at least for on the
+
+1853
+01:07:53,440 --> 01:07:55,039
+applications the building
+
+1854
+01:07:55,039 --> 01:07:58,319
+using that uh service okay so
+
+1855
+01:07:58,319 --> 01:07:59,520
+uh so those are two things that we
+
+1856
+01:07:59,520 --> 01:08:01,440
+really want you know one is you know we
+
+1857
+01:08:01,440 --> 01:08:01,920
+want some
+
+1858
+01:08:01,920 --> 01:08:05,520
+way of trying to get this atomicity uh
+
+1859
+01:08:05,520 --> 01:08:06,799
+that's what we're looking for in the
+
+1860
+01:08:06,799 --> 01:08:08,640
+zookeeper design and then in supervision
+
+1861
+01:08:08,640 --> 01:08:09,839
+the second point we're looking for in
+
+1862
+01:08:09,839 --> 01:08:11,599
+the cpu design is for
+
+1863
+01:08:11,599 --> 01:08:14,160
+an application to learn whether some
+
+1864
+01:08:14,160 --> 01:08:16,640
+node goes down
+
+1865
+01:08:16,640 --> 01:08:19,679
+so let's look at the zookeeper api and
+
+1866
+01:08:19,679 --> 01:08:21,040
+really you know what we want to look at
+
+1867
+01:08:21,040 --> 01:08:22,839
+is the z node
+
+1868
+01:08:22,839 --> 01:08:27,189
+api
+
+1869
+01:08:27,199 --> 01:08:28,719
+and you'll see again that is actually
+
+1870
+01:08:28,719 --> 01:08:30,480
+carefully designed to actually make it
+
+1871
+01:08:30,480 --> 01:08:31,520
+possible to
+
+1872
+01:08:31,520 --> 01:08:33,679
+uh do the things that were uh we're
+
+1873
+01:08:33,679 --> 01:08:34,799
+looking for
+
+1874
+01:08:34,799 --> 01:08:37,199
+okay so the way the system is organized
+
+1875
+01:08:37,199 --> 01:08:38,480
+there's you know there are there's a
+
+1876
+01:08:38,480 --> 01:08:39,120
+tree of z
+
+1877
+01:08:39,120 --> 01:08:41,679
+nodes uh typically you know there's like
+
+1878
+01:08:41,679 --> 01:08:42,560
+one
+
+1879
+01:08:42,560 --> 01:08:45,679
+you know sort of app one has a z
+
+1880
+01:08:45,679 --> 01:08:47,440
+node that might have some children that
+
+1881
+01:08:47,440 --> 01:08:48,880
+correspond to the
+
+1882
+01:08:48,880 --> 01:08:52,080
+machines that are part you know of f1
+
+1883
+01:08:52,080 --> 01:08:55,679
+something like peer or machine one
+
+1884
+01:08:55,679 --> 01:08:57,920
+machine two like maybe the irp addresses
+
+1885
+01:08:57,920 --> 01:08:59,440
+or dns names
+
+1886
+01:08:59,440 --> 01:09:02,239
+machine three uh and they might actually
+
+1887
+01:09:02,239 --> 01:09:03,359
+have version numbers
+
+1888
+01:09:03,359 --> 01:09:06,400
+associated or sequence numbers with them
+
+1889
+01:09:06,400 --> 01:09:10,400
+and basically z nodes can be three types
+
+1890
+01:09:10,400 --> 01:09:13,759
+one they can be regular so then they're
+
+1891
+01:09:13,759 --> 01:09:15,279
+fault tolerance replicated and all that
+
+1892
+01:09:15,279 --> 01:09:18,839
+kind of stuff and then they can be
+
+1893
+01:09:18,839 --> 01:09:21,120
+ephemeral
+
+1894
+01:09:21,120 --> 01:09:23,359
+and ephemeral basically means that the
+
+1895
+01:09:23,359 --> 01:09:24,719
+node will disappear
+
+1896
+01:09:24,719 --> 01:09:27,759
+uh automatically when the session
+
+1897
+01:09:27,759 --> 01:09:31,199
+uh with that uh machine free uh goes
+
+1898
+01:09:31,199 --> 01:09:32,239
+away
+
+1899
+01:09:32,239 --> 01:09:33,600
+so either because there's a network
+
+1900
+01:09:33,600 --> 01:09:35,279
+petition there's no heartbeats more
+
+1901
+01:09:35,279 --> 01:09:36,400
+coming in from
+
+1902
+01:09:36,400 --> 01:09:38,480
+machine three uh but at some point
+
+1903
+01:09:38,480 --> 01:09:40,080
+zookeeper decides you know that session
+
+1904
+01:09:40,080 --> 01:09:40,960
+is gone
+
+1905
+01:09:40,960 --> 01:09:43,120
+and so then it will delete you know that
+
+1906
+01:09:43,120 --> 01:09:44,000
+node uh
+
+1907
+01:09:44,000 --> 01:09:46,640
+automatically and so that's for
+
+1908
+01:09:46,640 --> 01:09:49,279
+ephemeral notes
+
+1909
+01:09:49,279 --> 01:09:50,880
+and then there's a third one uh which is
+
+1910
+01:09:50,880 --> 01:09:52,799
+the sequential
+
+1911
+01:09:52,799 --> 01:09:55,920
+let's go back to in the third one your
+
+1912
+01:09:55,920 --> 01:09:58,880
+type of notes are sequential
+
+1913
+01:09:58,880 --> 01:10:00,320
+notes and that really means that you
+
+1914
+01:10:00,320 --> 01:10:01,840
+know they have version version number
+
+1915
+01:10:01,840 --> 01:10:04,159
+associated with them in their name
+
+1916
+01:10:04,159 --> 01:10:06,800
+and uh and they're created you know one
+
+1917
+01:10:06,800 --> 01:10:07,520
+by one
+
+1918
+01:10:07,520 --> 01:10:10,400
+in under the particular uh z note uh all
+
+1919
+01:10:10,400 --> 01:10:12,159
+the children will have
+
+1920
+01:10:12,159 --> 01:10:15,280
+a sequence number in their name and the
+
+1921
+01:10:15,280 --> 01:10:16,880
+notes are not ordered by that sequence
+
+1922
+01:10:16,880 --> 01:10:19,199
+number
+
+1923
+01:10:19,199 --> 01:10:20,320
+and so for example this might have
+
+1924
+01:10:20,320 --> 01:10:21,520
+sequence number one this might have
+
+1925
+01:10:21,520 --> 01:10:22,800
+sequence number two and this might have
+
+1926
+01:10:22,800 --> 01:10:24,480
+sequence number three and if a new one
+
+1927
+01:10:24,480 --> 01:10:25,840
+gets created it will have a sequence
+
+1928
+01:10:25,840 --> 01:10:29,270
+number higher than three
+
+1929
+01:10:29,280 --> 01:10:32,400
+okay and then there's a api associated
+
+1930
+01:10:32,400 --> 01:10:33,760
+with that that way i want to talk a
+
+1931
+01:10:33,760 --> 01:10:36,560
+little bit about you know there's create
+
+1932
+01:10:36,560 --> 01:10:38,560
+which we already mentioned a little bit
+
+1933
+01:10:38,560 --> 01:10:40,400
+you know it takes a path
+
+1934
+01:10:40,400 --> 01:10:43,679
+uh it takes some data and flags
+
+1935
+01:10:43,679 --> 01:10:45,679
+and the flags correspond you know to the
+
+1936
+01:10:45,679 --> 01:10:47,760
+free cases
+
+1937
+01:10:47,760 --> 01:10:50,880
+and then there's delete and in the
+
+1938
+01:10:50,880 --> 01:10:52,640
+previous slide every little misleading
+
+1939
+01:10:52,640 --> 01:10:54,400
+you know delete takes a path as before
+
+1940
+01:10:54,400 --> 01:10:59,040
+but it also takes a version number and
+
+1941
+01:10:59,040 --> 01:11:05,189
+exists takes a path and a watch
+
+1942
+01:11:05,199 --> 01:11:08,239
+and then there's a get data
+
+1943
+01:11:08,239 --> 01:11:10,400
+primitive that takes a path and a
+
+1944
+01:11:10,400 --> 01:11:14,149
+version number
+
+1945
+01:11:14,159 --> 01:11:15,520
+and we'll see that these version numbers
+
+1946
+01:11:15,520 --> 01:11:17,199
+are the trick here or the key to
+
+1947
+01:11:17,199 --> 01:11:18,640
+actually get our automatically
+
+1948
+01:11:18,640 --> 01:11:22,080
+and then there's set data path
+
+1949
+01:11:22,080 --> 01:11:26,159
+data and a version number
+
+1950
+01:11:26,159 --> 01:11:28,239
+and there's also a call for get children
+
+1951
+01:11:28,239 --> 01:11:29,679
+to get actually all the children
+
+1952
+01:11:29,679 --> 01:11:32,719
+of a particular z node which
+
+1953
+01:11:32,719 --> 01:11:38,630
+takes a path and i think a watch
+
+1954
+01:11:38,640 --> 01:11:40,080
+and their sync you know basically are
+
+1955
+01:11:40,080 --> 01:11:41,840
+sort of a cop out operation to actually
+
+1956
+01:11:41,840 --> 01:11:42,960
+ensure that everything
+
+1957
+01:11:42,960 --> 01:11:44,880
+you know if you really need strong
+
+1958
+01:11:44,880 --> 01:11:47,440
+linearizability
+
+1959
+01:11:47,440 --> 01:11:49,600
+okay so i want to sort of talk a little
+
+1960
+01:11:49,600 --> 01:11:50,800
+bit about like you know why
+
+1961
+01:11:50,800 --> 01:11:53,520
+you know this version number is handy
+
+1962
+01:11:53,520 --> 01:11:55,360
+and so
+
+1963
+01:11:55,360 --> 01:11:57,520
+let's uh look at a particular example
+
+1964
+01:11:57,520 --> 01:11:59,040
+the simplest example i can come up with
+
+1965
+01:11:59,040 --> 01:11:59,280
+is
+
+1966
+01:11:59,280 --> 01:12:07,030
+like basically implementing a counter
+
+1967
+01:12:07,040 --> 01:12:09,040
+um and so the way you know you would
+
+1968
+01:12:09,040 --> 01:12:11,520
+write the
+
+1969
+01:12:11,520 --> 01:12:14,239
+uh if you write you know okay so let me
+
+1970
+01:12:14,239 --> 01:12:16,239
+actually first get the right solution so
+
+1971
+01:12:16,239 --> 01:12:19,280
+while you know true
+
+1972
+01:12:19,280 --> 01:12:21,360
+you know the way you implement increment
+
+1973
+01:12:21,360 --> 01:12:23,440
+so this is the pseudo code for increment
+
+1974
+01:12:23,440 --> 01:12:26,159
+of this counter is you know you do you
+
+1975
+01:12:26,159 --> 01:12:26,480
+have
+
+1976
+01:12:26,480 --> 01:12:31,430
+x v you know get data
+
+1977
+01:12:31,440 --> 01:12:35,030
+up the counter
+
+1978
+01:12:35,040 --> 01:12:39,030
+i get data you know count
+
+1979
+01:12:39,040 --> 01:12:43,280
+and then uh if
+
+1980
+01:12:43,280 --> 01:12:48,830
+you know set data
+
+1981
+01:12:48,840 --> 01:12:51,520
+counts oops
+
+1982
+01:12:51,520 --> 01:12:56,149
+so there's xbox one
+
+1983
+01:12:56,159 --> 01:12:59,520
+and the version number and
+
+1984
+01:12:59,520 --> 01:13:04,400
+if that is the case then brick so let me
+
+1985
+01:13:04,400 --> 01:13:04,880
+uh
+
+1986
+01:13:04,880 --> 01:13:07,760
+quickly go over this so to get data uh
+
+1987
+01:13:07,760 --> 01:13:09,600
+returns the current version number
+
+1988
+01:13:09,600 --> 01:13:13,120
+and the value uh of the key
+
+1989
+01:13:13,120 --> 01:13:15,280
+so the key or the path you know the so
+
+1990
+01:13:15,280 --> 01:13:16,320
+for the file count
+
+1991
+01:13:16,320 --> 01:13:17,840
+it returns the value and its version
+
+1992
+01:13:17,840 --> 01:13:19,440
+over that particular point when they did
+
+1993
+01:13:19,440 --> 01:13:22,640
+read and then you call uh and set data
+
+1994
+01:13:22,640 --> 01:13:24,320
+takes three arguments you know the path
+
+1995
+01:13:24,320 --> 01:13:26,239
+you know the update the new value in
+
+1996
+01:13:26,239 --> 01:13:27,440
+this case is going to be x plus one
+
+1997
+01:13:27,440 --> 01:13:28,640
+because we want to increment you know
+
+1998
+01:13:28,640 --> 01:13:29,920
+the value by one
+
+1999
+01:13:29,920 --> 01:13:31,520
+and it actually passes in also the
+
+2000
+01:13:31,520 --> 01:13:33,199
+virgin member and
+
+2001
+01:13:33,199 --> 01:13:36,560
+the uh semantics of said data is that if
+
+2002
+01:13:36,560 --> 01:13:38,080
+you know the version numbers
+
+2003
+01:13:38,080 --> 01:13:41,440
+are still the same then the set date
+
+2004
+01:13:41,440 --> 01:13:42,239
+actually happens
+
+2005
+01:13:42,239 --> 01:13:45,520
+and otherwise not so what does this
+
+2006
+01:13:45,520 --> 01:13:49,669
+protect against
+
+2007
+01:13:49,679 --> 01:13:53,199
+um this prevents you from interleaving
+
+2008
+01:13:53,199 --> 01:13:54,080
+the get and
+
+2009
+01:13:54,080 --> 01:13:57,600
+set basically yeah so if like two
+
+2010
+01:13:57,600 --> 01:13:59,520
+uh operators two clients did get at the
+
+2011
+01:13:59,520 --> 01:14:01,520
+same time they would read
+
+2012
+01:14:01,520 --> 01:14:06,640
+uh you know they do get at the same time
+
+2013
+01:14:06,640 --> 01:14:09,280
+they get both back say you know whatever
+
+2014
+01:14:09,280 --> 01:14:10,880
+x is zero
+
+2015
+01:14:10,880 --> 01:14:14,000
+and version number zero x is zero
+
+2016
+01:14:14,000 --> 01:14:17,280
+version number zero uh
+
+2017
+01:14:17,280 --> 01:14:19,520
+then they do both put where like in this
+
+2018
+01:14:19,520 --> 01:14:22,239
+case is set data
+
+2019
+01:14:22,239 --> 01:14:25,199
+so the z data with you know whatever uh
+
+2020
+01:14:25,199 --> 01:14:26,880
+x is one
+
+2021
+01:14:26,880 --> 01:14:29,679
+you know version number zero also this
+
+2022
+01:14:29,679 --> 01:14:30,960
+guy does the same thing
+
+2023
+01:14:30,960 --> 01:14:35,520
+set you know one zero
+
+2024
+01:14:35,520 --> 01:14:38,400
+uh and you know why and so both gonna
+
+2025
+01:14:38,400 --> 01:14:39,679
+both clients issue those
+
+2026
+01:14:39,679 --> 01:14:41,040
+two set operations or both set
+
+2027
+01:14:41,040 --> 01:14:48,070
+operations can cheat
+
+2028
+01:14:48,080 --> 01:14:51,920
+um well no
+
+2029
+01:14:51,920 --> 01:14:54,800
+yeah why not uh because one of the
+
+2030
+01:14:54,800 --> 01:14:56,880
+version numbers will be wrong
+
+2031
+01:14:56,880 --> 01:14:59,120
+yeah right like so one of the two goes
+
+2032
+01:14:59,120 --> 01:15:02,400
+first why does one of two go first
+
+2033
+01:15:02,400 --> 01:15:04,880
+because all rights are linearizable yeah
+
+2034
+01:15:04,880 --> 01:15:06,400
+all rights are linearizable so they go
+
+2035
+01:15:06,400 --> 01:15:07,360
+in some total order
+
+2036
+01:15:07,360 --> 01:15:09,280
+so you know we can pick one so let's say
+
+2037
+01:15:09,280 --> 01:15:10,640
+this guy goes first or this
+
+2038
+01:15:10,640 --> 01:15:12,800
+operation goes first so that will
+
+2039
+01:15:12,800 --> 01:15:14,000
+increase the
+
+2040
+01:15:14,000 --> 01:15:17,679
+uh that will increase the
+
+2041
+01:15:17,679 --> 01:15:21,120
+uh the value corrected the one
+
+2042
+01:15:21,120 --> 01:15:22,880
+from zero to one as correctly and but
+
+2043
+01:15:22,880 --> 01:15:24,560
+that will also and will
+
+2044
+01:15:24,560 --> 01:15:25,920
+execute because the version numbers
+
+2045
+01:15:25,920 --> 01:15:27,679
+match right like the version number zero
+
+2046
+01:15:27,679 --> 01:15:28,640
+is actually what the current version
+
+2047
+01:15:28,640 --> 01:15:29,679
+number is
+
+2048
+01:15:29,679 --> 01:15:31,199
+so the version numbers match the
+
+2049
+01:15:31,199 --> 01:15:33,040
+increment happens and the set data
+
+2050
+01:15:33,040 --> 01:15:34,000
+returns
+
+2051
+01:15:34,000 --> 01:15:36,000
+are true and what will happen with the
+
+2052
+01:15:36,000 --> 01:15:37,199
+second one well the second one the
+
+2053
+01:15:37,199 --> 01:15:38,640
+version numbers won't match because the
+
+2054
+01:15:38,640 --> 01:15:40,640
+virtual number will be increased because
+
+2055
+01:15:40,640 --> 01:15:42,560
+because this previous set data operation
+
+2056
+01:15:42,560 --> 01:15:44,159
+and therefore the second set operation
+
+2057
+01:15:44,159 --> 01:15:45,280
+will fail
+
+2058
+01:15:45,280 --> 01:15:46,960
+and so and then the client will loop
+
+2059
+01:15:46,960 --> 01:15:48,320
+back and try again
+
+2060
+01:15:48,320 --> 01:15:51,760
+and try to increment and
+
+2061
+01:15:51,760 --> 01:15:53,199
+try to take another shot and doing the
+
+2062
+01:15:53,199 --> 01:15:55,760
+increment incorrect so
+
+2063
+01:15:55,760 --> 01:15:57,120
+what what happens in this case is
+
+2064
+01:15:57,120 --> 01:15:58,960
+correct even though the two clients
+
+2065
+01:15:58,960 --> 01:16:00,560
+executed the operation you know
+
+2066
+01:16:00,560 --> 01:16:02,960
+concurrently uh if the interleaving is
+
+2067
+01:16:02,960 --> 01:16:04,239
+bad you know the
+
+2068
+01:16:04,239 --> 01:16:05,760
+this piece of code will actually do the
+
+2069
+01:16:05,760 --> 01:16:07,199
+right thing the second client will try
+
+2070
+01:16:07,199 --> 01:16:07,679
+again
+
+2071
+01:16:07,679 --> 01:16:10,239
+and as the result you know the what what
+
+2072
+01:16:10,239 --> 01:16:11,840
+the end value will be
+
+2073
+01:16:11,840 --> 01:16:15,120
+you know two as opposed to one
+
+2074
+01:16:15,120 --> 01:16:19,189
+okay
+
+2075
+01:16:19,199 --> 01:16:23,750
+does that make sense
+
+2076
+01:16:23,760 --> 01:16:25,520
+if you've done any sort of lock-free
+
+2077
+01:16:25,520 --> 01:16:26,880
+programming in the past
+
+2078
+01:16:26,880 --> 01:16:28,560
+uh then this might all look very
+
+2079
+01:16:28,560 --> 01:16:30,239
+familiar to you and so this sort of a
+
+2080
+01:16:30,239 --> 01:16:31,280
+style of lock for you
+
+2081
+01:16:31,280 --> 01:16:33,600
+you're basically zookeeper to encourage
+
+2082
+01:16:33,600 --> 01:16:34,960
+this sort of style of lock-free
+
+2083
+01:16:34,960 --> 01:16:44,790
+programming
+
+2084
+01:16:44,800 --> 01:16:48,880
+okay what i like to do
+
+2085
+01:16:48,880 --> 01:16:50,320
+since i'm always running out of time the
+
+2086
+01:16:50,320 --> 01:16:53,120
+last time i ran over time is i'll
+
+2087
+01:16:53,120 --> 01:16:56,400
+want to talk at some point about logs
+
+2088
+01:16:56,400 --> 01:17:00,800
+uh but i will do that uh next time
+
+2089
+01:17:00,800 --> 01:17:02,800
+the next lecture and now let me just
+
+2090
+01:17:02,800 --> 01:17:04,480
+sort of summarize what we've learned so
+
+2091
+01:17:04,480 --> 01:17:04,880
+far
+
+2092
+01:17:04,880 --> 01:17:06,640
+and then i'll talk a little bit more
+
+2093
+01:17:06,640 --> 01:17:08,000
+about zookeeper in the
+
+2094
+01:17:08,000 --> 01:17:12,320
+next lecture so
+
+2095
+01:17:12,320 --> 01:17:15,510
+in summary
+
+2096
+01:17:15,520 --> 01:17:17,760
+uh so basically you know this is a very
+
+2097
+01:17:17,760 --> 01:17:25,189
+successful design
+
+2098
+01:17:25,199 --> 01:17:27,679
+widely used uh you can you know download
+
+2099
+01:17:27,679 --> 01:17:28,400
+it you know
+
+2100
+01:17:28,400 --> 01:17:30,400
+it's on github you can play around with
+
+2101
+01:17:30,400 --> 01:17:31,679
+it if you wanted to
+
+2102
+01:17:31,679 --> 01:17:33,199
+uh and one of the things that is
+
+2103
+01:17:33,199 --> 01:17:34,560
+interesting about it you know compared
+
+2104
+01:17:34,560 --> 01:17:36,400
+to all the systems that we look so far
+
+2105
+01:17:36,400 --> 01:17:38,960
+it has weaker consistency which with
+
+2106
+01:17:38,960 --> 01:17:40,480
+weaker consistency i mean
+
+2107
+01:17:40,480 --> 01:17:44,480
+it doesn't provide linearizability
+
+2108
+01:17:44,480 --> 01:17:46,719
+uh and you know we're seeing that
+
+2109
+01:17:46,719 --> 01:17:48,640
+basically as a careful
+
+2110
+01:17:48,640 --> 01:17:50,960
+designed api at least we have seen some
+
+2111
+01:17:50,960 --> 01:17:53,280
+aspects of the kevlar design api that
+
+2112
+01:17:53,280 --> 01:17:54,719
+despite the fact that actually has
+
+2113
+01:17:54,719 --> 01:17:56,560
+weaker consistency you can still
+
+2114
+01:17:56,560 --> 01:17:58,800
+use it and in fact you know you can use
+
+2115
+01:17:58,800 --> 01:18:00,239
+it actually for pretty important
+
+2116
+01:18:00,239 --> 01:18:02,000
+applications you can actually use uh
+
+2117
+01:18:02,000 --> 01:18:04,719
+zoom keeper as a configuration service
+
+2118
+01:18:04,719 --> 01:18:06,640
+like this main purpose sort of keeping
+
+2119
+01:18:06,640 --> 01:18:08,560
+track of like whose primary
+
+2120
+01:18:08,560 --> 01:18:11,520
+who is in the uh what what's the set of
+
+2121
+01:18:11,520 --> 01:18:12,159
+replicas
+
+2122
+01:18:12,159 --> 01:18:14,480
+etc etc and so for this sort of crucial
+
+2123
+01:18:14,480 --> 01:18:16,080
+operation of being a configuration
+
+2124
+01:18:16,080 --> 01:18:17,600
+server that has to be correct because
+
+2125
+01:18:17,600 --> 01:18:18,880
+otherwise you know we get the split
+
+2126
+01:18:18,880 --> 01:18:19,920
+brain problem
+
+2127
+01:18:19,920 --> 01:18:22,320
+uh the api is carefully designed so that
+
+2128
+01:18:22,320 --> 01:18:23,600
+if you use the api
+
+2129
+01:18:23,600 --> 01:18:26,400
+correctly um you still can implement
+
+2130
+01:18:26,400 --> 01:18:27,600
+this crucial
+
+2131
+01:18:27,600 --> 01:18:31,199
+uh application on top of it and despite
+
+2132
+01:18:31,199 --> 01:18:32,640
+the fact that actually provides weak
+
+2133
+01:18:32,640 --> 01:18:34,320
+consistency
+
+2134
+01:18:34,320 --> 01:18:36,560
+and the cool part of that is that that's
+
+2135
+01:18:36,560 --> 01:18:37,760
+this discrimination
+
+2136
+01:18:37,760 --> 01:18:39,120
+you know like sort of careful designed
+
+2137
+01:18:39,120 --> 01:18:40,960
+api and the weaker consistency
+
+2138
+01:18:40,960 --> 01:18:42,560
+allows us to get you know zookeeper
+
+2139
+01:18:42,560 --> 01:18:49,350
+really high performance
+
+2140
+01:18:49,360 --> 01:18:51,600
+and we'll see later in later lectures
+
+2141
+01:18:51,600 --> 01:18:52,719
+more of like this
+
+2142
+01:18:52,719 --> 01:18:55,679
+sort of trick of trying to uh weaken the
+
+2143
+01:18:55,679 --> 01:18:57,520
+consistency guarantees to actually
+
+2144
+01:18:57,520 --> 01:18:59,040
+either you know get better
+
+2145
+01:18:59,040 --> 01:19:02,239
+uh to get better performance or uh
+
+2146
+01:19:02,239 --> 01:19:05,280
+you know be able to uh
+
+2147
+01:19:05,280 --> 01:19:09,679
+continue despite network petitions
+
+2148
+01:19:09,679 --> 01:19:12,239
+okay let me stop here and then i'll
+
+2149
+01:19:12,239 --> 01:19:14,239
+resume
+
+2150
+01:19:14,239 --> 01:19:16,719
+in a little while next time around the
+
+2151
+01:19:16,719 --> 01:19:19,199
+weird lecture
+
+2152
+01:19:19,199 --> 01:19:23,040
+any questions or again as usual
+
+2153
+01:19:23,040 --> 01:19:24,480
+if you have to go you know please feel
+
+2154
+01:19:24,480 --> 01:19:26,159
+free let go if you want to hang around
+
+2155
+01:19:26,159 --> 01:19:27,679
+and ask for more questions you know feel
+
+2156
+01:19:27,679 --> 01:19:28,320
+free
+
+2157
+01:19:28,320 --> 01:19:41,910
+please feel free to do so
+
+2158
+01:19:41,920 --> 01:19:45,199
+um sorry can you go to this slide which
+
+2159
+01:19:45,199 --> 01:19:49,040
+said the um set
+
+2160
+01:19:49,040 --> 01:19:52,080
+um the unsuccessful example for this set
+
+2161
+01:19:52,080 --> 01:19:55,280
+and for the test and set
+
+2162
+01:19:55,280 --> 01:19:59,120
+um i think it's two slides back this one
+
+2163
+01:19:59,120 --> 01:20:02,239
+uh yeah um so you the
+
+2164
+01:20:02,239 --> 01:20:06,239
+new design it's it is able to fix that
+
+2165
+01:20:06,239 --> 01:20:07,120
+right
+
+2166
+01:20:07,120 --> 01:20:14,790
+yeah you mean you're like with the apis
+
+2167
+01:20:14,800 --> 01:20:17,280
+the version right yeah if you have no
+
+2168
+01:20:17,280 --> 01:20:18,159
+like
+
+2169
+01:20:18,159 --> 01:20:20,560
+exactly uh so i didn't get to do that
+
+2170
+01:20:20,560 --> 01:20:21,440
+but that was the
+
+2171
+01:20:21,440 --> 01:20:22,880
+point of the rest of the lecture is to
+
+2172
+01:20:22,880 --> 01:20:24,639
+talk about how you can able to test the
+
+2173
+01:20:24,639 --> 01:20:26,960
+set using the version numbers
+
+2174
+01:20:26,960 --> 01:20:29,520
+and clearly the increment suggests you
+
+2175
+01:20:29,520 --> 01:20:30,880
+can correct because this is basically
+
+2176
+01:20:30,880 --> 01:20:33,840
+the same sequence
+
+2177
+01:20:33,840 --> 01:20:37,360
+right all right this is the same thing
+
+2178
+01:20:37,360 --> 01:20:38,960
+as the master okay
+
+2179
+01:20:38,960 --> 01:20:42,800
+yeah exactly okay thank you so much
+
+2180
+01:20:42,800 --> 01:20:45,679
+you're welcome i have a question about
+
+2181
+01:20:45,679 --> 01:20:46,320
+this
+
+2182
+01:20:46,320 --> 01:20:49,840
+version uh versioning to prevent lock
+
+2183
+01:20:49,840 --> 01:20:52,000
+uh to to implement lock free programming
+
+2184
+01:20:52,000 --> 01:20:53,199
+is this like
+
+2185
+01:20:53,199 --> 01:20:54,800
+much more efficient than log free
+
+2186
+01:20:54,800 --> 01:20:56,639
+programming because you still need to
+
+2187
+01:20:56,639 --> 01:20:56,960
+like
+
+2188
+01:20:56,960 --> 01:20:59,520
+re try the operation again and again
+
+2189
+01:20:59,520 --> 01:21:01,920
+until it succeeds right
+
+2190
+01:21:01,920 --> 01:21:04,400
+uh yeah like it maybe if tesla's set has
+
+2191
+01:21:04,400 --> 01:21:06,159
+a similar property correct if the tests
+
+2192
+01:21:06,159 --> 01:21:06,719
+have failed
+
+2193
+01:21:06,719 --> 01:21:08,080
+and you wanted to become you know
+
+2194
+01:21:08,080 --> 01:21:09,360
+actually increment you have to do that
+
+2195
+01:21:09,360 --> 01:21:09,760
+again
+
+2196
+01:21:09,760 --> 01:21:12,080
+so it's often the case in this lock free
+
+2197
+01:21:12,080 --> 01:21:13,520
+style programming that you know you can
+
+2198
+01:21:13,520 --> 01:21:16,239
+have these loops where you retry
+
+2199
+01:21:16,239 --> 01:21:18,159
+and so if there's a lot of contention
+
+2200
+01:21:18,159 --> 01:21:19,600
+you're going to get a lot of retract
+
+2201
+01:21:19,600 --> 01:21:20,719
+of course if there's no contention
+
+2202
+01:21:20,719 --> 01:21:22,880
+there's no retract uh
+
+2203
+01:21:22,880 --> 01:21:24,480
+and typically you know these lock-free
+
+2204
+01:21:24,480 --> 01:21:25,840
+algorithms actually are pretty careful
+
+2205
+01:21:25,840 --> 01:21:27,440
+in how they do the back off
+
+2206
+01:21:27,440 --> 01:21:29,120
+so they don't really try immediately you
+
+2207
+01:21:29,120 --> 01:21:32,080
+know they have some backup plan
+
+2208
+01:21:32,080 --> 01:21:34,080
+right but what benefits does this give
+
+2209
+01:21:34,080 --> 01:21:35,280
+over a
+
+2210
+01:21:35,280 --> 01:21:37,920
+standard lock because either way if you
+
+2211
+01:21:37,920 --> 01:21:39,120
+have a lot of contention you're going to
+
+2212
+01:21:39,120 --> 01:21:39,840
+be
+
+2213
+01:21:39,840 --> 01:21:42,080
+like sitting there and retracting a lot
+
+2214
+01:21:42,080 --> 01:21:43,520
+yeah so let's uh
+
+2215
+01:21:43,520 --> 01:21:46,719
+so you know so uh the the increment
+
+2216
+01:21:46,719 --> 01:21:47,440
+counter
+
+2217
+01:21:47,440 --> 01:21:50,320
+is an example where basically uh you
+
+2218
+01:21:50,320 --> 01:21:52,239
+sort of implicitly do the walking uh
+
+2219
+01:21:52,239 --> 01:21:53,040
+because you will see
+
+2220
+01:21:53,040 --> 01:21:56,320
+if we implement locks in zookeeper
+
+2221
+01:21:56,320 --> 01:21:58,880
+like the using the zookeep okay if you
+
+2222
+01:21:58,880 --> 01:22:01,120
+implement locks with the zoom keeper api
+
+2223
+01:22:01,120 --> 01:22:02,639
+and then if you do the stupid lock you
+
+2224
+01:22:02,639 --> 01:22:03,600
+know you're gonna also have this
+
+2225
+01:22:03,600 --> 01:22:05,120
+contention issue
+
+2226
+01:22:05,120 --> 01:22:06,400
+uh of course there's a way of
+
+2227
+01:22:06,400 --> 01:22:08,000
+implementing the smarter walk that they
+
+2228
+01:22:08,000 --> 01:22:10,480
+talked about like without the hurting
+
+2229
+01:22:10,480 --> 01:22:14,159
+and then you can do better uh and so i'm
+
+2230
+01:22:14,159 --> 01:22:16,239
+just hoping to talk about that uh next
+
+2231
+01:22:16,239 --> 01:22:18,629
+time
+
+2232
+01:22:18,639 --> 01:22:20,560
+all right thank you i think the real
+
+2233
+01:22:20,560 --> 01:22:22,159
+point here is you know that you know you
+
+2234
+01:22:22,159 --> 01:22:23,679
+can use these primitives to actually do
+
+2235
+01:22:23,679 --> 01:22:25,600
+log free programming
+
+2236
+01:22:25,600 --> 01:22:27,840
+like with the interface that the lab3
+
+2237
+01:22:27,840 --> 01:22:31,750
+provides it's not possible
+
+2238
+01:22:31,760 --> 01:22:42,870
+makes sense thank you
+
