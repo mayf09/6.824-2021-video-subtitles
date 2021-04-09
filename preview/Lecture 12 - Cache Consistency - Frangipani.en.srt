@@ -1,0 +1,8788 @@
+1
+00:00:01,280 --> 00:00:03,120
+okay um so
+
+2
+00:00:03,120 --> 00:00:05,200
+good morning good afternoon or good
+
+3
+00:00:05,200 --> 00:00:07,359
+evening or wherever you are
+
+4
+00:00:07,359 --> 00:00:09,679
+uh i said the plan for today is to talk
+
+5
+00:00:09,679 --> 00:00:11,280
+about the frontier ponte
+
+6
+00:00:11,280 --> 00:00:15,360
+this is a paper from uh 1997 so it's a
+
+7
+00:00:15,360 --> 00:00:18,240
+bit of an older paper the context of
+
+8
+00:00:18,240 --> 00:00:19,600
+this paper
+
+9
+00:00:19,600 --> 00:00:29,429
+is network file systems
+
+10
+00:00:29,439 --> 00:00:30,800
+and you know you should think about
+
+11
+00:00:30,800 --> 00:00:33,680
+systems such as you know athena afs you
+
+12
+00:00:33,680 --> 00:00:35,760
+know the android file system and athena
+
+13
+00:00:35,760 --> 00:00:39,120
+uh dropbox uh or a more modern version
+
+14
+00:00:39,120 --> 00:00:40,000
+of this
+
+15
+00:00:40,000 --> 00:00:41,920
+uh but the general goal here is to
+
+16
+00:00:41,920 --> 00:00:43,520
+basically share files between
+
+17
+00:00:43,520 --> 00:00:46,719
+a collection of users uh the frontier
+
+18
+00:00:46,719 --> 00:00:48,719
+pony itself
+
+19
+00:00:48,719 --> 00:00:51,280
+is not widely used or wasn't widely used
+
+20
+00:00:51,280 --> 00:00:53,360
+outside of the deck
+
+21
+00:00:53,360 --> 00:00:55,680
+and so the real the focus of the things
+
+22
+00:00:55,680 --> 00:00:56,800
+that you should get out of this paper
+
+23
+00:00:56,800 --> 00:00:57,680
+today
+
+24
+00:00:57,680 --> 00:01:01,760
+are free ideas and ideas that actually
+
+25
+00:01:01,760 --> 00:01:02,559
+will show up
+
+26
+00:01:02,559 --> 00:01:04,559
+over and over in a couple next couple
+
+27
+00:01:04,559 --> 00:01:08,870
+weeks first of all cash coherence
+
+28
+00:01:08,880 --> 00:01:13,520
+protocols for cash coherence
+
+29
+00:01:13,520 --> 00:01:23,350
+second distributed locking
+
+30
+00:01:23,360 --> 00:01:32,710
+and third distributed crash recovery
+
+31
+00:01:32,720 --> 00:01:34,400
+and these are going to be three ideas
+
+32
+00:01:34,400 --> 00:01:35,920
+that are going to be as i mentioned show
+
+33
+00:01:35,920 --> 00:01:36,720
+up in
+
+34
+00:01:36,720 --> 00:01:38,640
+the next couple of weeks in particular
+
+35
+00:01:38,640 --> 00:01:40,799
+we're going to read uh you know starting
+
+36
+00:01:40,799 --> 00:01:42,320
+next week you know two sort of heavy
+
+37
+00:01:42,320 --> 00:01:44,159
+duty transaction systems
+
+38
+00:01:44,159 --> 00:01:47,439
+and they uh build a lot
+
+39
+00:01:47,439 --> 00:01:50,000
+on uh you know some of the techniques or
+
+40
+00:01:50,000 --> 00:01:50,799
+to use some of the
+
+41
+00:01:50,799 --> 00:01:52,399
+techniques that actually franciupani
+
+42
+00:01:52,399 --> 00:01:54,240
+also uses and so
+
+43
+00:01:54,240 --> 00:01:55,759
+frontier pawn is sort of a more gentle
+
+44
+00:01:55,759 --> 00:01:57,439
+introduction you know to
+
+45
+00:01:57,439 --> 00:01:59,759
+these three topics before we get to
+
+46
+00:01:59,759 --> 00:02:00,560
+heavy duty
+
+47
+00:02:00,560 --> 00:02:04,000
+transaction systems and the id is also
+
+48
+00:02:04,000 --> 00:02:05,200
+in front of puns itself is an
+
+49
+00:02:05,200 --> 00:02:06,399
+interesting design
+
+50
+00:02:06,399 --> 00:02:08,479
+uh a from a distributed systems
+
+51
+00:02:08,479 --> 00:02:09,759
+perspective uh
+
+52
+00:02:09,759 --> 00:02:13,200
+it is a a cool system and let me
+
+53
+00:02:13,200 --> 00:02:16,239
+uh make that point by uh sort of
+
+54
+00:02:16,239 --> 00:02:17,760
+contrasting sort of the traditional
+
+55
+00:02:17,760 --> 00:02:18,400
+designs
+
+56
+00:02:18,400 --> 00:02:22,879
+for a network file system so traditional
+
+57
+00:02:22,879 --> 00:02:25,040
+or the most common network file system
+
+58
+00:02:25,040 --> 00:02:26,800
+design since if you think about like
+
+59
+00:02:26,800 --> 00:02:30,319
+uh uh afs on athena
+
+60
+00:02:30,319 --> 00:02:33,599
+you know you have a set of clients
+
+61
+00:02:33,599 --> 00:02:34,879
+and this is going to make a very simple
+
+62
+00:02:34,879 --> 00:02:37,040
+picture you have a set of clients you
+
+63
+00:02:37,040 --> 00:02:37,840
+know connected to
+
+64
+00:02:37,840 --> 00:02:40,160
+some network represent the network
+
+65
+00:02:40,160 --> 00:02:41,519
+basically as a single wire
+
+66
+00:02:41,519 --> 00:02:43,120
+you know sharing you know a number of
+
+67
+00:02:43,120 --> 00:02:45,040
+file servers
+
+68
+00:02:45,040 --> 00:02:52,710
+and then a file servers after the disk
+
+69
+00:02:52,720 --> 00:02:54,800
+and basically oh you know all the
+
+70
+00:02:54,800 --> 00:02:56,000
+complexity
+
+71
+00:02:56,000 --> 00:03:00,080
+uh although okay i'll get to catchphrase
+
+72
+00:03:00,080 --> 00:03:04,159
+in detail in a second the all the
+
+73
+00:03:04,159 --> 00:03:05,200
+complexity in the
+
+74
+00:03:05,200 --> 00:03:07,440
+this design is basically here at the
+
+75
+00:03:07,440 --> 00:03:08,640
+file servers
+
+76
+00:03:08,640 --> 00:03:10,480
+so the file servers implement you know
+
+77
+00:03:10,480 --> 00:03:12,560
+the file system operations open close
+
+78
+00:03:12,560 --> 00:03:15,280
+read write you know stat everything and
+
+79
+00:03:15,280 --> 00:03:15,920
+they
+
+80
+00:03:15,920 --> 00:03:18,000
+uh write you know things to disk in a
+
+81
+00:03:18,000 --> 00:03:19,360
+crash uh
+
+82
+00:03:19,360 --> 00:03:21,360
+resilient or resistant way and the
+
+83
+00:03:21,360 --> 00:03:23,040
+clients are really sort of dumb
+
+84
+00:03:23,040 --> 00:03:25,200
+or simple they don't really do much you
+
+85
+00:03:25,200 --> 00:03:26,879
+have to do some caching as they do in
+
+86
+00:03:26,879 --> 00:03:27,760
+afs
+
+87
+00:03:27,760 --> 00:03:30,239
+uh but you know most of it is uh they're
+
+88
+00:03:30,239 --> 00:03:32,159
+relaying you know file system operations
+
+89
+00:03:32,159 --> 00:03:33,760
+from clients from programs that are
+
+90
+00:03:33,760 --> 00:03:34,480
+running
+
+91
+00:03:34,480 --> 00:03:36,640
+like whatever the irs on your client
+
+92
+00:03:36,640 --> 00:03:38,400
+wanting it doesn't open close
+
+93
+00:03:38,400 --> 00:03:39,599
+and most of what the client does is
+
+94
+00:03:39,599 --> 00:03:41,120
+relaying those operations to file
+
+95
+00:03:41,120 --> 00:03:42,400
+servers
+
+96
+00:03:42,400 --> 00:03:44,159
+and one reason that the design is you
+
+97
+00:03:44,159 --> 00:03:45,599
+know popular is that because
+
+98
+00:03:45,599 --> 00:03:47,280
+you know like in terms of a security
+
+99
+00:03:47,280 --> 00:03:49,440
+perspective uh it is a nice design
+
+100
+00:03:49,440 --> 00:03:50,640
+because most of the
+
+101
+00:03:50,640 --> 00:03:52,560
+you know the file servers have to be
+
+102
+00:03:52,560 --> 00:03:54,480
+trusted but the clients don't have to be
+
+103
+00:03:54,480 --> 00:03:56,560
+trusted
+
+104
+00:03:56,560 --> 00:03:58,319
+and certainly in a setting like mit you
+
+105
+00:03:58,319 --> 00:03:59,680
+were like the machines are just in
+
+106
+00:03:59,680 --> 00:04:00,080
+public
+
+107
+00:04:00,080 --> 00:04:01,760
+and who knows who installs what kind of
+
+108
+00:04:01,760 --> 00:04:03,200
+software on it
+
+109
+00:04:03,200 --> 00:04:05,920
+you know that is a a nice property
+
+110
+00:04:05,920 --> 00:04:07,840
+project pony on the other end has a very
+
+111
+00:04:07,840 --> 00:04:08,879
+different design
+
+112
+00:04:08,879 --> 00:04:14,319
+and much more decentralized design
+
+113
+00:04:14,319 --> 00:04:16,320
+uh and in front of body actually a lot
+
+114
+00:04:16,320 --> 00:04:18,000
+of the the file server
+
+115
+00:04:18,000 --> 00:04:20,479
+uh is really there is actually no real
+
+116
+00:04:20,479 --> 00:04:22,160
+file server in this or literally sends
+
+117
+00:04:22,160 --> 00:04:23,040
+the work
+
+118
+00:04:23,040 --> 00:04:26,320
+but the clients basically implement
+
+119
+00:04:26,320 --> 00:04:29,199
+run the file server code itself so let's
+
+120
+00:04:29,199 --> 00:04:30,240
+say we have two
+
+121
+00:04:30,240 --> 00:04:32,479
+you know clients and most of the file
+
+122
+00:04:32,479 --> 00:04:33,360
+system uh
+
+123
+00:04:33,360 --> 00:04:35,360
+code itself like the thing that actually
+
+124
+00:04:35,360 --> 00:04:37,440
+has inode manages inodes
+
+125
+00:04:37,440 --> 00:04:39,440
+updates you know files creates
+
+126
+00:04:39,440 --> 00:04:40,800
+directories all the code
+
+127
+00:04:40,800 --> 00:04:42,960
+instead of living on the file server
+
+128
+00:04:42,960 --> 00:04:44,240
+looks like it lives on the
+
+129
+00:04:44,240 --> 00:04:47,600
+clients and the only thing that really
+
+130
+00:04:47,600 --> 00:04:52,000
+the the file server share is a big
+
+131
+00:04:52,000 --> 00:04:58,629
+virtual disk
+
+132
+00:04:58,639 --> 00:05:00,560
+and if you will you know maybe a good
+
+133
+00:05:00,560 --> 00:05:02,080
+image you have in your head or some
+
+134
+00:05:02,080 --> 00:05:03,440
+conceptual image you have in your head
+
+135
+00:05:03,440 --> 00:05:04,720
+is that the virtual disk is
+
+136
+00:05:04,720 --> 00:05:07,840
+basically like a big ssd drive uh
+
+137
+00:05:07,840 --> 00:05:09,600
+and and so the file servers just
+
+138
+00:05:09,600 --> 00:05:12,880
+basically share one ssd you know
+
+139
+00:05:12,880 --> 00:05:15,840
+one disk uh with each other uh now of
+
+140
+00:05:15,840 --> 00:05:16,720
+course internally
+
+141
+00:05:16,720 --> 00:05:19,280
+this virtual disk is implemented using a
+
+142
+00:05:19,280 --> 00:05:20,639
+system called pedal
+
+143
+00:05:20,639 --> 00:05:22,840
+and you know consists actually of many
+
+144
+00:05:22,840 --> 00:05:24,080
+machines
+
+145
+00:05:24,080 --> 00:05:27,199
+uh and but you know you get another
+
+146
+00:05:27,199 --> 00:05:28,560
+machine to replicate you know disc
+
+147
+00:05:28,560 --> 00:05:29,600
+blocks you know their
+
+148
+00:05:29,600 --> 00:05:31,600
+passes internally to make sure that like
+
+149
+00:05:31,600 --> 00:05:33,199
+it's uh you know all operations can
+
+150
+00:05:33,199 --> 00:05:34,639
+apply it in the right order
+
+151
+00:05:34,639 --> 00:05:36,400
+and all that kind of stuff but from the
+
+152
+00:05:36,400 --> 00:05:38,000
+outside perspective you know the
+
+153
+00:05:38,000 --> 00:05:39,280
+interface is really
+
+154
+00:05:39,280 --> 00:05:42,320
+uh read a block on writer block
+
+155
+00:05:42,320 --> 00:05:43,759
+and so it just looks like an ordinary
+
+156
+00:05:43,759 --> 00:05:45,919
+disk and
+
+157
+00:05:45,919 --> 00:05:47,520
+uh and so what is interesting in this
+
+158
+00:05:47,520 --> 00:05:49,199
+you know design if you contrast the two
+
+159
+00:05:49,199 --> 00:05:49,919
+designs
+
+160
+00:05:49,919 --> 00:05:51,759
+actually a lot of the complexity in this
+
+161
+00:05:51,759 --> 00:05:56,070
+design is on the client side
+
+162
+00:05:56,080 --> 00:05:57,680
+and you know one reason that you like
+
+163
+00:05:57,680 --> 00:06:00,160
+that or why the is that you know you can
+
+164
+00:06:00,160 --> 00:06:01,039
+grow
+
+165
+00:06:01,039 --> 00:06:03,440
+the file system uh with the number of
+
+166
+00:06:03,440 --> 00:06:04,639
+workstations so if you
+
+167
+00:06:04,639 --> 00:06:06,479
+increase the number of clients you know
+
+168
+00:06:06,479 --> 00:06:08,319
+you basically get more cpu power because
+
+169
+00:06:08,319 --> 00:06:09,919
+you get more clients and you know each
+
+170
+00:06:09,919 --> 00:06:11,360
+of the clients can drive around its own
+
+171
+00:06:11,360 --> 00:06:12,479
+file system
+
+172
+00:06:12,479 --> 00:06:14,880
+and so a lot of the really heavy-duty
+
+173
+00:06:14,880 --> 00:06:16,319
+computation can just all be done on the
+
+174
+00:06:16,319 --> 00:06:17,120
+client machines
+
+175
+00:06:17,120 --> 00:06:18,800
+and doesn't involve you know any file
+
+176
+00:06:18,800 --> 00:06:20,880
+server at all and just true that in sort
+
+177
+00:06:20,880 --> 00:06:22,240
+of in the left side the network
+
+178
+00:06:22,240 --> 00:06:24,240
+traditional network file system design
+
+179
+00:06:24,240 --> 00:06:26,080
+it's often the case that you know the
+
+180
+00:06:26,080 --> 00:06:28,080
+performance bottlenecks arise you know
+
+181
+00:06:28,080 --> 00:06:31,520
+in the uh in the file server you know
+
+182
+00:06:31,520 --> 00:06:32,960
+when the number of clients actually
+
+183
+00:06:32,960 --> 00:06:35,520
+uh becomes too large and often in that
+
+184
+00:06:35,520 --> 00:06:37,120
+case for example you split the file
+
+185
+00:06:37,120 --> 00:06:37,840
+system in
+
+186
+00:06:37,840 --> 00:06:41,039
+across different files in reverse okay
+
+187
+00:06:41,039 --> 00:06:42,560
+so that's sort of the
+
+188
+00:06:42,560 --> 00:06:44,560
+uh so from our perspective or at least
+
+189
+00:06:44,560 --> 00:06:47,039
+from a distributed systems in a design
+
+190
+00:06:47,039 --> 00:06:48,400
+uh frontier binding is interesting
+
+191
+00:06:48,400 --> 00:06:49,360
+because it's like much more
+
+192
+00:06:49,360 --> 00:06:50,240
+decentralized
+
+193
+00:06:50,240 --> 00:06:52,160
+than sort of the traditional uh network
+
+194
+00:06:52,160 --> 00:06:56,070
+file system designs
+
+195
+00:06:56,080 --> 00:06:58,560
+and the reason you know they sort of
+
+196
+00:06:58,560 --> 00:06:59,759
+wanted to explore
+
+197
+00:06:59,759 --> 00:07:02,240
+uh this design has a lot to do with the
+
+198
+00:07:02,240 --> 00:07:03,280
+use case that
+
+199
+00:07:03,280 --> 00:07:05,440
+they imagine or that they were targeting
+
+200
+00:07:05,440 --> 00:07:06,639
+so i want to say a little bit about the
+
+201
+00:07:06,639 --> 00:07:07,759
+use case because
+
+202
+00:07:07,759 --> 00:07:09,360
+uh there were a lot of questions related
+
+203
+00:07:09,360 --> 00:07:13,189
+to that in email so
+
+204
+00:07:13,199 --> 00:07:17,440
+so what is the use case the use case is
+
+205
+00:07:17,440 --> 00:07:19,280
+basically a number of researchers when
+
+206
+00:07:19,280 --> 00:07:25,110
+engineers
+
+207
+00:07:25,120 --> 00:07:29,270
+compiling
+
+208
+00:07:29,280 --> 00:07:31,440
+you know compiling editing you know
+
+209
+00:07:31,440 --> 00:07:39,510
+their programs or writing documents
+
+210
+00:07:39,520 --> 00:07:41,120
+and so it's really designed you know the
+
+211
+00:07:41,120 --> 00:07:42,720
+these papers from the
+
+212
+00:07:42,720 --> 00:07:45,520
+famous research lab uh in that time tech
+
+213
+00:07:45,520 --> 00:07:46,400
+circ
+
+214
+00:07:46,400 --> 00:07:48,160
+and you know deck circuit like you know
+
+215
+00:07:48,160 --> 00:07:49,919
+tens of uh researchers like
+
+216
+00:07:49,919 --> 00:07:52,400
+50 to 100 and they're really what
+
+217
+00:07:52,400 --> 00:07:54,400
+they're doing is designing a file system
+
+218
+00:07:54,400 --> 00:07:57,919
+for their use case so everybody uh
+
+219
+00:07:57,919 --> 00:08:00,639
+is trusted uh all the machines are
+
+220
+00:08:00,639 --> 00:08:01,919
+trusted all the software running and
+
+221
+00:08:01,919 --> 00:08:02,960
+they don't trust it
+
+222
+00:08:02,960 --> 00:08:04,800
+and so the security side of things is
+
+223
+00:08:04,800 --> 00:08:06,560
+really not an issue for that
+
+224
+00:08:06,560 --> 00:08:09,440
+uh all the these visitors are heavy duty
+
+225
+00:08:09,440 --> 00:08:10,319
+uh
+
+226
+00:08:10,319 --> 00:08:12,879
+computer users and you know and so they
+
+227
+00:08:12,879 --> 00:08:13,440
+want to
+
+228
+00:08:13,440 --> 00:08:15,199
+but mostly they're working on their own
+
+229
+00:08:15,199 --> 00:08:16,560
+private files you know they're writing
+
+230
+00:08:16,560 --> 00:08:18,319
+their own programs they're writing their
+
+231
+00:08:18,319 --> 00:08:21,440
+drawing documents um and so leaders want
+
+232
+00:08:21,440 --> 00:08:22,960
+to interact with the files with a high
+
+233
+00:08:22,960 --> 00:08:24,720
+performance file system
+
+234
+00:08:24,720 --> 00:08:27,440
+um of course you know they might share
+
+235
+00:08:27,440 --> 00:08:28,080
+otherwise
+
+236
+00:08:28,080 --> 00:08:32,399
+sharing would not be uh interesting uh
+
+237
+00:08:32,399 --> 00:08:34,240
+so they both potentially share files and
+
+238
+00:08:34,240 --> 00:08:35,919
+directories
+
+239
+00:08:35,919 --> 00:08:38,719
+and it shows up in two ways you know
+
+240
+00:08:38,719 --> 00:08:39,200
+they may
+
+241
+00:08:39,200 --> 00:08:40,880
+work together collaborate together on
+
+242
+00:08:40,880 --> 00:08:42,560
+writing a paper like the paper that
+
+243
+00:08:42,560 --> 00:08:43,839
+we're reading today
+
+244
+00:08:43,839 --> 00:08:46,560
+uh and so uh they want to have access to
+
+245
+00:08:46,560 --> 00:08:47,600
+uh the shared
+
+246
+00:08:47,600 --> 00:08:49,120
+files you know for the directory that
+
+247
+00:08:49,120 --> 00:08:50,880
+holds that particular paper
+
+248
+00:08:50,880 --> 00:08:57,590
+uh and so so usually the user sharing
+
+249
+00:08:57,600 --> 00:08:58,959
+and then there's a second form sharing
+
+250
+00:08:58,959 --> 00:09:00,720
+that like the same user might log into
+
+251
+00:09:00,720 --> 00:09:10,550
+multiple workstations
+
+252
+00:09:10,560 --> 00:09:13,200
+more than one workstation and so again
+
+253
+00:09:13,200 --> 00:09:13,600
+whatever
+
+254
+00:09:13,600 --> 00:09:15,040
+user one of the researchers who goes to
+
+255
+00:09:15,040 --> 00:09:16,800
+the public library of dextre
+
+256
+00:09:16,800 --> 00:09:18,560
+or their library and you know logs in
+
+257
+00:09:18,560 --> 00:09:20,320
+one of the public workstation with index
+
+258
+00:09:20,320 --> 00:09:20,800
+work
+
+259
+00:09:20,800 --> 00:09:22,560
+and it wants to be able to rewrite their
+
+260
+00:09:22,560 --> 00:09:23,839
+their files from that you know that
+
+261
+00:09:23,839 --> 00:09:25,040
+machine too
+
+262
+00:09:25,040 --> 00:09:28,240
+so that's the use case um and
+
+263
+00:09:28,240 --> 00:09:29,760
+this use case has sort of a number of
+
+264
+00:09:29,760 --> 00:09:31,680
+design uh
+
+265
+00:09:31,680 --> 00:09:34,880
+implications or you know design choices
+
+266
+00:09:34,880 --> 00:09:36,000
+that were motivated
+
+267
+00:09:36,000 --> 00:09:40,389
+you know by this use case
+
+268
+00:09:40,399 --> 00:09:43,839
+and so the one of the primary ones
+
+269
+00:09:43,839 --> 00:09:48,829
+that was motivated by this news case is
+
+270
+00:09:48,839 --> 00:09:51,440
+caching
+
+271
+00:09:51,440 --> 00:09:53,839
+so instead of leaving uh the data for
+
+272
+00:09:53,839 --> 00:09:55,360
+example all in pedal and every read or
+
+273
+00:09:55,360 --> 00:09:57,040
+write operation goes through pedal
+
+274
+00:09:57,040 --> 00:09:58,880
+uh they want to arrange it so that most
+
+275
+00:09:58,880 --> 00:10:00,160
+of actually the action happens in the
+
+276
+00:10:00,160 --> 00:10:01,279
+workstations
+
+277
+00:10:01,279 --> 00:10:03,680
+and so the researchers uh since they're
+
+278
+00:10:03,680 --> 00:10:05,120
+mostly working on their own private
+
+279
+00:10:05,120 --> 00:10:06,399
+files you know it seems like it'll make
+
+280
+00:10:06,399 --> 00:10:07,760
+a lot of sense to sort of capture the
+
+281
+00:10:07,760 --> 00:10:09,839
+data locally on the workstation
+
+282
+00:10:09,839 --> 00:10:11,600
+uh then as you read and write files
+
+283
+00:10:11,600 --> 00:10:12,880
+there's like basically no network
+
+284
+00:10:12,880 --> 00:10:14,640
+traffic really necessary
+
+285
+00:10:14,640 --> 00:10:17,360
+um and you can sort of uh write right at
+
+286
+00:10:17,360 --> 00:10:18,640
+high performance
+
+287
+00:10:18,640 --> 00:10:20,640
+and you know one reason one way they
+
+288
+00:10:20,640 --> 00:10:22,320
+avoid you know having sending a lot of
+
+289
+00:10:22,320 --> 00:10:24,480
+traffic to a pedal is they have a right
+
+290
+00:10:24,480 --> 00:10:27,269
+back cache
+
+291
+00:10:27,279 --> 00:10:29,279
+instead of a right through and so if
+
+292
+00:10:29,279 --> 00:10:30,640
+operations happen actually they just
+
+293
+00:10:30,640 --> 00:10:32,000
+stay in the cache and at some point
+
+294
+00:10:32,000 --> 00:10:34,000
+later they're percolated you know to uh
+
+295
+00:10:34,000 --> 00:10:35,360
+pedal as we'll see in the second
+
+296
+00:10:35,360 --> 00:10:38,800
+one um and so
+
+297
+00:10:38,800 --> 00:10:40,160
+combined with that like even though
+
+298
+00:10:40,160 --> 00:10:42,000
+they're doing mostly you know workloads
+
+299
+00:10:42,000 --> 00:10:42,480
+are going to be
+
+300
+00:10:42,480 --> 00:10:44,399
+sort of private uh where there's not
+
+301
+00:10:44,399 --> 00:10:45,600
+sharing going on
+
+302
+00:10:45,600 --> 00:10:47,760
+of course in the case they do share they
+
+303
+00:10:47,760 --> 00:10:50,399
+want to have strong consistency
+
+304
+00:10:50,399 --> 00:11:00,880
+or sometimes called you know coherence
+
+305
+00:11:00,880 --> 00:11:04,399
+uh and so meaning that for example if
+
+306
+00:11:04,399 --> 00:11:08,160
+uh one user writes a file then the
+
+307
+00:11:08,160 --> 00:11:10,399
+another user on the other workstation uh
+
+308
+00:11:10,399 --> 00:11:12,240
+reads the file it would be great if that
+
+309
+00:11:12,240 --> 00:11:13,360
+user actually saw
+
+310
+00:11:13,360 --> 00:11:15,279
+the changes that the the other
+
+311
+00:11:15,279 --> 00:11:18,079
+workstation the other user has made
+
+312
+00:11:18,079 --> 00:11:20,160
+and so they want string a strong
+
+313
+00:11:20,160 --> 00:11:22,949
+consistency
+
+314
+00:11:22,959 --> 00:11:26,320
+so those are the two design choices that
+
+315
+00:11:26,320 --> 00:11:28,000
+really drive
+
+316
+00:11:28,000 --> 00:11:31,040
+this design as well as just you know
+
+317
+00:11:31,040 --> 00:11:40,829
+basically
+
+318
+00:11:40,839 --> 00:11:42,079
+performance
+
+319
+00:11:42,079 --> 00:11:45,279
+so and maybe it's helpful you know to
+
+320
+00:11:45,279 --> 00:11:46,399
+think a little bit about like
+
+321
+00:11:46,399 --> 00:11:48,000
+what other use cases could you have
+
+322
+00:11:48,000 --> 00:11:50,079
+right for file systems and so maybe one
+
+323
+00:11:50,079 --> 00:11:52,240
+one good one that we talked a lot about
+
+324
+00:11:52,240 --> 00:11:55,519
+is to think about gfs uh you know would
+
+325
+00:11:55,519 --> 00:11:56,560
+give us be
+
+326
+00:11:56,560 --> 00:11:58,320
+a substitute for fronts and pinion or
+
+327
+00:11:58,320 --> 00:11:59,600
+the other way around like how do they
+
+328
+00:11:59,600 --> 00:12:00,800
+contrast
+
+329
+00:12:00,800 --> 00:12:02,480
+and one way to think about this is that
+
+330
+00:12:02,480 --> 00:12:04,880
+you know gfs is really a file system
+
+331
+00:12:04,880 --> 00:12:07,519
+designed for mapreduce applications and
+
+332
+00:12:07,519 --> 00:12:10,480
+so it's a file system where uh
+
+333
+00:12:10,480 --> 00:12:13,440
+files are not cached in fact you know
+
+334
+00:12:13,440 --> 00:12:14,880
+the files intend to be so big that they
+
+335
+00:12:14,880 --> 00:12:15,760
+wouldn't even fit
+
+336
+00:12:15,760 --> 00:12:17,600
+in the type of caches that we're talking
+
+337
+00:12:17,600 --> 00:12:19,279
+about the files are basically sort of
+
+338
+00:12:19,279 --> 00:12:20,399
+red you know sequentially
+
+339
+00:12:20,399 --> 00:12:22,399
+from beginning to end and that's it and
+
+340
+00:12:22,399 --> 00:12:24,000
+then maybe you know some other
+
+341
+00:12:24,000 --> 00:12:26,079
+uh computer will read that file because
+
+342
+00:12:26,079 --> 00:12:27,120
+there's some other map produce
+
+343
+00:12:27,120 --> 00:12:28,639
+application running on it
+
+344
+00:12:28,639 --> 00:12:30,079
+and so i think you think you're back at
+
+345
+00:12:30,079 --> 00:12:32,240
+gfs there was really no data caching
+
+346
+00:12:32,240 --> 00:12:33,519
+going on at all you know there was a
+
+347
+00:12:33,519 --> 00:12:34,959
+little bit of caching going on to
+
+348
+00:12:34,959 --> 00:12:38,399
+keep track of where uh the truck servers
+
+349
+00:12:38,399 --> 00:12:38,959
+were
+
+350
+00:12:38,959 --> 00:12:40,560
+but there's actually no caching of data
+
+351
+00:12:40,560 --> 00:12:42,079
+going on at all in gfs
+
+352
+00:12:42,079 --> 00:12:43,680
+so there's also no cache consistency
+
+353
+00:12:43,680 --> 00:12:45,440
+problem in gfs and so
+
+354
+00:12:45,440 --> 00:12:46,880
+there's a type of applications that they
+
+355
+00:12:46,880 --> 00:12:48,720
+were targeting that just didn't make
+
+356
+00:12:48,720 --> 00:12:51,839
+sense at all similarly in gfs gfs
+
+357
+00:12:51,839 --> 00:12:53,680
+actually it's not really a real file
+
+358
+00:12:53,680 --> 00:12:55,360
+system in the sense of the uh here you
+
+359
+00:12:55,360 --> 00:12:57,920
+know it was not intended to run like vi
+
+360
+00:12:57,920 --> 00:13:00,560
+gcc uh and so it didn't provide like
+
+361
+00:13:00,560 --> 00:13:02,079
+straight sort of passage or unique
+
+362
+00:13:02,079 --> 00:13:03,440
+compatibility yeah
+
+363
+00:13:03,440 --> 00:13:05,680
+in the franchise you can just run your
+
+364
+00:13:05,680 --> 00:13:07,440
+standard unix applications
+
+365
+00:13:07,440 --> 00:13:09,760
+and things just work out and the
+
+366
+00:13:09,760 --> 00:13:11,200
+applications behave
+
+367
+00:13:11,200 --> 00:13:13,120
+in the same way as if there was not a
+
+368
+00:13:13,120 --> 00:13:14,399
+distributed file system basically a
+
+369
+00:13:14,399 --> 00:13:16,240
+single file system
+
+370
+00:13:16,240 --> 00:13:20,079
+and again in gfs you know this the there
+
+371
+00:13:20,079 --> 00:13:22,389
+was
+
+372
+00:13:22,399 --> 00:13:24,240
+there's a was basically a little library
+
+373
+00:13:24,240 --> 00:13:25,760
+you know that actually application used
+
+374
+00:13:25,760 --> 00:13:27,760
+to read or write files
+
+375
+00:13:27,760 --> 00:13:30,079
+in gfs but it was not like you know 100
+
+376
+00:13:30,079 --> 00:13:32,639
+units compatible at all
+
+377
+00:13:32,639 --> 00:13:34,560
+so to give you a sense that you know
+
+378
+00:13:34,560 --> 00:13:35,839
+these workloads
+
+379
+00:13:35,839 --> 00:13:37,839
+privately really the design of these
+
+380
+00:13:37,839 --> 00:13:39,360
+different of these systems you know
+
+381
+00:13:39,360 --> 00:13:40,720
+in the case of gfs and it's the
+
+382
+00:13:40,720 --> 00:13:42,480
+mapreduce application that drove the
+
+383
+00:13:42,480 --> 00:13:43,279
+design
+
+384
+00:13:43,279 --> 00:13:45,920
+uh in the case of you know from tipani
+
+385
+00:13:45,920 --> 00:13:47,120
+or the shared file system it's really
+
+386
+00:13:47,120 --> 00:13:48,880
+collecting users they're working
+
+387
+00:13:48,880 --> 00:13:50,639
+on some shared file system but most of
+
+388
+00:13:50,639 --> 00:13:51,839
+the operations you know they're
+
+389
+00:13:51,839 --> 00:13:53,680
+performing are probably just on files
+
+390
+00:13:53,680 --> 00:13:54,399
+they own
+
+391
+00:13:54,399 --> 00:13:57,680
+uh and so it can perform locally
+
+392
+00:13:57,680 --> 00:13:59,279
+does that make sense in terms of
+
+393
+00:13:59,279 --> 00:14:01,199
+contrast and settings so you see
+
+394
+00:14:01,199 --> 00:14:02,160
+actually there are quite a different
+
+395
+00:14:02,160 --> 00:14:03,760
+number of file systems around you know
+
+396
+00:14:03,760 --> 00:14:05,519
+like in zookeepers yet another sort of
+
+397
+00:14:05,519 --> 00:14:06,959
+provides this file system interface but
+
+398
+00:14:06,959 --> 00:14:08,399
+it's not really a file system you know
+
+399
+00:14:08,399 --> 00:14:09,360
+it's like more of an
+
+400
+00:14:09,360 --> 00:14:10,880
+intended as a coordination service you
+
+401
+00:14:10,880 --> 00:14:12,880
+wouldn't store big files
+
+402
+00:14:12,880 --> 00:14:16,000
+in zookeeper
+
+403
+00:14:16,000 --> 00:14:21,670
+any questions about this uh setting
+
+404
+00:14:21,680 --> 00:14:24,320
+uh can you briefly repeat why having the
+
+405
+00:14:24,320 --> 00:14:26,399
+file server code running on the client
+
+406
+00:14:26,399 --> 00:14:26,959
+machine
+
+407
+00:14:26,959 --> 00:14:30,000
+uh enhances uh scalability
+
+408
+00:14:30,000 --> 00:14:31,440
+versus having the client and the file
+
+409
+00:14:31,440 --> 00:14:33,600
+server being on different machines
+
+410
+00:14:33,600 --> 00:14:36,160
+or on different uh yeah yeah so for
+
+411
+00:14:36,160 --> 00:14:37,600
+example if you know that i'd like to go
+
+412
+00:14:37,600 --> 00:14:39,360
+back to this uh previous slide here you
+
+413
+00:14:39,360 --> 00:14:40,720
+know on the left is the network file
+
+414
+00:14:40,720 --> 00:14:41,680
+system and correctly
+
+415
+00:14:41,680 --> 00:14:43,440
+there's many many many clients well
+
+416
+00:14:43,440 --> 00:14:44,880
+let's figure there's only one
+
+417
+00:14:44,880 --> 00:14:46,160
+you know there's let me simplify this
+
+418
+00:14:46,160 --> 00:14:48,160
+picture for a second and let's ignore
+
+419
+00:14:48,160 --> 00:14:49,600
+the second file server there's one one
+
+420
+00:14:49,600 --> 00:14:50,959
+file server so that everybody can share
+
+421
+00:14:50,959 --> 00:14:52,560
+the files and through that file server
+
+422
+00:14:52,560 --> 00:14:54,160
+then all these clients will be hammering
+
+423
+00:14:54,160 --> 00:14:56,160
+on that in a single file server
+
+424
+00:14:56,160 --> 00:14:57,680
+and so all the read or write operations
+
+425
+00:14:57,680 --> 00:14:58,880
+quick are going to be sent to the file
+
+426
+00:14:58,880 --> 00:15:00,320
+server the file server does the
+
+427
+00:15:00,320 --> 00:15:01,600
+directory look up
+
+428
+00:15:01,600 --> 00:15:04,320
+uh you know opens files and adjusts the
+
+429
+00:15:04,320 --> 00:15:05,440
+security checks
+
+430
+00:15:05,440 --> 00:15:06,720
+and all that kind of stuff so all the
+
+431
+00:15:06,720 --> 00:15:09,120
+computation really for the file system
+
+432
+00:15:09,120 --> 00:15:10,639
+itself is all happening
+
+433
+00:15:10,639 --> 00:15:12,880
+on the file server itself in the sort of
+
+434
+00:15:12,880 --> 00:15:14,800
+traditional network file system design
+
+435
+00:15:14,800 --> 00:15:16,639
+in the front economy that's not the case
+
+436
+00:15:16,639 --> 00:15:18,160
+okay confront you penny all the file
+
+437
+00:15:18,160 --> 00:15:19,760
+system operations are executed on the
+
+438
+00:15:19,760 --> 00:15:21,120
+workstations
+
+439
+00:15:21,120 --> 00:15:23,360
+and so we have multiple workstations
+
+440
+00:15:23,360 --> 00:15:24,959
+that basically you know the workload
+
+441
+00:15:24,959 --> 00:15:26,720
+that this file system can scale
+
+442
+00:15:26,720 --> 00:15:28,399
+or can support scales with the number of
+
+443
+00:15:28,399 --> 00:15:31,269
+workstations
+
+444
+00:15:31,279 --> 00:15:33,440
+i see and in the traditional uh
+
+445
+00:15:33,440 --> 00:15:35,040
+architecture so every file server
+
+446
+00:15:35,040 --> 00:15:35,680
+contains
+
+447
+00:15:35,680 --> 00:15:39,120
+or stores let's say a section of
+
+448
+00:15:39,120 --> 00:15:41,120
+the entire file system right so it does
+
+449
+00:15:41,120 --> 00:15:43,199
+so it's not the case that uh
+
+450
+00:15:43,199 --> 00:15:45,519
+every single file server has a copy of
+
+451
+00:15:45,519 --> 00:15:46,800
+the entire system
+
+452
+00:15:46,800 --> 00:15:48,880
+it's that it might be partitioned across
+
+453
+00:15:48,880 --> 00:15:50,399
+the files that might be across
+
+454
+00:15:50,399 --> 00:15:52,480
+like an example in a fast grid you know
+
+455
+00:15:52,480 --> 00:15:54,480
+there are different volumes
+
+456
+00:15:54,480 --> 00:15:56,720
+and you know file servers manage you
+
+457
+00:15:56,720 --> 00:15:58,399
+know different volumes and the data of
+
+458
+00:15:58,399 --> 00:16:00,079
+all the users at mit is spread across
+
+459
+00:16:00,079 --> 00:16:01,600
+the different volumes
+
+460
+00:16:01,600 --> 00:16:03,519
+but all the data like for one volume is
+
+461
+00:16:03,519 --> 00:16:05,199
+it going to be at one file server and so
+
+462
+00:16:05,199 --> 00:16:05,920
+if that file
+
+463
+00:16:05,920 --> 00:16:07,839
+volume gets hit hard you know you're
+
+464
+00:16:07,839 --> 00:16:10,000
+going to get forms bottlenecks
+
+465
+00:16:10,000 --> 00:16:13,590
+okay awesome thank you
+
+466
+00:16:13,600 --> 00:16:15,120
+any more questions about sort of the
+
+467
+00:16:15,120 --> 00:16:18,240
+setting here before we dive in
+
+468
+00:16:18,240 --> 00:16:25,590
+to more frontier planning
+
+469
+00:16:25,600 --> 00:16:29,440
+okay good so now the design choices they
+
+470
+00:16:29,440 --> 00:16:30,000
+made
+
+471
+00:16:30,000 --> 00:16:31,680
+uh immediately leads to a number of
+
+472
+00:16:31,680 --> 00:16:33,360
+challenges
+
+473
+00:16:33,360 --> 00:16:34,720
+right so i want to talk a little bit
+
+474
+00:16:34,720 --> 00:16:41,509
+about the challenges
+
+475
+00:16:41,519 --> 00:16:45,199
+and the main one you know that drives
+
+476
+00:16:45,199 --> 00:16:47,839
+almost a ton of the design
+
+477
+00:16:47,839 --> 00:16:50,800
+is let's say you have one workstation
+
+478
+00:16:50,800 --> 00:16:51,920
+workstation one
+
+479
+00:16:51,920 --> 00:16:53,759
+so in those days you know people had
+
+480
+00:16:53,759 --> 00:16:55,759
+workstations and laptops were actually
+
+481
+00:16:55,759 --> 00:16:56,240
+not
+
+482
+00:16:56,240 --> 00:16:59,040
+not really existed yet uh today probably
+
+483
+00:16:59,040 --> 00:17:00,800
+would be all kinds of laptops but again
+
+484
+00:17:00,800 --> 00:17:03,120
+so there's a workstation and somebody
+
+485
+00:17:03,120 --> 00:17:05,360
+like whatever reach a file
+
+486
+00:17:05,360 --> 00:17:07,839
+file f whatever you know the maybe the
+
+487
+00:17:07,839 --> 00:17:09,919
+grades database or the grades file
+
+488
+00:17:09,919 --> 00:17:11,760
+and so that you know basically that
+
+489
+00:17:11,760 --> 00:17:13,600
+means that that file actually is cached
+
+490
+00:17:13,600 --> 00:17:14,799
+you know inside of the
+
+491
+00:17:14,799 --> 00:17:17,520
+workstation and so the client you know
+
+492
+00:17:17,520 --> 00:17:18,000
+whatever
+
+493
+00:17:18,000 --> 00:17:20,160
+program running you know vi you know
+
+494
+00:17:20,160 --> 00:17:22,240
+gonna update and manipulate
+
+495
+00:17:22,240 --> 00:17:24,319
+the file and then you know sometimes
+
+496
+00:17:24,319 --> 00:17:25,760
+later the result will be written back
+
+497
+00:17:25,760 --> 00:17:26,559
+you know to
+
+498
+00:17:26,559 --> 00:17:29,679
+pedal the the the disk if you will
+
+499
+00:17:29,679 --> 00:17:32,080
+and so the challenges that are basically
+
+500
+00:17:32,080 --> 00:17:33,919
+around this module are free fault
+
+501
+00:17:33,919 --> 00:17:37,200
+uh one uh somebody else on workstation
+
+502
+00:17:37,200 --> 00:17:38,640
+two
+
+503
+00:17:38,640 --> 00:17:41,679
+maybe at some point do a cat event
+
+504
+00:17:41,679 --> 00:17:44,080
+you know get it to file f and of course
+
+505
+00:17:44,080 --> 00:17:45,440
+you know that should be the case that
+
+506
+00:17:45,440 --> 00:17:46,240
+you know
+
+507
+00:17:46,240 --> 00:17:48,240
+at least like we normally expect if we
+
+508
+00:17:48,240 --> 00:17:50,320
+have a traditional unix file system
+
+509
+00:17:50,320 --> 00:17:52,000
+that you know you will see the last
+
+510
+00:17:52,000 --> 00:17:53,679
+write you know to that particular f
+
+511
+00:17:53,679 --> 00:17:55,120
+so even though the right might have
+
+512
+00:17:55,120 --> 00:17:56,799
+happened at a different workstation
+
+513
+00:17:56,799 --> 00:17:58,960
+uh when the second workstation reads the
+
+514
+00:17:58,960 --> 00:18:00,320
+file
+
+515
+00:18:00,320 --> 00:18:02,799
+we would like to see that uh data show
+
+516
+00:18:02,799 --> 00:18:04,400
+up and this is what they you know
+
+517
+00:18:04,400 --> 00:18:06,799
+we're going to be roughly this broadly
+
+518
+00:18:06,799 --> 00:18:10,710
+comes to cash coherence
+
+519
+00:18:10,720 --> 00:18:13,440
+and other word synonyms for coherence or
+
+520
+00:18:13,440 --> 00:18:14,880
+cash consistency
+
+521
+00:18:14,880 --> 00:18:16,320
+uh which is like the term that we have
+
+522
+00:18:16,320 --> 00:18:18,160
+been seeing more uh
+
+523
+00:18:18,160 --> 00:18:20,400
+in the previous papers uh but in the
+
+524
+00:18:20,400 --> 00:18:22,320
+sort of out of the computer architecture
+
+525
+00:18:22,320 --> 00:18:24,160
+world actually the the term coherence
+
+526
+00:18:24,160 --> 00:18:26,080
+comes
+
+527
+00:18:26,080 --> 00:18:29,039
+comes from that world and so you can
+
+528
+00:18:29,039 --> 00:18:30,000
+think about them as
+
+529
+00:18:30,000 --> 00:18:33,039
+synonyms uh
+
+530
+00:18:33,039 --> 00:18:35,840
+two the second problem that you know you
+
+531
+00:18:35,840 --> 00:18:36,799
+uh
+
+532
+00:18:36,799 --> 00:18:38,480
+that's going to occur and we need to
+
+533
+00:18:38,480 --> 00:18:40,160
+deal with is that let's say that
+
+534
+00:18:40,160 --> 00:18:42,720
+workstation one
+
+535
+00:18:42,720 --> 00:18:45,200
+and workstation 2 both want to create a
+
+536
+00:18:45,200 --> 00:18:46,720
+file in particular in the shared
+
+537
+00:18:46,720 --> 00:18:47,840
+directory so like
+
+538
+00:18:47,840 --> 00:18:50,880
+here the workstation 1 creates a file
+
+539
+00:18:50,880 --> 00:18:53,760
+f in the directory d and workstation 2
+
+540
+00:18:53,760 --> 00:18:55,679
+also creates a file say g
+
+541
+00:18:55,679 --> 00:18:59,120
+in directory d and we want to
+
+542
+00:18:59,120 --> 00:19:00,400
+arrange it at least that like if
+
+543
+00:19:00,400 --> 00:19:02,240
+workstation one makes the changes and
+
+544
+00:19:02,240 --> 00:19:04,160
+then workstation two makes the changes
+
+545
+00:19:04,160 --> 00:19:06,000
+that like both files appear and that
+
+546
+00:19:06,000 --> 00:19:08,000
+like one file doesn't overwrite
+
+547
+00:19:08,000 --> 00:19:11,280
+uh say the directory uh of the other
+
+548
+00:19:11,280 --> 00:19:13,280
+uh or basically overwrites the directory
+
+549
+00:19:13,280 --> 00:19:14,799
+in a way that actually the other files
+
+550
+00:19:14,799 --> 00:19:16,240
+would disappear
+
+551
+00:19:16,240 --> 00:19:18,080
+so this has to so the second topic here
+
+552
+00:19:18,080 --> 00:19:22,870
+really is automatically
+
+553
+00:19:22,880 --> 00:19:25,120
+the operations of creating a file really
+
+554
+00:19:25,120 --> 00:19:26,000
+has to be
+
+555
+00:19:26,000 --> 00:19:27,679
+it has to be sort of an atomic operation
+
+556
+00:19:27,679 --> 00:19:29,120
+so that they don't get interleaved and
+
+557
+00:19:29,120 --> 00:19:29,840
+then we get
+
+558
+00:19:29,840 --> 00:19:33,840
+wrong results and then the final problem
+
+559
+00:19:33,840 --> 00:19:36,880
+uh that we need to deal with is that uh
+
+560
+00:19:36,880 --> 00:19:40,400
+you know workstation one you know might
+
+561
+00:19:40,400 --> 00:19:41,360
+crash
+
+562
+00:19:41,360 --> 00:19:43,840
+while doing one of these complex file
+
+563
+00:19:43,840 --> 00:19:49,990
+system operations
+
+564
+00:19:50,000 --> 00:19:51,919
+and so there has to be story you know
+
+565
+00:19:51,919 --> 00:19:55,039
+how actually the file system recovers
+
+566
+00:19:55,039 --> 00:19:56,720
+and so this is really a story about
+
+567
+00:19:56,720 --> 00:20:01,750
+crash recovery
+
+568
+00:20:01,760 --> 00:20:03,520
+so for example like in this first case
+
+569
+00:20:03,520 --> 00:20:06,000
+where like a workstation makes a file in
+
+570
+00:20:06,000 --> 00:20:07,200
+the directory d
+
+571
+00:20:07,200 --> 00:20:08,320
+you know there's actually a complex
+
+572
+00:20:08,320 --> 00:20:09,919
+operation you know the directory needs
+
+573
+00:20:09,919 --> 00:20:10,799
+to be modified
+
+574
+00:20:10,799 --> 00:20:12,480
+an inode needs to be allocated and i
+
+575
+00:20:12,480 --> 00:20:14,240
+don't need to be initialized
+
+576
+00:20:14,240 --> 00:20:15,679
+uh and then the i know number needs to
+
+577
+00:20:15,679 --> 00:20:17,440
+be written into the directory so there's
+
+578
+00:20:17,440 --> 00:20:19,039
+multiple sort of file system operation
+
+579
+00:20:19,039 --> 00:20:20,480
+involved in it and we wanted to be the
+
+580
+00:20:20,480 --> 00:20:21,840
+case that you know if the file system
+
+581
+00:20:21,840 --> 00:20:22,720
+crashes between
+
+582
+00:20:22,720 --> 00:20:25,520
+any of these uh steps in this sort of
+
+583
+00:20:25,520 --> 00:20:27,039
+complex file system operation
+
+584
+00:20:27,039 --> 00:20:28,320
+it better be the case that the file
+
+585
+00:20:28,320 --> 00:20:30,559
+system recovers correctly and what we
+
+586
+00:20:30,559 --> 00:20:31,600
+mean we file something recovered
+
+587
+00:20:31,600 --> 00:20:33,039
+correctly at least that it's internal
+
+588
+00:20:33,039 --> 00:20:34,559
+data structures are correct
+
+589
+00:20:34,559 --> 00:20:36,159
+and so for example that the inode is not
+
+590
+00:20:36,159 --> 00:20:37,600
+lost because it doesn't show up in the
+
+591
+00:20:37,600 --> 00:20:38,799
+directory
+
+592
+00:20:38,799 --> 00:20:40,400
+et cetera et cetera or like even that
+
+593
+00:20:40,400 --> 00:20:42,000
+the whole so the internal structures are
+
+594
+00:20:42,000 --> 00:20:43,440
+consistent
+
+595
+00:20:43,440 --> 00:20:44,640
+and so this is the topic of crash
+
+596
+00:20:44,640 --> 00:20:47,120
+recovery and so panel basically
+
+597
+00:20:47,120 --> 00:20:48,880
+we're at front upon he needs to address
+
+598
+00:20:48,880 --> 00:20:51,280
+you know all these uh three problems and
+
+599
+00:20:51,280 --> 00:20:54,799
+uh my plan is just go uh walk through
+
+600
+00:20:54,799 --> 00:20:55,200
+them
+
+601
+00:20:55,200 --> 00:20:57,440
+uh one by one and uh discuss how
+
+602
+00:20:57,440 --> 00:20:58,320
+francipani
+
+603
+00:20:58,320 --> 00:21:01,280
+addresses them any questions about the
+
+604
+00:21:01,280 --> 00:21:02,000
+top level
+
+605
+00:21:02,000 --> 00:21:09,669
+challenges
+
+606
+00:21:09,679 --> 00:21:12,480
+okay let's you know proceed so the first
+
+607
+00:21:12,480 --> 00:21:14,080
+thing is cash adherence
+
+608
+00:21:14,080 --> 00:21:27,669
+for cash consistency
+
+609
+00:21:27,679 --> 00:21:30,880
+and so the
+
+610
+00:21:30,880 --> 00:21:34,880
+key you know aspect in the solution that
+
+611
+00:21:34,880 --> 00:21:36,640
+francophone uses is that actually is a
+
+612
+00:21:36,640 --> 00:21:38,559
+lock server somewhere
+
+613
+00:21:38,559 --> 00:21:44,080
+and so and the lock server
+
+614
+00:21:44,080 --> 00:21:47,120
+basically has a table and for
+
+615
+00:21:47,120 --> 00:21:49,520
+uh every file and actually it's an inode
+
+616
+00:21:49,520 --> 00:21:51,919
+number but for every file
+
+617
+00:21:51,919 --> 00:21:54,480
+who has to walk at this particular point
+
+618
+00:21:54,480 --> 00:21:58,000
+of time so who's the owner
+
+619
+00:21:58,000 --> 00:21:59,679
+so we might have a file f and it
+
+620
+00:21:59,679 --> 00:22:01,440
+basically says you know it works and for
+
+621
+00:22:01,440 --> 00:22:02,400
+which
+
+622
+00:22:02,400 --> 00:22:03,919
+the lock server has a record that the
+
+623
+00:22:03,919 --> 00:22:05,760
+workstation one owns that particular
+
+624
+00:22:05,760 --> 00:22:09,760
+lock um and the lock server itself
+
+625
+00:22:09,760 --> 00:22:13,600
+is a distributed uh service and
+
+626
+00:22:13,600 --> 00:22:14,799
+you can almost think about it that are
+
+627
+00:22:14,799 --> 00:22:16,799
+sort of almost like zookeeper uh you
+
+628
+00:22:16,799 --> 00:22:18,000
+know it is a
+
+629
+00:22:18,000 --> 00:22:20,080
+uh it provides an acquiring releasing of
+
+630
+00:22:20,080 --> 00:22:21,360
+logs uh
+
+631
+00:22:21,360 --> 00:22:24,240
+it's fault tolerant uh in the case of uh
+
+632
+00:22:24,240 --> 00:22:26,720
+franciupani they do some taxes
+
+633
+00:22:26,720 --> 00:22:29,600
+based implementation uh but is spread
+
+634
+00:22:29,600 --> 00:22:31,280
+over across multiple machines
+
+635
+00:22:31,280 --> 00:22:34,320
+uh highly fault tolerant uh et cetera et
+
+636
+00:22:34,320 --> 00:22:36,320
+cetera
+
+637
+00:22:36,320 --> 00:22:39,600
+so that's the the the
+
+638
+00:22:39,600 --> 00:22:41,760
+lock server the turns out that the
+
+639
+00:22:41,760 --> 00:22:42,960
+workstation sort of also
+
+640
+00:22:42,960 --> 00:22:46,000
+keep a table for
+
+641
+00:22:46,000 --> 00:22:49,120
+their locks so here's workstation one
+
+642
+00:22:49,120 --> 00:22:50,880
+and you know there might be you know
+
+643
+00:22:50,880 --> 00:22:52,240
+let's say workstation one
+
+644
+00:22:52,240 --> 00:22:55,760
+cache is filed f and g
+
+645
+00:22:55,760 --> 00:22:57,280
+you know maybe h is cached by
+
+646
+00:22:57,280 --> 00:22:59,440
+workstation uh looks workstation one
+
+647
+00:22:59,440 --> 00:22:59,840
+where
+
+648
+00:22:59,840 --> 00:23:03,360
+h is maybe cached by workstation two uh
+
+649
+00:23:03,360 --> 00:23:05,280
+and then you know workstation one has a
+
+650
+00:23:05,280 --> 00:23:06,400
+similar table
+
+651
+00:23:06,400 --> 00:23:09,120
+and that list for where every file for
+
+652
+00:23:09,120 --> 00:23:10,880
+every lock that it holds
+
+653
+00:23:10,880 --> 00:23:14,240
+where it's either busy or idle
+
+654
+00:23:14,240 --> 00:23:17,840
+so like maybe f you know the lock status
+
+655
+00:23:17,840 --> 00:23:18,559
+is busy
+
+656
+00:23:18,559 --> 00:23:20,240
+and that really means that actually the
+
+657
+00:23:20,240 --> 00:23:21,919
+file server is just operating on that
+
+658
+00:23:21,919 --> 00:23:22,320
+file
+
+659
+00:23:22,320 --> 00:23:26,080
+so it's actively using that file and
+
+660
+00:23:26,080 --> 00:23:28,240
+there's a second state namely let's say
+
+661
+00:23:28,240 --> 00:23:30,080
+we have file g there's also cache there
+
+662
+00:23:30,080 --> 00:23:32,400
+and maybe g is actually in the state but
+
+663
+00:23:32,400 --> 00:23:33,760
+there's a call idle
+
+664
+00:23:33,760 --> 00:23:35,919
+and that means actually the g at that
+
+665
+00:23:35,919 --> 00:23:38,880
+point is not being modified
+
+666
+00:23:38,880 --> 00:23:41,679
+or not being worked on uh by the file so
+
+667
+00:23:41,679 --> 00:23:43,360
+for that particular instant time
+
+668
+00:23:43,360 --> 00:23:44,960
+uh but it's basically you know what they
+
+669
+00:23:44,960 --> 00:23:47,440
+call a sticky lock
+
+670
+00:23:47,440 --> 00:23:49,760
+so that if you know the file server at
+
+671
+00:23:49,760 --> 00:23:51,279
+some point soon you know it's going to
+
+672
+00:23:51,279 --> 00:23:51,919
+use
+
+673
+00:23:51,919 --> 00:23:54,000
+g again it can actually do so without
+
+674
+00:23:54,000 --> 00:23:55,120
+actually having to communicate with
+
+675
+00:23:55,120 --> 00:23:55,760
+pedal
+
+676
+00:23:55,760 --> 00:23:57,840
+or reload its cache or anything like
+
+677
+00:23:57,840 --> 00:24:00,000
+that at all because it has a sticky lock
+
+678
+00:24:00,000 --> 00:24:01,840
+it knows that nobody else actually has
+
+679
+00:24:01,840 --> 00:24:03,279
+acquired no other workstation has
+
+680
+00:24:03,279 --> 00:24:06,320
+required to walk in the meantime
+
+681
+00:24:06,320 --> 00:24:09,360
+so that's the sticky lock and it turns
+
+682
+00:24:09,360 --> 00:24:10,000
+out that
+
+683
+00:24:10,000 --> 00:24:13,840
+the the the the uh you know these are
+
+684
+00:24:13,840 --> 00:24:15,600
+the two building blocks that are then
+
+685
+00:24:15,600 --> 00:24:17,440
+being used to what they call
+
+686
+00:24:17,440 --> 00:24:20,559
+what's what is called a cash coherence
+
+687
+00:24:20,559 --> 00:24:21,360
+protocol and
+
+688
+00:24:21,360 --> 00:24:23,279
+a set of messages or a set of rules that
+
+689
+00:24:23,279 --> 00:24:25,279
+are being followed to actually uh get
+
+690
+00:24:25,279 --> 00:24:26,880
+cash consistency
+
+691
+00:24:26,880 --> 00:24:30,080
+and the basic rule is that uh you know
+
+692
+00:24:30,080 --> 00:24:30,640
+the
+
+693
+00:24:30,640 --> 00:24:38,950
+guiding rule is you know to cache a file
+
+694
+00:24:38,960 --> 00:24:43,430
+your first must acquire the lock
+
+695
+00:24:43,440 --> 00:24:45,440
+and we'll see that that should is sort
+
+696
+00:24:45,440 --> 00:24:47,360
+of the stepping stone for actually
+
+697
+00:24:47,360 --> 00:24:48,080
+getting
+
+698
+00:24:48,080 --> 00:24:52,080
+uh consistency or cash coherence
+
+699
+00:24:52,080 --> 00:24:53,600
+is i'm going to make a smaller
+
+700
+00:24:53,600 --> 00:24:55,679
+simplification uh
+
+701
+00:24:55,679 --> 00:24:57,039
+in the paper they described their
+
+702
+00:24:57,039 --> 00:24:59,440
+unlocks basically being exclusive or
+
+703
+00:24:59,440 --> 00:25:01,279
+read the writer locks i'm just going to
+
+704
+00:25:01,279 --> 00:25:03,039
+assume for the rest of the lecture that
+
+705
+00:25:03,039 --> 00:25:04,080
+they're exclusive it doesn't really
+
+706
+00:25:04,080 --> 00:25:04,799
+matter but
+
+707
+00:25:04,799 --> 00:25:06,159
+there's an optimization that basically
+
+708
+00:25:06,159 --> 00:25:08,559
+multiple workstations can have a file
+
+709
+00:25:08,559 --> 00:25:09,279
+cached
+
+710
+00:25:09,279 --> 00:25:12,470
+in read-only mode
+
+711
+00:25:12,480 --> 00:25:14,480
+okay so with that let me talk a little
+
+712
+00:25:14,480 --> 00:25:15,840
+bit about you know the
+
+713
+00:25:15,840 --> 00:25:19,590
+let's catch out the protocol
+
+714
+00:25:19,600 --> 00:25:22,640
+that francophone uses uh
+
+715
+00:25:22,640 --> 00:25:24,960
+and again you know cash coherence or
+
+716
+00:25:24,960 --> 00:25:26,840
+cash consistency
+
+717
+00:25:26,840 --> 00:25:29,919
+uh the goal actually for even though the
+
+718
+00:25:29,919 --> 00:25:31,679
+file system is distributed
+
+719
+00:25:31,679 --> 00:25:33,760
+it should behave like a single file
+
+720
+00:25:33,760 --> 00:25:35,279
+system so if you only have one file
+
+721
+00:25:35,279 --> 00:25:36,559
+server you know you want
+
+722
+00:25:36,559 --> 00:25:38,799
+basically that the same results will be
+
+723
+00:25:38,799 --> 00:25:40,960
+returned by the distributed file system
+
+724
+00:25:40,960 --> 00:25:42,159
+so you can't tell the difference whether
+
+725
+00:25:42,159 --> 00:25:44,240
+it's distributed or not um
+
+726
+00:25:44,240 --> 00:25:46,080
+and so this is actually reminding you of
+
+727
+00:25:46,080 --> 00:25:48,880
+like linearizability so in fact you know
+
+728
+00:25:48,880 --> 00:25:52,240
+i believe actually what the frontier
+
+729
+00:25:52,240 --> 00:25:54,240
+shoots for is actually linearizable file
+
+730
+00:25:54,240 --> 00:25:56,240
+system operations
+
+731
+00:25:56,240 --> 00:26:00,630
+okay so we've got the lock server
+
+732
+00:26:00,640 --> 00:26:04,149
+uh we've got workstation one
+
+733
+00:26:04,159 --> 00:26:07,510
+and there's workstation two
+
+734
+00:26:07,520 --> 00:26:09,840
+and uh there's sort of four messages
+
+735
+00:26:09,840 --> 00:26:11,919
+that are important here there's a namely
+
+736
+00:26:11,919 --> 00:26:13,360
+requesting a lock
+
+737
+00:26:13,360 --> 00:26:16,559
+uh granting a lock and revoking a lock
+
+738
+00:26:16,559 --> 00:26:18,320
+and actually releasing the lock so those
+
+739
+00:26:18,320 --> 00:26:20,000
+are the four messages that fly
+
+740
+00:26:20,000 --> 00:26:21,919
+between back and forth between
+
+741
+00:26:21,919 --> 00:26:23,600
+workstations and lock server and lock
+
+742
+00:26:23,600 --> 00:26:24,080
+server
+
+743
+00:26:24,080 --> 00:26:26,799
+and other workstations so let's uh look
+
+744
+00:26:26,799 --> 00:26:29,760
+at this let's say the lock server has
+
+745
+00:26:29,760 --> 00:26:31,760
+nobody has any locks at any time so
+
+746
+00:26:31,760 --> 00:26:33,840
+let's draw some timelines
+
+747
+00:26:33,840 --> 00:26:38,080
+and workstation in one wants to request
+
+748
+00:26:38,080 --> 00:26:41,360
+once they read write uh file f you know
+
+749
+00:26:41,360 --> 00:26:43,039
+basically send some requests for the
+
+750
+00:26:43,039 --> 00:26:44,720
+lock you know to the lock server for
+
+751
+00:26:44,720 --> 00:26:46,000
+file f
+
+752
+00:26:46,000 --> 00:26:48,720
+so the workstation but can't do anything
+
+753
+00:26:48,720 --> 00:26:50,080
+really at this point yet
+
+754
+00:26:50,080 --> 00:26:51,919
+uh the lock server node checks you know
+
+755
+00:26:51,919 --> 00:26:54,400
+if it's table and sees that f actually
+
+756
+00:26:54,400 --> 00:26:54,720
+is
+
+757
+00:26:54,720 --> 00:26:56,400
+not used by anybody at all it's gonna
+
+758
+00:26:56,400 --> 00:26:57,840
+list workstation one
+
+759
+00:26:57,840 --> 00:27:00,000
+as the lock owner and sends basically
+
+760
+00:27:00,000 --> 00:27:03,669
+message backs and granting
+
+761
+00:27:03,679 --> 00:27:07,200
+the lock for f so at this point
+
+762
+00:27:07,200 --> 00:27:09,679
+your workstation one exquired to walk
+
+763
+00:27:09,679 --> 00:27:10,240
+for f
+
+764
+00:27:10,240 --> 00:27:11,840
+now it can actually read and write where
+
+765
+00:27:11,840 --> 00:27:13,200
+now we can actually read you know the
+
+766
+00:27:13,200 --> 00:27:19,350
+file from pedal
+
+767
+00:27:19,360 --> 00:27:20,799
+and actually you can make modifications
+
+768
+00:27:20,799 --> 00:27:22,559
+to it too and all those specifications
+
+769
+00:27:22,559 --> 00:27:23,200
+just
+
+770
+00:27:23,200 --> 00:27:24,720
+stay local you know nothing really
+
+771
+00:27:24,720 --> 00:27:26,399
+happens it's a right uh
+
+772
+00:27:26,399 --> 00:27:28,559
+that cache not a right through cache and
+
+773
+00:27:28,559 --> 00:27:30,640
+so it just stays happily on the
+
+774
+00:27:30,640 --> 00:27:33,200
+on the client side uh in fact the
+
+775
+00:27:33,200 --> 00:27:34,720
+workspace you can even
+
+776
+00:27:34,720 --> 00:27:36,559
+release the lock you know here and
+
+777
+00:27:36,559 --> 00:27:42,230
+basically you know go from bc to idle
+
+778
+00:27:42,240 --> 00:27:44,559
+and so if it actually uh would need to
+
+779
+00:27:44,559 --> 00:27:45,919
+lock again for example once the right
+
+780
+00:27:45,919 --> 00:27:47,360
+after reading right half again you know
+
+781
+00:27:47,360 --> 00:27:47,840
+you can
+
+782
+00:27:47,840 --> 00:27:49,360
+actually do the completely local without
+
+783
+00:27:49,360 --> 00:27:52,240
+any interaction with the log server
+
+784
+00:27:52,240 --> 00:27:54,000
+but there's a slight simplification here
+
+785
+00:27:54,000 --> 00:27:55,200
+you know there's as we'll see in a
+
+786
+00:27:55,200 --> 00:27:55,600
+second
+
+787
+00:27:55,600 --> 00:27:57,679
+that the unlock has a lease associated
+
+788
+00:27:57,679 --> 00:27:59,039
+with it so the client at least has to
+
+789
+00:27:59,039 --> 00:28:00,640
+refresh the disk periodically
+
+790
+00:28:00,640 --> 00:28:02,159
+but it doesn't have to re-write or
+
+791
+00:28:02,159 --> 00:28:04,399
+re-re-read you know the file f
+
+792
+00:28:04,399 --> 00:28:06,880
+from actually paddle if the leads hasn't
+
+793
+00:28:06,880 --> 00:28:08,880
+expired
+
+794
+00:28:08,880 --> 00:28:10,480
+okay so so the instant case of course
+
+795
+00:28:10,480 --> 00:28:11,679
+happens like you know what if
+
+796
+00:28:11,679 --> 00:28:13,200
+workstation 2
+
+797
+00:28:13,200 --> 00:28:16,399
+wants to read the file f right so
+
+798
+00:28:16,399 --> 00:28:17,440
+you know what will happen let's say
+
+799
+00:28:17,440 --> 00:28:18,720
+workstation two wants to read and
+
+800
+00:28:18,720 --> 00:28:20,000
+basically it will do the same thing it
+
+801
+00:28:20,000 --> 00:28:20,399
+will
+
+802
+00:28:20,399 --> 00:28:22,799
+send an uh an acquire or a request
+
+803
+00:28:22,799 --> 00:28:23,760
+message sorry
+
+804
+00:28:23,760 --> 00:28:26,320
+request message to lock server saying i
+
+805
+00:28:26,320 --> 00:28:27,600
+want f
+
+806
+00:28:27,600 --> 00:28:29,360
+and the way it then works is that the
+
+807
+00:28:29,360 --> 00:28:30,960
+log server actually
+
+808
+00:28:30,960 --> 00:28:32,799
+looks at this table sees that f is
+
+809
+00:28:32,799 --> 00:28:34,399
+actually owned by
+
+810
+00:28:34,399 --> 00:28:36,240
+workstation one and then we'll send a
+
+811
+00:28:36,240 --> 00:28:37,840
+revoked message
+
+812
+00:28:37,840 --> 00:28:40,880
+to workstation one asking
+
+813
+00:28:40,880 --> 00:28:44,399
+the lock back so that will revoke f
+
+814
+00:28:44,399 --> 00:28:47,360
+and at this point uh pedal alex has to
+
+815
+00:28:47,360 --> 00:28:48,640
+do a little bit of
+
+816
+00:28:48,640 --> 00:28:49,919
+front defining actually has a little bit
+
+817
+00:28:49,919 --> 00:28:51,840
+of work uh because then we have to make
+
+818
+00:28:51,840 --> 00:28:53,840
+sure that workstation two observes the
+
+819
+00:28:53,840 --> 00:28:54,559
+rights
+
+820
+00:28:54,559 --> 00:28:56,480
+that workstation one is done and so the
+
+821
+00:28:56,480 --> 00:28:58,159
+way that is done is that basically this
+
+822
+00:28:58,159 --> 00:29:02,000
+instance of time uh
+
+823
+00:29:02,000 --> 00:29:03,840
+the workstation one writes actually f
+
+824
+00:29:03,840 --> 00:29:05,919
+you know to pedal
+
+825
+00:29:05,919 --> 00:29:07,200
+and we'll see in a second that actually
+
+826
+00:29:07,200 --> 00:29:09,120
+writing f2 panel is actually a slightly
+
+827
+00:29:09,120 --> 00:29:10,320
+complicated operation it's more
+
+828
+00:29:10,320 --> 00:29:11,679
+sophisticated than i'm just making it
+
+829
+00:29:11,679 --> 00:29:12,399
+out to be
+
+830
+00:29:12,399 --> 00:29:13,679
+but just think about it like at this
+
+831
+00:29:13,679 --> 00:29:15,760
+point workstation one is basically
+
+832
+00:29:15,760 --> 00:29:16,720
+flashing its state
+
+833
+00:29:16,720 --> 00:29:20,159
+related to f and a to pedal once that
+
+834
+00:29:20,159 --> 00:29:21,679
+actually is completed so like once
+
+835
+00:29:21,679 --> 00:29:23,360
+pedals are acknowledged that actually it
+
+836
+00:29:23,360 --> 00:29:25,120
+actually has received all the data
+
+837
+00:29:25,120 --> 00:29:26,880
+it actually sends a message back
+
+838
+00:29:26,880 --> 00:29:31,990
+releasing f
+
+839
+00:29:32,000 --> 00:29:33,679
+and you know once the lock server gets
+
+840
+00:29:33,679 --> 00:29:35,279
+the release of f you know that can
+
+841
+00:29:35,279 --> 00:29:35,919
+update
+
+842
+00:29:35,919 --> 00:29:37,440
+it's stable you know and allocate the
+
+843
+00:29:37,440 --> 00:29:39,600
+lock to workstation two
+
+844
+00:29:39,600 --> 00:29:42,960
+and sends you know a grant
+
+845
+00:29:42,960 --> 00:29:52,230
+for f to two oops
+
+846
+00:29:52,240 --> 00:29:54,880
+and at this point uh the workstation two
+
+847
+00:29:54,880 --> 00:29:55,919
+requires lock
+
+848
+00:29:55,919 --> 00:29:58,159
+and now it can actually read all the
+
+849
+00:29:58,159 --> 00:29:59,279
+information uh from
+
+850
+00:29:59,279 --> 00:30:01,600
+the file f and pedal at that point it is
+
+851
+00:30:01,600 --> 00:30:02,480
+guaranteed
+
+852
+00:30:02,480 --> 00:30:05,760
+that we'll see the latest changes to
+
+853
+00:30:05,760 --> 00:30:09,039
+uh the file f because the previous owner
+
+854
+00:30:09,039 --> 00:30:10,799
+must have flushed you know the state
+
+855
+00:30:10,799 --> 00:30:14,000
+you know to the um to pedal
+
+856
+00:30:14,000 --> 00:30:16,000
+uh before it actually released the lock
+
+857
+00:30:16,000 --> 00:30:17,520
+and gave it back to the walk server
+
+858
+00:30:17,520 --> 00:30:19,279
+and so workstation two is guaranteed to
+
+859
+00:30:19,279 --> 00:30:21,039
+actually observe those changes and so
+
+860
+00:30:21,039 --> 00:30:22,000
+here's where our strong
+
+861
+00:30:22,000 --> 00:30:23,919
+consistency comes in basically the
+
+862
+00:30:23,919 --> 00:30:25,360
+strong consistencies are tied
+
+863
+00:30:25,360 --> 00:30:29,669
+to the walk management
+
+864
+00:30:29,679 --> 00:30:34,870
+any questions about this
+
+865
+00:30:34,880 --> 00:30:41,110
+there's
+
+866
+00:30:41,120 --> 00:30:42,799
+okay one question in the chat let me
+
+867
+00:30:42,799 --> 00:30:44,720
+address the first uh would we need to
+
+868
+00:30:44,720 --> 00:30:46,559
+write to pedal when releasing both read
+
+869
+00:30:46,559 --> 00:30:47,520
+and write locks
+
+870
+00:30:47,520 --> 00:30:49,440
+why do we need to write to pedal when
+
+871
+00:30:49,440 --> 00:30:50,880
+releasing a read lock
+
+872
+00:30:50,880 --> 00:30:54,480
+uh let me let's ignore uh read write
+
+873
+00:30:54,480 --> 00:30:56,159
+the distinction between read and write
+
+874
+00:30:56,159 --> 00:30:58,640
+exclusive logs and read write logs
+
+875
+00:30:58,640 --> 00:31:01,679
+um and uh
+
+876
+00:31:01,679 --> 00:31:03,600
+and just focus on exclusive locks you
+
+877
+00:31:03,600 --> 00:31:05,200
+know the real the whole
+
+878
+00:31:05,200 --> 00:31:06,799
+reading is just a small app you know as
+
+879
+00:31:06,799 --> 00:31:08,640
+it happens an important optimization
+
+880
+00:31:08,640 --> 00:31:11,039
+uh but it doesn't really change the
+
+881
+00:31:11,039 --> 00:31:16,950
+designer system that dramatically
+
+882
+00:31:16,960 --> 00:31:20,000
+any other questions so this sort of
+
+883
+00:31:20,000 --> 00:31:20,559
+design
+
+884
+00:31:20,559 --> 00:31:22,640
+would be really inefficient if we have
+
+885
+00:31:22,640 --> 00:31:24,320
+like two different workstations that are
+
+886
+00:31:24,320 --> 00:31:26,240
+both modifying the same file
+
+887
+00:31:26,240 --> 00:31:28,640
+yeah you just get like cache bouncing
+
+888
+00:31:28,640 --> 00:31:29,519
+back and forth
+
+889
+00:31:29,519 --> 00:31:31,519
+yeah yeah you really if you're two box
+
+890
+00:31:31,519 --> 00:31:33,279
+stations or two different engineers at
+
+891
+00:31:33,279 --> 00:31:34,799
+dexter where you'd be banging on the
+
+892
+00:31:34,799 --> 00:31:35,919
+same file you know the
+
+893
+00:31:35,919 --> 00:31:39,039
+file would go back and forth uh
+
+894
+00:31:39,039 --> 00:31:41,200
+and and so this is not really suitable
+
+895
+00:31:41,200 --> 00:31:42,960
+so you can see here the influence of
+
+896
+00:31:42,960 --> 00:31:44,000
+like the
+
+897
+00:31:44,000 --> 00:31:46,240
+uh workload that they're designing for
+
+898
+00:31:46,240 --> 00:31:47,919
+uh you know their really assumption is
+
+899
+00:31:47,919 --> 00:31:48,720
+that basically
+
+900
+00:31:48,720 --> 00:31:50,159
+you know most engineers are working on
+
+901
+00:31:50,159 --> 00:31:52,240
+their private files and
+
+902
+00:31:52,240 --> 00:31:53,600
+you know once a while they'll share
+
+903
+00:31:53,600 --> 00:31:55,200
+files but they're probably not banging
+
+904
+00:31:55,200 --> 00:32:02,149
+on the same shared file
+
+905
+00:32:02,159 --> 00:32:04,000
+i mean you know we're not using git but
+
+906
+00:32:04,000 --> 00:32:05,200
+like you could imagine like if they have
+
+907
+00:32:05,200 --> 00:32:05,919
+a share of your
+
+908
+00:32:05,919 --> 00:32:07,679
+code repositories or you check out your
+
+909
+00:32:07,679 --> 00:32:09,760
+own copy of the code repository make all
+
+910
+00:32:09,760 --> 00:32:11,120
+the modifications and at some point you
+
+911
+00:32:11,120 --> 00:32:14,720
+write it back
+
+912
+00:32:14,720 --> 00:32:16,559
+i'm sorry just to make sure you said you
+
+913
+00:32:16,559 --> 00:32:18,080
+can release the lock
+
+914
+00:32:18,080 --> 00:32:20,559
+um while you still have the file in the
+
+915
+00:32:20,559 --> 00:32:23,509
+cash right
+
+916
+00:32:23,519 --> 00:32:26,720
+you can uh okay so
+
+917
+00:32:26,720 --> 00:32:28,240
+be very careful with what i meant with
+
+918
+00:32:28,240 --> 00:32:29,919
+releasing the lock there is not
+
+919
+00:32:29,919 --> 00:32:31,919
+releasing it to the lock server
+
+920
+00:32:31,919 --> 00:32:33,840
+but locally you know changing the status
+
+921
+00:32:33,840 --> 00:32:36,870
+from busy to idle
+
+922
+00:32:36,880 --> 00:32:38,880
+and since you know the lock is sticky
+
+923
+00:32:38,880 --> 00:32:40,320
+you know it still sits at workstation
+
+924
+00:32:40,320 --> 00:32:42,159
+one and the lock server are still things
+
+925
+00:32:42,159 --> 00:32:48,549
+actually workstation one has to walk
+
+926
+00:32:48,559 --> 00:32:51,679
+is that answering your question yeah
+
+927
+00:32:51,679 --> 00:32:56,559
+yeah thank you so what happens um
+
+928
+00:32:56,559 --> 00:32:59,600
+if the request from uh two comes
+
+929
+00:32:59,600 --> 00:33:02,320
+a while it's busy yeah that's a good
+
+930
+00:33:02,320 --> 00:33:02,720
+question
+
+931
+00:33:02,720 --> 00:33:10,240
+what do you think that happens does it
+
+932
+00:33:10,240 --> 00:33:12,080
+just reject it
+
+933
+00:33:12,080 --> 00:33:13,760
+no that's i think it doesn't reject it
+
+934
+00:33:13,760 --> 00:33:15,840
+but just waits it waits until
+
+935
+00:33:15,840 --> 00:33:18,559
+uh workstation one is done you know
+
+936
+00:33:18,559 --> 00:33:20,000
+modifying the file after
+
+937
+00:33:20,000 --> 00:33:22,320
+executing its file system operation and
+
+938
+00:33:22,320 --> 00:33:23,039
+then
+
+939
+00:33:23,039 --> 00:33:26,320
+uh the franchise code will release
+
+940
+00:33:26,320 --> 00:33:28,799
+locally the lock we'll see that someone
+
+941
+00:33:28,799 --> 00:33:30,080
+is waiting for it
+
+942
+00:33:30,080 --> 00:33:32,720
+and so doesn't change it into uh busy
+
+943
+00:33:32,720 --> 00:33:34,080
+but actually starts flushing all the
+
+944
+00:33:34,080 --> 00:33:35,039
+operations to
+
+945
+00:33:35,039 --> 00:33:38,320
+pedal and then releases the lock
+
+946
+00:33:38,320 --> 00:33:40,000
+so this comes actually nicely to the
+
+947
+00:33:40,000 --> 00:33:41,600
+second point uh which is this
+
+948
+00:33:41,600 --> 00:33:43,120
+automatically points and so maybe that
+
+949
+00:33:43,120 --> 00:33:45,279
+will make it more clear
+
+950
+00:33:45,279 --> 00:33:46,799
+let me talk a little bit about the misid
+
+951
+00:33:46,799 --> 00:33:48,399
+because it also uses
+
+952
+00:33:48,399 --> 00:33:51,600
+the same locks to actually achieve
+
+953
+00:33:51,600 --> 00:33:56,870
+atomic optic file system operations
+
+954
+00:33:56,880 --> 00:34:02,389
+so using locks
+
+955
+00:34:02,399 --> 00:34:06,159
+so when for example you do a create
+
+956
+00:34:06,159 --> 00:34:08,079
+operation like you execute the create
+
+957
+00:34:08,079 --> 00:34:09,760
+file system operation
+
+958
+00:34:09,760 --> 00:34:13,280
+or whatever create f you know whatever
+
+959
+00:34:13,280 --> 00:34:15,200
+the usual arguments
+
+960
+00:34:15,200 --> 00:34:16,879
+that there's of course internally even
+
+961
+00:34:16,879 --> 00:34:18,639
+though the application makes this create
+
+962
+00:34:18,639 --> 00:34:19,919
+file system called this internally
+
+963
+00:34:19,919 --> 00:34:21,599
+actually has multiple
+
+964
+00:34:21,599 --> 00:34:24,000
+uh file system modifications you know
+
+965
+00:34:24,000 --> 00:34:25,280
+for example you know the
+
+966
+00:34:25,280 --> 00:34:27,359
+directory needs to be modified actually
+
+967
+00:34:27,359 --> 00:34:28,879
+let me do it in a slightly different
+
+968
+00:34:28,879 --> 00:34:29,520
+order
+
+969
+00:34:29,520 --> 00:34:31,919
+we need to allocate an inode you know
+
+970
+00:34:31,919 --> 00:34:34,159
+for f
+
+971
+00:34:34,159 --> 00:34:37,280
+we need to initialize that inode
+
+972
+00:34:37,280 --> 00:34:40,560
+write the i node and then you know
+
+973
+00:34:40,560 --> 00:34:43,990
+update the directory
+
+974
+00:34:44,000 --> 00:34:47,200
+update the directory to add an entry
+
+975
+00:34:47,200 --> 00:34:48,079
+basically for
+
+976
+00:34:48,079 --> 00:34:50,560
+you know the tuple f and whatever inode
+
+977
+00:34:50,560 --> 00:34:51,599
+number
+
+978
+00:34:51,599 --> 00:34:54,560
+was allocated for f so there's a typical
+
+979
+00:34:54,560 --> 00:34:56,159
+way in which a unix file system
+
+980
+00:34:56,159 --> 00:34:58,240
+implements files and so we need the
+
+981
+00:34:58,240 --> 00:35:00,000
+range that these operations uh
+
+982
+00:35:00,000 --> 00:35:03,040
+happen atomically because we don't want
+
+983
+00:35:03,040 --> 00:35:04,560
+to sort of intermediate results be
+
+984
+00:35:04,560 --> 00:35:05,520
+visible to other
+
+985
+00:35:05,520 --> 00:35:07,440
+workstations and the way that happens is
+
+986
+00:35:07,440 --> 00:35:09,760
+using you know by acquiring those locks
+
+987
+00:35:09,760 --> 00:35:13,670
+we acquire the lock
+
+988
+00:35:13,680 --> 00:35:15,520
+for this particular inode you know for
+
+989
+00:35:15,520 --> 00:35:17,760
+example it was i know 10. so you require
+
+990
+00:35:17,760 --> 00:35:19,200
+a lot for f i'm just going to
+
+991
+00:35:19,200 --> 00:35:23,119
+use f as the lock thing but yeah
+
+992
+00:35:23,119 --> 00:35:24,160
+it's going to be an inaudible number and
+
+993
+00:35:24,160 --> 00:35:26,320
+then at some point it releases
+
+994
+00:35:26,320 --> 00:35:27,760
+the file system at the implantation
+
+995
+00:35:27,760 --> 00:35:30,240
+itself releases the lock
+
+996
+00:35:30,240 --> 00:35:32,480
+and again this releases a local release
+
+997
+00:35:32,480 --> 00:35:34,000
+operation it doesn't really
+
+998
+00:35:34,000 --> 00:35:37,040
+mean immediately uh releasing it back to
+
+999
+00:35:37,040 --> 00:35:38,320
+the lock server just
+
+1000
+00:35:38,320 --> 00:35:42,079
+changing the status from bc to idle
+
+1001
+00:35:42,079 --> 00:35:45,040
+and so so if at any particular point in
+
+1002
+00:35:45,040 --> 00:35:45,599
+time
+
+1003
+00:35:45,599 --> 00:35:47,200
+as we just ask you know there's a
+
+1004
+00:35:47,200 --> 00:35:49,040
+request coming in for
+
+1005
+00:35:49,040 --> 00:35:56,390
+uh you know revoke the lock
+
+1006
+00:35:56,400 --> 00:35:59,119
+f that request is not actually being
+
+1007
+00:35:59,119 --> 00:35:59,920
+served
+
+1008
+00:35:59,920 --> 00:36:02,240
+until the file system the local front
+
+1009
+00:36:02,240 --> 00:36:05,359
+sympathy file system and workstation one
+
+1010
+00:36:05,359 --> 00:36:08,240
+has calls the local release operation
+
+1011
+00:36:08,240 --> 00:36:09,359
+and then it sees that
+
+1012
+00:36:09,359 --> 00:36:10,960
+when it does the local release operation
+
+1013
+00:36:10,960 --> 00:36:12,720
+it sees that there's a
+
+1014
+00:36:12,720 --> 00:36:15,680
+revoke waiting and so at this point it's
+
+1015
+00:36:15,680 --> 00:36:17,119
+going to flush
+
+1016
+00:36:17,119 --> 00:36:21,589
+you know its cache state
+
+1017
+00:36:21,599 --> 00:36:26,079
+this cache state to pedal
+
+1018
+00:36:26,079 --> 00:36:27,760
+and once it actually has from a floccid
+
+1019
+00:36:27,760 --> 00:36:29,440
+cache state to pedal uh
+
+1020
+00:36:29,440 --> 00:36:32,720
+it will uh grant basically the revoke or
+
+1021
+00:36:32,720 --> 00:36:35,040
+accept the revoke and send back a
+
+1022
+00:36:35,040 --> 00:36:36,640
+release to the lock server so that then
+
+1023
+00:36:36,640 --> 00:36:38,400
+the lock can you know be
+
+1024
+00:36:38,400 --> 00:36:43,270
+assigned you know to our workstation two
+
+1025
+00:36:43,280 --> 00:36:48,550
+does that make sense
+
+1026
+00:36:48,560 --> 00:36:51,040
+um so just to make sure so in this
+
+1027
+00:36:51,040 --> 00:36:52,960
+create operation here we have to modify
+
+1028
+00:36:52,960 --> 00:36:56,480
+the inode for so we have to modify the i
+
+1029
+00:36:56,480 --> 00:36:57,839
+node for f and the i node for the
+
+1030
+00:36:57,839 --> 00:36:59,200
+directory that contains fb
+
+1031
+00:36:59,200 --> 00:37:01,280
+because we have to update the references
+
+1032
+00:37:01,280 --> 00:37:04,160
+and so that means that
+
+1033
+00:37:04,160 --> 00:37:05,599
+like technically speaking we're actually
+
+1034
+00:37:05,599 --> 00:37:07,599
+holding two
+
+1035
+00:37:07,599 --> 00:37:09,680
+locks and we have to release both of
+
+1036
+00:37:09,680 --> 00:37:11,359
+them before we reply back to the revoked
+
+1037
+00:37:11,359 --> 00:37:12,079
+request
+
+1038
+00:37:12,079 --> 00:37:14,320
+yes absolutely so uh so again there's a
+
+1039
+00:37:14,320 --> 00:37:15,359
+whole section about this over in the
+
+1040
+00:37:15,359 --> 00:37:16,160
+paper and then really
+
+1041
+00:37:16,160 --> 00:37:17,680
+talk about this in two but basically
+
+1042
+00:37:17,680 --> 00:37:19,280
+they sort of have
+
+1043
+00:37:19,280 --> 00:37:21,280
+not very coarse grain blocks but also
+
+1044
+00:37:21,280 --> 00:37:22,720
+not very fine-grained
+
+1045
+00:37:22,720 --> 00:37:24,560
+brush locks they basically have a lock
+
+1046
+00:37:24,560 --> 00:37:26,320
+you know per i node
+
+1047
+00:37:26,320 --> 00:37:27,920
+and you know the director's an inode
+
+1048
+00:37:27,920 --> 00:37:30,240
+file is an inode uh and in fact the
+
+1049
+00:37:30,240 --> 00:37:31,520
+director is nothing else than a file
+
+1050
+00:37:31,520 --> 00:37:31,839
+with
+
+1051
+00:37:31,839 --> 00:37:35,359
+sort of a specific uh format format
+
+1052
+00:37:35,359 --> 00:37:37,359
+uh and so really the great f you know
+
+1053
+00:37:37,359 --> 00:37:38,880
+would actually have to allocate
+
+1054
+00:37:38,880 --> 00:37:41,520
+first allocate the lock or acquire the
+
+1055
+00:37:41,520 --> 00:37:43,119
+lock in the directory d
+
+1056
+00:37:43,119 --> 00:37:45,200
+and then you know would allocate or
+
+1057
+00:37:45,200 --> 00:37:47,520
+acquire the walk on uh
+
+1058
+00:37:47,520 --> 00:37:52,000
+inode for f and so to hold two locks
+
+1059
+00:37:52,000 --> 00:37:54,240
+and as you probably have noticed you
+
+1060
+00:37:54,240 --> 00:37:55,760
+know the of course if you assume you
+
+1061
+00:37:55,760 --> 00:37:58,079
+have to acquire multiple locks there's a
+
+1062
+00:37:58,079 --> 00:37:59,920
+potential risk of deadlock you know if
+
+1063
+00:37:59,920 --> 00:38:01,440
+like one workstation
+
+1064
+00:38:01,440 --> 00:38:03,200
+uh allocates locks into different order
+
+1065
+00:38:03,200 --> 00:38:04,800
+you know you could have doc that lock
+
+1066
+00:38:04,800 --> 00:38:06,720
+and so front supine follows the rules
+
+1067
+00:38:06,720 --> 00:38:08,640
+that basically all walks are ordered in
+
+1068
+00:38:08,640 --> 00:38:09,599
+a particular way
+
+1069
+00:38:09,599 --> 00:38:11,839
+and you require the walks in a fixed
+
+1070
+00:38:11,839 --> 00:38:14,230
+order
+
+1071
+00:38:14,240 --> 00:38:15,839
+i say thank you i think the lock's
+
+1072
+00:38:15,839 --> 00:38:21,190
+awarded by what number i node number
+
+1073
+00:38:21,200 --> 00:38:24,160
+does that all make sense yeah so there's
+
+1074
+00:38:24,160 --> 00:38:29,109
+a bunch of more complexity there
+
+1075
+00:38:29,119 --> 00:38:32,800
+okay so the you know sort of
+
+1076
+00:38:32,800 --> 00:38:34,720
+having discussed sort of the ethnicity
+
+1077
+00:38:34,720 --> 00:38:36,240
+of file system operations at least you
+
+1078
+00:38:36,240 --> 00:38:37,599
+know during crashes
+
+1079
+00:38:37,599 --> 00:38:39,440
+you know if there's no crashes you know
+
+1080
+00:38:39,440 --> 00:38:41,760
+at least it's guaranteed that these uh
+
+1081
+00:38:41,760 --> 00:38:43,200
+operations should happen atomically
+
+1082
+00:38:43,200 --> 00:38:45,599
+because the walks ensure atomicity
+
+1083
+00:38:45,599 --> 00:38:47,680
+of course that could be the case that
+
+1084
+00:38:47,680 --> 00:38:48,800
+like we're unlucky
+
+1085
+00:38:48,800 --> 00:38:51,520
+right and sort of uh the workstation one
+
+1086
+00:38:51,520 --> 00:38:52,400
+crashes like
+
+1087
+00:38:52,400 --> 00:38:53,920
+right in the middle of these operations
+
+1088
+00:38:53,920 --> 00:38:55,520
+so example it has allocated
+
+1089
+00:38:55,520 --> 00:38:57,440
+allocated the inode it actually has not
+
+1090
+00:38:57,440 --> 00:38:59,440
+updated the directory yet
+
+1091
+00:38:59,440 --> 00:39:04,240
+and uh let's say the crash happens here
+
+1092
+00:39:04,240 --> 00:39:06,880
+uh you know and if we don't do anything
+
+1093
+00:39:06,880 --> 00:39:07,520
+special like
+
+1094
+00:39:07,520 --> 00:39:16,950
+what is the concern that we might have
+
+1095
+00:39:16,960 --> 00:39:19,119
+okay let me uh the concern that we might
+
+1096
+00:39:19,119 --> 00:39:20,400
+have is that you know some
+
+1097
+00:39:20,400 --> 00:39:22,079
+file system operation actually is only
+
+1098
+00:39:22,079 --> 00:39:24,160
+partially applied to pedal
+
+1099
+00:39:24,160 --> 00:39:26,640
+uh and you know that becomes more clear
+
+1100
+00:39:26,640 --> 00:39:28,000
+if we actually think about
+
+1101
+00:39:28,000 --> 00:39:30,000
+the scenario what actually happens in
+
+1102
+00:39:30,000 --> 00:39:31,119
+this particular state
+
+1103
+00:39:31,119 --> 00:39:34,160
+like when the state of the cache is
+
+1104
+00:39:34,160 --> 00:39:35,599
+actually flushed you know to
+
+1105
+00:39:35,599 --> 00:39:40,829
+pedal and so this is the topic of crash
+
+1106
+00:39:40,839 --> 00:39:50,150
+recovery
+
+1107
+00:39:50,160 --> 00:39:51,599
+it turns out that actually updating the
+
+1108
+00:39:51,599 --> 00:39:54,550
+state in
+
+1109
+00:39:54,560 --> 00:39:56,320
+updating the state in that pedal also
+
+1110
+00:39:56,320 --> 00:39:58,880
+follows actually pretty careful protocol
+
+1111
+00:39:58,880 --> 00:40:01,040
+and this protocol is typically called
+
+1112
+00:40:01,040 --> 00:40:21,430
+write ahead logging
+
+1113
+00:40:21,440 --> 00:40:22,960
+and this is a you know probably the term
+
+1114
+00:40:22,960 --> 00:40:24,720
+you already have seen uh i mean you've
+
+1115
+00:40:24,720 --> 00:40:26,560
+seen it probably in 6033
+
+1116
+00:40:26,560 --> 00:40:29,040
+uh and uh you know pedal uses it too
+
+1117
+00:40:29,040 --> 00:40:30,960
+it's a very common technique and it will
+
+1118
+00:40:30,960 --> 00:40:33,200
+also play a big important role in the
+
+1119
+00:40:33,200 --> 00:40:35,839
+subsequent papers that we'll see and so
+
+1120
+00:40:35,839 --> 00:40:37,040
+a pedal is actually a nicer
+
+1121
+00:40:37,040 --> 00:40:38,640
+reintroduction to
+
+1122
+00:40:38,640 --> 00:40:41,359
+this idea of right-hand logging and the
+
+1123
+00:40:41,359 --> 00:40:42,800
+way to think about writing you know i'm
+
+1124
+00:40:42,800 --> 00:40:43,440
+gonna
+
+1125
+00:40:43,440 --> 00:40:46,079
+it's a pedal's design of writer letter
+
+1126
+00:40:46,079 --> 00:40:46,880
+hogging
+
+1127
+00:40:46,880 --> 00:40:48,319
+use of right head locking is very
+
+1128
+00:40:48,319 --> 00:40:50,240
+similar to any other right head logging
+
+1129
+00:40:50,240 --> 00:40:50,960
+scheme
+
+1130
+00:40:50,960 --> 00:40:52,400
+and so you know the way to think about
+
+1131
+00:40:52,400 --> 00:40:54,640
+it as follows you know we have our disk
+
+1132
+00:40:54,640 --> 00:40:56,960
+our virtual disk i mean you could think
+
+1133
+00:40:56,960 --> 00:40:58,960
+about the disk as like a
+
+1134
+00:40:58,960 --> 00:41:02,560
+long long array of blocks and
+
+1135
+00:41:02,560 --> 00:41:04,720
+what they've done is they're part of the
+
+1136
+00:41:04,720 --> 00:41:06,000
+disk is like reserved
+
+1137
+00:41:06,000 --> 00:41:09,760
+as a log in fact in the case of pedal
+
+1138
+00:41:09,760 --> 00:41:11,680
+there's a log per server but let's for
+
+1139
+00:41:11,680 --> 00:41:13,359
+for now let's just assume there's like
+
+1140
+00:41:13,359 --> 00:41:14,640
+one single log
+
+1141
+00:41:14,640 --> 00:41:17,359
+and then there's the file system so
+
+1142
+00:41:17,359 --> 00:41:19,200
+there's part of the disk is the user for
+
+1143
+00:41:19,200 --> 00:41:20,720
+the logging you know part of the disk is
+
+1144
+00:41:20,720 --> 00:41:22,240
+the file system and the file system
+
+1145
+00:41:22,240 --> 00:41:22,800
+contains
+
+1146
+00:41:22,800 --> 00:41:26,160
+inodes you know some data blocks
+
+1147
+00:41:26,160 --> 00:41:30,240
+et cetera et cetera and the rule is that
+
+1148
+00:41:30,240 --> 00:41:33,280
+when you update the state in pedal the
+
+1149
+00:41:33,280 --> 00:41:34,319
+first thing you do
+
+1150
+00:41:34,319 --> 00:41:43,750
+is actually you first log the update
+
+1151
+00:41:43,760 --> 00:41:46,160
+so when uh if we go back to the previous
+
+1152
+00:41:46,160 --> 00:41:46,880
+picture
+
+1153
+00:41:46,880 --> 00:41:50,000
+and after at the point that the
+
+1154
+00:41:50,000 --> 00:41:53,359
+uh uh friendship only on workstation one
+
+1155
+00:41:53,359 --> 00:41:55,119
+i wanted to give back the lock you know
+
+1156
+00:41:55,119 --> 00:41:57,119
+to the lock server it first has to
+
+1157
+00:41:57,119 --> 00:41:58,960
+write its state you know to pedal and
+
+1158
+00:41:58,960 --> 00:42:00,560
+that goes in two steps
+
+1159
+00:42:00,560 --> 00:42:03,680
+the first step is log the uh update
+
+1160
+00:42:03,680 --> 00:42:05,280
+the description of the update you know
+
+1161
+00:42:05,280 --> 00:42:06,800
+to uh the log
+
+1162
+00:42:06,800 --> 00:42:08,880
+to the log person so here for example
+
+1163
+00:42:08,880 --> 00:42:10,880
+you know we'll get a record
+
+1164
+00:42:10,880 --> 00:42:13,440
+that says like you know create basic
+
+1165
+00:42:13,440 --> 00:42:15,599
+describes the create operation so it
+
+1166
+00:42:15,599 --> 00:42:16,720
+will have
+
+1167
+00:42:16,720 --> 00:42:20,000
+you know whatever allocate inode i know
+
+1168
+00:42:20,000 --> 00:42:21,200
+number or whatever
+
+1169
+00:42:21,200 --> 00:42:22,480
+basically the result that would have
+
+1170
+00:42:22,480 --> 00:42:23,920
+happened if you allocate it i know
+
+1171
+00:42:23,920 --> 00:42:24,880
+number and
+
+1172
+00:42:24,880 --> 00:42:30,800
+the directory change
+
+1173
+00:42:30,800 --> 00:42:32,160
+and we'll be a little bit more specific
+
+1174
+00:42:32,160 --> 00:42:34,000
+in a second but that's sort of the the
+
+1175
+00:42:34,000 --> 00:42:36,079
+update contains the modifications that
+
+1176
+00:42:36,079 --> 00:42:37,760
+need to be made to happen
+
+1177
+00:42:37,760 --> 00:42:40,720
+to the file system blocks to actually uh
+
+1178
+00:42:40,720 --> 00:42:42,400
+reflect you know the change
+
+1179
+00:42:42,400 --> 00:42:44,880
+so you first you know log to the uh
+
+1180
+00:42:44,880 --> 00:42:46,319
+first log the update
+
+1181
+00:42:46,319 --> 00:42:49,680
+and then once you have updated the log
+
+1182
+00:42:49,680 --> 00:42:52,319
+then we uh the second operation that the
+
+1183
+00:42:52,319 --> 00:42:53,440
+client executes
+
+1184
+00:42:53,440 --> 00:42:55,119
+the workstation executes is actually
+
+1185
+00:42:55,119 --> 00:43:01,910
+installing the update
+
+1186
+00:43:01,920 --> 00:43:05,280
+um and uh and
+
+1187
+00:43:05,280 --> 00:43:07,200
+the reason you know for doing it instead
+
+1188
+00:43:07,200 --> 00:43:09,119
+of two steps is that
+
+1189
+00:43:09,119 --> 00:43:11,119
+you know once you know you've logged all
+
+1190
+00:43:11,119 --> 00:43:12,480
+your changes
+
+1191
+00:43:12,480 --> 00:43:14,880
+then it's completely safe to update the
+
+1192
+00:43:14,880 --> 00:43:16,800
+data blocks because they always will end
+
+1193
+00:43:16,800 --> 00:43:18,000
+up in order to
+
+1194
+00:43:18,000 --> 00:43:19,599
+update the file system because it always
+
+1195
+00:43:19,599 --> 00:43:21,839
+will end up in a consistent state
+
+1196
+00:43:21,839 --> 00:43:24,960
+um and the way to see this is basically
+
+1197
+00:43:24,960 --> 00:43:27,359
+let's assume you know the client
+
+1198
+00:43:27,359 --> 00:43:29,040
+workstation that was actually flushing
+
+1199
+00:43:29,040 --> 00:43:29,680
+its state to
+
+1200
+00:43:29,680 --> 00:43:34,790
+a pedal you know crashes right here
+
+1201
+00:43:34,800 --> 00:43:43,910
+uh is that okay
+
+1202
+00:43:43,920 --> 00:43:46,079
+yes because since everything is locked
+
+1203
+00:43:46,079 --> 00:43:47,119
+the
+
+1204
+00:43:47,119 --> 00:43:50,000
+hey what was it called like the demon
+
+1205
+00:43:50,000 --> 00:43:51,680
+recovery service yeah
+
+1206
+00:43:51,680 --> 00:43:54,480
+correct so yeah the demon just can go
+
+1207
+00:43:54,480 --> 00:43:55,599
+back to uh
+
+1208
+00:43:55,599 --> 00:43:56,960
+there's gonna be a demon when there's a
+
+1209
+00:43:56,960 --> 00:43:58,640
+crash there's basically demon sees if
+
+1210
+00:43:58,640 --> 00:43:59,920
+there's anything in the log if there's
+
+1211
+00:43:59,920 --> 00:44:01,280
+anything in the log it just applies it
+
+1212
+00:44:01,280 --> 00:44:03,760
+to the file system
+
+1213
+00:44:03,760 --> 00:44:07,040
+and why actually do this in this way why
+
+1214
+00:44:07,040 --> 00:44:08,720
+not just write immediately or update the
+
+1215
+00:44:08,720 --> 00:44:14,870
+file system
+
+1216
+00:44:14,880 --> 00:44:16,400
+because we can crash in the middle of
+
+1217
+00:44:16,400 --> 00:44:18,000
+the update and we don't know
+
+1218
+00:44:18,000 --> 00:44:20,000
+what we've done and what we didn't yeah
+
+1219
+00:44:20,000 --> 00:44:21,520
+exactly correct so if you
+
+1220
+00:44:21,520 --> 00:44:23,280
+sort of in our previous example you know
+
+1221
+00:44:23,280 --> 00:44:25,839
+the allocating an i note is presumably
+
+1222
+00:44:25,839 --> 00:44:26,960
+you know it's making some change
+
+1223
+00:44:26,960 --> 00:44:27,760
+somewhere
+
+1224
+00:44:27,760 --> 00:44:30,000
+like going through a nine-note block and
+
+1225
+00:44:30,000 --> 00:44:31,440
+actually adding the directory
+
+1226
+00:44:31,440 --> 00:44:34,640
+to uh or adding the file f you know to a
+
+1227
+00:44:34,640 --> 00:44:35,920
+particular directory presumably updates
+
+1228
+00:44:35,920 --> 00:44:37,280
+a directory block or a data block
+
+1229
+00:44:37,280 --> 00:44:38,079
+somewhere
+
+1230
+00:44:38,079 --> 00:44:39,680
+and so these are two separate rights
+
+1231
+00:44:39,680 --> 00:44:40,880
+right through separate disk walks and
+
+1232
+00:44:40,880 --> 00:44:42,480
+they're not atomic so we would crash
+
+1233
+00:44:42,480 --> 00:44:43,839
+between one of the two
+
+1234
+00:44:43,839 --> 00:44:45,440
+then we might have allocated the inode
+
+1235
+00:44:45,440 --> 00:44:47,359
+but not stuck in the directory
+
+1236
+00:44:47,359 --> 00:44:49,040
+right then basically what what what
+
+1237
+00:44:49,040 --> 00:44:50,800
+happened if we crash and recover
+
+1238
+00:44:50,800 --> 00:44:53,280
+it's basically we lose the inode unless
+
+1239
+00:44:53,280 --> 00:44:54,480
+you know we could scan the whole disk
+
+1240
+00:44:54,480 --> 00:44:54,880
+but that's
+
+1241
+00:44:54,880 --> 00:44:58,319
+very expensive and so instead what we're
+
+1242
+00:44:58,319 --> 00:44:58,720
+doing
+
+1243
+00:44:58,720 --> 00:45:00,240
+is we're basically logging the two
+
+1244
+00:45:00,240 --> 00:45:02,160
+changes first we're
+
+1245
+00:45:02,160 --> 00:45:04,000
+we're logging a record describing both
+
+1246
+00:45:04,000 --> 00:45:05,280
+changes first
+
+1247
+00:45:05,280 --> 00:45:08,640
+and then you know apply the changes
+
+1248
+00:45:08,640 --> 00:45:10,079
+uh so how do we ensure that operation
+
+1249
+00:45:10,079 --> 00:45:13,040
+one is atomic so the first log to update
+
+1250
+00:45:13,040 --> 00:45:14,560
+the first log update yeah that's
+
+1251
+00:45:14,560 --> 00:45:16,640
+interesting so the the paper tracking
+
+1252
+00:45:16,640 --> 00:45:17,440
+now
+
+1253
+00:45:17,440 --> 00:45:19,119
+uh crisp on this but there's a couple
+
+1254
+00:45:19,119 --> 00:45:20,880
+ways of doing it um
+
+1255
+00:45:20,880 --> 00:45:23,920
+they mentioned that every uh
+
+1256
+00:45:23,920 --> 00:45:26,960
+log record has a checked zone and
+
+1257
+00:45:26,960 --> 00:45:29,520
+uh so they use the check show to see if
+
+1258
+00:45:29,520 --> 00:45:30,240
+there's actually
+
+1259
+00:45:30,240 --> 00:45:32,480
+so before the reader log record you know
+
+1260
+00:45:32,480 --> 00:45:33,839
+they read the log record we compute the
+
+1261
+00:45:33,839 --> 00:45:34,480
+checksum
+
+1262
+00:45:34,480 --> 00:45:35,920
+just to make sure that the whole record
+
+1263
+00:45:35,920 --> 00:45:38,550
+is complete
+
+1264
+00:45:38,560 --> 00:45:40,400
+i see thank you another way of doing it
+
+1265
+00:45:40,400 --> 00:45:41,920
+which is a couple way of doing it is you
+
+1266
+00:45:41,920 --> 00:45:43,680
+write you know a couple blocks
+
+1267
+00:45:43,680 --> 00:45:44,960
+like one two and then you're ready to
+
+1268
+00:45:44,960 --> 00:45:47,119
+commit record and
+
+1269
+00:45:47,119 --> 00:45:48,960
+the assumption is that running a single
+
+1270
+00:45:48,960 --> 00:45:50,960
+block a single five in the 12
+
+1271
+00:45:50,960 --> 00:45:52,800
+sector is an atomic operation so it
+
+1272
+00:45:52,800 --> 00:45:54,319
+either happens or doesn't happen
+
+1273
+00:45:54,319 --> 00:45:56,240
+and so either commit record says rights
+
+1274
+00:45:56,240 --> 00:45:58,319
+are done or rights are not done
+
+1275
+00:45:58,319 --> 00:45:59,680
+and so you can just look at the commit
+
+1276
+00:45:59,680 --> 00:46:01,839
+record and if the commit records
+
+1277
+00:46:01,839 --> 00:46:03,839
+is not there then you know that you know
+
+1278
+00:46:03,839 --> 00:46:05,280
+the operation is
+
+1279
+00:46:05,280 --> 00:46:06,960
+not completely recorded yet and you
+
+1280
+00:46:06,960 --> 00:46:09,839
+shouldn't execute any of it
+
+1281
+00:46:09,839 --> 00:46:12,240
+i see and also to double check to in the
+
+1282
+00:46:12,240 --> 00:46:13,119
+previous
+
+1283
+00:46:13,119 --> 00:46:15,760
+slide if the crash happens before we
+
+1284
+00:46:15,760 --> 00:46:17,119
+flush things to
+
+1285
+00:46:17,119 --> 00:46:19,359
+pedal then this is not a problem right
+
+1286
+00:46:19,359 --> 00:46:20,480
+because uh
+
+1287
+00:46:20,480 --> 00:46:22,000
+if the workstation crashes well the
+
+1288
+00:46:22,000 --> 00:46:23,440
+cache goes with the workstation but
+
+1289
+00:46:23,440 --> 00:46:25,040
+there's no inconsistent state for any
+
+1290
+00:46:25,040 --> 00:46:25,920
+other workstation
+
+1291
+00:46:25,920 --> 00:46:27,440
+that's correct yeah just the data will
+
+1292
+00:46:27,440 --> 00:46:29,280
+be lost that's it uh
+
+1293
+00:46:29,280 --> 00:46:30,880
+but it will since it's not written
+
+1294
+00:46:30,880 --> 00:46:33,599
+battles won't be any visibility problem
+
+1295
+00:46:33,599 --> 00:46:35,440
+so it's really you know the crash the
+
+1296
+00:46:35,440 --> 00:46:37,280
+crash here correct
+
+1297
+00:46:37,280 --> 00:46:38,960
+that one doesn't really matter in some
+
+1298
+00:46:38,960 --> 00:46:40,720
+ways the one that actually matters is
+
+1299
+00:46:40,720 --> 00:46:44,480
+the crash during this flush operation
+
+1300
+00:46:44,480 --> 00:46:51,109
+thank you
+
+1301
+00:46:51,119 --> 00:46:54,480
+okay so there's one subtlety
+
+1302
+00:46:54,480 --> 00:46:56,319
+in front france pioneer which we'll talk
+
+1303
+00:46:56,319 --> 00:46:57,520
+about in a second a little bit more
+
+1304
+00:46:57,520 --> 00:46:57,920
+deeper
+
+1305
+00:46:57,920 --> 00:47:00,560
+the detail namely that in france there's
+
+1306
+00:47:00,560 --> 00:47:03,510
+a
+
+1307
+00:47:03,520 --> 00:47:07,119
+lock per server
+
+1308
+00:47:07,119 --> 00:47:10,160
+and that's sort of unusual and
+
+1309
+00:47:10,160 --> 00:47:12,480
+we'll see in a second you know how the
+
+1310
+00:47:12,480 --> 00:47:14,079
+one that actually creates some problems
+
+1311
+00:47:14,079 --> 00:47:17,040
+uh and so we'll we'll see there's a
+
+1312
+00:47:17,040 --> 00:47:18,480
+there's a small extension to the
+
+1313
+00:47:18,480 --> 00:47:19,599
+protocol to actually
+
+1314
+00:47:19,599 --> 00:47:22,960
+make this all work out okay
+
+1315
+00:47:22,960 --> 00:47:25,040
+let me uh say a little bit about like
+
+1316
+00:47:25,040 --> 00:47:32,230
+what is in one of those log records
+
+1317
+00:47:32,240 --> 00:47:33,680
+because that turns out to be important
+
+1318
+00:47:33,680 --> 00:47:35,280
+for uh
+
+1319
+00:47:35,280 --> 00:47:38,240
+the crash recovery uh particularly
+
+1320
+00:47:38,240 --> 00:47:38,559
+because
+
+1321
+00:47:38,559 --> 00:47:40,319
+we have frontier binding as multiple
+
+1322
+00:47:40,319 --> 00:47:42,800
+logs per server
+
+1323
+00:47:42,800 --> 00:47:46,720
+so every log has a so your log basically
+
+1324
+00:47:46,720 --> 00:47:48,800
+you know there are records in it they
+
+1325
+00:47:48,800 --> 00:47:50,960
+have a sequence number
+
+1326
+00:47:50,960 --> 00:47:53,440
+you know whatever security number two
+
+1327
+00:47:53,440 --> 00:47:54,800
+one two
+
+1328
+00:47:54,800 --> 00:47:56,640
+and you know what the end of the log is
+
+1329
+00:47:56,640 --> 00:47:58,319
+if the next sequence number is not
+
+1330
+00:47:58,319 --> 00:47:59,760
+higher one higher than
+
+1331
+00:47:59,760 --> 00:48:02,800
+yours so there's another way to mark it
+
+1332
+00:48:02,800 --> 00:48:03,280
+up
+
+1333
+00:48:03,280 --> 00:48:06,160
+and basically in one of these records
+
+1334
+00:48:06,160 --> 00:48:07,839
+you know is an array is an array of
+
+1335
+00:48:07,839 --> 00:48:12,950
+updates
+
+1336
+00:48:12,960 --> 00:48:15,440
+now describe the file system operation
+
+1337
+00:48:15,440 --> 00:48:18,000
+and so it contains the block number
+
+1338
+00:48:18,000 --> 00:48:19,839
+that needs to be updated so for example
+
+1339
+00:48:19,839 --> 00:48:21,280
+in our case that would be
+
+1340
+00:48:21,280 --> 00:48:24,000
+would be uh uh the i know number the
+
+1341
+00:48:24,000 --> 00:48:25,760
+block that contains the inode uh that
+
+1342
+00:48:25,760 --> 00:48:27,119
+would have been allocated
+
+1343
+00:48:27,119 --> 00:48:29,920
+a version number is in that record and
+
+1344
+00:48:29,920 --> 00:48:31,119
+we'll see in a second
+
+1345
+00:48:31,119 --> 00:48:33,040
+why that is important and basically the
+
+1346
+00:48:33,040 --> 00:48:34,720
+new bytes
+
+1347
+00:48:34,720 --> 00:48:38,720
+for that block number and so for example
+
+1348
+00:48:38,720 --> 00:48:40,079
+in the case of creating you know
+
+1349
+00:48:40,079 --> 00:48:42,319
+file you know creating f there's going
+
+1350
+00:48:42,319 --> 00:48:44,160
+to be you know two
+
+1351
+00:48:44,160 --> 00:48:46,839
+uh entries in this array you know two
+
+1352
+00:48:46,839 --> 00:48:49,119
+entries
+
+1353
+00:48:49,119 --> 00:48:51,440
+one describing you know the update to
+
+1354
+00:48:51,440 --> 00:48:53,839
+the inode block the one describing
+
+1355
+00:48:53,839 --> 00:48:56,400
+you update to the directory block the
+
+1356
+00:48:56,400 --> 00:49:04,950
+data block of the directory
+
+1357
+00:49:04,960 --> 00:49:06,400
+and so basically what happens on the
+
+1358
+00:49:06,400 --> 00:49:08,160
+gratification just to like make
+
+1359
+00:49:08,160 --> 00:49:09,839
+you know it's abundantly clear right
+
+1360
+00:49:09,839 --> 00:49:11,280
+when a request through the
+
+1361
+00:49:11,280 --> 00:49:14,160
+vocal lock comes in you know the first
+
+1362
+00:49:14,160 --> 00:49:18,790
+thing that happens is force the log
+
+1363
+00:49:18,800 --> 00:49:21,920
+to pedal once then is done
+
+1364
+00:49:21,920 --> 00:49:24,559
+send the updates or send the blocks to
+
+1365
+00:49:24,559 --> 00:49:34,549
+update the blocks to pedal
+
+1366
+00:49:34,559 --> 00:49:41,589
+and then release the lock
+
+1367
+00:49:41,599 --> 00:49:43,839
+and this ensures that you know there's a
+
+1368
+00:49:43,839 --> 00:49:45,119
+couple things that we need to sort of
+
+1369
+00:49:45,119 --> 00:49:46,160
+think about
+
+1370
+00:49:46,160 --> 00:49:48,720
+uh if there's no crashes in the middle
+
+1371
+00:49:48,720 --> 00:49:49,920
+then you know this is just
+
+1372
+00:49:49,920 --> 00:49:52,960
+always as briefly described really you
+
+1373
+00:49:52,960 --> 00:49:54,640
+know the interesting case is when
+
+1374
+00:49:54,640 --> 00:49:57,920
+a crash happens right after forcing the
+
+1375
+00:49:57,920 --> 00:49:59,040
+log to p
+
+1376
+00:49:59,040 --> 00:50:02,400
+uh before updating pedal
+
+1377
+00:50:02,400 --> 00:50:06,630
+so let's talk a little bit about that
+
+1378
+00:50:06,640 --> 00:50:09,680
+sorry what do you mean by new bytes
+
+1379
+00:50:09,680 --> 00:50:12,960
+ah good let me
+
+1380
+00:50:12,960 --> 00:50:15,520
+go back so with another mean the changes
+
+1381
+00:50:15,520 --> 00:50:16,000
+to the
+
+1382
+00:50:16,000 --> 00:50:18,160
+i know box so for example the i know
+
+1383
+00:50:18,160 --> 00:50:19,119
+block
+
+1384
+00:50:19,119 --> 00:50:22,240
+uh you know maybe you update you know
+
+1385
+00:50:22,240 --> 00:50:23,760
+some part of the i know then you sort of
+
+1386
+00:50:23,760 --> 00:50:26,000
+write down what the the whatever the
+
+1387
+00:50:26,000 --> 00:50:26,400
+bytes
+
+1388
+00:50:26,400 --> 00:50:28,720
+have changed like you know bytes zero to
+
+1389
+00:50:28,720 --> 00:50:30,720
+five and twelve of the following value
+
+1390
+00:50:30,720 --> 00:50:32,880
+or bytes you know 10 to 20 half the
+
+1391
+00:50:32,880 --> 00:50:36,150
+following new value
+
+1392
+00:50:36,160 --> 00:50:38,240
+what can those changes be like because
+
+1393
+00:50:38,240 --> 00:50:40,000
+each one of these blocks is at most
+
+1394
+00:50:40,000 --> 00:50:43,040
+512 bytes right yeah but the the
+
+1395
+00:50:43,040 --> 00:50:44,480
+modifications that you make could be
+
+1396
+00:50:44,480 --> 00:50:46,079
+like a lot larger than
+
+1397
+00:50:46,079 --> 00:50:48,880
+512 bytes uh there's gonna be a record
+
+1398
+00:50:48,880 --> 00:50:50,160
+for every uh
+
+1399
+00:50:50,160 --> 00:50:53,440
+block so in fact in the okay so
+
+1400
+00:50:53,440 --> 00:50:56,960
+a couple points uh first of all
+
+1401
+00:50:56,960 --> 00:50:59,599
+uh data rights actually are not going
+
+1402
+00:50:59,599 --> 00:51:00,800
+through the log so this is actually an
+
+1403
+00:51:00,800 --> 00:51:02,160
+important point so thank you thank you
+
+1404
+00:51:02,160 --> 00:51:03,359
+for asking that question
+
+1405
+00:51:03,359 --> 00:51:06,000
+so when you write a file uh and the
+
+1406
+00:51:06,000 --> 00:51:06,559
+application
+
+1407
+00:51:06,559 --> 00:51:08,559
+recalls like write file f and a whole
+
+1408
+00:51:08,559 --> 00:51:09,680
+bunch of data
+
+1409
+00:51:09,680 --> 00:51:11,440
+all that data actually does not go
+
+1410
+00:51:11,440 --> 00:51:12,960
+through the log
+
+1411
+00:51:12,960 --> 00:51:14,720
+that just goes straight to pedal like
+
+1412
+00:51:14,720 --> 00:51:16,559
+once you're flush the
+
+1413
+00:51:16,559 --> 00:51:19,839
+state the only changes that go through
+
+1414
+00:51:19,839 --> 00:51:21,760
+the log are meta update
+
+1415
+00:51:21,760 --> 00:51:26,000
+changes so meta data changes
+
+1416
+00:51:26,000 --> 00:51:28,319
+and what metadata means is really
+
+1417
+00:51:28,319 --> 00:51:30,720
+information about files
+
+1418
+00:51:30,720 --> 00:51:33,520
+so inodes directories that kind of stuff
+
+1419
+00:51:33,520 --> 00:51:35,680
+that actually goes through the log
+
+1420
+00:51:35,680 --> 00:51:38,800
+and so uh the description that you see
+
+1421
+00:51:38,800 --> 00:51:40,800
+in here is really you know the updates
+
+1422
+00:51:40,800 --> 00:51:42,480
+to the metadata blocks you know of the
+
+1423
+00:51:42,480 --> 00:51:43,520
+file system
+
+1424
+00:51:43,520 --> 00:51:48,230
+so inodes and directory data
+
+1425
+00:51:48,240 --> 00:51:51,040
+and the application level data like the
+
+1426
+00:51:51,040 --> 00:51:52,720
+the file blocks that actually constitute
+
+1427
+00:51:52,720 --> 00:51:53,680
+a file
+
+1428
+00:51:53,680 --> 00:51:55,680
+uh that actually those blocks are just
+
+1429
+00:51:55,680 --> 00:51:57,200
+written straight to pedal and don't go
+
+1430
+00:51:57,200 --> 00:51:59,359
+for block
+
+1431
+00:51:59,359 --> 00:52:01,119
+so it's interesting to contemplate you
+
+1432
+00:52:01,119 --> 00:52:02,960
+know what is the implications of that
+
+1433
+00:52:02,960 --> 00:52:06,950
+like that design choice
+
+1434
+00:52:06,960 --> 00:52:08,720
+what's the downside of not writing
+
+1435
+00:52:08,720 --> 00:52:12,390
+everything through the log
+
+1436
+00:52:12,400 --> 00:52:17,030
+first
+
+1437
+00:52:17,040 --> 00:52:20,720
+the updates to the data they can be lost
+
+1438
+00:52:20,720 --> 00:52:23,520
+they can get lost yeah what other sort
+
+1439
+00:52:23,520 --> 00:52:23,839
+of
+
+1440
+00:52:23,839 --> 00:52:25,440
+scenarios are possible so let's say you
+
+1441
+00:52:25,440 --> 00:52:28,240
+know the file consists of 10 blocks
+
+1442
+00:52:28,240 --> 00:52:30,640
+uh we start writing the 10 blocks you
+
+1443
+00:52:30,640 --> 00:52:31,440
+know what's
+
+1444
+00:52:31,440 --> 00:52:32,880
+in what what states can the file
+
+1445
+00:52:32,880 --> 00:52:36,950
+actually end up
+
+1446
+00:52:36,960 --> 00:52:39,359
+being consistent yeah well yeah
+
+1447
+00:52:39,359 --> 00:52:40,960
+ecosystem could have some of the rights
+
+1448
+00:52:40,960 --> 00:52:41,760
+none of the rights
+
+1449
+00:52:41,760 --> 00:52:44,720
+all of them who knows what correct but
+
+1450
+00:52:44,720 --> 00:52:46,160
+it's not guaranteed that all 10 of them
+
+1451
+00:52:46,160 --> 00:52:48,400
+will be applied together
+
+1452
+00:52:48,400 --> 00:52:50,960
+um is is so is this important when you
+
+1453
+00:52:50,960 --> 00:52:51,920
+have like
+
+1454
+00:52:51,920 --> 00:52:55,440
+like this like need for atomic right
+
+1455
+00:52:55,440 --> 00:52:59,040
+or um yeah
+
+1456
+00:52:59,040 --> 00:53:02,240
+like if you didn't need atom atomicity
+
+1457
+00:53:02,240 --> 00:53:05,200
+uh with this like could we get rid of
+
+1458
+00:53:05,200 --> 00:53:07,440
+that of the log
+
+1459
+00:53:07,440 --> 00:53:09,920
+uh the the i think though so hold on
+
+1460
+00:53:09,920 --> 00:53:11,040
+hold on the question in a second let's
+
+1461
+00:53:11,040 --> 00:53:12,400
+first talk about the applications right
+
+1462
+00:53:12,400 --> 00:53:12,960
+and then
+
+1463
+00:53:12,960 --> 00:53:16,880
+we'll come back to that uh so um
+
+1464
+00:53:16,880 --> 00:53:21,520
+okay um the uh
+
+1465
+00:53:21,520 --> 00:53:25,119
+the so the applications can't really
+
+1466
+00:53:25,119 --> 00:53:26,800
+write you know their data atomically
+
+1467
+00:53:26,800 --> 00:53:28,400
+uh for your log because the the data is
+
+1468
+00:53:28,400 --> 00:53:30,000
+now written through the log
+
+1469
+00:53:30,000 --> 00:53:31,839
+and it's not written to the log and then
+
+1470
+00:53:31,839 --> 00:53:33,119
+apply it so
+
+1471
+00:53:33,119 --> 00:53:34,880
+so that means that for example if as an
+
+1472
+00:53:34,880 --> 00:53:36,559
+application you want authenticity of
+
+1473
+00:53:36,559 --> 00:53:39,599
+uh of your rights into a particular file
+
+1474
+00:53:39,599 --> 00:53:41,040
+then you have to arrange that for that
+
+1475
+00:53:41,040 --> 00:53:42,880
+yourself and this actually turns out to
+
+1476
+00:53:42,880 --> 00:53:44,720
+be the case on most unix files in any
+
+1477
+00:53:44,720 --> 00:53:45,280
+way
+
+1478
+00:53:45,280 --> 00:53:47,040
+and so like in that way from japan it
+
+1479
+00:53:47,040 --> 00:53:48,960
+doesn't really change the game
+
+1480
+00:53:48,960 --> 00:53:50,960
+uh you know if you write a file on the
+
+1481
+00:53:50,960 --> 00:53:52,319
+unix file system
+
+1482
+00:53:52,319 --> 00:53:54,559
+uh you write like a vm image and it's
+
+1483
+00:53:54,559 --> 00:53:56,640
+not guaranteed that like the whole
+
+1484
+00:53:56,640 --> 00:53:58,319
+image is written consistently in one
+
+1485
+00:53:58,319 --> 00:53:59,680
+single shot you know to the
+
+1486
+00:53:59,680 --> 00:54:02,319
+file system um even when there are
+
+1487
+00:54:02,319 --> 00:54:03,359
+crashes
+
+1488
+00:54:03,359 --> 00:54:05,839
+so the typical way you know people solve
+
+1489
+00:54:05,839 --> 00:54:07,040
+this problem uh
+
+1490
+00:54:07,040 --> 00:54:09,200
+in applications is that you first write
+
+1491
+00:54:09,200 --> 00:54:10,160
+a temporary file
+
+1492
+00:54:10,160 --> 00:54:11,680
+write everything in the temporary file
+
+1493
+00:54:11,680 --> 00:54:13,359
+and then do an atomic rename
+
+1494
+00:54:13,359 --> 00:54:15,599
+you know to the destination file name
+
+1495
+00:54:15,599 --> 00:54:17,359
+and so francophony basically relies
+
+1496
+00:54:17,359 --> 00:54:19,040
+exactly on the same
+
+1497
+00:54:19,040 --> 00:54:23,119
+uh setup uh sort of normal unix would do
+
+1498
+00:54:23,119 --> 00:54:24,640
+so like transplanting doesn't change the
+
+1499
+00:54:24,640 --> 00:54:26,160
+game and this is why
+
+1500
+00:54:26,160 --> 00:54:29,520
+uh the rights of files are actually not
+
+1501
+00:54:29,520 --> 00:54:30,079
+logged
+
+1502
+00:54:30,079 --> 00:54:32,400
+you know through the log and what is the
+
+1503
+00:54:32,400 --> 00:54:33,920
+advantage of not logging so clearly
+
+1504
+00:54:33,920 --> 00:54:35,920
+there's a downside right because you
+
+1505
+00:54:35,920 --> 00:54:37,839
+can't do file rights atomically using
+
+1506
+00:54:37,839 --> 00:54:39,680
+the log you have to have your own plan
+
+1507
+00:54:39,680 --> 00:54:40,240
+for
+
+1508
+00:54:40,240 --> 00:54:42,000
+doing automaticity and what was the
+
+1509
+00:54:42,000 --> 00:54:45,829
+advantage
+
+1510
+00:54:45,839 --> 00:54:48,160
+well performance because metadata is
+
+1511
+00:54:48,160 --> 00:54:49,599
+very small compared to the actual
+
+1512
+00:54:49,599 --> 00:54:53,280
+user data yeah and also memory as well
+
+1513
+00:54:53,280 --> 00:54:56,240
+yeah exactly so the uh so like if you
+
+1514
+00:54:56,240 --> 00:54:56,559
+write
+
+1515
+00:54:56,559 --> 00:54:58,319
+like a gigantic file correct you're like
+
+1516
+00:54:58,319 --> 00:54:59,599
+saying the gigabyte file that really
+
+1517
+00:54:59,599 --> 00:55:00,880
+means you have to write two gigabytes
+
+1518
+00:55:00,880 --> 00:55:01,280
+right
+
+1519
+00:55:01,280 --> 00:55:02,400
+first you're gonna write the gigabyte
+
+1520
+00:55:02,400 --> 00:55:03,599
+from through the log and then you write
+
+1521
+00:55:03,599 --> 00:55:05,359
+a gigabyte you know through the disk
+
+1522
+00:55:05,359 --> 00:55:06,559
+and so basically this cuts in their
+
+1523
+00:55:06,559 --> 00:55:09,280
+performance in uh pretty dramatically
+
+1524
+00:55:09,280 --> 00:55:11,280
+and so which is why you know typically
+
+1525
+00:55:11,280 --> 00:55:13,040
+you know the user data that uh is not
+
+1526
+00:55:13,040 --> 00:55:15,440
+written for bluewater
+
+1527
+00:55:15,440 --> 00:55:17,200
+uh yeah it's very important of course
+
+1528
+00:55:17,200 --> 00:55:18,400
+when coming back to this earlier
+
+1529
+00:55:18,400 --> 00:55:19,760
+question it's very important that the
+
+1530
+00:55:19,760 --> 00:55:21,680
+internal file system structures
+
+1531
+00:55:21,680 --> 00:55:23,839
+are kept consistent whether they are not
+
+1532
+00:55:23,839 --> 00:55:24,960
+you know are not
+
+1533
+00:55:24,960 --> 00:55:28,559
+uh inconsistent and so uh
+
+1534
+00:55:28,559 --> 00:55:30,799
+therefore the metadata updates all go
+
+1535
+00:55:30,799 --> 00:55:31,760
+through the log
+
+1536
+00:55:31,760 --> 00:55:33,200
+and so then basically you know like when
+
+1537
+00:55:33,200 --> 00:55:34,480
+you create a file you need to update the
+
+1538
+00:55:34,480 --> 00:55:35,920
+i know block and you need to update the
+
+1539
+00:55:35,920 --> 00:55:37,200
+directory block that's
+
+1540
+00:55:37,200 --> 00:55:42,390
+guaranteed to happen together
+
+1541
+00:55:42,400 --> 00:55:45,440
+um so would the data blocks updates go
+
+1542
+00:55:45,440 --> 00:55:45,920
+between
+
+1543
+00:55:45,920 --> 00:55:50,079
+step two and three uh
+
+1544
+00:55:50,079 --> 00:55:52,079
+yeah i think that you just send them out
+
+1545
+00:55:52,079 --> 00:55:53,440
+i mean they probably uh
+
+1546
+00:55:53,440 --> 00:55:55,680
+after one they probably sent the data
+
+1547
+00:55:55,680 --> 00:55:57,200
+blocks in parallel to
+
+1548
+00:55:57,200 --> 00:56:00,319
+uh uh yeah as part of step two and
+
+1549
+00:56:00,319 --> 00:56:03,119
+straight to pedal to the file system
+
+1550
+00:56:03,119 --> 00:56:13,670
+area
+
+1551
+00:56:13,680 --> 00:56:16,720
+okay so i
+
+1552
+00:56:16,720 --> 00:56:19,760
+i had i had a question i think um
+
+1553
+00:56:19,760 --> 00:56:22,000
+i don't remember exactly how big the log
+
+1554
+00:56:22,000 --> 00:56:23,200
+was but i believe
+
+1555
+00:56:23,200 --> 00:56:26,640
+it could span like two blocks
+
+1556
+00:56:26,640 --> 00:56:28,319
+is that the price multiple yeah the log
+
+1557
+00:56:28,319 --> 00:56:31,430
+is multiple records
+
+1558
+00:56:31,440 --> 00:56:34,640
+um oh yeah yeah that's right like up to
+
+1559
+00:56:34,640 --> 00:56:35,680
+two terabytes so
+
+1560
+00:56:35,680 --> 00:56:39,920
+what happens if we um if we send
+
+1561
+00:56:39,920 --> 00:56:42,960
+like a lot like part of a log and then
+
+1562
+00:56:42,960 --> 00:56:45,040
+it crashes as as you're sending the log
+
+1563
+00:56:45,040 --> 00:56:46,559
+when when we get like a
+
+1564
+00:56:46,559 --> 00:56:49,440
+an issue with like that's exactly this i
+
+1565
+00:56:49,440 --> 00:56:51,599
+want to talk about
+
+1566
+00:56:51,599 --> 00:56:54,480
+good thank you uh so there's a bunch of
+
+1567
+00:56:54,480 --> 00:56:55,760
+crashes that could happen right
+
+1568
+00:56:55,760 --> 00:56:59,440
+like so uh so if we can actually
+
+1569
+00:56:59,440 --> 00:57:00,799
+consider a bunch of cases like we write
+
+1570
+00:57:00,799 --> 00:57:11,430
+a crash before writing to the walk
+
+1571
+00:57:11,440 --> 00:57:18,789
+so what in that case what's the icon
+
+1572
+00:57:18,799 --> 00:57:24,950
+um it's it's lost yeah lost
+
+1573
+00:57:24,960 --> 00:57:28,319
+so uh then we're gonna do the scenario
+
+1574
+00:57:28,319 --> 00:57:39,430
+like we crash after writing the log
+
+1575
+00:57:39,440 --> 00:57:42,480
+what happens then there's actually a
+
+1576
+00:57:42,480 --> 00:57:45,040
+slightly complicated scenario
+
+1577
+00:57:45,040 --> 00:57:47,520
+is this after writing like the log to uh
+
+1578
+00:57:47,520 --> 00:57:48,319
+to pedal
+
+1579
+00:57:48,319 --> 00:57:51,520
+yeah then the demon
+
+1580
+00:57:51,520 --> 00:57:53,760
+steps in yes and then the demon steps in
+
+1581
+00:57:53,760 --> 00:57:54,400
+and there's a little bit of a
+
+1582
+00:57:54,400 --> 00:57:56,480
+complicated story correct because
+
+1583
+00:57:56,480 --> 00:57:58,640
+you know what uh so how does this is all
+
+1584
+00:57:58,640 --> 00:58:01,280
+discovered like what actually happens
+
+1585
+00:58:01,280 --> 00:58:02,720
+so presumably what happens is somebody
+
+1586
+00:58:02,720 --> 00:58:04,400
+else wants the law the lock
+
+1587
+00:58:04,400 --> 00:58:06,640
+correct on this file that you know that
+
+1588
+00:58:06,640 --> 00:58:10,079
+the crashed workstation holds
+
+1589
+00:58:10,079 --> 00:58:11,359
+and you know here's where the lease is
+
+1590
+00:58:11,359 --> 00:58:13,440
+coming important right so
+
+1591
+00:58:13,440 --> 00:58:16,160
+every lock has release and what the lock
+
+1592
+00:58:16,160 --> 00:58:17,839
+server will do
+
+1593
+00:58:17,839 --> 00:58:20,319
+it will not grant you know the the lock
+
+1594
+00:58:20,319 --> 00:58:21,119
+server will ask
+
+1595
+00:58:21,119 --> 00:58:23,599
+in workstation one please give me your
+
+1596
+00:58:23,599 --> 00:58:24,880
+lock f back
+
+1597
+00:58:24,880 --> 00:58:26,319
+uh workstation one you know it doesn't
+
+1598
+00:58:26,319 --> 00:58:28,079
+respond because it's crashed
+
+1599
+00:58:28,079 --> 00:58:31,599
+and what the lock server does
+
+1600
+00:58:31,599 --> 00:58:33,280
+it waits until the lease expires from
+
+1601
+00:58:33,280 --> 00:58:36,720
+the lock
+
+1602
+00:58:36,720 --> 00:58:39,119
+and why does it wait until the lease is
+
+1603
+00:58:39,119 --> 00:58:44,069
+expired
+
+1604
+00:58:44,079 --> 00:58:47,680
+i i think i think in this case the um
+
+1605
+00:58:47,680 --> 00:58:51,040
+the the server
+
+1606
+00:58:51,040 --> 00:58:53,839
+that or yeah the server that crashed
+
+1607
+00:58:53,839 --> 00:58:55,680
+like also knows
+
+1608
+00:58:55,680 --> 00:58:58,240
+um it didn't like renew its lease so it
+
+1609
+00:58:58,240 --> 00:59:00,400
+can clean up by like its own
+
+1610
+00:59:00,400 --> 00:59:01,680
+yeah can clean up his own stuff so like
+
+1611
+00:59:01,680 --> 00:59:02,799
+what is the sort of what's the
+
+1612
+00:59:02,799 --> 00:59:04,079
+fundamental problem here that we're
+
+1613
+00:59:04,079 --> 00:59:05,280
+actually trying to challenge almost like
+
+1614
+00:59:05,280 --> 00:59:05,520
+the
+
+1615
+00:59:05,520 --> 00:59:07,440
+the scenario that we've seen over and
+
+1616
+00:59:07,440 --> 00:59:09,200
+over in previous lectures that that is
+
+1617
+00:59:09,200 --> 00:59:11,280
+always a challenge
+
+1618
+00:59:11,280 --> 00:59:15,119
+the partition no repetition exactly
+
+1619
+00:59:15,119 --> 00:59:17,920
+it could be the case that you know
+
+1620
+00:59:17,920 --> 00:59:20,160
+actually workstation one did not crash
+
+1621
+00:59:20,160 --> 00:59:22,960
+but the lock server can't talk to the uh
+
+1622
+00:59:22,960 --> 00:59:24,240
+to the workstation because of the
+
+1623
+00:59:24,240 --> 00:59:25,119
+network petition
+
+1624
+00:59:25,119 --> 00:59:26,400
+but the wire and the work says you can
+
+1625
+00:59:26,400 --> 00:59:28,960
+talk to paddle and so it might not still
+
+1626
+00:59:28,960 --> 00:59:29,920
+may
+
+1627
+00:59:29,920 --> 00:59:32,240
+make changes right but what are we
+
+1628
+00:59:32,240 --> 00:59:33,839
+guaranteed as you just pointed out
+
+1629
+00:59:33,839 --> 00:59:35,599
+once the lease expires workstation one
+
+1630
+00:59:35,599 --> 00:59:39,040
+will definitely not make any changes
+
+1631
+00:59:39,040 --> 00:59:40,480
+it is not allowed to you know follows
+
+1632
+00:59:40,480 --> 00:59:41,760
+the protocol it's not allowed to make
+
+1633
+00:59:41,760 --> 00:59:44,240
+any changes anymore
+
+1634
+00:59:44,240 --> 00:59:46,480
+and so this is uh so why the lock server
+
+1635
+00:59:46,480 --> 00:59:48,559
+waits until the lease expires then at
+
+1636
+00:59:48,559 --> 00:59:50,559
+that point it knows for sure that nobody
+
+1637
+00:59:50,559 --> 00:59:52,799
+holds the lock anymore or couldn't hold
+
+1638
+00:59:52,799 --> 00:59:54,240
+the lock and nobody's writing to pedal
+
+1639
+00:59:54,240 --> 00:59:54,960
+anymore
+
+1640
+00:59:54,960 --> 00:59:57,280
+and so at this point it will ask one of
+
+1641
+00:59:57,280 --> 00:59:59,599
+the remaining workstations to
+
+1642
+00:59:59,599 --> 01:00:01,520
+uh basically what they're called the the
+
+1643
+01:00:01,520 --> 01:00:05,990
+demon
+
+1644
+01:00:06,000 --> 01:00:08,799
+the recovery demon to recover to run the
+
+1645
+01:00:08,799 --> 01:00:10,559
+recovery demon
+
+1646
+01:00:10,559 --> 01:00:12,559
+and the recovery demon basically will
+
+1647
+01:00:12,559 --> 01:00:14,559
+apply uh we'll read
+
+1648
+01:00:14,559 --> 01:00:16,880
+the the log of the workstation one you
+
+1649
+01:00:16,880 --> 01:00:17,839
+know it's log
+
+1650
+01:00:17,839 --> 01:00:19,520
+and basically apply the operations that
+
+1651
+01:00:19,520 --> 01:00:22,160
+are in that log
+
+1652
+01:00:22,160 --> 01:00:26,720
+okay uh
+
+1653
+01:00:26,720 --> 01:00:28,720
+the way to think about a daemon uh it's
+
+1654
+01:00:28,720 --> 01:00:29,760
+just sort of like a
+
+1655
+01:00:29,760 --> 01:00:31,520
+this is like terminology uh it's
+
+1656
+01:00:31,520 --> 01:00:32,960
+typically just a surface
+
+1657
+01:00:32,960 --> 01:00:36,240
+or server or sort of a process uh that
+
+1658
+01:00:36,240 --> 01:00:38,079
+basically does sort of uh house cleaning
+
+1659
+01:00:38,079 --> 01:00:39,200
+or house
+
+1660
+01:00:39,200 --> 01:00:41,119
+cleaning tasks and those kind of
+
+1661
+01:00:41,119 --> 01:00:42,559
+services that are sort of not really
+
+1662
+01:00:42,559 --> 01:00:43,440
+used
+
+1663
+01:00:43,440 --> 01:00:48,870
+continuously they're often called demons
+
+1664
+01:00:48,880 --> 01:00:50,799
+so once the daemon is done then actually
+
+1665
+01:00:50,799 --> 01:00:52,319
+the lock you know can be
+
+1666
+01:00:52,319 --> 01:00:54,720
+the lock server can reassign the lock or
+
+1667
+01:00:54,720 --> 01:00:56,160
+grant the walk to somebody to another
+
+1668
+01:00:56,160 --> 01:00:58,640
+workstation
+
+1669
+01:00:58,640 --> 01:01:01,280
+um but just to double check so uh uh if
+
+1670
+01:01:01,280 --> 01:01:02,160
+you crash after
+
+1671
+01:01:02,160 --> 01:01:03,599
+writing the log then you'll get and
+
+1672
+01:01:03,599 --> 01:01:04,799
+you're gonna have a consistent state
+
+1673
+01:01:04,799 --> 01:01:06,559
+when it comes to the metadata but the
+
+1674
+01:01:06,559 --> 01:01:08,160
+user is not guaranteed to have finished
+
+1675
+01:01:08,160 --> 01:01:10,640
+writing the user data yep absolutely so
+
+1676
+01:01:10,640 --> 01:01:11,839
+there's no guarantees about the user
+
+1677
+01:01:11,839 --> 01:01:12,960
+data
+
+1678
+01:01:12,960 --> 01:01:15,200
+so the only thing the the guarantees
+
+1679
+01:01:15,200 --> 01:01:17,920
+that like really the logging system
+
+1680
+01:01:17,920 --> 01:01:19,839
+helps achieving is basically consistency
+
+1681
+01:01:19,839 --> 01:01:21,680
+of the internal file system data
+
+1682
+01:01:21,680 --> 01:01:23,760
+structures
+
+1683
+01:01:23,760 --> 01:01:27,030
+okay sounds good
+
+1684
+01:01:27,040 --> 01:01:28,319
+which is important correct because it
+
+1685
+01:01:28,319 --> 01:01:29,920
+would be pretty bad if the file internal
+
+1686
+01:01:29,920 --> 01:01:31,280
+file system data structures are messed
+
+1687
+01:01:31,280 --> 01:01:32,000
+up
+
+1688
+01:01:32,000 --> 01:01:37,349
+you know everybody might lose their data
+
+1689
+01:01:37,359 --> 01:01:39,760
+okay so then there's another instant
+
+1690
+01:01:39,760 --> 01:01:40,880
+case
+
+1691
+01:01:40,880 --> 01:01:44,000
+uh what can happen okay so writing the
+
+1692
+01:01:44,000 --> 01:01:44,799
+log to p
+
+1693
+01:01:44,799 --> 01:01:51,109
+uh what happens if we crash during
+
+1694
+01:01:51,119 --> 01:02:05,190
+writing the law
+
+1695
+01:02:05,200 --> 01:02:07,440
+is this what you mentioned before that
+
+1696
+01:02:07,440 --> 01:02:09,119
+like there are check sums and we can
+
+1697
+01:02:09,119 --> 01:02:10,720
+check whether it was like complete or
+
+1698
+01:02:10,720 --> 01:02:11,119
+not
+
+1699
+01:02:11,119 --> 01:02:13,599
+or is this yeah so okay so good good
+
+1700
+01:02:13,599 --> 01:02:14,720
+point uh
+
+1701
+01:02:14,720 --> 01:02:16,720
+so so what happens in this case correct
+
+1702
+01:02:16,720 --> 01:02:18,559
+is that a prefix might end up
+
+1703
+01:02:18,559 --> 01:02:22,000
+in the the prefix it might end up in the
+
+1704
+01:02:22,000 --> 01:02:24,400
+log right
+
+1705
+01:02:24,400 --> 01:02:27,520
+uh but each of the and the prefix might
+
+1706
+01:02:27,520 --> 01:02:28,720
+contain multiple
+
+1707
+01:02:28,720 --> 01:02:31,359
+uh log records for multiple operations
+
+1708
+01:02:31,359 --> 01:02:32,799
+correct like you know whatever secrets
+
+1709
+01:02:32,799 --> 01:02:34,160
+number one secret number two
+
+1710
+01:02:34,160 --> 01:02:37,839
+the multiple uh records uh if we crash
+
+1711
+01:02:37,839 --> 01:02:38,319
+during
+
+1712
+01:02:38,319 --> 01:02:40,160
+one of these wreckage updates you know
+
+1713
+01:02:40,160 --> 01:02:42,400
+then uh the checksums won't check out
+
+1714
+01:02:42,400 --> 01:02:43,839
+and so we'll basically stop
+
+1715
+01:02:43,839 --> 01:02:45,760
+you know the the recovery demand will
+
+1716
+01:02:45,760 --> 01:02:47,119
+stop at that record
+
+1717
+01:02:47,119 --> 01:02:50,720
+so what will be in the log will be a
+
+1718
+01:02:50,720 --> 01:02:53,280
+correct prefix of the operations so for
+
+1719
+01:02:53,280 --> 01:02:54,480
+example you know the
+
+1720
+01:02:54,480 --> 01:02:57,520
+create of file f is in there maybe the
+
+1721
+01:02:57,520 --> 01:02:59,280
+create file file g is in there
+
+1722
+01:02:59,280 --> 01:03:02,319
+but the creator file h is not in there
+
+1723
+01:03:02,319 --> 01:03:04,000
+but each individual record that
+
+1724
+01:03:04,000 --> 01:03:05,680
+describes one atomic you know file
+
+1725
+01:03:05,680 --> 01:03:06,960
+system operation
+
+1726
+01:03:06,960 --> 01:03:10,000
+and is is in there and is complete and
+
+1727
+01:03:10,000 --> 01:03:10,480
+so
+
+1728
+01:03:10,480 --> 01:03:12,079
+what will happen is that basically we'll
+
+1729
+01:03:12,079 --> 01:03:14,160
+apply a prefix of the
+
+1730
+01:03:14,160 --> 01:03:16,559
+operations that the workstation is uh
+
+1731
+01:03:16,559 --> 01:03:18,640
+doing and we basically lose the end of
+
+1732
+01:03:18,640 --> 01:03:19,760
+the prefix
+
+1733
+01:03:19,760 --> 01:03:22,160
+or the end of the its updates you know
+
+1734
+01:03:22,160 --> 01:03:23,920
+undesirable but you know totally okay
+
+1735
+01:03:23,920 --> 01:03:26,400
+because you know in the other case we
+
+1736
+01:03:26,400 --> 01:03:31,119
+might have lost in all updates
+
+1737
+01:03:31,119 --> 01:03:33,680
+and in the first case we were clashed
+
+1738
+01:03:33,680 --> 01:03:35,200
+before the log we would have nothing on
+
+1739
+01:03:35,200 --> 01:03:40,470
+this
+
+1740
+01:03:40,480 --> 01:03:45,500
+does that make sense
+
+1741
+01:03:45,500 --> 01:03:46,799
+[Applause]
+
+1742
+01:03:46,799 --> 01:03:50,079
+okay then there's one uh one more tricky
+
+1743
+01:03:50,079 --> 01:03:50,640
+case
+
+1744
+01:03:50,640 --> 01:03:53,359
+uh that you know we need to consider and
+
+1745
+01:03:53,359 --> 01:03:54,720
+that has to do with the fact that
+
+1746
+01:03:54,720 --> 01:03:56,960
+actually the pedal has a walk per server
+
+1747
+01:03:56,960 --> 01:03:59,440
+or log per server
+
+1748
+01:03:59,440 --> 01:04:00,640
+so i want to talk a little bit about
+
+1749
+01:04:00,640 --> 01:04:02,640
+that and this is related to the
+
+1750
+01:04:02,640 --> 01:04:05,520
+question in a post you know for the
+
+1751
+01:04:05,520 --> 01:04:06,559
+reading
+
+1752
+01:04:06,559 --> 01:04:09,200
+and this is about many logs and so let's
+
+1753
+01:04:09,200 --> 01:04:10,000
+say we have
+
+1754
+01:04:10,000 --> 01:04:12,720
+free workstations each with their own
+
+1755
+01:04:12,720 --> 01:04:13,760
+log
+
+1756
+01:04:13,760 --> 01:04:15,680
+so here's workstation one workstation
+
+1757
+01:04:15,680 --> 01:04:19,359
+two workstation three
+
+1758
+01:04:19,359 --> 01:04:21,599
+and workstation one at some point does a
+
+1759
+01:04:21,599 --> 01:04:22,880
+delete
+
+1760
+01:04:22,880 --> 01:04:25,039
+of a file f that happened to exist
+
+1761
+01:04:25,039 --> 01:04:27,520
+before
+
+1762
+01:04:27,520 --> 01:04:33,190
+then uh workstation two there's a create
+
+1763
+01:04:33,200 --> 01:04:36,799
+of d and f and but that create remember
+
+1764
+01:04:36,799 --> 01:04:38,000
+is written to its own log
+
+1765
+01:04:38,000 --> 01:04:41,039
+okay so this this delete is written to
+
+1766
+01:04:41,039 --> 01:04:43,599
+the log of workstation one this creates
+
+1767
+01:04:43,599 --> 01:04:44,640
+is written to the log
+
+1768
+01:04:44,640 --> 01:04:49,280
+of workstation two and now let's say
+
+1769
+01:04:49,280 --> 01:04:52,950
+uh workstation one crashes
+
+1770
+01:04:52,960 --> 01:04:56,319
+and uh and then workstation three
+
+1771
+01:04:56,319 --> 01:04:58,079
+you know basically you know the recovery
+
+1772
+01:04:58,079 --> 01:05:07,430
+team runs
+
+1773
+01:05:07,440 --> 01:05:14,630
+you know for a workstation one
+
+1774
+01:05:14,640 --> 01:05:16,640
+and you know the bad possible outcome
+
+1775
+01:05:16,640 --> 01:05:18,079
+correct is that it would delete
+
+1776
+01:05:18,079 --> 01:05:21,039
+replay the delete which would overwrite
+
+1777
+01:05:21,039 --> 01:05:22,160
+you know the changes
+
+1778
+01:05:22,160 --> 01:05:26,000
+uh that workstation two made to head up
+
+1779
+01:05:26,000 --> 01:05:28,480
+right so that's the context and the
+
+1780
+01:05:28,480 --> 01:05:29,920
+question is how is this fixed
+
+1781
+01:05:29,920 --> 01:05:31,920
+and i think this the way i would like to
+
+1782
+01:05:31,920 --> 01:05:33,280
+address this is by actually you know
+
+1783
+01:05:33,280 --> 01:05:33,839
+having you
+
+1784
+01:05:33,839 --> 01:05:35,119
+spend a couple minutes in the breakout
+
+1785
+01:05:35,119 --> 01:05:37,119
+room uh debate this with each other or
+
+1786
+01:05:37,119 --> 01:05:38,559
+any other aspect of
+
+1787
+01:05:38,559 --> 01:05:41,920
+uh pedal if you uh want to
+
+1788
+01:05:41,920 --> 01:05:44,950
+and so
+
+1789
+01:05:44,960 --> 01:05:47,200
+lily or anybody else any of the other
+
+1790
+01:05:47,200 --> 01:05:48,079
+tas
+
+1791
+01:05:48,079 --> 01:06:01,990
+can you send people to breakout rooms
+
+1792
+01:06:02,000 --> 01:06:03,760
+should i do it or yeah that'd be great
+
+1793
+01:06:03,760 --> 01:06:06,079
+if you're good okay cool
+
+1794
+01:06:06,079 --> 01:06:12,069
+all right
+
+1795
+01:06:12,079 --> 01:06:14,400
+um i'll close them in about five minutes
+
+1796
+01:06:14,400 --> 01:08:07,580
+yup five minutes would be perfect
+
+1797
+01:08:07,590 --> 01:10:56,830
+[Music]
+
+1798
+01:10:56,840 --> 01:11:38,830
+action
+
+1799
+01:11:38,840 --> 01:12:12,670
+so
+
+1800
+01:12:12,680 --> 01:12:21,830
+[Music]
+
+1801
+01:12:21,840 --> 01:12:31,830
+everybody back
+
+1802
+01:12:31,840 --> 01:12:35,679
+okay so just uh just uh quickly uh
+
+1803
+01:12:35,679 --> 01:12:37,199
+re-summarize here so we have three
+
+1804
+01:12:37,199 --> 01:12:38,400
+workstations
+
+1805
+01:12:38,400 --> 01:12:40,239
+workstation one at some point deleted
+
+1806
+01:12:40,239 --> 01:12:41,679
+the file
+
+1807
+01:12:41,679 --> 01:12:44,719
+it's in the log uh workstation two at
+
+1808
+01:12:44,719 --> 01:12:45,600
+some point later
+
+1809
+01:12:45,600 --> 01:12:48,800
+created a created file f it is in this
+
+1810
+01:12:48,800 --> 01:12:49,600
+log
+
+1811
+01:12:49,600 --> 01:12:51,840
+and then one crashes and workstation
+
+1812
+01:12:51,840 --> 01:12:53,440
+three actually runs the recovery daemon
+
+1813
+01:12:53,440 --> 01:12:55,760
+on the log of workstation one
+
+1814
+01:12:55,760 --> 01:12:57,440
+and of course it would be disaster if
+
+1815
+01:12:57,440 --> 01:12:59,520
+the the lead would be replayed
+
+1816
+01:12:59,520 --> 01:13:01,040
+because the later create has happened on
+
+1817
+01:13:01,040 --> 01:13:02,480
+another workstation but it's in another
+
+1818
+01:13:02,480 --> 01:13:03,520
+lock so the
+
+1819
+01:13:03,520 --> 01:13:05,440
+demon doesn't know what how is this
+
+1820
+01:13:05,440 --> 01:13:07,600
+problem solved
+
+1821
+01:13:07,600 --> 01:13:09,840
+or how is this potentially disaster
+
+1822
+01:13:09,840 --> 01:13:14,550
+avoided
+
+1823
+01:13:14,560 --> 01:13:19,280
+we we said version numbers yeah yeah
+
+1824
+01:13:19,280 --> 01:13:20,560
+jose can you say a little bit more if
+
+1825
+01:13:20,560 --> 01:13:22,320
+you want to sure
+
+1826
+01:13:22,320 --> 01:13:26,159
+um so like it's guaranteed because we
+
+1827
+01:13:26,159 --> 01:13:28,000
+had the lock that the
+
+1828
+01:13:28,000 --> 01:13:30,640
+operations have already completed for
+
+1829
+01:13:30,640 --> 01:13:31,520
+for
+
+1830
+01:13:31,520 --> 01:13:34,880
+um for server one yep
+
+1831
+01:13:34,880 --> 01:13:38,239
+um and so the like the
+
+1832
+01:13:38,239 --> 01:13:41,120
+version number for the log is written in
+
+1833
+01:13:41,120 --> 01:13:41,440
+uh
+
+1834
+01:13:41,440 --> 01:13:44,239
+in pedal like the last operation and so
+
+1835
+01:13:44,239 --> 01:13:44,960
+the
+
+1836
+01:13:44,960 --> 01:13:47,040
+recovery demand won't do anything
+
+1837
+01:13:47,040 --> 01:13:48,960
+previous to the
+
+1838
+01:13:48,960 --> 01:13:51,360
+uh current version number yeah okay so
+
+1839
+01:13:51,360 --> 01:13:52,400
+let's say you're
+
+1840
+01:13:52,400 --> 01:13:54,320
+absolutely right so we'll just summarize
+
+1841
+01:13:54,320 --> 01:13:56,080
+this so we have two
+
+1842
+01:13:56,080 --> 01:13:58,640
+logs correct that actually of importance
+
+1843
+01:13:58,640 --> 01:14:00,000
+and we have some file system
+
+1844
+01:14:00,000 --> 01:14:02,719
+state that sits in the pedal right so
+
+1845
+01:14:02,719 --> 01:14:03,840
+these are the logs and then
+
+1846
+01:14:03,840 --> 01:14:07,669
+here's the actual file system
+
+1847
+01:14:07,679 --> 01:14:10,000
+and uh here was you know like this is
+
+1848
+01:14:10,000 --> 01:14:10,960
+directory d
+
+1849
+01:14:10,960 --> 01:14:13,679
+you know vector d was modified and the
+
+1850
+01:14:13,679 --> 01:14:14,560
+file f was
+
+1851
+01:14:14,560 --> 01:14:17,199
+deleted and that has a log number uh i
+
+1852
+01:14:17,199 --> 01:14:17,840
+say
+
+1853
+01:14:17,840 --> 01:14:20,880
+10. and
+
+1854
+01:14:20,880 --> 01:14:24,640
+this is a workstation 2 and here is a d
+
+1855
+01:14:24,640 --> 01:14:27,360
+that was deleting the fmd and here's
+
+1856
+01:14:27,360 --> 01:14:29,280
+creating f and d and what log number
+
+1857
+01:14:29,280 --> 01:14:30,239
+will be in this
+
+1858
+01:14:30,239 --> 01:14:34,470
+uh entry
+
+1859
+01:14:34,480 --> 01:14:37,750
+version number sorry
+
+1860
+01:14:41,270 --> 01:14:41,280
+11 11 yep right because
+
+1861
+01:14:41,280 --> 01:14:42,719
+basically totally ordered and the
+
+1862
+01:14:42,719 --> 01:14:44,159
+locking protocol will ensure that
+
+1863
+01:14:44,159 --> 01:14:45,520
+they're totally ordered
+
+1864
+01:14:45,520 --> 01:14:48,000
+and on the in the file system with the
+
+1865
+01:14:48,000 --> 01:14:49,840
+metadata blocks like for example with
+
+1866
+01:14:49,840 --> 01:14:52,159
+the inode block for f
+
+1867
+01:14:52,159 --> 01:14:54,320
+i know f what version number is going to
+
+1868
+01:14:54,320 --> 01:14:55,760
+be on the disk
+
+1869
+01:14:55,760 --> 01:15:04,390
+or in pedal
+
+1870
+01:15:07,430 --> 01:15:07,440
+11 yeah in the case that actually the
+
+1871
+01:15:07,440 --> 01:15:09,280
+operation was applied to the file system
+
+1872
+01:15:09,280 --> 01:15:11,440
+it would be 11 correct
+
+1873
+01:15:11,440 --> 01:15:15,120
+and so when the demon we
+
+1874
+01:15:15,120 --> 01:15:20,470
+uh what rule does the demon follow
+
+1875
+01:15:20,480 --> 01:15:23,679
+never replays something that's already
+
+1876
+01:15:23,679 --> 01:15:25,040
+been applied
+
+1877
+01:15:25,040 --> 01:15:28,560
+yeah now does it decide if it's applied
+
+1878
+01:15:28,560 --> 01:15:30,480
+like a version number yeah the version
+
+1879
+01:15:30,480 --> 01:15:32,080
+number right so if the version of it
+
+1880
+01:15:32,080 --> 01:15:32,480
+only
+
+1881
+01:15:32,480 --> 01:15:34,880
+reapplies an entry if the version number
+
+1882
+01:15:34,880 --> 01:15:37,040
+in the log record
+
+1883
+01:15:37,040 --> 01:15:40,400
+large numbered version number is higher
+
+1884
+01:15:40,400 --> 01:15:42,560
+than the inode or the metadata
+
+1885
+01:15:42,560 --> 01:15:45,830
+version number
+
+1886
+01:15:45,840 --> 01:15:49,840
+and then replay okay
+
+1887
+01:15:49,840 --> 01:15:51,920
+so in this case you know the recovery
+
+1888
+01:15:51,920 --> 01:15:53,600
+demon will see that the
+
+1889
+01:15:53,600 --> 01:15:55,520
+version number in the log bracket is 10
+
+1890
+01:15:55,520 --> 01:15:57,280
+which is smaller than 11
+
+1891
+01:15:57,280 --> 01:15:59,360
+or equal to 11 doesn't matter and so it
+
+1892
+01:15:59,360 --> 01:16:00,719
+won't replay it and so this problem
+
+1893
+01:16:00,719 --> 01:16:02,320
+cannot appear
+
+1894
+01:16:02,320 --> 01:16:05,040
+so does the 10 necessarily not does is
+
+1895
+01:16:05,040 --> 01:16:07,199
+that is it okay such that like the 10
+
+1896
+01:16:07,199 --> 01:16:11,920
+is not on the ws workspace 2's log
+
+1897
+01:16:11,920 --> 01:16:15,520
+yeah it's not there so like in the work
+
+1898
+01:16:15,520 --> 01:16:17,120
+because the workstation 2
+
+1899
+01:16:17,120 --> 01:16:20,640
+uh wrote actually the i know the after
+
+1900
+01:16:20,640 --> 01:16:22,960
+you know workstation one and so it's uh
+
+1901
+01:16:22,960 --> 01:16:24,719
+version number b11
+
+1902
+01:16:24,719 --> 01:16:26,159
+basically when you do a prepare an
+
+1903
+01:16:26,159 --> 01:16:28,719
+update the version number in the update
+
+1904
+01:16:28,719 --> 01:16:30,080
+record is always
+
+1905
+01:16:30,080 --> 01:16:32,800
+one plus you know the current version
+
+1906
+01:16:32,800 --> 01:16:37,910
+number in the inode
+
+1907
+01:16:37,920 --> 01:16:39,679
+okay this is a small question but what
+
+1908
+01:16:39,679 --> 01:16:41,520
+does the d stand for and uh
+
+1909
+01:16:41,520 --> 01:16:45,120
+directly to directory okay okay
+
+1910
+01:16:45,120 --> 01:16:46,800
+we're creating a file in the directory d
+
+1911
+01:16:46,800 --> 01:16:48,400
+we're deleting a file from the directory
+
+1912
+01:16:48,400 --> 01:16:49,760
+d
+
+1913
+01:16:49,760 --> 01:16:52,000
+and the update must include you know the
+
+1914
+01:16:52,000 --> 01:16:57,350
+so many information about the directory
+
+1915
+01:16:57,360 --> 01:17:00,239
+okay so um sorry i had a quick question
+
+1916
+01:17:00,239 --> 01:17:00,640
+so
+
+1917
+01:17:00,640 --> 01:17:02,800
+are the best version numbers like always
+
+1918
+01:17:02,800 --> 01:17:04,719
+tied to the specific i know that's being
+
+1919
+01:17:04,719 --> 01:17:05,920
+edited
+
+1920
+01:17:05,920 --> 01:17:09,280
+yes okay that's only
+
+1921
+01:17:09,280 --> 01:17:10,960
+the the version numbers for every update
+
+1922
+01:17:10,960 --> 01:17:12,159
+correct like there's a version memory
+
+1923
+01:17:12,159 --> 01:17:12,400
+for
+
+1924
+01:17:12,400 --> 01:17:13,520
+the directory there's a version number
+
+1925
+01:17:13,520 --> 01:17:14,960
+for the file i'm like showing this a
+
+1926
+01:17:14,960 --> 01:17:16,239
+little bit wrong here
+
+1927
+01:17:16,239 --> 01:17:20,000
+like if you go back to the log record uh
+
+1928
+01:17:20,000 --> 01:17:21,520
+here basically there's an array of
+
+1929
+01:17:21,520 --> 01:17:23,120
+updates and every update
+
+1930
+01:17:23,120 --> 01:17:24,640
+in the array you know completes block
+
+1931
+01:17:24,640 --> 01:17:25,760
+number the version number and the new
+
+1932
+01:17:25,760 --> 01:17:28,830
+bytes
+
+1933
+01:17:28,840 --> 01:17:32,310
+thanks
+
+1934
+01:17:32,320 --> 01:17:34,719
+okay so just stepping back and closing
+
+1935
+01:17:34,719 --> 01:17:38,070
+off this discussion of this paper
+
+1936
+01:17:38,080 --> 01:17:39,280
+so it's probably the first paper that
+
+1937
+01:17:39,280 --> 01:17:41,440
+we've read that basically in order the
+
+1938
+01:17:41,440 --> 01:17:43,120
+system itself is not the one you know
+
+1939
+01:17:43,120 --> 01:17:43,679
+it's not going
+
+1940
+01:17:43,679 --> 01:17:45,040
+in dominant use and therefore it's
+
+1941
+01:17:45,040 --> 01:17:46,719
+really interesting to talk about
+
+1942
+01:17:46,719 --> 01:17:49,440
+uh but what is interesting about this
+
+1943
+01:17:49,440 --> 01:17:51,360
+system is the ideas in it
+
+1944
+01:17:51,360 --> 01:17:56,229
+and so cash coherence protocol
+
+1945
+01:17:56,239 --> 01:18:03,189
+more cash consistence c protocol
+
+1946
+01:18:03,199 --> 01:18:07,270
+uh distributed locking
+
+1947
+01:18:07,280 --> 01:18:11,040
+the lock servers leases
+
+1948
+01:18:11,040 --> 01:18:14,159
+uh granting and acquiring and
+
+1949
+01:18:14,159 --> 01:18:18,800
+revoking and uh distributed recovery
+
+1950
+01:18:18,800 --> 01:18:20,560
+you know where one workstation crashes
+
+1951
+01:18:20,560 --> 01:18:22,719
+but like a demon on another
+
+1952
+01:18:22,719 --> 01:18:25,199
+workstation actually does the recovery
+
+1953
+01:18:25,199 --> 01:18:26,080
+and what
+
+1954
+01:18:26,080 --> 01:18:27,600
+particularly interesting is it what's
+
+1955
+01:18:27,600 --> 01:18:28,719
+interesting is sort of the interaction
+
+1956
+01:18:28,719 --> 01:18:32,070
+between the three pieces
+
+1957
+01:18:32,080 --> 01:18:35,110
+then they interact
+
+1958
+01:18:35,120 --> 01:18:36,800
+and what we'll see in the next you know
+
+1959
+01:18:36,800 --> 01:18:38,560
+a couple papers uh
+
+1960
+01:18:38,560 --> 01:18:40,239
+next week particularly not uh not on the
+
+1961
+01:18:40,239 --> 01:18:41,840
+first day but the the
+
+1962
+01:18:41,840 --> 01:18:43,520
+papers after that which we're going to
+
+1963
+01:18:43,520 --> 01:18:45,199
+talk about sort of heavy duty
+
+1964
+01:18:45,199 --> 01:18:46,560
+pretty involved you know transaction
+
+1965
+01:18:46,560 --> 01:18:48,560
+systems we'll see these three topics
+
+1966
+01:18:48,560 --> 01:18:49,679
+going to come up
+
+1967
+01:18:49,679 --> 01:18:52,480
+uh too and so hopefully this will help
+
+1968
+01:18:52,480 --> 01:18:53,120
+you when
+
+1969
+01:18:53,120 --> 01:18:54,480
+reading those papers should understand
+
+1970
+01:18:54,480 --> 01:18:56,239
+actually what cache can earns is
+
+1971
+01:18:56,239 --> 01:18:59,600
+what you know crash recovery is and uh
+
+1972
+01:18:59,600 --> 01:19:02,640
+you know distributor locks are um and
+
+1973
+01:19:02,640 --> 01:19:03,920
+the other very probably point
+
+1974
+01:19:03,920 --> 01:19:06,320
+and that's interesting to make is that
+
+1975
+01:19:06,320 --> 01:19:07,280
+you know the you know
+
+1976
+01:19:07,280 --> 01:19:09,920
+pedal is really good you know for useful
+
+1977
+01:19:09,920 --> 01:19:10,880
+for the particular
+
+1978
+01:19:10,880 --> 01:19:15,990
+setting they designed it for
+
+1979
+01:19:16,000 --> 01:19:18,480
+and the performance part of the paper is
+
+1980
+01:19:18,480 --> 01:19:19,679
+a little bit hard to understand because
+
+1981
+01:19:19,679 --> 01:19:21,600
+it's like for 1999
+
+1982
+01:19:21,600 --> 01:19:23,840
+but you look at the graph you'll see
+
+1983
+01:19:23,840 --> 01:19:25,440
+that the
+
+1984
+01:19:25,440 --> 01:19:27,520
+file system basically workload can
+
+1985
+01:19:27,520 --> 01:19:29,360
+increase with the number of workstations
+
+1986
+01:19:29,360 --> 01:19:30,640
+and you know that's exactly what they
+
+1987
+01:19:30,640 --> 01:19:32,880
+were shooting for and
+
+1988
+01:19:32,880 --> 01:19:35,840
+you know and they achieved that goal
+
+1989
+01:19:35,840 --> 01:19:37,120
+anyway i hope you find this
+
+1990
+01:19:37,120 --> 01:19:38,560
+design interesting and sort of not your
+
+1991
+01:19:38,560 --> 01:19:40,640
+usual design and so hopefully that's a
+
+1992
+01:19:40,640 --> 01:19:42,239
+thought-provoking
+
+1993
+01:19:42,239 --> 01:19:45,199
+and with that i'll stop of course you
+
+1994
+01:19:45,199 --> 01:19:45,679
+know
+
+1995
+01:19:45,679 --> 01:19:46,880
+stick around if you want to ask more
+
+1996
+01:19:46,880 --> 01:19:48,880
+questions and otherwise we'll see your
+
+1997
+01:19:48,880 --> 01:19:53,270
+first day
+
+1998
+01:19:53,280 --> 01:19:56,960
+um can i can i ask two questions um
+
+1999
+01:19:56,960 --> 01:19:59,280
+my first question was just in general
+
+2000
+01:19:59,280 --> 01:20:02,320
+the cash coherence protocol here
+
+2001
+01:20:02,320 --> 01:20:05,840
+is to not have one file cached
+
+2002
+01:20:05,840 --> 01:20:09,760
+into places right okay
+
+2003
+01:20:09,760 --> 01:20:12,880
+um and my other question was about the
+
+2004
+01:20:12,880 --> 01:20:15,920
+there was a um a page
+
+2005
+01:20:15,920 --> 01:20:19,520
+with the log i mean you had the log
+
+2006
+01:20:19,520 --> 01:20:23,679
+um records there yep let me go back here
+
+2007
+01:20:23,679 --> 01:20:26,800
+yeah yeah um and i was
+
+2008
+01:20:26,800 --> 01:20:30,000
+i was wondering you said that each
+
+2009
+01:20:30,000 --> 01:20:33,040
+each like record is
+
+2010
+01:20:33,040 --> 01:20:36,719
+atomic but each record has a number of
+
+2011
+01:20:36,719 --> 01:20:38,000
+updates
+
+2012
+01:20:38,000 --> 01:20:41,600
+too right yes uh and again i think the
+
+2013
+01:20:41,600 --> 01:20:42,800
+paper is slightly vague here what
+
+2014
+01:20:42,800 --> 01:20:43,760
+exactly what it does
+
+2015
+01:20:43,760 --> 01:20:46,560
+either it always fits in 512 bytes and
+
+2016
+01:20:46,560 --> 01:20:49,199
+then a single sector for 512 bytes just
+
+2017
+01:20:49,199 --> 01:20:52,719
+is uh atomic or they uh
+
+2018
+01:20:52,719 --> 01:20:55,760
+use this checksum trick so uh
+
+2019
+01:20:55,760 --> 01:20:58,639
+you re-two and five the final bytes uh
+
+2020
+01:20:58,639 --> 01:20:59,520
+sectors
+
+2021
+01:20:59,520 --> 01:21:01,600
+you recompute the checksum and compare
+
+2022
+01:21:01,600 --> 01:21:02,800
+it with the checks on the store there
+
+2023
+01:21:02,800 --> 01:21:04,000
+and if it's the right then
+
+2024
+01:21:04,000 --> 01:21:07,350
+you know it must be a complete record
+
+2025
+01:21:07,360 --> 01:21:09,520
+okay okay so if it's shorter than good
+
+2026
+01:21:09,520 --> 01:21:11,120
+if it's not then you do the trick
+
+2027
+01:21:11,120 --> 01:21:13,679
+okay i see yeah i'm not sure what they
+
+2028
+01:21:13,679 --> 01:21:15,199
+exactly do
+
+2029
+01:21:15,199 --> 01:21:18,239
+oh okay okay thank you so much
+
+2030
+01:21:18,239 --> 01:21:21,910
+you're welcome
+
+2031
+01:21:21,920 --> 01:21:29,199
+any more questions
+
+2032
+01:21:29,199 --> 01:21:32,639
+uh if you go uh back or forward
+
+2033
+01:21:32,639 --> 01:21:36,800
+three slides yep here there was a
+
+2034
+01:21:36,800 --> 01:21:38,880
+oh maybe back one slide there's a
+
+2035
+01:21:38,880 --> 01:21:41,280
+section where you talked about how
+
+2036
+01:21:41,280 --> 01:21:44,719
+if a crash happens during the middle of
+
+2037
+01:21:44,719 --> 01:21:46,480
+a right and we get like yeah a prefix in
+
+2038
+01:21:46,480 --> 01:21:47,520
+the log
+
+2039
+01:21:47,520 --> 01:21:49,360
+um that's like okay or something do you
+
+2040
+01:21:49,360 --> 01:21:50,880
+mind repeating what you meant
+
+2041
+01:21:50,880 --> 01:21:54,239
+there yeah okay so uh so
+
+2042
+01:21:54,239 --> 01:21:55,679
+let's go back to this last picture i
+
+2043
+01:21:55,679 --> 01:21:58,320
+just showed uh earlier
+
+2044
+01:21:58,320 --> 01:22:02,400
+here so here we have our show the the
+
+2045
+01:22:02,400 --> 01:22:04,159
+workstation one could have executed many
+
+2046
+01:22:04,159 --> 01:22:06,239
+many file system operations correct
+
+2047
+01:22:06,239 --> 01:22:08,800
+each one of them uh described by one of
+
+2048
+01:22:08,800 --> 01:22:09,360
+these log
+
+2049
+01:22:09,360 --> 01:22:12,080
+by an entry in the log so like the first
+
+2050
+01:22:12,080 --> 01:22:12,560
+entry
+
+2051
+01:22:12,560 --> 01:22:14,080
+it might be creating file f because the
+
+2052
+01:22:14,080 --> 01:22:15,600
+second entry in the log might be
+
+2053
+01:22:15,600 --> 01:22:17,120
+creating file g you know whatever the
+
+2054
+01:22:17,120 --> 01:22:20,000
+third one migrating and deleting file f
+
+2055
+01:22:20,000 --> 01:22:21,520
+and so there's a whole sequence of
+
+2056
+01:22:21,520 --> 01:22:23,120
+operations because remember the
+
+2057
+01:22:23,120 --> 01:22:25,280
+workstation just keeps executing uh
+
+2058
+01:22:25,280 --> 01:22:28,480
+file system operations uh as long as it
+
+2059
+01:22:28,480 --> 01:22:29,520
+holds the logs and
+
+2060
+01:22:29,520 --> 01:22:32,159
+nobody else wants the loss and so the
+
+2061
+01:22:32,159 --> 01:22:32,560
+log
+
+2062
+01:22:32,560 --> 01:22:35,600
+could be uh containing a whole bunch of
+
+2063
+01:22:35,600 --> 01:22:37,040
+file system operations
+
+2064
+01:22:37,040 --> 01:22:38,800
+now for each file system operation for
+
+2065
+01:22:38,800 --> 01:22:42,159
+each individual one there's a log record
+
+2066
+01:22:42,159 --> 01:22:45,360
+and the log record you know is the
+
+2067
+01:22:45,360 --> 01:22:46,719
+atomic file system operation the
+
+2068
+01:22:46,719 --> 01:22:48,239
+description of the changes that need to
+
+2069
+01:22:48,239 --> 01:22:50,400
+be made to the actual file system blocks
+
+2070
+01:22:50,400 --> 01:22:53,120
+to uh reflect you know that file system
+
+2071
+01:22:53,120 --> 01:22:54,480
+operation
+
+2072
+01:22:54,480 --> 01:22:56,880
+and so what could happen correct is that
+
+2073
+01:22:56,880 --> 01:22:57,760
+uh
+
+2074
+01:22:57,760 --> 01:23:00,239
+the revoked message comes in the
+
+2075
+01:23:00,239 --> 01:23:02,560
+workstation one starts writing its log
+
+2076
+01:23:02,560 --> 01:23:05,360
+you know to uh panel but it just doesn't
+
+2077
+01:23:05,360 --> 01:23:06,880
+get all the way to the end it just
+
+2078
+01:23:06,880 --> 01:23:08,239
+happens to crash like somewhere in the
+
+2079
+01:23:08,239 --> 01:23:08,639
+middle
+
+2080
+01:23:08,639 --> 01:23:11,679
+like anywhere right in that case
+
+2081
+01:23:11,679 --> 01:23:13,920
+basically a prefix of the workstation
+
+2082
+01:23:13,920 --> 01:23:16,719
+log is on the disk
+
+2083
+01:23:16,719 --> 01:23:19,840
+or in pedal and that means that
+
+2084
+01:23:19,840 --> 01:23:21,600
+basically the last couple file system
+
+2085
+01:23:21,600 --> 01:23:27,270
+operations are just locks
+
+2086
+01:23:27,280 --> 01:23:31,280
+and only the prefix will be replayed
+
+2087
+01:23:31,280 --> 01:23:33,199
+i see and we're just saying that's okay
+
+2088
+01:23:33,199 --> 01:23:35,600
+yeah we're accepting that outcome
+
+2089
+01:23:35,600 --> 01:23:37,120
+got it thank you because we're already
+
+2090
+01:23:37,120 --> 01:23:38,800
+accepted to that outcome earlier right
+
+2091
+01:23:38,800 --> 01:23:40,080
+because it could have been the case that
+
+2092
+01:23:40,080 --> 01:23:40,560
+we
+
+2093
+01:23:40,560 --> 01:23:42,719
+the file system crashed like right
+
+2094
+01:23:42,719 --> 01:23:44,639
+before or right after we got the revoked
+
+2095
+01:23:44,639 --> 01:23:46,159
+message but it actually didn't write any
+
+2096
+01:23:46,159 --> 01:23:46,960
+log entries
+
+2097
+01:23:46,960 --> 01:23:56,709
+you have to do to pedal
+
+2098
+01:23:56,719 --> 01:24:01,750
+any more questions
+
+2099
+01:24:01,760 --> 01:24:04,719
+i have a completely unrelated question
+
+2100
+01:24:04,719 --> 01:24:05,199
+sure
+
+2101
+01:24:05,199 --> 01:24:08,239
+go ahead um two eight to four but
+
+2102
+01:24:08,239 --> 01:24:11,360
+i was wondering if you knew um anything
+
+2103
+01:24:11,360 --> 01:24:11,920
+about
+
+2104
+01:24:11,920 --> 01:24:14,960
+uh 6858 for next semester i saw
+
+2105
+01:24:14,960 --> 01:24:16,480
+professor saldwich is going to be
+
+2106
+01:24:16,480 --> 01:24:17,440
+teaching
+
+2107
+01:24:17,440 --> 01:24:22,000
+uh 6 so 860. yeah i think we're
+
+2108
+01:24:22,000 --> 01:24:24,800
+the current players not to offer 858 in
+
+2109
+01:24:24,800 --> 01:24:25,070
+the
+
+2110
+01:24:25,070 --> 01:24:26,400
+[Music]
+
+2111
+01:24:26,400 --> 01:24:29,440
+fall but we're hoping
+
+2112
+01:24:29,440 --> 01:24:32,880
+to offer it in the spring okay awesome
+
+2113
+01:24:32,880 --> 01:24:35,920
+uh do you know what 6.060
+
+2114
+01:24:35,920 --> 01:24:39,679
+is i i couldn't find much information
+
+2115
+01:24:39,679 --> 01:24:43,199
+yet so that's a good question
+
+2116
+01:24:43,199 --> 01:24:46,320
+uh it's intended to be an uh
+
+2117
+01:24:46,320 --> 01:24:49,440
+undergrad security class okay
+
+2118
+01:24:49,440 --> 01:24:52,719
+okay nice so like six eight five seven
+
+2119
+01:24:52,719 --> 01:24:53,360
+six
+
+2120
+01:24:53,360 --> 01:24:57,199
+eight five eight but um undergrad
+
+2121
+01:24:57,199 --> 01:25:00,880
+yeah sort of like uh maybe an intro to
+
+2122
+01:25:00,880 --> 01:25:02,480
+both six eight five seven and six eight
+
+2123
+01:25:02,480 --> 01:25:04,880
+five eight
+
+2124
+01:25:04,880 --> 01:25:08,239
+okay what's the number
+
+2125
+01:25:08,239 --> 01:25:09,679
+it's an experimental number it's one of
+
+2126
+01:25:09,679 --> 01:25:11,040
+these experimental ones because the
+
+2127
+01:25:11,040 --> 01:25:12,719
+class doesn't exist yet
+
+2128
+01:25:12,719 --> 01:25:14,159
+it will be offered for the you know the
+
+2129
+01:25:14,159 --> 01:25:15,520
+goal is to offer it for the first time
+
+2130
+01:25:15,520 --> 01:25:17,679
+in the fall
+
+2131
+01:25:17,679 --> 01:25:21,280
+okay and um so is is it going to be
+
+2132
+01:25:21,280 --> 01:25:22,560
+mostly like content from
+
+2133
+01:25:22,560 --> 01:25:26,080
+like is 858 gonna keep its original form
+
+2134
+01:25:26,080 --> 01:25:28,950
+or is it uh
+
+2135
+01:25:28,960 --> 01:25:30,239
+you're asking me questions i don't know
+
+2136
+01:25:30,239 --> 01:25:33,910
+sorry yeah
+
+2137
+01:25:33,920 --> 01:25:37,040
+and i think uh the people involved in
+
+2138
+01:25:37,040 --> 01:25:38,800
+in designing the class are people that
+
+2139
+01:25:38,800 --> 01:25:40,400
+are involved in 857 and the people
+
+2140
+01:25:40,400 --> 01:25:41,679
+involved in a fight yeah
+
+2141
+01:25:41,679 --> 01:25:44,000
+i'm not actually involved okay yet
+
+2142
+01:25:44,000 --> 01:25:45,120
+another reason but
+
+2143
+01:25:45,120 --> 01:25:47,520
+um and they're trying to work out what
+
+2144
+01:25:47,520 --> 01:25:48,880
+the curriculum exactly is going to be
+
+2145
+01:25:48,880 --> 01:25:50,000
+and then of course it's going to have
+
+2146
+01:25:50,000 --> 01:25:53,520
+some percolations for 858 and 857.
+
+2147
+01:25:53,520 --> 01:25:56,320
+okay sounds good but eight five eight
+
+2148
+01:25:56,320 --> 01:25:57,520
+and eight five seven are not gonna go
+
+2149
+01:25:57,520 --> 01:25:58,400
+away
+
+2150
+01:25:58,400 --> 01:26:01,920
+if that's the great
+
+2151
+01:26:01,920 --> 01:26:05,120
+thanks you're welcome as a
+
+2152
+01:26:05,120 --> 01:26:06,840
+question i don't know how quick it is
+
+2153
+01:26:06,840 --> 01:26:10,159
+but um and the paper at the end of
+
+2154
+01:26:10,159 --> 01:26:13,760
+page um or like right before section
+
+2155
+01:26:13,760 --> 01:26:14,639
+seven
+
+2156
+01:26:14,639 --> 01:26:18,480
+they talk about a case a failure where
+
+2157
+01:26:18,480 --> 01:26:20,960
+uh with like the lease expiring yeah and
+
+2158
+01:26:20,960 --> 01:26:22,800
+the server not really crashing
+
+2159
+01:26:22,800 --> 01:26:26,880
+yeah and then talk about like um
+
+2160
+01:26:26,880 --> 01:26:29,440
+basically that there's no real solution
+
+2161
+01:26:29,440 --> 01:26:30,159
+to this well
+
+2162
+01:26:30,159 --> 01:26:32,400
+there is a solution uh there's a real
+
+2163
+01:26:32,400 --> 01:26:33,760
+solution
+
+2164
+01:26:33,760 --> 01:26:36,639
+and okay it's like human intervention
+
+2165
+01:26:36,639 --> 01:26:37,040
+yeah
+
+2166
+01:26:37,040 --> 01:26:38,800
+okay so i think the problem here really
+
+2167
+01:26:38,800 --> 01:26:40,239
+is this was the theme of the paperwork
+
+2168
+01:26:40,239 --> 01:26:42,000
+like you know paddle and franchopani are
+
+2169
+01:26:42,000 --> 01:26:43,520
+designed independently
+
+2170
+01:26:43,520 --> 01:26:46,159
+and that has a lot of nice properties uh
+
+2171
+01:26:46,159 --> 01:26:47,920
+and this is one where one one place
+
+2172
+01:26:47,920 --> 01:26:49,360
+where it would be very helpful
+
+2173
+01:26:49,360 --> 01:26:50,880
+hopefully that your pedal has some
+
+2174
+01:26:50,880 --> 01:26:52,800
+support you know to help franciupani
+
+2175
+01:26:52,800 --> 01:26:53,679
+along
+
+2176
+01:26:53,679 --> 01:26:55,840
+and that support would be actually have
+
+2177
+01:26:55,840 --> 01:26:57,360
+a time stamp on the right
+
+2178
+01:26:57,360 --> 01:26:59,520
+two pedals so that pedal can see when a
+
+2179
+01:26:59,520 --> 01:27:00,800
+ride actually is out of the
+
+2180
+01:27:00,800 --> 01:27:04,000
+basically too old
+
+2181
+01:27:04,000 --> 01:27:06,639
+okay so unless you do that you need to
+
+2182
+01:27:06,639 --> 01:27:08,800
+like fiddle around with like the margin
+
+2183
+01:27:08,800 --> 01:27:13,040
+yes exactly okay and what happens if
+
+2184
+01:27:13,040 --> 01:27:16,159
+um like uh
+
+2185
+01:27:16,159 --> 01:27:19,280
+that error occurs like outside of the
+
+2186
+01:27:19,280 --> 01:27:20,639
+bounds of the margin
+
+2187
+01:27:20,639 --> 01:27:23,830
+ah i mean that's a cool
+
+2188
+01:27:23,840 --> 01:27:25,679
+basically you get an old uh right you
+
+2189
+01:27:25,679 --> 01:27:27,600
+know showing up in uh
+
+2190
+01:27:27,600 --> 01:27:29,360
+basically somebody else might at that
+
+2191
+01:27:29,360 --> 01:27:30,880
+point gotten the lock on the file
+
+2192
+01:27:30,880 --> 01:27:32,400
+correctly starting writing to it
+
+2193
+01:27:32,400 --> 01:27:34,000
+and then this old write shows up and
+
+2194
+01:27:34,000 --> 01:27:35,679
+basically presumably overwrite some part
+
+2195
+01:27:35,679 --> 01:27:37,199
+of it
+
+2196
+01:27:37,199 --> 01:27:42,390
+okay so we'll bring consistency
+
+2197
+01:27:42,400 --> 01:27:49,189
+sweet thank you you're welcome
+
