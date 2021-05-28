@@ -1,0 +1,8648 @@
+1
+00:00:03,520 --> 00:00:04,000
+okay
+
+2
+00:00:04,000 --> 00:00:06,560
+good afternoon good morning or good
+
+3
+00:00:06,560 --> 00:00:08,000
+night
+
+4
+00:00:08,000 --> 00:00:11,040
+um uh let's get started
+
+5
+00:00:11,040 --> 00:00:12,880
+uh today i want to talk about the
+
+6
+00:00:12,880 --> 00:00:14,160
+bitcoin
+
+7
+00:00:14,160 --> 00:00:17,840
+um the reason i want to talk about it is
+
+8
+00:00:17,840 --> 00:00:20,720
+it's also hard problem namely achieving
+
+9
+00:00:20,720 --> 00:00:28,790
+consensus
+
+10
+00:00:28,800 --> 00:00:41,270
+with byzantine participants
+
+11
+00:00:41,280 --> 00:00:43,440
+and you know it solves it uh some of the
+
+12
+00:00:43,440 --> 00:00:44,399
+byzantine i mean
+
+13
+00:00:44,399 --> 00:00:46,879
+participants that uh might be malicious
+
+14
+00:00:46,879 --> 00:00:48,480
+or adversarial
+
+15
+00:00:48,480 --> 00:00:50,960
+and uh it solves this problem in the
+
+16
+00:00:50,960 --> 00:00:52,000
+context of in
+
+17
+00:00:52,000 --> 00:00:53,520
+completely open systems you know people
+
+18
+00:00:53,520 --> 00:00:57,840
+can uh join and leave the system at will
+
+19
+00:00:57,840 --> 00:00:59,440
+and some of them you know maybe
+
+20
+00:00:59,440 --> 00:01:02,239
+malicious and yet you know achieves uh
+
+21
+00:01:02,239 --> 00:01:03,840
+consensus on
+
+22
+00:01:03,840 --> 00:01:06,320
+uh the order in which transaction
+
+23
+00:01:06,320 --> 00:01:06,880
+happens
+
+24
+00:01:06,880 --> 00:01:08,159
+does it actually in a very challenging
+
+25
+00:01:08,159 --> 00:01:10,000
+context of actually really uh
+
+26
+00:01:10,000 --> 00:01:15,109
+doing it in uh with money involved
+
+27
+00:01:15,119 --> 00:01:18,240
+the design uh you know looks a little
+
+28
+00:01:18,240 --> 00:01:18,720
+bit
+
+29
+00:01:18,720 --> 00:01:22,080
+like has aspects of sunder so in since
+
+30
+00:01:22,080 --> 00:01:25,270
+there's a sign log
+
+31
+00:01:25,280 --> 00:01:26,960
+of operations in this case the
+
+32
+00:01:26,960 --> 00:01:28,320
+transactions
+
+33
+00:01:28,320 --> 00:01:30,720
+uh but unlike in cylinder that actually
+
+34
+00:01:30,720 --> 00:01:33,200
+you know can handle
+
+35
+00:01:33,200 --> 00:01:38,950
+uh forks
+
+36
+00:01:38,960 --> 00:01:40,799
+and so most of the you know the many
+
+37
+00:01:40,799 --> 00:01:42,720
+aspects are interesting to talk about uh
+
+38
+00:01:42,720 --> 00:01:44,720
+with respect to bitcoin um but mostly
+
+39
+00:01:44,720 --> 00:01:46,159
+i'm going to focus on sort of the
+
+40
+00:01:46,159 --> 00:01:48,399
+sort of the distributed systems aspect
+
+41
+00:01:48,399 --> 00:01:50,240
+of this particular paper
+
+42
+00:01:50,240 --> 00:01:53,600
+this paper is a bit unusual or
+
+43
+00:01:53,600 --> 00:01:56,640
+quite unusual uh first of all this is
+
+44
+00:01:56,640 --> 00:01:57,360
+not a
+
+45
+00:01:57,360 --> 00:01:59,280
+paper out of the sort of scientific
+
+46
+00:01:59,280 --> 00:02:00,560
+literature that we've been reading so
+
+47
+00:02:00,560 --> 00:02:01,439
+far
+
+48
+00:02:01,439 --> 00:02:03,840
+it comes out of a different part of the
+
+49
+00:02:03,840 --> 00:02:04,960
+world
+
+50
+00:02:04,960 --> 00:02:14,470
+it is pseudo-anonymous
+
+51
+00:02:14,480 --> 00:02:17,360
+and it has a you know particularly gripe
+
+52
+00:02:17,360 --> 00:02:18,319
+you know with
+
+53
+00:02:18,319 --> 00:02:21,040
+financial institutions um and you know
+
+54
+00:02:21,040 --> 00:02:22,400
+you can have uh
+
+55
+00:02:22,400 --> 00:02:23,760
+all kinds of opinions you know about
+
+56
+00:02:23,760 --> 00:02:26,000
+whether bitcoin in general uh
+
+57
+00:02:26,000 --> 00:02:28,480
+and cryptocurrency in general uh but
+
+58
+00:02:28,480 --> 00:02:29,680
+from the perspective of receiving
+
+59
+00:02:29,680 --> 00:02:30,720
+systems this is a
+
+60
+00:02:30,720 --> 00:02:32,480
+mutually successful system you know this
+
+61
+00:02:32,480 --> 00:02:33,760
+is really truly
+
+62
+00:02:33,760 --> 00:02:36,879
+uh an open system that can tolerate the
+
+63
+00:02:36,879 --> 00:02:38,319
+listening participants and
+
+64
+00:02:38,319 --> 00:02:40,560
+achieve consensus and so really you know
+
+65
+00:02:40,560 --> 00:02:42,239
+the focus on this lecture is trying to
+
+66
+00:02:42,239 --> 00:02:43,760
+you know understand how actually to
+
+67
+00:02:43,760 --> 00:02:45,840
+choose that particular uh
+
+68
+00:02:45,840 --> 00:02:50,560
+aspect um any questions
+
+69
+00:02:50,560 --> 00:03:00,550
+just do before i dive in
+
+70
+00:03:00,560 --> 00:03:03,599
+okay so uh as just mentioned you know
+
+71
+00:03:03,599 --> 00:03:04,319
+the
+
+72
+00:03:04,319 --> 00:03:07,280
+context is here uh the financial
+
+73
+00:03:07,280 --> 00:03:08,959
+transactions
+
+74
+00:03:08,959 --> 00:03:11,840
+and so those are free overriding
+
+75
+00:03:11,840 --> 00:03:13,120
+concerns you know when
+
+76
+00:03:13,120 --> 00:03:15,120
+uh when transactions are involved where
+
+77
+00:03:15,120 --> 00:03:16,640
+money transactions are involved
+
+78
+00:03:16,640 --> 00:03:17,760
+first of all of course you know there's
+
+79
+00:03:17,760 --> 00:03:25,509
+a conservative outright forgery
+
+80
+00:03:25,519 --> 00:03:27,120
+where basically you know people cook up
+
+81
+00:03:27,120 --> 00:03:29,040
+you know transactions
+
+82
+00:03:29,040 --> 00:03:31,360
+out of thin air and answer them in the
+
+83
+00:03:31,360 --> 00:03:32,640
+log and you know
+
+84
+00:03:32,640 --> 00:03:35,680
+uh try to mislead other participants you
+
+85
+00:03:35,680 --> 00:03:36,799
+know that actually they're spending
+
+86
+00:03:36,799 --> 00:03:38,640
+their uh their own money
+
+87
+00:03:38,640 --> 00:03:40,799
+uh while spending somebody else's money
+
+88
+00:03:40,799 --> 00:03:42,159
+and you know this problem
+
+89
+00:03:42,159 --> 00:03:43,360
+is reasonable straightforward for
+
+90
+00:03:43,360 --> 00:03:45,040
+assault and in a very sort of similar
+
+91
+00:03:45,040 --> 00:03:45,760
+style to
+
+92
+00:03:45,760 --> 00:03:49,200
+sunder but basically signing operations
+
+93
+00:03:49,200 --> 00:03:52,959
+uh make it hard to actually forge and in
+
+94
+00:03:52,959 --> 00:03:54,159
+fact you know so the general setting
+
+95
+00:03:54,159 --> 00:03:56,000
+here correct is the same as in some very
+
+96
+00:03:56,000 --> 00:03:56,560
+well
+
+97
+00:03:56,560 --> 00:03:59,439
+you know the byzantine uh partition that
+
+98
+00:03:59,439 --> 00:04:00,000
+are very very
+
+99
+00:04:00,000 --> 00:04:01,680
+very powerful we're going to be assuming
+
+100
+00:04:01,680 --> 00:04:04,080
+that the crypto systems uh actually uh
+
+101
+00:04:04,080 --> 00:04:06,720
+work and or cannot be compromised
+
+102
+00:04:06,720 --> 00:04:08,560
+and so a lot of the core you know
+
+103
+00:04:08,560 --> 00:04:10,319
+functionality uh
+
+104
+00:04:10,319 --> 00:04:12,319
+or the basis of which you know we might
+
+105
+00:04:12,319 --> 00:04:14,000
+conclude that actually things are secure
+
+106
+00:04:14,000 --> 00:04:16,079
+are all going to come down to the fact
+
+107
+00:04:16,079 --> 00:04:17,840
+that the underlying
+
+108
+00:04:17,840 --> 00:04:21,120
+cryptography is correct so
+
+109
+00:04:21,120 --> 00:04:23,759
+that's one challenge uh the second
+
+110
+00:04:23,759 --> 00:04:24,880
+challenge which is the one that
+
+111
+00:04:24,880 --> 00:04:26,080
+the paper spends most of this time
+
+112
+00:04:26,080 --> 00:04:33,749
+talking about is double spending
+
+113
+00:04:33,759 --> 00:04:36,320
+so you legitimately have you know some
+
+114
+00:04:36,320 --> 00:04:37,199
+bitcoins
+
+115
+00:04:37,199 --> 00:04:41,680
+that you accumulated in a
+
+116
+00:04:41,680 --> 00:04:43,919
+business participant tries to spend uh
+
+117
+00:04:43,919 --> 00:04:44,880
+twice
+
+118
+00:04:44,880 --> 00:04:47,040
+uh that same bitcoin and of course we
+
+119
+00:04:47,040 --> 00:04:49,199
+want to avoid that particular problem
+
+120
+00:04:49,199 --> 00:04:52,160
+i do and the main ideas we'll see is
+
+121
+00:04:52,160 --> 00:04:52,479
+that
+
+122
+00:04:52,479 --> 00:04:55,840
+there's a public ledger or a public log
+
+123
+00:04:55,840 --> 00:04:56,320
+uh
+
+124
+00:04:56,320 --> 00:04:58,240
+of all the transactions you know so that
+
+125
+00:04:58,240 --> 00:04:59,919
+you can see if the transaction actually
+
+126
+00:04:59,919 --> 00:05:01,919
+uh without money was already spent in an
+
+127
+00:05:01,919 --> 00:05:03,199
+early transaction
+
+128
+00:05:03,199 --> 00:05:05,039
+and really trying to achieve uh
+
+129
+00:05:05,039 --> 00:05:06,960
+consensus on what is actually in the log
+
+130
+00:05:06,960 --> 00:05:10,560
+is at the heart of the the the paper
+
+131
+00:05:10,560 --> 00:05:13,440
+then uh of course in addition to uh
+
+132
+00:05:13,440 --> 00:05:14,000
+these two
+
+133
+00:05:14,000 --> 00:05:15,680
+there's sort of the obvious other
+
+134
+00:05:15,680 --> 00:05:17,360
+problem uh which paper doesn't really
+
+135
+00:05:17,360 --> 00:05:18,560
+talk much about and we're also not going
+
+136
+00:05:18,560 --> 00:05:19,680
+to talk much about
+
+137
+00:05:19,680 --> 00:05:23,360
+uh which is just theft uh where
+
+138
+00:05:23,360 --> 00:05:25,440
+somebody actually steals somebody else's
+
+139
+00:05:25,440 --> 00:05:27,280
+private key and therefore
+
+140
+00:05:27,280 --> 00:05:30,160
+can spend money or bitcoins uh using
+
+141
+00:05:30,160 --> 00:05:31,280
+that particular private key
+
+142
+00:05:31,280 --> 00:05:32,560
+and it turns out to be in practice a
+
+143
+00:05:32,560 --> 00:05:34,320
+serious problem uh
+
+144
+00:05:34,320 --> 00:05:37,759
+people store uh their wallets with
+
+145
+00:05:37,759 --> 00:05:40,560
+their signing keys on computers you know
+
+146
+00:05:40,560 --> 00:05:42,000
+computers can be broken into
+
+147
+00:05:42,000 --> 00:05:44,240
+and and therefore people can break it
+
+148
+00:05:44,240 --> 00:05:45,120
+over to steal
+
+149
+00:05:45,120 --> 00:05:47,680
+you know somebody else's money um and
+
+150
+00:05:47,680 --> 00:05:49,440
+another i think it's a serious problem
+
+151
+00:05:49,440 --> 00:05:49,759
+in
+
+152
+00:05:49,759 --> 00:05:51,680
+practice i'm not going to be spending
+
+153
+00:05:51,680 --> 00:05:53,360
+much time talking about it in fact
+
+154
+00:05:53,360 --> 00:05:54,800
+again i always want to focus on the
+
+155
+00:05:54,800 --> 00:05:59,029
+distributed systems aspects
+
+156
+00:05:59,039 --> 00:06:06,400
+any questions about the challenges
+
+157
+00:06:06,400 --> 00:06:08,960
+okay let's look at the transaction then
+
+158
+00:06:08,960 --> 00:06:11,600
+you know what's actually in it
+
+159
+00:06:11,600 --> 00:06:18,830
+so this is basically what is in the
+
+160
+00:06:18,840 --> 00:06:21,440
+ledger
+
+161
+00:06:21,440 --> 00:06:26,240
+uh i'm going to simplify this greatly uh
+
+162
+00:06:26,240 --> 00:06:27,680
+because some of the details actually
+
+163
+00:06:27,680 --> 00:06:28,880
+don't really matter to the discussion
+
+164
+00:06:28,880 --> 00:06:30,160
+that we're going to have
+
+165
+00:06:30,160 --> 00:06:31,600
+and you know the first order you can
+
+166
+00:06:31,600 --> 00:06:34,319
+just think about it is every transaction
+
+167
+00:06:34,319 --> 00:06:37,600
+uh is a record and that record has a
+
+168
+00:06:37,600 --> 00:06:43,670
+public key
+
+169
+00:06:43,680 --> 00:06:45,759
+of the user you know for which you know
+
+170
+00:06:45,759 --> 00:06:46,960
+the
+
+171
+00:06:46,960 --> 00:06:48,880
+the money is intended so this is the the
+
+172
+00:06:48,880 --> 00:06:51,039
+destination
+
+173
+00:06:51,039 --> 00:06:56,469
+um the hash
+
+174
+00:06:56,479 --> 00:06:58,319
+of the previous transaction you know for
+
+175
+00:06:58,319 --> 00:07:00,720
+this particular bitcoin
+
+176
+00:07:00,720 --> 00:07:05,189
+uh and a signature
+
+177
+00:07:05,199 --> 00:07:11,110
+and we have the private key
+
+178
+00:07:11,120 --> 00:07:12,880
+these two you know basically the
+
+179
+00:07:12,880 --> 00:07:15,199
+previous owner of
+
+180
+00:07:15,199 --> 00:07:18,560
+of that particular uh bitcoin and
+
+181
+00:07:18,560 --> 00:07:20,319
+uh and that sort of you could think
+
+182
+00:07:20,319 --> 00:07:22,319
+about this as the source so basically
+
+183
+00:07:22,319 --> 00:07:24,720
+u2 is making you know granting you know
+
+184
+00:07:24,720 --> 00:07:25,599
+bitcoins or
+
+185
+00:07:25,599 --> 00:07:27,360
+uh transferring bitcoins from youtube to
+
+186
+00:07:27,360 --> 00:07:29,440
+your one so that you're one that can
+
+187
+00:07:29,440 --> 00:07:30,800
+spend them
+
+188
+00:07:30,800 --> 00:07:32,319
+um of course there's all kinds of other
+
+189
+00:07:32,319 --> 00:07:34,319
+stuff in it like there's an amount in it
+
+190
+00:07:34,319 --> 00:07:37,280
+it's a fractional amount uh there are
+
+191
+00:07:37,280 --> 00:07:38,880
+many destinations and many sources
+
+192
+00:07:38,880 --> 00:07:39,440
+possible
+
+193
+00:07:39,440 --> 00:07:43,199
+you know many ins and outs uh
+
+194
+00:07:43,199 --> 00:07:44,800
+the reagans are basically all ignored
+
+195
+00:07:44,800 --> 00:07:47,280
+and just sort of focus on uh
+
+196
+00:07:47,280 --> 00:07:49,520
+the simplified description turns out the
+
+197
+00:07:49,520 --> 00:07:50,720
+transactions are
+
+198
+00:07:50,720 --> 00:07:53,120
+encoded also uh not sort of like sort of
+
+199
+00:07:53,120 --> 00:07:54,560
+passive records but
+
+200
+00:07:54,560 --> 00:07:56,000
+uh basically in a little scripting
+
+201
+00:07:56,000 --> 00:07:59,440
+language um and also going to ignore
+
+202
+00:07:59,440 --> 00:08:02,960
+all those aspects uh in this technique i
+
+203
+00:08:02,960 --> 00:08:04,080
+want to focus on this thing
+
+204
+00:08:04,080 --> 00:08:05,840
+and you know talk a little bit and show
+
+205
+00:08:05,840 --> 00:08:07,599
+a little example uh so that we get a
+
+206
+00:08:07,599 --> 00:08:08,879
+little bit of the handle of actually
+
+207
+00:08:08,879 --> 00:08:09,440
+what
+
+208
+00:08:09,440 --> 00:08:11,120
+what we're looking at in terms of the
+
+209
+00:08:11,120 --> 00:08:15,350
+challenge
+
+210
+00:08:15,360 --> 00:08:16,639
+so we're going to sort of look at an
+
+211
+00:08:16,639 --> 00:08:18,560
+example ledger and sort of
+
+212
+00:08:18,560 --> 00:08:20,000
+try to understand actually you know what
+
+213
+00:08:20,000 --> 00:08:21,840
+it means to be a bitcoin
+
+214
+00:08:21,840 --> 00:08:24,639
+or what a coin is uh because it's not
+
+215
+00:08:24,639 --> 00:08:25,440
+like you know
+
+216
+00:08:25,440 --> 00:08:27,280
+it's sort of a single thing uh actually
+
+217
+00:08:27,280 --> 00:08:29,120
+it really comes down to it's actually
+
+218
+00:08:29,120 --> 00:08:31,280
+you know sort of a sha-1 of the last
+
+219
+00:08:31,280 --> 00:08:32,880
+transaction that is sort of what a coin
+
+220
+00:08:32,880 --> 00:08:33,919
+is
+
+221
+00:08:33,919 --> 00:08:37,200
+uh so let's say you know why uh
+
+222
+00:08:37,200 --> 00:08:40,399
+owns a coin and received uh from
+
+223
+00:08:40,399 --> 00:08:42,320
+x and so that means that they're
+
+224
+00:08:42,320 --> 00:08:44,240
+somewhere in the ledger there's sort of
+
+225
+00:08:44,240 --> 00:08:44,560
+a
+
+226
+00:08:44,560 --> 00:08:46,720
+set of transactions that transfer the
+
+227
+00:08:46,720 --> 00:08:47,680
+money or the
+
+228
+00:08:47,680 --> 00:08:50,800
+coin or parts of the coin to uh y
+
+229
+00:08:50,800 --> 00:08:54,080
+and so let's see like somewhere maybe
+
+230
+00:08:54,080 --> 00:08:55,040
+there's an entry in the left or
+
+231
+00:08:55,040 --> 00:08:57,279
+somewhere in the some period of time
+
+232
+00:08:57,279 --> 00:09:00,640
+where x actually received
+
+233
+00:09:00,640 --> 00:09:03,760
+uh some bitcoins
+
+234
+00:09:03,760 --> 00:09:06,959
+and uh and now you know it's a
+
+235
+00:09:06,959 --> 00:09:10,240
+grandson or uh it has given it to uh
+
+236
+00:09:10,240 --> 00:09:13,519
+y so there's another transaction in
+
+237
+00:09:13,519 --> 00:09:15,760
+the ledger that basically records that
+
+238
+00:09:15,760 --> 00:09:17,920
+fact and so that might have the top key
+
+239
+00:09:17,920 --> 00:09:18,959
+of
+
+240
+00:09:18,959 --> 00:09:22,640
+y as the destination the hash of the
+
+241
+00:09:22,640 --> 00:09:26,389
+transaction six
+
+242
+00:09:26,399 --> 00:09:28,480
+so that uniquely identifies a shorthand
+
+243
+00:09:28,480 --> 00:09:30,640
+handle for actually uniquely identifying
+
+244
+00:09:30,640 --> 00:09:33,040
+transaction six and so we have the
+
+245
+00:09:33,040 --> 00:09:34,399
+ledger record that we think is
+
+246
+00:09:34,399 --> 00:09:36,240
+transaction six now we can recompute the
+
+247
+00:09:36,240 --> 00:09:38,480
+hash of that transaction compared to
+
+248
+00:09:38,480 --> 00:09:40,320
+the one that stored into section seven
+
+249
+00:09:40,320 --> 00:09:41,920
+and you know truly determined that
+
+250
+00:09:41,920 --> 00:09:42,640
+basically
+
+251
+00:09:42,640 --> 00:09:45,360
+uh transaction six what's the source you
+
+252
+00:09:45,360 --> 00:09:47,360
+know for this transaction seven
+
+253
+00:09:47,360 --> 00:09:49,120
+or it's based the previous objection was
+
+254
+00:09:49,120 --> 00:09:50,480
+to section six
+
+255
+00:09:50,480 --> 00:09:52,240
+for this particular coin and this is
+
+256
+00:09:52,240 --> 00:09:55,670
+assigned by
+
+257
+00:09:55,680 --> 00:09:58,880
+you know x um now
+
+258
+00:09:58,880 --> 00:10:00,399
+uh so this is sort of the situation
+
+259
+00:10:00,399 --> 00:10:02,160
+where you know y
+
+260
+00:10:02,160 --> 00:10:04,880
+obtained you know basically uh you know
+
+261
+00:10:04,880 --> 00:10:06,959
+some some bitcoins you know for an x
+
+262
+00:10:06,959 --> 00:10:08,959
+you know y wants to spend i think for
+
+263
+00:10:08,959 --> 00:10:10,480
+example maybe y wants to
+
+264
+00:10:10,480 --> 00:10:13,440
+buy a latte you know from z uh and so
+
+265
+00:10:13,440 --> 00:10:14,240
+it's gonna
+
+266
+00:10:14,240 --> 00:10:17,360
+transfer some money to um
+
+267
+00:10:17,360 --> 00:10:19,920
+z so maybe we'll see another transaction
+
+268
+00:10:19,920 --> 00:10:20,640
+in the ledger
+
+269
+00:10:20,640 --> 00:10:22,320
+which is going to be a form you know
+
+270
+00:10:22,320 --> 00:10:23,839
+this is one that actually y is going to
+
+271
+00:10:23,839 --> 00:10:25,600
+add
+
+272
+00:10:25,600 --> 00:10:30,829
+uh
+
+273
+00:10:30,839 --> 00:10:33,600
+z uh hash of the
+
+274
+00:10:33,600 --> 00:10:37,120
+you know previous uh coin
+
+275
+00:10:37,120 --> 00:10:38,640
+which is the last injection for that
+
+276
+00:10:38,640 --> 00:10:40,399
+coin so that's t7
+
+277
+00:10:40,399 --> 00:10:45,030
+and it's sent by y
+
+278
+00:10:45,040 --> 00:10:47,920
+um and basically you know c wants to
+
+279
+00:10:47,920 --> 00:10:49,680
+before again z actually hands over the
+
+280
+00:10:49,680 --> 00:10:50,079
+latte
+
+281
+00:10:50,079 --> 00:10:51,760
+to y because you need to do some
+
+282
+00:10:51,760 --> 00:10:53,200
+verification uh to
+
+283
+00:10:53,200 --> 00:10:55,040
+make sure that this actually is a legit
+
+284
+00:10:55,040 --> 00:10:56,480
+you know transaction
+
+285
+00:10:56,480 --> 00:11:00,000
+uh so you know we'll look up uh
+
+286
+00:11:00,000 --> 00:11:03,360
+you know transaction seven um and you
+
+287
+00:11:03,360 --> 00:11:04,880
+know compute you know the hash of it you
+
+288
+00:11:04,880 --> 00:11:06,160
+know double check that the
+
+289
+00:11:06,160 --> 00:11:07,600
+hash actually corresponds to the one
+
+290
+00:11:07,600 --> 00:11:09,760
+that actually is listed in transaction
+
+291
+00:11:09,760 --> 00:11:12,800
+uh uh in transaction eight
+
+292
+00:11:12,800 --> 00:11:14,959
+uh if you know the hash you know checks
+
+293
+00:11:14,959 --> 00:11:16,640
+out so there's action seven is indeed
+
+294
+00:11:16,640 --> 00:11:17,360
+you know
+
+295
+00:11:17,360 --> 00:11:18,880
+we believe that the one that actually
+
+296
+00:11:18,880 --> 00:11:20,959
+turned action eight refers to
+
+297
+00:11:20,959 --> 00:11:23,440
+uh you know z looks up the the public
+
+298
+00:11:23,440 --> 00:11:24,000
+key
+
+299
+00:11:24,000 --> 00:11:27,680
+uh in transaction seven for
+
+300
+00:11:27,680 --> 00:11:30,800
+y which usually is the public key y then
+
+301
+00:11:30,800 --> 00:11:32,480
+you know verifies that use that public
+
+302
+00:11:32,480 --> 00:11:34,000
+key to verify the signature
+
+303
+00:11:34,000 --> 00:11:36,079
+you know of this transaction and the
+
+304
+00:11:36,079 --> 00:11:37,680
+second zero course you know covers
+
+305
+00:11:37,680 --> 00:11:39,760
+you know the whole transaction and if
+
+306
+00:11:39,760 --> 00:11:40,880
+the signature checks out
+
+307
+00:11:40,880 --> 00:11:43,839
+you know then uh you know z can be sort
+
+308
+00:11:43,839 --> 00:11:45,839
+of confident you know that actually
+
+309
+00:11:45,839 --> 00:11:48,399
+uh the ledger you know contains a
+
+310
+00:11:48,399 --> 00:11:50,079
+transaction that basically transfers you
+
+311
+00:11:50,079 --> 00:11:51,440
+know some amount of money
+
+312
+00:11:51,440 --> 00:11:54,399
+from y to z and so at this point you
+
+313
+00:11:54,399 --> 00:11:56,320
+know the verification you know she
+
+314
+00:11:56,320 --> 00:11:57,760
+verifies
+
+315
+00:11:57,760 --> 00:12:03,040
+and you know if it's okay
+
+316
+00:12:03,040 --> 00:12:07,430
+you know whatever shift the latte
+
+317
+00:12:07,440 --> 00:12:12,470
+and if not you know reject
+
+318
+00:12:12,480 --> 00:12:15,120
+and again like before in uh you know
+
+319
+00:12:15,120 --> 00:12:15,680
+sunder
+
+320
+00:12:15,680 --> 00:12:18,079
+and in all these sort of schemes uh you
+
+321
+00:12:18,079 --> 00:12:19,440
+know we're relying here on the fact that
+
+322
+00:12:19,440 --> 00:12:20,959
+basically why
+
+323
+00:12:20,959 --> 00:12:23,680
+uh you know was careful with its private
+
+324
+00:12:23,680 --> 00:12:30,949
+key
+
+325
+00:12:30,959 --> 00:12:34,399
+yeah so yeah we we have to assume that y
+
+326
+00:12:34,399 --> 00:12:40,150
+didn't disclose in any way
+
+327
+00:12:40,160 --> 00:12:43,829
+it's private key
+
+328
+00:12:43,839 --> 00:12:45,519
+uh because if anybody has you know this
+
+329
+00:12:45,519 --> 00:12:47,279
+private key then basically anybody could
+
+330
+00:12:47,279 --> 00:12:48,639
+come up to signature
+
+331
+00:12:48,639 --> 00:12:50,399
+uh and you know he's able to spend
+
+332
+00:12:50,399 --> 00:12:52,480
+basically wise money
+
+333
+00:12:52,480 --> 00:12:54,800
+um although maybe from the perspective
+
+334
+00:12:54,800 --> 00:12:56,560
+receiver doesn't really care
+
+335
+00:12:56,560 --> 00:13:00,399
+um okay so uh
+
+336
+00:13:00,399 --> 00:13:03,440
+so that's sort of the basic plan
+
+337
+00:13:03,440 --> 00:13:06,560
+uh in terms of you know having a record
+
+338
+00:13:06,560 --> 00:13:09,040
+and uh you know this is pretty good
+
+339
+00:13:09,040 --> 00:13:12,710
+right i mean
+
+340
+00:13:12,720 --> 00:13:14,320
+there's a record of the transaction that
+
+341
+00:13:14,320 --> 00:13:16,320
+happened uh when c you know receives a
+
+342
+00:13:16,320 --> 00:13:17,760
+transaction they can check whether this
+
+343
+00:13:17,760 --> 00:13:18,839
+is a valid
+
+344
+00:13:18,839 --> 00:13:22,160
+transaction and uh um you know wants to
+
+345
+00:13:22,160 --> 00:13:23,519
+decide whether to actually
+
+346
+00:13:23,519 --> 00:13:26,560
+accept the money and deliver the goods
+
+347
+00:13:26,560 --> 00:13:32,829
+so one key challenge
+
+348
+00:13:32,839 --> 00:13:35,200
+uh now sort of left
+
+349
+00:13:35,200 --> 00:13:36,480
+you know we are seeing that outright
+
+350
+00:13:36,480 --> 00:13:40,710
+forgery is difficult uh
+
+351
+00:13:40,720 --> 00:13:41,920
+but you know we need to think a little
+
+352
+00:13:41,920 --> 00:13:44,160
+bit about the double spend and so
+
+353
+00:13:44,160 --> 00:13:45,360
+the double spending problem is as
+
+354
+00:13:45,360 --> 00:13:47,360
+follows let's say instead of you know
+
+355
+00:13:47,360 --> 00:13:48,480
+creating two
+
+356
+00:13:48,480 --> 00:13:50,480
+one record as in this critical example
+
+357
+00:13:50,480 --> 00:13:51,600
+in the transaction
+
+358
+00:13:51,600 --> 00:13:54,880
+eight z actually integrates over y
+
+359
+00:13:54,880 --> 00:14:07,110
+creates two records
+
+360
+00:14:07,120 --> 00:14:10,320
+uh one record is basically giving the
+
+361
+00:14:10,320 --> 00:14:11,519
+one that we just saw
+
+362
+00:14:11,519 --> 00:14:14,839
+i mean rt8
+
+363
+00:14:14,839 --> 00:14:19,829
+y2z uh with the hash of seven
+
+364
+00:14:19,839 --> 00:14:21,680
+now but let's see let's assume that
+
+365
+00:14:21,680 --> 00:14:23,199
+actually uh y also
+
+366
+00:14:23,199 --> 00:14:25,920
+tries to uh double spend its money so it
+
+367
+00:14:25,920 --> 00:14:26,720
+creates a second
+
+368
+00:14:26,720 --> 00:14:29,680
+transaction you know ta prime uh were
+
+369
+00:14:29,680 --> 00:14:30,160
+you know
+
+370
+00:14:30,160 --> 00:14:31,920
+the records is basically the same except
+
+371
+00:14:31,920 --> 00:14:33,279
+you know the money you know maybe goes
+
+372
+00:14:33,279 --> 00:14:35,040
+to q
+
+373
+00:14:35,040 --> 00:14:38,079
+and it has the hash of t7
+
+374
+00:14:38,079 --> 00:14:41,120
+and of course you know science by y you
+
+375
+00:14:41,120 --> 00:14:45,990
+know signed by y
+
+376
+00:14:46,000 --> 00:14:48,720
+um and now you know let's say you know
+
+377
+00:14:48,720 --> 00:14:49,760
+both q and z are
+
+378
+00:14:49,760 --> 00:14:53,120
+like a lot a stores uh if you know
+
+379
+00:14:53,120 --> 00:14:56,480
+uh z accepts to you eight uh
+
+380
+00:14:56,480 --> 00:14:58,160
+as it would because you know everything
+
+381
+00:14:58,160 --> 00:15:00,079
+will check out as we saw in the previous
+
+382
+00:15:00,079 --> 00:15:02,639
+slide then z would actually ship a lot a
+
+383
+00:15:02,639 --> 00:15:03,600
+to y
+
+384
+00:15:03,600 --> 00:15:06,480
+uh when q not knowing anything maybe
+
+385
+00:15:06,480 --> 00:15:07,279
+about this other
+
+386
+00:15:07,279 --> 00:15:09,839
+ta transaction uh since this ta the
+
+387
+00:15:09,839 --> 00:15:10,720
+transaction
+
+388
+00:15:10,720 --> 00:15:12,720
+you know checks out it's indeed the case
+
+389
+00:15:12,720 --> 00:15:14,079
+that you know the money
+
+390
+00:15:14,079 --> 00:15:16,800
+in t7 was transferred to why uh the
+
+391
+00:15:16,800 --> 00:15:18,399
+thing is you know checked you know with
+
+392
+00:15:18,399 --> 00:15:18,880
+the
+
+393
+00:15:18,880 --> 00:15:20,399
+the second year for why you know it's
+
+394
+00:15:20,399 --> 00:15:22,240
+valid and it will say okay great you
+
+395
+00:15:22,240 --> 00:15:22,720
+know
+
+396
+00:15:22,720 --> 00:15:24,800
+i'll thank you for the money i'll ship
+
+397
+00:15:24,800 --> 00:15:25,760
+you also a lot
+
+398
+00:15:25,760 --> 00:15:27,760
+and now so we're in this bad you know
+
+399
+00:15:27,760 --> 00:15:29,519
+position where
+
+400
+00:15:29,519 --> 00:15:32,560
+um why uh by double spending or
+
+401
+00:15:32,560 --> 00:15:33,920
+succeeded in double spending and
+
+402
+00:15:33,920 --> 00:15:35,519
+i've got two relatives you know just the
+
+403
+00:15:35,519 --> 00:15:37,600
+problem that basically the
+
+404
+00:15:37,600 --> 00:15:39,680
+paper is really focused on and trying to
+
+405
+00:15:39,680 --> 00:15:45,350
+solve
+
+406
+00:15:45,360 --> 00:15:49,110
+the basic approach is
+
+407
+00:15:49,120 --> 00:15:51,519
+yeah sort of similar to what you know
+
+408
+00:15:51,519 --> 00:15:52,880
+something was doing you know let's keep
+
+409
+00:15:52,880 --> 00:15:54,079
+a complete log of all
+
+410
+00:15:54,079 --> 00:15:56,959
+transactions since the beginning of time
+
+411
+00:15:56,959 --> 00:16:01,829
+uh
+
+412
+00:16:01,839 --> 00:16:05,040
+and uh in the logs and it contains all
+
+413
+00:16:05,040 --> 00:16:06,160
+the transactions
+
+414
+00:16:06,160 --> 00:16:12,949
+uh including in the order
+
+415
+00:16:12,959 --> 00:16:14,720
+right and so you know let's see you know
+
+416
+00:16:14,720 --> 00:16:16,959
+so we just sort of put the distributions
+
+417
+00:16:16,959 --> 00:16:17,680
+in
+
+418
+00:16:17,680 --> 00:16:19,360
+you know whatever here we have you know
+
+419
+00:16:19,360 --> 00:16:22,560
+t6 here we have t7
+
+420
+00:16:22,560 --> 00:16:24,959
+so if there's a public record that is
+
+421
+00:16:24,959 --> 00:16:26,560
+ordered of all the transactions you know
+
+422
+00:16:26,560 --> 00:16:28,880
+t8 or ta prime goes first let's say t8
+
+423
+00:16:28,880 --> 00:16:30,560
+goes first
+
+424
+00:16:30,560 --> 00:16:35,110
+and then ta prime goes in the log
+
+425
+00:16:35,120 --> 00:16:37,680
+and you know if this would happen then
+
+426
+00:16:37,680 --> 00:16:39,199
+you know no problem at all
+
+427
+00:16:39,199 --> 00:16:41,199
+correct because uh this was the
+
+428
+00:16:41,199 --> 00:16:42,560
+transaction from
+
+429
+00:16:42,560 --> 00:16:45,279
+y to z this was the transaction from y
+
+430
+00:16:45,279 --> 00:16:47,120
+to q
+
+431
+00:16:47,120 --> 00:16:50,720
+and uh you know basically when uh
+
+432
+00:16:50,720 --> 00:16:52,959
+uh q validates to you know when z
+
+433
+00:16:52,959 --> 00:16:54,399
+validates interjection everything looks
+
+434
+00:16:54,399 --> 00:16:56,079
+perfect as exactly as before
+
+435
+00:16:56,079 --> 00:16:58,240
+when q validates the transaction in
+
+436
+00:16:58,240 --> 00:16:59,519
+addition to the checks you know that we
+
+437
+00:16:59,519 --> 00:17:00,480
+just looked at
+
+438
+00:17:00,480 --> 00:17:02,959
+um it actually looks in the log you know
+
+439
+00:17:02,959 --> 00:17:07,189
+q who's in the log
+
+440
+00:17:07,199 --> 00:17:09,439
+so i like to see if t7 basically is
+
+441
+00:17:09,439 --> 00:17:21,510
+already spent
+
+442
+00:17:21,520 --> 00:17:22,720
+and you know of course you know scans
+
+443
+00:17:22,720 --> 00:17:25,120
+back and lock you know runs into t y
+
+444
+00:17:25,120 --> 00:17:27,199
+uh t8 and you know sees that actually
+
+445
+00:17:27,199 --> 00:17:28,480
+the money has been spent
+
+446
+00:17:28,480 --> 00:17:31,840
+so therefore it will reject you know t a
+
+447
+00:17:31,840 --> 00:17:33,840
+prime
+
+448
+00:17:33,840 --> 00:17:37,200
+all right so uh so that's
+
+449
+00:17:37,200 --> 00:17:38,960
+the basic plan and so basically you know
+
+450
+00:17:38,960 --> 00:17:40,559
+we reduced this one problem
+
+451
+00:17:40,559 --> 00:17:43,120
+which is like how do we actually ensure
+
+452
+00:17:43,120 --> 00:17:44,080
+that
+
+453
+00:17:44,080 --> 00:17:47,120
+um all participants in the systems
+
+454
+00:17:47,120 --> 00:17:49,200
+actually agree on this log and that you
+
+455
+00:17:49,200 --> 00:17:50,799
+know all the transactions are in the
+
+456
+00:17:50,799 --> 00:17:51,600
+same slot
+
+457
+00:17:51,600 --> 00:17:53,760
+everywhere uh and contain the same
+
+458
+00:17:53,760 --> 00:17:55,280
+content the same hashes the same
+
+459
+00:17:55,280 --> 00:17:56,240
+signatures
+
+460
+00:17:56,240 --> 00:17:58,160
+so that we can actually verify uh the
+
+461
+00:17:58,160 --> 00:17:59,919
+transactions you know using the scheme
+
+462
+00:17:59,919 --> 00:18:00,640
+that the
+
+463
+00:18:00,640 --> 00:18:02,720
+uh this is sort of laid out on this
+
+464
+00:18:02,720 --> 00:18:03,840
+slide
+
+465
+00:18:03,840 --> 00:18:05,840
+and so this is where uh the sort of
+
+466
+00:18:05,840 --> 00:18:06,960
+consensus problem
+
+467
+00:18:06,960 --> 00:18:10,480
+uh comes in and um sometimes people
+
+468
+00:18:10,480 --> 00:18:12,320
+refer to the solution here as the
+
+469
+00:18:12,320 --> 00:18:15,600
+nakamoto consensus protocol
+
+470
+00:18:15,600 --> 00:18:18,400
+now before diving into that protocol i
+
+471
+00:18:18,400 --> 00:18:19,840
+want to sort of sketch out
+
+472
+00:18:19,840 --> 00:18:24,000
+you know possible uh solutions that are
+
+473
+00:18:24,000 --> 00:18:26,000
+not going to work just to get a little
+
+474
+00:18:26,000 --> 00:18:27,360
+bit better sense about like you know
+
+475
+00:18:27,360 --> 00:18:29,120
+what the challenges are that
+
+476
+00:18:29,120 --> 00:18:32,160
+this sort of uh nakamoto consensus
+
+477
+00:18:32,160 --> 00:18:32,720
+actually
+
+478
+00:18:32,720 --> 00:18:35,830
+solves
+
+479
+00:18:35,840 --> 00:18:39,600
+so uh you know design one
+
+480
+00:18:39,600 --> 00:18:42,000
+there's not really design it's more sort
+
+481
+00:18:42,000 --> 00:18:44,320
+of an idea to sort of think about and
+
+482
+00:18:44,320 --> 00:18:46,400
+then reject
+
+483
+00:18:46,400 --> 00:18:48,080
+design one you know maybe is the easiest
+
+484
+00:18:48,080 --> 00:18:51,120
+design is let's assume
+
+485
+00:18:51,120 --> 00:18:53,280
+we have a server s and the server
+
+486
+00:18:53,280 --> 00:18:58,070
+actually just trusted
+
+487
+00:18:58,080 --> 00:19:00,080
+and then we have clients you know that
+
+488
+00:19:00,080 --> 00:19:01,200
+you know
+
+489
+00:19:01,200 --> 00:19:06,710
+submit transactions you know whatever t6
+
+490
+00:19:06,720 --> 00:19:13,110
+uh one
+
+491
+00:19:13,120 --> 00:19:14,799
+and they just submit you know these
+
+492
+00:19:14,799 --> 00:19:16,640
+transactions to the
+
+493
+00:19:16,640 --> 00:19:18,559
+uh to the structure server you know
+
+494
+00:19:18,559 --> 00:19:20,160
+after we all the
+
+495
+00:19:20,160 --> 00:19:21,840
+old clients you know trust the server
+
+496
+00:19:21,840 --> 00:19:24,000
+then the server can just produce a log
+
+497
+00:19:24,000 --> 00:19:27,280
+right with all the transactions in it
+
+498
+00:19:27,280 --> 00:19:29,039
+and you know order them appropriately
+
+499
+00:19:29,039 --> 00:19:31,760
+etc etc
+
+500
+00:19:31,760 --> 00:19:33,840
+so if we assume you know there's a
+
+501
+00:19:33,840 --> 00:19:34,960
+trusted server then this problem is
+
+502
+00:19:34,960 --> 00:19:35,919
+actually reasonable and
+
+503
+00:19:35,919 --> 00:19:37,200
+straightforward to solve and you know
+
+504
+00:19:37,200 --> 00:19:38,320
+that's the setting that we're in that
+
+505
+00:19:38,320 --> 00:19:39,840
+we're in great shape
+
+506
+00:19:39,840 --> 00:19:42,240
+uh you know we will replicate the server
+
+507
+00:19:42,240 --> 00:19:44,240
+using you know some rafter type
+
+508
+00:19:44,240 --> 00:19:47,440
+protocol and uh you know where i have a
+
+509
+00:19:47,440 --> 00:19:49,440
+full tolerance server
+
+510
+00:19:49,440 --> 00:19:51,120
+and you know really the only downside
+
+511
+00:19:51,120 --> 00:19:52,720
+you know to this particular process is
+
+512
+00:19:52,720 --> 00:19:54,320
+if the clients can just not agree
+
+513
+00:19:54,320 --> 00:19:57,760
+on a single trusted uh server and so
+
+514
+00:19:57,760 --> 00:19:59,679
+for example in the case of bitcoin and
+
+515
+00:19:59,679 --> 00:20:01,440
+where you want to do transactions
+
+516
+00:20:01,440 --> 00:20:04,080
+uh you know maybe the you know the rest
+
+517
+00:20:04,080 --> 00:20:06,080
+of the world will not uh
+
+518
+00:20:06,080 --> 00:20:07,600
+trust the u.s government to actually you
+
+519
+00:20:07,600 --> 00:20:09,200
+know implement this server correctly and
+
+520
+00:20:09,200 --> 00:20:10,400
+produce
+
+521
+00:20:10,400 --> 00:20:13,600
+a log and uh and in that case you know
+
+522
+00:20:13,600 --> 00:20:14,000
+we have
+
+523
+00:20:14,000 --> 00:20:17,200
+multiple uh different clients because
+
+524
+00:20:17,200 --> 00:20:19,120
+you cannot agree on a trusted server
+
+525
+00:20:19,120 --> 00:20:20,000
+then this this
+
+526
+00:20:20,000 --> 00:20:24,000
+solution this user doesn't work
+
+527
+00:20:24,000 --> 00:20:27,200
+so that's one uh solution uh it's the
+
+528
+00:20:27,200 --> 00:20:28,080
+easy one
+
+529
+00:20:28,080 --> 00:20:30,240
+but in the case of a decentralized
+
+530
+00:20:30,240 --> 00:20:31,600
+design where the participants
+
+531
+00:20:31,600 --> 00:20:34,080
+don't trust any central component this
+
+532
+00:20:34,080 --> 00:20:35,440
+is not a workable
+
+533
+00:20:35,440 --> 00:20:38,720
+uh solution so so now we could consider
+
+534
+00:20:38,720 --> 00:20:40,320
+you know using sort of the more
+
+535
+00:20:40,320 --> 00:20:42,559
+solder-like approach
+
+536
+00:20:42,559 --> 00:20:44,799
+to modify the scheme slightly and say
+
+537
+00:20:44,799 --> 00:20:46,400
+like okay good we know actually how to
+
+538
+00:20:46,400 --> 00:20:47,120
+deal with
+
+539
+00:20:47,120 --> 00:20:49,039
+untrusted servers in fact we read a
+
+540
+00:20:49,039 --> 00:20:50,640
+paper about last week
+
+541
+00:20:50,640 --> 00:20:53,280
+and so let's assume that this server is
+
+542
+00:20:53,280 --> 00:20:55,200
+actually untrusted
+
+543
+00:20:55,200 --> 00:20:57,039
+and you know we basically you know play
+
+544
+00:20:57,039 --> 00:20:59,120
+this undergame the clients
+
+545
+00:20:59,120 --> 00:21:01,280
+produce the logs read the logs from the
+
+546
+00:21:01,280 --> 00:21:03,440
+server paint the rockets to the
+
+547
+00:21:03,440 --> 00:21:05,679
+kinds of penta records to the log submit
+
+548
+00:21:05,679 --> 00:21:07,200
+it back you know to the server
+
+549
+00:21:07,200 --> 00:21:08,720
+and so the server is basically doing
+
+550
+00:21:08,720 --> 00:21:10,880
+almost nothing else that's relaying logs
+
+551
+00:21:10,880 --> 00:21:13,200
+you know between different clients
+
+552
+00:21:13,200 --> 00:21:15,120
+and you know we've seen in last week
+
+553
+00:21:15,120 --> 00:21:16,240
+that that x approach
+
+554
+00:21:16,240 --> 00:21:19,520
+works really well uh and you know can be
+
+555
+00:21:19,520 --> 00:21:20,080
+used
+
+556
+00:21:20,080 --> 00:21:23,600
+uh but you know it has one shortcoming
+
+557
+00:21:23,600 --> 00:21:24,400
+as we saw
+
+558
+00:21:24,400 --> 00:21:27,280
+namely the server can present two very
+
+559
+00:21:27,280 --> 00:21:28,480
+different views
+
+560
+00:21:28,480 --> 00:21:30,559
+of the world by basically forking the
+
+561
+00:21:30,559 --> 00:21:33,280
+log so maybe the log has some prefix
+
+562
+00:21:33,280 --> 00:21:34,640
+you know whatever p one two three five
+
+563
+00:21:34,640 --> 00:21:37,120
+six c six seven but you know it has
+
+564
+00:21:37,120 --> 00:21:39,760
+you know t eight in this one and has
+
+565
+00:21:39,760 --> 00:21:41,200
+another log
+
+566
+00:21:41,200 --> 00:21:44,799
+which indeed has t seven do
+
+567
+00:21:44,799 --> 00:21:48,159
+and t8 prime right and
+
+568
+00:21:48,159 --> 00:21:50,720
+so one fork you know we've got our t8 on
+
+569
+00:21:50,720 --> 00:21:52,960
+the other fork we have t8 prime
+
+570
+00:21:52,960 --> 00:21:56,799
+and now like we became really acetylene
+
+571
+00:21:56,799 --> 00:21:59,600
+in one particular uh
+
+572
+00:21:59,600 --> 00:22:02,159
+fork and uh the server sort of
+
+573
+00:22:02,159 --> 00:22:03,679
+persistently you know keeps the two
+
+574
+00:22:03,679 --> 00:22:04,480
+worlds apart
+
+575
+00:22:04,480 --> 00:22:07,200
+like the y's and uh z's in one area of
+
+576
+00:22:07,200 --> 00:22:07,679
+the world
+
+577
+00:22:07,679 --> 00:22:10,799
+accuse another in the world uh y
+
+578
+00:22:10,799 --> 00:22:13,360
+always gets the first sort of log and uh
+
+579
+00:22:13,360 --> 00:22:15,360
+uh and zeos gets the second one locked
+
+580
+00:22:15,360 --> 00:22:15,760
+or
+
+581
+00:22:15,760 --> 00:22:19,679
+the other way around uh then uh you know
+
+582
+00:22:19,679 --> 00:22:21,760
+then they will pretend they're good yeah
+
+583
+00:22:21,760 --> 00:22:23,600
+there was no money earlier spent in
+
+584
+00:22:23,600 --> 00:22:27,520
+t7 uh uh in this log so you know taq
+
+585
+00:22:27,520 --> 00:22:28,880
+will actually accept
+
+586
+00:22:28,880 --> 00:22:32,400
+you know t8 prime in this world and here
+
+587
+00:22:32,400 --> 00:22:32,960
+z
+
+588
+00:22:32,960 --> 00:22:35,280
+will accept you know t8 and so y
+
+589
+00:22:35,280 --> 00:22:38,480
+succeeded in actually double spending
+
+590
+00:22:38,480 --> 00:22:41,679
+and so uh so this design doesn't work
+
+591
+00:22:41,679 --> 00:22:44,720
+uh for the particular problem at hand uh
+
+592
+00:22:44,720 --> 00:22:46,480
+we need some solution this is where the
+
+593
+00:22:46,480 --> 00:22:48,640
+consensus comes in we need some solution
+
+594
+00:22:48,640 --> 00:22:49,600
+basically for
+
+595
+00:22:49,600 --> 00:22:52,240
+the untrusted clients to basically be
+
+596
+00:22:52,240 --> 00:22:53,120
+able to settle
+
+597
+00:22:53,120 --> 00:22:57,840
+on which you know fork they are on
+
+598
+00:22:57,840 --> 00:23:01,280
+okay so in so let's think a little bit
+
+599
+00:23:01,280 --> 00:23:03,440
+about that so like so think about a more
+
+600
+00:23:03,440 --> 00:23:04,799
+much more decent light design where you
+
+601
+00:23:04,799 --> 00:23:06,320
+know we're just going to replace the
+
+602
+00:23:06,320 --> 00:23:09,039
+server with a network of computers
+
+603
+00:23:09,039 --> 00:23:11,760
+and so this is there and this goes sort
+
+604
+00:23:11,760 --> 00:23:12,320
+of to
+
+605
+00:23:12,320 --> 00:23:14,640
+get you closer to the bitcoin design
+
+606
+00:23:14,640 --> 00:23:16,799
+where there's indeed a network
+
+607
+00:23:16,799 --> 00:23:19,679
+of you know peers that sort of all
+
+608
+00:23:19,679 --> 00:23:20,559
+collaborate
+
+609
+00:23:20,559 --> 00:23:23,600
+uh together to use or provide you know
+
+610
+00:23:23,600 --> 00:23:24,720
+this
+
+611
+00:23:24,720 --> 00:23:26,640
+single log although even though some of
+
+612
+00:23:26,640 --> 00:23:27,919
+the participants actually might
+
+613
+00:23:27,919 --> 00:23:29,360
+be malicious and try to do something
+
+614
+00:23:29,360 --> 00:23:30,880
+different and so basically the idea is
+
+615
+00:23:30,880 --> 00:23:32,159
+that you know when a client actually you
+
+616
+00:23:32,159 --> 00:23:34,240
+know have to
+
+617
+00:23:34,240 --> 00:23:36,400
+create a transaction you know then
+
+618
+00:23:36,400 --> 00:23:37,919
+transaction x was distributed
+
+619
+00:23:37,919 --> 00:23:42,320
+across uh a network you know of peers
+
+620
+00:23:42,320 --> 00:23:43,919
+the fact the client one might be appear
+
+621
+00:23:43,919 --> 00:23:46,159
+himself and so the transaction is
+
+622
+00:23:46,159 --> 00:23:50,720
+spread around
+
+623
+00:23:50,720 --> 00:23:53,760
+and uh you know everybody every node
+
+624
+00:23:53,760 --> 00:23:56,400
+in the network actually maintains a log
+
+625
+00:23:56,400 --> 00:23:56,960
+and
+
+626
+00:23:56,960 --> 00:23:58,799
+appends you know the transaction to its
+
+627
+00:23:58,799 --> 00:24:03,669
+log
+
+628
+00:24:03,679 --> 00:24:06,640
+and the problem that we sort of have
+
+629
+00:24:06,640 --> 00:24:16,830
+left is like you know how to agree on an
+
+630
+00:24:16,840 --> 00:24:18,720
+order
+
+631
+00:24:18,720 --> 00:24:22,400
+uh and you know we we actually have seen
+
+632
+00:24:22,400 --> 00:24:23,840
+you know this kind of sort of systems uh
+
+633
+00:24:23,840 --> 00:24:25,919
+before like in fact in raft you know we
+
+634
+00:24:25,919 --> 00:24:27,120
+had multiple computers
+
+635
+00:24:27,120 --> 00:24:28,960
+and they were able to agree on an order
+
+636
+00:24:28,960 --> 00:24:30,480
+correct and the basic trick
+
+637
+00:24:30,480 --> 00:24:32,000
+you know that would use so the basic
+
+638
+00:24:32,000 --> 00:24:34,080
+insight is you know to basically
+
+639
+00:24:34,080 --> 00:24:35,919
+compute you know some majority and have
+
+640
+00:24:35,919 --> 00:24:37,919
+majority of the nodes agree
+
+641
+00:24:37,919 --> 00:24:40,240
+that in slot you know 6 is going to be
+
+642
+00:24:40,240 --> 00:24:41,440
+transaction t8
+
+643
+00:24:41,440 --> 00:24:46,000
+and in slot 7 is going to be ta prime
+
+644
+00:24:46,000 --> 00:24:49,120
+and the and
+
+645
+00:24:49,120 --> 00:24:51,840
+that works great correct uh if we know
+
+646
+00:24:51,840 --> 00:24:53,520
+exactly how many nodes there are in the
+
+647
+00:24:53,520 --> 00:24:54,640
+system
+
+648
+00:24:54,640 --> 00:24:56,320
+uh we know there are five nodes in the
+
+649
+00:24:56,320 --> 00:24:57,760
+system uh
+
+650
+00:24:57,760 --> 00:24:59,919
+the new and then the majority is free
+
+651
+00:24:59,919 --> 00:25:02,400
+and so we receive a response from free
+
+652
+00:25:02,400 --> 00:25:04,400
+participants you know we know okay we
+
+653
+00:25:04,400 --> 00:25:06,559
+can commit that particular slot
+
+654
+00:25:06,559 --> 00:25:08,240
+and the problem really here is that this
+
+655
+00:25:08,240 --> 00:25:09,600
+is a decentralized system
+
+656
+00:25:09,600 --> 00:25:13,029
+that is completely open
+
+657
+00:25:13,039 --> 00:25:16,159
+the system uh notes might even uh
+
+658
+00:25:16,159 --> 00:25:17,840
+may leave and come at any particular
+
+659
+00:25:17,840 --> 00:25:19,520
+point in time and now like there is no
+
+660
+00:25:19,520 --> 00:25:21,039
+list of all the participants in the
+
+661
+00:25:21,039 --> 00:25:23,360
+system so there's also no
+
+662
+00:25:23,360 --> 00:25:24,960
+you know clear what actually what is a
+
+663
+00:25:24,960 --> 00:25:29,360
+majority in a system like that
+
+664
+00:25:29,360 --> 00:25:32,720
+um because it's completely open and so
+
+665
+00:25:32,720 --> 00:25:33,919
+it's like in the notion of a majority
+
+666
+00:25:33,919 --> 00:25:35,520
+you're completely ill-defined
+
+667
+00:25:35,520 --> 00:25:38,799
+um so you know we need some sort of
+
+668
+00:25:38,799 --> 00:25:42,080
+sort of like actual usual game of doing
+
+669
+00:25:42,080 --> 00:25:45,120
+uh voting on a majority and then accept
+
+670
+00:25:45,120 --> 00:25:46,320
+the result of the majority
+
+671
+00:25:46,320 --> 00:25:48,320
+is not going to sort of play out and so
+
+672
+00:25:48,320 --> 00:25:49,919
+this is the
+
+673
+00:25:49,919 --> 00:25:51,520
+the game that sort of raft you know even
+
+674
+00:25:51,520 --> 00:25:52,960
+though it's a consensus protocol
+
+675
+00:25:52,960 --> 00:25:54,159
+it's not going to really work out
+
+676
+00:25:54,159 --> 00:25:56,240
+because you know the uh the setting
+
+677
+00:25:56,240 --> 00:25:57,520
+we're dealing with
+
+678
+00:25:57,520 --> 00:25:59,760
+is a decentralized open distributed
+
+679
+00:25:59,760 --> 00:26:01,440
+system as opposed to sort of a closed
+
+680
+00:26:01,440 --> 00:26:02,559
+system as in the
+
+681
+00:26:02,559 --> 00:26:07,430
+setting of draft
+
+682
+00:26:07,440 --> 00:26:10,720
+does this make sense so far
+
+683
+00:26:10,720 --> 00:26:12,559
+let me pause for a second before getting
+
+684
+00:26:12,559 --> 00:26:20,870
+into the more technical part
+
+685
+00:26:20,880 --> 00:26:25,990
+all right
+
+686
+00:26:26,000 --> 00:26:29,279
+okay so uh so how does bitcoin solve
+
+687
+00:26:29,279 --> 00:26:34,230
+this problem
+
+688
+00:26:34,240 --> 00:26:37,279
+and the key idea is uh something that's
+
+689
+00:26:37,279 --> 00:26:37,840
+called
+
+690
+00:26:37,840 --> 00:26:45,750
+approval work
+
+691
+00:26:45,760 --> 00:26:50,950
+basically the rule is that
+
+692
+00:26:50,960 --> 00:26:54,320
+there's a amount of work uh a note needs
+
+693
+00:26:54,320 --> 00:26:54,799
+to do
+
+694
+00:26:54,799 --> 00:26:58,320
+to actually be able to extend the log
+
+695
+00:26:58,320 --> 00:27:02,320
+and uh and the basic rule is that
+
+696
+00:27:02,320 --> 00:27:06,080
+the winner uh in
+
+697
+00:27:06,080 --> 00:27:09,679
+you know proof of work the the
+
+698
+00:27:09,679 --> 00:27:12,320
+machine that's able to solve the puzzle
+
+699
+00:27:12,320 --> 00:27:12,880
+first
+
+700
+00:27:12,880 --> 00:27:25,510
+is it decides on the next log entry
+
+701
+00:27:25,520 --> 00:27:28,480
+and uh and and the basic idea that this
+
+702
+00:27:28,480 --> 00:27:29,600
+might you know you might actually get
+
+703
+00:27:29,600 --> 00:27:31,039
+some intuition why this actually will
+
+704
+00:27:31,039 --> 00:27:32,000
+work out
+
+705
+00:27:32,000 --> 00:27:33,679
+is because it's basically hard to
+
+706
+00:27:33,679 --> 00:27:44,389
+impersonate the winner
+
+707
+00:27:44,399 --> 00:27:46,240
+to actually solve the particular
+
+708
+00:27:46,240 --> 00:27:48,720
+proof-of-work puzzle uh
+
+709
+00:27:48,720 --> 00:27:50,960
+that needs to be uh to be able to add to
+
+710
+00:27:50,960 --> 00:27:52,559
+the log actually requires a real
+
+711
+00:27:52,559 --> 00:27:53,360
+computer
+
+712
+00:27:53,360 --> 00:27:56,399
+uh in a month roughly of you know
+
+713
+00:27:56,399 --> 00:27:57,520
+compute time
+
+714
+00:27:57,520 --> 00:28:00,640
+uh to actually solve the problem and so
+
+715
+00:28:00,640 --> 00:28:01,840
+if you can solve and demonstrate
+
+716
+00:28:01,840 --> 00:28:03,120
+yourself the problem you know you know
+
+717
+00:28:03,120 --> 00:28:04,559
+for sure that somebody actually spent a
+
+718
+00:28:04,559 --> 00:28:06,480
+month of work actually doing it
+
+719
+00:28:06,480 --> 00:28:09,679
+um and this is sort of enough of to
+
+720
+00:28:09,679 --> 00:28:13,520
+uh uh convince you know the rest of the
+
+721
+00:28:13,520 --> 00:28:14,960
+system that you know the
+
+722
+00:28:14,960 --> 00:28:19,440
+the uh the real resources were actually
+
+723
+00:28:19,440 --> 00:28:20,240
+spent
+
+724
+00:28:20,240 --> 00:28:23,440
+to uh append to be able to attend to the
+
+725
+00:28:23,440 --> 00:28:26,480
+log entry and and you can maybe think of
+
+726
+00:28:26,480 --> 00:28:26,799
+other
+
+727
+00:28:26,799 --> 00:28:28,080
+type of schemes or like you know
+
+728
+00:28:28,080 --> 00:28:30,320
+whatever you know the unique ip
+
+729
+00:28:30,320 --> 00:28:31,679
+addresses or things like that but all
+
+730
+00:28:31,679 --> 00:28:32,880
+those kind of things can be actually
+
+731
+00:28:32,880 --> 00:28:34,559
+easily falsified
+
+732
+00:28:34,559 --> 00:28:37,279
+uh and so uh and this sort of proof of
+
+733
+00:28:37,279 --> 00:28:37,760
+work
+
+734
+00:28:37,760 --> 00:28:40,640
+idea is sort of the core to demonstrate
+
+735
+00:28:40,640 --> 00:28:41,279
+that
+
+736
+00:28:41,279 --> 00:28:43,600
+uh yeah i can really you know put a
+
+737
+00:28:43,600 --> 00:28:45,360
+month effort in to actually
+
+738
+00:28:45,360 --> 00:28:48,799
+uh uh to to figure out what the next
+
+739
+00:28:48,799 --> 00:28:50,720
+door to compute be able to
+
+740
+00:28:50,720 --> 00:28:53,200
+to be able to append a log entry to the
+
+741
+00:28:53,200 --> 00:28:57,269
+blog
+
+742
+00:28:57,279 --> 00:28:58,960
+one you know just to get that
+
+743
+00:28:58,960 --> 00:29:00,240
+immediately out of the way one of the
+
+744
+00:29:00,240 --> 00:29:01,919
+downside of this sort of proof-of-work
+
+745
+00:29:01,919 --> 00:29:03,200
+approach
+
+746
+00:29:03,200 --> 00:29:11,029
+is that it actually wastes energy
+
+747
+00:29:11,039 --> 00:29:13,279
+and in fact if you're uh you know
+
+748
+00:29:13,279 --> 00:29:14,960
+bitcoin has become so successful
+
+749
+00:29:14,960 --> 00:29:17,039
+uh that a lot of people are down there
+
+750
+00:29:17,039 --> 00:29:18,559
+are you know mining and doing this uh
+
+751
+00:29:18,559 --> 00:29:19,600
+proof of work
+
+752
+00:29:19,600 --> 00:29:21,919
+uh the the you know energy bill or the
+
+753
+00:29:21,919 --> 00:29:23,200
+energy consumption
+
+754
+00:29:23,200 --> 00:29:26,240
+uh of all the combined
+
+755
+00:29:26,240 --> 00:29:27,919
+miners together is incredibly
+
+756
+00:29:27,919 --> 00:29:29,279
+significant uh
+
+757
+00:29:29,279 --> 00:29:32,960
+which is huge and so the
+
+758
+00:29:32,960 --> 00:29:34,720
+complete downside of this approach is
+
+759
+00:29:34,720 --> 00:29:38,159
+the the wasted energy
+
+760
+00:29:38,159 --> 00:29:40,960
+in recent years you know there have been
+
+761
+00:29:40,960 --> 00:29:41,440
+other
+
+762
+00:29:41,440 --> 00:29:44,960
+uh cryptocurrencies or other designs
+
+763
+00:29:44,960 --> 00:29:46,720
+that are based on a different idea
+
+764
+00:29:46,720 --> 00:29:47,919
+instead of proof of work they're
+
+765
+00:29:47,919 --> 00:29:48,960
+actually based on something that's
+
+766
+00:29:48,960 --> 00:29:56,389
+called proof of stake
+
+767
+00:29:56,399 --> 00:29:58,240
+uh and this is basically sort of the
+
+768
+00:29:58,240 --> 00:29:59,679
+game there is that like you know let's
+
+769
+00:29:59,679 --> 00:30:00,960
+say you own three percent
+
+770
+00:30:00,960 --> 00:30:04,080
+of you know the currency then
+
+771
+00:30:04,080 --> 00:30:07,279
+you get uh because of your uh you own
+
+772
+00:30:07,279 --> 00:30:09,039
+three percent you can actually
+
+773
+00:30:09,039 --> 00:30:11,600
+decide you know for three percent of the
+
+774
+00:30:11,600 --> 00:30:12,559
+log entries
+
+775
+00:30:12,559 --> 00:30:15,520
+uh which ones are going to be appended
+
+776
+00:30:15,520 --> 00:30:16,640
+and so the
+
+777
+00:30:16,640 --> 00:30:18,320
+uh and so this is a completely different
+
+778
+00:30:18,320 --> 00:30:19,679
+approach that doesn't
+
+779
+00:30:19,679 --> 00:30:22,559
+require solving uh computational
+
+780
+00:30:22,559 --> 00:30:23,919
+intensive puzzles
+
+781
+00:30:23,919 --> 00:30:27,039
+uh and that seems to uh
+
+782
+00:30:27,039 --> 00:30:29,919
+get quite a bit of actually uh attention
+
+783
+00:30:29,919 --> 00:30:31,520
+and you know there are
+
+784
+00:30:31,520 --> 00:30:33,679
+cryptocurrencies that use it and in fact
+
+785
+00:30:33,679 --> 00:30:35,039
+it looks like one of the more
+
+786
+00:30:35,039 --> 00:30:37,600
+major ones ethereum seems to be sort of
+
+787
+00:30:37,600 --> 00:30:38,640
+slated or
+
+788
+00:30:38,640 --> 00:30:39,760
+going in the direction of a
+
+789
+00:30:39,760 --> 00:30:42,159
+proof-of-stake approach
+
+790
+00:30:42,159 --> 00:30:44,720
+but bitcoin now uses a proof-of-work
+
+791
+00:30:44,720 --> 00:30:45,760
+approach
+
+792
+00:30:45,760 --> 00:30:47,360
+and so we're just going to proceed you
+
+793
+00:30:47,360 --> 00:30:51,840
+know with that design
+
+794
+00:30:51,840 --> 00:30:55,279
+any questions um
+
+795
+00:30:55,279 --> 00:30:58,720
+so let's uh so i'm just wondering of how
+
+796
+00:30:58,720 --> 00:31:00,720
+it's hard to impersonate the wenner so
+
+797
+00:31:00,720 --> 00:31:01,919
+let's say that we have
+
+798
+00:31:01,919 --> 00:31:05,039
+server a and server b and server a wants
+
+799
+00:31:05,039 --> 00:31:05,760
+to append
+
+800
+00:31:05,760 --> 00:31:08,240
+entry let's say e1 and server b wants to
+
+801
+00:31:08,240 --> 00:31:10,080
+append entry e2
+
+802
+00:31:10,080 --> 00:31:12,480
+so server a solves the puzzle and
+
+803
+00:31:12,480 --> 00:31:14,080
+publishes the solution
+
+804
+00:31:14,080 --> 00:31:15,600
+right and i'm assuming that the solution
+
+805
+00:31:15,600 --> 00:31:17,360
+is easy to check so
+
+806
+00:31:17,360 --> 00:31:19,919
+then server b uh sees the solution and
+
+807
+00:31:19,919 --> 00:31:21,279
+checks that it's correct
+
+808
+00:31:21,279 --> 00:31:24,480
+uh so it cannot work
+
+809
+00:31:24,480 --> 00:31:27,279
+that server b just simply republishes
+
+810
+00:31:27,279 --> 00:31:28,399
+the solution
+
+811
+00:31:28,399 --> 00:31:30,640
+with its own name and signing it by its
+
+812
+00:31:30,640 --> 00:31:32,880
+own name because the puzzle for
+
+813
+00:31:32,880 --> 00:31:34,480
+e2 is different from the puzzle for e1
+
+814
+00:31:34,480 --> 00:31:36,000
+right
+
+815
+00:31:36,000 --> 00:31:37,840
+yeah yeah exactly and we'll see uh you
+
+816
+00:31:37,840 --> 00:31:39,200
+know we'll get into this in more detail
+
+817
+00:31:39,200 --> 00:31:40,240
+in a second
+
+818
+00:31:40,240 --> 00:31:42,799
+uh this is sort of the basic insight you
+
+819
+00:31:42,799 --> 00:31:45,120
+know it's of course not enough
+
+820
+00:31:45,120 --> 00:31:46,720
+uh but it will turn out to be enough to
+
+821
+00:31:46,720 --> 00:31:48,159
+basically settle on a
+
+822
+00:31:48,159 --> 00:31:50,000
+fork so we're going to accept they're
+
+823
+00:31:50,000 --> 00:31:51,200
+going to be forks and then we're going
+
+824
+00:31:51,200 --> 00:31:51,519
+to
+
+825
+00:31:51,519 --> 00:31:53,760
+have you know bitcoin basically accepts
+
+826
+00:31:53,760 --> 00:31:55,039
+that there are forex like in
+
+827
+00:31:55,039 --> 00:31:57,039
+solder but then has a way of basically
+
+828
+00:31:57,039 --> 00:32:02,710
+deciding which fork to settle on
+
+829
+00:32:02,720 --> 00:32:04,720
+so i had a question about uh network
+
+830
+00:32:04,720 --> 00:32:06,880
+partitions
+
+831
+00:32:06,880 --> 00:32:10,799
+and i was wondering how like you know
+
+832
+00:32:10,799 --> 00:32:12,960
+if you were able to make a partition
+
+833
+00:32:12,960 --> 00:32:14,159
+like on the internet
+
+834
+00:32:14,159 --> 00:32:16,080
+which you know it's probably like
+
+835
+00:32:16,080 --> 00:32:17,360
+unreasonable but
+
+836
+00:32:17,360 --> 00:32:19,120
+if you're able to partition the internet
+
+837
+00:32:19,120 --> 00:32:20,640
+like the whole internet
+
+838
+00:32:20,640 --> 00:32:24,480
+and couldn't you convince like you know
+
+839
+00:32:24,480 --> 00:32:28,000
+um one like double spend
+
+840
+00:32:28,000 --> 00:32:30,240
+by like spending on both sides of the
+
+841
+00:32:30,240 --> 00:32:31,519
+partition
+
+842
+00:32:31,519 --> 00:32:34,320
+yeah the petition never heals you
+
+843
+00:32:34,320 --> 00:32:35,760
+succeed
+
+844
+00:32:35,760 --> 00:32:39,200
+like eventually you'd assume it heals
+
+845
+00:32:39,200 --> 00:32:40,480
+but then by then
+
+846
+00:32:40,480 --> 00:32:42,320
+right like you probably would have
+
+847
+00:32:42,320 --> 00:32:44,159
+gotten like something shipped or
+
+848
+00:32:44,159 --> 00:32:46,240
+yeah so in general so we'll see we'll
+
+849
+00:32:46,240 --> 00:32:47,919
+talk a little bit more about it but like
+
+850
+00:32:47,919 --> 00:32:50,399
+uh there are all kinds of there's ways
+
+851
+00:32:50,399 --> 00:32:51,600
+of creating forks and what you're
+
+852
+00:32:51,600 --> 00:32:52,799
+describing is basically fork that
+
+853
+00:32:52,799 --> 00:32:55,279
+persists for a long period of time
+
+854
+00:32:55,279 --> 00:32:58,559
+and you know we'll see the the basically
+
+855
+00:32:58,559 --> 00:32:59,360
+the
+
+856
+00:32:59,360 --> 00:33:01,840
+uh you know bitcoin basically produces
+
+857
+00:33:01,840 --> 00:33:03,600
+these blocks with transactions sort of
+
+858
+00:33:03,600 --> 00:33:05,039
+every 10 minutes
+
+859
+00:33:05,039 --> 00:33:07,279
+and you know if you're very conservative
+
+860
+00:33:07,279 --> 00:33:09,360
+or you want to be careful
+
+861
+00:33:09,360 --> 00:33:12,470
+not to be
+
+862
+00:33:12,480 --> 00:33:13,919
+avoid double spending or making sure
+
+863
+00:33:13,919 --> 00:33:15,200
+that there's no nothing with double
+
+864
+00:33:15,200 --> 00:33:16,559
+spend you generally wait
+
+865
+00:33:16,559 --> 00:33:18,559
+you know for multiple these blocks to
+
+866
+00:33:18,559 --> 00:33:20,799
+appear like five six or basically an
+
+867
+00:33:20,799 --> 00:33:21,440
+hour
+
+868
+00:33:21,440 --> 00:33:23,039
+before actually you decide to actually
+
+869
+00:33:23,039 --> 00:33:24,799
+accept you know the to say
+
+870
+00:33:24,799 --> 00:33:26,480
+oh yeah that this is i'm on the right
+
+871
+00:33:26,480 --> 00:33:36,830
+fork
+
+872
+00:33:36,840 --> 00:33:38,960
+thanks
+
+873
+00:33:38,960 --> 00:33:42,480
+okay so let's also see actually how the
+
+874
+00:33:42,480 --> 00:33:45,840
+pieces fit together um so it turns out
+
+875
+00:33:45,840 --> 00:33:47,840
+you know the you don't do a proof of
+
+876
+00:33:47,840 --> 00:33:49,200
+work you know per transaction
+
+877
+00:33:49,200 --> 00:33:51,840
+uh it'll be crazy uh because you got to
+
+878
+00:33:51,840 --> 00:33:53,360
+spend a lot of computational power
+
+879
+00:33:53,360 --> 00:33:54,720
+you know for them for that one single
+
+880
+00:33:54,720 --> 00:33:55,919
+transaction that will limit the number
+
+881
+00:33:55,919 --> 00:33:57,919
+of transactions you can actually do
+
+882
+00:33:57,919 --> 00:34:00,880
+per second and so uh the way actually
+
+883
+00:34:00,880 --> 00:34:02,080
+this is done is that basically
+
+884
+00:34:02,080 --> 00:34:03,440
+transactions are
+
+885
+00:34:03,440 --> 00:34:06,240
+grouped in blocks and the proof of work
+
+886
+00:34:06,240 --> 00:34:07,039
+uh
+
+887
+00:34:07,039 --> 00:34:10,079
+is done on a on a blog basis
+
+888
+00:34:10,079 --> 00:34:14,389
+and so we have our network
+
+889
+00:34:14,399 --> 00:34:16,240
+and the way it actually works is that
+
+890
+00:34:16,240 --> 00:34:18,480
+we're not making a lot of blogs but like
+
+891
+00:34:18,480 --> 00:34:19,200
+we you know
+
+892
+00:34:19,200 --> 00:34:21,040
+make a a lot of transactions we make
+
+893
+00:34:21,040 --> 00:34:23,040
+actually log of blocks which are called
+
+894
+00:34:23,040 --> 00:34:28,629
+you know basically a blockchain
+
+895
+00:34:28,639 --> 00:34:31,119
+and so here we've got our network you
+
+896
+00:34:31,119 --> 00:34:32,079
+know we have peers
+
+897
+00:34:32,079 --> 00:34:35,520
+all around the world and uh
+
+898
+00:34:35,520 --> 00:34:37,760
+you know the log you know is basically
+
+899
+00:34:37,760 --> 00:34:42,550
+you know sequence of blocks
+
+900
+00:34:42,560 --> 00:34:44,320
+and so peers have you know copies of
+
+901
+00:34:44,320 --> 00:34:46,720
+these you know they may communicate new
+
+902
+00:34:46,720 --> 00:34:48,000
+ones you know pen them
+
+903
+00:34:48,000 --> 00:34:49,280
+and distribute them and flood them
+
+904
+00:34:49,280 --> 00:34:51,520
+across the network
+
+905
+00:34:51,520 --> 00:34:54,639
+and so what is in a in a block
+
+906
+00:34:54,639 --> 00:34:57,920
+uh at a very high level again there are
+
+907
+00:34:57,920 --> 00:34:59,040
+many more details
+
+908
+00:34:59,040 --> 00:35:01,200
+that i'm just going to ignore it's going
+
+909
+00:35:01,200 --> 00:35:03,040
+to be the hash of the previous block
+
+910
+00:35:03,040 --> 00:35:07,359
+so p minus one
+
+911
+00:35:07,359 --> 00:35:09,200
+and so if this is block five you know
+
+912
+00:35:09,200 --> 00:35:10,640
+this is going to be then
+
+913
+00:35:10,640 --> 00:35:14,480
+uh you know b4 so b minus one
+
+914
+00:35:14,480 --> 00:35:15,920
+so the unique identifier of the
+
+915
+00:35:15,920 --> 00:35:18,079
+basically the previous block in the
+
+916
+00:35:18,079 --> 00:35:20,400
+in the chain the transactions that are
+
+917
+00:35:20,400 --> 00:35:23,200
+part of this block
+
+918
+00:35:23,200 --> 00:35:26,320
+uh and then announce
+
+919
+00:35:26,320 --> 00:35:27,680
+which we'll talk about in a second but
+
+920
+00:35:27,680 --> 00:35:29,200
+this is the thing that is going to play
+
+921
+00:35:29,200 --> 00:35:30,160
+a crucial role
+
+922
+00:35:30,160 --> 00:35:38,950
+in the the puzzle and the timestamp
+
+923
+00:35:38,960 --> 00:35:42,880
+and you know this is about typically
+
+924
+00:35:42,880 --> 00:35:44,000
+obviously a little bit but you know
+
+925
+00:35:44,000 --> 00:35:47,520
+think about this as a roughly a megabyte
+
+926
+00:35:47,520 --> 00:35:49,920
+you know block so basically the the game
+
+927
+00:35:49,920 --> 00:35:51,599
+is you know the
+
+928
+00:35:51,599 --> 00:35:55,359
+uh the period of collect transactions uh
+
+929
+00:35:55,359 --> 00:35:58,720
+then uh basically solves the puzzle
+
+930
+00:35:58,720 --> 00:36:00,880
+uh and once they solve the puzzle
+
+931
+00:36:00,880 --> 00:36:01,839
+they're gonna
+
+932
+00:36:01,839 --> 00:36:04,560
+ship the block to uh everybody in the in
+
+933
+00:36:04,560 --> 00:36:05,520
+the network
+
+934
+00:36:05,520 --> 00:36:07,920
+uh everybody can check whether the peer
+
+935
+00:36:07,920 --> 00:36:08,720
+actually solved the
+
+936
+00:36:08,720 --> 00:36:10,880
+puzzle correctly and if you know the
+
+937
+00:36:10,880 --> 00:36:12,000
+possible's correcting yourself
+
+938
+00:36:12,000 --> 00:36:14,000
+uh correctly in the transaction checkout
+
+939
+00:36:14,000 --> 00:36:15,200
+and you know everything the hash is
+
+940
+00:36:15,200 --> 00:36:16,000
+checked out
+
+941
+00:36:16,000 --> 00:36:17,119
+then they're going to basically accept
+
+942
+00:36:17,119 --> 00:36:18,800
+that block as the next block in the
+
+943
+00:36:18,800 --> 00:36:22,470
+chain
+
+944
+00:36:22,480 --> 00:36:25,599
+so a little bit more detail
+
+945
+00:36:25,599 --> 00:36:28,400
+uh you know when you know basically the
+
+946
+00:36:28,400 --> 00:36:30,240
+winner gets to the site
+
+947
+00:36:30,240 --> 00:36:33,520
+uh on the next vlog
+
+948
+00:36:33,520 --> 00:36:40,400
+so we have a new blog
+
+949
+00:36:40,400 --> 00:36:41,680
+and this is basically going to be the
+
+950
+00:36:41,680 --> 00:36:43,359
+proof of work which is done typically
+
+951
+00:36:43,359 --> 00:36:43,680
+the
+
+952
+00:36:43,680 --> 00:36:45,200
+the party that does the proof of work is
+
+953
+00:36:45,200 --> 00:36:47,119
+called the miners
+
+954
+00:36:47,119 --> 00:36:51,359
+and we'll see in a second why um
+
+955
+00:36:51,359 --> 00:36:54,720
+and basically the the game that
+
+956
+00:36:54,720 --> 00:37:01,430
+we're going to play is that the
+
+957
+00:37:01,440 --> 00:37:04,320
+miner has to compute a hash of this new
+
+958
+00:37:04,320 --> 00:37:05,440
+block
+
+959
+00:37:05,440 --> 00:37:09,040
+for that basically has
+
+960
+00:37:09,040 --> 00:37:12,230
+has n leading
+
+961
+00:37:12,240 --> 00:37:17,589
+zeros
+
+962
+00:37:17,599 --> 00:37:20,960
+so and the way you know the the miner
+
+963
+00:37:20,960 --> 00:37:22,000
+can do that is basically
+
+964
+00:37:22,000 --> 00:37:24,880
+by changing the nuts so basically the
+
+965
+00:37:24,880 --> 00:37:26,400
+miner makes the random guesses
+
+966
+00:37:26,400 --> 00:37:29,440
+uh four or nones uh computes the hash
+
+967
+00:37:29,440 --> 00:37:31,200
+and you know checks you know the number
+
+968
+00:37:31,200 --> 00:37:33,200
+of leading zeros and then
+
+969
+00:37:33,200 --> 00:37:34,880
+if the lean number of leading zeros is
+
+970
+00:37:34,880 --> 00:37:36,240
+you know and or larger
+
+971
+00:37:36,240 --> 00:37:37,920
+then you know basically that is a block
+
+972
+00:37:37,920 --> 00:37:40,079
+that's going to be accepted
+
+973
+00:37:40,079 --> 00:37:41,359
+the only way you can think about it is
+
+974
+00:37:41,359 --> 00:37:43,520
+that basically the hash value is below
+
+975
+00:37:43,520 --> 00:37:47,349
+some particular uh
+
+976
+00:37:47,359 --> 00:37:50,880
+particular difficulty value this end can
+
+977
+00:37:50,880 --> 00:37:52,160
+be tuned
+
+978
+00:37:52,160 --> 00:37:54,320
+over time as we'll see in a second later
+
+979
+00:37:54,320 --> 00:37:55,440
+uh to you know
+
+980
+00:37:55,440 --> 00:37:58,720
+adjust the difficulty um uh
+
+981
+00:37:58,720 --> 00:38:01,359
+and but on average you know what you
+
+982
+00:38:01,359 --> 00:38:04,000
+know the amount of work
+
+983
+00:38:04,000 --> 00:38:05,839
+that is necessary you know sort of that
+
+984
+00:38:05,839 --> 00:38:07,119
+they're targeting
+
+985
+00:38:07,119 --> 00:38:10,480
+is about like roughly a cpu month of
+
+986
+00:38:10,480 --> 00:38:13,280
+computation and it's not really
+
+987
+00:38:13,280 --> 00:38:14,400
+expressed in that way it's really
+
+988
+00:38:14,400 --> 00:38:15,760
+expressed in terms of number of hashes
+
+989
+00:38:15,760 --> 00:38:17,119
+you can do per second
+
+990
+00:38:17,119 --> 00:38:19,520
+uh but then it boils down to sort of
+
+991
+00:38:19,520 --> 00:38:21,680
+shooting for that kind of number
+
+992
+00:38:21,680 --> 00:38:23,359
+of course a lot of peers you know do
+
+993
+00:38:23,359 --> 00:38:24,880
+this in parallel you know
+
+994
+00:38:24,880 --> 00:38:26,400
+they're i think the network is currently
+
+995
+00:38:26,400 --> 00:38:27,760
+around ten thousand nodes so ten
+
+996
+00:38:27,760 --> 00:38:28,800
+thousand nodes might be
+
+997
+00:38:28,800 --> 00:38:31,839
+and there might be many more miners
+
+998
+00:38:31,839 --> 00:38:33,280
+i think the hundreds of thousands of
+
+999
+00:38:33,280 --> 00:38:35,440
+miners and you know they might get lucky
+
+1000
+00:38:35,440 --> 00:38:36,640
+right when you know you
+
+1001
+00:38:36,640 --> 00:38:38,400
+pick you know the right nuns very
+
+1002
+00:38:38,400 --> 00:38:40,720
+quickly uh and some of them actually
+
+1003
+00:38:40,720 --> 00:38:43,760
+uh uh get quickly and so
+
+1004
+00:38:43,760 --> 00:38:45,280
+what they're shooting sort of roughly is
+
+1005
+00:38:45,280 --> 00:38:46,880
+that you know that the first one you
+
+1006
+00:38:46,880 --> 00:38:48,480
+know to actually solve the puzzle
+
+1007
+00:38:48,480 --> 00:38:54,390
+now takes about 10 minutes
+
+1008
+00:38:54,400 --> 00:38:57,520
+and you know by adjusting the difficulty
+
+1009
+00:38:57,520 --> 00:38:59,680
+and the you know the the protocol can
+
+1010
+00:38:59,680 --> 00:39:01,280
+sort of adjust you know the
+
+1011
+00:39:01,280 --> 00:39:04,240
+time or the the the time it will take to
+
+1012
+00:39:04,240 --> 00:39:05,520
+actually you know compute one of these
+
+1013
+00:39:05,520 --> 00:39:06,079
+hashes and
+
+1014
+00:39:06,079 --> 00:39:08,240
+so the energy that one has to put into
+
+1015
+00:39:08,240 --> 00:39:09,760
+to actually solve the the
+
+1016
+00:39:09,760 --> 00:39:12,880
+puzzle and so whenever
+
+1017
+00:39:12,880 --> 00:39:15,920
+uh you know the whoever miner you know
+
+1018
+00:39:15,920 --> 00:39:17,680
+sort of solves this puzzle first
+
+1019
+00:39:17,680 --> 00:39:20,000
+basically gets to uh spread the block
+
+1020
+00:39:20,000 --> 00:39:21,280
+across the network
+
+1021
+00:39:21,280 --> 00:39:22,560
+and basically has sort of about 10
+
+1022
+00:39:22,560 --> 00:39:24,400
+minutes you know to do so right and so
+
+1023
+00:39:24,400 --> 00:39:25,599
+you know one reason
+
+1024
+00:39:25,599 --> 00:39:27,839
+that the ten minutes is there is that it
+
+1025
+00:39:27,839 --> 00:39:29,359
+will take a little bit of time to move
+
+1026
+00:39:29,359 --> 00:39:30,720
+that one megabyte of walk you know
+
+1027
+00:39:30,720 --> 00:39:32,480
+across you know the many many peers that
+
+1028
+00:39:32,480 --> 00:39:33,760
+are in the network
+
+1029
+00:39:33,760 --> 00:39:36,079
+and uh you want to make sure that
+
+1030
+00:39:36,079 --> 00:39:37,440
+there's enough time to sort of
+
+1031
+00:39:37,440 --> 00:39:40,720
+get the uh the block out
+
+1032
+00:39:40,720 --> 00:39:43,520
+to many of the peers so that you can
+
+1033
+00:39:43,520 --> 00:39:46,320
+avoid forks as we'll see in a second
+
+1034
+00:39:46,320 --> 00:39:48,000
+and so before that somebody else
+
+1035
+00:39:48,000 --> 00:39:51,200
+actually you know solves the puzzle too
+
+1036
+00:39:51,200 --> 00:39:54,240
+um professor yeah so
+
+1037
+00:39:54,240 --> 00:39:58,880
+um does the number of leading zeroes
+
+1038
+00:39:58,880 --> 00:40:02,640
+that uh hash needs like to be accepted
+
+1039
+00:40:02,640 --> 00:40:03,359
+by a node
+
+1040
+00:40:03,359 --> 00:40:05,520
+is that number like set by each node
+
+1041
+00:40:05,520 --> 00:40:06,640
+individually
+
+1042
+00:40:06,640 --> 00:40:08,400
+no no no no this is part of the protocol
+
+1043
+00:40:08,400 --> 00:40:09,920
+there's an agreed part on it
+
+1044
+00:40:09,920 --> 00:40:12,240
+right right but it's consensus on the
+
+1045
+00:40:12,240 --> 00:40:13,839
+about ns
+
+1046
+00:40:13,839 --> 00:40:16,240
+um but what what i mean is like it's
+
+1047
+00:40:16,240 --> 00:40:17,839
+part of the protocol but
+
+1048
+00:40:17,839 --> 00:40:21,359
+like um
+
+1049
+00:40:21,359 --> 00:40:25,359
+so so so you can change
+
+1050
+00:40:25,359 --> 00:40:27,200
+well-behaved nodes will follow it but
+
+1051
+00:40:27,200 --> 00:40:29,280
+they but but who calculate who
+
+1052
+00:40:29,280 --> 00:40:30,400
+calculates it the
+
+1053
+00:40:30,400 --> 00:40:32,880
+is it a central server that that
+
+1054
+00:40:32,880 --> 00:40:34,960
+calculates the sand and sends it out or
+
+1055
+00:40:34,960 --> 00:40:36,000
+everything oh no no
+
+1056
+00:40:36,000 --> 00:40:37,440
+we'll see in a second later actually how
+
+1057
+00:40:37,440 --> 00:40:39,200
+it's computed uh
+
+1058
+00:40:39,200 --> 00:40:41,280
+but basically what i can give you a hint
+
+1059
+00:40:41,280 --> 00:40:42,800
+about like how it's computed
+
+1060
+00:40:42,800 --> 00:40:44,880
+one reason the timestamps are in these
+
+1061
+00:40:44,880 --> 00:40:46,400
+things
+
+1062
+00:40:46,400 --> 00:40:49,440
+uh is that like if the time between
+
+1063
+00:40:49,440 --> 00:40:51,599
+blocks becomes too low then the
+
+1064
+00:40:51,599 --> 00:40:54,710
+difficulty goes up
+
+1065
+00:40:54,720 --> 00:40:56,480
+and you know these time sensor cores are
+
+1066
+00:40:56,480 --> 00:40:58,160
+validated you know using the hashes and
+
+1067
+00:40:58,160 --> 00:40:59,440
+all the kind of stuff and sit in the
+
+1068
+00:40:59,440 --> 00:41:00,880
+blockchain everybody sees the same
+
+1069
+00:41:00,880 --> 00:41:02,000
+blockchain
+
+1070
+00:41:02,000 --> 00:41:03,760
+so they will compute you know the same
+
+1071
+00:41:03,760 --> 00:41:05,280
+difference between the timestamps and
+
+1072
+00:41:05,280 --> 00:41:06,000
+you know therefore
+
+1073
+00:41:06,000 --> 00:41:07,359
+make the same adjustment in terms of
+
+1074
+00:41:07,359 --> 00:41:09,040
+difficulty right
+
+1075
+00:41:09,040 --> 00:41:10,720
+um and this is one of the cool parts
+
+1076
+00:41:10,720 --> 00:41:12,319
+correct of having a log of everything
+
+1077
+00:41:12,319 --> 00:41:13,680
+that's in there like if you know i have
+
+1078
+00:41:13,680 --> 00:41:14,800
+some determinant of this
+
+1079
+00:41:14,800 --> 00:41:16,240
+you could compute any deterministic
+
+1080
+00:41:16,240 --> 00:41:18,839
+function of like the content of the log
+
+1081
+00:41:18,839 --> 00:41:22,560
+right okay um so so it would be a
+
+1082
+00:41:22,560 --> 00:41:24,160
+deterministic function but but at the
+
+1083
+00:41:24,160 --> 00:41:25,200
+end of the day like
+
+1084
+00:41:25,200 --> 00:41:28,160
+if if i like try and get away with like
+
+1085
+00:41:28,160 --> 00:41:28,720
+sending
+
+1086
+00:41:28,720 --> 00:41:32,400
+less than n like zeros
+
+1087
+00:41:32,400 --> 00:41:35,520
+then each individual node in the network
+
+1088
+00:41:35,520 --> 00:41:37,440
+should call me out yeah they will reject
+
+1089
+00:41:37,440 --> 00:41:38,640
+your solution because
+
+1090
+00:41:38,640 --> 00:41:42,800
+i don't have a real solution okay thanks
+
+1091
+00:41:42,800 --> 00:41:45,040
+so what stops an attacker from just
+
+1092
+00:41:45,040 --> 00:41:46,720
+constantly flooding the network with
+
+1093
+00:41:46,720 --> 00:41:48,560
+wrong solutions
+
+1094
+00:41:48,560 --> 00:41:50,079
+uh yeah the denial service attack you
+
+1095
+00:41:50,079 --> 00:41:52,400
+know hopefully the the one of the
+
+1096
+00:41:52,400 --> 00:41:53,680
+turns out that the checking the solution
+
+1097
+00:41:53,680 --> 00:41:55,680
+is very easy right
+
+1098
+00:41:55,680 --> 00:41:57,839
+and so it's easy to quickly reject an
+
+1099
+00:41:57,839 --> 00:42:01,270
+incorrect solution
+
+1100
+00:42:01,280 --> 00:42:04,000
+thank you and how how are the time
+
+1101
+00:42:04,000 --> 00:42:05,599
+stamps determined dude
+
+1102
+00:42:05,599 --> 00:42:07,839
+like does each block set the timestamp
+
+1103
+00:42:07,839 --> 00:42:09,359
+on its own or
+
+1104
+00:42:09,359 --> 00:42:11,040
+now the miner that successfully mines
+
+1105
+00:42:11,040 --> 00:42:12,960
+you know sets the timestamp in the
+
+1106
+00:42:12,960 --> 00:42:16,160
+block and what if they just set the
+
+1107
+00:42:16,160 --> 00:42:17,359
+timestamp to be
+
+1108
+00:42:17,359 --> 00:42:20,640
+uh like longer than it took
+
+1109
+00:42:20,640 --> 00:42:22,400
+so that it becomes less difficult well
+
+1110
+00:42:22,400 --> 00:42:23,839
+they can't lie too much correctly they
+
+1111
+00:42:23,839 --> 00:42:25,440
+have a 10 minute window sort of roughly
+
+1112
+00:42:25,440 --> 00:42:26,240
+to why i
+
+1113
+00:42:26,240 --> 00:42:27,520
+i don't really know exactly how the
+
+1114
+00:42:27,520 --> 00:42:30,960
+timestamp is checked i don't know
+
+1115
+00:42:30,960 --> 00:42:34,710
+i might imagine this is solvable
+
+1116
+00:42:34,720 --> 00:42:38,400
+okay peers get like the transactions
+
+1117
+00:42:38,400 --> 00:42:38,720
+that
+
+1118
+00:42:38,720 --> 00:42:41,599
+want to be appended to the block thank
+
+1119
+00:42:41,599 --> 00:42:44,560
+you that's the next line
+
+1120
+00:42:44,560 --> 00:42:57,270
+so so blocks and transactions
+
+1121
+00:42:57,280 --> 00:42:59,200
+uh so let's assume like there is some
+
+1122
+00:42:59,200 --> 00:43:00,880
+you know block b5
+
+1123
+00:43:00,880 --> 00:43:02,720
+that already has been computed you know
+
+1124
+00:43:02,720 --> 00:43:04,000
+that sits in the log
+
+1125
+00:43:04,000 --> 00:43:07,920
+you know points forever two b four
+
+1126
+00:43:07,920 --> 00:43:11,520
+and so we're a minor uh we're working on
+
+1127
+00:43:11,520 --> 00:43:14,000
+you know we got a blog with you know
+
+1128
+00:43:14,000 --> 00:43:14,880
+that is sort of
+
+1129
+00:43:14,880 --> 00:43:17,760
+we're mining on so that has a bunch of
+
+1130
+00:43:17,760 --> 00:43:18,720
+transactions
+
+1131
+00:43:18,720 --> 00:43:21,839
+and uh we're basically you know trying
+
+1132
+00:43:21,839 --> 00:43:22,400
+to compute
+
+1133
+00:43:22,400 --> 00:43:24,720
+you know the solution to this puzzle and
+
+1134
+00:43:24,720 --> 00:43:26,079
+so new transactions come in
+
+1135
+00:43:26,079 --> 00:43:28,880
+right you know they arrive and so the
+
+1136
+00:43:28,880 --> 00:43:30,160
+new transaction is actually
+
+1137
+00:43:30,160 --> 00:43:32,079
+you know they call the memory buffer or
+
+1138
+00:43:32,079 --> 00:43:34,240
+buffer they're going some buffer
+
+1139
+00:43:34,240 --> 00:43:37,359
+uh and uh and basically they're gonna
+
+1140
+00:43:37,359 --> 00:43:40,560
+uh when the next block now we're
+
+1141
+00:43:40,560 --> 00:43:42,880
+going to be so at some point this guy
+
+1142
+00:43:42,880 --> 00:43:44,880
+you know let's say this is one minor
+
+1143
+00:43:44,880 --> 00:43:48,800
+minor all right so let's say minori is
+
+1144
+00:43:48,800 --> 00:43:50,319
+the lucky one you know actually
+
+1145
+00:43:50,319 --> 00:43:53,760
+uh minori computes you know the
+
+1146
+00:43:53,760 --> 00:43:58,720
+new b6 and so at some point you know d6
+
+1147
+00:43:58,720 --> 00:44:03,040
+is the new uh next head of the log
+
+1148
+00:44:03,040 --> 00:44:04,480
+uh you know which contains a bunch of
+
+1149
+00:44:04,480 --> 00:44:07,040
+transactions and so while you know sort
+
+1150
+00:44:07,040 --> 00:44:08,960
+of minor i was actually trying to hash
+
+1151
+00:44:08,960 --> 00:44:11,839
+you know computing many many many hashes
+
+1152
+00:44:11,839 --> 00:44:13,200
+to actually solve the puzzle
+
+1153
+00:44:13,200 --> 00:44:16,000
+new transactions come in and so soon as
+
+1154
+00:44:16,000 --> 00:44:16,560
+uh
+
+1155
+00:44:16,560 --> 00:44:19,680
+the minor i is done you know with b6 uh
+
+1156
+00:44:19,680 --> 00:44:21,280
+it basically selects you know the number
+
+1157
+00:44:21,280 --> 00:44:23,280
+of transactions puts a new block
+
+1158
+00:44:23,280 --> 00:44:23,760
+together
+
+1159
+00:44:23,760 --> 00:44:25,680
+a partial blog that's not the one that
+
+1160
+00:44:25,680 --> 00:44:27,040
+is solved yet
+
+1161
+00:44:27,040 --> 00:44:29,680
+you know transactions in from the pool
+
+1162
+00:44:29,680 --> 00:44:30,160
+uh
+
+1163
+00:44:30,160 --> 00:44:31,760
+whatever updates you know whatever an
+
+1164
+00:44:31,760 --> 00:44:33,280
+instrument needs to be updated and then
+
+1165
+00:44:33,280 --> 00:44:34,640
+start hashing on that one
+
+1166
+00:44:34,640 --> 00:44:37,440
+and hoping to solve it so that that can
+
+1167
+00:44:37,440 --> 00:44:39,280
+be added you know to the transaction log
+
+1168
+00:44:39,280 --> 00:44:41,680
+at some point later if it succeeds
+
+1169
+00:44:41,680 --> 00:44:43,839
+of course if somebody else succeeds in
+
+1170
+00:44:43,839 --> 00:44:44,960
+solving the
+
+1171
+00:44:44,960 --> 00:44:48,079
+uh producing b7 before minor i
+
+1172
+00:44:48,079 --> 00:44:49,440
+you know minor is going to switch you
+
+1173
+00:44:49,440 --> 00:44:51,599
+know to the d7 of that blog
+
+1174
+00:44:51,599 --> 00:44:54,480
+remove any transactions that ended up
+
+1175
+00:44:54,480 --> 00:44:55,599
+already in d7
+
+1176
+00:44:55,599 --> 00:44:57,280
+and continues with the transaction that
+
+1177
+00:44:57,280 --> 00:45:01,040
+are left and that are not in b7 yet
+
+1178
+00:45:01,040 --> 00:45:04,560
+okay so that's sort of the plan
+
+1179
+00:45:04,560 --> 00:45:08,880
+for how transactions and blogs interact
+
+1180
+00:45:08,880 --> 00:45:12,480
+at a high level um
+
+1181
+00:45:12,480 --> 00:45:15,920
+so as as transactions um
+
+1182
+00:45:15,920 --> 00:45:19,280
+come in like you know you're trying to
+
+1183
+00:45:19,280 --> 00:45:21,520
+calculate the nons for a block
+
+1184
+00:45:21,520 --> 00:45:23,920
+uh that'll that'll like give you like
+
+1185
+00:45:23,920 --> 00:45:25,920
+you know and leaving zeros
+
+1186
+00:45:25,920 --> 00:45:28,880
+um new transactions will come in right
+
+1187
+00:45:28,880 --> 00:45:29,359
+as
+
+1188
+00:45:29,359 --> 00:45:31,200
+you yeah they're not part of that block
+
+1189
+00:45:31,200 --> 00:45:32,640
+they're going to be sitting on the side
+
+1190
+00:45:32,640 --> 00:45:34,240
+there for the next block
+
+1191
+00:45:34,240 --> 00:45:37,440
+okay could you
+
+1192
+00:45:37,440 --> 00:45:40,880
+could you add could you add them to them
+
+1193
+00:45:40,880 --> 00:45:44,400
+i would change the hash right but
+
+1194
+00:45:44,400 --> 00:45:47,119
+i mean you just need to keep trying to
+
+1195
+00:45:47,119 --> 00:45:48,240
+get like a
+
+1196
+00:45:48,240 --> 00:45:50,240
+nonce right you also have there's a
+
+1197
+00:45:50,240 --> 00:45:51,440
+limit on the block size
+
+1198
+00:45:51,440 --> 00:45:52,720
+you know the block size can't be bigger
+
+1199
+00:45:52,720 --> 00:45:54,480
+than one one some
+
+1200
+00:45:54,480 --> 00:45:56,079
+particular predefined console by
+
+1201
+00:45:56,079 --> 00:45:57,680
+protocol uh
+
+1202
+00:45:57,680 --> 00:45:59,119
+you know there's a bunch of other
+
+1203
+00:45:59,119 --> 00:46:00,400
+reasons you know once you filled up the
+
+1204
+00:46:00,400 --> 00:46:02,000
+blog you know with your transactions you
+
+1205
+00:46:02,000 --> 00:46:04,240
+you keep going hashing until you know
+
+1206
+00:46:04,240 --> 00:46:05,599
+you find the solution
+
+1207
+00:46:05,599 --> 00:46:09,200
+okay or or you get and
+
+1208
+00:46:09,200 --> 00:46:10,640
+or you receive a new one and then you
+
+1209
+00:46:10,640 --> 00:46:11,920
+reject and you don't work on the next
+
+1210
+00:46:11,920 --> 00:46:12,839
+one
+
+1211
+00:46:12,839 --> 00:46:16,319
+okay thanks
+
+1212
+00:46:16,319 --> 00:46:19,440
+so when when someone when a miner like
+
+1213
+00:46:19,440 --> 00:46:20,319
+loses
+
+1214
+00:46:20,319 --> 00:46:23,359
+and do they like like is it possible for
+
+1215
+00:46:23,359 --> 00:46:25,119
+a minor never to make profit
+
+1216
+00:46:25,119 --> 00:46:26,720
+out of this because they keep like
+
+1217
+00:46:26,720 --> 00:46:28,160
+losing because they don't have enough
+
+1218
+00:46:28,160 --> 00:46:28,800
+computers
+
+1219
+00:46:28,800 --> 00:46:31,920
+yeah absolutely if i would start mining
+
+1220
+00:46:31,920 --> 00:46:33,359
+with my laptop i'm pretty sure it would
+
+1221
+00:46:33,359 --> 00:46:37,030
+make no money
+
+1222
+00:46:37,040 --> 00:46:41,200
+in the transaction pool it is local
+
+1223
+00:46:41,200 --> 00:46:43,920
+yeah every every node maintains this uh
+
+1224
+00:46:43,920 --> 00:46:45,520
+transaction pool right as they receive
+
+1225
+00:46:45,520 --> 00:46:47,920
+transactions from uh
+
+1226
+00:46:47,920 --> 00:46:50,480
+uh from other nodes in the network you
+
+1227
+00:46:50,480 --> 00:46:51,359
+know they keep that
+
+1228
+00:46:51,359 --> 00:46:52,960
+transaction pool and you know they use
+
+1229
+00:46:52,960 --> 00:46:54,640
+that transaction pool basically to
+
+1230
+00:46:54,640 --> 00:46:58,000
+fail the next block so
+
+1231
+00:46:58,000 --> 00:46:59,200
+and there are all kinds of rules you
+
+1232
+00:46:59,200 --> 00:47:01,359
+know how you should select transactions
+
+1233
+00:47:01,359 --> 00:47:03,920
+which i'm not going to talk about okay
+
+1234
+00:47:03,920 --> 00:47:05,280
+so to a pen you need to tell your
+
+1235
+00:47:05,280 --> 00:47:07,839
+transaction to everyone
+
+1236
+00:47:07,839 --> 00:47:11,200
+yes or you you tell to a bunch of peers
+
+1237
+00:47:11,200 --> 00:47:11,680
+and they
+
+1238
+00:47:11,680 --> 00:47:13,520
+will flood it for the rest of you to the
+
+1239
+00:47:13,520 --> 00:47:18,069
+rest of the network
+
+1240
+00:47:18,079 --> 00:47:21,040
+so from my understanding uh when a miner
+
+1241
+00:47:21,040 --> 00:47:22,079
+successfully
+
+1242
+00:47:22,079 --> 00:47:25,440
+mines or verifies a transaction uh
+
+1243
+00:47:25,440 --> 00:47:28,800
+they get rewarded because they did
+
+1244
+00:47:28,800 --> 00:47:31,920
+this verification but they can also
+
+1245
+00:47:31,920 --> 00:47:33,760
+lie when it comes to the time stamp so
+
+1246
+00:47:33,760 --> 00:47:35,520
+let's say that you have two verifiers
+
+1247
+00:47:35,520 --> 00:47:36,800
+and they're both working on the same
+
+1248
+00:47:36,800 --> 00:47:37,359
+block
+
+1249
+00:47:37,359 --> 00:47:40,160
+and they almost simultaneously verified
+
+1250
+00:47:40,160 --> 00:47:41,280
+at the same time
+
+1251
+00:47:41,280 --> 00:47:44,720
+but one of them was you know they lied
+
+1252
+00:47:44,720 --> 00:47:46,640
+and they made the timestamp a bit
+
+1253
+00:47:46,640 --> 00:47:48,800
+earlier uh so kind of they were
+
+1254
+00:47:48,800 --> 00:47:51,440
+but the the the the difficulties chosen
+
+1255
+00:47:51,440 --> 00:47:52,000
+for a period
+
+1256
+00:47:52,000 --> 00:47:54,160
+of time like for the next like 20 you
+
+1257
+00:47:54,160 --> 00:47:55,520
+know there's a whole bunch of series
+
+1258
+00:47:55,520 --> 00:47:57,839
+it only changes periodically you can't
+
+1259
+00:47:57,839 --> 00:47:59,839
+change it arbitrarily
+
+1260
+00:47:59,839 --> 00:48:01,760
+so what's that i'm sorry i think i
+
+1261
+00:48:01,760 --> 00:48:03,760
+missed that line
+
+1262
+00:48:03,760 --> 00:48:05,839
+the difficulty is not changed on every
+
+1263
+00:48:05,839 --> 00:48:07,200
+block
+
+1264
+00:48:07,200 --> 00:48:09,440
+it is periodically changed after some
+
+1265
+00:48:09,440 --> 00:48:10,880
+number of you know blocks
+
+1266
+00:48:10,880 --> 00:48:13,359
+have been computed and so you know it's
+
+1267
+00:48:13,359 --> 00:48:14,960
+done in the back you know everybody can
+
+1268
+00:48:14,960 --> 00:48:16,640
+see what these timestamps are
+
+1269
+00:48:16,640 --> 00:48:19,359
+you know every i think it's every i up
+
+1270
+00:48:19,359 --> 00:48:20,000
+the exact number
+
+1271
+00:48:20,000 --> 00:48:22,960
+of blocks is where uh uh when when you
+
+1272
+00:48:22,960 --> 00:48:25,119
+know the difficulty is adjusted
+
+1273
+00:48:25,119 --> 00:48:28,400
+i see okay thank you so at that point
+
+1274
+00:48:28,400 --> 00:48:30,160
+you already agreed on all those blogs in
+
+1275
+00:48:30,160 --> 00:48:31,920
+the past so everybody's in agreement
+
+1276
+00:48:31,920 --> 00:48:34,319
+like what the timestamps are that we're
+
+1277
+00:48:34,319 --> 00:48:35,280
+going to actually use to actually
+
+1278
+00:48:35,280 --> 00:48:36,000
+compute a new
+
+1279
+00:48:36,000 --> 00:48:39,510
+uh developer block
+
+1280
+00:48:39,520 --> 00:48:42,800
+um so so i i had one um
+
+1281
+00:48:42,800 --> 00:48:46,079
+one question about um like achieving
+
+1282
+00:48:46,079 --> 00:48:46,960
+consensus i
+
+1283
+00:48:46,960 --> 00:48:50,000
+i guess like all of this like relies on
+
+1284
+00:48:50,000 --> 00:48:51,119
+like
+
+1285
+00:48:51,119 --> 00:48:53,839
+pretty much every node running uh the
+
+1286
+00:48:53,839 --> 00:48:55,599
+same code right or at least following
+
+1287
+00:48:55,599 --> 00:48:56,480
+the
+
+1288
+00:48:56,480 --> 00:48:59,680
+the rules very very precisely yep like
+
+1289
+00:48:59,680 --> 00:49:01,040
+what happens if there's a bug
+
+1290
+00:49:01,040 --> 00:49:02,800
+in like my code in the code that i'm
+
+1291
+00:49:02,800 --> 00:49:04,880
+running um
+
+1292
+00:49:04,880 --> 00:49:07,119
+you know maybe a bug in like a bunch of
+
+1293
+00:49:07,119 --> 00:49:09,599
+different nodes
+
+1294
+00:49:09,599 --> 00:49:11,760
+does that like throw off like like all
+
+1295
+00:49:11,760 --> 00:49:13,920
+like notions of like consistency
+
+1296
+00:49:13,920 --> 00:49:17,200
+potentially well you know the the the
+
+1297
+00:49:17,200 --> 00:49:18,960
+as long as the majority is we'll talk a
+
+1298
+00:49:18,960 --> 00:49:21,119
+little bit more about it as a majority
+
+1299
+00:49:21,119 --> 00:49:22,079
+of the nodes actually
+
+1300
+00:49:22,079 --> 00:49:23,520
+runs the right code you know everything
+
+1301
+00:49:23,520 --> 00:49:25,920
+should work out right
+
+1302
+00:49:25,920 --> 00:49:27,839
+but like if there's a trapdoor in the
+
+1303
+00:49:27,839 --> 00:49:29,760
+code yeah you got a problem
+
+1304
+00:49:29,760 --> 00:49:31,280
+like if there's a trebor in linux you
+
+1305
+00:49:31,280 --> 00:49:33,920
+got a problem too
+
+1306
+00:49:33,920 --> 00:49:37,280
+so so do does every node run
+
+1307
+00:49:37,280 --> 00:49:39,680
+like the same code or are they different
+
+1308
+00:49:39,680 --> 00:49:41,119
+no there are a couple different bitcoin
+
+1309
+00:49:41,119 --> 00:49:42,240
+versions around we'll talk a little bit
+
+1310
+00:49:42,240 --> 00:49:43,359
+more about it in a second
+
+1311
+00:49:43,359 --> 00:49:45,760
+uh but there are uh sort of the main you
+
+1312
+00:49:45,760 --> 00:49:46,720
+know core
+
+1313
+00:49:46,720 --> 00:49:48,720
+uh they're called you know and they're
+
+1314
+00:49:48,720 --> 00:49:50,400
+like it's like an open source project
+
+1315
+00:49:50,400 --> 00:49:52,319
+like like linuxes you know it has
+
+1316
+00:49:52,319 --> 00:49:53,839
+maintainers and you know
+
+1317
+00:49:53,839 --> 00:49:56,800
+code review and all that kind of stuff
+
+1318
+00:49:56,800 --> 00:49:58,800
+and mostly like the wallets and most of
+
+1319
+00:49:58,800 --> 00:50:00,079
+the sort of the
+
+1320
+00:50:00,079 --> 00:50:02,240
+appears will run you know one of the the
+
+1321
+00:50:02,240 --> 00:50:04,640
+standardized version basically
+
+1322
+00:50:04,640 --> 00:50:11,030
+thanks
+
+1323
+00:50:11,040 --> 00:50:14,319
+uh okay forks so
+
+1324
+00:50:14,319 --> 00:50:17,440
+uh so we know now like what the rule is
+
+1325
+00:50:17,440 --> 00:50:18,160
+you know
+
+1326
+00:50:18,160 --> 00:50:21,280
+who can actually extend uh the the log
+
+1327
+00:50:21,280 --> 00:50:23,760
+uh or the chain the boxing you can still
+
+1328
+00:50:23,760 --> 00:50:25,119
+have forks
+
+1329
+00:50:25,119 --> 00:50:26,720
+again because it's going to mute our
+
+1330
+00:50:26,720 --> 00:50:28,400
+chain whatever
+
+1331
+00:50:28,400 --> 00:50:31,599
+b5 you know b6
+
+1332
+00:50:31,599 --> 00:50:33,599
+and you know we you know somebody you
+
+1333
+00:50:33,599 --> 00:50:35,200
+two might actually get sort of lucky
+
+1334
+00:50:35,200 --> 00:50:37,359
+and so roughly computes you know b7 you
+
+1335
+00:50:37,359 --> 00:50:39,599
+know two b7s at the same time so
+
+1336
+00:50:39,599 --> 00:50:42,880
+here we go b7 prime and here we have b7
+
+1337
+00:50:42,880 --> 00:50:45,910
+double prime
+
+1338
+00:50:45,920 --> 00:50:48,319
+uh and that'll be problematic for us
+
+1339
+00:50:48,319 --> 00:50:49,680
+right because maybe you know one of
+
+1340
+00:50:49,680 --> 00:50:50,319
+these
+
+1341
+00:50:50,319 --> 00:50:53,280
+this chain uh has the transaction you
+
+1342
+00:50:53,280 --> 00:50:54,240
+know the
+
+1343
+00:50:54,240 --> 00:50:57,920
+the the y to whatever y to z
+
+1344
+00:50:57,920 --> 00:51:02,309
+yeah and maybe this one has no y to q
+
+1345
+00:51:02,319 --> 00:51:03,520
+right then you know we we're on there
+
+1346
+00:51:03,520 --> 00:51:04,720
+sort of make sure that we actually
+
+1347
+00:51:04,720 --> 00:51:07,119
+settle in the end of one chain
+
+1348
+00:51:07,119 --> 00:51:08,800
+so there's two reasons why this change
+
+1349
+00:51:08,800 --> 00:51:10,880
+might develop you know one
+
+1350
+00:51:10,880 --> 00:51:14,319
+is you know the people or participants
+
+1351
+00:51:14,319 --> 00:51:15,280
+find the
+
+1352
+00:51:15,280 --> 00:51:22,400
+the find the nons at the same time
+
+1353
+00:51:22,400 --> 00:51:24,800
+or roughly at the same time and the
+
+1354
+00:51:24,800 --> 00:51:25,440
+second one
+
+1355
+00:51:25,440 --> 00:51:26,960
+is that you know there may be a slow
+
+1356
+00:51:26,960 --> 00:51:30,870
+network yeah
+
+1357
+00:51:30,880 --> 00:51:33,520
+and so you know a peer might receive you
+
+1358
+00:51:33,520 --> 00:51:35,200
+know from two
+
+1359
+00:51:35,200 --> 00:51:36,079
+that there are different ends of the
+
+1360
+00:51:36,079 --> 00:51:37,599
+network at some point these two new
+
+1361
+00:51:37,599 --> 00:51:39,119
+solutions
+
+1362
+00:51:39,119 --> 00:51:42,480
+um and basically you know when a node
+
+1363
+00:51:42,480 --> 00:51:43,680
+ends up in this situation
+
+1364
+00:51:43,680 --> 00:51:45,359
+it basically does nothing and usually
+
+1365
+00:51:45,359 --> 00:51:46,880
+keeps the fork around
+
+1366
+00:51:46,880 --> 00:51:49,200
+and just waits to see which work gets
+
+1367
+00:51:49,200 --> 00:51:50,240
+extended
+
+1368
+00:51:50,240 --> 00:51:51,920
+and so you know maybe this fork the
+
+1369
+00:51:51,920 --> 00:51:53,839
+bottom one you know will get extended
+
+1370
+00:51:53,839 --> 00:51:55,599
+with you know b8
+
+1371
+00:51:55,599 --> 00:51:58,319
+and then the rule is very simple uh you
+
+1372
+00:51:58,319 --> 00:51:58,880
+know the
+
+1373
+00:51:58,880 --> 00:52:04,160
+pier switches
+
+1374
+00:52:04,160 --> 00:52:11,670
+switches to longest fork
+
+1375
+00:52:11,680 --> 00:52:14,960
+and uh and so uh and so
+
+1376
+00:52:14,960 --> 00:52:16,800
+basically you know all the transactions
+
+1377
+00:52:16,800 --> 00:52:18,240
+you know they might have learned about
+
+1378
+00:52:18,240 --> 00:52:20,720
+in this this work in the top fork are
+
+1379
+00:52:20,720 --> 00:52:22,160
+just going to disappear you know they're
+
+1380
+00:52:22,160 --> 00:52:22,720
+going to
+
+1381
+00:52:22,720 --> 00:52:25,440
+not matter in the the system uh because
+
+1382
+00:52:25,440 --> 00:52:26,079
+in the end
+
+1383
+00:52:26,079 --> 00:52:27,680
+you know all those sort of good notes
+
+1384
+00:52:27,680 --> 00:52:30,000
+will actually agree on the longest chain
+
+1385
+00:52:30,000 --> 00:52:32,160
+and you know basically proceed you know
+
+1386
+00:52:32,160 --> 00:52:34,880
+mining along the longest chain
+
+1387
+00:52:34,880 --> 00:52:37,359
+that's the basic plan and so let's look
+
+1388
+00:52:37,359 --> 00:52:38,880
+a little bit about like how
+
+1389
+00:52:38,880 --> 00:52:41,280
+would that solve our double spending
+
+1390
+00:52:41,280 --> 00:52:43,750
+problem
+
+1391
+00:52:43,760 --> 00:52:46,400
+oh wait i have a question on the new
+
+1392
+00:52:46,400 --> 00:52:47,359
+slide
+
+1393
+00:52:47,359 --> 00:52:48,960
+yep i'm going to continue on the
+
+1394
+00:52:48,960 --> 00:52:50,640
+previous slide in this slide
+
+1395
+00:52:50,640 --> 00:52:54,800
+oh okay so um let me ask the question so
+
+1396
+00:52:54,800 --> 00:52:57,760
+so even if the in the in the second
+
+1397
+00:52:57,760 --> 00:52:58,240
+cause
+
+1398
+00:52:58,240 --> 00:53:01,520
+like the slow network can't you um
+
+1399
+00:53:01,520 --> 00:53:04,640
+detect that if you if the miner included
+
+1400
+00:53:04,640 --> 00:53:06,319
+the timestamp where they
+
+1401
+00:53:06,319 --> 00:53:12,309
+when they found the solution
+
+1402
+00:53:12,319 --> 00:53:15,839
+okay yeah you might you know already be
+
+1403
+00:53:15,839 --> 00:53:17,040
+suspicious or may
+
+1404
+00:53:17,040 --> 00:53:18,800
+agree on what actually the next you know
+
+1405
+00:53:18,800 --> 00:53:20,240
+what the right problem the right chain
+
+1406
+00:53:20,240 --> 00:53:20,720
+is
+
+1407
+00:53:20,720 --> 00:53:23,440
+but it will be confirmed later by future
+
+1408
+00:53:23,440 --> 00:53:24,800
+blocks
+
+1409
+00:53:24,800 --> 00:53:26,400
+and you know you use the future blocks
+
+1410
+00:53:26,400 --> 00:53:27,920
+to really decide what the longest chain
+
+1411
+00:53:27,920 --> 00:53:30,549
+is
+
+1412
+00:53:30,559 --> 00:53:34,069
+okay
+
+1413
+00:53:34,079 --> 00:53:37,520
+uh okay double spending uh
+
+1414
+00:53:37,520 --> 00:53:39,680
+so let's talk about sort of two easy two
+
+1415
+00:53:39,680 --> 00:53:42,160
+cases the first one is easy uh
+
+1416
+00:53:42,160 --> 00:53:45,280
+you know y you know sends
+
+1417
+00:53:45,280 --> 00:53:48,400
+you know the y to z
+
+1418
+00:53:48,400 --> 00:53:54,950
+and y to q to some pier or to the peers
+
+1419
+00:53:54,960 --> 00:53:56,559
+and basically what will happen correct
+
+1420
+00:53:56,559 --> 00:53:57,760
+in this case is that if it's a
+
+1421
+00:53:57,760 --> 00:53:59,359
+well-behaving peer you'll see like hey
+
+1422
+00:53:59,359 --> 00:54:00,880
+you know two transactions
+
+1423
+00:54:00,880 --> 00:54:03,520
+uh that actually spent the same money at
+
+1424
+00:54:03,520 --> 00:54:03,920
+uh
+
+1425
+00:54:03,920 --> 00:54:06,559
+said twice or this is going to reject uh
+
+1426
+00:54:06,559 --> 00:54:08,559
+that so a peer that receives you know is
+
+1427
+00:54:08,559 --> 00:54:09,119
+trying to
+
+1428
+00:54:09,119 --> 00:54:10,800
+go or minor that it's going to construct
+
+1429
+00:54:10,800 --> 00:54:12,640
+a blog and it will actually validate all
+
+1430
+00:54:12,640 --> 00:54:14,240
+the transactions before they stick them
+
+1431
+00:54:14,240 --> 00:54:15,680
+in the blog
+
+1432
+00:54:15,680 --> 00:54:17,680
+so this will you know don't really this
+
+1433
+00:54:17,680 --> 00:54:18,880
+is not going to work mine is going to
+
+1434
+00:54:18,880 --> 00:54:19,359
+reject
+
+1435
+00:54:19,359 --> 00:54:24,319
+a good binder
+
+1436
+00:54:24,319 --> 00:54:26,160
+okay the second advice or the more
+
+1437
+00:54:26,160 --> 00:54:27,920
+instinct i think cases
+
+1438
+00:54:27,920 --> 00:54:32,480
+basically why since you know y to z
+
+1439
+00:54:32,480 --> 00:54:35,990
+you know to some set of appears
+
+1440
+00:54:36,000 --> 00:54:39,200
+and you know y to q
+
+1441
+00:54:39,200 --> 00:54:47,109
+to another set of peers
+
+1442
+00:54:47,119 --> 00:54:50,640
+and you know and you know that and my
+
+1443
+00:54:50,640 --> 00:54:52,960
+you know maybe you know the maybe the
+
+1444
+00:54:52,960 --> 00:54:54,640
+one pool is bigger than the other pool
+
+1445
+00:54:54,640 --> 00:54:56,400
+uh but it could actually end up in a
+
+1446
+00:54:56,400 --> 00:54:57,920
+situation where basically you know we
+
+1447
+00:54:57,920 --> 00:54:58,799
+got the chain
+
+1448
+00:54:58,799 --> 00:55:02,400
+like as before and basically either
+
+1449
+00:55:02,400 --> 00:55:04,559
+once it appears you know computes you
+
+1450
+00:55:04,559 --> 00:55:06,720
+know the uh a hash where
+
+1451
+00:55:06,720 --> 00:55:09,920
+that includes y to q and the other one
+
+1452
+00:55:09,920 --> 00:55:11,200
+computes a block you know that actually
+
+1453
+00:55:11,200 --> 00:55:12,319
+contains y to
+
+1454
+00:55:12,319 --> 00:55:15,760
+z uh and so this looks like a double
+
+1455
+00:55:15,760 --> 00:55:16,720
+spending thing
+
+1456
+00:55:16,720 --> 00:55:18,799
+and so if you're z correct like studio
+
+1457
+00:55:18,799 --> 00:55:20,640
+is the person that is going to decide
+
+1458
+00:55:20,640 --> 00:55:22,319
+whether to accept you know
+
+1459
+00:55:22,319 --> 00:55:24,880
+this transaction and hand out the uh
+
+1460
+00:55:24,880 --> 00:55:26,319
+hand up the latte
+
+1461
+00:55:26,319 --> 00:55:29,359
+what you do is you're going to wait
+
+1462
+00:55:29,359 --> 00:55:31,839
+and you're going to wait until there's a
+
+1463
+00:55:31,839 --> 00:55:33,839
+bunch of more blocks that are behind it
+
+1464
+00:55:33,839 --> 00:55:34,640
+so
+
+1465
+00:55:34,640 --> 00:55:37,119
+typically it's five six up to five six
+
+1466
+00:55:37,119 --> 00:55:38,720
+you know for a very valuable transaction
+
+1467
+00:55:38,720 --> 00:55:40,160
+maybe not for a latte but if you're
+
+1468
+00:55:40,160 --> 00:55:41,359
+buying a car
+
+1469
+00:55:41,359 --> 00:55:42,960
+uh you know you really wanna make damn
+
+1470
+00:55:42,960 --> 00:55:44,880
+sure that you're gonna get your money
+
+1471
+00:55:44,880 --> 00:55:47,599
+and uh that you know why didn't double
+
+1472
+00:55:47,599 --> 00:55:48,079
+spend
+
+1473
+00:55:48,079 --> 00:55:51,680
+the money and so uh you may work you
+
+1474
+00:55:51,680 --> 00:55:52,720
+know
+
+1475
+00:55:52,720 --> 00:55:55,359
+wait for a while you know until new uh
+
+1476
+00:55:55,359 --> 00:55:56,480
+hash has been ended
+
+1477
+00:55:56,480 --> 00:55:57,760
+you know to do a new blocks will be
+
+1478
+00:55:57,760 --> 00:56:00,319
+extended to the uh blockchain
+
+1479
+00:56:00,319 --> 00:56:02,559
+and you know once you have five or six
+
+1480
+00:56:02,559 --> 00:56:05,119
+uh as the paper does some calculations
+
+1481
+00:56:05,119 --> 00:56:06,640
+you're gonna be pretty confident that
+
+1482
+00:56:06,640 --> 00:56:08,559
+you'll be very confident that
+
+1483
+00:56:08,559 --> 00:56:11,680
+um uh that it's unlikely
+
+1484
+00:56:11,680 --> 00:56:13,680
+you know for attacker to basically uh
+
+1485
+00:56:13,680 --> 00:56:15,200
+compute a new chain
+
+1486
+00:56:15,200 --> 00:56:17,680
+and sort of overtake you know the the
+
+1487
+00:56:17,680 --> 00:56:18,400
+longer chain
+
+1488
+00:56:18,400 --> 00:56:20,400
+right let's say this is the attacker the
+
+1489
+00:56:20,400 --> 00:56:22,319
+attacker has less computational power
+
+1490
+00:56:22,319 --> 00:56:23,839
+you know presumably or this is
+
+1491
+00:56:23,839 --> 00:56:25,359
+the assumption behind this whole paper
+
+1492
+00:56:25,359 --> 00:56:26,799
+has less computational power than all
+
+1493
+00:56:26,799 --> 00:56:27,920
+the good people
+
+1494
+00:56:27,920 --> 00:56:29,760
+and so if the good people have more
+
+1495
+00:56:29,760 --> 00:56:31,040
+computational power
+
+1496
+00:56:31,040 --> 00:56:32,880
+it's going to be impossible for the
+
+1497
+00:56:32,880 --> 00:56:34,160
+attacker or you know
+
+1498
+00:56:34,160 --> 00:56:36,960
+unlikely or if it's intellectually uh
+
+1499
+00:56:36,960 --> 00:56:38,480
+impossible or unlikely
+
+1500
+00:56:38,480 --> 00:56:39,920
+for the attacker to basically compute
+
+1501
+00:56:39,920 --> 00:56:42,160
+faster and actually make a chain that's
+
+1502
+00:56:42,160 --> 00:56:44,319
+longer than the good chain
+
+1503
+00:56:44,319 --> 00:56:46,640
+and so that's sort of the key assumption
+
+1504
+00:56:46,640 --> 00:56:47,440
+that's behind
+
+1505
+00:56:47,440 --> 00:56:50,640
+all this uh about among this among this
+
+1506
+00:56:50,640 --> 00:56:51,359
+reasoner
+
+1507
+00:56:51,359 --> 00:56:54,960
+reasoning and so basically c
+
+1508
+00:56:54,960 --> 00:56:57,119
+you know just has to wait for a while
+
+1509
+00:56:57,119 --> 00:56:59,040
+until the good guys have extended the
+
+1510
+00:56:59,040 --> 00:57:01,359
+chain uh long enough that you know the z
+
+1511
+00:57:01,359 --> 00:57:03,040
+is completely convinced that you know
+
+1512
+00:57:03,040 --> 00:57:04,640
+you know it's impossible for a set of
+
+1513
+00:57:04,640 --> 00:57:06,640
+attackers uh to actually
+
+1514
+00:57:06,640 --> 00:57:10,400
+out compute you know the the good people
+
+1515
+00:57:10,400 --> 00:57:12,559
+and and at that point you know z can
+
+1516
+00:57:12,559 --> 00:57:14,079
+just accept the transaction
+
+1517
+00:57:14,079 --> 00:57:15,280
+and say like oh this is a legit
+
+1518
+00:57:15,280 --> 00:57:16,720
+transaction and if everything else
+
+1519
+00:57:16,720 --> 00:57:17,680
+checks out
+
+1520
+00:57:17,680 --> 00:57:20,559
+and uh hand over the latte or the car
+
+1521
+00:57:20,559 --> 00:57:21,200
+you know to
+
+1522
+00:57:21,200 --> 00:57:26,079
+uh to z or yeah to y i guess
+
+1523
+00:57:26,079 --> 00:57:28,160
+sorry quick question uh who distributes
+
+1524
+00:57:28,160 --> 00:57:30,559
+the puzzles
+
+1525
+00:57:30,559 --> 00:57:33,119
+uh there's no distribution deposits
+
+1526
+00:57:33,119 --> 00:57:33,920
+necessary
+
+1527
+00:57:33,920 --> 00:57:37,589
+right the uh
+
+1528
+00:57:37,599 --> 00:57:40,000
+the puzzle is you know predetermined you
+
+1529
+00:57:40,000 --> 00:57:41,920
+know the puzzle is you have to compute a
+
+1530
+00:57:41,920 --> 00:57:43,760
+hash of a block
+
+1531
+00:57:43,760 --> 00:57:49,030
+that has enough leading zeros
+
+1532
+00:57:49,040 --> 00:57:51,040
+so there's no distribution of the puzzle
+
+1533
+00:57:51,040 --> 00:57:52,319
+the only thing that's distributed maybe
+
+1534
+00:57:52,319 --> 00:57:53,760
+is the difficulty but as we talked a
+
+1535
+00:57:53,760 --> 00:57:55,119
+little bit earlier that sort of adjusted
+
+1536
+00:57:55,119 --> 00:57:56,079
+over time
+
+1537
+00:57:56,079 --> 00:58:00,559
+in a deterministic way thank you
+
+1538
+00:58:00,559 --> 00:58:03,359
+so there's all these transactions that
+
+1539
+00:58:03,359 --> 00:58:04,480
+are happening and then
+
+1540
+00:58:04,480 --> 00:58:06,319
+through some gossip protocol or
+
+1541
+00:58:06,319 --> 00:58:08,160
+something the transaction is distributed
+
+1542
+00:58:08,160 --> 00:58:09,520
+to all the nodes
+
+1543
+00:58:09,520 --> 00:58:12,559
+and then somehow
+
+1544
+00:58:12,559 --> 00:58:15,440
+there's agreement on what set of
+
+1545
+00:58:15,440 --> 00:58:17,440
+transactions are packaged into a block
+
+1546
+00:58:17,440 --> 00:58:18,319
+so everyone has
+
+1547
+00:58:18,319 --> 00:58:23,119
+agreement on what the block is
+
+1548
+00:58:23,119 --> 00:58:25,599
+no no no the miner receives transactions
+
+1549
+00:58:25,599 --> 00:58:27,200
+right
+
+1550
+00:58:27,200 --> 00:58:31,349
+uh we go here where was it
+
+1551
+00:58:31,359 --> 00:58:34,720
+uh new block there was some slide on
+
+1552
+00:58:34,720 --> 00:58:37,760
+i think the next one
+
+1553
+00:58:37,760 --> 00:58:39,680
+yeah blocks in transactions so the miner
+
+1554
+00:58:39,680 --> 00:58:41,599
+maybe like miner i
+
+1555
+00:58:41,599 --> 00:58:43,280
+you know just receives transactions over
+
+1556
+00:58:43,280 --> 00:58:44,960
+the network and it just decides which
+
+1557
+00:58:44,960 --> 00:58:46,960
+transactions go in that block
+
+1558
+00:58:46,960 --> 00:58:49,680
+and it starts computing and if it wins
+
+1559
+00:58:49,680 --> 00:58:51,280
+that is the transactions that go in that
+
+1560
+00:58:51,280 --> 00:58:52,640
+block
+
+1561
+00:58:52,640 --> 00:58:54,799
+i see okay so that determines that the
+
+1562
+00:58:54,799 --> 00:58:55,920
+total order correct
+
+1563
+00:58:55,920 --> 00:58:57,440
+you know the total order is determined
+
+1564
+00:58:57,440 --> 00:58:58,960
+by all the previous blocks you know plus
+
+1565
+00:58:58,960 --> 00:59:00,720
+this new block and within the block you
+
+1566
+00:59:00,720 --> 00:59:02,240
+know basically a minor i has decided
+
+1567
+00:59:02,240 --> 00:59:03,119
+what goes in
+
+1568
+00:59:03,119 --> 00:59:04,640
+and there's some complicated rules that
+
+1569
+00:59:04,640 --> 00:59:07,280
+the reminders are supposed to follow
+
+1570
+00:59:07,280 --> 00:59:08,640
+but you know basically the miner gets to
+
+1571
+00:59:08,640 --> 00:59:10,880
+this side
+
+1572
+00:59:10,880 --> 00:59:16,309
+thank you
+
+1573
+00:59:16,319 --> 00:59:17,599
+and there's sort of incentive systems
+
+1574
+00:59:17,599 --> 00:59:20,240
+for the miners to do the right thing
+
+1575
+00:59:20,240 --> 00:59:22,079
+uh so let me talk a little bit about
+
+1576
+00:59:22,079 --> 00:59:23,440
+this um
+
+1577
+00:59:23,440 --> 00:59:27,119
+uh so uh so far you know we've seen you
+
+1578
+00:59:27,119 --> 00:59:27,760
+know the
+
+1579
+00:59:27,760 --> 00:59:29,599
+this puzzle that's sort of the core of
+
+1580
+00:59:29,599 --> 00:59:31,280
+this proof of work idea to that's at the
+
+1581
+00:59:31,280 --> 00:59:32,640
+core of actually
+
+1582
+00:59:32,640 --> 00:59:35,680
+achieving consensus uh
+
+1583
+00:59:35,680 --> 00:59:38,160
+and uh but you know this requires the
+
+1584
+00:59:38,160 --> 00:59:39,680
+miners actually do quite a bit of work
+
+1585
+00:59:39,680 --> 00:59:41,280
+you know like they have to hash hash
+
+1586
+00:59:41,280 --> 00:59:42,960
+hash you have to have a serious computer
+
+1587
+00:59:42,960 --> 00:59:45,280
+uh you know it's a month one roughly a
+
+1588
+00:59:45,280 --> 00:59:46,640
+month work right
+
+1589
+00:59:46,640 --> 00:59:48,799
+and so why would a minor do that and so
+
+1590
+00:59:48,799 --> 00:59:50,160
+there's an incentive system
+
+1591
+00:59:50,160 --> 00:59:52,640
+for to encourage miners to actually play
+
+1592
+00:59:52,640 --> 01:00:02,549
+this role
+
+1593
+01:00:02,559 --> 01:00:04,880
+and you know there's a rule that
+
+1594
+01:00:04,880 --> 01:00:06,480
+basically the
+
+1595
+01:00:06,480 --> 01:00:08,160
+uh there's a bunch of sort of bitcoins
+
+1596
+01:00:08,160 --> 01:00:10,319
+reserved in the pool like when the
+
+1597
+01:00:10,319 --> 01:00:12,240
+first bit you know bitcoin transaction
+
+1598
+01:00:12,240 --> 01:00:13,760
+was created
+
+1599
+01:00:13,760 --> 01:00:17,359
+and miners get paid or rewarded out of
+
+1600
+01:00:17,359 --> 01:00:18,079
+that pool
+
+1601
+01:00:18,079 --> 01:00:22,950
+and so basically the first transaction
+
+1602
+01:00:22,960 --> 01:00:26,839
+transaction in the blog is basically a
+
+1603
+01:00:26,839 --> 01:00:33,190
+reward for the miner
+
+1604
+01:00:33,200 --> 01:00:35,280
+and so basically the miner can insert a
+
+1605
+01:00:35,280 --> 01:00:37,359
+transaction in in the
+
+1606
+01:00:37,359 --> 01:00:38,559
+first generation conservation
+
+1607
+01:00:38,559 --> 01:00:40,799
+interaction the first slot uh
+
+1608
+01:00:40,799 --> 01:00:42,400
+where that basically is you know the
+
+1609
+01:00:42,400 --> 01:00:43,839
+miner's public key
+
+1610
+01:00:43,839 --> 01:00:45,920
+and uh transferring money out of the
+
+1611
+01:00:45,920 --> 01:00:47,520
+pool to himself
+
+1612
+01:00:47,520 --> 01:00:51,280
+or herself and uh and as the way the
+
+1613
+01:00:51,280 --> 01:00:52,400
+miners get actually
+
+1614
+01:00:52,400 --> 01:00:55,680
+uh uh uh uh getting
+
+1615
+01:00:55,680 --> 01:00:58,160
+really sort of a return or reward for
+
+1616
+01:00:58,160 --> 01:00:59,599
+actually the work they do
+
+1617
+01:00:59,599 --> 01:01:03,520
+uh that reward changes over time um
+
+1618
+01:01:03,520 --> 01:01:05,200
+currently i think you're for you know
+
+1619
+01:01:05,200 --> 01:01:07,440
+today is i think it's 6.25
+
+1620
+01:01:07,440 --> 01:01:10,559
+you know bitcoin uh
+
+1621
+01:01:10,559 --> 01:01:13,680
+to actually mine a block um but this
+
+1622
+01:01:13,680 --> 01:01:15,040
+changes over time it actually has sort
+
+1623
+01:01:15,040 --> 01:01:17,280
+of a halfing rule uh
+
+1624
+01:01:17,280 --> 01:01:20,480
+that reduces you know half the like a
+
+1625
+01:01:20,480 --> 01:01:21,520
+couple years ago it was
+
+1626
+01:01:21,520 --> 01:01:24,880
+a 12-bit 12.5 bitcoin uh you know in a
+
+1627
+01:01:24,880 --> 01:01:25,200
+couple
+
+1628
+01:01:25,200 --> 01:01:27,359
+in the wild will be whatever free point
+
+1629
+01:01:27,359 --> 01:01:29,359
+you know whatever they have for 6.25 and
+
+1630
+01:01:29,359 --> 01:01:30,000
+i think
+
+1631
+01:01:30,000 --> 01:01:31,839
+uh i remember correctly every like every
+
+1632
+01:01:31,839 --> 01:01:33,680
+two and every two
+
+1633
+01:01:33,680 --> 01:01:36,319
+under 10 000 blocks uh that number
+
+1634
+01:01:36,319 --> 01:01:37,440
+halves
+
+1635
+01:01:37,440 --> 01:01:40,720
+it's until it runs into the most finest
+
+1636
+01:01:40,720 --> 01:01:44,000
+uh you know the the finest uh
+
+1637
+01:01:44,000 --> 01:01:47,520
+bitcoin uh denominator and then it
+
+1638
+01:01:47,520 --> 01:01:49,359
+basically stops
+
+1639
+01:01:49,359 --> 01:01:51,280
+but we're a while away before that
+
+1640
+01:01:51,280 --> 01:01:52,799
+actually is the case
+
+1641
+01:01:52,799 --> 01:01:55,920
+if that happens then uh the idea is that
+
+1642
+01:01:55,920 --> 01:01:58,000
+you know to mine actually block every
+
+1643
+01:01:58,000 --> 01:01:59,839
+transaction pays a little fee
+
+1644
+01:01:59,839 --> 01:02:01,920
+and the miner collects the fees you know
+
+1645
+01:02:01,920 --> 01:02:02,880
+from all the
+
+1646
+01:02:02,880 --> 01:02:06,160
+transactions in the block and use and
+
+1647
+01:02:06,160 --> 01:02:07,119
+reward
+
+1648
+01:02:07,119 --> 01:02:09,599
+the miner with those feeds even now
+
+1649
+01:02:09,599 --> 01:02:11,680
+there are some fees
+
+1650
+01:02:11,680 --> 01:02:14,240
+but to basically ensure that basically
+
+1651
+01:02:14,240 --> 01:02:16,960
+the transactions are not frivolous
+
+1652
+01:02:16,960 --> 01:02:19,359
+and so really the miner actually earns
+
+1653
+01:02:19,359 --> 01:02:20,559
+not only the
+
+1654
+01:02:20,559 --> 01:02:23,599
+uh 6.25 but also like the
+
+1655
+01:02:23,599 --> 01:02:26,559
+the the fees that actually uh and the
+
+1656
+01:02:26,559 --> 01:02:28,000
+fees that actually go along with the
+
+1657
+01:02:28,000 --> 01:02:31,670
+transactions
+
+1658
+01:02:31,680 --> 01:02:34,880
+okay so that's the minor incentive uh
+
+1659
+01:02:34,880 --> 01:02:37,839
+in uh you know bitcoin has gotten so
+
+1660
+01:02:37,839 --> 01:02:38,799
+successful
+
+1661
+01:02:38,799 --> 01:02:40,240
+that basically there's sort of an arms
+
+1662
+01:02:40,240 --> 01:02:44,390
+range in minors
+
+1663
+01:02:44,400 --> 01:02:45,839
+and this is like for example why you
+
+1664
+01:02:45,839 --> 01:02:47,440
+know if i would want to participate
+
+1665
+01:02:47,440 --> 01:02:50,319
+and actually win and make some money i'm
+
+1666
+01:02:50,319 --> 01:02:51,280
+going to lose
+
+1667
+01:02:51,280 --> 01:02:55,039
+because the serious miners
+
+1668
+01:02:55,039 --> 01:02:57,839
+are much better at computing hashes at a
+
+1669
+01:02:57,839 --> 01:02:59,680
+very high rate
+
+1670
+01:02:59,680 --> 01:03:02,079
+than you know your standard laptop can
+
+1671
+01:03:02,079 --> 01:03:03,280
+and so there's a couple of things that
+
+1672
+01:03:03,280 --> 01:03:05,039
+are actually going on in this arms race
+
+1673
+01:03:05,039 --> 01:03:13,109
+first of all the miners for pools
+
+1674
+01:03:13,119 --> 01:03:14,720
+so the basic idea is that the miners
+
+1675
+01:03:14,720 --> 01:03:16,319
+collaborate with each other
+
+1676
+01:03:16,319 --> 01:03:18,000
+and they share the revenue with each
+
+1677
+01:03:18,000 --> 01:03:19,359
+other and so like you know if you've
+
+1678
+01:03:19,359 --> 01:03:19,760
+pulled
+
+1679
+01:03:19,760 --> 01:03:23,680
+many many many notes uh you know maybe
+
+1680
+01:03:23,680 --> 01:03:25,520
+from different people many computers
+
+1681
+01:03:25,520 --> 01:03:27,440
+from different people the uh you know
+
+1682
+01:03:27,440 --> 01:03:28,400
+the people can share
+
+1683
+01:03:28,400 --> 01:03:31,359
+the revenue stream out of mining and uh
+
+1684
+01:03:31,359 --> 01:03:33,119
+because they do it as a pool
+
+1685
+01:03:33,119 --> 01:03:35,200
+you know they're more likely to actually
+
+1686
+01:03:35,200 --> 01:03:36,960
+win and once in a while
+
+1687
+01:03:36,960 --> 01:03:39,200
+and you know of course probabilistically
+
+1688
+01:03:39,200 --> 01:03:40,480
+they have some chance to win
+
+1689
+01:03:40,480 --> 01:03:42,079
+and basically you know spread sort of
+
+1690
+01:03:42,079 --> 01:03:44,319
+the income stream
+
+1691
+01:03:44,319 --> 01:03:46,400
+in a more stable form across all the
+
+1692
+01:03:46,400 --> 01:03:49,039
+miners in the single pool
+
+1693
+01:03:49,039 --> 01:03:52,720
+if you think if you look online today
+
+1694
+01:03:52,720 --> 01:03:55,599
+there are some really large pools and i
+
+1695
+01:03:55,599 --> 01:03:56,240
+think like
+
+1696
+01:03:56,240 --> 01:03:59,760
+the three biggest pools uh continue
+
+1697
+01:03:59,760 --> 01:04:01,440
+to contribute more than fifty percent
+
+1698
+01:04:01,440 --> 01:04:06,230
+you know sort of the mining power
+
+1699
+01:04:06,240 --> 01:04:10,160
+oh sorry why is this why you said that
+
+1700
+01:04:10,160 --> 01:04:13,280
+each block takes like around 10 minutes
+
+1701
+01:04:13,280 --> 01:04:15,920
+to mine even though it takes a month of
+
+1702
+01:04:15,920 --> 01:04:17,200
+cpu power
+
+1703
+01:04:17,200 --> 01:04:20,319
+oh yeah on average is a month
+
+1704
+01:04:20,319 --> 01:04:21,599
+uh but you know you're gonna have some
+
+1705
+01:04:21,599 --> 01:04:23,119
+lucky you know you pick the noms you
+
+1706
+01:04:23,119 --> 01:04:23,520
+know
+
+1707
+01:04:23,520 --> 01:04:26,640
+uh you can get lucky and actually uh uh
+
+1708
+01:04:26,640 --> 01:04:28,000
+pick a nonce that actually allows you to
+
+1709
+01:04:28,000 --> 01:04:29,520
+solve the problem much quicker right
+
+1710
+01:04:29,520 --> 01:04:30,799
+there's always some probability the
+
+1711
+01:04:30,799 --> 01:04:32,160
+nonsense of some big number
+
+1712
+01:04:32,160 --> 01:04:34,160
+or and if you pick the right number you
+
+1713
+01:04:34,160 --> 01:04:36,079
+know you get a good lucky and many many
+
+1714
+01:04:36,079 --> 01:04:36,720
+many
+
+1715
+01:04:36,720 --> 01:04:38,799
+minors do that there's actually a chance
+
+1716
+01:04:38,799 --> 01:04:40,799
+that
+
+1717
+01:04:40,799 --> 01:04:43,280
+it's going to take much less than uh a
+
+1718
+01:04:43,280 --> 01:04:44,880
+month and in fact that's why
+
+1719
+01:04:44,880 --> 01:04:47,440
+where the 10 minute comes from um wait
+
+1720
+01:04:47,440 --> 01:04:48,240
+so is
+
+1721
+01:04:48,240 --> 01:04:50,000
+is the month more important or 10
+
+1722
+01:04:50,000 --> 01:04:51,440
+minutes more important because
+
+1723
+01:04:51,440 --> 01:04:53,839
+like if there was only one minor right
+
+1724
+01:04:53,839 --> 01:04:55,520
+and the expected is one month
+
+1725
+01:04:55,520 --> 01:04:58,480
+you on average it would take one month
+
+1726
+01:04:58,480 --> 01:05:00,400
+right yeah but the the assumption is
+
+1727
+01:05:00,400 --> 01:05:02,160
+there are many many miners
+
+1728
+01:05:02,160 --> 01:05:04,880
+um but what wouldn't it like vary like
+
+1729
+01:05:04,880 --> 01:05:06,839
+if there's a lot more minor
+
+1730
+01:05:06,839 --> 01:05:10,880
+miners there's a lot of variation but on
+
+1731
+01:05:10,880 --> 01:05:12,559
+average is 10 minutes
+
+1732
+01:05:12,559 --> 01:05:14,240
+so it's picked that his own averages
+
+1733
+01:05:14,240 --> 01:05:16,000
+comes out to be 10 minutes
+
+1734
+01:05:16,000 --> 01:05:19,599
+okay is it ever possible that like a
+
+1735
+01:05:19,599 --> 01:05:20,839
+puzzle is
+
+1736
+01:05:20,839 --> 01:05:23,280
+impossible
+
+1737
+01:05:23,280 --> 01:05:26,480
+uh no i don't think so
+
+1738
+01:05:26,480 --> 01:05:29,760
+it may take a long time there is going
+
+1739
+01:05:29,760 --> 01:05:34,230
+to be a
+
+1740
+01:05:34,240 --> 01:05:35,760
+there's going to be you get to pick the
+
+1741
+01:05:35,760 --> 01:05:37,599
+nonce correct and
+
+1742
+01:05:37,599 --> 01:05:39,119
+you know there's going to be a case
+
+1743
+01:05:39,119 --> 01:05:41,200
+where the hash is going to fall
+
+1744
+01:05:41,200 --> 01:05:47,589
+you know within the in leading zeros
+
+1745
+01:05:47,599 --> 01:05:49,760
+i'm so like how so since the value of
+
+1746
+01:05:49,760 --> 01:05:51,440
+bitcoin is actually very
+
+1747
+01:05:51,440 --> 01:05:56,240
+let's say volatile yes
+
+1748
+01:05:56,240 --> 01:05:57,599
+and so then like how can we actually
+
+1749
+01:05:57,599 --> 01:05:59,200
+ensure that the incentive system for the
+
+1750
+01:05:59,200 --> 01:06:00,000
+miners is
+
+1751
+01:06:00,000 --> 01:06:01,839
+uh still adequate to keep this thing
+
+1752
+01:06:01,839 --> 01:06:03,680
+going for the future
+
+1753
+01:06:03,680 --> 01:06:05,680
+i mean since the number of like since
+
+1754
+01:06:05,680 --> 01:06:07,200
+like the reward is predetermined let's
+
+1755
+01:06:07,200 --> 01:06:09,039
+say to be 6.25 bitcoins
+
+1756
+01:06:09,039 --> 01:06:10,720
+what if for some reason the bitcoin
+
+1757
+01:06:10,720 --> 01:06:11,839
+value just dropped and then the
+
+1758
+01:06:11,839 --> 01:06:13,119
+incentive is not good enough for the
+
+1759
+01:06:13,119 --> 01:06:13,920
+miners and so
+
+1760
+01:06:13,920 --> 01:06:15,520
+just there yeah you know like there's
+
+1761
+01:06:15,520 --> 01:06:17,760
+absolutely no value for miners to do
+
+1762
+01:06:17,760 --> 01:06:18,000
+this
+
+1763
+01:06:18,000 --> 01:06:19,839
+then you know the bitcoin network will
+
+1764
+01:06:19,839 --> 01:06:22,079
+collapse and presumably the way this is
+
+1765
+01:06:22,079 --> 01:06:22,960
+going to work out is that the
+
+1766
+01:06:22,960 --> 01:06:25,680
+transaction fee is going to go up
+
+1767
+01:06:25,680 --> 01:06:27,599
+but then if the transaction fees go up
+
+1768
+01:06:27,599 --> 01:06:28,799
+then it will
+
+1769
+01:06:28,799 --> 01:06:30,319
+it will be a counter incentive for
+
+1770
+01:06:30,319 --> 01:06:32,559
+people who
+
+1771
+01:06:32,559 --> 01:06:34,000
+yeah but like you know if everybody's on
+
+1772
+01:06:34,000 --> 01:06:35,599
+the bitcoin network you know if you want
+
+1773
+01:06:35,599 --> 01:06:37,200
+to trade you know goods you know
+
+1774
+01:06:37,200 --> 01:06:38,640
+you have to deal with somebody on the
+
+1775
+01:06:38,640 --> 01:06:40,880
+bitcoin network so there's all kinds of
+
+1776
+01:06:40,880 --> 01:06:43,119
+you know sort of compensated analysis
+
+1777
+01:06:43,119 --> 01:06:44,720
+that i'm not going to like you know
+
+1778
+01:06:44,720 --> 01:06:46,240
+predict on like what is going to be the
+
+1779
+01:06:46,240 --> 01:06:47,920
+outcome that's
+
+1780
+01:06:47,920 --> 01:06:51,760
+okay well i guess we've seen two 21.40
+
+1781
+01:06:51,760 --> 01:06:53,119
+and that's sort of the point where i
+
+1782
+01:06:53,119 --> 01:06:54,799
+think the reward system runs out and
+
+1783
+01:06:54,799 --> 01:06:56,000
+it's going to be all based on
+
+1784
+01:06:56,000 --> 01:06:57,520
+transaction fees
+
+1785
+01:06:57,520 --> 01:07:02,870
+and with the current rate i think
+
+1786
+01:07:02,880 --> 01:07:06,000
+um okay so the other thing that's going
+
+1787
+01:07:06,000 --> 01:07:06,559
+on is
+
+1788
+01:07:06,559 --> 01:07:09,200
+you know people build special hardware
+
+1789
+01:07:09,200 --> 01:07:10,559
+you know there are companies that you
+
+1790
+01:07:10,559 --> 01:07:12,240
+know will deliver you boards you know
+
+1791
+01:07:12,240 --> 01:07:14,400
+that are really good at fast and hashing
+
+1792
+01:07:14,400 --> 01:07:17,839
+and uh these are used by the minor poles
+
+1793
+01:07:17,839 --> 01:07:20,400
+uh people try to maybe they have high
+
+1794
+01:07:20,400 --> 01:07:22,960
+speed links too many peers
+
+1795
+01:07:22,960 --> 01:07:24,559
+so that if they find a block they can
+
+1796
+01:07:24,559 --> 01:07:26,319
+actually you know get it out first
+
+1797
+01:07:26,319 --> 01:07:30,240
+and so they win etcetera etcetera so
+
+1798
+01:07:30,240 --> 01:07:32,000
+this is a you know if you're interested
+
+1799
+01:07:32,000 --> 01:07:33,599
+in this you can read lots and lots of
+
+1800
+01:07:33,599 --> 01:07:35,200
+information about it online
+
+1801
+01:07:35,200 --> 01:07:37,440
+uh but you know still the system seems
+
+1802
+01:07:37,440 --> 01:07:43,200
+to be sort of hanging together
+
+1803
+01:07:43,200 --> 01:07:45,520
+okay uh let me talk a little bit about a
+
+1804
+01:07:45,520 --> 01:07:46,799
+whole bunch of sort of
+
+1805
+01:07:46,799 --> 01:07:48,559
+practical issues that i sort of ignored
+
+1806
+01:07:48,559 --> 01:07:57,520
+although we touched on it a bit
+
+1807
+01:07:57,520 --> 01:08:03,109
+um so first ten minutes
+
+1808
+01:08:03,119 --> 01:08:04,799
+i think the ten minutes is basically
+
+1809
+01:08:04,799 --> 01:08:06,480
+you're sort of the tying
+
+1810
+01:08:06,480 --> 01:08:08,160
+you know the sort of an upper bound or
+
+1811
+01:08:08,160 --> 01:08:11,119
+like if you will like sort of 10 times
+
+1812
+01:08:11,119 --> 01:08:20,630
+the time roughly to flood the network
+
+1813
+01:08:20,640 --> 01:08:22,640
+so bitcoin wants to try to avoid you
+
+1814
+01:08:22,640 --> 01:08:24,080
+know these uh sort of
+
+1815
+01:08:24,080 --> 01:08:27,839
+privileged uh you know frivolous uh
+
+1816
+01:08:27,839 --> 01:08:29,440
+forks you know we're basically you know
+
+1817
+01:08:29,440 --> 01:08:31,199
+two nodes at the same time roughly
+
+1818
+01:08:31,199 --> 01:08:31,920
+compute
+
+1819
+01:08:31,920 --> 01:08:34,480
+and therefore extend you know the uh
+
+1820
+01:08:34,480 --> 01:08:34,960
+chain
+
+1821
+01:08:34,960 --> 01:08:36,799
+roughly at the same time and want to try
+
+1822
+01:08:36,799 --> 01:08:38,239
+to avoid that
+
+1823
+01:08:38,239 --> 01:08:40,880
+and so one way to avoid that is to
+
+1824
+01:08:40,880 --> 01:08:42,880
+basically give enough time to the nodes
+
+1825
+01:08:42,880 --> 01:08:44,400
+to sort of get the
+
+1826
+01:08:44,400 --> 01:08:47,520
+uh the block out you know to many many
+
+1827
+01:08:47,520 --> 01:08:48,400
+many peers
+
+1828
+01:08:48,400 --> 01:08:50,040
+so that most peers actually know about
+
+1829
+01:08:50,040 --> 01:08:51,759
+it
+
+1830
+01:08:51,759 --> 01:08:53,199
+and then you know so that's where this
+
+1831
+01:08:53,199 --> 01:08:56,400
+sort of the 10 minutes comes from
+
+1832
+01:08:56,400 --> 01:09:03,590
+um of course the block size
+
+1833
+01:09:03,600 --> 01:09:05,759
+determines the uh the newer transactions
+
+1834
+01:09:05,759 --> 01:09:09,110
+per second
+
+1835
+01:09:09,120 --> 01:09:10,880
+the block size is roughly a megabyte and
+
+1836
+01:09:10,880 --> 01:09:15,110
+so uh
+
+1837
+01:09:15,120 --> 01:09:16,719
+you know you're gonna do one block you
+
+1838
+01:09:16,719 --> 01:09:19,040
+know per you know roughly 10 minutes
+
+1839
+01:09:19,040 --> 01:09:21,199
+then you know the number of transactions
+
+1840
+01:09:21,199 --> 01:09:22,159
+uh
+
+1841
+01:09:22,159 --> 01:09:25,279
+is limited to uh
+
+1842
+01:09:25,279 --> 01:09:27,440
+the number of uh you know the number of
+
+1843
+01:09:27,440 --> 01:09:29,920
+introductions that fit in a single walk
+
+1844
+01:09:29,920 --> 01:09:30,960
+and that is the only number of
+
+1845
+01:09:30,960 --> 01:09:33,759
+transactions you can do
+
+1846
+01:09:33,759 --> 01:09:36,880
+and it turns out that uh for uh
+
+1847
+01:09:36,880 --> 01:09:39,040
+today you know the uh the number
+
+1848
+01:09:39,040 --> 01:09:40,719
+transactions is like in
+
+1849
+01:09:40,719 --> 01:09:42,480
+the thousands per second you should work
+
+1850
+01:09:42,480 --> 01:09:44,159
+out the numbers and that's sufficient
+
+1851
+01:09:44,159 --> 01:09:45,920
+for example there's probably you know
+
+1852
+01:09:45,920 --> 01:09:47,199
+the analogy that people always make you
+
+1853
+01:09:47,199 --> 01:09:48,480
+know sort of bigger than the sort of the
+
+1854
+01:09:48,480 --> 01:09:49,279
+visa network
+
+1855
+01:09:49,279 --> 01:09:50,640
+uh the more transaction the visa can
+
+1856
+01:09:50,640 --> 01:09:52,960
+process by presumably is not big enough
+
+1857
+01:09:52,960 --> 01:09:53,600
+to actually
+
+1858
+01:09:53,600 --> 01:09:56,800
+uh uh you know basically run all
+
+1859
+01:09:56,800 --> 01:09:58,560
+transactions you know uh money
+
+1860
+01:09:58,560 --> 01:10:00,840
+transactions in the world
+
+1861
+01:10:00,840 --> 01:10:03,280
+across
+
+1862
+01:10:03,280 --> 01:10:05,600
+another big you know this i'll come back
+
+1863
+01:10:05,600 --> 01:10:07,679
+to this in a second
+
+1864
+01:10:07,679 --> 01:10:10,880
+another big issue is that changes you
+
+1865
+01:10:10,880 --> 01:10:14,149
+know to the protocol
+
+1866
+01:10:14,159 --> 01:10:22,630
+change required consensus
+
+1867
+01:10:22,640 --> 01:10:26,870
+and in some cases this is easy right
+
+1868
+01:10:26,880 --> 01:10:31,910
+some changes are easy
+
+1869
+01:10:31,920 --> 01:10:33,679
+there's one easy changes for example the
+
+1870
+01:10:33,679 --> 01:10:35,600
+number of leading zeros
+
+1871
+01:10:35,600 --> 01:10:36,560
+you know there's basically a
+
+1872
+01:10:36,560 --> 01:10:39,440
+deterministic algorithm
+
+1873
+01:10:39,440 --> 01:10:42,800
+to compute from the past log entries
+
+1874
+01:10:42,800 --> 01:10:44,560
+uh what the difficulty is going to be
+
+1875
+01:10:44,560 --> 01:10:46,320
+for future uh
+
+1876
+01:10:46,320 --> 01:10:49,360
+puzzles and since that is deterministic
+
+1877
+01:10:49,360 --> 01:10:51,760
+uh function of the log you know there's
+
+1878
+01:10:51,760 --> 01:10:52,640
+nothing
+
+1879
+01:10:52,640 --> 01:10:54,560
+that changes basically uh and easy and
+
+1880
+01:10:54,560 --> 01:10:55,679
+there's a bunch of
+
+1881
+01:10:55,679 --> 01:10:56,960
+other parameters in the protocol that
+
+1882
+01:10:56,960 --> 01:10:59,910
+have that kind of flavor
+
+1883
+01:10:59,920 --> 01:11:02,080
+some changes however resolved in a soft
+
+1884
+01:11:02,080 --> 01:11:10,229
+fork
+
+1885
+01:11:10,239 --> 01:11:12,080
+let me talk just a little bit about well
+
+1886
+01:11:12,080 --> 01:11:14,560
+let's say when uh you know the
+
+1887
+01:11:14,560 --> 01:11:16,400
+main software the main distribution the
+
+1888
+01:11:16,400 --> 01:11:18,560
+core distribution for bitcoin uh wants
+
+1889
+01:11:18,560 --> 01:11:20,159
+to make a change that they're already
+
+1890
+01:11:20,159 --> 01:11:21,760
+sort of incompatible
+
+1891
+01:11:21,760 --> 01:11:24,560
+uh then you're gonna have old clients uh
+
+1892
+01:11:24,560 --> 01:11:25,920
+clients running with the old software or
+
+1893
+01:11:25,920 --> 01:11:27,360
+appears running with the old server and
+
+1894
+01:11:27,360 --> 01:11:29,520
+new gears with the new software
+
+1895
+01:11:29,520 --> 01:11:31,120
+and that will you know temporarily you
+
+1896
+01:11:31,120 --> 01:11:33,040
+know may create some forms
+
+1897
+01:11:33,040 --> 01:11:34,800
+uh and of course you know there's some
+
+1898
+01:11:34,800 --> 01:11:36,480
+communication going on and
+
+1899
+01:11:36,480 --> 01:11:39,280
+uh in the long run you know probably the
+
+1900
+01:11:39,280 --> 01:11:41,600
+people will settle on the new fork
+
+1901
+01:11:41,600 --> 01:11:44,709
+with the new software
+
+1902
+01:11:44,719 --> 01:11:46,480
+some changes actually result in a hard
+
+1903
+01:11:46,480 --> 01:11:53,830
+fork
+
+1904
+01:11:53,840 --> 01:11:57,350
+oops work for it
+
+1905
+01:11:57,360 --> 01:11:59,280
+uh so for example there was a you know a
+
+1906
+01:11:59,280 --> 01:12:00,880
+couple years ago there was a lot of
+
+1907
+01:12:00,880 --> 01:12:02,480
+discussion about this block size
+
+1908
+01:12:02,480 --> 01:12:04,400
+uh because some uh people in the
+
+1909
+01:12:04,400 --> 01:12:05,760
+community community want to increase the
+
+1910
+01:12:05,760 --> 01:12:07,040
+block size some other people don't want
+
+1911
+01:12:07,040 --> 01:12:08,640
+to increase the block size
+
+1912
+01:12:08,640 --> 01:12:11,840
+and basically you know uh they split and
+
+1913
+01:12:11,840 --> 01:12:13,360
+immediately there's corresponds with
+
+1914
+01:12:13,360 --> 01:12:16,640
+two bitcoin or two bitcoin
+
+1915
+01:12:16,640 --> 01:12:22,400
+forks running
+
+1916
+01:12:22,400 --> 01:12:24,400
+in fact there's probably more than two
+
+1917
+01:12:24,400 --> 01:12:26,159
+uh but like that one resulted in a
+
+1918
+01:12:26,159 --> 01:12:28,880
+hardware and a hard fork split
+
+1919
+01:12:28,880 --> 01:12:31,440
+um and so sort of an interesting you
+
+1920
+01:12:31,440 --> 01:12:33,120
+know aspect of this consensus you know
+
+1921
+01:12:33,120 --> 01:12:34,400
+that kind of systems that you know
+
+1922
+01:12:34,400 --> 01:12:36,080
+you're gonna have have
+
+1923
+01:12:36,080 --> 01:12:37,520
+these kinds of practical problems that
+
+1924
+01:12:37,520 --> 01:12:39,520
+actually can relate either
+
+1925
+01:12:39,520 --> 01:12:41,600
+into software or in hard work so people
+
+1926
+01:12:41,600 --> 01:12:42,960
+just don't want to collaborate on a
+
+1927
+01:12:42,960 --> 01:12:46,229
+particular form
+
+1928
+01:12:46,239 --> 01:12:50,000
+any questions about this
+
+1929
+01:12:50,000 --> 01:12:53,760
+um what happens in hard forks
+
+1930
+01:12:53,760 --> 01:12:55,600
+like you have two good two different
+
+1931
+01:12:55,600 --> 01:12:57,440
+blockchains
+
+1932
+01:12:57,440 --> 01:12:58,800
+and clients have to choose from which
+
+1933
+01:12:58,800 --> 01:13:00,960
+for they want to be
+
+1934
+01:13:00,960 --> 01:13:04,159
+interesting um or publish their
+
+1935
+01:13:04,159 --> 01:13:05,120
+transactions in both
+
+1936
+01:13:05,120 --> 01:13:09,520
+i don't know i mean but you have like
+
+1937
+01:13:09,520 --> 01:13:12,640
+i mean say i have like a couple bitcoin
+
+1938
+01:13:12,640 --> 01:13:15,199
+i'll have a couple like bitcoin in both
+
+1939
+01:13:15,199 --> 01:13:16,400
+forks right
+
+1940
+01:13:16,400 --> 01:13:20,000
+but i can start spending them in either
+
+1941
+01:13:20,000 --> 01:13:22,400
+like well you have you have bitcoins in
+
+1942
+01:13:22,400 --> 01:13:23,120
+the prefix
+
+1943
+01:13:23,120 --> 01:13:26,000
+of those yeah right so and both both
+
+1944
+01:13:26,000 --> 01:13:27,360
+forks have to prefix
+
+1945
+01:13:27,360 --> 01:13:28,960
+so you can you can't double spend your
+
+1946
+01:13:28,960 --> 01:13:30,840
+money
+
+1947
+01:13:30,840 --> 01:13:34,080
+huh well so actually in in the case of
+
+1948
+01:13:34,080 --> 01:13:34,640
+like when
+
+1949
+01:13:34,640 --> 01:13:36,480
+bitcoin for there was a hard fork and
+
+1950
+01:13:36,480 --> 01:13:38,400
+they in the one of the new
+
+1951
+01:13:38,400 --> 01:13:41,520
+forks was called bitcoin cash all the
+
+1952
+01:13:41,520 --> 01:13:43,120
+tokens were duplicated
+
+1953
+01:13:43,120 --> 01:13:47,199
+but then the the value of the tokens
+
+1954
+01:13:47,199 --> 01:13:49,120
+um it wasn't like you doubled your
+
+1955
+01:13:49,120 --> 01:13:50,719
+values like the price of bitcoin
+
+1956
+01:13:50,719 --> 01:13:51,520
+decreased
+
+1957
+01:13:51,520 --> 01:13:53,920
+and then the difference in that decrease
+
+1958
+01:13:53,920 --> 01:13:56,239
+was the value of the bitcoin cash
+
+1959
+01:13:56,239 --> 01:13:59,360
+so is think of it like a stock split
+
+1960
+01:13:59,360 --> 01:14:00,320
+like you get
+
+1961
+01:14:00,320 --> 01:14:03,280
+more tokens but the actual value would
+
+1962
+01:14:03,280 --> 01:14:04,239
+stay the same
+
+1963
+01:14:04,239 --> 01:14:05,280
+because you're just increasing the
+
+1964
+01:14:05,280 --> 01:14:08,239
+supply of tokens okay
+
+1965
+01:14:08,239 --> 01:14:12,229
+great thank you
+
+1966
+01:14:12,239 --> 01:14:19,350
+any other questions
+
+1967
+01:14:19,360 --> 01:14:26,830
+okay good let me summarize that
+
+1968
+01:14:26,840 --> 01:14:30,159
+um so uh basically what we're seeing
+
+1969
+01:14:30,159 --> 01:14:30,480
+here
+
+1970
+01:14:30,480 --> 01:14:36,630
+is you know distributed consensus
+
+1971
+01:14:36,640 --> 01:14:39,280
+with uh in an open distributed systems
+
+1972
+01:14:39,280 --> 01:14:40,480
+with you know
+
+1973
+01:14:40,480 --> 01:14:42,960
+potentially a byzantine participants
+
+1974
+01:14:42,960 --> 01:14:44,480
+oops
+
+1975
+01:14:44,480 --> 01:14:54,830
+let's see my program crashed hold on a
+
+1976
+01:14:54,840 --> 01:15:08,830
+second
+
+1977
+01:15:08,840 --> 01:15:10,719
+um
+
+1978
+01:15:10,719 --> 01:15:13,120
+so these are the consensus with visiting
+
+1979
+01:15:13,120 --> 01:15:23,030
+potentially byzantine participants
+
+1980
+01:15:23,040 --> 01:15:25,840
+um and you know the you know the the
+
+1981
+01:15:25,840 --> 01:15:27,199
+thing that actually is being reached
+
+1982
+01:15:27,199 --> 01:15:29,199
+consensus on is this public ledger
+
+1983
+01:15:29,199 --> 01:15:33,590
+or public log if you will
+
+1984
+01:15:33,600 --> 01:15:35,199
+that basically orders all the
+
+1985
+01:15:35,199 --> 01:15:36,719
+transactions ever since the beginning of
+
+1986
+01:15:36,719 --> 01:15:38,239
+time
+
+1987
+01:15:38,239 --> 01:15:41,440
+and allow people to
+
+1988
+01:15:41,440 --> 01:15:43,600
+check you know what the balances are of
+
+1989
+01:15:43,600 --> 01:15:44,640
+every
+
+1990
+01:15:44,640 --> 01:15:48,239
+public key and avoid
+
+1991
+01:15:48,239 --> 01:15:51,520
+double spending and you know the
+
+1992
+01:15:51,520 --> 01:15:53,920
+particular cool sort of idea here is to
+
+1993
+01:15:53,920 --> 01:15:54,640
+you know
+
+1994
+01:15:54,640 --> 01:15:58,400
+basically just prove a work uh idea to
+
+1995
+01:15:58,400 --> 01:16:01,440
+uh determine actually who uh
+
+1996
+01:16:01,440 --> 01:16:05,040
+is allowed to extend the blockchain
+
+1997
+01:16:05,040 --> 01:16:08,239
+okay so that's basically uh all i wanted
+
+1998
+01:16:08,239 --> 01:16:08,800
+to say
+
+1999
+01:16:08,800 --> 01:16:12,080
+uh and so if you need to run
+
+2000
+01:16:12,080 --> 01:16:14,560
+and leave uh feel free to leave this is
+
+2001
+01:16:14,560 --> 01:16:16,320
+basically the end of this lecture
+
+2002
+01:16:16,320 --> 01:16:17,840
+and anybody who wants to stay and ask
+
+2003
+01:16:17,840 --> 01:16:20,080
+more questions please feel free to stay
+
+2004
+01:16:20,080 --> 01:16:22,320
+on thursday there's no lecture it's a
+
+2005
+01:16:22,320 --> 01:16:23,360
+hacking day
+
+2006
+01:16:23,360 --> 01:16:25,679
+as you know the friday is the deadline
+
+2007
+01:16:25,679 --> 01:16:26,880
+for
+
+2008
+01:16:26,880 --> 01:16:29,280
+the final project or lap for whatever
+
+2009
+01:16:29,280 --> 01:16:30,960
+you'll be doing so good luck you know
+
+2010
+01:16:30,960 --> 01:16:31,920
+trying to
+
+2011
+01:16:31,920 --> 01:16:35,040
+get that work finished uh and uh we'll
+
+2012
+01:16:35,040 --> 01:16:37,199
+talk in the next class meetings next
+
+2013
+01:16:37,199 --> 01:16:39,040
+tuesday
+
+2014
+01:16:39,040 --> 01:16:43,590
+okay thank you
+
+2015
+01:16:43,600 --> 01:16:45,840
+oh could you talk a little bit more
+
+2016
+01:16:45,840 --> 01:16:48,480
+about the proof of stake
+
+2017
+01:16:48,480 --> 01:16:52,480
+um there's a sure i'm not sure i have a
+
+2018
+01:16:52,480 --> 01:16:53,520
+ton to say about it
+
+2019
+01:16:53,520 --> 01:16:56,870
+um
+
+2020
+01:16:56,880 --> 01:16:58,159
+you know if you want to know any more
+
+2021
+01:16:58,159 --> 01:16:59,280
+details you know just google
+
+2022
+01:16:59,280 --> 01:17:00,560
+proof-of-stake
+
+2023
+01:17:00,560 --> 01:17:02,080
+you'll find all the different bitcoin
+
+2024
+01:17:02,080 --> 01:17:03,920
+currencies that use it and
+
+2025
+01:17:03,920 --> 01:17:08,000
+uh and i'll tell you in more detail
+
+2026
+01:17:08,000 --> 01:17:11,440
+but basically you know the power
+
+2027
+01:17:11,440 --> 01:17:13,040
+in the network is proportional to your
+
+2028
+01:17:13,040 --> 01:17:15,280
+stake in the network
+
+2029
+01:17:15,280 --> 01:17:17,600
+and the basic idea is that like if you
+
+2030
+01:17:17,600 --> 01:17:19,440
+uh own like whatever three percent or
+
+2031
+01:17:19,440 --> 01:17:20,960
+ten percent of all the bitcoins you know
+
+2032
+01:17:20,960 --> 01:17:22,640
+you get sort of to decide ten percent of
+
+2033
+01:17:22,640 --> 01:17:23,679
+the
+
+2034
+01:17:23,679 --> 01:17:27,120
+uh the new blocks um and you're gonna
+
+2035
+01:17:27,120 --> 01:17:28,640
+have incentive you know the higher your
+
+2036
+01:17:28,640 --> 01:17:30,320
+stake you know the higher incentives
+
+2037
+01:17:30,320 --> 01:17:30,960
+actually is to
+
+2038
+01:17:30,960 --> 01:17:35,030
+uh play the game correctly
+
+2039
+01:17:35,040 --> 01:17:38,000
+so becomes more deterministic in that
+
+2040
+01:17:38,000 --> 01:17:40,480
+case right
+
+2041
+01:17:40,480 --> 01:17:44,000
+uh it all depends on the details of the
+
+2042
+01:17:44,000 --> 01:17:45,920
+protocol
+
+2043
+01:17:45,920 --> 01:17:47,920
+uh like in el grant you know basically
+
+2044
+01:17:47,920 --> 01:17:49,360
+there's a periodic leader
+
+2045
+01:17:49,360 --> 01:17:50,800
+and there's a committee election and
+
+2046
+01:17:50,800 --> 01:17:52,320
+then the committee decides on like you
+
+2047
+01:17:52,320 --> 01:17:54,080
+know what the next you know block is and
+
+2048
+01:17:54,080 --> 01:17:55,520
+then you know there's a new leader in
+
+2049
+01:17:55,520 --> 01:17:56,159
+the new
+
+2050
+01:17:56,159 --> 01:17:59,520
+committee election et cetera
+
+2051
+01:17:59,520 --> 01:18:02,159
+and many aspects of that are uh you know
+
+2052
+01:18:02,159 --> 01:18:03,040
+probabilistic
+
+2053
+01:18:03,040 --> 01:18:06,159
+and randomized so that the attacker can
+
+2054
+01:18:06,159 --> 01:18:15,189
+like win the game
+
+2055
+01:18:15,199 --> 01:18:26,080
+these particles are quite sophisticated
+
+2056
+01:18:26,080 --> 01:18:30,239
+um also to be able to mine you have to
+
+2057
+01:18:30,239 --> 01:18:33,760
+have of the log to verify
+
+2058
+01:18:33,760 --> 01:18:36,960
+the transactions right yes
+
+2059
+01:18:36,960 --> 01:18:38,640
+yeah so the miners have a complete copy
+
+2060
+01:18:38,640 --> 01:18:42,000
+of the uh which is gigabytes
+
+2061
+01:18:42,000 --> 01:18:44,800
+isn't that a lot well i think it turned
+
+2062
+01:18:44,800 --> 01:18:46,719
+out to be
+
+2063
+01:18:46,719 --> 01:18:49,040
+totally doable for a reasonable computer
+
+2064
+01:18:49,040 --> 01:18:51,040
+okay
+
+2065
+01:18:51,040 --> 01:18:59,189
+thank you
+
+2066
+01:18:59,199 --> 01:19:01,840
+this is unrelated to the lecture but do
+
+2067
+01:19:01,840 --> 01:19:03,760
+you think it'd be possible to
+
+2068
+01:19:03,760 --> 01:19:05,600
+to talk about during the class sometime
+
+2069
+01:19:05,600 --> 01:19:06,880
+like the design that
+
+2070
+01:19:06,880 --> 01:19:09,520
+tas and that you had for labs three and
+
+2071
+01:19:09,520 --> 01:19:10,000
+four
+
+2072
+01:19:10,000 --> 01:19:12,560
+like because it was more open-ended so
+
+2073
+01:19:12,560 --> 01:19:13,840
+certainly yeah certainly that floor is
+
+2074
+01:19:13,840 --> 01:19:14,800
+more open-ended
+
+2075
+01:19:14,800 --> 01:19:17,840
+um i was not planning to
+
+2076
+01:19:17,840 --> 01:19:20,239
+uh i don't know we have time left to do
+
+2077
+01:19:20,239 --> 01:19:21,120
+so
+
+2078
+01:19:21,120 --> 01:19:23,199
+uh first of all not everybody has done
+
+2079
+01:19:23,199 --> 01:19:25,040
+lap four
+
+2080
+01:19:25,040 --> 01:19:27,679
+and so i currently have no intention to
+
+2081
+01:19:27,679 --> 01:19:28,719
+do so but
+
+2082
+01:19:28,719 --> 01:19:30,239
+of course you can reach out to office
+
+2083
+01:19:30,239 --> 01:19:33,360
+hours and talk to the tas
+
+2084
+01:19:33,360 --> 01:19:36,320
+or reach out later to me and we can talk
+
+2085
+01:19:36,320 --> 01:19:38,800
+about a lot three and left four
+
+2086
+01:19:38,800 --> 01:19:45,030
+sounds good thank you
+
+2087
+01:19:45,040 --> 01:19:49,600
+um so i i had a question about um
+
+2088
+01:19:49,600 --> 01:19:52,159
+like it says it says on the paper like
+
+2089
+01:19:52,159 --> 01:19:54,790
+uh
+
+2090
+01:19:54,800 --> 01:19:58,800
+or rather sorry um
+
+2091
+01:19:58,800 --> 01:20:00,880
+yeah once once the latest transaction
+
+2092
+01:20:00,880 --> 01:20:04,000
+the coin is buried under enough block uh
+
+2093
+01:20:04,000 --> 01:20:06,080
+to spend transaction before it can be
+
+2094
+01:20:06,080 --> 01:20:08,080
+discarded to save disk space
+
+2095
+01:20:08,080 --> 01:20:11,199
+yeah yeah um like
+
+2096
+01:20:11,199 --> 01:20:14,639
+i i i understood though that you know
+
+2097
+01:20:14,639 --> 01:20:18,239
+blockchain um never really like
+
+2098
+01:20:18,239 --> 01:20:21,360
+like uh discards transactions
+
+2099
+01:20:21,360 --> 01:20:23,120
+it keeps like a whole log of all the
+
+2100
+01:20:23,120 --> 01:20:24,639
+transactions
+
+2101
+01:20:24,639 --> 01:20:27,520
+um why is this like why was this done in
+
+2102
+01:20:27,520 --> 01:20:28,719
+practice
+
+2103
+01:20:28,719 --> 01:20:32,880
+ah because to save space on the
+
+2104
+01:20:32,880 --> 01:20:36,239
+say stays on the allow
+
+2105
+01:20:36,239 --> 01:20:39,199
+space compaction on the you know on the
+
+2106
+01:20:39,199 --> 01:20:41,040
+nodes and the miners
+
+2107
+01:20:41,040 --> 01:20:42,719
+and so they don't have to keep track of
+
+2108
+01:20:42,719 --> 01:20:44,400
+every transaction
+
+2109
+01:20:44,400 --> 01:20:46,000
+in the log you know for every basically
+
+2110
+01:20:46,000 --> 01:20:48,080
+bitcoin they have to just keep track of
+
+2111
+01:20:48,080 --> 01:20:49,440
+the last one
+
+2112
+01:20:49,440 --> 01:20:52,560
+um and efficient and so
+
+2113
+01:20:52,560 --> 01:20:53,840
+one way to think about it is sort of
+
+2114
+01:20:53,840 --> 01:20:54,800
+like you know you could compute the
+
+2115
+01:20:54,800 --> 01:20:56,159
+snapshot in time
+
+2116
+01:20:56,159 --> 01:20:59,280
+of all the values of all the uh
+
+2117
+01:20:59,280 --> 01:21:02,080
+points and then you don't really have to
+
+2118
+01:21:02,080 --> 01:21:03,679
+remember the whole past
+
+2119
+01:21:03,679 --> 01:21:07,040
+who does keep the whole past then
+
+2120
+01:21:07,040 --> 01:21:10,320
+uh there's two things so the one is like
+
+2121
+01:21:10,320 --> 01:21:10,960
+you know
+
+2122
+01:21:10,960 --> 01:21:12,800
+when you check whether a transaction is
+
+2123
+01:21:12,800 --> 01:21:14,560
+valid you know go you scan the whole log
+
+2124
+01:21:14,560 --> 01:21:16,080
+people don't do that you know they take
+
+2125
+01:21:16,080 --> 01:21:17,760
+forever they basically build a data
+
+2126
+01:21:17,760 --> 01:21:18,880
+structure that is
+
+2127
+01:21:18,880 --> 01:21:21,120
+quite compact and has the last
+
+2128
+01:21:21,120 --> 01:21:22,239
+transaction for
+
+2129
+01:21:22,239 --> 01:21:25,840
+uh every uh unspent
+
+2130
+01:21:25,840 --> 01:21:28,960
+uh coin um the
+
+2131
+01:21:28,960 --> 01:21:31,040
+you know you can totally download the
+
+2132
+01:21:31,040 --> 01:21:32,719
+whole log you know from
+
+2133
+01:21:32,719 --> 01:21:34,400
+you want to from the internet uh and it
+
+2134
+01:21:34,400 --> 01:21:36,080
+is maintained and
+
+2135
+01:21:36,080 --> 01:21:39,040
+no notes store it you know to basically
+
+2136
+01:21:39,040 --> 01:21:39,360
+they
+
+2137
+01:21:39,360 --> 01:21:41,920
+lose all their data they can compute all
+
+2138
+01:21:41,920 --> 01:21:43,360
+the balances you know basically from
+
+2139
+01:21:43,360 --> 01:21:44,480
+running all the trajectory from the
+
+2140
+01:21:44,480 --> 01:21:47,910
+beginning of time
+
+2141
+01:21:47,920 --> 01:21:51,679
+um but so so like if people are
+
+2142
+01:21:51,679 --> 01:21:54,159
+are like who maintains a whole block
+
+2143
+01:21:54,159 --> 01:21:54,960
+like the whole
+
+2144
+01:21:54,960 --> 01:21:56,560
+transactions i just replicated
+
+2145
+01:21:56,560 --> 01:21:58,880
+everywhere right like everybody
+
+2146
+01:21:58,880 --> 01:22:01,600
+wants to can have a copy of the log
+
+2147
+01:22:01,600 --> 01:22:02,800
+right
+
+2148
+01:22:02,800 --> 01:22:04,719
+but but if most people are doing this
+
+2149
+01:22:04,719 --> 01:22:06,880
+and discarding like transactions
+
+2150
+01:22:06,880 --> 01:22:09,520
+like why would someone keep like the the
+
+2151
+01:22:09,520 --> 01:22:10,560
+whole like
+
+2152
+01:22:10,560 --> 01:22:12,560
+well this is not good enough to actually
+
+2153
+01:22:12,560 --> 01:22:13,840
+keep track of
+
+2154
+01:22:13,840 --> 01:22:16,159
+this allows you to decide where a
+
+2155
+01:22:16,159 --> 01:22:17,520
+transaction was actually
+
+2156
+01:22:17,520 --> 01:22:19,280
+uh happened in the past but it doesn't
+
+2157
+01:22:19,280 --> 01:22:20,800
+allow you to validate transactions so
+
+2158
+01:22:20,800 --> 01:22:22,000
+you want to validate instruction you
+
+2159
+01:22:22,000 --> 01:22:23,440
+have to keep the pass
+
+2160
+01:22:23,440 --> 01:22:27,199
+okay okay
+
+2161
+01:22:27,199 --> 01:22:32,709
+thanks welcome
+
+2162
+01:22:32,719 --> 01:22:37,030
+any more questions
+

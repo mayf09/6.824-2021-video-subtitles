@@ -1,0 +1,8584 @@
+1
+00:00:01,280 --> 00:00:04,720
+okay good uh good afternoon dinner
+
+2
+00:00:04,720 --> 00:00:08,310
+can everybody hear me
+
+3
+00:00:08,320 --> 00:00:11,360
+yep thank you yes i will post the
+
+4
+00:00:11,360 --> 00:00:12,160
+lecture notes
+
+5
+00:00:12,160 --> 00:00:15,599
+uh at the end of lecture uh in response
+
+6
+00:00:15,599 --> 00:00:17,680
+to the
+
+7
+00:00:17,680 --> 00:00:21,199
+chat uh okay so uh
+
+8
+00:00:21,199 --> 00:00:23,199
+uh today basically uh i want to start
+
+9
+00:00:23,199 --> 00:00:24,400
+with a new topic
+
+10
+00:00:24,400 --> 00:00:28,640
+in uh in 824 and sort of uh
+
+11
+00:00:28,640 --> 00:00:31,519
+the last topic that we'll be discussing
+
+12
+00:00:31,519 --> 00:00:42,830
+the topic is really decentralized
+
+13
+00:00:42,840 --> 00:00:45,440
+systems
+
+14
+00:00:45,440 --> 00:00:47,440
+and these are typically uh the
+
+15
+00:00:47,440 --> 00:00:49,200
+decentralized really refers to the fact
+
+16
+00:00:49,200 --> 00:00:50,079
+that there's no
+
+17
+00:00:50,079 --> 00:00:52,879
+single authority that is in control of
+
+18
+00:00:52,879 --> 00:00:54,239
+the system
+
+19
+00:00:54,239 --> 00:00:56,000
+uh a lot of the systems that we've seen
+
+20
+00:00:56,000 --> 00:00:58,320
+so far you know all the machines and
+
+21
+00:00:58,320 --> 00:00:59,680
+servers sort of cooperate
+
+22
+00:00:59,680 --> 00:01:02,399
+uh and are on the under control of a
+
+23
+00:01:02,399 --> 00:01:04,400
+single institution or any single uh
+
+24
+00:01:04,400 --> 00:01:07,840
+authority um and the systems over and
+
+25
+00:01:07,840 --> 00:01:09,439
+a lot of you ask questions about like oh
+
+26
+00:01:09,439 --> 00:01:12,080
+how would it work if
+
+27
+00:01:12,080 --> 00:01:15,439
+there's no central point of trust
+
+28
+00:01:15,439 --> 00:01:18,960
+and so from now on the three systems or
+
+29
+00:01:18,960 --> 00:01:19,360
+the three
+
+30
+00:01:19,360 --> 00:01:20,560
+papers that we're going to be discussing
+
+31
+00:01:20,560 --> 00:01:22,479
+are all sit in this form of decent life
+
+32
+00:01:22,479 --> 00:01:24,400
+systems
+
+33
+00:01:24,400 --> 00:01:27,200
+and decentralized systems are harder to
+
+34
+00:01:27,200 --> 00:01:27,840
+build
+
+35
+00:01:27,840 --> 00:01:31,360
+than the sort of single trust systems uh
+
+36
+00:01:31,360 --> 00:01:32,960
+because you know you might have to
+
+37
+00:01:32,960 --> 00:01:35,360
+account for byzantine failures or visit
+
+38
+00:01:35,360 --> 00:01:45,510
+byzantine participants
+
+39
+00:01:45,520 --> 00:01:47,600
+and these are participants that you know
+
+40
+00:01:47,600 --> 00:01:48,799
+sometimes follow the protocol and
+
+41
+00:01:48,799 --> 00:01:50,880
+sometimes they don't follow the protocol
+
+42
+00:01:50,880 --> 00:01:52,640
+so you know the really they think about
+
+43
+00:01:52,640 --> 00:01:55,040
+it they're basically adversaries
+
+44
+00:01:55,040 --> 00:01:58,399
+and they may try to abuse
+
+45
+00:01:58,399 --> 00:02:02,640
+or trick other participation systems
+
+46
+00:02:02,640 --> 00:02:04,240
+you know for their own goods but not
+
+47
+00:02:04,240 --> 00:02:07,030
+maybe for others
+
+48
+00:02:07,040 --> 00:02:10,399
+and um and so that makes actually system
+
+49
+00:02:10,399 --> 00:02:11,760
+design with these distributed system
+
+50
+00:02:11,760 --> 00:02:13,680
+designs much more challenging
+
+51
+00:02:13,680 --> 00:02:15,840
+and much more difficult to reason about
+
+52
+00:02:15,840 --> 00:02:17,680
+we feel like in the last you know
+
+53
+00:02:17,680 --> 00:02:20,720
+you know 18 whatever lectures uh mostly
+
+54
+00:02:20,720 --> 00:02:21,760
+you know where we
+
+55
+00:02:21,760 --> 00:02:23,280
+talked about when we designed protocol
+
+56
+00:02:23,280 --> 00:02:24,959
+or we thought about draft you know we
+
+57
+00:02:24,959 --> 00:02:26,720
+just assumed that actually every
+
+58
+00:02:26,720 --> 00:02:29,280
+uh participant in the protocol follows
+
+59
+00:02:29,280 --> 00:02:30,400
+the rules
+
+60
+00:02:30,400 --> 00:02:32,560
+and in the business with distinctive
+
+61
+00:02:32,560 --> 00:02:33,840
+participants that is not the case
+
+62
+00:02:33,840 --> 00:02:34,720
+anymore you know
+
+63
+00:02:34,720 --> 00:02:36,959
+the the participants can cook up new
+
+64
+00:02:36,959 --> 00:02:38,160
+messages you know
+
+65
+00:02:38,160 --> 00:02:40,879
+send messages out of order trick uh
+
+66
+00:02:40,879 --> 00:02:42,239
+other participants
+
+67
+00:02:42,239 --> 00:02:45,120
+and so the we the thinking about those
+
+68
+00:02:45,120 --> 00:02:46,959
+kind of protocols is much more difficult
+
+69
+00:02:46,959 --> 00:02:49,120
+because we have to consider like what
+
+70
+00:02:49,120 --> 00:02:51,360
+what the adversary could do
+
+71
+00:02:51,360 --> 00:02:54,319
+to sort of make our life to break
+
+72
+00:02:54,319 --> 00:02:55,280
+basically the
+
+73
+00:02:55,280 --> 00:02:56,720
+the properties of the protocols that
+
+74
+00:02:56,720 --> 00:02:59,200
+we're shooting for so this tends to be
+
+75
+00:02:59,200 --> 00:03:04,560
+make the problem much harder
+
+76
+00:03:04,560 --> 00:03:07,200
+and really you know where what this sort
+
+77
+00:03:07,200 --> 00:03:08,879
+of topic is it so sits on the
+
+78
+00:03:08,879 --> 00:03:10,959
+intersection of distributed systems
+
+79
+00:03:10,959 --> 00:03:15,910
+and security
+
+80
+00:03:15,920 --> 00:03:17,680
+and as we'll see in the you know the
+
+81
+00:03:17,680 --> 00:03:20,159
+next uh this paper the next three paper
+
+82
+00:03:20,159 --> 00:03:23,200
+uh you know for cryptography or security
+
+83
+00:03:23,200 --> 00:03:25,519
+ideas like signing and hashing and
+
+84
+00:03:25,519 --> 00:03:27,280
+are going to play a crucial role to
+
+85
+00:03:27,280 --> 00:03:30,400
+actually uh make a forward progress
+
+86
+00:03:30,400 --> 00:03:32,560
+um in fact you know the paper actually
+
+87
+00:03:32,560 --> 00:03:34,239
+that we're reading for today is also
+
+88
+00:03:34,239 --> 00:03:37,760
+is a paper that we use in uh 6858
+
+89
+00:03:37,760 --> 00:03:39,599
+so if you're taking maybe six five eight
+
+90
+00:03:39,599 --> 00:03:40,799
+last uh
+
+91
+00:03:40,799 --> 00:03:43,760
+spring uh we we talked about this paper
+
+92
+00:03:43,760 --> 00:03:44,560
+too although
+
+93
+00:03:44,560 --> 00:03:46,080
+then from mostly from the perspective of
+
+94
+00:03:46,080 --> 00:03:48,319
+security and today i'm going to mostly
+
+95
+00:03:48,319 --> 00:03:51,200
+focus it is on the perspective of
+
+96
+00:03:51,200 --> 00:03:57,040
+distributed systems the sunder itself
+
+97
+00:03:57,040 --> 00:03:59,040
+a lot of people asked a lot of you ask
+
+98
+00:03:59,040 --> 00:04:01,200
+you know this summer being used
+
+99
+00:04:01,200 --> 00:04:04,560
+uh and as far as i know there's actually
+
+100
+00:04:04,560 --> 00:04:05,519
+no systems
+
+101
+00:04:05,519 --> 00:04:08,159
+that actually uh implement sunder
+
+102
+00:04:08,159 --> 00:04:09,439
+directly or
+
+103
+00:04:09,439 --> 00:04:12,000
+directly based on sunder other than uh
+
+104
+00:04:12,000 --> 00:04:13,040
+lab four
+
+105
+00:04:13,040 --> 00:04:15,760
+in six eight five eight um i mean lot
+
+106
+00:04:15,760 --> 00:04:16,560
+four
+
+107
+00:04:16,560 --> 00:04:19,680
+uh what if you do the blackboard the
+
+108
+00:04:19,680 --> 00:04:21,280
+default project which is like four and
+
+109
+00:04:21,280 --> 00:04:22,240
+eight five eight
+
+110
+00:04:22,240 --> 00:04:26,080
+then uh you actually implement uh sunder
+
+111
+00:04:26,080 --> 00:04:29,280
+now uh the reason and so you might
+
+112
+00:04:29,280 --> 00:04:30,880
+wonder why are we
+
+113
+00:04:30,880 --> 00:04:32,639
+studying this paper at all the reason
+
+114
+00:04:32,639 --> 00:04:33,840
+we're studying it because it actually
+
+115
+00:04:33,840 --> 00:04:35,440
+proposes a number of very powerful
+
+116
+00:04:35,440 --> 00:04:40,390
+techniques for powerful ideas
+
+117
+00:04:40,400 --> 00:04:43,520
+uh and so particularly the same log
+
+118
+00:04:43,520 --> 00:04:45,840
+uh even though it is a sort of a straw
+
+119
+00:04:45,840 --> 00:04:47,919
+man designer or a conceptual design
+
+120
+00:04:47,919 --> 00:04:51,199
+um is incredibly powerful and you see it
+
+121
+00:04:51,199 --> 00:04:51,759
+back
+
+122
+00:04:51,759 --> 00:04:53,759
+uh that same idea appear in lots of
+
+123
+00:04:53,759 --> 00:04:56,080
+other decentralized systems you know
+
+124
+00:04:56,080 --> 00:04:57,199
+ranging from
+
+125
+00:04:57,199 --> 00:04:59,600
+you know systems like git you know to
+
+126
+00:04:59,600 --> 00:05:01,680
+you know systems like bitcoin or any
+
+127
+00:05:01,680 --> 00:05:03,440
+other sort of cryptographic ledger
+
+128
+00:05:03,440 --> 00:05:05,199
+which we're going to be talking about
+
+129
+00:05:05,199 --> 00:05:06,800
+monday or next
+
+130
+00:05:06,800 --> 00:05:10,479
+tuesday i know one system that actually
+
+131
+00:05:10,479 --> 00:05:10,880
+is
+
+132
+00:05:10,880 --> 00:05:13,919
+directly influenced uh by sunder which
+
+133
+00:05:13,919 --> 00:05:16,400
+is a system called key base
+
+134
+00:05:16,400 --> 00:05:18,560
+uh i mean key based users uh some of
+
+135
+00:05:18,560 --> 00:05:20,000
+their techniques
+
+136
+00:05:20,000 --> 00:05:22,720
+and and many more uh if you're not
+
+137
+00:05:22,720 --> 00:05:24,639
+familiar with key base that actually uh
+
+138
+00:05:24,639 --> 00:05:28,160
+was originally acquired by zoom which
+
+139
+00:05:28,160 --> 00:05:32,070
+was only all familiar with
+
+140
+00:05:32,080 --> 00:05:34,400
+okay so that's sort of for the quick
+
+141
+00:05:34,400 --> 00:05:35,120
+intro
+
+142
+00:05:35,120 --> 00:05:38,000
+uh to this paper um before i'll dive
+
+143
+00:05:38,000 --> 00:05:38,320
+into
+
+144
+00:05:38,320 --> 00:05:40,080
+more of the setting any sort of
+
+145
+00:05:40,080 --> 00:05:42,320
+questions before
+
+146
+00:05:42,320 --> 00:05:50,710
+diving a little bit deeper in the table
+
+147
+00:05:50,720 --> 00:05:54,080
+okay um so let's talk a little bit about
+
+148
+00:05:54,080 --> 00:05:55,120
+the the setting
+
+149
+00:05:55,120 --> 00:05:57,280
+uh of this paper or the the motivation
+
+150
+00:05:57,280 --> 00:05:59,280
+of this uh
+
+151
+00:05:59,280 --> 00:06:02,880
+paper so the setting uh in
+
+152
+00:06:02,880 --> 00:06:04,800
+that the hour that the officer set
+
+153
+00:06:04,800 --> 00:06:11,189
+forward is a network file system
+
+154
+00:06:11,199 --> 00:06:14,000
+and um you can think about this a little
+
+155
+00:06:14,000 --> 00:06:15,919
+bit in the style of uh
+
+156
+00:06:15,919 --> 00:06:18,840
+an earlier paper that we've read from
+
+157
+00:06:18,840 --> 00:06:20,080
+chimpani
+
+158
+00:06:20,080 --> 00:06:22,080
+where the topic also was to implement
+
+159
+00:06:22,080 --> 00:06:23,759
+and consistent you know network file
+
+160
+00:06:23,759 --> 00:06:25,039
+system
+
+161
+00:06:25,039 --> 00:06:30,870
+um so you know we have a file server
+
+162
+00:06:30,880 --> 00:06:32,800
+we have clients that interact with the
+
+163
+00:06:32,800 --> 00:06:34,240
+file server
+
+164
+00:06:34,240 --> 00:06:35,840
+you know somebody might actually create
+
+165
+00:06:35,840 --> 00:06:39,590
+a file f
+
+166
+00:06:39,600 --> 00:06:44,400
+and you know maybe vdf on another client
+
+167
+00:06:44,400 --> 00:06:47,440
+um and you know the the setting
+
+168
+00:06:47,440 --> 00:06:50,560
+uh that we're in is that basically the
+
+169
+00:06:50,560 --> 00:06:51,440
+file server
+
+170
+00:06:51,440 --> 00:06:55,039
+as opposed to in uh in front of only
+
+171
+00:06:55,039 --> 00:07:00,830
+uh the file server actually can be
+
+172
+00:07:00,840 --> 00:07:02,720
+visited
+
+173
+00:07:02,720 --> 00:07:05,680
+and byzantine um really is creating an
+
+174
+00:07:05,680 --> 00:07:07,520
+extremely powerful threat model or
+
+175
+00:07:07,520 --> 00:07:09,199
+you know gives the attacker an
+
+176
+00:07:09,199 --> 00:07:10,880
+incredible amount of power
+
+177
+00:07:10,880 --> 00:07:12,880
+so in byzantine you know the server
+
+178
+00:07:12,880 --> 00:07:14,560
+might
+
+179
+00:07:14,560 --> 00:07:16,400
+send different rpcs back you know cook
+
+180
+00:07:16,400 --> 00:07:18,240
+of its own rpcs
+
+181
+00:07:18,240 --> 00:07:21,680
+um the the
+
+182
+00:07:21,680 --> 00:07:25,280
+the take over the machine uh
+
+183
+00:07:25,280 --> 00:07:27,759
+you know bribe the administrator uh and
+
+184
+00:07:27,759 --> 00:07:28,960
+enter everything is
+
+185
+00:07:28,960 --> 00:07:30,000
+basically you know the way to think
+
+186
+00:07:30,000 --> 00:07:31,919
+about it is that the address area gets
+
+187
+00:07:31,919 --> 00:07:32,960
+complete control
+
+188
+00:07:32,960 --> 00:07:36,080
+of the file server
+
+189
+00:07:36,080 --> 00:07:38,880
+um and so this covers sort of a wide
+
+190
+00:07:38,880 --> 00:07:39,680
+range
+
+191
+00:07:39,680 --> 00:07:41,840
+of you know sort of more common attacks
+
+192
+00:07:41,840 --> 00:07:43,360
+or like in the typical attacks that you
+
+193
+00:07:43,360 --> 00:07:44,240
+might see in
+
+194
+00:07:44,240 --> 00:07:46,960
+a real system so real attacks one boxing
+
+195
+00:07:46,960 --> 00:07:51,830
+software
+
+196
+00:07:51,840 --> 00:07:54,879
+so if there's a bug in the software then
+
+197
+00:07:54,879 --> 00:07:57,360
+you know the assets area can exploit
+
+198
+00:07:57,360 --> 00:08:00,879
+that bot maybe to obtain uh privileges
+
+199
+00:08:00,879 --> 00:08:03,759
+and you know the the business model you
+
+200
+00:08:03,759 --> 00:08:06,240
+know completely encompasses that
+
+201
+00:08:06,240 --> 00:08:08,160
+or you know the system administrator
+
+202
+00:08:08,160 --> 00:08:13,360
+might have a weak
+
+203
+00:08:13,360 --> 00:08:16,639
+we have a weak password that the
+
+204
+00:08:16,639 --> 00:08:18,160
+attacker compromises and then
+
+205
+00:08:18,160 --> 00:08:20,479
+takes control over uh the system you
+
+206
+00:08:20,479 --> 00:08:22,400
+know that's also covered by byzantine
+
+207
+00:08:22,400 --> 00:08:27,990
+uh physical breaking
+
+208
+00:08:28,000 --> 00:08:30,000
+maybe the attacker ranger you know gets
+
+209
+00:08:30,000 --> 00:08:32,800
+access you know to the physical machine
+
+210
+00:08:32,800 --> 00:08:36,719
+uh and uh you know can therefore control
+
+211
+00:08:36,719 --> 00:08:38,240
+the physical parts of the machine
+
+212
+00:08:38,240 --> 00:08:39,680
+again that's all covered by this you
+
+213
+00:08:39,680 --> 00:08:41,680
+know byzantine threat model
+
+214
+00:08:41,680 --> 00:08:44,800
+or even you know maybe you know the the
+
+215
+00:08:44,800 --> 00:08:45,440
+attacker
+
+216
+00:08:45,440 --> 00:08:49,350
+bribes
+
+217
+00:08:49,360 --> 00:08:54,560
+uh an operator
+
+218
+00:08:54,560 --> 00:08:58,000
+or colludes you know with uh
+
+219
+00:08:58,000 --> 00:09:00,640
+a malicious client you know that is also
+
+220
+00:09:00,640 --> 00:09:01,680
+covered by this model
+
+221
+00:09:01,680 --> 00:09:04,320
+so this is a threat model that is very
+
+222
+00:09:04,320 --> 00:09:04,800
+very
+
+223
+00:09:04,800 --> 00:09:07,920
+uh gives a lot of power to the adversary
+
+224
+00:09:07,920 --> 00:09:09,279
+it covers a lot of sort of standard
+
+225
+00:09:09,279 --> 00:09:10,399
+attacks
+
+226
+00:09:10,399 --> 00:09:13,040
+um and you know the first thing sort of
+
+227
+00:09:13,040 --> 00:09:18,310
+observed the you know the game that
+
+228
+00:09:18,320 --> 00:09:21,680
+summed their place is that instead of
+
+229
+00:09:21,680 --> 00:09:22,000
+actually
+
+230
+00:09:22,000 --> 00:09:23,519
+you know sort of maintaining the whole
+
+231
+00:09:23,519 --> 00:09:25,600
+file system on the file server
+
+232
+00:09:25,600 --> 00:09:27,519
+uh the file server is as simple as
+
+233
+00:09:27,519 --> 00:09:28,959
+possible
+
+234
+00:09:28,959 --> 00:09:31,040
+and in fact you know the the file server
+
+235
+00:09:31,040 --> 00:09:32,800
+is very much like almost like pedal
+
+236
+00:09:32,800 --> 00:09:34,720
+uh it's almost like a block device with
+
+237
+00:09:34,720 --> 00:09:38,949
+a little bit more
+
+238
+00:09:38,959 --> 00:09:40,480
+so the sort of central place where all
+
+239
+00:09:40,480 --> 00:09:44,000
+the you know blocks are stored
+
+240
+00:09:44,000 --> 00:09:46,240
+and but the clients really implement the
+
+241
+00:09:46,240 --> 00:09:47,519
+file system so
+
+242
+00:09:47,519 --> 00:09:49,600
+it's not really you know that the client
+
+243
+00:09:49,600 --> 00:09:52,160
+sends a creates for a file actually
+
+244
+00:09:52,160 --> 00:09:55,040
+you know sends blocks and reads blocks
+
+245
+00:09:55,040 --> 00:09:55,360
+uh
+
+246
+00:09:55,360 --> 00:09:59,440
+from you know the block server and uh
+
+247
+00:09:59,440 --> 00:10:01,120
+and basically constructs you know from
+
+248
+00:10:01,120 --> 00:10:02,480
+the blocks with reach and right you know
+
+249
+00:10:02,480 --> 00:10:03,360
+its own view
+
+250
+00:10:03,360 --> 00:10:05,920
+of the file system and serve you know
+
+251
+00:10:05,920 --> 00:10:06,560
+file system
+
+252
+00:10:06,560 --> 00:10:08,079
+operations basically on the straight on
+
+253
+00:10:08,079 --> 00:10:10,880
+the client and so here really we have to
+
+254
+00:10:10,880 --> 00:10:14,399
+create you know f read f
+
+255
+00:10:14,399 --> 00:10:18,320
+etc so very very similar to uh the front
+
+256
+00:10:18,320 --> 00:10:19,360
+japan
+
+257
+00:10:19,360 --> 00:10:20,800
+except you know the big difference in
+
+258
+00:10:20,800 --> 00:10:22,720
+france epony is that pedal and all the
+
+259
+00:10:22,720 --> 00:10:24,480
+clients were completely trusted
+
+260
+00:10:24,480 --> 00:10:26,800
+and in this setting uh the coins are not
+
+261
+00:10:26,800 --> 00:10:27,680
+trusted
+
+262
+00:10:27,680 --> 00:10:30,720
+and uh the file surface that uh it can
+
+263
+00:10:30,720 --> 00:10:31,200
+be
+
+264
+00:10:31,200 --> 00:10:41,350
+also is also not trusted okay
+
+265
+00:10:41,360 --> 00:10:45,040
+okay so the paper focus on a particular
+
+266
+00:10:45,040 --> 00:10:48,240
+set of security properties
+
+267
+00:10:48,240 --> 00:10:54,710
+and the focus is really on
+
+268
+00:10:54,720 --> 00:10:58,839
+the focus is on what is called integrity
+
+269
+00:10:58,839 --> 00:11:00,480
+properties
+
+270
+00:11:00,480 --> 00:11:02,959
+and in contrast to confidentiality so
+
+271
+00:11:02,959 --> 00:11:04,320
+confidentiality is about you know
+
+272
+00:11:04,320 --> 00:11:05,440
+protecting data from
+
+273
+00:11:05,440 --> 00:11:07,440
+so that nobody else can read it uh
+
+274
+00:11:07,440 --> 00:11:09,519
+integrity is just assuring that the
+
+275
+00:11:09,519 --> 00:11:12,000
+the system structure uh is correct and
+
+276
+00:11:12,000 --> 00:11:12,839
+uh the
+
+277
+00:11:12,839 --> 00:11:15,200
+modifications uh illegal modifications
+
+278
+00:11:15,200 --> 00:11:16,720
+to the data are being detected and
+
+279
+00:11:16,720 --> 00:11:18,320
+whether the data is public or not public
+
+280
+00:11:18,320 --> 00:11:19,920
+you know that sort of besides the the
+
+281
+00:11:19,920 --> 00:11:21,440
+point here
+
+282
+00:11:21,440 --> 00:11:22,959
+uh and to make it a little bit more
+
+283
+00:11:22,959 --> 00:11:24,880
+concrete you know what they're sort of
+
+284
+00:11:24,880 --> 00:11:25,360
+the
+
+285
+00:11:25,360 --> 00:11:27,279
+thing that they have in their minds is
+
+286
+00:11:27,279 --> 00:11:28,399
+we have a set of
+
+287
+00:11:28,399 --> 00:11:32,389
+you know we have developers
+
+288
+00:11:32,399 --> 00:11:36,640
+uh we have you know dev1 you know dev2
+
+289
+00:11:36,640 --> 00:11:39,680
+they may share you know some machine
+
+290
+00:11:39,680 --> 00:11:42,240
+that contains the source code repository
+
+291
+00:11:42,240 --> 00:11:43,519
+of some
+
+292
+00:11:43,519 --> 00:11:45,680
+you know source from project the
+
+293
+00:11:45,680 --> 00:11:46,720
+developers you know
+
+294
+00:11:46,720 --> 00:11:50,639
+collaborating on that project uh and
+
+295
+00:11:50,639 --> 00:11:52,800
+uh and sort of think about this as you
+
+296
+00:11:52,800 --> 00:11:54,560
+know the example that the paper mentions
+
+297
+00:11:54,560 --> 00:11:55,279
+is
+
+298
+00:11:55,279 --> 00:11:57,040
+in the paper maybe this is the
+
+299
+00:11:57,040 --> 00:11:59,920
+development machines and the server for
+
+300
+00:11:59,920 --> 00:12:03,360
+uh debian linux and the
+
+301
+00:12:03,360 --> 00:12:05,680
+what they want to again defend against
+
+302
+00:12:05,680 --> 00:12:07,519
+is trap or
+
+303
+00:12:07,519 --> 00:12:11,760
+trap door
+
+304
+00:12:11,760 --> 00:12:16,790
+you know trapdoor in the software
+
+305
+00:12:16,800 --> 00:12:20,160
+so the um you know an
+
+306
+00:12:20,160 --> 00:12:22,079
+attacker you know takes over control
+
+307
+00:12:22,079 --> 00:12:24,000
+breaks into the machine that contains
+
+308
+00:12:24,000 --> 00:12:27,519
+the source repo modifies the
+
+309
+00:12:27,519 --> 00:12:29,839
+software unnoticed and then at some
+
+310
+00:12:29,839 --> 00:12:31,680
+point that software gets deployed you
+
+311
+00:12:31,680 --> 00:12:32,560
+know for example that
+
+312
+00:12:32,560 --> 00:12:33,920
+linux gets deployed to lots of lots of
+
+313
+00:12:33,920 --> 00:12:36,399
+machines and
+
+314
+00:12:36,399 --> 00:12:39,680
+now the attacker has control over
+
+315
+00:12:39,680 --> 00:12:41,839
+those machines because it can exploit
+
+316
+00:12:41,839 --> 00:12:43,200
+the trapdoor
+
+317
+00:12:43,200 --> 00:12:46,240
+um the the paper talks about this attack
+
+318
+00:12:46,240 --> 00:12:49,600
+this particular instance of w linux in
+
+319
+00:12:49,600 --> 00:12:52,959
+you know 2003
+
+320
+00:12:52,959 --> 00:12:54,800
+where you know attack was able to
+
+321
+00:12:54,800 --> 00:12:56,160
+compromise you know the
+
+322
+00:12:56,160 --> 00:12:59,600
+development uh server or cluster uh
+
+323
+00:12:59,600 --> 00:13:01,279
+and recovering from these kinds of
+
+324
+00:13:01,279 --> 00:13:02,800
+attacks is very painful
+
+325
+00:13:02,800 --> 00:13:05,440
+uh in fact in 2003 you know they report
+
+326
+00:13:05,440 --> 00:13:06,160
+that
+
+327
+00:13:06,160 --> 00:13:08,959
+the demolition froze development for a
+
+328
+00:13:08,959 --> 00:13:09,680
+couple days
+
+329
+00:13:09,680 --> 00:13:11,920
+and while they were trying to sort out
+
+330
+00:13:11,920 --> 00:13:13,440
+which you know parts of their source
+
+331
+00:13:13,440 --> 00:13:14,320
+repo were still
+
+332
+00:13:14,320 --> 00:13:15,839
+you know correct and which parts were
+
+333
+00:13:15,839 --> 00:13:18,240
+actually modified by the attacker
+
+334
+00:13:18,240 --> 00:13:19,839
+and then these attacks happen sort of
+
+335
+00:13:19,839 --> 00:13:21,519
+periodically uh i think
+
+336
+00:13:21,519 --> 00:13:23,440
+last year you know ubuntu had a similar
+
+337
+00:13:23,440 --> 00:13:24,800
+type of problem
+
+338
+00:13:24,800 --> 00:13:27,839
+in uh i think in 2018 or 2019 i can't
+
+339
+00:13:27,839 --> 00:13:28,959
+remember exactly
+
+340
+00:13:28,959 --> 00:13:32,959
+uh and it was a similar case where the
+
+341
+00:13:32,959 --> 00:13:34,720
+one of the the core development uh
+
+342
+00:13:34,720 --> 00:13:37,279
+servers was the the broken into
+
+343
+00:13:37,279 --> 00:13:39,040
+and you know they had to sort of sort
+
+344
+00:13:39,040 --> 00:13:40,320
+out uh
+
+345
+00:13:40,320 --> 00:13:43,199
+what was really what would uh see which
+
+346
+00:13:43,199 --> 00:13:43,920
+software where
+
+347
+00:13:43,920 --> 00:13:46,839
+which files got effect affected by that
+
+348
+00:13:46,839 --> 00:13:48,560
+breaking
+
+349
+00:13:48,560 --> 00:13:50,320
+okay so that's sort of the setting of
+
+350
+00:13:50,320 --> 00:13:52,079
+the of the paper
+
+351
+00:13:52,079 --> 00:13:53,839
+uh and i'm going to make it a little bit
+
+352
+00:13:53,839 --> 00:13:55,839
+more concrete a little bit of a toy
+
+353
+00:13:55,839 --> 00:13:56,720
+example
+
+354
+00:13:56,720 --> 00:13:59,920
+to help us go through the techniques
+
+355
+00:13:59,920 --> 00:14:03,440
+that this paper actually uses
+
+356
+00:14:03,440 --> 00:14:06,720
+um so the example that i'm going to use
+
+357
+00:14:06,720 --> 00:14:10,560
+partially inspired by 6858
+
+358
+00:14:10,560 --> 00:14:13,040
+uh is you know let's say you know we
+
+359
+00:14:13,040 --> 00:14:14,720
+have a file system
+
+360
+00:14:14,720 --> 00:14:18,720
+uh there's a you know you're doing the
+
+361
+00:14:18,720 --> 00:14:20,399
+and the file system contains you know
+
+362
+00:14:20,399 --> 00:14:22,240
+the source code for this application
+
+363
+00:14:22,240 --> 00:14:22,959
+that yeah
+
+364
+00:14:22,959 --> 00:14:26,079
+we use in 858 called zoobar
+
+365
+00:14:26,079 --> 00:14:29,279
+um and zubar is a
+
+366
+00:14:29,279 --> 00:14:32,079
+sort of a virtual bank type application
+
+367
+00:14:32,079 --> 00:14:32,720
+where
+
+368
+00:14:32,720 --> 00:14:35,519
+uh users of the system uh registered
+
+369
+00:14:35,519 --> 00:14:36,880
+users of the systems can you know
+
+370
+00:14:36,880 --> 00:14:37,440
+transfer
+
+371
+00:14:37,440 --> 00:14:39,680
+zoo bars to each other and so it has a
+
+372
+00:14:39,680 --> 00:14:40,639
+file
+
+373
+00:14:40,639 --> 00:14:43,680
+called off.py you know that does uh
+
+374
+00:14:43,680 --> 00:14:45,120
+authentication
+
+375
+00:14:45,120 --> 00:14:46,800
+and it has a file that basically you
+
+376
+00:14:46,800 --> 00:14:48,480
+know implements sort of the bank
+
+377
+00:14:48,480 --> 00:14:52,240
+it's called bank ui and
+
+378
+00:14:52,240 --> 00:14:55,040
+uh and so now let's you know consider
+
+379
+00:14:55,040 --> 00:14:56,160
+the case where
+
+380
+00:14:56,160 --> 00:14:58,399
+uh you know a set of developers a b and
+
+381
+00:14:58,399 --> 00:14:59,199
+c
+
+382
+00:14:59,199 --> 00:15:00,959
+and you know they decided that they want
+
+383
+00:15:00,959 --> 00:15:03,120
+to sort of include increase the
+
+384
+00:15:03,120 --> 00:15:05,839
+usability of zoobar and actually deploy
+
+385
+00:15:05,839 --> 00:15:06,800
+it for real
+
+386
+00:15:06,800 --> 00:15:09,040
+and to make it real basically you know
+
+387
+00:15:09,040 --> 00:15:10,560
+they decided to divide the work as
+
+388
+00:15:10,560 --> 00:15:11,920
+follows
+
+389
+00:15:11,920 --> 00:15:16,000
+a is going to modify
+
+390
+00:15:16,000 --> 00:15:20,870
+off.ui
+
+391
+00:15:20,880 --> 00:15:24,150
+to support
+
+392
+00:15:24,160 --> 00:15:28,480
+mit certificates or mi2 certs
+
+393
+00:15:28,480 --> 00:15:31,839
+kerberos tickets or certificates and
+
+394
+00:15:31,839 --> 00:15:34,079
+with the idea that you know uh what
+
+395
+00:15:34,079 --> 00:15:34,959
+they're going to do is
+
+396
+00:15:34,959 --> 00:15:38,160
+uh uh you know they're going to the fbi
+
+397
+00:15:38,160 --> 00:15:39,759
+is going to be modified so that onlinely
+
+398
+00:15:39,759 --> 00:15:41,120
+legit
+
+399
+00:15:41,120 --> 00:15:44,079
+mit community members actually can log
+
+400
+00:15:44,079 --> 00:15:45,759
+into the file server
+
+401
+00:15:45,759 --> 00:15:47,839
+file server or into zoobar and so that
+
+402
+00:15:47,839 --> 00:15:49,279
+we actually know you know who it
+
+403
+00:15:49,279 --> 00:15:50,720
+actually really is
+
+404
+00:15:50,720 --> 00:15:52,320
+that is associated with that particular
+
+405
+00:15:52,320 --> 00:15:54,399
+mit certificate and then
+
+406
+00:15:54,399 --> 00:15:55,279
+you know to make a little bit more
+
+407
+00:15:55,279 --> 00:15:56,880
+useful you know b is gonna actually
+
+408
+00:15:56,880 --> 00:15:57,680
+modify the bank
+
+409
+00:15:57,680 --> 00:16:00,800
+ui to actually link it you know to
+
+410
+00:16:00,800 --> 00:16:06,320
+uh hashtag for tech cash
+
+411
+00:16:06,320 --> 00:16:09,680
+and so uh in the idea that basically uh
+
+412
+00:16:09,680 --> 00:16:11,040
+we can actually use the zoom bars from
+
+413
+00:16:11,040 --> 00:16:12,160
+the system of course you should never do
+
+414
+00:16:12,160 --> 00:16:13,600
+that but like we can use the zubair
+
+415
+00:16:13,600 --> 00:16:14,480
+system to actually
+
+416
+00:16:14,480 --> 00:16:17,680
+uh uh transfer money you know uh
+
+417
+00:16:17,680 --> 00:16:20,160
+real money instead of zoo bars between
+
+418
+00:16:20,160 --> 00:16:22,720
+users that are registered uh
+
+419
+00:16:22,720 --> 00:16:25,600
+with uh this service now this sounds of
+
+420
+00:16:25,600 --> 00:16:27,199
+course like a crazy idea you should not
+
+421
+00:16:27,199 --> 00:16:28,000
+really do it but
+
+422
+00:16:28,000 --> 00:16:29,440
+you know it's not completely ridiculous
+
+423
+00:16:29,440 --> 00:16:31,519
+uh you know because the
+
+424
+00:16:31,519 --> 00:16:33,440
+app ui really checks you know who it
+
+425
+00:16:33,440 --> 00:16:34,560
+actually is
+
+426
+00:16:34,560 --> 00:16:36,800
+based on the mit certificate and so
+
+427
+00:16:36,800 --> 00:16:38,399
+maybe it's not unreasonable that you
+
+428
+00:16:38,399 --> 00:16:39,199
+know we could connect
+
+429
+00:16:39,199 --> 00:16:41,440
+you know back into poi to actually tech
+
+430
+00:16:41,440 --> 00:16:43,680
+cache
+
+431
+00:16:43,680 --> 00:16:46,480
+and then you know basically c in our
+
+432
+00:16:46,480 --> 00:16:48,079
+scenarios is going to be the person
+
+433
+00:16:48,079 --> 00:16:49,360
+that's actually going to deploy the
+
+434
+00:16:49,360 --> 00:16:53,269
+software
+
+435
+00:16:53,279 --> 00:16:55,759
+and find the machine takes the software
+
+436
+00:16:55,759 --> 00:16:57,360
+installs it there and runs it
+
+437
+00:16:57,360 --> 00:16:59,839
+and uh and opens it up to the mit
+
+438
+00:16:59,839 --> 00:17:01,120
+community
+
+439
+00:17:01,120 --> 00:17:04,559
+now uh in the case now let's consider
+
+440
+00:17:04,559 --> 00:17:06,400
+you know what you know what could happen
+
+441
+00:17:06,400 --> 00:17:07,839
+what could go wrong
+
+442
+00:17:07,839 --> 00:17:09,919
+uh if actually the file server was
+
+443
+00:17:09,919 --> 00:17:11,120
+compromised and so
+
+444
+00:17:11,120 --> 00:17:16,549
+it was visited
+
+445
+00:17:16,559 --> 00:17:18,799
+well the obvious you know problem
+
+446
+00:17:18,799 --> 00:17:20,319
+there's a couple of obvious problems
+
+447
+00:17:20,319 --> 00:17:23,360
+you know bad outcomes possible
+
+448
+00:17:23,360 --> 00:17:27,669
+uh so let's consider them
+
+449
+00:17:27,679 --> 00:17:29,760
+you know that outcome one which is the
+
+450
+00:17:29,760 --> 00:17:31,440
+one that we should be talking about
+
+451
+00:17:31,440 --> 00:17:33,760
+and also in the previous examples is you
+
+452
+00:17:33,760 --> 00:17:34,640
+know basically
+
+453
+00:17:34,640 --> 00:17:38,480
+the adversary gives arbitrary code to c
+
+454
+00:17:38,480 --> 00:17:46,240
+so adversary
+
+455
+00:17:46,240 --> 00:17:49,679
+provides own code
+
+456
+00:17:49,679 --> 00:17:53,270
+to see
+
+457
+00:17:53,280 --> 00:17:55,280
+and you know that's sort of the or you
+
+458
+00:17:55,280 --> 00:17:57,760
+know maybe the ads are slightly
+
+459
+00:17:57,760 --> 00:17:59,919
+subtle about it or clever about it you
+
+460
+00:17:59,919 --> 00:18:01,280
+know whatever
+
+461
+00:18:01,280 --> 00:18:02,720
+makes it a little bit hard to spot that
+
+462
+00:18:02,720 --> 00:18:05,280
+actually uh modified off.pui
+
+463
+00:18:05,280 --> 00:18:06,960
+uh for example to delete the mit
+
+464
+00:18:06,960 --> 00:18:08,960
+certificates uh but this is basically
+
+465
+00:18:08,960 --> 00:18:10,480
+you know there's really no way for c
+
+466
+00:18:10,480 --> 00:18:12,480
+to check that actually it got the
+
+467
+00:18:12,480 --> 00:18:14,480
+software that a and b produced
+
+468
+00:18:14,480 --> 00:18:16,720
+and uh without any modifications from
+
+469
+00:18:16,720 --> 00:18:18,240
+the adversary so that's sort of the
+
+470
+00:18:18,240 --> 00:18:19,039
+obvious
+
+471
+00:18:19,039 --> 00:18:20,400
+problem we're going to talk a lot about
+
+472
+00:18:20,400 --> 00:18:22,160
+it there's a second
+
+473
+00:18:22,160 --> 00:18:23,840
+uh sort of bad outcome which may be a
+
+474
+00:18:23,840 --> 00:18:26,240
+little more subtle
+
+475
+00:18:26,240 --> 00:18:32,150
+which is that the adversary
+
+476
+00:18:32,160 --> 00:18:34,559
+provides the changes you know today with
+
+477
+00:18:34,559 --> 00:18:37,990
+poi
+
+478
+00:18:38,000 --> 00:18:43,200
+without the changes
+
+479
+00:18:43,200 --> 00:18:47,909
+to off.py
+
+480
+00:18:47,919 --> 00:18:49,679
+and so at this point you know this this
+
+481
+00:18:49,679 --> 00:18:51,520
+is pretty problematic right because you
+
+482
+00:18:51,520 --> 00:18:53,039
+know bank bpi is linked to
+
+483
+00:18:53,039 --> 00:18:56,000
+tech cash now but we actually don't have
+
+484
+00:18:56,000 --> 00:18:56,960
+appropriate
+
+485
+00:18:56,960 --> 00:18:59,360
+notification of the users anymore in
+
+486
+00:18:59,360 --> 00:19:00,880
+fact you know anybody that actually
+
+487
+00:19:00,880 --> 00:19:02,960
+uh creates a zubar account can now
+
+488
+00:19:02,960 --> 00:19:04,240
+actually interact with
+
+489
+00:19:04,240 --> 00:19:07,280
+tech hash um and so yeah clearly very
+
+490
+00:19:07,280 --> 00:19:08,799
+very undesirable
+
+491
+00:19:08,799 --> 00:19:11,919
+uh and harder to spot right because
+
+492
+00:19:11,919 --> 00:19:12,640
+basically
+
+493
+00:19:12,640 --> 00:19:14,080
+the adversary actually doesn't really
+
+494
+00:19:14,080 --> 00:19:16,000
+modify any software i just
+
+495
+00:19:16,000 --> 00:19:18,400
+selectively you know presents and takes
+
+496
+00:19:18,400 --> 00:19:19,840
+pieces of it and
+
+497
+00:19:19,840 --> 00:19:21,760
+presents that to see who then actually
+
+498
+00:19:21,760 --> 00:19:24,559
+goes off and deployed
+
+499
+00:19:24,559 --> 00:19:26,640
+and so it's it's really you know of
+
+500
+00:19:26,640 --> 00:19:28,960
+course the the
+
+501
+00:19:28,960 --> 00:19:32,000
+the tax the the paper uh
+
+502
+00:19:32,000 --> 00:19:33,760
+considers is of course attack number one
+
+503
+00:19:33,760 --> 00:19:35,760
+to the two uh but you know a lot of some
+
+504
+00:19:35,760 --> 00:19:37,360
+of the subtle issues actually
+
+505
+00:19:37,360 --> 00:19:39,120
+are brought out by this sort of second
+
+506
+00:19:39,120 --> 00:19:44,150
+case that we'll be talking about
+
+507
+00:19:44,160 --> 00:19:48,070
+any questions so far
+
+508
+00:19:48,080 --> 00:19:50,840
+about the setting and by the motivation
+
+509
+00:19:50,840 --> 00:19:53,039
+and
+
+510
+00:19:53,039 --> 00:19:55,200
+before we're gonna try to discuss
+
+511
+00:19:55,200 --> 00:19:56,960
+solutions
+
+512
+00:19:56,960 --> 00:19:58,720
+so the problem with the second case is
+
+513
+00:19:58,720 --> 00:20:00,400
+that the user
+
+514
+00:20:00,400 --> 00:20:03,200
+um that the author the authentication
+
+515
+00:20:03,200 --> 00:20:04,240
+does not
+
+516
+00:20:04,240 --> 00:20:07,360
+authenticate yeah it doesn't use mit
+
+517
+00:20:07,360 --> 00:20:08,400
+certificates anymore
+
+518
+00:20:08,400 --> 00:20:10,000
+and so we don't really know actually who
+
+519
+00:20:10,000 --> 00:20:12,870
+logs in
+
+520
+00:20:12,880 --> 00:20:17,280
+thank you what about the case where um
+
+521
+00:20:17,280 --> 00:20:20,640
+uh a or like b won't see
+
+522
+00:20:20,640 --> 00:20:25,430
+is like the fork
+
+523
+00:20:25,440 --> 00:20:26,960
+let's assume for a second that a and b
+
+524
+00:20:26,960 --> 00:20:28,240
+actually you know i have talked to each
+
+525
+00:20:28,240 --> 00:20:29,679
+other and divided up the work so they
+
+526
+00:20:29,679 --> 00:20:30,720
+know
+
+527
+00:20:30,720 --> 00:20:32,000
+that they're supposed to be doing this
+
+528
+00:20:32,000 --> 00:20:35,270
+together
+
+529
+00:20:35,280 --> 00:20:38,240
+i mean they form a team um they're in
+
+530
+00:20:38,240 --> 00:20:40,000
+close collaboration and contact
+
+531
+00:20:40,000 --> 00:20:42,799
+you know and they've divided up the work
+
+532
+00:20:42,799 --> 00:20:43,600
+and so they know
+
+533
+00:20:43,600 --> 00:20:45,760
+you know b tells a when he's done b
+
+534
+00:20:45,760 --> 00:20:47,120
+tells a when he's done and then they
+
+535
+00:20:47,120 --> 00:20:47,919
+tell see there
+
+536
+00:20:47,919 --> 00:20:52,149
+go ahead we're all done okay
+
+537
+00:20:52,159 --> 00:20:55,760
+okay so uh let's start
+
+538
+00:20:55,760 --> 00:20:57,520
+with considering a simple design that is
+
+539
+00:20:57,520 --> 00:21:02,080
+too simple meaning it doesn't work
+
+540
+00:21:02,080 --> 00:21:04,080
+but it gives us some you know uh
+
+541
+00:21:04,080 --> 00:21:05,120
+starting points
+
+542
+00:21:05,120 --> 00:21:08,080
+for a more uh sophisticated design that
+
+543
+00:21:08,080 --> 00:21:10,080
+you know hopefully it might work
+
+544
+00:21:10,080 --> 00:21:13,200
+and so the simple uh point is that uh a
+
+545
+00:21:13,200 --> 00:21:14,159
+and b or any
+
+546
+00:21:14,159 --> 00:21:17,280
+uh all the files are going to be
+
+547
+00:21:17,280 --> 00:21:20,799
+signed with the person who modified it
+
+548
+00:21:20,799 --> 00:21:21,440
+so
+
+549
+00:21:21,440 --> 00:21:29,270
+when like a modifies you know off the py
+
+550
+00:21:29,280 --> 00:21:33,200
+uh a actually produces a signature
+
+551
+00:21:33,200 --> 00:21:39,190
+and that signed with the public key
+
+552
+00:21:39,200 --> 00:21:41,840
+which signature assigned to the public
+
+553
+00:21:41,840 --> 00:21:44,240
+key of ah
+
+554
+00:21:44,240 --> 00:21:46,159
+and you know that signature covers the
+
+555
+00:21:46,159 --> 00:21:47,440
+data
+
+556
+00:21:47,440 --> 00:21:51,430
+of the file
+
+557
+00:21:51,440 --> 00:21:55,440
+and so when c uh downloads
+
+558
+00:21:55,440 --> 00:22:05,029
+the uh off.py know check the signature
+
+559
+00:22:05,039 --> 00:22:06,640
+and if the signature checks out you know
+
+560
+00:22:06,640 --> 00:22:08,480
+then the c knows that actually this file
+
+561
+00:22:08,480 --> 00:22:08,880
+was
+
+562
+00:22:08,880 --> 00:22:10,960
+produced you know this is indeed
+
+563
+00:22:10,960 --> 00:22:12,320
+produced by a
+
+564
+00:22:12,320 --> 00:22:14,320
+and uh you know might all believe that
+
+565
+00:22:14,320 --> 00:22:15,919
+things are good
+
+566
+00:22:15,919 --> 00:22:19,039
+um and that's the basic plan and
+
+567
+00:22:19,039 --> 00:22:20,159
+you know we'll talk a little bit about
+
+568
+00:22:20,159 --> 00:22:21,600
+again where the keys are coming from
+
+569
+00:22:21,600 --> 00:22:22,720
+although
+
+570
+00:22:22,720 --> 00:22:23,919
+the issue sort of public key
+
+571
+00:22:23,919 --> 00:22:25,840
+distribution is really an
+
+572
+00:22:25,840 --> 00:22:27,360
+858 topic so i'm not going to talk too
+
+573
+00:22:27,360 --> 00:22:29,440
+much about it but just assume for now
+
+574
+00:22:29,440 --> 00:22:30,000
+that
+
+575
+00:22:30,000 --> 00:22:33,200
+uh every user has a key um public
+
+576
+00:22:33,200 --> 00:22:36,240
+private key pair and the
+
+577
+00:22:36,240 --> 00:22:38,720
+private keys are secret and the public
+
+578
+00:22:38,720 --> 00:22:40,400
+keys are public and
+
+579
+00:22:40,400 --> 00:22:42,559
+every user knows whose public key
+
+580
+00:22:42,559 --> 00:22:45,039
+belongs to who
+
+581
+00:22:45,039 --> 00:22:48,880
+so now let's consider some uh
+
+582
+00:22:48,880 --> 00:22:52,559
+attacks and see which ones sort of you
+
+583
+00:22:52,559 --> 00:22:54,480
+know fail which ones you know
+
+584
+00:22:54,480 --> 00:22:57,280
+uh work so of course the obvious attack
+
+585
+00:22:57,280 --> 00:22:58,080
+was number one
+
+586
+00:22:58,080 --> 00:22:59,919
+uh that we talked about on the previous
+
+587
+00:22:59,919 --> 00:23:03,039
+slide which s modifies
+
+588
+00:23:03,039 --> 00:23:06,559
+files and
+
+589
+00:23:06,559 --> 00:23:09,039
+that is not a little bit uh that's not
+
+590
+00:23:09,039 --> 00:23:09,600
+directly
+
+591
+00:23:09,600 --> 00:23:13,440
+uh as modified out of gi
+
+592
+00:23:13,440 --> 00:23:15,360
+uh that's not really going to be
+
+593
+00:23:15,360 --> 00:23:16,640
+possible anymore
+
+594
+00:23:16,640 --> 00:23:19,679
+uh because when c downloads you know the
+
+595
+00:23:19,679 --> 00:23:22,720
+file and the signature and checks it and
+
+596
+00:23:22,720 --> 00:23:24,159
+it will see that the security rejection
+
+597
+00:23:24,159 --> 00:23:24,720
+check
+
+598
+00:23:24,720 --> 00:23:26,400
+because the data that actually was
+
+599
+00:23:26,400 --> 00:23:28,720
+signed is different than the data that
+
+600
+00:23:28,720 --> 00:23:29,120
+actually
+
+601
+00:23:29,120 --> 00:23:32,080
+the server produced and so it's not
+
+602
+00:23:32,080 --> 00:23:33,520
+really possible for
+
+603
+00:23:33,520 --> 00:23:36,400
+the server really to modify off not puy
+
+604
+00:23:36,400 --> 00:23:37,520
+without actually being
+
+605
+00:23:37,520 --> 00:23:40,559
+attacked or we leave out being detected
+
+606
+00:23:40,559 --> 00:23:42,080
+so you know this is we're sort of in
+
+607
+00:23:42,080 --> 00:23:44,400
+good shape here on this attacks
+
+608
+00:23:44,400 --> 00:23:47,200
+and that's sort of the core attack right
+
+609
+00:23:47,200 --> 00:23:47,760
+but
+
+610
+00:23:47,760 --> 00:23:50,240
+there's a lot of other things that still
+
+611
+00:23:50,240 --> 00:23:50,960
+could do
+
+612
+00:23:50,960 --> 00:23:52,400
+so let's consider some of the other
+
+613
+00:23:52,400 --> 00:23:55,039
+things um
+
+614
+00:23:55,039 --> 00:23:57,679
+s you know could actually in the way i
+
+615
+00:23:57,679 --> 00:24:00,559
+would describe the fps in another file
+
+616
+00:24:00,559 --> 00:24:05,440
+and pretend to be off.py
+
+617
+00:24:05,440 --> 00:24:07,840
+uh and because the signature doesn't
+
+618
+00:24:07,840 --> 00:24:08,720
+really say
+
+619
+00:24:08,720 --> 00:24:11,120
+uh which actually file the data belongs
+
+620
+00:24:11,120 --> 00:24:11,919
+to
+
+621
+00:24:11,919 --> 00:24:15,200
+and so s could just you know produce
+
+622
+00:24:15,200 --> 00:24:16,240
+some other
+
+623
+00:24:16,240 --> 00:24:18,000
+file and say like oh yeah see this is
+
+624
+00:24:18,000 --> 00:24:19,520
+actually after py
+
+625
+00:24:19,520 --> 00:24:22,000
+uh you could believe me in here you know
+
+626
+00:24:22,000 --> 00:24:23,600
+the science they use the signature that
+
+627
+00:24:23,600 --> 00:24:25,360
+was of course produced by s
+
+628
+00:24:25,360 --> 00:24:27,840
+so uh of course this could be fixed you
+
+629
+00:24:27,840 --> 00:24:29,840
+know maybe the signature should not only
+
+630
+00:24:29,840 --> 00:24:30,240
+include
+
+631
+00:24:30,240 --> 00:24:31,679
+you know the data but it also probably
+
+632
+00:24:31,679 --> 00:24:35,190
+should include you know the file name
+
+633
+00:24:35,200 --> 00:24:37,760
+so you know maybe not too uh too bad and
+
+634
+00:24:37,760 --> 00:24:39,039
+something that you could be
+
+635
+00:24:39,039 --> 00:24:43,200
+addressed a third you know another yet
+
+636
+00:24:43,200 --> 00:24:44,320
+another possibility
+
+637
+00:24:44,320 --> 00:24:48,720
+is to for s to basically send
+
+638
+00:24:48,720 --> 00:24:52,149
+the contents of old files
+
+639
+00:24:52,159 --> 00:25:03,350
+old content and maybe some new
+
+640
+00:25:03,360 --> 00:25:04,880
+and that's a little bit more difficult
+
+641
+00:25:04,880 --> 00:25:06,960
+now for us to uh
+
+642
+00:25:06,960 --> 00:25:08,480
+to handle correcting this too simple
+
+643
+00:25:08,480 --> 00:25:10,400
+plan uh because
+
+644
+00:25:10,400 --> 00:25:12,799
+you know the there's no way you know
+
+645
+00:25:12,799 --> 00:25:14,880
+basically the files are indefinitely
+
+646
+00:25:14,880 --> 00:25:16,480
+authenticated but not you know together
+
+647
+00:25:16,480 --> 00:25:18,000
+you know it's not that uh
+
+648
+00:25:18,000 --> 00:25:19,919
+c gets sort of a consistent picture of
+
+649
+00:25:19,919 --> 00:25:21,120
+the file system
+
+650
+00:25:21,120 --> 00:25:24,159
+uh it just gets like signed files and
+
+651
+00:25:24,159 --> 00:25:25,600
+how those signed files relate to each
+
+652
+00:25:25,600 --> 00:25:28,240
+other in terms of their histories
+
+653
+00:25:28,240 --> 00:25:29,840
+is completely not covered in this too
+
+654
+00:25:29,840 --> 00:25:31,360
+simple design
+
+655
+00:25:31,360 --> 00:25:32,799
+this is exactly of course you know the
+
+656
+00:25:32,799 --> 00:25:34,799
+issue this there's more subtle attack
+
+657
+00:25:34,799 --> 00:25:35,440
+that
+
+658
+00:25:35,440 --> 00:25:36,960
+now could just completely work out
+
+659
+00:25:36,960 --> 00:25:38,559
+correct because you know
+
+660
+00:25:38,559 --> 00:25:42,240
+s could send the uh as could said the
+
+661
+00:25:42,240 --> 00:25:44,480
+old version of after py
+
+662
+00:25:44,480 --> 00:25:47,039
+uh it will completely check out uh and
+
+663
+00:25:47,039 --> 00:25:48,640
+then send the new version
+
+664
+00:25:48,640 --> 00:25:52,720
+of the uh of the bank.py
+
+665
+00:25:52,720 --> 00:25:54,480
+uh which actually talks to is linked to
+
+666
+00:25:54,480 --> 00:25:56,240
+techcache and now we're
+
+667
+00:25:56,240 --> 00:25:59,360
+exactly back in the warzone case where
+
+668
+00:25:59,360 --> 00:26:00,799
+you know we have an old version of after
+
+669
+00:26:00,799 --> 00:26:03,279
+py or not the changes to office by not
+
+670
+00:26:03,279 --> 00:26:05,600
+the certificate changes to the off.py
+
+671
+00:26:05,600 --> 00:26:08,480
+uh in the new version that actually
+
+672
+00:26:08,480 --> 00:26:10,640
+linked to techcache and so that
+
+673
+00:26:10,640 --> 00:26:13,360
+this is not so good uh so and the simple
+
+674
+00:26:13,360 --> 00:26:14,720
+point that we have here just just
+
+675
+00:26:14,720 --> 00:26:15,200
+doesn't
+
+676
+00:26:15,200 --> 00:26:18,400
+deal with this uh there's a similar sort
+
+677
+00:26:18,400 --> 00:26:19,919
+of another sort of version of this that
+
+678
+00:26:19,919 --> 00:26:20,480
+where
+
+679
+00:26:20,480 --> 00:26:22,320
+you know of course you know s can also
+
+680
+00:26:22,320 --> 00:26:31,430
+just claim that the file doesn't exist
+
+681
+00:26:31,440 --> 00:26:34,480
+and c doesn't really have any
+
+682
+00:26:34,480 --> 00:26:36,559
+way of checking whether that actually is
+
+683
+00:26:36,559 --> 00:26:38,000
+true or not because again it doesn't
+
+684
+00:26:38,000 --> 00:26:39,440
+have a global picture
+
+685
+00:26:39,440 --> 00:26:41,600
+where it's a consistent view of the file
+
+686
+00:26:41,600 --> 00:26:43,279
+system yeah and it only
+
+687
+00:26:43,279 --> 00:26:46,559
+knows about signatures for each file
+
+688
+00:26:46,559 --> 00:26:48,159
+and so you can see that you know there's
+
+689
+00:26:48,159 --> 00:26:49,520
+this simple design you know maybe a good
+
+690
+00:26:49,520 --> 00:26:50,960
+starting point but we need something
+
+691
+00:26:50,960 --> 00:26:53,039
+more uh
+
+692
+00:26:53,039 --> 00:26:54,960
+more complete and particularly we need
+
+693
+00:26:54,960 --> 00:26:57,440
+something that really tastes good all
+
+694
+00:26:57,440 --> 00:26:59,360
+the file systems all the files together
+
+695
+00:26:59,360 --> 00:26:59,840
+that ties
+
+696
+00:26:59,840 --> 00:27:01,279
+the directories together the content of
+
+697
+00:27:01,279 --> 00:27:03,440
+the directories together
+
+698
+00:27:03,440 --> 00:27:05,600
+and and we have to be able to decide in
+
+699
+00:27:05,600 --> 00:27:07,039
+some way you know what is the latest
+
+700
+00:27:07,039 --> 00:27:07,840
+version
+
+701
+00:27:07,840 --> 00:27:10,880
+of the file system and so that nc can't
+
+702
+00:27:10,880 --> 00:27:12,320
+be tricked into
+
+703
+00:27:12,320 --> 00:27:14,400
+uh in this sort of problematic case
+
+704
+00:27:14,400 --> 00:27:16,320
+where one file is installed and the
+
+705
+00:27:16,320 --> 00:27:18,799
+other other file is not installed
+
+706
+00:27:18,799 --> 00:27:20,720
+so that's really what the uh some of the
+
+707
+00:27:20,720 --> 00:27:22,000
+paper tries to uh
+
+708
+00:27:22,000 --> 00:27:26,950
+address um and
+
+709
+00:27:26,960 --> 00:27:30,720
+and the big idea uh in the in the paper
+
+710
+00:27:30,720 --> 00:27:32,480
+uh and it just turns out to be just a
+
+711
+00:27:32,480 --> 00:27:35,440
+big idea in general
+
+712
+00:27:35,440 --> 00:27:37,200
+and it's a conceptual idea even though
+
+713
+00:27:37,200 --> 00:27:39,039
+the paper actually doesn't really
+
+714
+00:27:39,039 --> 00:27:40,799
+implement this big idea directly it
+
+715
+00:27:40,799 --> 00:27:43,600
+implements it in a more indirect way
+
+716
+00:27:43,600 --> 00:27:47,279
+it is an incredibly powerful idea
+
+717
+00:27:47,279 --> 00:27:51,120
+so the big idea is to
+
+718
+00:27:51,120 --> 00:27:54,720
+have assigned log
+
+719
+00:27:54,720 --> 00:28:01,190
+of operations
+
+720
+00:28:01,200 --> 00:28:02,559
+and of course you know you're well
+
+721
+00:28:02,559 --> 00:28:04,720
+familiar with blocks of operations
+
+722
+00:28:04,720 --> 00:28:07,440
+and and you know you can and this is
+
+723
+00:28:07,440 --> 00:28:08,240
+basically a
+
+724
+00:28:08,240 --> 00:28:10,480
+sort of a beefed up version of it uh
+
+725
+00:28:10,480 --> 00:28:12,080
+where there are signatures on the log
+
+726
+00:28:12,080 --> 00:28:12,960
+entries that
+
+727
+00:28:12,960 --> 00:28:15,200
+both consider cover the entry as well as
+
+728
+00:28:15,200 --> 00:28:17,120
+you know preceding entries
+
+729
+00:28:17,120 --> 00:28:21,279
+um and uh this turns out to be uh
+
+730
+00:28:21,279 --> 00:28:22,880
+as you've seen in all the previous
+
+731
+00:28:22,880 --> 00:28:24,880
+disabled systems and failure recovery
+
+732
+00:28:24,880 --> 00:28:26,640
+protocols we talked about the log is
+
+733
+00:28:26,640 --> 00:28:29,520
+actually a very powerful idea to
+
+734
+00:28:29,520 --> 00:28:31,120
+think about like the correctness of the
+
+735
+00:28:31,120 --> 00:28:32,720
+system and in
+
+736
+00:28:32,720 --> 00:28:34,720
+the same way that the idea is sort of
+
+737
+00:28:34,720 --> 00:28:35,760
+carried forward
+
+738
+00:28:35,760 --> 00:28:38,880
+here in this byzantine context
+
+739
+00:28:38,880 --> 00:28:40,559
+uh and so like you know let's let me
+
+740
+00:28:40,559 --> 00:28:41,919
+draw you know
+
+741
+00:28:41,919 --> 00:28:45,600
+the log
+
+742
+00:28:45,600 --> 00:28:48,880
+so it captures in the paper uh so blog
+
+743
+00:28:48,880 --> 00:28:50,640
+whatever has some entries and let's say
+
+744
+00:28:50,640 --> 00:28:52,000
+you know we're
+
+745
+00:28:52,000 --> 00:28:53,679
+covering the page that we are talking
+
+746
+00:28:53,679 --> 00:28:56,000
+about so there's a modification
+
+747
+00:28:56,000 --> 00:29:01,200
+okay a lot you know off dot py
+
+748
+00:29:01,200 --> 00:29:05,590
+you know by a and assigned by a
+
+749
+00:29:05,600 --> 00:29:08,240
+you know there's a mod so if it goes
+
+750
+00:29:08,240 --> 00:29:09,760
+well you know there's a mod of
+
+751
+00:29:09,760 --> 00:29:12,880
+the uh bank
+
+752
+00:29:12,880 --> 00:29:16,149
+py
+
+753
+00:29:16,159 --> 00:29:20,549
+signed by v
+
+754
+00:29:20,559 --> 00:29:22,320
+and as we'll talk about in a second you
+
+755
+00:29:22,320 --> 00:29:24,320
+know it turns out that not only
+
+756
+00:29:24,320 --> 00:29:27,120
+are the modifications uh in the log but
+
+757
+00:29:27,120 --> 00:29:27,600
+also
+
+758
+00:29:27,600 --> 00:29:31,909
+the fetch so the read operations
+
+759
+00:29:31,919 --> 00:29:35,510
+so fetch
+
+760
+00:29:35,520 --> 00:29:40,080
+fetch of the log you know site by c
+
+761
+00:29:40,080 --> 00:29:43,669
+effective off dot p y
+
+762
+00:29:43,679 --> 00:29:48,710
+and the fetch of think that p y
+
+763
+00:29:48,720 --> 00:29:52,470
+sine by c
+
+764
+00:29:52,480 --> 00:29:54,480
+we'll talk about uh those operations of
+
+765
+00:29:54,480 --> 00:29:56,399
+the the fetch operations a little bit
+
+766
+00:29:56,399 --> 00:29:59,520
+uh first i want to talk about the
+
+767
+00:29:59,520 --> 00:30:00,880
+the preceding operations first
+
+768
+00:30:00,880 --> 00:30:03,120
+modifications
+
+769
+00:30:03,120 --> 00:30:06,399
+um so first of all the
+
+770
+00:30:06,399 --> 00:30:08,799
+what is important to realize is that the
+
+771
+00:30:08,799 --> 00:30:10,799
+signature that is in the
+
+772
+00:30:10,799 --> 00:30:13,840
+record not only covers the current
+
+773
+00:30:13,840 --> 00:30:14,320
+record
+
+774
+00:30:14,320 --> 00:30:20,830
+but it also covers all the records
+
+775
+00:30:20,840 --> 00:30:23,120
+before
+
+776
+00:30:23,120 --> 00:30:25,039
+um let me stop for a second here because
+
+777
+00:30:25,039 --> 00:30:26,960
+i'm not 100 sure
+
+778
+00:30:26,960 --> 00:30:30,159
+can everybody still hear me yes
+
+779
+00:30:30,159 --> 00:30:33,200
+yeah yes okay okay like my ipad
+
+780
+00:30:33,200 --> 00:30:36,159
+uh walked out of the zoom session uh i'm
+
+781
+00:30:36,159 --> 00:30:37,600
+always logged in twice
+
+782
+00:30:37,600 --> 00:30:40,880
+uh and my ipad logged out so
+
+783
+00:30:40,880 --> 00:30:42,559
+i just want to make sure that i'm still
+
+784
+00:30:42,559 --> 00:30:45,990
+talking to you and you can hear me
+
+785
+00:30:46,000 --> 00:30:48,559
+and so that is the case okay so let's
+
+786
+00:30:48,559 --> 00:31:20,470
+just proceed uh
+
+787
+00:31:20,480 --> 00:32:04,870
+i think we lost friends
+
+788
+00:32:04,880 --> 00:32:08,310
+can people hear me now
+
+789
+00:32:08,320 --> 00:32:11,590
+does anybody hear me
+
+790
+00:32:11,600 --> 00:32:15,039
+yeah yes okay good good okay uh i don't
+
+791
+00:32:15,039 --> 00:32:16,240
+know if anything weird happened on your
+
+792
+00:32:16,240 --> 00:32:17,440
+end but on my end
+
+793
+00:32:17,440 --> 00:32:21,279
+uh i got logged out of zoom and logged
+
+794
+00:32:21,279 --> 00:32:24,310
+back in
+
+795
+00:32:24,320 --> 00:32:29,519
+maybe there's a byzantine server at work
+
+796
+00:32:29,519 --> 00:32:33,440
+okay let me hold on one second
+
+797
+00:32:33,440 --> 00:32:49,669
+and get myself in it
+
+798
+00:32:49,679 --> 00:33:07,830
+and let me see that video off
+
+799
+00:33:07,840 --> 00:33:13,190
+camera okay uh let me know if i'm good
+
+800
+00:33:13,200 --> 00:33:16,720
+good okay good no screen sharing yet but
+
+801
+00:33:16,720 --> 00:33:17,440
+yeah
+
+802
+00:33:17,440 --> 00:33:20,159
+okay well i'm hoping i hope this works
+
+803
+00:33:20,159 --> 00:33:20,880
+out better
+
+804
+00:33:20,880 --> 00:33:23,760
+okay um so i was at this very important
+
+805
+00:33:23,760 --> 00:33:24,159
+point
+
+806
+00:33:24,159 --> 00:33:26,240
+where uh the signature does not cover
+
+807
+00:33:26,240 --> 00:33:28,240
+the log entry itself
+
+808
+00:33:28,240 --> 00:33:30,000
+uh but it also covers all the preceding
+
+809
+00:33:30,000 --> 00:33:31,440
+log entries
+
+810
+00:33:31,440 --> 00:33:34,640
+uh and so when you know a
+
+811
+00:33:34,640 --> 00:33:37,679
+adds this modification to off py to
+
+812
+00:33:37,679 --> 00:33:40,640
+the log it signs the log record itself
+
+813
+00:33:40,640 --> 00:33:42,080
+plus the preceding lock
+
+814
+00:33:42,080 --> 00:33:43,279
+records and you can think about this
+
+815
+00:33:43,279 --> 00:33:45,120
+that the receiving log is maybe
+
+816
+00:33:45,120 --> 00:33:47,120
+represented by the content of the
+
+817
+00:33:47,120 --> 00:33:48,159
+preceding
+
+818
+00:33:48,159 --> 00:33:51,360
+log is a cryptographic hash and
+
+819
+00:33:51,360 --> 00:33:54,480
+uh in the record basically uh of the
+
+820
+00:33:54,480 --> 00:33:55,360
+modification
+
+821
+00:33:55,360 --> 00:33:58,399
+to off top ui you know the uh
+
+822
+00:33:58,399 --> 00:34:00,480
+the cryptographic hash the proceeding
+
+823
+00:34:00,480 --> 00:34:02,799
+part of the log is uh included and
+
+824
+00:34:02,799 --> 00:34:04,640
+covered by the signature just to be
+
+825
+00:34:04,640 --> 00:34:06,240
+clear we still can't see the
+
+826
+00:34:06,240 --> 00:34:08,800
+screen ah i can can't see the screen oh
+
+827
+00:34:08,800 --> 00:34:10,079
+good
+
+828
+00:34:10,079 --> 00:34:11,599
+well the screen hasn't changed yet but
+
+829
+00:34:11,599 --> 00:34:14,320
+uh let me uh
+
+830
+00:34:14,320 --> 00:34:17,919
+see if i can do something about that
+
+831
+00:34:17,919 --> 00:34:21,200
+oh yeah i guess huh
+
+832
+00:34:21,200 --> 00:34:22,399
+zoom still thinks that there's actually
+
+833
+00:34:22,399 --> 00:34:24,320
+sharing the screen but it doesn't look
+
+834
+00:34:24,320 --> 00:34:35,119
+like it actually is
+
+835
+00:34:35,119 --> 00:34:38,879
+how about this yep you can see now
+
+836
+00:34:38,879 --> 00:34:41,599
+okay thank you okay so i didn't change
+
+837
+00:34:41,599 --> 00:34:42,480
+anything yet
+
+838
+00:34:42,480 --> 00:34:43,679
+other than i think i was going to draw
+
+839
+00:34:43,679 --> 00:34:45,839
+the next era which basically when these
+
+840
+00:34:45,839 --> 00:34:46,480
+signs
+
+841
+00:34:46,480 --> 00:34:47,760
+you know it actually covering all the
+
+842
+00:34:47,760 --> 00:34:50,320
+preceding entries too
+
+843
+00:34:50,320 --> 00:34:52,399
+and this is sort of good correct because
+
+844
+00:34:52,399 --> 00:34:53,520
+uh when
+
+845
+00:34:53,520 --> 00:34:57,440
+uh uh the client you know c
+
+846
+00:34:57,440 --> 00:34:59,280
+actually receives you know or gets
+
+847
+00:34:59,280 --> 00:35:01,680
+actually sees the walk entry for b
+
+848
+00:35:01,680 --> 00:35:05,839
+then it is impossible for the server to
+
+849
+00:35:05,839 --> 00:35:06,320
+drop
+
+850
+00:35:06,320 --> 00:35:09,359
+you know the log entry of a because you
+
+851
+00:35:09,359 --> 00:35:11,280
+know that will be detected when cx
+
+852
+00:35:11,280 --> 00:35:11,920
+detects the
+
+853
+00:35:11,920 --> 00:35:15,200
+signature on the log entry of b and so
+
+854
+00:35:15,200 --> 00:35:16,640
+we already made sort of a big step
+
+855
+00:35:16,640 --> 00:35:17,440
+forward
+
+856
+00:35:17,440 --> 00:35:20,640
+uh in the sense that uh it's much harder
+
+857
+00:35:20,640 --> 00:35:22,960
+for the server now to selectively
+
+858
+00:35:22,960 --> 00:35:26,240
+uh draw block entries so that that so
+
+859
+00:35:26,240 --> 00:35:26,800
+that we're
+
+860
+00:35:26,800 --> 00:35:28,480
+pretty good pretty good shape you know
+
+861
+00:35:28,480 --> 00:35:36,470
+the server cannot drop a
+
+862
+00:35:36,480 --> 00:35:39,829
+and keep
+
+863
+00:35:39,839 --> 00:35:44,240
+these modifications
+
+864
+00:35:44,240 --> 00:35:46,320
+so that's actually a big big big step
+
+865
+00:35:46,320 --> 00:35:48,079
+forward and so let's just look a little
+
+866
+00:35:48,079 --> 00:35:49,040
+bit more in detail
+
+867
+00:35:49,040 --> 00:35:50,800
+how this actually is going to play out
+
+868
+00:35:50,800 --> 00:35:53,760
+so we're the client c
+
+869
+00:35:53,760 --> 00:35:56,400
+and you know we're fetching uh the log
+
+870
+00:35:56,400 --> 00:35:58,240
+to basically roll out you know the
+
+871
+00:35:58,240 --> 00:35:59,599
+distribution of the software or to
+
+872
+00:35:59,599 --> 00:36:01,599
+install it on a particular machine
+
+873
+00:36:01,599 --> 00:36:03,839
+the first thing the client does it
+
+874
+00:36:03,839 --> 00:36:04,640
+actually
+
+875
+00:36:04,640 --> 00:36:13,839
+checks all the signatures
+
+876
+00:36:13,839 --> 00:36:15,839
+and uh you know always the question of
+
+877
+00:36:15,839 --> 00:36:17,520
+course is like when you know you want to
+
+878
+00:36:17,520 --> 00:36:19,119
+check the signature log entry you know
+
+879
+00:36:19,119 --> 00:36:21,040
+which public key do you use
+
+880
+00:36:21,040 --> 00:36:23,280
+uh and uh because you want to make sure
+
+881
+00:36:23,280 --> 00:36:25,040
+that uh
+
+882
+00:36:25,040 --> 00:36:27,200
+you're not being tricked in accepting a
+
+883
+00:36:27,200 --> 00:36:29,040
+sick mirror or
+
+884
+00:36:29,040 --> 00:36:30,480
+a modification by a but it turns out
+
+885
+00:36:30,480 --> 00:36:31,680
+that actually a was not the person
+
+886
+00:36:31,680 --> 00:36:32,079
+actually
+
+887
+00:36:32,079 --> 00:36:33,839
+who signed it and it turns out that
+
+888
+00:36:33,839 --> 00:36:36,400
+basically uh
+
+889
+00:36:36,400 --> 00:36:38,400
+to figure out like which key to use to
+
+890
+00:36:38,400 --> 00:36:39,839
+actually verify
+
+891
+00:36:39,839 --> 00:36:43,280
+the signature the the key you use is the
+
+892
+00:36:43,280 --> 00:36:45,200
+owner of the file
+
+893
+00:36:45,200 --> 00:36:48,160
+so the public key needs to correspond to
+
+894
+00:36:48,160 --> 00:36:50,800
+the owner of the file
+
+895
+00:36:50,800 --> 00:36:54,079
+and ignoring groups for now uh you know
+
+896
+00:36:54,079 --> 00:36:55,680
+basically only the owner of the file is
+
+897
+00:36:55,680 --> 00:36:57,839
+allowed to modify a file
+
+898
+00:36:57,839 --> 00:37:00,240
+so for this for simple for slightly
+
+899
+00:37:00,240 --> 00:37:01,520
+simplified you know we could think about
+
+900
+00:37:01,520 --> 00:37:02,400
+it the
+
+901
+00:37:02,400 --> 00:37:05,280
+off the ui is owned by a and the id of
+
+902
+00:37:05,280 --> 00:37:07,040
+the file is basically the public key of
+
+903
+00:37:07,040 --> 00:37:08,000
+a
+
+904
+00:37:08,000 --> 00:37:11,040
+and so we know which
+
+905
+00:37:11,040 --> 00:37:14,160
+public key to use and
+
+906
+00:37:14,160 --> 00:37:17,200
+and can verify the signature with it and
+
+907
+00:37:17,200 --> 00:37:17,680
+so
+
+908
+00:37:17,680 --> 00:37:19,040
+if somebody else you know makes a
+
+909
+00:37:19,040 --> 00:37:20,960
+modification that pretends to be a
+
+910
+00:37:20,960 --> 00:37:23,440
+that actually is not going to check out
+
+911
+00:37:23,440 --> 00:37:24,880
+so it's really only a that can actually
+
+912
+00:37:24,880 --> 00:37:28,400
+make the modifications and similar for b
+
+913
+00:37:28,400 --> 00:37:30,800
+so that's part of the you know one thing
+
+914
+00:37:30,800 --> 00:37:31,920
+that's actually clever
+
+915
+00:37:31,920 --> 00:37:33,839
+about sunder which i'm not really going
+
+916
+00:37:33,839 --> 00:37:35,520
+to be talking about in some sense the
+
+917
+00:37:35,520 --> 00:37:37,440
+file system is actually doubling both as
+
+918
+00:37:37,440 --> 00:37:38,560
+a file system as
+
+919
+00:37:38,560 --> 00:37:42,960
+and as a public key publicly uh
+
+920
+00:37:42,960 --> 00:37:44,560
+infrastructure distribution
+
+921
+00:37:44,560 --> 00:37:46,320
+infrastructure
+
+922
+00:37:46,320 --> 00:37:48,160
+and so it is actually possible to do
+
+923
+00:37:48,160 --> 00:37:50,000
+something basically reliably determine
+
+924
+00:37:50,000 --> 00:37:51,440
+like you know which user has which
+
+925
+00:37:51,440 --> 00:37:53,520
+public key
+
+926
+00:37:53,520 --> 00:37:54,800
+but i'm not really going to talk about
+
+927
+00:37:54,800 --> 00:37:56,160
+this i really want to focus on the
+
+928
+00:37:56,160 --> 00:37:57,040
+consistency
+
+929
+00:37:57,040 --> 00:37:59,359
+aspects and the more distributed systems
+
+930
+00:37:59,359 --> 00:38:00,880
+aspects
+
+931
+00:38:00,880 --> 00:38:03,680
+the second thing that the client does is
+
+932
+00:38:03,680 --> 00:38:06,390
+check
+
+933
+00:38:06,400 --> 00:38:13,270
+its own last entry
+
+934
+00:38:13,280 --> 00:38:14,960
+and this is to protect you know the
+
+935
+00:38:14,960 --> 00:38:16,720
+client from actually being rolled back
+
+936
+00:38:16,720 --> 00:38:18,160
+by the server in time
+
+937
+00:38:18,160 --> 00:38:20,320
+so the server can't actually by if the
+
+938
+00:38:20,320 --> 00:38:22,240
+client checks always his last entry
+
+939
+00:38:22,240 --> 00:38:24,640
+if his last entry is in the log still
+
+940
+00:38:24,640 --> 00:38:26,640
+then you know the only way forward for
+
+941
+00:38:26,640 --> 00:38:27,119
+the
+
+942
+00:38:27,119 --> 00:38:29,839
+attacker uh is to actually enroll the
+
+943
+00:38:29,839 --> 00:38:30,720
+file system for
+
+944
+00:38:30,720 --> 00:38:33,040
+it can roll backwards so c will check
+
+945
+00:38:33,040 --> 00:38:34,480
+whether a venue of its previous
+
+946
+00:38:34,480 --> 00:38:35,839
+operations are in it
+
+947
+00:38:35,839 --> 00:38:37,680
+and you know confirm that they're still
+
+948
+00:38:37,680 --> 00:38:39,440
+in it
+
+949
+00:38:39,440 --> 00:38:41,200
+uh actually it's last entry still in
+
+950
+00:38:41,200 --> 00:38:44,240
+that is the question here
+
+951
+00:38:44,240 --> 00:38:47,520
+this only um i think
+
+952
+00:38:47,520 --> 00:38:50,000
+this attack from the server to roll back
+
+953
+00:38:50,000 --> 00:38:51,119
+would only work
+
+954
+00:38:51,119 --> 00:38:54,960
+if no other client wrote to the log
+
+955
+00:38:54,960 --> 00:38:58,480
+um like after
+
+956
+00:38:58,480 --> 00:39:00,560
+this client's last entry right because
+
+957
+00:39:00,560 --> 00:39:03,200
+otherwise checking signatures would
+
+958
+00:39:03,200 --> 00:39:08,230
+figure that out uh yeah although
+
+959
+00:39:08,240 --> 00:39:09,760
+let's talk about it in a second maybe i
+
+960
+00:39:09,760 --> 00:39:11,280
+mean you could always play a fork attack
+
+961
+00:39:11,280 --> 00:39:13,680
+right so you can always split you know
+
+962
+00:39:13,680 --> 00:39:15,200
+the view of the file system to multiple
+
+963
+00:39:15,200 --> 00:39:17,839
+users uh but you can at least not grow
+
+964
+00:39:17,839 --> 00:39:19,680
+back the client once the client saw a
+
+965
+00:39:19,680 --> 00:39:21,359
+particular file system
+
+966
+00:39:21,359 --> 00:39:24,400
+you can't go backwards in time now the
+
+967
+00:39:24,400 --> 00:39:25,760
+client can the server can present
+
+968
+00:39:25,760 --> 00:39:27,920
+different file systems in the future but
+
+969
+00:39:27,920 --> 00:39:30,950
+you can draw back
+
+970
+00:39:30,960 --> 00:39:35,119
+uh third part uh
+
+971
+00:39:35,119 --> 00:39:36,320
+the different like what you call
+
+972
+00:39:36,320 --> 00:39:42,079
+industries and construct the file system
+
+973
+00:39:42,079 --> 00:39:44,160
+after you know it knows that actually
+
+974
+00:39:44,160 --> 00:39:45,760
+it's not enrolled a past version of the
+
+975
+00:39:45,760 --> 00:39:46,800
+file system
+
+976
+00:39:46,800 --> 00:39:48,320
+uh it basically applies all the
+
+977
+00:39:48,320 --> 00:39:49,760
+modifications and basically builds a
+
+978
+00:39:49,760 --> 00:39:51,359
+file system tree
+
+979
+00:39:51,359 --> 00:39:54,320
+you know on the client and uh and then
+
+980
+00:39:54,320 --> 00:39:56,160
+you know before whatever operation it is
+
+981
+00:39:56,160 --> 00:39:57,680
+it wants to perform so let's say
+
+982
+00:39:57,680 --> 00:40:01,200
+in the case of uh c uh what it will do
+
+983
+00:40:01,200 --> 00:40:03,359
+is you know it will read you know uh
+
+984
+00:40:03,359 --> 00:40:04,720
+off.py
+
+985
+00:40:04,720 --> 00:40:13,510
+and append an entry to the log
+
+986
+00:40:13,520 --> 00:40:17,190
+and cite it
+
+987
+00:40:17,200 --> 00:40:19,599
+so in the case when it reads off.ui it
+
+988
+00:40:19,599 --> 00:40:20,880
+will
+
+989
+00:40:20,880 --> 00:40:22,960
+produce basically a signature an entry
+
+990
+00:40:22,960 --> 00:40:25,040
+for this log entry
+
+991
+00:40:25,040 --> 00:40:26,960
+and basically then and then the final
+
+992
+00:40:26,960 --> 00:40:28,720
+step in this protocol
+
+993
+00:40:28,720 --> 00:40:37,589
+is it uploads the log to the file server
+
+994
+00:40:37,599 --> 00:40:39,760
+and you know clearly this protocol is
+
+995
+00:40:39,760 --> 00:40:41,200
+completely impractical
+
+996
+00:40:41,200 --> 00:40:43,920
+uh and and really what it is is sort of
+
+997
+00:40:43,920 --> 00:40:45,599
+more conceptual protocol to help us
+
+998
+00:40:45,599 --> 00:40:46,640
+understand
+
+999
+00:40:46,640 --> 00:40:48,400
+uh why actually we might even be
+
+1000
+00:40:48,400 --> 00:40:50,720
+successful in achieving uh security in
+
+1001
+00:40:50,720 --> 00:40:52,400
+the context of
+
+1002
+00:40:52,400 --> 00:40:55,599
+an uh byzantine server
+
+1003
+00:40:55,599 --> 00:40:56,800
+because it would be ridiculous correct
+
+1004
+00:40:56,800 --> 00:40:59,680
+to download the log for every operation
+
+1005
+00:40:59,680 --> 00:41:01,280
+and the law contains the history of all
+
+1006
+00:41:01,280 --> 00:41:02,880
+the operations ever happened to the file
+
+1007
+00:41:02,880 --> 00:41:03,680
+system
+
+1008
+00:41:03,680 --> 00:41:05,839
+in step three you know the client
+
+1009
+00:41:05,839 --> 00:41:07,440
+actually constructs a file system at all
+
+1010
+00:41:07,440 --> 00:41:08,079
+the operator
+
+1011
+00:41:08,079 --> 00:41:09,760
+all doctors ever perform and since the
+
+1012
+00:41:09,760 --> 00:41:12,000
+beginning of time and then finally in
+
+1013
+00:41:12,000 --> 00:41:12,560
+step five
+
+1014
+00:41:12,560 --> 00:41:14,240
+uploads the whole log back to the server
+
+1015
+00:41:14,240 --> 00:41:16,000
+uh that seems completely ridiculous
+
+1016
+00:41:16,000 --> 00:41:17,920
+and it is ridiculous uh in terms of
+
+1017
+00:41:17,920 --> 00:41:19,920
+performance but it will help us
+
+1018
+00:41:19,920 --> 00:41:21,040
+understand
+
+1019
+00:41:21,040 --> 00:41:23,760
+uh you know when we sort of look at the
+
+1020
+00:41:23,760 --> 00:41:24,720
+implementation
+
+1021
+00:41:24,720 --> 00:41:27,599
+of a scheme uh where it actually has the
+
+1022
+00:41:27,599 --> 00:41:29,119
+same set of properties that this sort of
+
+1023
+00:41:29,119 --> 00:41:30,240
+conceptual
+
+1024
+00:41:30,240 --> 00:41:33,040
+design has and we'll see later you know
+
+1025
+00:41:33,040 --> 00:41:34,400
+for example in the case of
+
+1026
+00:41:34,400 --> 00:41:36,400
+bitcoin that literally does actually
+
+1027
+00:41:36,400 --> 00:41:38,160
+have a log you know since the beginning
+
+1028
+00:41:38,160 --> 00:41:39,920
+of time with all operations in it
+
+1029
+00:41:39,920 --> 00:41:43,040
+and so uh maybe it was a crazy idea
+
+1030
+00:41:43,040 --> 00:41:45,119
+maybe in the context of 2004
+
+1031
+00:41:45,119 --> 00:41:47,760
+but you know people actually do uh have
+
+1032
+00:41:47,760 --> 00:41:49,200
+these sort of sign logs and really
+
+1033
+00:41:49,200 --> 00:41:50,560
+maintain them
+
+1034
+00:41:50,560 --> 00:41:52,480
+and so in that sense you know it's not
+
+1035
+00:41:52,480 --> 00:41:54,240
+only a big conceptual idea that's where
+
+1036
+00:41:54,240 --> 00:41:58,150
+people do it in practice
+
+1037
+00:41:58,160 --> 00:42:04,309
+any questions so far
+
+1038
+00:42:04,319 --> 00:42:08,000
+okay so the one thing
+
+1039
+00:42:08,000 --> 00:42:09,920
+you know that you're uh probably
+
+1040
+00:42:09,920 --> 00:42:11,680
+wondering about and uh
+
+1041
+00:42:11,680 --> 00:42:15,200
+that was a proposed as a question for
+
+1042
+00:42:15,200 --> 00:42:17,760
+the reading today is now what is up with
+
+1043
+00:42:17,760 --> 00:42:19,119
+dispatchers you know why
+
+1044
+00:42:19,119 --> 00:42:22,720
+are the fetchers in the mark too and
+
+1045
+00:42:22,720 --> 00:42:26,560
+um and the because you might think well
+
+1046
+00:42:26,560 --> 00:42:27,520
+you know the only thing that we really
+
+1047
+00:42:27,520 --> 00:42:29,119
+care about like if we think about
+
+1048
+00:42:29,119 --> 00:42:31,920
+uh the way we care about is that only
+
+1049
+00:42:31,920 --> 00:42:32,720
+the modifications
+
+1050
+00:42:32,720 --> 00:42:33,760
+have to be in the log because they're
+
+1051
+00:42:33,760 --> 00:42:34,880
+not actually other things that actually
+
+1052
+00:42:34,880 --> 00:42:36,480
+modify the file systems reads don't
+
+1053
+00:42:36,480 --> 00:42:38,079
+really modify this file system so what
+
+1054
+00:42:38,079 --> 00:42:40,000
+is the what's the problem
+
+1055
+00:42:40,000 --> 00:42:43,119
+um and so i think i want to do a
+
+1056
+00:42:43,119 --> 00:42:44,800
+quick break out here and sort of you
+
+1057
+00:42:44,800 --> 00:42:46,000
+know you can brainstorm to each other
+
+1058
+00:42:46,000 --> 00:42:47,200
+about what you thought the answer to
+
+1059
+00:42:47,200 --> 00:42:47,599
+this
+
+1060
+00:42:47,599 --> 00:42:49,440
+particular question was and hopefully
+
+1061
+00:42:49,440 --> 00:42:51,359
+maybe uh
+
+1062
+00:42:51,359 --> 00:42:55,040
+sort of this initial uh coverage of like
+
+1063
+00:42:55,040 --> 00:42:56,000
+uh sunder
+
+1064
+00:42:56,000 --> 00:42:57,680
+you know maybe hasn't now improved your
+
+1065
+00:42:57,680 --> 00:42:59,119
+understanding uh
+
+1066
+00:42:59,119 --> 00:43:00,560
+and you know you can sort of figure out
+
+1067
+00:43:00,560 --> 00:43:01,760
+like what the answer is or talk about
+
+1068
+00:43:01,760 --> 00:43:02,640
+something else
+
+1069
+00:43:02,640 --> 00:43:04,480
+so i would like to take a you know maybe
+
+1070
+00:43:04,480 --> 00:43:06,079
+do a five minute uh
+
+1071
+00:43:06,079 --> 00:45:58,829
+breakout group
+
+1072
+00:45:58,839 --> 00:46:12,829
+yes
+
+1073
+00:46:12,839 --> 00:49:18,549
+so
+
+1074
+00:49:18,559 --> 00:49:21,839
+i'm just double checking everybody back
+
+1075
+00:49:21,839 --> 00:49:25,839
+one second thank you okay so what uh
+
+1076
+00:49:25,839 --> 00:49:26,960
+i guess i'm like let's start with the
+
+1077
+00:49:26,960 --> 00:49:29,359
+homework questions uh with no more
+
+1078
+00:49:29,359 --> 00:49:30,000
+questions
+
+1079
+00:49:30,000 --> 00:49:38,150
+why do why are the factors in your log
+
+1080
+00:49:38,160 --> 00:49:41,520
+anybody um
+
+1081
+00:49:41,520 --> 00:49:44,319
+if you have a read only server if there
+
+1082
+00:49:44,319 --> 00:49:45,280
+are no fetches
+
+1083
+00:49:45,280 --> 00:49:47,280
+this the file system can give it
+
+1084
+00:49:47,280 --> 00:49:48,640
+anything
+
+1085
+00:49:48,640 --> 00:49:51,920
+good it can give it because it
+
+1086
+00:49:51,920 --> 00:49:53,680
+because there are no fetches in the log
+
+1087
+00:49:53,680 --> 00:49:55,040
+that would mean that
+
+1088
+00:49:55,040 --> 00:49:58,480
+um there are
+
+1089
+00:49:58,480 --> 00:50:01,920
+the the read-only servers would not
+
+1090
+00:50:01,920 --> 00:50:04,880
+be doing a lot of the checks that we
+
+1091
+00:50:04,880 --> 00:50:05,920
+talked about before
+
+1092
+00:50:05,920 --> 00:50:09,040
+so they um they go back in time for
+
+1093
+00:50:09,040 --> 00:50:09,839
+example might
+
+1094
+00:50:09,839 --> 00:50:12,640
+maybe not work because it did not put
+
+1095
+00:50:12,640 --> 00:50:13,839
+anything in the log
+
+1096
+00:50:13,839 --> 00:50:16,160
+because it only fetches yeah yeah okay
+
+1097
+00:50:16,160 --> 00:50:17,280
+good good good okay so
+
+1098
+00:50:17,280 --> 00:50:19,119
+i think you're totally on the right
+
+1099
+00:50:19,119 --> 00:50:21,119
+track uh it was like trying to make it a
+
+1100
+00:50:21,119 --> 00:50:22,640
+little bit more precise
+
+1101
+00:50:22,640 --> 00:50:24,640
+or more concrete i think you know that
+
+1102
+00:50:24,640 --> 00:50:26,240
+is correct so let's assume this is the
+
+1103
+00:50:26,240 --> 00:50:28,240
+log looked like and the c's fetches are
+
+1104
+00:50:28,240 --> 00:50:29,440
+not in it
+
+1105
+00:50:29,440 --> 00:50:32,160
+um and let's you know uh so this is the
+
+1106
+00:50:32,160 --> 00:50:33,920
+the log before actually c
+
+1107
+00:50:33,920 --> 00:50:36,240
+downloads uh the log and so let's say
+
+1108
+00:50:36,240 --> 00:50:37,200
+you know we're
+
+1109
+00:50:37,200 --> 00:50:44,150
+see a catcher
+
+1110
+00:50:44,160 --> 00:50:47,599
+the file that was modified by a and
+
+1111
+00:50:47,599 --> 00:50:50,800
+basically what the server does uh the
+
+1112
+00:50:50,800 --> 00:50:53,680
+server instead of actually providing
+
+1113
+00:50:53,680 --> 00:50:55,200
+both the modifications a and b
+
+1114
+00:50:55,200 --> 00:50:57,359
+because it has it correct which a and b
+
+1115
+00:50:57,359 --> 00:50:59,520
+were done with its modifications
+
+1116
+00:50:59,520 --> 00:51:05,109
+it sends the c
+
+1117
+00:51:05,119 --> 00:51:08,800
+basically prefix
+
+1118
+00:51:08,800 --> 00:51:13,750
+since the prefix that excludes
+
+1119
+00:51:13,760 --> 00:51:16,800
+the modifications to a and b
+
+1120
+00:51:16,800 --> 00:51:22,240
+so we have mods a and b
+
+1121
+00:51:22,240 --> 00:51:24,079
+right then so c you know fetches this
+
+1122
+00:51:24,079 --> 00:51:26,720
+file uh let's fetch the log
+
+1123
+00:51:26,720 --> 00:51:28,480
+and so this is basically it's this part
+
+1124
+00:51:28,480 --> 00:51:32,470
+of the log here's the prefix
+
+1125
+00:51:32,480 --> 00:51:35,599
+uh you know the c
+
+1126
+00:51:35,599 --> 00:51:37,440
+the signature she checks whether it's
+
+1127
+00:51:37,440 --> 00:51:39,200
+proceeding operations are in it
+
+1128
+00:51:39,200 --> 00:51:40,720
+you know then they're all there because
+
+1129
+00:51:40,720 --> 00:51:42,800
+she hasn't done any other operation yet
+
+1130
+00:51:42,800 --> 00:51:44,640
+and so basically it will accept the log
+
+1131
+00:51:44,640 --> 00:51:47,119
+and the log as it is or the prefix as it
+
+1132
+00:51:47,119 --> 00:51:47,760
+is
+
+1133
+00:51:47,760 --> 00:51:50,240
+and basically returns you know after the
+
+1134
+00:51:50,240 --> 00:51:51,440
+py to whatever
+
+1135
+00:51:51,440 --> 00:51:54,400
+application that is copying the software
+
+1136
+00:51:54,400 --> 00:51:55,760
+into the machine that actually is going
+
+1137
+00:51:55,760 --> 00:51:56,400
+to run the
+
+1138
+00:51:56,400 --> 00:52:04,000
+installed software so then cefetrix
+
+1139
+00:52:04,000 --> 00:52:08,390
+bank.py
+
+1140
+00:52:08,400 --> 00:52:12,000
+and this time around the server
+
+1141
+00:52:12,000 --> 00:52:19,440
+sends the whole log
+
+1142
+00:52:19,440 --> 00:52:23,760
+and you know the c uh
+
+1143
+00:52:23,760 --> 00:52:26,160
+she looks at these uh entries and it's a
+
+1144
+00:52:26,160 --> 00:52:27,040
+valid log
+
+1145
+00:52:27,040 --> 00:52:29,920
+uh and its own operations are visually
+
+1146
+00:52:29,920 --> 00:52:31,280
+in the prefix
+
+1147
+00:52:31,280 --> 00:52:33,359
+uh since we didn't care about fetches
+
+1148
+00:52:33,359 --> 00:52:35,200
+you know it's of course not in the log
+
+1149
+00:52:35,200 --> 00:52:37,520
+um and so everything looks you know good
+
+1150
+00:52:37,520 --> 00:52:38,880
+uh you know these are valid
+
+1151
+00:52:38,880 --> 00:52:39,760
+modifications
+
+1152
+00:52:39,760 --> 00:52:43,440
+uh nothing has been changed and
+
+1153
+00:52:43,440 --> 00:52:45,839
+um and so you know civil you know
+
+1154
+00:52:45,839 --> 00:52:47,760
+without the fetish in the log
+
+1155
+00:52:47,760 --> 00:52:50,400
+c will actually accept you know this log
+
+1156
+00:52:50,400 --> 00:52:51,040
+and
+
+1157
+00:52:51,040 --> 00:52:52,800
+uh basically build a file system that
+
+1158
+00:52:52,800 --> 00:52:55,040
+has uh
+
+1159
+00:52:55,040 --> 00:52:57,040
+uh that deploy that includes the
+
+1160
+00:52:57,040 --> 00:52:58,559
+modifications to the amb
+
+1161
+00:52:58,559 --> 00:53:00,880
+and returns the result you know to the
+
+1162
+00:53:00,880 --> 00:53:05,349
+application for bank.py
+
+1163
+00:53:05,359 --> 00:53:06,880
+so that i can install it on the machine
+
+1164
+00:53:06,880 --> 00:53:08,240
+that actually is going to run you know
+
+1165
+00:53:08,240 --> 00:53:09,440
+the service
+
+1166
+00:53:09,440 --> 00:53:11,359
+and as you can see now we're sort of in
+
+1167
+00:53:11,359 --> 00:53:13,200
+a bad situation correct because
+
+1168
+00:53:13,200 --> 00:53:18,160
+we took the old version of off.py
+
+1169
+00:53:18,160 --> 00:53:22,870
+and the new version of banker to pui
+
+1170
+00:53:22,880 --> 00:53:24,800
+and the one way you can think about this
+
+1171
+00:53:24,800 --> 00:53:26,240
+is that you know from
+
+1172
+00:53:26,240 --> 00:53:28,880
+you know c's perspective uh what really
+
+1173
+00:53:28,880 --> 00:53:29,280
+seemed to
+
+1174
+00:53:29,280 --> 00:53:31,280
+have happened is that i don't know while
+
+1175
+00:53:31,280 --> 00:53:32,319
+uh
+
+1176
+00:53:32,319 --> 00:53:35,680
+uh while you know it was uh
+
+1177
+00:53:35,680 --> 00:53:37,839
+reading off the py you know there were
+
+1178
+00:53:37,839 --> 00:53:39,520
+concurrent modifications to
+
+1179
+00:53:39,520 --> 00:53:41,359
+a and b and just happened basically at
+
+1180
+00:53:41,359 --> 00:53:43,119
+the same time or at least the server is
+
+1181
+00:53:43,119 --> 00:53:45,520
+pretending it happens at the same time
+
+1182
+00:53:45,520 --> 00:53:48,800
+and so and so it gets confused or it
+
+1183
+00:53:48,800 --> 00:53:49,760
+can't detect
+
+1184
+00:53:49,760 --> 00:53:51,440
+that in fact you know these applications
+
+1185
+00:53:51,440 --> 00:53:53,200
+were did happen before
+
+1186
+00:53:53,200 --> 00:53:56,400
+anytime so this is the this is the
+
+1187
+00:53:56,400 --> 00:53:58,000
+problem that you know basically
+
+1188
+00:53:58,000 --> 00:54:00,079
+putting the fetches in the log sulfur
+
+1189
+00:54:00,079 --> 00:54:01,040
+sauce
+
+1190
+00:54:01,040 --> 00:54:03,359
+and it's like let's make that actually
+
+1191
+00:54:03,359 --> 00:54:04,960
+uh just
+
+1192
+00:54:04,960 --> 00:54:08,150
+also concrete
+
+1193
+00:54:08,160 --> 00:54:10,800
+uh and so see why actually this problem
+
+1194
+00:54:10,800 --> 00:54:12,079
+is uh
+
+1195
+00:54:12,079 --> 00:54:15,359
+solved in that case because i i had a
+
+1196
+00:54:15,359 --> 00:54:16,000
+question
+
+1197
+00:54:16,000 --> 00:54:20,079
+yep um so i i'm having a little trouble
+
+1198
+00:54:20,079 --> 00:54:21,119
+understand like
+
+1199
+00:54:21,119 --> 00:54:24,319
+understanding what the um like
+
+1200
+00:54:24,319 --> 00:54:28,160
+sort of like um the interface like
+
+1201
+00:54:28,160 --> 00:54:31,280
+for for fetch and modify is like what
+
+1202
+00:54:31,280 --> 00:54:33,760
+um i i thought you fetched pretty much
+
+1203
+00:54:33,760 --> 00:54:34,960
+like the whole
+
+1204
+00:54:34,960 --> 00:54:37,119
+tree and had to rebuild the whole file
+
+1205
+00:54:37,119 --> 00:54:38,160
+system
+
+1206
+00:54:38,160 --> 00:54:41,839
+a basic example um but in this slide
+
+1207
+00:54:41,839 --> 00:54:43,680
+before you're fetching like specific
+
+1208
+00:54:43,680 --> 00:54:46,710
+files
+
+1209
+00:54:46,720 --> 00:54:48,240
+the server is the one that returns the
+
+1210
+00:54:48,240 --> 00:54:49,760
+log correct right
+
+1211
+00:54:49,760 --> 00:54:51,280
+so the server can decide you know what
+
+1212
+00:54:51,280 --> 00:54:53,119
+entries to include yeah
+
+1213
+00:54:53,119 --> 00:54:54,799
+and we're already seeing that it can
+
+1214
+00:54:54,799 --> 00:54:56,319
+they can't really delete anything out of
+
+1215
+00:54:56,319 --> 00:54:57,680
+the middle of the lock right that's not
+
+1216
+00:54:57,680 --> 00:54:59,040
+really possible
+
+1217
+00:54:59,040 --> 00:55:00,640
+right it's always send a prefix of the
+
+1218
+00:55:00,640 --> 00:55:02,319
+log because the prefix is always
+
+1219
+00:55:02,319 --> 00:55:04,000
+consistent with itself
+
+1220
+00:55:04,000 --> 00:55:07,599
+yeah and so in this first case
+
+1221
+00:55:07,599 --> 00:55:09,760
+correct it sent the prefix and in the
+
+1222
+00:55:09,760 --> 00:55:11,680
+second case it's in the whole walk
+
+1223
+00:55:11,680 --> 00:55:13,760
+yeah and so the server can decide to do
+
+1224
+00:55:13,760 --> 00:55:14,960
+that right because there's like nothing
+
+1225
+00:55:14,960 --> 00:55:16,079
+that the client can
+
+1226
+00:55:16,079 --> 00:55:18,079
+or at least have like so far you know
+
+1227
+00:55:18,079 --> 00:55:19,359
+discussed there's nothing that the
+
+1228
+00:55:19,359 --> 00:55:19,760
+client
+
+1229
+00:55:19,760 --> 00:55:21,119
+how the client could detect that it
+
+1230
+00:55:21,119 --> 00:55:23,040
+didn't get like the whole log
+
+1231
+00:55:23,040 --> 00:55:25,680
+right right i i my question is more
+
+1232
+00:55:25,680 --> 00:55:26,720
+towards like
+
+1233
+00:55:26,720 --> 00:55:28,960
+what the interface is for for clients to
+
+1234
+00:55:28,960 --> 00:55:31,200
+use like fetch and modify like
+
+1235
+00:55:31,200 --> 00:55:33,359
+like because i thought initially i
+
+1236
+00:55:33,359 --> 00:55:34,799
+thought okay like fetch
+
+1237
+00:55:34,799 --> 00:55:37,280
+fetches like the whole file system no no
+
+1238
+00:55:37,280 --> 00:55:37,920
+no
+
+1239
+00:55:37,920 --> 00:55:40,960
+it's a single file okay and
+
+1240
+00:55:40,960 --> 00:55:42,880
+and so basically what effects does is it
+
+1241
+00:55:42,880 --> 00:55:44,400
+gets the law again like modifications
+
+1242
+00:55:44,400 --> 00:55:46,000
+defense okay so modifications are all
+
+1243
+00:55:46,000 --> 00:55:48,160
+the operations and modify the file
+
+1244
+00:55:48,160 --> 00:55:49,839
+and like if you go back to a slide a
+
+1245
+00:55:49,839 --> 00:55:51,440
+little bit earlier you know in the
+
+1246
+00:55:51,440 --> 00:55:53,280
+modification record it says explicitly
+
+1247
+00:55:53,280 --> 00:55:54,000
+which file
+
+1248
+00:55:54,000 --> 00:55:57,440
+is being modified and you know
+
+1249
+00:55:57,440 --> 00:55:58,799
+what's being cited similarly in the
+
+1250
+00:55:58,799 --> 00:56:00,640
+fetch actually it says with file like so
+
+1251
+00:56:00,640 --> 00:56:03,510
+this client shop
+
+1252
+00:56:03,520 --> 00:56:07,520
+okay and then so so so
+
+1253
+00:56:07,520 --> 00:56:10,720
+for a fetch like a client goes through
+
+1254
+00:56:10,720 --> 00:56:13,599
+the log but only looks at yeah the final
+
+1255
+00:56:13,599 --> 00:56:14,960
+thing it does is actually read the file
+
+1256
+00:56:14,960 --> 00:56:16,480
+that actually is looking for
+
+1257
+00:56:16,480 --> 00:56:18,400
+okay but does it check every single
+
+1258
+00:56:18,400 --> 00:56:19,920
+entry in the log anyways
+
+1259
+00:56:19,920 --> 00:56:22,960
+for the signature yeah yeah okay the
+
+1260
+00:56:22,960 --> 00:56:24,240
+first step is always
+
+1261
+00:56:24,240 --> 00:56:27,200
+check the whole log go for make sure
+
+1262
+00:56:27,200 --> 00:56:28,960
+that your last you know
+
+1263
+00:56:28,960 --> 00:56:30,319
+operations in it whether it's a factory
+
+1264
+00:56:30,319 --> 00:56:32,400
+or modified uh although
+
+1265
+00:56:32,400 --> 00:56:34,960
+in this broken scheme you know we we
+
+1266
+00:56:34,960 --> 00:56:36,160
+drop the fetches
+
+1267
+00:56:36,160 --> 00:56:38,799
+uh it applies all the it checks all the
+
+1268
+00:56:38,799 --> 00:56:39,839
+signatures
+
+1269
+00:56:39,839 --> 00:56:42,960
+and then it builds up uh the file system
+
+1270
+00:56:42,960 --> 00:56:44,480
+by replaying the log from the beginning
+
+1271
+00:56:44,480 --> 00:56:46,079
+of time and get a file system
+
+1272
+00:56:46,079 --> 00:56:48,240
+and then it does its operation and so in
+
+1273
+00:56:48,240 --> 00:56:49,680
+this case the operation is actually
+
+1274
+00:56:49,680 --> 00:56:52,400
+fetched off.py is basically reading it
+
+1275
+00:56:52,400 --> 00:56:54,400
+okay the reason you know basically we
+
+1276
+00:56:54,400 --> 00:56:55,680
+talked about fetch and modify
+
+1277
+00:56:55,680 --> 00:56:57,599
+is because all operations are basically
+
+1278
+00:56:57,599 --> 00:56:59,200
+following one or two camps either it's a
+
+1279
+00:56:59,200 --> 00:57:00,319
+fetch
+
+1280
+00:57:00,319 --> 00:57:03,280
+or it is a modification operation like
+
+1281
+00:57:03,280 --> 00:57:05,200
+writing a file creating a file those are
+
+1282
+00:57:05,200 --> 00:57:05,599
+all
+
+1283
+00:57:05,599 --> 00:57:07,599
+modification operations the fetch
+
+1284
+00:57:07,599 --> 00:57:10,160
+operations are reading a file maybe
+
+1285
+00:57:10,160 --> 00:57:12,640
+lsn directory spata file that kind of
+
+1286
+00:57:12,640 --> 00:57:13,680
+thing
+
+1287
+00:57:13,680 --> 00:57:17,920
+okay and then the modify is also like
+
+1288
+00:57:17,920 --> 00:57:21,520
+a modified like doesn't fetch
+
+1289
+00:57:21,520 --> 00:57:24,640
+the okay also fetches the log but then
+
+1290
+00:57:24,640 --> 00:57:26,880
+builds the file system yeah yeah so
+
+1291
+00:57:26,880 --> 00:57:28,640
+maybe the fetcher here i'm using fetch i
+
+1292
+00:57:28,640 --> 00:57:29,680
+guess in two ways
+
+1293
+00:57:29,680 --> 00:57:32,240
+one describe read-only operations and
+
+1294
+00:57:32,240 --> 00:57:33,839
+actually to get you know to obtain or
+
+1295
+00:57:33,839 --> 00:57:36,160
+receive the log from the server
+
+1296
+00:57:36,160 --> 00:57:38,960
+okay but then modify modifies also one
+
+1297
+00:57:38,960 --> 00:57:40,319
+single file
+
+1298
+00:57:40,319 --> 00:57:42,559
+yes yeah for every modification in the
+
+1299
+00:57:42,559 --> 00:57:43,920
+file system you're going to have a lock
+
+1300
+00:57:43,920 --> 00:57:44,799
+entry
+
+1301
+00:57:44,799 --> 00:57:47,839
+okay thanks
+
+1302
+00:57:47,839 --> 00:57:51,680
+um sorry i also have a question i'm
+
+1303
+00:57:51,680 --> 00:57:54,480
+i i don't really understand why this
+
+1304
+00:57:54,480 --> 00:57:56,799
+scenario is a problem
+
+1305
+00:57:56,799 --> 00:58:00,160
+because as you said it's it's possible
+
+1306
+00:58:00,160 --> 00:58:01,839
+like from the perspective of the client
+
+1307
+00:58:01,839 --> 00:58:03,440
+it may well be that
+
+1308
+00:58:03,440 --> 00:58:08,000
+amb got uh created or modified
+
+1309
+00:58:08,000 --> 00:58:10,319
+from the last fetch yeah in principle it
+
+1310
+00:58:10,319 --> 00:58:11,680
+could have happened correct that was
+
+1311
+00:58:11,680 --> 00:58:12,960
+recovering modification
+
+1312
+00:58:12,960 --> 00:58:15,839
+we do know because like we were sort of
+
+1313
+00:58:15,839 --> 00:58:17,119
+look from the top
+
+1314
+00:58:17,119 --> 00:58:18,960
+and we know that basically c you read
+
+1315
+00:58:18,960 --> 00:58:22,720
+the file after a and b modified it
+
+1316
+00:58:22,720 --> 00:58:24,880
+but the server can pretend as if it
+
+1317
+00:58:24,880 --> 00:58:26,079
+actually happened concurrently
+
+1318
+00:58:26,079 --> 00:58:28,559
+and and in a second we'll see that if we
+
+1319
+00:58:28,559 --> 00:58:29,839
+stick the fetches in the log
+
+1320
+00:58:29,839 --> 00:58:33,200
+the server cannot pretend to do that
+
+1321
+00:58:33,200 --> 00:58:35,760
+okay but even if the server pretends
+
+1322
+00:58:35,760 --> 00:58:36,559
+that
+
+1323
+00:58:36,559 --> 00:58:39,920
+does it even is that even a
+
+1324
+00:58:39,920 --> 00:58:41,760
+problem does it break anything because
+
+1325
+00:58:41,760 --> 00:58:43,040
+the plan can
+
+1326
+00:58:43,040 --> 00:58:44,720
+yeah this is the example where it shows
+
+1327
+00:58:44,720 --> 00:58:46,240
+that it breaks something correct
+
+1328
+00:58:46,240 --> 00:58:50,160
+like step one you know c fetches off.py
+
+1329
+00:58:50,160 --> 00:58:53,040
+the server gave it one you know as far
+
+1330
+00:58:53,040 --> 00:58:54,000
+as the fetch
+
+1331
+00:58:54,000 --> 00:58:56,799
+it gave it the prefix and so the client
+
+1332
+00:58:56,799 --> 00:58:58,480
+constructed the file system executed the
+
+1333
+00:58:58,480 --> 00:58:59,119
+operation
+
+1334
+00:58:59,119 --> 00:59:01,440
+returned off the py to the application
+
+1335
+00:59:01,440 --> 00:59:02,240
+that the and
+
+1336
+00:59:02,240 --> 00:59:03,359
+installed the software around the
+
+1337
+00:59:03,359 --> 00:59:05,760
+machine just to make it very crisp
+
+1338
+00:59:05,760 --> 00:59:08,559
+so now the first reading of the py that
+
+1339
+00:59:08,559 --> 00:59:09,839
+operation is done
+
+1340
+00:59:09,839 --> 00:59:12,799
+right finished already executed and has
+
+1341
+00:59:12,799 --> 00:59:13,440
+installed
+
+1342
+00:59:13,440 --> 00:59:16,839
+the old version of after py on the
+
+1343
+00:59:16,839 --> 00:59:18,640
+machine
+
+1344
+00:59:18,640 --> 00:59:20,640
+then the client you know can fetches
+
+1345
+00:59:20,640 --> 00:59:22,960
+bank dot py
+
+1346
+00:59:22,960 --> 00:59:26,240
+now the server actually uh the client or
+
+1347
+00:59:26,240 --> 00:59:28,640
+the application wants to read bank.by
+
+1348
+00:59:28,640 --> 00:59:30,319
+so the client fetches the log from the
+
+1349
+00:59:30,319 --> 00:59:32,640
+server or ask the server please give me
+
+1350
+00:59:32,640 --> 00:59:33,520
+the log
+
+1351
+00:59:33,520 --> 00:59:34,960
+the server this time around gets the
+
+1352
+00:59:34,960 --> 00:59:36,640
+whole log and not
+
+1353
+00:59:36,640 --> 00:59:39,839
+just the prefix yeah but you know builds
+
+1354
+00:59:39,839 --> 00:59:40,960
+up the whole file system
+
+1355
+00:59:40,960 --> 00:59:44,799
+and returns bankwy to the application
+
+1356
+00:59:44,799 --> 00:59:48,319
+but in like i wouldn't this happen in an
+
+1357
+00:59:48,319 --> 00:59:50,160
+incorrect implementation of the client
+
+1358
+00:59:50,160 --> 00:59:51,200
+because if the client
+
+1359
+00:59:51,200 --> 00:59:54,559
+finds that receives the log and it sees
+
+1360
+00:59:54,559 --> 00:59:56,240
+an additional modification on
+
+1361
+00:59:56,240 --> 00:59:59,680
+a if the client knows that its logic
+
+1362
+00:59:59,680 --> 01:00:00,559
+depends on
+
+1363
+01:00:00,559 --> 01:00:02,799
+a and b being in sync it will also fetch
+
+1364
+01:00:02,799 --> 01:00:04,000
+a again
+
+1365
+01:00:04,000 --> 01:00:05,760
+yeah yeah okay so the the there's a
+
+1366
+01:00:05,760 --> 01:00:08,240
+great question c doesn't know
+
+1367
+01:00:08,240 --> 01:00:12,390
+correct that um
+
+1368
+01:00:12,400 --> 01:00:16,880
+ac okay in this particular scenario
+
+1369
+01:00:16,880 --> 01:00:20,559
+uh the the the we're trying to establish
+
+1370
+01:00:20,559 --> 01:00:21,920
+whether actually you know so you can
+
+1371
+01:00:21,920 --> 01:00:22,799
+determine whether actually
+
+1372
+01:00:22,799 --> 01:00:24,799
+democratization happens concurrently
+
+1373
+01:00:24,799 --> 01:00:27,440
+or in the past before it read it you
+
+1374
+01:00:27,440 --> 01:00:28,880
+know we want to be in the case that
+
+1375
+01:00:28,880 --> 01:00:30,160
+actually happened in the past because
+
+1376
+01:00:30,160 --> 01:00:32,240
+actually really happened in the past
+
+1377
+01:00:32,240 --> 01:00:34,319
+but you know what this you know uh
+
+1378
+01:00:34,319 --> 01:00:36,079
+server does it just pretends that the
+
+1379
+01:00:36,079 --> 01:00:37,599
+modification actually happened
+
+1380
+01:00:37,599 --> 01:00:40,839
+concurrently with actually seize
+
+1381
+01:00:40,839 --> 01:00:42,400
+operations uh
+
+1382
+01:00:42,400 --> 01:00:44,319
+and your c doesn't really have any way
+
+1383
+01:00:44,319 --> 01:00:45,680
+to detect that
+
+1384
+01:00:45,680 --> 01:00:48,400
+other than a new you know maybe that a
+
+1385
+01:00:48,400 --> 01:00:49,280
+you know there should have been a
+
+1386
+01:00:49,280 --> 01:00:51,440
+modification for a and b together
+
+1387
+01:00:51,440 --> 01:00:53,200
+uh but that only could have known if
+
+1388
+01:00:53,200 --> 01:00:54,559
+there's a sort of communication between
+
+1389
+01:00:54,559 --> 01:00:54,880
+c
+
+1390
+01:00:54,880 --> 01:00:57,119
+and a and b and second let's talk about
+
+1391
+01:00:57,119 --> 01:00:58,319
+that in a second but if
+
+1392
+01:00:58,319 --> 01:01:00,559
+c had not talked to a and b then you
+
+1393
+01:01:00,559 --> 01:01:01,520
+know
+
+1394
+01:01:01,520 --> 01:01:04,000
+it could have gotten uh it could could
+
+1395
+01:01:04,000 --> 01:01:04,799
+ended up in this
+
+1396
+01:01:04,799 --> 01:01:06,319
+scenario where it installed the old
+
+1397
+01:01:06,319 --> 01:01:08,960
+version and off.beyond the new version
+
+1398
+01:01:08,960 --> 01:01:10,400
+of bankwi
+
+1399
+01:01:10,400 --> 01:01:12,000
+and we'll see in a second if we stick
+
+1400
+01:01:12,000 --> 01:01:13,760
+the fetches in then this probably just
+
+1401
+01:01:13,760 --> 01:01:17,589
+cannot happen
+
+1402
+01:01:17,599 --> 01:01:19,440
+somebody asked if we timestamp
+
+1403
+01:01:19,440 --> 01:01:21,040
+everything then you know we could detect
+
+1404
+01:01:21,040 --> 01:01:21,520
+things
+
+1405
+01:01:21,520 --> 01:01:25,359
+hold that thought for a second
+
+1406
+01:01:25,359 --> 01:01:28,160
+okay let's look at the the vid fetch
+
+1407
+01:01:28,160 --> 01:01:29,040
+scenario
+
+1408
+01:01:29,040 --> 01:01:31,040
+right so and see what what actually
+
+1409
+01:01:31,040 --> 01:01:32,160
+happens in that case
+
+1410
+01:01:32,160 --> 01:01:36,789
+so client fetches
+
+1411
+01:01:36,799 --> 01:01:41,670
+once the fetch of off wpy
+
+1412
+01:01:41,680 --> 01:01:49,109
+oops what happened now
+
+1413
+01:01:49,119 --> 01:01:53,520
+hold on a sec something went wrong
+
+1414
+01:01:53,520 --> 01:02:02,870
+i presume nobody can see my screen yet
+
+1415
+01:02:02,880 --> 01:02:05,200
+it's black yeah yeah it's coming back
+
+1416
+01:02:05,200 --> 01:02:10,549
+hold on a second
+
+1417
+01:02:10,559 --> 01:02:12,559
+i definitely feel today there's a
+
+1418
+01:02:12,559 --> 01:02:14,000
+byzantine
+
+1419
+01:02:14,000 --> 01:02:32,230
+component to e24
+
+1420
+01:02:32,240 --> 01:02:33,839
+okay i need to stop sharing the screen
+
+1421
+01:02:33,839 --> 01:03:21,829
+for a second
+
+1422
+01:03:21,839 --> 01:03:28,829
+all right we're back hopefully okay
+
+1423
+01:03:28,839 --> 01:03:32,069
+um
+
+1424
+01:03:32,079 --> 01:03:35,200
+okay uh so back to uh
+
+1425
+01:03:35,200 --> 01:03:37,280
+this example uh we're now the fetches
+
+1426
+01:03:37,280 --> 01:03:42,000
+are in the log c fetches the off dot py
+
+1427
+01:03:42,000 --> 01:03:45,440
+actually let me continue right then let
+
+1428
+01:03:45,440 --> 01:03:48,870
+me
+
+1429
+01:03:48,880 --> 01:03:53,200
+save this for just uh if it fetches
+
+1430
+01:03:53,200 --> 01:03:56,839
+py uh the server you know sends the
+
+1431
+01:03:56,839 --> 01:04:03,109
+prefix
+
+1432
+01:04:03,119 --> 01:04:04,720
+so basically since you know these
+
+1433
+01:04:04,720 --> 01:04:06,160
+modifications
+
+1434
+01:04:06,160 --> 01:04:07,359
+correct because the server can just
+
+1435
+01:04:07,359 --> 01:04:09,920
+return whatever it likes
+
+1436
+01:04:09,920 --> 01:04:13,039
+then uh you know in this new plan grid
+
+1437
+01:04:13,039 --> 01:04:14,559
+where where the fetch rejections are
+
+1438
+01:04:14,559 --> 01:04:15,599
+being logged
+
+1439
+01:04:15,599 --> 01:04:18,960
+then uh c constructs the file system
+
+1440
+01:04:18,960 --> 01:04:20,240
+using a and b
+
+1441
+01:04:20,240 --> 01:04:23,039
+uh and then uh returns that of course
+
+1442
+01:04:23,039 --> 01:04:23,920
+you know off dot
+
+1443
+01:04:23,920 --> 01:04:26,720
+py to decline to the client or to the
+
+1444
+01:04:26,720 --> 01:04:27,760
+application
+
+1445
+01:04:27,760 --> 01:04:32,319
+and then it adds a fetch
+
+1446
+01:04:32,319 --> 01:04:36,150
+to the log
+
+1447
+01:04:36,160 --> 01:04:42,069
+and uploads that log
+
+1448
+01:04:42,079 --> 01:04:46,160
+to the server and then you know the
+
+1449
+01:04:46,160 --> 01:04:51,750
+it doesn't fetch off you know bank.poi
+
+1450
+01:04:51,760 --> 01:04:54,880
+and uh you know the server uh
+
+1451
+01:04:54,880 --> 01:04:58,160
+you know in our previous example the uh
+
+1452
+01:04:58,160 --> 01:05:01,520
+so first it says it said just the prefix
+
+1453
+01:05:01,520 --> 01:05:05,029
+so here's the prefix
+
+1454
+01:05:05,039 --> 01:05:08,240
+uh now you know now the client sends the
+
+1455
+01:05:08,240 --> 01:05:10,000
+whole thing
+
+1456
+01:05:10,000 --> 01:05:13,359
+right so it says the uh the whole log
+
+1457
+01:05:13,359 --> 01:05:17,760
+and uh but if the modifications are not
+
+1458
+01:05:17,760 --> 01:05:19,119
+in it
+
+1459
+01:05:19,119 --> 01:05:20,720
+so and we'll have to send the whole log
+
+1460
+01:05:20,720 --> 01:05:22,240
+well to send the whole log it must
+
+1461
+01:05:22,240 --> 01:05:24,240
+include the fetch from c
+
+1462
+01:05:24,240 --> 01:05:27,599
+right and so uh the
+
+1463
+01:05:27,599 --> 01:05:29,839
+uh and if it doesn't you know the center
+
+1464
+01:05:29,839 --> 01:05:31,599
+the effects we see
+
+1465
+01:05:31,599 --> 01:05:34,720
+uh it actually uh sees
+
+1466
+01:05:34,720 --> 01:05:37,200
+the the c is not actually not there the
+
+1467
+01:05:37,200 --> 01:05:37,839
+the
+
+1468
+01:05:37,839 --> 01:05:40,960
+the read operation and uh basically
+
+1469
+01:05:40,960 --> 01:05:44,400
+the uh client will reject uh the log
+
+1470
+01:05:44,400 --> 01:05:46,079
+because actually its own fetch operation
+
+1471
+01:05:46,079 --> 01:05:47,200
+is actually not in it
+
+1472
+01:05:47,200 --> 01:05:51,119
+so it is not possible for the
+
+1473
+01:05:51,119 --> 01:05:53,119
+server to pretend you know that to send
+
+1474
+01:05:53,119 --> 01:05:55,280
+the log later on because actually the
+
+1475
+01:05:55,280 --> 01:05:56,160
+new log
+
+1476
+01:05:56,160 --> 01:05:57,520
+should have included that fetch
+
+1477
+01:05:57,520 --> 01:05:59,680
+operation that was in it
+
+1478
+01:05:59,680 --> 01:06:02,400
+and the upgrade the c or the server
+
+1479
+01:06:02,400 --> 01:06:04,640
+cannot splice that fetch operation into
+
+1480
+01:06:04,640 --> 01:06:06,559
+here
+
+1481
+01:06:06,559 --> 01:06:07,839
+to make it consistent what actually
+
+1482
+01:06:07,839 --> 01:06:10,160
+happened before because that would be
+
+1483
+01:06:10,160 --> 01:06:11,039
+detected
+
+1484
+01:06:11,039 --> 01:06:12,559
+because you know the modifications on
+
+1485
+01:06:12,559 --> 01:06:14,799
+the records of a and b are not
+
+1486
+01:06:14,799 --> 01:06:18,319
+wouldn't check out
+
+1487
+01:06:18,319 --> 01:06:20,480
+okay so basically what what this really
+
+1488
+01:06:20,480 --> 01:06:21,599
+does is
+
+1489
+01:06:21,599 --> 01:06:23,440
+to sort of step back is that you can
+
+1490
+01:06:23,440 --> 01:06:24,640
+think about this attack
+
+1491
+01:06:24,640 --> 01:06:27,520
+that um the server sort of pretends that
+
+1492
+01:06:27,520 --> 01:06:29,119
+the modification to a and b happen
+
+1493
+01:06:29,119 --> 01:06:30,079
+concurrently
+
+1494
+01:06:30,079 --> 01:06:32,720
+uh with the c reading it uh even though
+
+1495
+01:06:32,720 --> 01:06:34,400
+we know that actually is not the case
+
+1496
+01:06:34,400 --> 01:06:37,280
+and by sticking the fetches in it uh the
+
+1497
+01:06:37,280 --> 01:06:43,430
+that attack cannot happen
+
+1498
+01:06:43,440 --> 01:06:46,799
+i have uh two questions um
+
+1499
+01:06:46,799 --> 01:06:49,039
+maybe first just if you could like
+
+1500
+01:06:49,039 --> 01:06:51,280
+define for consistency and the
+
+1501
+01:06:51,280 --> 01:06:53,200
+fetch modify consistency and then the
+
+1502
+01:06:53,200 --> 01:06:54,319
+second is
+
+1503
+01:06:54,319 --> 01:06:56,559
+in this example so what exactly is
+
+1504
+01:06:56,559 --> 01:06:58,319
+stopping the uh
+
+1505
+01:06:58,319 --> 01:07:01,839
+server from placing the fetch
+
+1506
+01:07:01,839 --> 01:07:04,240
+in the right place of the log because
+
+1507
+01:07:04,240 --> 01:07:06,240
+remember every log entry
+
+1508
+01:07:06,240 --> 01:07:09,599
+covers all its preceding entries
+
+1509
+01:07:09,599 --> 01:07:13,280
+okay so if if the server could not
+
+1510
+01:07:13,280 --> 01:07:14,000
+splice that
+
+1511
+01:07:14,000 --> 01:07:16,160
+you know fetch you know after the prefix
+
+1512
+01:07:16,160 --> 01:07:18,799
+before the modifications of amd
+
+1513
+01:07:18,799 --> 01:07:20,240
+so let's say it only wants to send the
+
+1514
+01:07:20,240 --> 01:07:22,480
+modification of a it knows the hash of
+
+1515
+01:07:22,480 --> 01:07:23,839
+the modification of a and everything
+
+1516
+01:07:23,839 --> 01:07:24,960
+preceding it
+
+1517
+01:07:24,960 --> 01:07:26,960
+and then it could insert like the fetch
+
+1518
+01:07:26,960 --> 01:07:28,880
+to see there because it knows that
+
+1519
+01:07:28,880 --> 01:07:31,440
+you could say of that yeah but then you
+
+1520
+01:07:31,440 --> 01:07:32,240
+could change that
+
+1521
+01:07:32,240 --> 01:07:33,280
+yeah but then they couldn't send the
+
+1522
+01:07:33,280 --> 01:07:36,309
+modification to b
+
+1523
+01:07:36,319 --> 01:07:37,680
+because the modification would be you
+
+1524
+01:07:37,680 --> 01:07:39,520
+know is directly after a
+
+1525
+01:07:39,520 --> 01:07:41,920
+and so a must and so he can't splice it
+
+1526
+01:07:41,920 --> 01:07:42,640
+between a and b
+
+1527
+01:07:42,640 --> 01:07:49,430
+either i see it okay
+
+1528
+01:07:49,440 --> 01:07:50,880
+sorry and what was the problem with
+
+1529
+01:07:50,880 --> 01:07:54,160
+having it where it is in the picture
+
+1530
+01:07:54,160 --> 01:07:56,720
+um well where it is and now the picture
+
+1531
+01:07:56,720 --> 01:07:58,160
+is perfect that's fine
+
+1532
+01:07:58,160 --> 01:07:59,680
+correct and in fact you know this
+
+1533
+01:07:59,680 --> 01:08:01,280
+basically suggests you know that
+
+1534
+01:08:01,280 --> 01:08:03,359
+the fetch of c actually included the
+
+1535
+01:08:03,359 --> 01:08:04,480
+modification of a b
+
+1536
+01:08:04,480 --> 01:08:07,520
+like the blue was the real log and we
+
+1537
+01:08:07,520 --> 01:08:08,640
+have the fashion to see
+
+1538
+01:08:08,640 --> 01:08:10,799
+in it and you know the everything is
+
+1539
+01:08:10,799 --> 01:08:18,550
+going to be perfect
+
+1540
+01:08:18,560 --> 01:08:20,960
+so just to clarify the definition for
+
+1541
+01:08:20,960 --> 01:08:22,000
+consistency oh yeah
+
+1542
+01:08:22,000 --> 01:08:23,120
+hold on hold on a second because this is
+
+1543
+01:08:23,120 --> 01:08:25,520
+the topic of this slide
+
+1544
+01:08:25,520 --> 01:08:26,719
+i haven't talked about the definition
+
+1545
+01:08:26,719 --> 01:08:28,319
+focuses yet i'm going to do that right
+
+1546
+01:08:28,319 --> 01:08:30,400
+now
+
+1547
+01:08:30,400 --> 01:08:36,829
+okay so we're going to talk about four
+
+1548
+01:08:36,839 --> 01:08:43,910
+consistency
+
+1549
+01:08:43,920 --> 01:08:46,960
+so uh so what we've seen right so far
+
+1550
+01:08:46,960 --> 01:08:49,600
+is that the the server cannot really
+
+1551
+01:08:49,600 --> 01:08:51,199
+manipulate the log it can only sort of
+
+1552
+01:08:51,199 --> 01:08:53,440
+send prefixes or it can hide parts
+
+1553
+01:08:53,440 --> 01:08:55,839
+you know it can hide it can send the
+
+1554
+01:08:55,839 --> 01:08:57,199
+prefix back to
+
+1555
+01:08:57,199 --> 01:08:59,279
+the client but it can't really modify
+
+1556
+01:08:59,279 --> 01:09:01,040
+the log so it just basically has an
+
+1557
+01:09:01,040 --> 01:09:02,799
+opportunity to you know sort of
+
+1558
+01:09:02,799 --> 01:09:05,920
+uh show different logs to different uh
+
+1559
+01:09:05,920 --> 01:09:07,759
+clients and that is basically what
+
+1560
+01:09:07,759 --> 01:09:10,799
+uh for consistency is and so
+
+1561
+01:09:10,799 --> 01:09:12,480
+it cannot provide you know so the kind
+
+1562
+01:09:12,480 --> 01:09:14,799
+of the server cannot provide the type of
+
+1563
+01:09:14,799 --> 01:09:16,400
+constituencies that we've seen so far in
+
+1564
+01:09:16,400 --> 01:09:18,319
+the past namely like linearizability and
+
+1565
+01:09:18,319 --> 01:09:19,600
+external consistency and things like
+
+1566
+01:09:19,600 --> 01:09:21,359
+that that's just not possible
+
+1567
+01:09:21,359 --> 01:09:23,359
+uh but they can provide this with the
+
+1568
+01:09:23,359 --> 01:09:25,040
+paper calls or introduces
+
+1569
+01:09:25,040 --> 01:09:27,520
+is for consistency and you know let me
+
+1570
+01:09:27,520 --> 01:09:28,960
+abstract a little bit away and to
+
+1571
+01:09:28,960 --> 01:09:30,480
+explain what that is
+
+1572
+01:09:30,480 --> 01:09:32,880
+so let's say we have you know client a
+
+1573
+01:09:32,880 --> 01:09:35,279
+we have the server s
+
+1574
+01:09:35,279 --> 01:09:39,349
+and you know that has a log
+
+1575
+01:09:39,359 --> 01:09:40,799
+let's say i'm just going to extract
+
+1576
+01:09:40,799 --> 01:09:42,480
+everything away it has entries a b
+
+1577
+01:09:42,480 --> 01:09:45,510
+c and d and e
+
+1578
+01:09:45,520 --> 01:09:47,839
+and uh you know a you know whatever
+
+1579
+01:09:47,839 --> 01:09:49,600
+maybe you know dependent dot entry to
+
+1580
+01:09:49,600 --> 01:09:50,319
+the log
+
+1581
+01:09:50,319 --> 01:09:53,600
+uh and you know yeah and
+
+1582
+01:09:53,600 --> 01:09:57,199
+and that's basically it um and
+
+1583
+01:09:57,199 --> 01:10:00,830
+you know maybe we have another coin b
+
+1584
+01:10:00,840 --> 01:10:04,640
+and uh what the server can do is sort of
+
+1585
+01:10:04,640 --> 01:10:06,640
+give the other client a completely
+
+1586
+01:10:06,640 --> 01:10:07,920
+different view of the world
+
+1587
+01:10:07,920 --> 01:10:09,760
+by basically have another copy of the
+
+1588
+01:10:09,760 --> 01:10:11,199
+log
+
+1589
+01:10:11,199 --> 01:10:13,199
+or its own copy or give it a different
+
+1590
+01:10:13,199 --> 01:10:14,800
+copy of the lock for example maybe that
+
+1591
+01:10:14,800 --> 01:10:17,120
+log you know contains the record a
+
+1592
+01:10:17,120 --> 01:10:19,520
+uh but then every operation that b does
+
+1593
+01:10:19,520 --> 01:10:21,120
+you know goes into this log
+
+1594
+01:10:21,120 --> 01:10:23,520
+you know b1 b2 maybe even some
+
+1595
+01:10:23,520 --> 01:10:25,040
+operations from other clients that also
+
+1596
+01:10:25,040 --> 01:10:26,000
+get this view
+
+1597
+01:10:26,000 --> 01:10:28,000
+end up in this log but they're not
+
+1598
+01:10:28,000 --> 01:10:29,679
+actually shown to a
+
+1599
+01:10:29,679 --> 01:10:32,080
+you know a basically you know a made
+
+1600
+01:10:32,080 --> 01:10:33,600
+actually also add more entries to the
+
+1601
+01:10:33,600 --> 01:10:33,920
+log
+
+1602
+01:10:33,920 --> 01:10:36,960
+like maybe it had b c d and e uh and
+
+1603
+01:10:36,960 --> 01:10:39,520
+those are not actually shown to uh d and
+
+1604
+01:10:39,520 --> 01:10:40,960
+so these two logs
+
+1605
+01:10:40,960 --> 01:10:43,920
+to to the oral view of a you know looks
+
+1606
+01:10:43,920 --> 01:10:45,120
+completely consistent
+
+1607
+01:10:45,120 --> 01:10:46,800
+because it's unaware of any of these
+
+1608
+01:10:46,800 --> 01:10:48,719
+changes and to be
+
+1609
+01:10:48,719 --> 01:10:50,080
+you know this log looks completely
+
+1610
+01:10:50,080 --> 01:10:51,600
+consistent because we're really aware of
+
+1611
+01:10:51,600 --> 01:10:52,560
+any a
+
+1612
+01:10:52,560 --> 01:10:55,199
+changes right because in this model of
+
+1613
+01:10:55,199 --> 01:10:56,000
+the world
+
+1614
+01:10:56,000 --> 01:10:58,719
+the only shared communication uh place
+
+1615
+01:10:58,719 --> 01:10:59,440
+that is there
+
+1616
+01:10:59,440 --> 01:11:01,040
+is the server you know that is sort of
+
+1617
+01:11:01,040 --> 01:11:03,120
+the you know the thing that you know
+
+1618
+01:11:03,120 --> 01:11:05,840
+uh shows you know what actually is the
+
+1619
+01:11:05,840 --> 01:11:07,600
+state of the system
+
+1620
+01:11:07,600 --> 01:11:09,840
+um and one way you can think about it is
+
+1621
+01:11:09,840 --> 01:11:11,280
+like in terms of we've talked about
+
+1622
+01:11:11,280 --> 01:11:12,960
+before this is sort of like a split
+
+1623
+01:11:12,960 --> 01:11:16,470
+brain
+
+1624
+01:11:16,480 --> 01:11:19,679
+you know basically uh you know a gets
+
+1625
+01:11:19,679 --> 01:11:20,239
+the
+
+1626
+01:11:20,239 --> 01:11:22,239
+c1 view of the world you know cooked up
+
+1627
+01:11:22,239 --> 01:11:23,840
+by uh
+
+1628
+01:11:23,840 --> 01:11:26,080
+by a log that's consistent with age view
+
+1629
+01:11:26,080 --> 01:11:27,040
+and you know b
+
+1630
+01:11:27,040 --> 01:11:28,080
+you know it gets another view of the
+
+1631
+01:11:28,080 --> 01:11:31,120
+world and basically the server keeps
+
+1632
+01:11:31,120 --> 01:11:32,880
+them sort of carefully separate
+
+1633
+01:11:32,880 --> 01:11:36,000
+and uh and therefore can pretend that
+
+1634
+01:11:36,000 --> 01:11:36,719
+you know
+
+1635
+01:11:36,719 --> 01:11:38,640
+a is looking one you know sees the left
+
+1636
+01:11:38,640 --> 01:11:40,239
+of the other underside of his brain and
+
+1637
+01:11:40,239 --> 01:11:42,400
+b he's actually the right side of s is
+
+1638
+01:11:42,400 --> 01:11:43,760
+great
+
+1639
+01:11:43,760 --> 01:11:49,910
+okay does that make sense
+
+1640
+01:11:49,920 --> 01:11:51,040
+so that's sort of what you know
+
+1641
+01:11:51,040 --> 01:11:52,320
+basically they're saying is like you
+
+1642
+01:11:52,320 --> 01:11:54,239
+know we can't really do better than ford
+
+1643
+01:11:54,239 --> 01:11:56,320
+consistency uh because it's always
+
+1644
+01:11:56,320 --> 01:11:58,320
+possible for the server
+
+1645
+01:11:58,320 --> 01:12:01,440
+to uh to basically make a copy of the
+
+1646
+01:12:01,440 --> 01:12:02,239
+log
+
+1647
+01:12:02,239 --> 01:12:04,320
+and then from then on you know present
+
+1648
+01:12:04,320 --> 01:12:05,520
+different views to these
+
+1649
+01:12:05,520 --> 01:12:08,719
+uh clients now s could not
+
+1650
+01:12:08,719 --> 01:12:10,640
+merge the two logs again correct you
+
+1651
+01:12:10,640 --> 01:12:12,400
+know these logs have to be separate you
+
+1652
+01:12:12,400 --> 01:12:12,960
+know for a
+
+1653
+01:12:12,960 --> 01:12:15,520
+and b uh because it could be it's
+
+1654
+01:12:15,520 --> 01:12:17,199
+impossible for us to sort of take
+
+1655
+01:12:17,199 --> 01:12:18,880
+you know the logs you know let them grow
+
+1656
+01:12:18,880 --> 01:12:20,800
+for a while and then basically splice
+
+1657
+01:12:20,800 --> 01:12:22,880
+these two logs together again
+
+1658
+01:12:22,880 --> 01:12:26,000
+uh you know the the the because these
+
+1659
+01:12:26,000 --> 01:12:27,280
+entries you know protect all these
+
+1660
+01:12:27,280 --> 01:12:28,880
+preceding entries these entries project
+
+1661
+01:12:28,880 --> 01:12:30,719
+all the preceding entries of those
+
+1662
+01:12:30,719 --> 01:12:32,239
+and so you can't like put them back
+
+1663
+01:12:32,239 --> 01:12:33,760
+together
+
+1664
+01:12:33,760 --> 01:12:35,040
+and because the signatures wouldn't
+
+1665
+01:12:35,040 --> 01:12:36,560
+check out because the signatures always
+
+1666
+01:12:36,560 --> 01:12:37,840
+cover the current entry for all the
+
+1667
+01:12:37,840 --> 01:12:40,320
+proceeding entries
+
+1668
+01:12:40,320 --> 01:12:41,840
+uh and so the only thing that you know
+
+1669
+01:12:41,840 --> 01:12:44,159
+basically the server can do
+
+1670
+01:12:44,159 --> 01:12:46,400
+is basically uh split the world fork the
+
+1671
+01:12:46,400 --> 01:12:47,199
+world
+
+1672
+01:12:47,199 --> 01:12:49,280
+and into different uh into two different
+
+1673
+01:12:49,280 --> 01:12:50,800
+logs
+
+1674
+01:12:50,800 --> 01:12:52,159
+so they might have a common log in the
+
+1675
+01:12:52,159 --> 01:12:54,239
+beginning then the server forks them
+
+1676
+01:12:54,239 --> 01:12:56,640
+and now the a and b basically operate in
+
+1677
+01:12:56,640 --> 01:12:59,120
+different worlds
+
+1678
+01:12:59,120 --> 01:13:02,640
+um so and that's sort of the
+
+1679
+01:13:02,640 --> 01:13:04,080
+what the definition of our consistency
+
+1680
+01:13:04,080 --> 01:13:05,600
+and that is basically the best you know
+
+1681
+01:13:05,600 --> 01:13:07,679
+this particular file system uh this this
+
+1682
+01:13:07,679 --> 01:13:09,120
+particular system can do
+
+1683
+01:13:09,120 --> 01:13:10,960
+if there's the only communication
+
+1684
+01:13:10,960 --> 01:13:15,110
+actually happens between s
+
+1685
+01:13:15,120 --> 01:13:17,199
+notice actually by the way that sort of
+
+1686
+01:13:17,199 --> 01:13:18,960
+four consistency is good enough for our
+
+1687
+01:13:18,960 --> 01:13:21,199
+particular application zookeeper correct
+
+1688
+01:13:21,199 --> 01:13:25,120
+uh because the uh either the server
+
+1689
+01:13:25,120 --> 01:13:26,159
+shows the old
+
+1690
+01:13:26,159 --> 01:13:29,360
+version you know without amd uh
+
+1691
+01:13:29,360 --> 01:13:31,679
+or you know the server shows the s you
+
+1692
+01:13:31,679 --> 01:13:37,350
+know the modification with a and b
+
+1693
+01:13:37,360 --> 01:13:39,760
+okay so what do you do it seems like you
+
+1694
+01:13:39,760 --> 01:13:41,520
+know maybe this is actually properly
+
+1695
+01:13:41,520 --> 01:13:44,560
+uh you know how do you detect forex and
+
+1696
+01:13:44,560 --> 01:13:51,990
+how could you
+
+1697
+01:13:52,000 --> 01:13:53,280
+so how do you do tech force well there's
+
+1698
+01:13:53,280 --> 01:13:55,520
+sort of two uh schemes that there's a
+
+1699
+01:13:55,520 --> 01:13:56,000
+paper
+
+1700
+01:13:56,000 --> 01:13:59,360
+uh mentions one is out-of-band
+
+1701
+01:13:59,360 --> 01:14:10,070
+communication
+
+1702
+01:14:10,080 --> 01:14:13,520
+it is pretty straightforward if you know
+
+1703
+01:14:13,520 --> 01:14:16,239
+a and b ever you know talk to each other
+
+1704
+01:14:16,239 --> 01:14:18,080
+and for example ask each other hey what
+
+1705
+01:14:18,080 --> 01:14:20,400
+is your last entry in the log
+
+1706
+01:14:20,400 --> 01:14:22,960
+and they get different answers they know
+
+1707
+01:14:22,960 --> 01:14:24,800
+you know that they have been forked
+
+1708
+01:14:24,800 --> 01:14:27,679
+uh and because either they okay they
+
+1709
+01:14:27,679 --> 01:14:29,040
+could have different answers but like at
+
+1710
+01:14:29,040 --> 01:14:29,600
+least
+
+1711
+01:14:29,600 --> 01:14:31,440
+uh that one should be the prefix of the
+
+1712
+01:14:31,440 --> 01:14:34,320
+other uh and if that's not the case
+
+1713
+01:14:34,320 --> 01:14:35,600
+then they know that they're actually
+
+1714
+01:14:35,600 --> 01:14:40,550
+being uh they're happy for it
+
+1715
+01:14:40,560 --> 01:14:43,760
+so that's one possible uh
+
+1716
+01:14:43,760 --> 01:14:45,120
+scenario that they discussed in the
+
+1717
+01:14:45,120 --> 01:14:46,800
+paper to basically
+
+1718
+01:14:46,800 --> 01:14:48,560
+share you know the the clients
+
+1719
+01:14:48,560 --> 01:14:50,800
+periodically exchanged you know the last
+
+1720
+01:14:50,800 --> 01:14:52,719
+log entries
+
+1721
+01:14:52,719 --> 01:14:54,800
+the last entry in their log another
+
+1722
+01:14:54,800 --> 01:14:56,239
+solution which actually has mentioned in
+
+1723
+01:14:56,239 --> 01:14:57,120
+the chat
+
+1724
+01:14:57,120 --> 01:15:00,880
+is uh you know introduce what they call
+
+1725
+01:15:00,880 --> 01:15:02,640
+sort of a trusted machine
+
+1726
+01:15:02,640 --> 01:15:08,310
+uh that is a timestamp box
+
+1727
+01:15:08,320 --> 01:15:10,080
+and basically like every you know a few
+
+1728
+01:15:10,080 --> 01:15:11,760
+seconds you know it actually ends
+
+1729
+01:15:11,760 --> 01:15:14,800
+uh adds a time stamp to the log
+
+1730
+01:15:14,800 --> 01:15:19,040
+and uh and every client knows that that
+
+1731
+01:15:19,040 --> 01:15:20,560
+you know basically it's a file in the
+
+1732
+01:15:20,560 --> 01:15:22,239
+file system that just contains you know
+
+1733
+01:15:22,239 --> 01:15:22,560
+the
+
+1734
+01:15:22,560 --> 01:15:25,520
+current time every time uh the timestamp
+
+1735
+01:15:25,520 --> 01:15:25,920
+block
+
+1736
+01:15:25,920 --> 01:15:27,440
+you know every couple seconds timestamp
+
+1737
+01:15:27,440 --> 01:15:29,360
+box updates that file
+
+1738
+01:15:29,360 --> 01:15:31,679
+the clients read that file and they know
+
+1739
+01:15:31,679 --> 01:15:33,120
+there should be a new modification
+
+1740
+01:15:33,120 --> 01:15:35,440
+like every couple seconds and that
+
+1741
+01:15:35,440 --> 01:15:36,880
+basically you know that
+
+1742
+01:15:36,880 --> 01:15:39,600
+that fork that contains the timestamp is
+
+1743
+01:15:39,600 --> 01:15:40,640
+sort of the
+
+1744
+01:15:40,640 --> 01:15:44,719
+forex that the the clients
+
+1745
+01:15:44,719 --> 01:15:46,719
+that the server actually has to present
+
+1746
+01:15:46,719 --> 01:15:51,590
+to the clients
+
+1747
+01:15:51,600 --> 01:15:54,719
+okay so that's the two things that
+
+1748
+01:15:54,719 --> 01:15:56,080
+actually the paper discusses
+
+1749
+01:15:56,080 --> 01:15:57,440
+and what's sort of interesting and we'll
+
+1750
+01:15:57,440 --> 01:15:59,360
+see on tuesday uh
+
+1751
+01:15:59,360 --> 01:16:01,440
+is that this you know this whole fork uh
+
+1752
+01:16:01,440 --> 01:16:03,440
+detection and fork resolution approach
+
+1753
+01:16:03,440 --> 01:16:03,679
+is
+
+1754
+01:16:03,679 --> 01:16:05,280
+sort of a key problem basically in
+
+1755
+01:16:05,280 --> 01:16:06,960
+bitcoin correct and
+
+1756
+01:16:06,960 --> 01:16:08,800
+we when we're talking tuesday about
+
+1757
+01:16:08,800 --> 01:16:10,320
+bitcoin you know we see
+
+1758
+01:16:10,320 --> 01:16:15,430
+a way basically to settle on a fork
+
+1759
+01:16:15,440 --> 01:16:17,920
+so even if the file system or the server
+
+1760
+01:16:17,920 --> 01:16:18,480
+the
+
+1761
+01:16:18,480 --> 01:16:20,400
+the byzantine servers actually have
+
+1762
+01:16:20,400 --> 01:16:21,600
+created a forex
+
+1763
+01:16:21,600 --> 01:16:23,520
+uh you know bitcoin basically has a way
+
+1764
+01:16:23,520 --> 01:16:24,880
+of just deciding well
+
+1765
+01:16:24,880 --> 01:16:26,400
+we're going to reach the consensus on
+
+1766
+01:16:26,400 --> 01:16:27,679
+like which fork we're going to actually
+
+1767
+01:16:27,679 --> 01:16:29,360
+proceed with
+
+1768
+01:16:29,360 --> 01:16:31,760
+uh and so we'll leave that up until
+
+1769
+01:16:31,760 --> 01:16:32,640
+tuesday
+
+1770
+01:16:32,640 --> 01:16:34,239
+but here's sort of a connection you know
+
+1771
+01:16:34,239 --> 01:16:35,679
+between uh
+
+1772
+01:16:35,679 --> 01:16:40,709
+you know sunder and actually bitcoin
+
+1773
+01:16:40,719 --> 01:16:49,910
+any questions about this
+
+1774
+01:16:49,920 --> 01:16:52,960
+okay okay i want to talk very quickly
+
+1775
+01:16:52,960 --> 01:16:54,080
+because i have sort of three minutes
+
+1776
+01:16:54,080 --> 01:16:54,480
+left
+
+1777
+01:16:54,480 --> 01:16:58,400
+uh about um
+
+1778
+01:16:58,400 --> 01:17:00,320
+the other so i think the key thing i
+
+1779
+01:17:00,320 --> 01:17:01,760
+would get in the paper is this actually
+
+1780
+01:17:01,760 --> 01:17:02,560
+this
+
+1781
+01:17:02,560 --> 01:17:05,520
+log conceptual view of the world uh of
+
+1782
+01:17:05,520 --> 01:17:07,040
+course you know it's impractical as i
+
+1783
+01:17:07,040 --> 01:17:08,080
+mentioned earlier
+
+1784
+01:17:08,080 --> 01:17:09,840
+and so some direction has a proposal for
+
+1785
+01:17:09,840 --> 01:17:11,120
+how to do it better
+
+1786
+01:17:11,120 --> 01:17:12,719
+uh even though like other systems like
+
+1787
+01:17:12,719 --> 01:17:14,159
+bitcoin actually do maintain the whole
+
+1788
+01:17:14,159 --> 01:17:14,960
+log
+
+1789
+01:17:14,960 --> 01:17:17,360
+and so what does something do two things
+
+1790
+01:17:17,360 --> 01:17:18,000
+better
+
+1791
+01:17:18,000 --> 01:17:19,520
+instead of actually maintaining a log
+
+1792
+01:17:19,520 --> 01:17:22,320
+you know that's actually has snapshots
+
+1793
+01:17:22,320 --> 01:17:24,800
+similar to sort of the snapshots that
+
+1794
+01:17:24,800 --> 01:17:26,719
+we've seen before you know in raft here
+
+1795
+01:17:26,719 --> 01:17:27,679
+where we
+
+1796
+01:17:27,679 --> 01:17:29,760
+construct a part of the world based on
+
+1797
+01:17:29,760 --> 01:17:31,280
+the log you know we take a snapshot and
+
+1798
+01:17:31,280 --> 01:17:33,199
+that actually forms the
+
+1799
+01:17:33,199 --> 01:17:35,840
+the current state in fact really what
+
+1800
+01:17:35,840 --> 01:17:36,719
+the
+
+1801
+01:17:36,719 --> 01:17:38,320
+sender does it actually doesn't really
+
+1802
+01:17:38,320 --> 01:17:39,760
+make literally take snapchats it really
+
+1803
+01:17:39,760 --> 01:17:41,760
+maintains a snapshot view of the file
+
+1804
+01:17:41,760 --> 01:17:42,320
+system
+
+1805
+01:17:42,320 --> 01:17:45,910
+and does it per user
+
+1806
+01:17:45,920 --> 01:17:47,520
+so one way to think about it is that the
+
+1807
+01:17:47,520 --> 01:17:49,760
+file system is sharded by user
+
+1808
+01:17:49,760 --> 01:17:52,239
+every user has its own view snapshot of
+
+1809
+01:17:52,239 --> 01:17:53,199
+the world
+
+1810
+01:17:53,199 --> 01:17:54,640
+and you know there's a little bit of a
+
+1811
+01:17:54,640 --> 01:17:56,159
+protocol to make sure that these
+
+1812
+01:17:56,159 --> 01:17:58,080
+different snapshots from different users
+
+1813
+01:17:58,080 --> 01:18:03,120
+are actually consistent uh and let me
+
+1814
+01:18:03,120 --> 01:18:05,920
+talk a little bit about uh how actually
+
+1815
+01:18:05,920 --> 01:18:07,280
+sunder actually has
+
+1816
+01:18:07,280 --> 01:18:10,719
+makes that snapshot basically
+
+1817
+01:18:10,719 --> 01:18:15,030
+in sunder uh
+
+1818
+01:18:15,040 --> 01:18:16,159
+it's on there basically there's
+
+1819
+01:18:16,159 --> 01:18:17,360
+something that's called the user eye
+
+1820
+01:18:17,360 --> 01:18:18,480
+handle
+
+1821
+01:18:18,480 --> 01:18:19,920
+and the user eye handle basically
+
+1822
+01:18:19,920 --> 01:18:22,239
+uniquely identifies snapshot in the file
+
+1823
+01:18:22,239 --> 01:18:22,960
+system
+
+1824
+01:18:22,960 --> 01:18:25,440
+and basically is a cryptographic hash of
+
+1825
+01:18:25,440 --> 01:18:26,400
+the
+
+1826
+01:18:26,400 --> 01:18:28,560
+i table which completes all the inodes
+
+1827
+01:18:28,560 --> 01:18:29,760
+in the system
+
+1828
+01:18:29,760 --> 01:18:32,960
+and you know and uh and for every i know
+
+1829
+01:18:32,960 --> 01:18:33,679
+there's a hash
+
+1830
+01:18:33,679 --> 01:18:35,679
+the inode would basically covers all the
+
+1831
+01:18:35,679 --> 01:18:37,360
+data all the blocks belong to that
+
+1832
+01:18:37,360 --> 01:18:39,040
+particular i node
+
+1833
+01:18:39,040 --> 01:18:42,080
+so for example when uh say
+
+1834
+01:18:42,080 --> 01:18:45,199
+a modifies off.by it might write one
+
+1835
+01:18:45,199 --> 01:18:46,159
+block
+
+1836
+01:18:46,159 --> 01:18:49,199
+uh the client recomputes the hash of
+
+1837
+01:18:49,199 --> 01:18:50,159
+this block
+
+1838
+01:18:50,159 --> 01:18:52,480
+updates the entry here you know updates
+
+1839
+01:18:52,480 --> 01:18:53,679
+the entry here
+
+1840
+01:18:53,679 --> 01:18:55,440
+updates the entry here and that's
+
+1841
+01:18:55,440 --> 01:18:57,199
+basically a new handle
+
+1842
+01:18:57,199 --> 01:18:59,920
+that describes basically the the capture
+
+1843
+01:18:59,920 --> 01:19:01,760
+the complete you know file system
+
+1844
+01:19:01,760 --> 01:19:03,520
+i'm going to ignore the group and the
+
+1845
+01:19:03,520 --> 01:19:04,880
+directory uh
+
+1846
+01:19:04,880 --> 01:19:07,040
+block for an item for a second so this
+
+1847
+01:19:07,040 --> 01:19:08,560
+basically gives you a complete
+
+1848
+01:19:08,560 --> 01:19:12,000
+uh checkpoint or a snapshot of
+
+1849
+01:19:12,000 --> 01:19:16,709
+user two's view of the file system
+
+1850
+01:19:16,719 --> 01:19:19,760
+now and then to deal with this issue
+
+1851
+01:19:19,760 --> 01:19:22,480
+of how to get a sort of consistency
+
+1852
+01:19:22,480 --> 01:19:24,400
+across users
+
+1853
+01:19:24,400 --> 01:19:33,830
+they have this notion of version vectors
+
+1854
+01:19:33,840 --> 01:19:35,040
+what inversion vectors is pretty
+
+1855
+01:19:35,040 --> 01:19:38,320
+straightforward every version vector has
+
+1856
+01:19:38,320 --> 01:19:40,960
+an i handle like a's i handle is in it
+
+1857
+01:19:40,960 --> 01:19:41,440
+after
+
+1858
+01:19:41,440 --> 01:19:45,600
+it modified say uh
+
+1859
+01:19:45,600 --> 01:19:49,199
+off why and then for every user in the
+
+1860
+01:19:49,199 --> 01:19:51,360
+system the version vector has
+
+1861
+01:19:51,360 --> 01:19:52,400
+a counter for the number of
+
+1862
+01:19:52,400 --> 01:19:53,840
+modifications that were made by that
+
+1863
+01:19:53,840 --> 01:19:55,600
+user so if a made
+
+1864
+01:19:55,600 --> 01:19:57,920
+this update to off.ui that counter is
+
+1865
+01:19:57,920 --> 01:19:58,800
+set to one
+
+1866
+01:19:58,800 --> 01:20:00,719
+you know b didn't make any modifications
+
+1867
+01:20:00,719 --> 01:20:02,960
+you know c didn't make any modifications
+
+1868
+01:20:02,960 --> 01:20:05,520
+they're all zero and this whole thing is
+
+1869
+01:20:05,520 --> 01:20:09,430
+silent
+
+1870
+01:20:09,440 --> 01:20:12,000
+and so when b makes this modification so
+
+1871
+01:20:12,000 --> 01:20:14,000
+we use the version vector for b
+
+1872
+01:20:14,000 --> 01:20:16,639
+gives us a version vector so b makes a
+
+1873
+01:20:16,639 --> 01:20:17,600
+version
+
+1874
+01:20:17,600 --> 01:20:20,480
+it creates a new handle that includes of
+
+1875
+01:20:20,480 --> 01:20:21,520
+course all the
+
+1876
+01:20:21,520 --> 01:20:23,679
+modifications or represent all the
+
+1877
+01:20:23,679 --> 01:20:24,880
+modifications
+
+1878
+01:20:24,880 --> 01:20:27,040
+and in its version handle it actually of
+
+1879
+01:20:27,040 --> 01:20:28,080
+an insertion vector
+
+1880
+01:20:28,080 --> 01:20:30,480
+it includes which uh how many operations
+
+1881
+01:20:30,480 --> 01:20:32,400
+are read by ed user so it will record
+
+1882
+01:20:32,400 --> 01:20:33,920
+the fact that for example
+
+1883
+01:20:33,920 --> 01:20:36,800
+that it actually saw ace modification it
+
+1884
+01:20:36,800 --> 01:20:38,639
+updates you know views to b1
+
+1885
+01:20:38,639 --> 01:20:41,360
+and c to d0 and basically assigns this
+
+1886
+01:20:41,360 --> 01:20:44,470
+whole thing
+
+1887
+01:20:44,480 --> 01:20:48,800
+and now c when c next does an operation
+
+1888
+01:20:48,800 --> 01:20:52,400
+uh wants to read you know off.py and uh
+
+1889
+01:20:52,400 --> 01:20:55,920
+fetch the and uh
+
+1890
+01:20:55,920 --> 01:20:58,400
+bank.py it basically downloads all the
+
+1891
+01:20:58,400 --> 01:20:59,440
+version vectors
+
+1892
+01:20:59,440 --> 01:21:02,320
+from every user yeah and so in this case
+
+1893
+01:21:02,320 --> 01:21:03,679
+it will get the version vectors for a
+
+1894
+01:21:03,679 --> 01:21:06,149
+and b
+
+1895
+01:21:06,159 --> 01:21:08,080
+takes the latest one which in this case
+
+1896
+01:21:08,080 --> 01:21:09,440
+is b
+
+1897
+01:21:09,440 --> 01:21:10,960
+because actually it includes all the
+
+1898
+01:21:10,960 --> 01:21:12,960
+operations of a in it
+
+1899
+01:21:12,960 --> 01:21:14,480
+and that's basically the represented
+
+1900
+01:21:14,480 --> 01:21:16,159
+version of the file system and from that
+
+1901
+01:21:16,159 --> 01:21:19,520
+version it reads you know off dot ui
+
+1902
+01:21:19,520 --> 01:21:23,990
+and bank.dui
+
+1903
+01:21:24,000 --> 01:21:25,679
+and note you know that basically it's
+
+1904
+01:21:25,679 --> 01:21:27,520
+impossible for the server
+
+1905
+01:21:27,520 --> 01:21:31,520
+to basically present uh bank the py
+
+1906
+01:21:31,520 --> 01:21:34,800
+and not after pppy because
+
+1907
+01:21:34,800 --> 01:21:36,800
+you know it cannot you know it can the
+
+1908
+01:21:36,800 --> 01:21:38,080
+only two sort of version factors that
+
+1909
+01:21:38,080 --> 01:21:39,199
+can be returned
+
+1910
+01:21:39,199 --> 01:21:40,960
+is this version vector or this version
+
+1911
+01:21:40,960 --> 01:21:43,040
+vector the version of vector a doesn't
+
+1912
+01:21:43,040 --> 01:21:44,320
+include actually the
+
+1913
+01:21:44,320 --> 01:21:48,080
+changes of bank vpy if you know c
+
+1914
+01:21:48,080 --> 01:21:49,600
+actually does get the versions of bank b
+
+1915
+01:21:49,600 --> 01:21:50,320
+to y
+
+1916
+01:21:50,320 --> 01:21:52,960
+it must actually have the versions the
+
+1917
+01:21:52,960 --> 01:21:54,719
+modification that a is made
+
+1918
+01:21:54,719 --> 01:21:55,760
+because the version vectors are
+
+1919
+01:21:55,760 --> 01:21:58,560
+constructed in that way
+
+1920
+01:21:58,560 --> 01:22:01,920
+and so that's basically the way for uh
+
+1921
+01:22:01,920 --> 01:22:05,440
+using version vectors to detect that s
+
+1922
+01:22:05,440 --> 01:22:08,560
+doesn't drop changes as we
+
+1923
+01:22:08,560 --> 01:22:10,080
+as the same way that the logging system
+
+1924
+01:22:10,080 --> 01:22:11,840
+is done
+
+1925
+01:22:11,840 --> 01:22:13,120
+okay so that's the essence of the
+
+1926
+01:22:13,120 --> 01:22:16,629
+version vector plan
+
+1927
+01:22:16,639 --> 01:22:22,709
+um so in summary
+
+1928
+01:22:22,719 --> 01:22:26,639
+okay uh byzantine participants you know
+
+1929
+01:22:26,639 --> 01:22:28,639
+sort of a problem that you have to
+
+1930
+01:22:28,639 --> 01:22:30,560
+handle in uh
+
+1931
+01:22:30,560 --> 01:22:33,910
+decentralized systems
+
+1932
+01:22:33,920 --> 01:22:35,760
+because there's no single institution
+
+1933
+01:22:35,760 --> 01:22:37,520
+that sort of uh
+
+1934
+01:22:37,520 --> 01:22:40,639
+it can be either a source of trust and
+
+1935
+01:22:40,639 --> 01:22:42,639
+we've seen this notion of some blogs
+
+1936
+01:22:42,639 --> 01:22:45,760
+as a very powerful tool
+
+1937
+01:22:45,760 --> 01:22:49,280
+to uh deal with malicious servers
+
+1938
+01:22:49,280 --> 01:22:52,480
+and as i said on on tuesday
+
+1939
+01:22:52,480 --> 01:22:53,600
+and we're going to continue this
+
+1940
+01:22:53,600 --> 01:22:55,520
+discussion and you'll see how the sort
+
+1941
+01:22:55,520 --> 01:22:56,960
+of design logs are used
+
+1942
+01:22:56,960 --> 01:23:00,239
+in uh bitcoin in particular like how for
+
+1943
+01:23:00,239 --> 01:23:03,360
+consistency or how uh the the fact that
+
+1944
+01:23:03,360 --> 01:23:04,239
+forks are sort of
+
+1945
+01:23:04,239 --> 01:23:06,880
+being created are being resolved in the
+
+1946
+01:23:06,880 --> 01:23:08,480
+case of bitcoin
+
+1947
+01:23:08,480 --> 01:23:10,719
+all right so that was it for as an
+
+1948
+01:23:10,719 --> 01:23:11,520
+introduction to
+
+1949
+01:23:11,520 --> 01:23:14,159
+decentralized systems uh and i hope the
+
+1950
+01:23:14,159 --> 01:23:15,360
+paper
+
+1951
+01:23:15,360 --> 01:23:17,679
+uh is a little bit more understandable
+
+1952
+01:23:17,679 --> 01:23:19,440
+than maybe
+
+1953
+01:23:19,440 --> 01:23:21,600
+when uh before you start reading it uh
+
+1954
+01:23:21,600 --> 01:23:23,600
+earlier this week or today
+
+1955
+01:23:23,600 --> 01:23:26,719
+okay see you on tuesday
+
+1956
+01:23:26,719 --> 01:23:28,080
+and of course if there's questions you
+
+1957
+01:23:28,080 --> 01:23:30,320
+know peacefully uh please feel free to
+
+1958
+01:23:30,320 --> 01:23:31,199
+hang around
+
+1959
+01:23:31,199 --> 01:23:33,360
+uh if you need to go somewhere else uh
+
+1960
+01:23:33,360 --> 01:23:35,840
+absolutely go somewhere else
+
+1961
+01:23:35,840 --> 01:23:38,159
+i have a question about the data
+
+1962
+01:23:38,159 --> 01:23:39,679
+structure that they use the
+
+1963
+01:23:39,679 --> 01:23:43,040
+b plus tree or whatever like what's the
+
+1964
+01:23:43,040 --> 01:23:44,480
+difference between that and
+
+1965
+01:23:44,480 --> 01:23:47,600
+like yeah like uh like a miracle dac for
+
+1966
+01:23:47,600 --> 01:23:48,159
+example
+
+1967
+01:23:48,159 --> 01:23:50,719
+oh it's a miracle data structure uh you
+
+1968
+01:23:50,719 --> 01:23:51,600
+know i think uh the
+
+1969
+01:23:51,600 --> 01:23:53,679
+person who's uh sort of credited with
+
+1970
+01:23:53,679 --> 01:23:55,199
+his id is merkel
+
+1971
+01:23:55,199 --> 01:23:56,480
+and that's why it often is called the
+
+1972
+01:23:56,480 --> 01:23:59,990
+miracle data tree
+
+1973
+01:24:00,000 --> 01:24:03,040
+so this is the same thing yeah
+
+1974
+01:24:03,040 --> 01:24:05,040
+okay yeah sunder basically uses a
+
+1975
+01:24:05,040 --> 01:24:11,669
+miracle tree
+
+1976
+01:24:11,679 --> 01:24:15,440
+um sorry when when you are verifying
+
+1977
+01:24:15,440 --> 01:24:18,719
+the um the signatures doesn't mean you
+
+1978
+01:24:18,719 --> 01:24:21,120
+have to like
+
+1979
+01:24:21,120 --> 01:24:23,360
+basically as you go if you're 100
+
+1980
+01:24:23,360 --> 01:24:24,960
+entries into the
+
+1981
+01:24:24,960 --> 01:24:28,159
+log you have to compute
+
+1982
+01:24:28,159 --> 01:24:31,199
+you know the hash of all the 100 entries
+
+1983
+01:24:31,199 --> 01:24:32,080
+concatenated
+
+1984
+01:24:32,080 --> 01:24:35,600
+and then compute and yeah so you need to
+
+1985
+01:24:35,600 --> 01:24:36,800
+keep the running hash
+
+1986
+01:24:36,800 --> 01:24:41,590
+okay let's go back to verify yes
+
+1987
+01:24:41,600 --> 01:24:45,760
+uh let's uh
+
+1988
+01:24:45,760 --> 01:24:47,199
+so here's probably a good place to talk
+
+1989
+01:24:47,199 --> 01:24:49,520
+about it uh
+
+1990
+01:24:49,520 --> 01:24:53,199
+so um so here
+
+1991
+01:24:53,199 --> 01:24:55,040
+so let's say let's say take the last
+
+1992
+01:24:55,040 --> 01:24:57,440
+entry correct
+
+1993
+01:24:57,440 --> 01:25:00,880
+um the last entry you will have a hash
+
+1994
+01:25:00,880 --> 01:25:04,320
+of the preceding entries so everything
+
+1995
+01:25:04,320 --> 01:25:05,600
+you know from the like or whatever
+
+1996
+01:25:05,600 --> 01:25:07,760
+records let's say this is zero one and
+
+1997
+01:25:07,760 --> 01:25:09,520
+two you know zero
+
+1998
+01:25:09,520 --> 01:25:12,960
+one and two or basically has the hash of
+
+1999
+01:25:12,960 --> 01:25:14,000
+the previous
+
+2000
+01:25:14,000 --> 01:25:17,990
+entry number two
+
+2001
+01:25:18,000 --> 01:25:21,040
+in it and uh that needs to be that needs
+
+2002
+01:25:21,040 --> 01:25:22,480
+to be checked
+
+2003
+01:25:22,480 --> 01:25:26,080
+and the way uh
+
+2004
+01:25:26,080 --> 01:25:28,159
+that is being checked is the you know in
+
+2005
+01:25:28,159 --> 01:25:29,520
+principle if you start really from the
+
+2006
+01:25:29,520 --> 01:25:30,560
+beginning of the world
+
+2007
+01:25:30,560 --> 01:25:31,760
+you know you would have to compute the
+
+2008
+01:25:31,760 --> 01:25:33,840
+hash of record with zero you find out
+
+2009
+01:25:33,840 --> 01:25:35,120
+what the hash is
+
+2010
+01:25:35,120 --> 01:25:37,679
+uh and uh double check you know that the
+
+2011
+01:25:37,679 --> 01:25:38,960
+uh
+
+2012
+01:25:38,960 --> 01:25:40,800
+that corresponds to the entry that's in
+
+2013
+01:25:40,800 --> 01:25:43,280
+here and that the signature is valid
+
+2014
+01:25:43,280 --> 01:25:47,199
+etc etc now of course you know in the
+
+2015
+01:25:47,199 --> 01:25:48,960
+real system you can remember most of the
+
+2016
+01:25:48,960 --> 01:25:49,840
+log
+
+2017
+01:25:49,840 --> 01:25:51,920
+and just double check that like whatever
+
+2018
+01:25:51,920 --> 01:25:55,910
+the and start from there
+
+2019
+01:25:55,920 --> 01:25:59,360
+oh it's it's inefficient okay
+
+2020
+01:25:59,360 --> 01:26:00,480
+yeah if you have to replay from the
+
+2021
+01:26:00,480 --> 01:26:02,080
+beginning of time you basically have to
+
+2022
+01:26:02,080 --> 01:26:02,480
+really
+
+2023
+01:26:02,480 --> 01:26:03,520
+validate the whole lot from the
+
+2024
+01:26:03,520 --> 01:26:06,629
+beginning of time
+
+2025
+01:26:06,639 --> 01:26:08,480
+thank you that makes sense yeah you'll
+
+2026
+01:26:08,480 --> 01:26:10,880
+see this in the bitcoin paper right
+
+2027
+01:26:10,880 --> 01:26:13,360
+so are the hashes like almost like a
+
+2028
+01:26:13,360 --> 01:26:14,080
+merkle
+
+2029
+01:26:14,080 --> 01:26:18,639
+chain like yes okay same idea
+
+2030
+01:26:18,639 --> 01:26:22,719
+so are the uh
+
+2031
+01:26:22,719 --> 01:26:26,400
+uh like if uh is this like leaf
+
+2032
+01:26:26,400 --> 01:26:29,520
+in the sort of tree or chain
+
+2033
+01:26:29,520 --> 01:26:32,239
+like uh an entire file or like blocks of
+
+2034
+01:26:32,239 --> 01:26:32,800
+a file
+
+2035
+01:26:32,800 --> 01:26:34,480
+this is a block one block so this is
+
+2036
+01:26:34,480 --> 01:26:43,430
+four five for 96 bytes
+
+2037
+01:26:43,440 --> 01:26:44,800
+and all the other hashes don't change
+
+2038
+01:26:44,800 --> 01:26:46,000
+correct so it's actually not that
+
+2039
+01:26:46,000 --> 01:26:46,800
+efficient
+
+2040
+01:26:46,800 --> 01:26:48,719
+inefficient yeah because if you only
+
+2041
+01:26:48,719 --> 01:26:50,400
+change part of the file it only
+
+2042
+01:26:50,400 --> 01:26:51,840
+rehashes that part you just have to
+
+2043
+01:26:51,840 --> 01:26:53,600
+rehash that one and then you have to
+
+2044
+01:26:53,600 --> 01:26:56,400
+recompute the hash of the tree you know
+
+2045
+01:26:56,400 --> 01:27:02,470
+all the way to the user's eye handle
+
+2046
+01:27:02,480 --> 01:27:03,840
+and the paper talks about the sort of a
+
+2047
+01:27:03,840 --> 01:27:05,199
+couple of optimizations to make this
+
+2048
+01:27:05,199 --> 01:27:06,159
+more efficient
+
+2049
+01:27:06,159 --> 01:27:08,159
+but hashing is actually generally not
+
+2050
+01:27:08,159 --> 01:27:09,600
+that expensive the signing is
+
+2051
+01:27:09,600 --> 01:27:18,239
+the more expensive part operation
+
+2052
+01:27:18,239 --> 01:27:20,159
+i had a question about version vectors
+
+2053
+01:27:20,159 --> 01:27:21,440
+yeah so
+
+2054
+01:27:21,440 --> 01:27:23,360
+uh we use version vectors to make sure
+
+2055
+01:27:23,360 --> 01:27:24,960
+that the system can't return like an old
+
+2056
+01:27:24,960 --> 01:27:25,600
+state
+
+2057
+01:27:25,600 --> 01:27:27,360
+yeah so why can't the uh why can't the
+
+2058
+01:27:27,360 --> 01:27:28,800
+system just return the old state and the
+
+2059
+01:27:28,800 --> 01:27:30,560
+old version vector if it keeps like a
+
+2060
+01:27:30,560 --> 01:27:33,679
+second copy yeah it's good fork
+
+2061
+01:27:33,679 --> 01:27:35,360
+right so so we only have four
+
+2062
+01:27:35,360 --> 01:27:37,199
+consistency then with the
+
+2063
+01:27:37,199 --> 01:27:38,719
+reversion vectors only for consistent
+
+2064
+01:27:38,719 --> 01:27:47,120
+either thunder for consistency no more
+
+2065
+01:27:47,120 --> 01:27:48,960
+so for consistency you need the
+
+2066
+01:27:48,960 --> 01:27:50,480
+timestamp
+
+2067
+01:27:50,480 --> 01:27:52,480
+before consistency i mean that you know
+
+2068
+01:27:52,480 --> 01:27:54,239
+the uh
+
+2069
+01:27:54,239 --> 01:27:58,080
+the server can fork the log
+
+2070
+01:27:58,080 --> 01:28:00,639
+at any particular point in time and
+
+2071
+01:28:00,639 --> 01:28:01,920
+present a consistent view
+
+2072
+01:28:01,920 --> 01:28:04,880
+of the uh what they can merge logs back
+
+2073
+01:28:04,880 --> 01:28:07,590
+together
+
+2074
+01:28:07,600 --> 01:28:11,360
+so really this picture that
+
+2075
+01:28:11,360 --> 01:28:14,480
+the uh server can actually construct you
+
+2076
+01:28:14,480 --> 01:28:16,000
+know different views of the world
+
+2077
+01:28:16,000 --> 01:28:18,159
+and split you know the world in multiple
+
+2078
+01:28:18,159 --> 01:28:19,760
+worlds uh but it can
+
+2079
+01:28:19,760 --> 01:28:23,430
+merge the worlds back together
+
+2080
+01:28:23,440 --> 01:28:27,030
+undetectably
+
+2081
+01:28:27,040 --> 01:28:30,400
+so the best we can do is for
+
+2082
+01:28:30,400 --> 01:28:33,199
+consistency which allows for forking but
+
+2083
+01:28:33,199 --> 01:28:35,840
+we can detect forking
+
+2084
+01:28:35,840 --> 01:28:38,960
+so if we detect forking can we then get
+
+2085
+01:28:38,960 --> 01:28:39,920
+something stronger than
+
+2086
+01:28:39,920 --> 01:28:42,400
+for consistency well yep well we can
+
+2087
+01:28:42,400 --> 01:28:43,600
+settle on a fork
+
+2088
+01:28:43,600 --> 01:28:45,360
+we're going to have forks but we can try
+
+2089
+01:28:45,360 --> 01:28:47,280
+to settle like pick one fork as the one
+
+2090
+01:28:47,280 --> 01:28:49,360
+to go for it with
+
+2091
+01:28:49,360 --> 01:28:53,120
+okay but stunder doesn't have a way to
+
+2092
+01:28:53,120 --> 01:28:53,760
+do that
+
+2093
+01:28:53,760 --> 01:28:59,990
+nope okay so that doesn't happen happens
+
+2094
+01:29:00,000 --> 01:29:02,880
+i mean sandra does propose some some
+
+2095
+01:29:02,880 --> 01:29:04,239
+methods no
+
+2096
+01:29:04,239 --> 01:29:06,320
+methods you detect and basically you
+
+2097
+01:29:06,320 --> 01:29:08,320
+know one basically proposes like you use
+
+2098
+01:29:08,320 --> 01:29:10,159
+the timestamp box to
+
+2099
+01:29:10,159 --> 01:29:17,189
+you know use that one right
+
+2100
+01:29:17,199 --> 01:29:20,550
+thanks you're wondering
+
+2101
+01:29:20,560 --> 01:29:23,360
+the time some the timestamp box is just
+
+2102
+01:29:23,360 --> 01:29:24,480
+a server that
+
+2103
+01:29:24,480 --> 01:29:27,520
+appends entries and yeah and is trusted
+
+2104
+01:29:27,520 --> 01:29:29,199
+so it's not under control of the
+
+2105
+01:29:29,199 --> 01:29:35,350
+adversary
+
+2106
+01:29:35,360 --> 01:29:38,719
+thank you uh can i
+
+2107
+01:29:38,719 --> 01:29:40,719
+also ask one final question about the
+
+2108
+01:29:40,719 --> 01:29:43,520
+debian example you said in the beginning
+
+2109
+01:29:43,520 --> 01:29:46,960
+um can you say again what happened there
+
+2110
+01:29:46,960 --> 01:29:51,040
+uh yeah sure uh so basically the
+
+2111
+01:29:51,040 --> 01:29:53,679
+this is the source repo the development
+
+2112
+01:29:53,679 --> 01:29:54,639
+machines for
+
+2113
+01:29:54,639 --> 01:29:57,840
+debbie and linux in 2003 uh
+
+2114
+01:29:57,840 --> 01:30:01,120
+an attacker compromised broke into news
+
+2115
+01:30:01,120 --> 01:30:02,000
+machines
+
+2116
+01:30:02,000 --> 01:30:05,199
+and modified files
+
+2117
+01:30:05,199 --> 01:30:06,639
+and this is the distribution that hasn't
+
+2118
+01:30:06,639 --> 01:30:08,320
+been sort of handed off you know which
+
+2119
+01:30:08,320 --> 01:30:09,760
+you know if you're on demi and linux
+
+2120
+01:30:09,760 --> 01:30:12,480
+you know you're you're uh anybody who
+
+2121
+01:30:12,480 --> 01:30:13,440
+got like the
+
+2122
+01:30:13,440 --> 01:30:14,880
+the debbie limbs after you attack and
+
+2123
+01:30:14,880 --> 01:30:16,480
+i've got maybe a compromise deputy in
+
+2124
+01:30:16,480 --> 01:30:17,679
+linux
+
+2125
+01:30:17,679 --> 01:30:19,280
+and so when as soon as they discover
+
+2126
+01:30:19,280 --> 01:30:20,880
+this they uh
+
+2127
+01:30:20,880 --> 01:30:22,800
+didn't do any further development and
+
+2128
+01:30:22,800 --> 01:30:24,480
+they would refer to distributions they
+
+2129
+01:30:24,480 --> 01:30:26,159
+sorted out like you know they went to
+
+2130
+01:30:26,159 --> 01:30:27,920
+backups you know started comparing files
+
+2131
+01:30:27,920 --> 01:30:29,600
+and backups with the
+
+2132
+01:30:29,600 --> 01:30:31,840
+files that they have and you know
+
+2133
+01:30:31,840 --> 01:30:33,280
+basically double check that all the
+
+2134
+01:30:33,280 --> 01:30:34,719
+changes that were in the
+
+2135
+01:30:34,719 --> 01:30:38,080
+repo are actually really legit
+
+2136
+01:30:38,080 --> 01:30:39,760
+and roll back and roll back any changes
+
+2137
+01:30:39,760 --> 01:30:42,159
+that are not legit
+
+2138
+01:30:42,159 --> 01:30:44,880
+like that that isn't bad yeah it's
+
+2139
+01:30:44,880 --> 01:30:46,000
+pretty bad
+
+2140
+01:30:46,000 --> 01:30:47,440
+it just just occasionally happens this
+
+2141
+01:30:47,440 --> 01:30:49,520
+is a real problem
+
+2142
+01:30:49,520 --> 01:30:52,239
+there's a real problem in practice thank
+
+2143
+01:30:52,239 --> 01:30:53,920
+you so much that was a very interesting
+
+2144
+01:30:53,920 --> 01:30:54,560
+lecture
+
+2145
+01:30:54,560 --> 01:31:03,840
+thank you you're welcome thank you
+
+2146
+01:31:03,840 --> 01:31:05,920
+you
+

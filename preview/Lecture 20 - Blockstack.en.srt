@@ -1,0 +1,9452 @@
+1
+00:00:00,080 --> 00:00:03,040
+okay thank you okay so uh
+
+2
+00:00:03,040 --> 00:00:04,799
+that's a good afternoon good morning
+
+3
+00:00:04,799 --> 00:00:06,560
+good evening good night wherever you are
+
+4
+00:00:06,560 --> 00:00:09,679
+uh and i guess welcome to the last week
+
+5
+00:00:09,679 --> 00:00:10,639
+of the semester
+
+6
+00:00:10,639 --> 00:00:12,960
+uh so there's two more class meetings uh
+
+7
+00:00:12,960 --> 00:00:14,480
+today which we're going to be talking
+
+8
+00:00:14,480 --> 00:00:17,279
+about block stack and on thursday
+
+9
+00:00:17,279 --> 00:00:20,800
+uh well we we get a report from
+
+10
+00:00:20,800 --> 00:00:22,400
+the different projects from a number of
+
+11
+00:00:22,400 --> 00:00:23,920
+the project groups in
+
+12
+00:00:23,920 --> 00:00:27,920
+6824 and so today is basically the
+
+13
+00:00:27,920 --> 00:00:32,389
+last paper discussion uh
+
+14
+00:00:32,399 --> 00:00:34,480
+and so the topic is uh you know the
+
+15
+00:00:34,480 --> 00:00:36,160
+system that uh
+
+16
+00:00:36,160 --> 00:00:37,680
+we assigned for uh what i signed for
+
+17
+00:00:37,680 --> 00:00:39,840
+reading which is box tech
+
+18
+00:00:39,840 --> 00:00:42,559
+and really what blocks that represents
+
+19
+00:00:42,559 --> 00:00:44,399
+is an approach to
+
+20
+00:00:44,399 --> 00:00:49,270
+building decentralized
+
+21
+00:00:49,280 --> 00:00:53,510
+applications
+
+22
+00:00:53,520 --> 00:00:55,840
+and with decentralized what we mean here
+
+23
+00:00:55,840 --> 00:00:57,120
+is that
+
+24
+00:00:57,120 --> 00:00:58,960
+uh unlike in centralized websites you
+
+25
+00:00:58,960 --> 00:01:00,719
+know the sort of website owns the data
+
+26
+00:01:00,719 --> 00:01:02,399
+in decentralized application
+
+27
+00:01:02,399 --> 00:01:04,879
+applications the the system is set up in
+
+28
+00:01:04,879 --> 00:01:06,240
+a way that the users actually keep
+
+29
+00:01:06,240 --> 00:01:07,760
+control over the data
+
+30
+00:01:07,760 --> 00:01:10,479
+and not the websites and so this form
+
+31
+00:01:10,479 --> 00:01:11,439
+sort of a
+
+32
+00:01:11,439 --> 00:01:13,040
+trend in the last you know this is the
+
+33
+00:01:13,040 --> 00:01:14,720
+final lecture in this series or three
+
+34
+00:01:14,720 --> 00:01:15,600
+lectures on
+
+35
+00:01:15,600 --> 00:01:17,680
+decentralized distributed systems you
+
+36
+00:01:17,680 --> 00:01:19,200
+know we talked about
+
+37
+00:01:19,200 --> 00:01:22,400
+uh logs and signing or saying logs as a
+
+38
+00:01:22,400 --> 00:01:23,759
+way of constructing
+
+39
+00:01:23,759 --> 00:01:26,320
+these decent life storage systems uh we
+
+40
+00:01:26,320 --> 00:01:27,600
+sell bitcoin to see
+
+41
+00:01:27,600 --> 00:01:30,479
+uh as an example of how you can achieve
+
+42
+00:01:30,479 --> 00:01:31,840
+a consensus
+
+43
+00:01:31,840 --> 00:01:34,479
+in a decent life systems with entrusted
+
+44
+00:01:34,479 --> 00:01:36,640
+participants or byzantine participants
+
+45
+00:01:36,640 --> 00:01:39,119
+and so today we're taking one more step
+
+46
+00:01:39,119 --> 00:01:40,560
+up and actually look at like how you can
+
+47
+00:01:40,560 --> 00:01:42,000
+actually even build you know complete
+
+48
+00:01:42,000 --> 00:01:42,880
+applications
+
+49
+00:01:42,880 --> 00:01:45,200
+other than just crypto currency
+
+50
+00:01:45,200 --> 00:01:46,799
+applications
+
+51
+00:01:46,799 --> 00:01:48,159
+the decentralized applications have a
+
+52
+00:01:48,159 --> 00:01:49,840
+long history uh
+
+53
+00:01:49,840 --> 00:01:53,520
+in the early 2000s late 90s there was a
+
+54
+00:01:53,520 --> 00:01:54,000
+lot of
+
+55
+00:01:54,000 --> 00:01:57,040
+to do around peer-to-peer applications
+
+56
+00:01:57,040 --> 00:01:59,439
+uh which had a decent like architecture
+
+57
+00:01:59,439 --> 00:02:00,719
+like napster
+
+58
+00:02:00,719 --> 00:02:03,600
+uh you know more recently uh you know
+
+59
+00:02:03,600 --> 00:02:05,920
+you're probably familiar with key base
+
+60
+00:02:05,920 --> 00:02:08,959
+which has a decentralized design uh
+
+61
+00:02:08,959 --> 00:02:12,000
+or a solid uh you know and
+
+62
+00:02:12,000 --> 00:02:13,920
+of course box tech and so there's a you
+
+63
+00:02:13,920 --> 00:02:15,599
+know quite a bit of activity
+
+64
+00:02:15,599 --> 00:02:17,520
+in this uh space of decentralized
+
+65
+00:02:17,520 --> 00:02:19,120
+applications
+
+66
+00:02:19,120 --> 00:02:21,520
+um the block stack is interesting uh
+
+67
+00:02:21,520 --> 00:02:22,319
+from
+
+68
+00:02:22,319 --> 00:02:23,680
+from the perspective of actually writing
+
+69
+00:02:23,680 --> 00:02:25,840
+decentralized applications but also
+
+70
+00:02:25,840 --> 00:02:27,760
+uh is an example of sort of a
+
+71
+00:02:27,760 --> 00:02:29,120
+non-currency use
+
+72
+00:02:29,120 --> 00:02:32,400
+or non-money use uh
+
+73
+00:02:32,400 --> 00:02:35,440
+of uh bitcoin of the blockchain
+
+74
+00:02:35,440 --> 00:02:44,869
+the bitcoin blockchain
+
+75
+00:02:44,879 --> 00:02:47,360
+uh and we'll see uh you know there are a
+
+76
+00:02:47,360 --> 00:02:48,080
+number of
+
+77
+00:02:48,080 --> 00:02:49,680
+aspects that are interesting than blocks
+
+78
+00:02:49,680 --> 00:02:51,519
+tech but the the key thing that this
+
+79
+00:02:51,519 --> 00:02:52,959
+what the paper focuses on
+
+80
+00:02:52,959 --> 00:02:56,640
+is actually uh naming how to build
+
+81
+00:02:56,640 --> 00:02:59,040
+uh a distributed decentralized naming
+
+82
+00:02:59,040 --> 00:03:00,159
+system
+
+83
+00:03:00,159 --> 00:03:02,000
+uh and of course the naming systems are
+
+84
+00:03:02,000 --> 00:03:04,159
+widely used you know think of dns
+
+85
+00:03:04,159 --> 00:03:07,200
+uh i think about where you know
+
+86
+00:03:07,200 --> 00:03:09,280
+kerberos you know there's tons and tons
+
+87
+00:03:09,280 --> 00:03:10,319
+of different uh
+
+88
+00:03:10,319 --> 00:03:11,920
+naming systems out there you know widely
+
+89
+00:03:11,920 --> 00:03:13,840
+used and this is just a different design
+
+90
+00:03:13,840 --> 00:03:15,200
+and where the most interesting part of
+
+91
+00:03:15,200 --> 00:03:15,680
+it again
+
+92
+00:03:15,680 --> 00:03:22,070
+is it's decentralized
+
+93
+00:03:22,080 --> 00:03:23,920
+now this lecture is a little bit
+
+94
+00:03:23,920 --> 00:03:25,200
+different than uh
+
+95
+00:03:25,200 --> 00:03:26,720
+sort of the preceding lectures or many
+
+96
+00:03:26,720 --> 00:03:27,760
+of the proceedings like there's many
+
+97
+00:03:27,760 --> 00:03:29,120
+machining lectures i sort of have to
+
+98
+00:03:29,120 --> 00:03:30,560
+flavor well here's a hard technical
+
+99
+00:03:30,560 --> 00:03:31,120
+problem
+
+100
+00:03:31,120 --> 00:03:32,640
+here's the solution to solve that
+
+101
+00:03:32,640 --> 00:03:34,560
+particular problem and
+
+102
+00:03:34,560 --> 00:03:36,400
+uh here we're in a slightly sort of
+
+103
+00:03:36,400 --> 00:03:38,159
+different position uh
+
+104
+00:03:38,159 --> 00:03:39,519
+there's a hard technical problem and we
+
+105
+00:03:39,519 --> 00:03:41,519
+have to build decentralized applications
+
+106
+00:03:41,519 --> 00:03:44,239
+uh but it's not you know even 100 clear
+
+107
+00:03:44,239 --> 00:03:45,680
+that is exactly you know the right thing
+
+108
+00:03:45,680 --> 00:03:47,040
+to do to build this central application
+
+109
+00:03:47,040 --> 00:03:49,120
+so it's extremely intriguing
+
+110
+00:03:49,120 --> 00:03:51,120
+um and it's also not clear that like box
+
+111
+00:03:51,120 --> 00:03:52,959
+vector is just the right solution to do
+
+112
+00:03:52,959 --> 00:03:53,360
+so
+
+113
+00:03:53,360 --> 00:03:56,640
+um and so it's much more uh experimental
+
+114
+00:03:56,640 --> 00:03:58,400
+uh you know blocksec does actually have
+
+115
+00:03:58,400 --> 00:04:00,560
+a user community and
+
+116
+00:04:00,560 --> 00:04:02,239
+but you know it's not like yet an
+
+117
+00:04:02,239 --> 00:04:03,920
+overwhelming success
+
+118
+00:04:03,920 --> 00:04:05,680
+and a demonstration that this is a the
+
+119
+00:04:05,680 --> 00:04:07,120
+right way to go so
+
+120
+00:04:07,120 --> 00:04:10,400
+in that sense uh this is
+
+121
+00:04:10,400 --> 00:04:12,319
+uh this paper in some sense is more
+
+122
+00:04:12,319 --> 00:04:13,760
+thought provoking
+
+123
+00:04:13,760 --> 00:04:16,479
+than giving actually a definite answer
+
+124
+00:04:16,479 --> 00:04:18,079
+to a particular technical problem
+
+125
+00:04:18,079 --> 00:04:20,560
+and so uh in some ways you know this is
+
+126
+00:04:20,560 --> 00:04:22,880
+a more of a
+
+127
+00:04:22,880 --> 00:04:25,120
+topic that sort of uh lends itself to a
+
+128
+00:04:25,120 --> 00:04:26,320
+larger debate
+
+129
+00:04:26,320 --> 00:04:28,479
+about you know the different views on
+
+130
+00:04:28,479 --> 00:04:30,320
+this kind of kind of design
+
+131
+00:04:30,320 --> 00:04:33,280
+and so uh during lecture if we get to
+
+132
+00:04:33,280 --> 00:04:34,639
+the
+
+133
+00:04:34,639 --> 00:04:36,000
+would we prefer to be fine actually you
+
+134
+00:04:36,000 --> 00:04:38,320
+know to have quite a bit of discussion
+
+135
+00:04:38,320 --> 00:04:39,919
+on different aspects and i don't think
+
+136
+00:04:39,919 --> 00:04:43,040
+there's going to be one right answer
+
+137
+00:04:43,040 --> 00:04:46,479
+and so anytime you have a question about
+
+138
+00:04:46,479 --> 00:04:48,400
+or want to argue about a particular
+
+139
+00:04:48,400 --> 00:04:49,759
+aspect of sort of these decentralized
+
+140
+00:04:49,759 --> 00:04:51,360
+app designs you know
+
+141
+00:04:51,360 --> 00:04:55,120
+speak up okay
+
+142
+00:04:55,120 --> 00:04:58,720
+um so maybe before uh you know
+
+143
+00:04:58,720 --> 00:05:00,320
+talking about decentralized apps you can
+
+144
+00:05:00,320 --> 00:05:02,160
+just quickly revisit you know actually
+
+145
+00:05:02,160 --> 00:05:03,680
+what's sort of the common paradigm to
+
+146
+00:05:03,680 --> 00:05:05,280
+actually build websites or build web
+
+147
+00:05:05,280 --> 00:05:06,880
+applications right and that's really
+
+148
+00:05:06,880 --> 00:05:12,950
+using centralized websites
+
+149
+00:05:12,960 --> 00:05:14,240
+the sites made itself might be
+
+150
+00:05:14,240 --> 00:05:15,919
+distributed across multiple data centers
+
+151
+00:05:15,919 --> 00:05:17,120
+across the world
+
+152
+00:05:17,120 --> 00:05:18,720
+but the architecture or the design of
+
+153
+00:05:18,720 --> 00:05:20,000
+the site is you know centralized you
+
+154
+00:05:20,000 --> 00:05:21,680
+know where we have
+
+155
+00:05:21,680 --> 00:05:24,880
+you know here's your typical website uh
+
+156
+00:05:24,880 --> 00:05:25,520
+it has
+
+157
+00:05:25,520 --> 00:05:27,120
+some applications and code you know
+
+158
+00:05:27,120 --> 00:05:29,039
+whether
+
+159
+00:05:29,039 --> 00:05:30,800
+gmail you know whatever twitter or
+
+160
+00:05:30,800 --> 00:05:32,160
+facebook uh
+
+161
+00:05:32,160 --> 00:05:36,560
+and uh that operates on a database
+
+162
+00:05:36,560 --> 00:05:42,790
+uh that contains you know user data
+
+163
+00:05:42,800 --> 00:05:44,400
+and we might actually have different
+
+164
+00:05:44,400 --> 00:05:47,600
+users interacting you know with the
+
+165
+00:05:47,600 --> 00:05:51,039
+sitting by web browser and user one
+
+166
+00:05:51,039 --> 00:05:53,680
+two uh they interact you know through
+
+167
+00:05:53,680 --> 00:05:55,360
+the application with the website you
+
+168
+00:05:55,360 --> 00:05:57,280
+know they you know create data the data
+
+169
+00:05:57,280 --> 00:05:58,960
+is stored in the database
+
+170
+00:05:58,960 --> 00:06:01,600
+uh other users may view the data and the
+
+171
+00:06:01,600 --> 00:06:03,280
+application displays basically you know
+
+172
+00:06:03,280 --> 00:06:04,240
+that data to
+
+173
+00:06:04,240 --> 00:06:06,880
+uh you know inside of the web browser
+
+174
+00:06:06,880 --> 00:06:08,479
+and you know the data might be
+
+175
+00:06:08,479 --> 00:06:11,600
+you know blog posts
+
+176
+00:06:11,600 --> 00:06:16,390
+tweets
+
+177
+00:06:16,400 --> 00:06:20,720
+piazza posts photos
+
+178
+00:06:20,720 --> 00:06:23,039
+perhaps even more sort of sensitive you
+
+179
+00:06:23,039 --> 00:06:23,919
+know medical
+
+180
+00:06:23,919 --> 00:06:26,950
+medical records
+
+181
+00:06:26,960 --> 00:06:30,720
+etc and basically you know the
+
+182
+00:06:30,720 --> 00:06:32,160
+application we're running on the site
+
+183
+00:06:32,160 --> 00:06:33,919
+you know to transform you know that data
+
+184
+00:06:33,919 --> 00:06:35,600
+from all the different users
+
+185
+00:06:35,600 --> 00:06:37,280
+uh into something that's interesting to
+
+186
+00:06:37,280 --> 00:06:39,120
+look at where basically integrating for
+
+187
+00:06:39,120 --> 00:06:40,479
+example the timeline
+
+188
+00:06:40,479 --> 00:06:42,400
+of you know many users into a single
+
+189
+00:06:42,400 --> 00:06:44,400
+timeline percentage to the user
+
+190
+00:06:44,400 --> 00:06:46,400
+uh you know organizing the tweets you
+
+191
+00:06:46,400 --> 00:06:48,160
+know doing ups and down votes
+
+192
+00:06:48,160 --> 00:06:51,599
+et cetera et cetera and
+
+193
+00:06:51,599 --> 00:06:53,599
+you know one sort of distinguishing
+
+194
+00:06:53,599 --> 00:06:55,039
+feature uh of this
+
+195
+00:06:55,039 --> 00:06:57,120
+sort of design is that the application
+
+196
+00:06:57,120 --> 00:06:58,479
+and the data's are bundled you know
+
+197
+00:06:58,479 --> 00:06:59,759
+they're only the control
+
+198
+00:06:59,759 --> 00:07:01,759
+of the application site you know whether
+
+199
+00:07:01,759 --> 00:07:02,960
+it's you know facebook twitter
+
+200
+00:07:02,960 --> 00:07:04,560
+you know google or any you know website
+
+201
+00:07:04,560 --> 00:07:06,160
+and really the interface between the
+
+202
+00:07:06,160 --> 00:07:06,800
+user or
+
+203
+00:07:06,800 --> 00:07:10,400
+the dividing line between the user and
+
+204
+00:07:10,400 --> 00:07:12,800
+the website is basically you know html
+
+205
+00:07:12,800 --> 00:07:17,440
+or the ui
+
+206
+00:07:17,440 --> 00:07:19,039
+now the application basically computes
+
+207
+00:07:19,039 --> 00:07:20,880
+you know whatever the user is going to
+
+208
+00:07:20,880 --> 00:07:22,160
+see and that's going to be displayed
+
+209
+00:07:22,160 --> 00:07:23,440
+inside of the browser
+
+210
+00:07:23,440 --> 00:07:25,039
+of course the application might actually
+
+211
+00:07:25,039 --> 00:07:26,880
+run inside of the browser not like you
+
+212
+00:07:26,880 --> 00:07:28,560
+know javascript but others are not
+
+213
+00:07:28,560 --> 00:07:29,199
+really
+
+214
+00:07:29,199 --> 00:07:31,199
+pertinent to this particular discussion
+
+215
+00:07:31,199 --> 00:07:33,360
+um you know it's still the application
+
+216
+00:07:33,360 --> 00:07:35,360
+is under control of the website you know
+
+217
+00:07:35,360 --> 00:07:36,880
+the programmers of the website write the
+
+218
+00:07:36,880 --> 00:07:37,759
+application
+
+219
+00:07:37,759 --> 00:07:39,440
+and the application basically you know
+
+220
+00:07:39,440 --> 00:07:41,360
+manipulates the dom you know fields from
+
+221
+00:07:41,360 --> 00:07:43,120
+inside of the web browser
+
+222
+00:07:43,120 --> 00:07:45,280
+and so from the user point of view the
+
+223
+00:07:45,280 --> 00:07:46,639
+interaction
+
+224
+00:07:46,639 --> 00:07:48,080
+the interface you know between the
+
+225
+00:07:48,080 --> 00:07:49,680
+defining interface between the
+
+226
+00:07:49,680 --> 00:07:52,960
+website and and
+
+227
+00:07:52,960 --> 00:07:57,589
+in the browser is still sort of html
+
+228
+00:07:57,599 --> 00:07:59,360
+and so this you know just this design
+
+229
+00:07:59,360 --> 00:08:01,680
+clearly is overwhelmingly successful
+
+230
+00:08:01,680 --> 00:08:04,319
+uh you know most websites a year
+
+231
+00:08:04,319 --> 00:08:04,800
+probably
+
+232
+00:08:04,800 --> 00:08:06,319
+actually probably all of the websites
+
+233
+00:08:06,319 --> 00:08:08,160
+you probably use are you know sort of
+
+234
+00:08:08,160 --> 00:08:11,280
+following this particular design
+
+235
+00:08:11,280 --> 00:08:13,360
+and then one reason for you know this
+
+236
+00:08:13,360 --> 00:08:14,720
+very successful design is we'll talk a
+
+237
+00:08:14,720 --> 00:08:16,000
+little bit more later is you know
+
+238
+00:08:16,000 --> 00:08:17,680
+because of the tight integration between
+
+239
+00:08:17,680 --> 00:08:19,120
+the application and the data and the
+
+240
+00:08:19,120 --> 00:08:20,400
+data from the different users so the
+
+241
+00:08:20,400 --> 00:08:22,240
+application has easy access to all the
+
+242
+00:08:22,240 --> 00:08:22,800
+users
+
+243
+00:08:22,800 --> 00:08:24,720
+uh data from different users and
+
+244
+00:08:24,720 --> 00:08:26,000
+integrated to me in creative and
+
+245
+00:08:26,000 --> 00:08:27,759
+interesting ways
+
+246
+00:08:27,759 --> 00:08:29,840
+um but there are you know you know it's
+
+247
+00:08:29,840 --> 00:08:31,120
+not completely perfect
+
+248
+00:08:31,120 --> 00:08:33,839
+you know this design and um and so those
+
+249
+00:08:33,839 --> 00:08:34,959
+are things that you know
+
+250
+00:08:34,959 --> 00:08:37,680
+you might wish could be slightly better
+
+251
+00:08:37,680 --> 00:08:38,159
+uh
+
+252
+00:08:38,159 --> 00:08:39,360
+and in some sense decentralized
+
+253
+00:08:39,360 --> 00:08:41,919
+applications is a response to those uh
+
+254
+00:08:41,919 --> 00:08:43,120
+sort of things that are
+
+255
+00:08:43,120 --> 00:08:46,080
+and it might be not 100 desirable and so
+
+256
+00:08:46,080 --> 00:08:46,640
+for one
+
+257
+00:08:46,640 --> 00:08:49,519
+and here's a very simple observation uh
+
+258
+00:08:49,519 --> 00:08:50,959
+you can really not create another
+
+259
+00:08:50,959 --> 00:08:52,480
+application you know so the
+
+260
+00:08:52,480 --> 00:08:54,399
+the the site decides actually how the
+
+261
+00:08:54,399 --> 00:08:56,080
+app looks like you know and that's the
+
+262
+00:08:56,080 --> 00:08:57,600
+ui you're going to get
+
+263
+00:08:57,600 --> 00:08:59,839
+uh and which is sort of very different
+
+264
+00:08:59,839 --> 00:09:00,720
+than
+
+265
+00:09:00,720 --> 00:09:03,839
+uh let's say uh on
+
+266
+00:09:03,839 --> 00:09:04,880
+your running application during your
+
+267
+00:09:04,880 --> 00:09:06,320
+laptop you know example you want to
+
+268
+00:09:06,320 --> 00:09:07,360
+modify and edit
+
+269
+00:09:07,360 --> 00:09:09,279
+the effects file but you get to choose
+
+270
+00:09:09,279 --> 00:09:10,880
+which browser or editor you're going to
+
+271
+00:09:10,880 --> 00:09:12,880
+use you know whether you may use emacs
+
+272
+00:09:12,880 --> 00:09:13,519
+you know vim
+
+273
+00:09:13,519 --> 00:09:14,640
+you know you can have all kinds of
+
+274
+00:09:14,640 --> 00:09:16,080
+culture wars about which one is better
+
+275
+00:09:16,080 --> 00:09:17,040
+than the other
+
+276
+00:09:17,040 --> 00:09:19,120
+but you get an option to choose which
+
+277
+00:09:19,120 --> 00:09:20,320
+one you want to use
+
+278
+00:09:20,320 --> 00:09:21,519
+and in this case you know that's just
+
+279
+00:09:21,519 --> 00:09:23,680
+not the case uh you're using gmail you
+
+280
+00:09:23,680 --> 00:09:25,760
+don't have
+
+281
+00:09:25,760 --> 00:09:27,040
+gmail is not the best example the
+
+282
+00:09:27,040 --> 00:09:28,080
+twitter you know twitter's going to
+
+283
+00:09:28,080 --> 00:09:29,440
+decide actually how the application is
+
+284
+00:09:29,440 --> 00:09:31,040
+going to look like
+
+285
+00:09:31,040 --> 00:09:32,480
+uh the reason why gmail might not be the
+
+286
+00:09:32,480 --> 00:09:33,680
+best example is because you can actually
+
+287
+00:09:33,680 --> 00:09:35,120
+download your email maybe you know
+
+288
+00:09:35,120 --> 00:09:37,760
+through imap and then run your own
+
+289
+00:09:37,760 --> 00:09:40,480
+uh email program uh but from any website
+
+290
+00:09:40,480 --> 00:09:42,080
+you know the the user in the application
+
+291
+00:09:42,080 --> 00:09:43,279
+data very controlled and you
+
+292
+00:09:43,279 --> 00:09:46,880
+have no control over it um
+
+293
+00:09:46,880 --> 00:09:48,399
+the website you know may change the
+
+294
+00:09:48,399 --> 00:09:50,160
+rules on who can see
+
+295
+00:09:50,160 --> 00:09:53,600
+and uh what data and it might actually
+
+296
+00:09:53,600 --> 00:09:54,959
+do without really telling you
+
+297
+00:09:54,959 --> 00:09:56,080
+and so you don't really have full
+
+298
+00:09:56,080 --> 00:09:58,240
+control over actually who
+
+299
+00:09:58,240 --> 00:09:59,920
+who sees your data but furthermore you
+
+300
+00:09:59,920 --> 00:10:01,360
+know the website actually might use it
+
+301
+00:10:01,360 --> 00:10:02,800
+you know your data to
+
+302
+00:10:02,800 --> 00:10:04,720
+uh you know generate revenue or whatever
+
+303
+00:10:04,720 --> 00:10:07,600
+to decide which ads actually display
+
+304
+00:10:07,600 --> 00:10:10,000
+and uh again basically snooping over
+
+305
+00:10:10,000 --> 00:10:10,720
+your data
+
+306
+00:10:10,720 --> 00:10:12,720
+right or in the worst case you know
+
+307
+00:10:12,720 --> 00:10:14,480
+maybe a bad employee
+
+308
+00:10:14,480 --> 00:10:17,279
+actually just snips over your data and
+
+309
+00:10:17,279 --> 00:10:18,640
+that's really sort of outside of your
+
+310
+00:10:18,640 --> 00:10:19,839
+control there's nothing you really can
+
+311
+00:10:19,839 --> 00:10:21,040
+do about it you know you gave the
+
+312
+00:10:21,040 --> 00:10:22,160
+website the data
+
+313
+00:10:22,160 --> 00:10:25,600
+that's theirs now and so this is
+
+314
+00:10:25,600 --> 00:10:29,200
+sort of the so these sort of pain points
+
+315
+00:10:29,200 --> 00:10:31,279
+uh you know it makes people wonder you
+
+316
+00:10:31,279 --> 00:10:33,040
+know is there a way of
+
+317
+00:10:33,040 --> 00:10:36,320
+designing systems then really not
+
+318
+00:10:36,320 --> 00:10:38,000
+don't follow this you know paradigm but
+
+319
+00:10:38,000 --> 00:10:39,279
+you know follow this paradigm of
+
+320
+00:10:39,279 --> 00:10:54,150
+decentralized applications
+
+321
+00:10:54,160 --> 00:10:57,279
+um and so in
+
+322
+00:10:57,279 --> 00:11:00,399
+this world view you know whatever we're
+
+323
+00:11:00,399 --> 00:11:02,079
+still in our internet the cloud
+
+324
+00:11:02,079 --> 00:11:03,680
+uh but you know we have storage
+
+325
+00:11:03,680 --> 00:11:05,680
+providers
+
+326
+00:11:05,680 --> 00:11:08,720
+and storage providers are basically
+
+327
+00:11:08,720 --> 00:11:12,079
+nothing really um you know sophisticated
+
+328
+00:11:12,079 --> 00:11:14,880
+where they don't really run app code
+
+329
+00:11:14,880 --> 00:11:16,640
+they just purely provide storage
+
+330
+00:11:16,640 --> 00:11:18,240
+you know ways of you know maybe it's
+
+331
+00:11:18,240 --> 00:11:20,640
+like your google drive or whatever
+
+332
+00:11:20,640 --> 00:11:23,760
+or uh amazon s3 but basically they're
+
+333
+00:11:23,760 --> 00:11:24,720
+sort of dumb
+
+334
+00:11:24,720 --> 00:11:28,160
+you know uh bid holders uh
+
+335
+00:11:28,160 --> 00:11:29,680
+the data maybe you know the user
+
+336
+00:11:29,680 --> 00:11:31,200
+probably wants to encrypt the data
+
+337
+00:11:31,200 --> 00:11:33,279
+but basically the real goal here is that
+
+338
+00:11:33,279 --> 00:11:35,040
+the user decides you know which storage
+
+339
+00:11:35,040 --> 00:11:35,600
+for
+
+340
+00:11:35,600 --> 00:11:37,680
+where the data lives and it keeps under
+
+341
+00:11:37,680 --> 00:11:39,200
+the control of the user
+
+342
+00:11:39,200 --> 00:11:41,680
+so whatever you know storage rider s3
+
+343
+00:11:41,680 --> 00:11:44,720
+might have you know users one data
+
+344
+00:11:44,720 --> 00:11:48,160
+um another storage divider might
+
+345
+00:11:48,160 --> 00:11:49,760
+actually have user two's data
+
+346
+00:11:49,760 --> 00:11:51,920
+or stores you know data on behalf of
+
+347
+00:11:51,920 --> 00:11:52,959
+user two
+
+348
+00:11:52,959 --> 00:11:55,200
+uh u2 and users f3 may actually encrypt
+
+349
+00:11:55,200 --> 00:11:56,880
+it so that the storage provider can
+
+350
+00:11:56,880 --> 00:12:00,069
+actually not read it
+
+351
+00:12:00,079 --> 00:12:02,160
+and control like who can actually uh
+
+352
+00:12:02,160 --> 00:12:04,240
+decrypt the data
+
+353
+00:12:04,240 --> 00:12:06,160
+and then you know the applications
+
+354
+00:12:06,160 --> 00:12:08,639
+really are in the control of the
+
+355
+00:12:08,639 --> 00:12:11,279
+user themselves and so you know when i'm
+
+356
+00:12:11,279 --> 00:12:13,200
+using a user here
+
+357
+00:12:13,200 --> 00:12:16,079
+you want workstation or laptop it runs
+
+358
+00:12:16,079 --> 00:12:18,560
+in an application
+
+359
+00:12:18,560 --> 00:12:22,399
+and you know here's you too
+
+360
+00:12:22,399 --> 00:12:24,079
+there's also another application may
+
+361
+00:12:24,079 --> 00:12:25,519
+actually be looking at maybe the same
+
+362
+00:12:25,519 --> 00:12:27,040
+data but like a slightly different
+
+363
+00:12:27,040 --> 00:12:28,639
+version of the application whatever one
+
+364
+00:12:28,639 --> 00:12:32,000
+photo viewer and another photo viewer
+
+365
+00:12:32,000 --> 00:12:35,120
+and basically to construct you know what
+
+366
+00:12:35,120 --> 00:12:35,760
+is actually
+
+367
+00:12:35,760 --> 00:12:37,279
+shown to the user you know the
+
+368
+00:12:37,279 --> 00:12:38,800
+application will fetches
+
+369
+00:12:38,800 --> 00:12:41,120
+you know data you know from different
+
+370
+00:12:41,120 --> 00:12:43,360
+users for example if you do
+
+371
+00:12:43,360 --> 00:12:46,560
+share the photos with u1 uh
+
+372
+00:12:46,560 --> 00:12:48,079
+then you know the applications would
+
+373
+00:12:48,079 --> 00:12:51,360
+integrate the photoshop you want to u2
+
+374
+00:12:51,360 --> 00:12:55,279
+by extracting or retrieving the
+
+375
+00:12:55,279 --> 00:12:57,360
+photos from the the different storage
+
+376
+00:12:57,360 --> 00:12:58,480
+providers
+
+377
+00:12:58,480 --> 00:12:59,839
+and here really what the sort of
+
+378
+00:12:59,839 --> 00:13:03,519
+dividing line is between users
+
+379
+00:13:03,519 --> 00:13:06,560
+and the dividing line is
+
+380
+00:13:06,560 --> 00:13:09,750
+is really this
+
+381
+00:13:09,760 --> 00:13:10,959
+there's sort of a dividing line between
+
+382
+00:13:10,959 --> 00:13:12,639
+the application and the storage so
+
+383
+00:13:12,639 --> 00:13:13,279
+there's a
+
+384
+00:13:13,279 --> 00:13:16,480
+storage api you know it has to sort of
+
+385
+00:13:16,480 --> 00:13:16,880
+be
+
+386
+00:13:16,880 --> 00:13:18,720
+uniform because many different
+
+387
+00:13:18,720 --> 00:13:20,160
+applications are going to use the same
+
+388
+00:13:20,160 --> 00:13:21,680
+storage i device you know maybe this
+
+389
+00:13:21,680 --> 00:13:22,320
+application
+
+390
+00:13:22,320 --> 00:13:24,959
+that creates to-do lists uh maybe it's a
+
+391
+00:13:24,959 --> 00:13:27,279
+photo list maybe it's a
+
+392
+00:13:27,279 --> 00:13:29,120
+twitter clone that this retrieves the
+
+393
+00:13:29,120 --> 00:13:30,480
+tweets from different users and
+
+394
+00:13:30,480 --> 00:13:31,440
+integrates them
+
+395
+00:13:31,440 --> 00:13:34,480
+and presents them to the user
+
+396
+00:13:34,480 --> 00:13:36,160
+and it's really that sort of single
+
+397
+00:13:36,160 --> 00:13:38,079
+storage api or
+
+398
+00:13:38,079 --> 00:13:41,360
+that that actually provides
+
+399
+00:13:41,360 --> 00:13:43,920
+the dividing line between the
+
+400
+00:13:43,920 --> 00:13:45,120
+applications
+
+401
+00:13:45,120 --> 00:13:47,199
+and the data and of course that source
+
+402
+00:13:47,199 --> 00:13:48,639
+api has to be quite general purpose you
+
+403
+00:13:48,639 --> 00:13:50,240
+can support multiple applications
+
+404
+00:13:50,240 --> 00:13:52,639
+but also has to allow sharing between uh
+
+405
+00:13:52,639 --> 00:13:54,000
+different application between different
+
+406
+00:13:54,000 --> 00:13:55,519
+users and different applications
+
+407
+00:13:55,519 --> 00:13:59,199
+no modulo or the permissions right
+
+408
+00:13:59,199 --> 00:14:02,240
+and so you know let's say you wanted to
+
+409
+00:14:02,240 --> 00:14:05,440
+uh build uh sort of a sharia
+
+410
+00:14:05,440 --> 00:14:12,550
+to-do list
+
+411
+00:14:12,560 --> 00:14:14,880
+then you know between user one and user
+
+412
+00:14:14,880 --> 00:14:16,480
+two then
+
+413
+00:14:16,480 --> 00:14:18,160
+let's look at this from the perspective
+
+414
+00:14:18,160 --> 00:14:19,920
+of usual one you know probably there
+
+415
+00:14:19,920 --> 00:14:21,360
+would be some operation
+
+416
+00:14:21,360 --> 00:14:23,519
+uh or some sharing operations in user
+
+417
+00:14:23,519 --> 00:14:24,880
+two and usually one saying like yeah you
+
+418
+00:14:24,880 --> 00:14:26,079
+know here's
+
+419
+00:14:26,079 --> 00:14:29,360
+the names of the my to-do list um
+
+420
+00:14:29,360 --> 00:14:31,920
+and you know user one can then download
+
+421
+00:14:31,920 --> 00:14:32,639
+you know the
+
+422
+00:14:32,639 --> 00:14:36,000
+user two's uh to-do list uh maybe check
+
+423
+00:14:36,000 --> 00:14:37,440
+you know the signature
+
+424
+00:14:37,440 --> 00:14:39,680
+on the file to verify that data was
+
+425
+00:14:39,680 --> 00:14:42,160
+indeed you know written by user two
+
+426
+00:14:42,160 --> 00:14:43,760
+and then you know integrate you know
+
+427
+00:14:43,760 --> 00:14:45,600
+that uh with its own
+
+428
+00:14:45,600 --> 00:14:47,920
+uh to-do list and you know present to
+
+429
+00:14:47,920 --> 00:14:48,880
+user one
+
+430
+00:14:48,880 --> 00:14:50,639
+uh a shared to-do list that contains
+
+431
+00:14:50,639 --> 00:14:52,800
+both the user ones and you should choose
+
+432
+00:14:52,800 --> 00:14:56,320
+to do items um
+
+433
+00:14:56,320 --> 00:14:59,360
+so that's sort of the general uh
+
+434
+00:14:59,360 --> 00:15:02,480
+view of actually building these
+
+435
+00:15:02,480 --> 00:15:04,079
+this decentralized architecture for
+
+436
+00:15:04,079 --> 00:15:06,870
+applications
+
+437
+00:15:06,880 --> 00:15:21,189
+any questions so far
+
+438
+00:15:21,199 --> 00:15:23,760
+okay so this is so so far hopefully
+
+439
+00:15:23,760 --> 00:15:24,800
+we've seen that you know
+
+440
+00:15:24,800 --> 00:15:26,480
+this address is one of the sort of the
+
+441
+00:15:26,480 --> 00:15:28,560
+major you know pain points for
+
+442
+00:15:28,560 --> 00:15:30,880
+the centralized approach but basically
+
+443
+00:15:30,880 --> 00:15:32,560
+the users you know stay in control of
+
+444
+00:15:32,560 --> 00:15:33,199
+the data
+
+445
+00:15:33,199 --> 00:15:35,440
+uh it's not owned by a particular site
+
+446
+00:15:35,440 --> 00:15:37,440
+anymore and the users decide
+
+447
+00:15:37,440 --> 00:15:39,839
+who uh which applications and who
+
+448
+00:15:39,839 --> 00:15:40,560
+actually get
+
+449
+00:15:40,560 --> 00:15:43,920
+access to data i know that's a desirable
+
+450
+00:15:43,920 --> 00:15:45,040
+uh
+
+451
+00:15:45,040 --> 00:15:48,320
+property um but you know the this whole
+
+452
+00:15:48,320 --> 00:15:50,160
+design is also with its you know set of
+
+453
+00:15:50,160 --> 00:15:50,959
+challenges
+
+454
+00:15:50,959 --> 00:15:53,279
+and so let me lay out some of them and
+
+455
+00:15:53,279 --> 00:15:54,720
+we'll focus on a few of them in the
+
+456
+00:15:54,720 --> 00:16:00,949
+context of block stack
+
+457
+00:16:00,959 --> 00:16:03,040
+and so those are two i think broad
+
+458
+00:16:03,040 --> 00:16:05,120
+categories of challenges
+
+459
+00:16:05,120 --> 00:16:07,120
+one sort of on the business side you
+
+460
+00:16:07,120 --> 00:16:10,550
+know what is the revenue model
+
+461
+00:16:10,560 --> 00:16:13,600
+you know what will uh you know get these
+
+462
+00:16:13,600 --> 00:16:15,199
+applications actually being adopted
+
+463
+00:16:15,199 --> 00:16:16,720
+and you know pay people money to
+
+464
+00:16:16,720 --> 00:16:19,600
+actually develop the applications
+
+465
+00:16:19,600 --> 00:16:21,759
+and so that they actually become really
+
+466
+00:16:21,759 --> 00:16:23,120
+good and
+
+467
+00:16:23,120 --> 00:16:26,480
+uh and people are excited about using
+
+468
+00:16:26,480 --> 00:16:27,199
+them
+
+469
+00:16:27,199 --> 00:16:29,360
+i'm not really gonna you know kind of
+
+470
+00:16:29,360 --> 00:16:30,560
+talk about that at all
+
+471
+00:16:30,560 --> 00:16:32,720
+uh uh but instead you know i wanna
+
+472
+00:16:32,720 --> 00:16:43,269
+motion focus on the technical challenges
+
+473
+00:16:43,279 --> 00:16:47,040
+and there are several of them
+
+474
+00:16:47,040 --> 00:16:49,279
+one is you know we go back to this sort
+
+475
+00:16:49,279 --> 00:16:50,880
+of picture here before
+
+476
+00:16:50,880 --> 00:16:52,880
+uh you know the storage api is sort of
+
+477
+00:16:52,880 --> 00:16:54,160
+the you know key
+
+478
+00:16:54,160 --> 00:16:56,480
+uh interface and uh you know the
+
+479
+00:16:56,480 --> 00:16:58,560
+interface has to be minimal it has to be
+
+480
+00:16:58,560 --> 00:17:01,440
+uh general purpose enough uh but in
+
+481
+00:17:01,440 --> 00:17:02,959
+typically it's actually you know it's
+
+482
+00:17:02,959 --> 00:17:04,000
+not the same thing
+
+483
+00:17:04,000 --> 00:17:05,839
+as you know the api that basically sits
+
+484
+00:17:05,839 --> 00:17:08,160
+here uh
+
+485
+00:17:08,160 --> 00:17:09,600
+you know between the application and the
+
+486
+00:17:09,600 --> 00:17:11,760
+database
+
+487
+00:17:11,760 --> 00:17:41,110
+let's do that hold on a second
+
+488
+00:17:41,120 --> 00:17:42,559
+okay hopefully everybody has seen
+
+489
+00:17:42,559 --> 00:17:44,840
+screening of the wards again
+
+490
+00:17:44,840 --> 00:17:47,919
+good um
+
+491
+00:17:47,919 --> 00:17:50,080
+the so there's a couple of technical
+
+492
+00:17:50,080 --> 00:17:51,039
+challenges you know
+
+493
+00:17:51,039 --> 00:17:52,320
+what i was going to point out is that
+
+494
+00:17:52,320 --> 00:17:54,960
+that storage api is typically not as
+
+495
+00:17:54,960 --> 00:17:55,919
+powerful
+
+496
+00:17:55,919 --> 00:17:58,400
+or you know that file system api is not
+
+497
+00:17:58,400 --> 00:18:01,760
+as powerful as sql
+
+498
+00:18:01,760 --> 00:18:05,120
+uh and uh and furthermore
+
+499
+00:18:05,120 --> 00:18:06,799
+you know not all the data sort of old
+
+500
+00:18:06,799 --> 00:18:08,160
+users is like handy
+
+501
+00:18:08,160 --> 00:18:10,080
+in a single place that you can run you
+
+502
+00:18:10,080 --> 00:18:11,919
+know arbitrary queries on uh to
+
+503
+00:18:11,919 --> 00:18:13,120
+integrate it in
+
+504
+00:18:13,120 --> 00:18:14,480
+you know whatever application specific
+
+505
+00:18:14,480 --> 00:18:16,400
+manners uh so
+
+506
+00:18:16,400 --> 00:18:18,960
+that's sort of a challenge that sort of
+
+507
+00:18:18,960 --> 00:18:21,200
+applications really rely on the power
+
+508
+00:18:21,200 --> 00:18:23,280
+of being able to run arbitrary queries
+
+509
+00:18:23,280 --> 00:18:24,799
+over all the user data that is in
+
+510
+00:18:24,799 --> 00:18:26,080
+decentralized application a little bit
+
+511
+00:18:26,080 --> 00:18:27,360
+harder to achieve because the data is
+
+512
+00:18:27,360 --> 00:18:28,640
+not spread out
+
+513
+00:18:28,640 --> 00:18:30,240
+over many maybe different storage
+
+514
+00:18:30,240 --> 00:18:31,919
+servers
+
+515
+00:18:31,919 --> 00:18:33,200
+there's also features that might be
+
+516
+00:18:33,200 --> 00:18:35,200
+harder to implement
+
+517
+00:18:35,200 --> 00:18:38,320
+like example if you want to implement
+
+518
+00:18:38,320 --> 00:18:41,360
+ebay then
+
+519
+00:18:41,360 --> 00:18:44,720
+uh users have to submit sort of uh uh
+
+520
+00:18:44,720 --> 00:18:46,160
+bits but you know we wanna don't
+
+521
+00:18:46,160 --> 00:18:47,760
+disclose those bits immediately
+
+522
+00:18:47,760 --> 00:18:49,760
+and so there has to be so some trusted
+
+523
+00:18:49,760 --> 00:18:51,440
+you know aspect to it that actually
+
+524
+00:18:51,440 --> 00:18:53,200
+integrates these bits and then decides
+
+525
+00:18:53,200 --> 00:18:55,120
+you know actually who's the winner
+
+526
+00:18:55,120 --> 00:18:56,640
+without you know disclosing those bits
+
+527
+00:18:56,640 --> 00:18:58,240
+beforehand
+
+528
+00:18:58,240 --> 00:19:01,600
+uh similarly there's a uh
+
+529
+00:19:01,600 --> 00:19:04,480
+sort of challenges around management uh
+
+530
+00:19:04,480 --> 00:19:06,000
+typically you know these decentralized
+
+531
+00:19:06,000 --> 00:19:07,600
+applications you know involve
+
+532
+00:19:07,600 --> 00:19:11,120
+uh you know crypto keys
+
+533
+00:19:11,120 --> 00:19:13,679
+and so there has to be sort of a you
+
+534
+00:19:13,679 --> 00:19:14,640
+know that's often
+
+535
+00:19:14,640 --> 00:19:17,120
+a killer seo some user loses their
+
+536
+00:19:17,120 --> 00:19:18,720
+private key and then
+
+537
+00:19:18,720 --> 00:19:20,400
+you know you can't use your you can't
+
+538
+00:19:20,400 --> 00:19:21,919
+get to your data anymore
+
+539
+00:19:21,919 --> 00:19:24,400
+uh and or somebody actually steals your
+
+540
+00:19:24,400 --> 00:19:25,840
+private key and then you know
+
+541
+00:19:25,840 --> 00:19:28,880
+they can get into your data um so those
+
+542
+00:19:28,880 --> 00:19:29,919
+are sort of a series of
+
+543
+00:19:29,919 --> 00:19:31,600
+uh sort of technical challenge you know
+
+544
+00:19:31,600 --> 00:19:33,840
+to make this actually really work
+
+545
+00:19:33,840 --> 00:19:36,080
+uh and one of them uh the one remaining
+
+546
+00:19:36,080 --> 00:19:37,760
+one which is mostly the topic of this
+
+547
+00:19:37,760 --> 00:19:38,320
+lecture
+
+548
+00:19:38,320 --> 00:19:43,669
+is naming
+
+549
+00:19:43,679 --> 00:19:45,120
+and sort of these broad set of
+
+550
+00:19:45,120 --> 00:19:46,400
+challenges are basically i think you
+
+551
+00:19:46,400 --> 00:19:47,760
+know challenges for any sort of
+
+552
+00:19:47,760 --> 00:19:48,799
+decentralized
+
+553
+00:19:48,799 --> 00:19:50,880
+application infrastructure and certainly
+
+554
+00:19:50,880 --> 00:19:52,960
+also in the context of
+
+555
+00:19:52,960 --> 00:19:55,200
+a blog stack uh but in the case of block
+
+556
+00:19:55,200 --> 00:19:56,480
+stack you know we're gonna mostly you
+
+557
+00:19:56,480 --> 00:19:57,840
+know we'll see actually uh
+
+558
+00:19:57,840 --> 00:20:00,000
+the importance of names and why naming
+
+559
+00:20:00,000 --> 00:20:01,280
+actually is a
+
+560
+00:20:01,280 --> 00:20:04,960
+a challenge okay so
+
+561
+00:20:04,960 --> 00:20:06,720
+just before we stop here for a second
+
+562
+00:20:06,720 --> 00:20:08,480
+and sort of give people time to ask any
+
+563
+00:20:08,480 --> 00:20:10,080
+questions in terms of
+
+564
+00:20:10,080 --> 00:20:11,919
+contrasting sort of these two different
+
+565
+00:20:11,919 --> 00:20:13,200
+ways of building
+
+566
+00:20:13,200 --> 00:20:14,880
+uh applications whether it's you know
+
+567
+00:20:14,880 --> 00:20:16,320
+centralized as in the sort of the
+
+568
+00:20:16,320 --> 00:20:17,600
+traditional model that we're probably
+
+569
+00:20:17,600 --> 00:20:19,200
+all familiar with
+
+570
+00:20:19,200 --> 00:20:22,789
+or this decentralized model
+
+571
+00:20:22,799 --> 00:20:24,720
+so what's the uh challenge exactly with
+
+572
+00:20:24,720 --> 00:20:26,480
+bids
+
+573
+00:20:26,480 --> 00:20:33,190
+so which challenge with bids
+
+574
+00:20:33,200 --> 00:20:34,799
+you need an application need to have
+
+575
+00:20:34,799 --> 00:20:36,480
+access to the user bits
+
+576
+00:20:36,480 --> 00:20:38,400
+uh but shouldn't disclose them right to
+
+577
+00:20:38,400 --> 00:20:39,520
+other applications
+
+578
+00:20:39,520 --> 00:20:42,720
+and so that means that uh the
+
+579
+00:20:42,720 --> 00:20:45,440
+the application like like i'm due one
+
+580
+00:20:45,440 --> 00:20:46,960
+i'm submitting a bit
+
+581
+00:20:46,960 --> 00:20:49,120
+uh you know i get youtube's bit but my
+
+582
+00:20:49,120 --> 00:20:50,480
+application shouldn't really be closed
+
+583
+00:20:50,480 --> 00:20:52,080
+youtube's bit immediately to me because
+
+584
+00:20:52,080 --> 00:20:53,840
+you know it wouldn't be fair
+
+585
+00:20:53,840 --> 00:20:55,760
+uh and so how would you do that so you
+
+586
+00:20:55,760 --> 00:20:57,280
+need some sort of form of a trusted
+
+587
+00:20:57,280 --> 00:20:58,640
+party or whatever some
+
+588
+00:20:58,640 --> 00:21:03,600
+protocol that actually makes that happen
+
+589
+00:21:03,600 --> 00:21:06,950
+thank you
+
+590
+00:21:06,960 --> 00:21:08,400
+the application runs in your models on
+
+591
+00:21:08,400 --> 00:21:09,679
+your workstation you can modify the work
+
+592
+00:21:09,679 --> 00:21:14,070
+in the application correct
+
+593
+00:21:14,080 --> 00:21:15,760
+uh sorry in the previous slide i think
+
+594
+00:21:15,760 --> 00:21:17,200
+you mentioned also
+
+595
+00:21:17,200 --> 00:21:21,039
+um app one being different from uh like
+
+596
+00:21:21,039 --> 00:21:24,320
+the two apps being different um what do
+
+597
+00:21:24,320 --> 00:21:24,640
+you
+
+598
+00:21:24,640 --> 00:21:27,039
+mean exactly well for example okay just
+
+599
+00:21:27,039 --> 00:21:28,400
+to make the analogy is very crisp
+
+600
+00:21:28,400 --> 00:21:30,480
+because this could be vim
+
+601
+00:21:30,480 --> 00:21:33,120
+and this could be emacs and u1 and u2
+
+602
+00:21:33,120 --> 00:21:34,480
+get to decide which application they're
+
+603
+00:21:34,480 --> 00:21:35,919
+going to use to actually modify
+
+604
+00:21:35,919 --> 00:21:39,520
+their you know data correct and you know
+
+605
+00:21:39,520 --> 00:21:41,280
+today in the sort of centralized model
+
+606
+00:21:41,280 --> 00:21:42,880
+you know it's not really possible you
+
+607
+00:21:42,880 --> 00:21:44,480
+know you can't have basically two
+
+608
+00:21:44,480 --> 00:21:46,000
+twitter apps you know where you were
+
+609
+00:21:46,000 --> 00:21:47,280
+like one way of interacting with the
+
+610
+00:21:47,280 --> 00:21:48,480
+twitter app and somebody else likes them
+
+611
+00:21:48,480 --> 00:21:50,799
+to do it in a different way
+
+612
+00:21:50,799 --> 00:21:53,840
+there's just a twitter app i see thank
+
+613
+00:21:53,840 --> 00:21:54,880
+you
+
+614
+00:21:54,880 --> 00:21:57,840
+i i had a question just about like the
+
+615
+00:21:57,840 --> 00:21:59,600
+design of the decentralized like
+
+616
+00:21:59,600 --> 00:22:01,919
+app like model is it is it necessary for
+
+617
+00:22:01,919 --> 00:22:03,840
+the app to be like on the
+
+618
+00:22:03,840 --> 00:22:05,679
+client side or could it you know could
+
+619
+00:22:05,679 --> 00:22:07,520
+you have like these like decentralized
+
+620
+00:22:07,520 --> 00:22:10,640
+apps on the like internet uh
+
+621
+00:22:10,640 --> 00:22:12,720
+side well you you could have a principal
+
+622
+00:22:12,720 --> 00:22:14,080
+on the internet it's like the key
+
+623
+00:22:14,080 --> 00:22:15,600
+issue and it doesn't really have to run
+
+624
+00:22:15,600 --> 00:22:17,120
+on the user's workstation when you mean
+
+625
+00:22:17,120 --> 00:22:18,880
+anything can run anywhere but it is
+
+626
+00:22:18,880 --> 00:22:21,039
+under the user's control
+
+627
+00:22:21,039 --> 00:22:22,080
+of course you have somebody who writes
+
+628
+00:22:22,080 --> 00:22:24,240
+it but the user gets to decide which app
+
+629
+00:22:24,240 --> 00:22:24,799
+to run
+
+630
+00:22:24,799 --> 00:22:28,400
+over what data right
+
+631
+00:22:28,400 --> 00:22:30,240
+so so the important thing here is is
+
+632
+00:22:30,240 --> 00:22:31,679
+that you know app
+
+633
+00:22:31,679 --> 00:22:33,840
+the chooser that you usually chooses the
+
+634
+00:22:33,840 --> 00:22:34,720
+app and like
+
+635
+00:22:34,720 --> 00:22:36,559
+importantly the app has access to any
+
+636
+00:22:36,559 --> 00:22:40,080
+storage provider right
+
+637
+00:22:40,080 --> 00:22:46,070
+thanks
+
+638
+00:22:46,080 --> 00:22:52,310
+okay any other questions
+
+639
+00:22:52,320 --> 00:22:55,360
+okay so names so
+
+640
+00:22:55,360 --> 00:22:56,480
+and this is getting a little bit more
+
+641
+00:22:56,480 --> 00:23:08,000
+into block stack
+
+642
+00:23:08,000 --> 00:23:10,320
+and then uh you know let me sort of sort
+
+643
+00:23:10,320 --> 00:23:12,640
+of lay out like the role the names play
+
+644
+00:23:12,640 --> 00:23:14,080
+you know first of all you know you have
+
+645
+00:23:14,080 --> 00:23:15,440
+to do list and you want to share that
+
+646
+00:23:15,440 --> 00:23:16,559
+with somebody else you're going to have
+
+647
+00:23:16,559 --> 00:23:18,159
+to be able to name that user from whom
+
+648
+00:23:18,159 --> 00:23:19,520
+you're sharing
+
+649
+00:23:19,520 --> 00:23:21,120
+and so there's a sort of mapping from
+
+650
+00:23:21,120 --> 00:23:23,840
+name to user
+
+651
+00:23:23,840 --> 00:23:26,640
+that's an important role there's a
+
+652
+00:23:26,640 --> 00:23:27,440
+mapping for
+
+653
+00:23:27,440 --> 00:23:36,159
+name to location of data
+
+654
+00:23:36,159 --> 00:23:38,400
+my to-do list app you know i share you
+
+655
+00:23:38,400 --> 00:23:40,640
+know the to-do list of usual one with
+
+656
+00:23:40,640 --> 00:23:41,760
+user two
+
+657
+00:23:41,760 --> 00:23:44,559
+uh and then uh you know what i wanna
+
+658
+00:23:44,559 --> 00:23:46,080
+actually retrieve usually one wants to
+
+659
+00:23:46,080 --> 00:23:47,279
+be two of user two's
+
+660
+00:23:47,279 --> 00:23:49,440
+uh data that needs to be a way of
+
+661
+00:23:49,440 --> 00:23:51,919
+actually naming the users to use uh
+
+662
+00:23:51,919 --> 00:23:54,880
+to-do list and actually retrieving it
+
+663
+00:23:54,880 --> 00:23:55,360
+and then
+
+664
+00:23:55,360 --> 00:23:56,720
+you know there's a assembly there's a
+
+665
+00:23:56,720 --> 00:23:58,559
+name you know to
+
+666
+00:23:58,559 --> 00:24:01,840
+public key uh mapping
+
+667
+00:24:01,840 --> 00:24:03,840
+you know when i do you know successfully
+
+668
+00:24:03,840 --> 00:24:05,600
+retrieve uh
+
+669
+00:24:05,600 --> 00:24:07,679
+user choose data uh you know probably
+
+670
+00:24:07,679 --> 00:24:09,360
+want to verify that actually was written
+
+671
+00:24:09,360 --> 00:24:11,760
+uh by user two and so i'll probably use
+
+672
+00:24:11,760 --> 00:24:13,600
+user2's public key
+
+673
+00:24:13,600 --> 00:24:15,679
+to verify the integrity of the data
+
+674
+00:24:15,679 --> 00:24:17,600
+retrieved because the storage providers
+
+675
+00:24:17,600 --> 00:24:18,559
+you know might be
+
+676
+00:24:18,559 --> 00:24:21,600
+you know can then be untrusted and but
+
+677
+00:24:21,600 --> 00:24:23,520
+that requires that i can establish
+
+678
+00:24:23,520 --> 00:24:26,400
+uh what actually uses two public key is
+
+679
+00:24:26,400 --> 00:24:29,360
+in in a reliable manner
+
+680
+00:24:29,360 --> 00:24:32,559
+and so uh so you should think about it
+
+681
+00:24:32,559 --> 00:24:33,760
+like in every step
+
+682
+00:24:33,760 --> 00:24:36,400
+of these uh decentralized applications
+
+683
+00:24:36,400 --> 00:24:37,360
+you know the name
+
+684
+00:24:37,360 --> 00:24:40,640
+uh plays a crucial role and
+
+685
+00:24:40,640 --> 00:24:42,880
+and the common name given in particular
+
+686
+00:24:42,880 --> 00:24:43,760
+for you know the
+
+687
+00:24:43,760 --> 00:24:46,480
+these mappings from names to peace which
+
+688
+00:24:46,480 --> 00:24:47,039
+is a
+
+689
+00:24:47,039 --> 00:24:49,840
+crucial piece is typically called the
+
+690
+00:24:49,840 --> 00:25:02,149
+public key infrastructure
+
+691
+00:25:02,159 --> 00:25:04,799
+and that is you know building actually
+
+692
+00:25:04,799 --> 00:25:05,200
+uh
+
+693
+00:25:05,200 --> 00:25:07,200
+any public key infrastructure is quite
+
+694
+00:25:07,200 --> 00:25:08,559
+challenging uh
+
+695
+00:25:08,559 --> 00:25:10,559
+you know you might be familiar with dns
+
+696
+00:25:10,559 --> 00:25:11,840
+sec you know there's a
+
+697
+00:25:11,840 --> 00:25:13,440
+particular way unfortunately the wide
+
+698
+00:25:13,440 --> 00:25:16,159
+web has a with certificates has a whole
+
+699
+00:25:16,159 --> 00:25:17,679
+public key infrastructure
+
+700
+00:25:17,679 --> 00:25:20,799
+uh kerberos is an example of uh
+
+701
+00:25:20,799 --> 00:25:23,440
+uh public key infrastructure and in in
+
+702
+00:25:23,440 --> 00:25:25,039
+some ways with the you know these papers
+
+703
+00:25:25,039 --> 00:25:25,520
+that's it
+
+704
+00:25:25,520 --> 00:25:27,120
+to do is just build get another you know
+
+705
+00:25:27,120 --> 00:25:29,039
+public key infrastructure that is
+
+706
+00:25:29,039 --> 00:25:36,470
+completely decentralized
+
+707
+00:25:36,480 --> 00:25:39,840
+and that's sort of the
+
+708
+00:25:39,840 --> 00:25:42,799
+key aspect aspect you know this uh
+
+709
+00:25:42,799 --> 00:25:44,000
+what's interesting about this naming
+
+710
+00:25:44,000 --> 00:25:44,640
+scheme
+
+711
+00:25:44,640 --> 00:25:47,440
+in uh in blockstack that's actually
+
+712
+00:25:47,440 --> 00:25:49,120
+provides a decent life publicly
+
+713
+00:25:49,120 --> 00:25:51,120
+infrastructure
+
+714
+00:25:51,120 --> 00:25:53,039
+let me try to explain a little bit why
+
+715
+00:25:53,039 --> 00:25:56,080
+you know this is challenging
+
+716
+00:25:56,080 --> 00:25:59,430
+so
+
+717
+00:25:59,440 --> 00:26:00,960
+the people refers to this in a couple
+
+718
+00:26:00,960 --> 00:26:02,960
+places and it says like you know
+
+719
+00:26:02,960 --> 00:26:05,039
+there's three aspects that you want uh
+
+720
+00:26:05,039 --> 00:26:06,000
+if you
+
+721
+00:26:06,000 --> 00:26:07,679
+want to general purpose and naming your
+
+722
+00:26:07,679 --> 00:26:09,520
+structure you want to be able to have
+
+723
+00:26:09,520 --> 00:26:12,710
+unique names
+
+724
+00:26:12,720 --> 00:26:17,590
+to have a unique name for every user
+
+725
+00:26:17,600 --> 00:26:19,919
+so that you can identify you know the
+
+726
+00:26:19,919 --> 00:26:21,440
+particular john or the particular
+
+727
+00:26:21,440 --> 00:26:24,950
+journal you're talking about
+
+728
+00:26:24,960 --> 00:26:28,480
+you on human human
+
+729
+00:26:28,480 --> 00:26:32,789
+readable names
+
+730
+00:26:32,799 --> 00:26:36,400
+so that's easy to remember and then in
+
+731
+00:26:36,400 --> 00:26:38,480
+this case
+
+732
+00:26:38,480 --> 00:26:40,880
+what block stack also wants is you know
+
+733
+00:26:40,880 --> 00:26:46,710
+decentralized
+
+734
+00:26:46,720 --> 00:26:48,320
+and you know the paper sort of makes a
+
+735
+00:26:48,320 --> 00:26:49,840
+point that it's
+
+736
+00:26:49,840 --> 00:26:52,480
+easy to get two of the three but it's
+
+737
+00:26:52,480 --> 00:26:53,360
+very difficult to get
+
+738
+00:26:53,360 --> 00:26:56,240
+uh all three of them and you know maybe
+
+739
+00:26:56,240 --> 00:26:57,760
+let's look at a couple naming systems to
+
+740
+00:26:57,760 --> 00:26:59,120
+see you know which two
+
+741
+00:26:59,120 --> 00:27:01,279
+they do get so let's think about like
+
+742
+00:27:01,279 --> 00:27:12,870
+email addresses
+
+743
+00:27:12,880 --> 00:27:16,400
+look at email addresses are they uh
+
+744
+00:27:16,400 --> 00:27:22,149
+unique names
+
+745
+00:27:22,159 --> 00:27:25,279
+yes yeah are they human-readable
+
+746
+00:27:25,279 --> 00:27:28,960
+yup yes are they decentralized no
+
+747
+00:27:28,960 --> 00:27:30,720
+no so you should just get two of these
+
+748
+00:27:30,720 --> 00:27:33,200
+guys correct but not the first one
+
+749
+00:27:33,200 --> 00:27:36,480
+uh how about random public keys
+
+750
+00:27:36,480 --> 00:27:38,720
+or maybe like if the paper uh uses
+
+751
+00:27:38,720 --> 00:27:40,640
+hashes of the file contents to actually
+
+752
+00:27:40,640 --> 00:27:42,640
+get a name correct for the
+
+753
+00:27:42,640 --> 00:27:45,760
+workflow so basically okay so random
+
+754
+00:27:45,760 --> 00:27:49,200
+public keys which maybe just public keys
+
+755
+00:27:49,200 --> 00:27:55,110
+to get the random but presumably random
+
+756
+00:27:55,120 --> 00:27:59,190
+so public keys are they unique
+
+757
+00:27:59,200 --> 00:28:03,279
+yep yeah yep uh are they unimaginable
+
+758
+00:28:03,279 --> 00:28:06,559
+no no are they decentralized yes
+
+759
+00:28:06,559 --> 00:28:09,039
+yeah you can generate them you know with
+
+760
+00:28:09,039 --> 00:28:10,880
+high probability in a unique manner
+
+761
+00:28:10,880 --> 00:28:13,760
+completely decentralized correct
+
+762
+00:28:13,760 --> 00:28:15,840
+so in fact you should have done that
+
+763
+00:28:15,840 --> 00:28:18,320
+more in lab three with these cleric ids
+
+764
+00:28:18,320 --> 00:28:20,880
+so here we get like again two of the
+
+765
+00:28:20,880 --> 00:28:23,279
+three but not the human readable one
+
+766
+00:28:23,279 --> 00:28:24,720
+let's see can we actually get human
+
+767
+00:28:24,720 --> 00:28:27,760
+readable and decentralized
+
+768
+00:28:27,760 --> 00:28:34,710
+can you think of an example
+
+769
+00:28:34,720 --> 00:28:37,120
+is that like uh peer-to-peer file
+
+770
+00:28:37,120 --> 00:28:39,830
+sharing
+
+771
+00:28:39,840 --> 00:28:41,600
+yeah it's not whatever it's not unique
+
+772
+00:28:41,600 --> 00:28:43,520
+the files but they're human readable and
+
+773
+00:28:43,520 --> 00:28:44,799
+decentralized
+
+774
+00:28:44,799 --> 00:28:47,919
+yeah nothing simpler uh you know think
+
+775
+00:28:47,919 --> 00:28:53,990
+about your phone
+
+776
+00:28:54,000 --> 00:28:55,600
+then the example for me always is a good
+
+777
+00:28:55,600 --> 00:29:02,310
+one is like your contact list
+
+778
+00:29:02,320 --> 00:29:03,600
+yeah you know the names in your contract
+
+779
+00:29:03,600 --> 00:29:05,120
+listed your remote you know
+
+780
+00:29:05,120 --> 00:29:06,559
+decentralized you know
+
+781
+00:29:06,559 --> 00:29:10,159
+you can have uh john you know
+
+782
+00:29:10,159 --> 00:29:11,600
+in the entry for john one phone number
+
+783
+00:29:11,600 --> 00:29:14,000
+and i can have uh another phone number
+
+784
+00:29:14,000 --> 00:29:15,360
+for my john entry
+
+785
+00:29:15,360 --> 00:29:17,520
+uh they're probably different people uh
+
+786
+00:29:17,520 --> 00:29:18,480
+but you know the the
+
+787
+00:29:18,480 --> 00:29:19,919
+you know i can pick the names in a
+
+788
+00:29:19,919 --> 00:29:21,600
+decentralized manner
+
+789
+00:29:21,600 --> 00:29:23,200
+and they're certainly unreadable are
+
+790
+00:29:23,200 --> 00:29:27,360
+they unique
+
+791
+00:29:27,360 --> 00:29:30,559
+no correct this is like you have your
+
+792
+00:29:30,559 --> 00:29:32,399
+list of names i have my list of names
+
+793
+00:29:32,399 --> 00:29:33,679
+and they may actually overlap
+
+794
+00:29:33,679 --> 00:29:36,240
+and still talk about different people
+
+795
+00:29:36,240 --> 00:29:37,360
+okay so you're sort of
+
+796
+00:29:37,360 --> 00:29:38,880
+what the paper is trying to get get at
+
+797
+00:29:38,880 --> 00:29:40,480
+that actually getting two out of the
+
+798
+00:29:40,480 --> 00:29:41,200
+three
+
+799
+00:29:41,200 --> 00:29:44,799
+uh is quite common or very easy
+
+800
+00:29:44,799 --> 00:29:46,640
+uh but actually getting uh all three of
+
+801
+00:29:46,640 --> 00:29:48,960
+them is hard
+
+802
+00:29:48,960 --> 00:29:52,799
+and uh and
+
+803
+00:29:52,799 --> 00:29:55,440
+the papers are like well we actually we
+
+804
+00:29:55,440 --> 00:29:56,559
+achieve all three of them
+
+805
+00:29:56,559 --> 00:29:58,080
+and you know we get the unique names we
+
+806
+00:29:58,080 --> 00:30:00,000
+get unreal and decentralized
+
+807
+00:30:00,000 --> 00:30:03,520
+right and in the way in some ways they
+
+808
+00:30:03,520 --> 00:30:06,960
+they get this is to basically uh exploit
+
+809
+00:30:06,960 --> 00:30:10,480
+uh the blockchain
+
+810
+00:30:10,480 --> 00:30:14,950
+so
+
+811
+00:30:14,960 --> 00:30:27,430
+so bloxtex approach
+
+812
+00:30:27,440 --> 00:30:31,039
+uh and really to be fair uh
+
+813
+00:30:31,039 --> 00:30:33,120
+it's really not black black sex
+
+814
+00:30:33,120 --> 00:30:34,840
+approaches really name
+
+815
+00:30:34,840 --> 00:30:37,200
+coins approach
+
+816
+00:30:37,200 --> 00:30:40,640
+that they sort of adopted uh the basic
+
+817
+00:30:40,640 --> 00:30:41,760
+idea is very simple
+
+818
+00:30:41,760 --> 00:30:43,360
+uh you know we're going to take
+
+819
+00:30:43,360 --> 00:30:45,120
+advantage of the existence of the
+
+820
+00:30:45,120 --> 00:30:46,320
+bitcoin block stack
+
+821
+00:30:46,320 --> 00:30:49,520
+with the bitcoin blockchain and
+
+822
+00:30:49,520 --> 00:30:50,880
+of course you could use any other
+
+823
+00:30:50,880 --> 00:30:52,159
+blockchain but like you know just for
+
+824
+00:30:52,159 --> 00:30:53,120
+concreteness
+
+825
+00:30:53,120 --> 00:30:54,799
+you know we're gonna think about the
+
+826
+00:30:54,799 --> 00:30:56,480
+bitcoin one and so
+
+827
+00:30:56,480 --> 00:30:59,679
+here we got our chain
+
+828
+00:30:59,679 --> 00:31:02,840
+you know transactions that's it in
+
+829
+00:31:02,840 --> 00:31:04,640
+bitcoin
+
+830
+00:31:04,640 --> 00:31:07,200
+uh you know grows over time you know
+
+831
+00:31:07,200 --> 00:31:09,200
+miners add new transactions
+
+832
+00:31:09,200 --> 00:31:11,440
+and the way we're gonna uh basically
+
+833
+00:31:11,440 --> 00:31:13,039
+create a naming system is we're gonna
+
+834
+00:31:13,039 --> 00:31:13,600
+just
+
+835
+00:31:13,600 --> 00:31:16,320
+uh post uh transactions that are for
+
+836
+00:31:16,320 --> 00:31:17,279
+different type
+
+837
+00:31:17,279 --> 00:31:19,919
+that basically claim a name and so for
+
+838
+00:31:19,919 --> 00:31:21,840
+example you know we might actually have
+
+839
+00:31:21,840 --> 00:31:23,279
+you know certainly special special
+
+840
+00:31:23,279 --> 00:31:25,360
+transactions uh
+
+841
+00:31:25,360 --> 00:31:27,200
+because every transaction actually turns
+
+842
+00:31:27,200 --> 00:31:29,760
+out in bitcoin has a metadata field and
+
+843
+00:31:29,760 --> 00:31:31,120
+you can basically stick anything in the
+
+844
+00:31:31,120 --> 00:31:32,960
+metadata field you want
+
+845
+00:31:32,960 --> 00:31:34,080
+and so what we're going to stick in
+
+846
+00:31:34,080 --> 00:31:36,559
+there is a name record
+
+847
+00:31:36,559 --> 00:31:37,760
+so we're going to have some transaction
+
+848
+00:31:37,760 --> 00:31:38,960
+and then we're going to stick a name
+
+849
+00:31:38,960 --> 00:31:41,360
+record in there
+
+850
+00:31:41,360 --> 00:31:43,039
+and we'll see a little in a second but
+
+851
+00:31:43,039 --> 00:31:44,640
+exactly the details of this name record
+
+852
+00:31:44,640 --> 00:31:45,360
+is
+
+853
+00:31:45,360 --> 00:31:46,880
+but in the case of block stack you know
+
+854
+00:31:46,880 --> 00:31:48,640
+it's basically a name
+
+855
+00:31:48,640 --> 00:31:51,840
+like six eight to four
+
+856
+00:31:51,840 --> 00:31:54,000
+and then you know maybe as we see later
+
+857
+00:31:54,000 --> 00:31:56,240
+a hash of the zone file
+
+858
+00:31:56,240 --> 00:31:59,279
+um and the basic rule in
+
+859
+00:31:59,279 --> 00:32:02,320
+this scheme is going to be that
+
+860
+00:32:02,320 --> 00:32:05,760
+the first one the first
+
+861
+00:32:05,760 --> 00:32:14,159
+user first name record basically wins
+
+862
+00:32:14,159 --> 00:32:15,760
+right so there might be a second you
+
+863
+00:32:15,760 --> 00:32:18,000
+know somebody else creates the name 684
+
+864
+00:32:18,000 --> 00:32:18,799
+later
+
+865
+00:32:18,799 --> 00:32:22,880
+uh and not because you know the 6.6824
+
+866
+00:32:22,880 --> 00:32:26,840
+uh shows up later in the in the
+
+867
+00:32:26,840 --> 00:32:29,519
+bitcoin uh blockchain and we're going to
+
+868
+00:32:29,519 --> 00:32:32,240
+basically ignore that one and you know
+
+869
+00:32:32,240 --> 00:32:32,880
+only
+
+870
+00:32:32,880 --> 00:32:36,399
+you know uh consider that the valid
+
+871
+00:32:36,399 --> 00:32:39,440
+name record for 6824 right and this
+
+872
+00:32:39,440 --> 00:32:40,000
+completely
+
+873
+00:32:40,000 --> 00:32:41,760
+you know plays off you know the fact
+
+874
+00:32:41,760 --> 00:32:43,360
+that there's basically
+
+875
+00:32:43,360 --> 00:32:46,720
+uh the blockchain is a log
+
+876
+00:32:46,720 --> 00:32:49,200
+of all the operations ever happened uh
+
+877
+00:32:49,200 --> 00:32:50,240
+they're in order
+
+878
+00:32:50,240 --> 00:32:52,159
+there's consensus in what order they
+
+879
+00:32:52,159 --> 00:32:54,720
+happened and so from that you know we
+
+880
+00:32:54,720 --> 00:32:56,559
+can basically uh construct
+
+881
+00:32:56,559 --> 00:32:58,720
+uh if you will like a database uh
+
+882
+00:32:58,720 --> 00:33:00,240
+database with all the names in the world
+
+883
+00:33:00,240 --> 00:33:01,279
+you know we just go through the
+
+884
+00:33:01,279 --> 00:33:03,120
+blockchain from the beginning of time
+
+885
+00:33:03,120 --> 00:33:06,480
+find all the valid uh transactions name
+
+886
+00:33:06,480 --> 00:33:07,360
+transactions
+
+887
+00:33:07,360 --> 00:33:10,320
+and use that to construct a database
+
+888
+00:33:10,320 --> 00:33:11,600
+with all the
+
+889
+00:33:11,600 --> 00:33:14,640
+uh with all the valid names and in some
+
+890
+00:33:14,640 --> 00:33:15,440
+ways
+
+891
+00:33:15,440 --> 00:33:17,120
+uh you know a number of people sort of
+
+892
+00:33:17,120 --> 00:33:18,880
+pointed this out like isn't this exactly
+
+893
+00:33:18,880 --> 00:33:20,799
+you know we've been doing like lab three
+
+894
+00:33:20,799 --> 00:33:22,559
+uh where you know we have vlogs like
+
+895
+00:33:22,559 --> 00:33:24,480
+graph you know provides a log
+
+896
+00:33:24,480 --> 00:33:26,399
+we stick operations in the log you know
+
+897
+00:33:26,399 --> 00:33:26,700
+we
+
+898
+00:33:26,700 --> 00:33:27,840
+[Music]
+
+899
+00:33:27,840 --> 00:33:31,120
+run you know the operations and uh
+
+900
+00:33:31,120 --> 00:33:32,960
+and that constructs another state you
+
+901
+00:33:32,960 --> 00:33:34,320
+know where the state in this case would
+
+902
+00:33:34,320 --> 00:33:34,559
+be
+
+903
+00:33:34,559 --> 00:33:36,960
+a naming database and there's you know i
+
+904
+00:33:36,960 --> 00:33:39,039
+think it's exactly that kind of style
+
+905
+00:33:39,039 --> 00:33:41,360
+uh in the same idea except the small
+
+906
+00:33:41,360 --> 00:33:42,720
+differences here correct you know we're
+
+907
+00:33:42,720 --> 00:33:44,559
+not using graph to get consensus we're
+
+908
+00:33:44,559 --> 00:33:45,679
+again we're using
+
+909
+00:33:45,679 --> 00:33:49,200
+uh bitcoin uh or nakamoto uh to get the
+
+910
+00:33:49,200 --> 00:33:51,440
+nakamoto consensus to actually achieve
+
+911
+00:33:51,440 --> 00:33:52,880
+uh one single
+
+912
+00:33:52,880 --> 00:33:56,000
+uh blockchain uh but in spirit you know
+
+913
+00:33:56,000 --> 00:33:56,720
+yes you know
+
+914
+00:33:56,720 --> 00:34:01,590
+it is it's very similar
+
+915
+00:34:01,600 --> 00:34:04,159
+okay um so let's think a little bit
+
+916
+00:34:04,159 --> 00:34:04,840
+about it
+
+917
+00:34:04,840 --> 00:34:08,079
+uh our free properties you know first of
+
+918
+00:34:08,079 --> 00:34:09,679
+all
+
+919
+00:34:09,679 --> 00:34:17,990
+you know do we get unique names
+
+920
+00:34:18,000 --> 00:34:20,240
+yes yes yeah we got unique names correct
+
+921
+00:34:20,240 --> 00:34:24,710
+because the first one wins
+
+922
+00:34:24,720 --> 00:34:28,800
+uh is it decentralized
+
+923
+00:34:28,800 --> 00:34:31,359
+yes yeah it's decentralized you know by
+
+924
+00:34:31,359 --> 00:34:32,079
+virtue of
+
+925
+00:34:32,079 --> 00:34:36,470
+uh bitcoin right
+
+926
+00:34:36,480 --> 00:34:38,879
+and the consensus and the log basically
+
+927
+00:34:38,879 --> 00:34:40,560
+makes sure that we can actually identify
+
+928
+00:34:40,560 --> 00:34:41,359
+what the
+
+929
+00:34:41,359 --> 00:34:42,879
+first name is so that we can actually
+
+930
+00:34:42,879 --> 00:34:44,879
+pick a unique name
+
+931
+00:34:44,879 --> 00:34:49,280
+this is human readable can't be
+
+932
+00:34:49,280 --> 00:34:53,109
+candy yeah i get exactly okay
+
+933
+00:34:53,119 --> 00:34:56,320
+certainly my stream uh 6824 is hopefully
+
+934
+00:34:56,320 --> 00:35:00,829
+unreasonable
+
+935
+00:35:00,839 --> 00:35:03,280
+ah okay so it seems like you know sort
+
+936
+00:35:03,280 --> 00:35:04,240
+of from the first
+
+937
+00:35:04,240 --> 00:35:07,599
+uh brought you know uh suite where uh
+
+938
+00:35:07,599 --> 00:35:08,480
+you know it looks like
+
+939
+00:35:08,480 --> 00:35:09,839
+indeed you know we got the the free
+
+940
+00:35:09,839 --> 00:35:12,160
+properties right got new marine ball we
+
+941
+00:35:12,160 --> 00:35:13,280
+got the uniqueness and we got the
+
+942
+00:35:13,280 --> 00:35:14,800
+decentralized one
+
+943
+00:35:14,800 --> 00:35:16,240
+and i think that really named coin was
+
+944
+00:35:16,240 --> 00:35:17,920
+sort of the first uh
+
+945
+00:35:17,920 --> 00:35:20,640
+naming system that uh demonstrated that
+
+946
+00:35:20,640 --> 00:35:21,119
+could be
+
+947
+00:35:21,119 --> 00:35:24,320
+that could be achieved in this way now
+
+948
+00:35:24,320 --> 00:35:25,680
+you know it's not completely perfect
+
+949
+00:35:25,680 --> 00:35:27,359
+right uh
+
+950
+00:35:27,359 --> 00:35:29,359
+like for example even though we got sort
+
+951
+00:35:29,359 --> 00:35:31,440
+of unique names and the union readable
+
+952
+00:35:31,440 --> 00:35:33,760
+we don't really know like what 684
+
+953
+00:35:33,760 --> 00:35:35,359
+really means correct and i feel like you
+
+954
+00:35:35,359 --> 00:35:36,560
+see 6824
+
+955
+00:35:36,560 --> 00:35:38,960
+then what what does 6824 refer to is it
+
+956
+00:35:38,960 --> 00:35:39,680
+like a
+
+957
+00:35:39,680 --> 00:35:43,280
+a part number or is it a class number or
+
+958
+00:35:43,280 --> 00:35:44,880
+anything we don't really know like how
+
+959
+00:35:44,880 --> 00:35:46,320
+to interpret names but you know they're
+
+960
+00:35:46,320 --> 00:35:47,760
+still human readable so it's not
+
+961
+00:35:47,760 --> 00:35:49,040
+completely perfect it's not like
+
+962
+00:35:49,040 --> 00:35:50,720
+identifying uniquely some
+
+963
+00:35:50,720 --> 00:35:53,440
+you know user in the world right or um
+
+964
+00:35:53,440 --> 00:35:54,960
+and even like you know whatever you were
+
+965
+00:35:54,960 --> 00:35:56,480
+done cash looking that doesn't really
+
+966
+00:35:56,480 --> 00:35:58,079
+uniquely identify
+
+967
+00:35:58,079 --> 00:36:00,720
+uh one person right so whenever you see
+
+968
+00:36:00,720 --> 00:36:02,800
+a name here there's still the
+
+969
+00:36:02,800 --> 00:36:04,800
+uh issue of like who it actually really
+
+970
+00:36:04,800 --> 00:36:06,240
+is
+
+971
+00:36:06,240 --> 00:36:10,480
+um and also there's sort of a similar
+
+972
+00:36:10,480 --> 00:36:12,640
+you know related issue why it's not
+
+973
+00:36:12,640 --> 00:36:13,520
+completely perfect
+
+974
+00:36:13,520 --> 00:36:16,800
+uh which is like um how do you find
+
+975
+00:36:16,800 --> 00:36:17,920
+somebody's name
+
+976
+00:36:17,920 --> 00:36:20,400
+uh and you know you know how do you find
+
+977
+00:36:20,400 --> 00:36:21,760
+actually you know what a casserole's
+
+978
+00:36:21,760 --> 00:36:22,079
+name
+
+979
+00:36:22,079 --> 00:36:25,440
+or uh and how do you know how do you
+
+980
+00:36:25,440 --> 00:36:26,079
+find that
+
+981
+00:36:26,079 --> 00:36:27,680
+how do you know which record actually
+
+982
+00:36:27,680 --> 00:36:29,200
+goes within which particular user
+
+983
+00:36:29,200 --> 00:36:32,240
+so you know although so although the
+
+984
+00:36:32,240 --> 00:36:34,320
+you know the system is uh quite cool
+
+985
+00:36:34,320 --> 00:36:35,599
+because it has this
+
+986
+00:36:35,599 --> 00:36:37,040
+decent life uniqueness and human
+
+987
+00:36:37,040 --> 00:36:38,960
+readable aspects to it and it's not
+
+988
+00:36:38,960 --> 00:36:40,320
+completely perfect and
+
+989
+00:36:40,320 --> 00:36:42,000
+these are generally issues with naming
+
+990
+00:36:42,000 --> 00:36:44,000
+general naming systems uh but certainly
+
+991
+00:36:44,000 --> 00:36:44,880
+true here too
+
+992
+00:36:44,880 --> 00:36:46,320
+and so it's not the case that you know
+
+993
+00:36:46,320 --> 00:36:48,079
+we're you know we sort of solved all
+
+994
+00:36:48,079 --> 00:36:49,440
+naming problems
+
+995
+00:36:49,440 --> 00:36:52,839
+uh in one single uh swoop we do have a
+
+996
+00:36:52,839 --> 00:36:55,200
+good standing position to
+
+997
+00:36:55,200 --> 00:36:57,680
+work with but you know it's not a
+
+998
+00:36:57,680 --> 00:37:01,589
+complete 100 hit
+
+999
+00:37:01,599 --> 00:37:04,640
+right so question so
+
+1000
+00:37:04,640 --> 00:37:06,320
+namecoin all they did was add
+
+1001
+00:37:06,320 --> 00:37:08,160
+essentially this like record to
+
+1002
+00:37:08,160 --> 00:37:13,910
+the the like transaction
+
+1003
+00:37:13,920 --> 00:37:15,200
+i think we did a little bit more than
+
+1004
+00:37:15,200 --> 00:37:17,440
+that right they run their own blockchain
+
+1005
+00:37:17,440 --> 00:37:21,280
+uh independent of bitcoin and uh
+
+1006
+00:37:21,280 --> 00:37:23,520
+and and used that blockchain you know
+
+1007
+00:37:23,520 --> 00:37:25,280
+purely for naming
+
+1008
+00:37:25,280 --> 00:37:27,119
+uh and they had always a bunch of rules
+
+1009
+00:37:27,119 --> 00:37:28,720
+about like you know uh
+
+1010
+00:37:28,720 --> 00:37:30,960
+how much money how many name points you
+
+1011
+00:37:30,960 --> 00:37:32,560
+have to pay to get a particular name
+
+1012
+00:37:32,560 --> 00:37:34,320
+and uh there's all kinds of other
+
+1013
+00:37:34,320 --> 00:37:35,760
+extensions
+
+1014
+00:37:35,760 --> 00:37:38,000
+that i haven't really discussed uh yet
+
+1015
+00:37:38,000 --> 00:37:39,200
+were mentioned
+
+1016
+00:37:39,200 --> 00:37:40,720
+but they sort of you know followed this
+
+1017
+00:37:40,720 --> 00:37:42,720
+particular approach and were the first
+
+1018
+00:37:42,720 --> 00:37:46,470
+sort of to do so
+
+1019
+00:37:46,480 --> 00:37:48,720
+in the many pragmatic issues that the
+
+1020
+00:37:48,720 --> 00:37:50,160
+paper touch is on and
+
+1021
+00:37:50,160 --> 00:37:55,910
+i haven't mentioned it all yet
+
+1022
+00:37:55,920 --> 00:38:04,240
+any other questions
+
+1023
+00:38:04,240 --> 00:38:06,160
+okay so let's actually dive in a little
+
+1024
+00:38:06,160 --> 00:38:07,359
+bit on the
+
+1025
+00:38:07,359 --> 00:38:10,160
+sort of the practical issues uh although
+
+1026
+00:38:10,160 --> 00:38:11,520
+there's a slightly different nature than
+
+1027
+00:38:11,520 --> 00:38:12,079
+we did once
+
+1028
+00:38:12,079 --> 00:38:15,839
+we just talked about it really is by the
+
+1029
+00:38:15,839 --> 00:38:19,440
+how to actually implement decentralized
+
+1030
+00:38:19,440 --> 00:38:20,240
+apps
+
+1031
+00:38:20,240 --> 00:38:30,829
+and naming system by leveraging
+
+1032
+00:38:30,839 --> 00:38:41,910
+bitcoin
+
+1033
+00:38:41,920 --> 00:38:45,359
+and there are a bunch of uh the bunches
+
+1034
+00:38:45,359 --> 00:38:46,480
+of barriers or just
+
+1035
+00:38:46,480 --> 00:38:49,200
+you know pragmatic issues there's limits
+
+1036
+00:38:49,200 --> 00:38:53,670
+on the amount of data you can put in a
+
+1037
+00:38:53,680 --> 00:38:59,030
+on data size in a transaction
+
+1038
+00:38:59,040 --> 00:39:00,640
+so although maybe it's perfectly fine to
+
+1039
+00:39:00,640 --> 00:39:02,160
+have a name
+
+1040
+00:39:02,160 --> 00:39:05,200
+uh value binding into uh
+
+1041
+00:39:05,200 --> 00:39:08,000
+uh into the uh into a bitcoin
+
+1042
+00:39:08,000 --> 00:39:08,720
+transaction
+
+1043
+00:39:08,720 --> 00:39:10,079
+you know we can't put like our to-do
+
+1044
+00:39:10,079 --> 00:39:12,320
+list inside of the trajection and so you
+
+1045
+00:39:12,320 --> 00:39:14,400
+know we gotta have some plan
+
+1046
+00:39:14,400 --> 00:39:16,880
+for actually how that you know part is
+
+1047
+00:39:16,880 --> 00:39:18,480
+going to work out
+
+1048
+00:39:18,480 --> 00:39:22,160
+uh it has slow rights we know from the
+
+1049
+00:39:22,160 --> 00:39:23,280
+last lecture
+
+1050
+00:39:23,280 --> 00:39:25,119
+it takes a while you know for rights
+
+1051
+00:39:25,119 --> 00:39:26,400
+actually or
+
+1052
+00:39:26,400 --> 00:39:29,359
+transactions to propagate and uh before
+
+1053
+00:39:29,359 --> 00:39:29,839
+they
+
+1054
+00:39:29,839 --> 00:39:31,920
+consider to be really stable and cannot
+
+1055
+00:39:31,920 --> 00:39:34,000
+be uh forked off anymore
+
+1056
+00:39:34,000 --> 00:39:35,520
+you know we might be talking about like
+
+1057
+00:39:35,520 --> 00:39:37,040
+you know four five six
+
+1058
+00:39:37,040 --> 00:39:39,280
+uh blocks later in the chain you know
+
+1059
+00:39:39,280 --> 00:39:41,119
+and your blocks ten minutes so you know
+
+1060
+00:39:41,119 --> 00:39:42,960
+an hour later right
+
+1061
+00:39:42,960 --> 00:39:44,720
+and so this is really not so cool if you
+
+1062
+00:39:44,720 --> 00:39:47,680
+stick our to-do list inside of the
+
+1063
+00:39:47,680 --> 00:39:49,760
+blockchain too uh because you know i
+
+1064
+00:39:49,760 --> 00:39:50,960
+will modify my blog
+
+1065
+00:39:50,960 --> 00:39:53,280
+my channel modify my to-do list like an
+
+1066
+00:39:53,280 --> 00:39:54,720
+hour later maybe you actually observe it
+
+1067
+00:39:54,720 --> 00:39:55,119
+so
+
+1068
+00:39:55,119 --> 00:39:56,720
+that seems not so good and if we want to
+
+1069
+00:39:56,720 --> 00:39:59,040
+go to more aggressive applications where
+
+1070
+00:39:59,040 --> 00:40:00,720
+like there's much more data that's
+
+1071
+00:40:00,720 --> 00:40:03,599
+manipulated you know we certainly uh a
+
+1072
+00:40:03,599 --> 00:40:05,760
+problem you know
+
+1073
+00:40:05,760 --> 00:40:07,119
+similarly you know in addition to slow
+
+1074
+00:40:07,119 --> 00:40:08,640
+right you know there's also a low low
+
+1075
+00:40:08,640 --> 00:40:15,670
+throughput a little bandwidth
+
+1076
+00:40:15,680 --> 00:40:16,880
+in the numerator there's only a few
+
+1077
+00:40:16,880 --> 00:40:19,510
+transactions
+
+1078
+00:40:19,520 --> 00:40:21,040
+per second correct so we're going to do
+
+1079
+00:40:21,040 --> 00:40:22,160
+a lot of writes you know through the
+
+1080
+00:40:22,160 --> 00:40:22,800
+file
+
+1081
+00:40:22,800 --> 00:40:25,280
+uh many times we're also we're going
+
+1082
+00:40:25,280 --> 00:40:26,240
+running the
+
+1083
+00:40:26,240 --> 00:40:28,800
+the the file operations through the
+
+1084
+00:40:28,800 --> 00:40:29,839
+blockchain so
+
+1085
+00:40:29,839 --> 00:40:31,839
+uh so clearly you know you know we got
+
+1086
+00:40:31,839 --> 00:40:33,119
+to be a little bit you know if we want
+
+1087
+00:40:33,119 --> 00:40:35,200
+to really build a general purpose
+
+1088
+00:40:35,200 --> 00:40:38,240
+uh infrastructure for
+
+1089
+00:40:38,240 --> 00:40:39,599
+decentral applications you know there
+
+1090
+00:40:39,599 --> 00:40:41,839
+needs to be a more complete story that
+
+1091
+00:40:41,839 --> 00:40:43,680
+actually allows us to get like
+
+1092
+00:40:43,680 --> 00:40:45,920
+uh fast rates you know high bandwidth
+
+1093
+00:40:45,920 --> 00:40:47,040
+rates uh
+
+1094
+00:40:47,040 --> 00:40:49,359
+and gets around and you know basically
+
+1095
+00:40:49,359 --> 00:40:51,599
+not run everything for the blockchain
+
+1096
+00:40:51,599 --> 00:40:52,960
+the paper also talks about one other
+
+1097
+00:40:52,960 --> 00:40:54,640
+final problem the ledger the
+
+1098
+00:40:54,640 --> 00:40:56,560
+ever-growing ledger
+
+1099
+00:40:56,560 --> 00:40:59,680
+uh and i'm not actually spend much time
+
+1100
+00:40:59,680 --> 00:41:01,280
+without talking about that at all
+
+1101
+00:41:01,280 --> 00:41:03,040
+uh but that's clearly also an issue now
+
+1102
+00:41:03,040 --> 00:41:04,319
+if you wanted to
+
+1103
+00:41:04,319 --> 00:41:06,000
+say the report in the paper you're going
+
+1104
+00:41:06,000 --> 00:41:08,160
+to boot up a box take note
+
+1105
+00:41:08,160 --> 00:41:10,160
+uh if you do sort of uh in the
+
+1106
+00:41:10,160 --> 00:41:12,000
+traditional sort of bitcoin style where
+
+1107
+00:41:12,000 --> 00:41:12,960
+you know you're going to run through all
+
+1108
+00:41:12,960 --> 00:41:14,720
+the tracking transactions one by one
+
+1109
+00:41:14,720 --> 00:41:16,079
+that will take a while before you
+
+1110
+00:41:16,079 --> 00:41:17,359
+actually have build up your complete
+
+1111
+00:41:17,359 --> 00:41:18,720
+naming record
+
+1112
+00:41:18,720 --> 00:41:19,920
+and particularly in the case of block
+
+1113
+00:41:19,920 --> 00:41:21,440
+stack is a little bit annoying because a
+
+1114
+00:41:21,440 --> 00:41:22,000
+lot of the
+
+1115
+00:41:22,000 --> 00:41:23,920
+transactions that are in the blockchain
+
+1116
+00:41:23,920 --> 00:41:25,200
+are completely not relevant to block
+
+1117
+00:41:25,200 --> 00:41:26,400
+stacks right there
+
+1118
+00:41:26,400 --> 00:41:27,920
+uh there are whatever transactions for
+
+1119
+00:41:27,920 --> 00:41:29,440
+completing some different purpose
+
+1120
+00:41:29,440 --> 00:41:31,440
+uh and have nothing to do with uh the
+
+1121
+00:41:31,440 --> 00:41:32,560
+block stack
+
+1122
+00:41:32,560 --> 00:41:34,560
+uh approach but you know blocks tech if
+
+1123
+00:41:34,560 --> 00:41:36,400
+you really literally were using
+
+1124
+00:41:36,400 --> 00:41:38,079
+uh the bitpoint blockchain as your
+
+1125
+00:41:38,079 --> 00:41:39,200
+fundamental thing you know you would
+
+1126
+00:41:39,200 --> 00:41:40,079
+have to go through and
+
+1127
+00:41:40,079 --> 00:41:41,440
+interpret the end of them and see which
+
+1128
+00:41:41,440 --> 00:41:45,030
+ones actually you need to apply
+
+1129
+00:41:45,040 --> 00:41:46,480
+okay so we're going to focus more on
+
+1130
+00:41:46,480 --> 00:41:48,560
+sort of these the first couple
+
+1131
+00:41:48,560 --> 00:41:51,119
+uh challenges which is like you know
+
+1132
+00:41:51,119 --> 00:41:51,760
+basically what
+
+1133
+00:41:51,760 --> 00:41:54,000
+we want to do is like minimize the use
+
+1134
+00:41:54,000 --> 00:41:55,119
+of the uh
+
+1135
+00:41:55,119 --> 00:41:58,160
+blockchain uh yeah so that we can you
+
+1136
+00:41:58,160 --> 00:41:59,440
+know actually get high you know like
+
+1137
+00:41:59,440 --> 00:42:00,560
+performance rights or
+
+1138
+00:42:00,560 --> 00:42:04,870
+in decent bandwidth
+
+1139
+00:42:04,880 --> 00:42:11,270
+does that make sense
+
+1140
+00:42:11,280 --> 00:42:13,680
+good and that sort of gets us to the
+
+1141
+00:42:13,680 --> 00:42:15,599
+core of the paper
+
+1142
+00:42:15,599 --> 00:42:19,440
+which is like the pull up that diagram
+
+1143
+00:42:19,440 --> 00:42:23,109
+so we can look at it
+
+1144
+00:42:23,119 --> 00:42:25,760
+that's basically this diagram and that
+
+1145
+00:42:25,760 --> 00:42:27,280
+sort of describes you know the general
+
+1146
+00:42:27,280 --> 00:42:28,720
+approach
+
+1147
+00:42:28,720 --> 00:42:31,520
+that the paper takes to address you know
+
+1148
+00:42:31,520 --> 00:42:31,839
+the
+
+1149
+00:42:31,839 --> 00:42:33,520
+challenges that i just laid out on the
+
+1150
+00:42:33,520 --> 00:42:38,950
+previous board
+
+1151
+00:42:38,960 --> 00:42:40,720
+okay so this is a complicated picture
+
+1152
+00:42:40,720 --> 00:42:42,079
+and so let's uh go
+
+1153
+00:42:42,079 --> 00:42:44,160
+for layer by layer and try to understand
+
+1154
+00:42:44,160 --> 00:42:50,309
+actually how things work
+
+1155
+00:42:50,319 --> 00:42:55,119
+so at the the bottom you know is the
+
+1156
+00:42:55,119 --> 00:43:02,069
+yeah is the bitcoin chain
+
+1157
+00:43:02,079 --> 00:43:05,280
+uh and in the bitcoin chain there are
+
+1158
+00:43:05,280 --> 00:43:06,720
+lots and lots of transactions
+
+1159
+00:43:06,720 --> 00:43:08,400
+and many of these rejections have
+
+1160
+00:43:08,400 --> 00:43:11,280
+absolutely nothing to do with
+
+1161
+00:43:11,280 --> 00:43:18,630
+block stack right down watch that here
+
+1162
+00:43:18,640 --> 00:43:20,560
+uh and the block stack transactions are
+
+1163
+00:43:20,560 --> 00:43:22,240
+sort of sitting in you know
+
+1164
+00:43:22,240 --> 00:43:23,760
+you know particular blocks in the
+
+1165
+00:43:23,760 --> 00:43:25,680
+blockchain
+
+1166
+00:43:25,680 --> 00:43:28,400
+and then there's also the second layer
+
+1167
+00:43:28,400 --> 00:43:30,240
+which is really the block stack nodes
+
+1168
+00:43:30,240 --> 00:43:32,640
+that basically read all these
+
+1169
+00:43:32,640 --> 00:43:33,839
+transactions
+
+1170
+00:43:33,839 --> 00:43:35,280
+fish out the ones that are actually
+
+1171
+00:43:35,280 --> 00:43:37,839
+related to block stack
+
+1172
+00:43:37,839 --> 00:43:41,040
+interpret you know those operations and
+
+1173
+00:43:41,040 --> 00:43:41,920
+you know build up
+
+1174
+00:43:41,920 --> 00:43:45,119
+a blockstack database with names to
+
+1175
+00:43:45,119 --> 00:43:48,160
+what turns out to be zone file hashes so
+
+1176
+00:43:48,160 --> 00:43:50,160
+we look at these operations what's in
+
+1177
+00:43:50,160 --> 00:43:51,680
+there so in every
+
+1178
+00:43:51,680 --> 00:43:53,520
+uh bitcoin introduction as i mentioned
+
+1179
+00:43:53,520 --> 00:43:55,040
+earlier you can have some metadata
+
+1180
+00:43:55,040 --> 00:43:56,800
+uh this sits in the what's called the op
+
+1181
+00:43:56,800 --> 00:43:58,480
+underscore return field
+
+1182
+00:43:58,480 --> 00:44:01,040
+and in that up underscore return field
+
+1183
+00:44:01,040 --> 00:44:02,720
+uh there is basically
+
+1184
+00:44:02,720 --> 00:44:05,920
+uh an a name say
+
+1185
+00:44:05,920 --> 00:44:09,200
+x uh plus you know the hash
+
+1186
+00:44:09,200 --> 00:44:15,910
+of the zone file
+
+1187
+00:44:15,920 --> 00:44:19,200
+and that's sort of the binding that sits
+
+1188
+00:44:19,200 --> 00:44:21,200
+in bitcoin and that you know basically
+
+1189
+00:44:21,200 --> 00:44:23,119
+blocks that uses uh
+
+1190
+00:44:23,119 --> 00:44:24,880
+bitcoin to basically make that binding
+
+1191
+00:44:24,880 --> 00:44:27,520
+from from name to a zoom file
+
+1192
+00:44:27,520 --> 00:44:30,880
+uh unique uh uh
+
+1193
+00:44:30,880 --> 00:44:34,480
+and uh in a decentralized manner
+
+1194
+00:44:34,480 --> 00:44:37,839
+so as you know like in lab3 or
+
+1195
+00:44:37,839 --> 00:44:40,880
+in any other sort of logging system uh
+
+1196
+00:44:40,880 --> 00:44:44,000
+the these blocks tech nodes interpret
+
+1197
+00:44:44,000 --> 00:44:44,480
+these
+
+1198
+00:44:44,480 --> 00:44:48,480
+uh particular uh name uh transactions
+
+1199
+00:44:48,480 --> 00:44:51,680
+look at the op field uh see that this up
+
+1200
+00:44:51,680 --> 00:44:53,119
+field is for example to create a
+
+1201
+00:44:53,119 --> 00:44:54,160
+particular name
+
+1202
+00:44:54,160 --> 00:44:56,240
+and basically store it in the database
+
+1203
+00:44:56,240 --> 00:44:57,359
+the you know the
+
+1204
+00:44:57,359 --> 00:45:01,119
+the binding from name acts you know to
+
+1205
+00:45:01,119 --> 00:45:03,359
+the hash of the zone file
+
+1206
+00:45:03,359 --> 00:45:05,280
+and you know once a while as we'll see
+
+1207
+00:45:05,280 --> 00:45:07,040
+in the second user may want to update
+
+1208
+00:45:07,040 --> 00:45:08,000
+the zone file
+
+1209
+00:45:08,000 --> 00:45:10,079
+so you might see multiple transactions
+
+1210
+00:45:10,079 --> 00:45:11,680
+for the same
+
+1211
+00:45:11,680 --> 00:45:13,680
+user updating basically the hash of the
+
+1212
+00:45:13,680 --> 00:45:15,040
+zone file
+
+1213
+00:45:15,040 --> 00:45:16,960
+and of course we want to minimize you
+
+1214
+00:45:16,960 --> 00:45:18,240
+know these uh
+
+1215
+00:45:18,240 --> 00:45:19,839
+changes because you know every change
+
+1216
+00:45:19,839 --> 00:45:21,280
+you know to the
+
+1217
+00:45:21,280 --> 00:45:24,000
+would require uh would require a
+
+1218
+00:45:24,000 --> 00:45:25,520
+modification we're in a posting a
+
+1219
+00:45:25,520 --> 00:45:26,800
+bitcoin transaction
+
+1220
+00:45:26,800 --> 00:45:28,720
+uh and you know for many reasons that
+
+1221
+00:45:28,720 --> 00:45:30,079
+are on the previous slide that's slow
+
+1222
+00:45:30,079 --> 00:45:31,359
+so we like to try to avoid it
+
+1223
+00:45:31,359 --> 00:45:32,880
+furthermore it will cost a little bit of
+
+1224
+00:45:32,880 --> 00:45:33,599
+money
+
+1225
+00:45:33,599 --> 00:45:35,359
+uh i mean because these transactions
+
+1226
+00:45:35,359 --> 00:45:38,240
+actually need to be processed
+
+1227
+00:45:38,240 --> 00:45:42,000
+and so um uh
+
+1228
+00:45:42,000 --> 00:45:45,119
+so so the basic plan so this this
+
+1229
+00:45:45,119 --> 00:45:47,200
+node layer this the the virtual chain
+
+1230
+00:45:47,200 --> 00:45:49,119
+layer basically builds this database
+
+1231
+00:45:49,119 --> 00:45:52,720
+of mappings from name to hash zone file
+
+1232
+00:45:52,720 --> 00:45:54,800
+uh and of course also filters out all
+
+1233
+00:45:54,800 --> 00:45:55,839
+the
+
+1234
+00:45:55,839 --> 00:45:57,839
+transactions that are invalid or like
+
+1235
+00:45:57,839 --> 00:45:59,839
+you know new access that's being created
+
+1236
+00:45:59,839 --> 00:46:02,000
+after the first one
+
+1237
+00:46:02,000 --> 00:46:05,599
+and then uh using the hash of the zone
+
+1238
+00:46:05,599 --> 00:46:06,640
+file you know
+
+1239
+00:46:06,640 --> 00:46:10,079
+which we got uh it locates uh
+
+1240
+00:46:10,079 --> 00:46:12,960
+an application can locate uh the zone
+
+1241
+00:46:12,960 --> 00:46:13,440
+file
+
+1242
+00:46:13,440 --> 00:46:14,720
+and this zone file can come up from
+
+1243
+00:46:14,720 --> 00:46:17,119
+anywhere uh and because we have the hash
+
+1244
+00:46:17,119 --> 00:46:18,160
+of the zone file
+
+1245
+00:46:18,160 --> 00:46:19,839
+when we retrieve a file that claims to
+
+1246
+00:46:19,839 --> 00:46:21,599
+be the zone file we can recompute the
+
+1247
+00:46:21,599 --> 00:46:22,160
+hash
+
+1248
+00:46:22,160 --> 00:46:24,240
+if the hash is identical to the one that
+
+1249
+00:46:24,240 --> 00:46:26,160
+we got sort of through uh indirectly
+
+1250
+00:46:26,160 --> 00:46:27,040
+from bitcoin
+
+1251
+00:46:27,040 --> 00:46:29,520
+then we know for sure that that is the
+
+1252
+00:46:29,520 --> 00:46:30,960
+zone file that goes with
+
+1253
+00:46:30,960 --> 00:46:34,800
+x and so okay what is that in
+
+1254
+00:46:34,800 --> 00:46:37,839
+uh the zone files well in the in the
+
+1255
+00:46:37,839 --> 00:46:39,760
+zone file is
+
+1256
+00:46:39,760 --> 00:46:42,560
+yet another table if you will of mapping
+
+1257
+00:46:42,560 --> 00:46:43,440
+names
+
+1258
+00:46:43,440 --> 00:46:45,839
+uh to uris so for example you know you
+
+1259
+00:46:45,839 --> 00:46:47,359
+might have a zone file which
+
+1260
+00:46:47,359 --> 00:46:50,560
+has like maybe for the to-do app that's
+
+1261
+00:46:50,560 --> 00:46:52,640
+an entry to do
+
+1262
+00:46:52,640 --> 00:46:56,800
+and you know that points to a uri
+
+1263
+00:46:56,800 --> 00:46:58,880
+where actually the data is located for
+
+1264
+00:46:58,880 --> 00:47:00,960
+you know the to-do list
+
+1265
+00:47:00,960 --> 00:47:03,440
+um and you know there's sort of two
+
+1266
+00:47:03,440 --> 00:47:05,520
+types of jump files and one is what's
+
+1267
+00:47:05,520 --> 00:47:05,839
+called
+
+1268
+00:47:05,839 --> 00:47:08,160
+immutable and one is immutable the
+
+1269
+00:47:08,160 --> 00:47:10,720
+mutable ones have uri plus
+
+1270
+00:47:10,720 --> 00:47:15,190
+a public key
+
+1271
+00:47:15,200 --> 00:47:18,400
+so uh and this is public key is the key
+
+1272
+00:47:18,400 --> 00:47:20,079
+to actually validate
+
+1273
+00:47:20,079 --> 00:47:23,359
+uh the whether the file is written by
+
+1274
+00:47:23,359 --> 00:47:25,280
+the user x so basically the user x you
+
+1275
+00:47:25,280 --> 00:47:27,280
+know publishes through the zone file
+
+1276
+00:47:27,280 --> 00:47:30,240
+a public key for him or herself and
+
+1277
+00:47:30,240 --> 00:47:31,280
+later on
+
+1278
+00:47:31,280 --> 00:47:34,079
+uh when user two wants to look up user x
+
+1279
+00:47:34,079 --> 00:47:35,520
+you know it gets the hash of the zone
+
+1280
+00:47:35,520 --> 00:47:36,160
+file
+
+1281
+00:47:36,160 --> 00:47:38,559
+the hash finds the zone file double
+
+1282
+00:47:38,559 --> 00:47:39,839
+checks that the zone file
+
+1283
+00:47:39,839 --> 00:47:42,480
+you know uh hashes to the right value
+
+1284
+00:47:42,480 --> 00:47:42,960
+looks
+
+1285
+00:47:42,960 --> 00:47:46,400
+inside the the the zone file finds the
+
+1286
+00:47:46,400 --> 00:47:47,440
+you know the public key
+
+1287
+00:47:47,440 --> 00:47:50,480
+of x and you know the uri
+
+1288
+00:47:50,480 --> 00:47:53,520
+you know for the to-do file uh uses the
+
+1289
+00:47:53,520 --> 00:47:54,960
+uri to fetch
+
+1290
+00:47:54,960 --> 00:47:58,000
+uh the actual to do file uh check
+
+1291
+00:47:58,000 --> 00:47:59,680
+you know the signature on the retreat
+
+1292
+00:47:59,680 --> 00:48:01,119
+file with the public key
+
+1293
+00:48:01,119 --> 00:48:02,880
+and if it all checks out then basically
+
+1294
+00:48:02,880 --> 00:48:04,160
+user one two
+
+1295
+00:48:04,160 --> 00:48:07,680
+knows okay i got you know user x
+
+1296
+00:48:07,680 --> 00:48:11,359
+uh zone file and then it might be also
+
+1297
+00:48:11,359 --> 00:48:13,760
+like other names in this zone file like
+
+1298
+00:48:13,760 --> 00:48:15,440
+whatever you know usage to
+
+1299
+00:48:15,440 --> 00:48:18,559
+your access tweets uh etc
+
+1300
+00:48:18,559 --> 00:48:20,319
+timeline whatever you know for every
+
+1301
+00:48:20,319 --> 00:48:22,000
+application there's probably an entry
+
+1302
+00:48:22,000 --> 00:48:24,000
+and you know probably the applications
+
+1303
+00:48:24,000 --> 00:48:25,440
+sort of agree on like you know what name
+
+1304
+00:48:25,440 --> 00:48:29,109
+to use for a particular application
+
+1305
+00:48:29,119 --> 00:48:32,079
+um so don't we lose the like data
+
+1306
+00:48:32,079 --> 00:48:33,920
+immutability guarantees where like it's
+
+1307
+00:48:33,920 --> 00:48:35,280
+possible this data could be deleted and
+
+1308
+00:48:35,280 --> 00:48:36,160
+then
+
+1309
+00:48:36,160 --> 00:48:37,280
+you wouldn't have the hash and the data
+
+1310
+00:48:37,280 --> 00:48:39,280
+could just be lost so
+
+1311
+00:48:39,280 --> 00:48:41,040
+you mean like the the zone file could
+
+1312
+00:48:41,040 --> 00:48:42,480
+get lost
+
+1313
+00:48:42,480 --> 00:48:44,559
+right like like with the chain you can't
+
+1314
+00:48:44,559 --> 00:48:46,000
+lose data because it'll be replicated
+
+1315
+00:48:46,000 --> 00:49:00,950
+enough places but here
+
+1316
+00:49:00,960 --> 00:49:02,960
+four or four kilobyte or something in
+
+1317
+00:49:02,960 --> 00:49:04,800
+that order and so they can be replicated
+
+1318
+00:49:04,800 --> 00:49:05,599
+everywhere
+
+1319
+00:49:05,599 --> 00:49:08,640
+okay then for the to-do
+
+1320
+00:49:08,640 --> 00:49:11,760
+list okay the do file the uri uh the
+
+1321
+00:49:11,760 --> 00:49:13,119
+basic idea is that
+
+1322
+00:49:13,119 --> 00:49:16,079
+you might store the same data or
+
+1323
+00:49:16,079 --> 00:49:17,920
+multiple providers for example you might
+
+1324
+00:49:17,920 --> 00:49:20,640
+want to have like you replicate it at s3
+
+1325
+00:49:20,640 --> 00:49:22,319
+and maybe you know you also stick it in
+
+1326
+00:49:22,319 --> 00:49:25,030
+google drive
+
+1327
+00:49:25,040 --> 00:49:28,720
+and uh one reason that actually blocks
+
+1328
+00:49:28,720 --> 00:49:30,240
+that has a storage
+
+1329
+00:49:30,240 --> 00:49:32,319
+service is not because actually they
+
+1330
+00:49:32,319 --> 00:49:33,920
+store the data but basically you provide
+
+1331
+00:49:33,920 --> 00:49:36,000
+a uniform api to all these different
+
+1332
+00:49:36,000 --> 00:49:43,030
+storage providers
+
+1333
+00:49:43,040 --> 00:49:50,309
+okay so they have does that make sense
+
+1334
+00:49:50,319 --> 00:49:52,400
+okay so then there's a uh there's as i
+
+1335
+00:49:52,400 --> 00:49:53,760
+mentioned zone files in two
+
+1336
+00:49:53,760 --> 00:49:56,079
+ways uh there's another which i call
+
+1337
+00:49:56,079 --> 00:49:57,839
+immutable storage and that actually
+
+1338
+00:49:57,839 --> 00:50:01,119
+contains you know the uri
+
+1339
+00:50:01,119 --> 00:50:04,630
+name uri
+
+1340
+00:50:04,630 --> 00:50:06,160
+[Music]
+
+1341
+00:50:06,160 --> 00:50:10,150
+public key
+
+1342
+00:50:10,160 --> 00:50:13,680
+and the hash of the data
+
+1343
+00:50:13,680 --> 00:50:16,880
+of the file and so
+
+1344
+00:50:16,880 --> 00:50:18,720
+you can basically verify you know is
+
+1345
+00:50:18,720 --> 00:50:21,200
+this indeed the latest version of the
+
+1346
+00:50:21,200 --> 00:50:24,319
+the file uh because in this scheme you
+
+1347
+00:50:24,319 --> 00:50:25,119
+get to update
+
+1348
+00:50:25,119 --> 00:50:26,960
+you know x can update the file but it's
+
+1349
+00:50:26,960 --> 00:50:28,319
+harder to tell uh
+
+1350
+00:50:28,319 --> 00:50:30,160
+for user two whether that is actually
+
+1351
+00:50:30,160 --> 00:50:31,359
+the latest version
+
+1352
+00:50:31,359 --> 00:50:32,880
+uh the paper mentions that they're you
+
+1353
+00:50:32,880 --> 00:50:34,079
+know you probably want to stick version
+
+1354
+00:50:34,079 --> 00:50:35,119
+numbers in it
+
+1355
+00:50:35,119 --> 00:50:36,559
+uh but if you really want to guarantee
+
+1356
+00:50:36,559 --> 00:50:37,839
+it to be sort of the latest version for
+
+1357
+00:50:37,839 --> 00:50:39,040
+a particular name
+
+1358
+00:50:39,040 --> 00:50:41,200
+uh in if you're using immutable storage
+
+1359
+00:50:41,200 --> 00:50:42,240
+you know then
+
+1360
+00:50:42,240 --> 00:50:43,760
+the mutable storage contains the hash of
+
+1361
+00:50:43,760 --> 00:50:45,440
+the file and
+
+1362
+00:50:45,440 --> 00:50:47,280
+that uniquely identifies a particular
+
+1363
+00:50:47,280 --> 00:50:49,520
+version of that particular file
+
+1364
+00:50:49,520 --> 00:50:51,760
+that does mean like if you update you
+
+1365
+00:50:51,760 --> 00:50:54,000
+know this record
+
+1366
+00:50:54,000 --> 00:50:56,240
+then uh that really means you update the
+
+1367
+00:50:56,240 --> 00:50:57,280
+zone file
+
+1368
+00:50:57,280 --> 00:50:59,520
+so that means you have to republish or
+
+1369
+00:50:59,520 --> 00:51:01,440
+recreate a log entry
+
+1370
+00:51:01,440 --> 00:51:04,079
+in the bitcoin chain uh mapping you know
+
+1371
+00:51:04,079 --> 00:51:04,640
+x to
+
+1372
+00:51:04,640 --> 00:51:11,190
+a new hash hash zone file
+
+1373
+00:51:11,200 --> 00:51:12,480
+okay so this is sort of the overall
+
+1374
+00:51:12,480 --> 00:51:14,480
+picture uh for the
+
+1375
+00:51:14,480 --> 00:51:18,000
+uh for the system and as you can see you
+
+1376
+00:51:18,000 --> 00:51:18,559
+know
+
+1377
+00:51:18,559 --> 00:51:20,240
+uh particularly like you know in this
+
+1378
+00:51:20,240 --> 00:51:22,960
+to-do list site um
+
+1379
+00:51:22,960 --> 00:51:26,000
+you know the user x can actually update
+
+1380
+00:51:26,000 --> 00:51:29,040
+uh its uh his or her
+
+1381
+00:51:29,040 --> 00:51:31,440
+to-do list without actually having to
+
+1382
+00:51:31,440 --> 00:51:32,960
+publish a new
+
+1383
+00:51:32,960 --> 00:51:36,079
+record in the in the bitcoin chain in
+
+1384
+00:51:36,079 --> 00:51:37,520
+fact you know the only thing that really
+
+1385
+00:51:37,520 --> 00:51:39,200
+has to be created in the bitcoin chain
+
+1386
+00:51:39,200 --> 00:51:39,680
+is
+
+1387
+00:51:39,680 --> 00:51:42,559
+just you know x's name uh and x of
+
+1388
+00:51:42,559 --> 00:51:44,000
+course might have many other names that
+
+1389
+00:51:44,000 --> 00:51:45,599
+are sitting in the zone files
+
+1390
+00:51:45,599 --> 00:51:49,119
+uh and uh and uh but the
+
+1391
+00:51:49,119 --> 00:51:53,760
+the the the system doesn't rely on
+
+1392
+00:51:53,760 --> 00:51:56,240
+uh for every operation on the uh on the
+
+1393
+00:51:56,240 --> 00:51:57,680
+blockchain
+
+1394
+00:51:57,680 --> 00:51:59,920
+in which it gets around gets us around a
+
+1395
+00:51:59,920 --> 00:52:01,119
+lot of these problems of
+
+1396
+00:52:01,119 --> 00:52:04,160
+you know flow rates low bandwidth uh
+
+1397
+00:52:04,160 --> 00:52:06,960
+and the limits on the uh and the limits
+
+1398
+00:52:06,960 --> 00:52:07,599
+on the
+
+1399
+00:52:07,599 --> 00:52:09,520
+uh on the data that actually appear in a
+
+1400
+00:52:09,520 --> 00:52:10,880
+transaction record because the only data
+
+1401
+00:52:10,880 --> 00:52:11,839
+really has to appear
+
+1402
+00:52:11,839 --> 00:52:14,160
+in this transaction record is this name
+
+1403
+00:52:14,160 --> 00:52:19,910
+plus the hash of the zone file
+
+1404
+00:52:19,920 --> 00:52:22,000
+sorry uh how can do we find there's no
+
+1405
+00:52:22,000 --> 00:52:24,160
+file if you only have the hash
+
+1406
+00:52:24,160 --> 00:52:26,000
+ah it's a very good uh question we don't
+
+1407
+00:52:26,000 --> 00:52:27,760
+really care uh
+
+1408
+00:52:27,760 --> 00:52:29,280
+where it comes from and so in fact you
+
+1409
+00:52:29,280 --> 00:52:30,720
+know they call this the routing layer
+
+1410
+00:52:30,720 --> 00:52:32,160
+right this basically
+
+1411
+00:52:32,160 --> 00:52:34,000
+you tell the learning writer hey i'm
+
+1412
+00:52:34,000 --> 00:52:36,000
+looking for a file that has to follow a
+
+1413
+00:52:36,000 --> 00:52:37,920
+hash
+
+1414
+00:52:37,920 --> 00:52:40,960
+and then the writing layer has to
+
+1415
+00:52:40,960 --> 00:52:41,920
+produce that file
+
+1416
+00:52:41,920 --> 00:52:43,200
+and you can check whether you got the
+
+1417
+00:52:43,200 --> 00:52:45,359
+right file by recomputing the hash and
+
+1418
+00:52:45,359 --> 00:52:46,880
+see if that's just the one that you're
+
+1419
+00:52:46,880 --> 00:52:58,230
+asking for
+
+1420
+00:52:58,240 --> 00:53:05,190
+any other questions about this
+
+1421
+00:53:05,200 --> 00:53:08,480
+so sorry just to clarify um operations
+
+1422
+00:53:08,480 --> 00:53:09,280
+within this
+
+1423
+00:53:09,280 --> 00:53:11,440
+file storage or these zone files is
+
+1424
+00:53:11,440 --> 00:53:12,800
+still limited by the underlying
+
+1425
+00:53:12,800 --> 00:53:14,960
+blockchain though right
+
+1426
+00:53:14,960 --> 00:53:18,000
+uh yes or no uh
+
+1427
+00:53:18,000 --> 00:53:21,750
+what are you thinking
+
+1428
+00:53:21,760 --> 00:53:24,720
+or just like because modifications or
+
+1429
+00:53:24,720 --> 00:53:26,720
+changes to like the file will need
+
+1430
+00:53:26,720 --> 00:53:29,119
+like a new hash and therefore a new log
+
+1431
+00:53:29,119 --> 00:53:30,720
+entry within the blockchain
+
+1432
+00:53:30,720 --> 00:53:33,599
+so you still have to wait for that to be
+
+1433
+00:53:33,599 --> 00:53:35,440
+quote unquote accepted which is like an
+
+1434
+00:53:35,440 --> 00:53:36,720
+hour right
+
+1435
+00:53:36,720 --> 00:53:39,040
+yeah although absolutely true so when
+
+1436
+00:53:39,040 --> 00:53:40,720
+you make a change to the zone file
+
+1437
+00:53:40,720 --> 00:53:42,960
+you know that that has to run through
+
+1438
+00:53:42,960 --> 00:53:44,079
+the txn
+
+1439
+00:53:44,079 --> 00:53:46,400
+but for example updating the to-do list
+
+1440
+00:53:46,400 --> 00:53:47,839
+uh wouldn't have to
+
+1441
+00:53:47,839 --> 00:53:53,589
+require an uh bitcoin transaction
+
+1442
+00:53:53,599 --> 00:53:55,440
+you don't really update the zone file at
+
+1443
+00:53:55,440 --> 00:53:56,880
+all you know you're just
+
+1444
+00:53:56,880 --> 00:53:58,880
+updating the to-do list file and the
+
+1445
+00:53:58,880 --> 00:54:00,480
+zone file only contains the name
+
+1446
+00:54:00,480 --> 00:54:03,119
+to do and the uri plus the public key
+
+1447
+00:54:03,119 --> 00:54:08,309
+but you're not updating any of those
+
+1448
+00:54:08,319 --> 00:54:11,200
+i see but doesn't then we store also the
+
+1449
+00:54:11,200 --> 00:54:13,119
+hash of the file so if we change the
+
+1450
+00:54:13,119 --> 00:54:13,839
+content yeah that's
+
+1451
+00:54:13,839 --> 00:54:15,839
+that's okay there are two cases for the
+
+1452
+00:54:15,839 --> 00:54:17,920
+mutable there's the mutable storage and
+
+1453
+00:54:17,920 --> 00:54:21,200
+immutable storage and uh
+
+1454
+00:54:21,200 --> 00:54:24,079
+what they propose is that for immutable
+
+1455
+00:54:24,079 --> 00:54:25,760
+storage like storage if you don't update
+
+1456
+00:54:25,760 --> 00:54:26,880
+you can actually stick the hash of the
+
+1457
+00:54:26,880 --> 00:54:29,200
+file in there but for mutable storage
+
+1458
+00:54:29,200 --> 00:54:30,160
+you know that's going to see
+
+1459
+00:54:30,160 --> 00:54:32,000
+a lot of writes you know you shouldn't
+
+1460
+00:54:32,000 --> 00:54:36,789
+do that you should use this scheme
+
+1461
+00:54:36,799 --> 00:54:38,880
+i see and then how is it possible to
+
+1462
+00:54:38,880 --> 00:54:40,559
+validate with mutable storage that
+
+1463
+00:54:40,559 --> 00:54:42,160
+you're getting the right data then
+
+1464
+00:54:42,160 --> 00:54:43,920
+yeah so the presumably uh that's a very
+
+1465
+00:54:43,920 --> 00:54:45,920
+good question uh well you
+
+1466
+00:54:45,920 --> 00:54:47,280
+you can validate whether you actually
+
+1467
+00:54:47,280 --> 00:54:49,280
+get data that actually was produced by x
+
+1468
+00:54:49,280 --> 00:54:50,720
+because you have to pull the key for x
+
+1469
+00:54:50,720 --> 00:54:52,480
+and you can verify whether actually the
+
+1470
+00:54:52,480 --> 00:54:54,400
+signature on the to do file
+
+1471
+00:54:54,400 --> 00:54:56,319
+indeed you know checks out with the
+
+1472
+00:54:56,319 --> 00:54:57,520
+public key of x
+
+1473
+00:54:57,520 --> 00:54:59,119
+so you at least know that x has written
+
+1474
+00:54:59,119 --> 00:55:01,920
+it you may not know of this most recent
+
+1475
+00:55:01,920 --> 00:55:02,799
+version
+
+1476
+00:55:02,799 --> 00:55:05,280
+and so the paper sort of doesn't really
+
+1477
+00:55:05,280 --> 00:55:06,000
+talk about this
+
+1478
+00:55:06,000 --> 00:55:07,200
+you know in detail but basically says
+
+1479
+00:55:07,200 --> 00:55:08,240
+you know you probably have to stick
+
+1480
+00:55:08,240 --> 00:55:09,359
+version numbers in it
+
+1481
+00:55:09,359 --> 00:55:11,520
+and so at least you can uh detect
+
+1482
+00:55:11,520 --> 00:55:12,480
+drawback
+
+1483
+00:55:12,480 --> 00:55:14,079
+uh but there's a little bit fake
+
+1484
+00:55:14,079 --> 00:55:15,839
+actually i don't know how to uh how to
+
+1485
+00:55:15,839 --> 00:55:18,710
+actually uh
+
+1486
+00:55:18,720 --> 00:55:19,760
+you can't really assure that you
+
+1487
+00:55:19,760 --> 00:55:21,839
+actually got the latest version
+
+1488
+00:55:21,839 --> 00:55:23,920
+right so where are the modifications to
+
+1489
+00:55:23,920 --> 00:55:24,880
+immutable storage
+
+1490
+00:55:24,880 --> 00:55:28,000
+coming into uh your to-do file lives
+
+1491
+00:55:28,000 --> 00:55:29,040
+here like in
+
+1492
+00:55:29,040 --> 00:55:32,480
+like here's my to do file and
+
+1493
+00:55:32,480 --> 00:55:34,400
+uh if an application my to-do list
+
+1494
+00:55:34,400 --> 00:55:35,920
+application wants to update to to do
+
+1495
+00:55:35,920 --> 00:55:38,000
+file it just goes ahead and does it
+
+1496
+00:55:38,000 --> 00:55:41,200
+and uh and then signs it you know using
+
+1497
+00:55:41,200 --> 00:55:43,040
+the public key and sticks it in
+
+1498
+00:55:43,040 --> 00:55:46,400
+uh the uh
+
+1499
+00:55:46,400 --> 00:55:48,640
+and sticks it in for uh for the given
+
+1500
+00:55:48,640 --> 00:55:50,240
+uri
+
+1501
+00:55:50,240 --> 00:55:52,240
+and would that be done through the the
+
+1502
+00:55:52,240 --> 00:55:53,760
+routing layer as well
+
+1503
+00:55:53,760 --> 00:55:55,839
+because you have you want to find where
+
+1504
+00:55:55,839 --> 00:55:57,040
+in the storage
+
+1505
+00:55:57,040 --> 00:55:59,520
+yeah so the user tool will retrieve uh
+
+1506
+00:55:59,520 --> 00:56:01,680
+access zone file correct
+
+1507
+00:56:01,680 --> 00:56:04,160
+and once it has accession file it knows
+
+1508
+00:56:04,160 --> 00:56:05,839
+where
+
+1509
+00:56:05,839 --> 00:56:07,599
+the file the to do file is because
+
+1510
+00:56:07,599 --> 00:56:09,860
+there's the uri sits in the zone file
+
+1511
+00:56:09,860 --> 00:56:12,559
+[Music]
+
+1512
+00:56:12,559 --> 00:56:16,160
+so again and they can retrieve it and
+
+1513
+00:56:16,160 --> 00:56:19,359
+check the signature about the uri are
+
+1514
+00:56:19,359 --> 00:56:20,240
+there
+
+1515
+00:56:20,240 --> 00:56:23,359
+is it only one uri per uh
+
+1516
+00:56:23,359 --> 00:56:26,799
+name in the zone file or um i
+
+1517
+00:56:26,799 --> 00:56:30,480
+don't know unclear exactly how it works
+
+1518
+00:56:30,480 --> 00:56:33,200
+uh sorry i'm not you know i didn't look
+
+1519
+00:56:33,200 --> 00:56:34,799
+check out the source code and like look
+
+1520
+00:56:34,799 --> 00:56:35,359
+at the
+
+1521
+00:56:35,359 --> 00:56:42,309
+specific form of the zone files
+
+1522
+00:56:42,319 --> 00:56:44,880
+uh since we are publishing the public
+
+1523
+00:56:44,880 --> 00:56:45,839
+key
+
+1524
+00:56:45,839 --> 00:56:48,319
+together with all the rest of the data
+
+1525
+00:56:48,319 --> 00:56:50,640
+in the xml file does it mean i can
+
+1526
+00:56:50,640 --> 00:56:54,319
+just make up a private key
+
+1527
+00:56:54,319 --> 00:56:57,520
+make like a matching public key and just
+
+1528
+00:56:57,520 --> 00:56:59,280
+stick something in there and say
+
+1529
+00:56:59,280 --> 00:57:02,559
+i'm user z because
+
+1530
+00:57:02,559 --> 00:57:05,359
+i'm because i do provide the public key
+
+1531
+00:57:05,359 --> 00:57:06,079
+so
+
+1532
+00:57:06,079 --> 00:57:08,960
+can i not just lie well you can't
+
+1533
+00:57:08,960 --> 00:57:11,280
+falsify the zone file correct
+
+1534
+00:57:11,280 --> 00:57:13,599
+because the zone file the hash of the
+
+1535
+00:57:13,599 --> 00:57:14,640
+zone file must
+
+1536
+00:57:14,640 --> 00:57:16,000
+match the hash that sits in the
+
+1537
+00:57:16,000 --> 00:57:23,829
+blockchain
+
+1538
+00:57:23,839 --> 00:57:27,200
+so only the
+
+1539
+00:57:27,200 --> 00:57:28,559
+person that actually entered the
+
+1540
+00:57:28,559 --> 00:57:30,640
+blockchain record mapping
+
+1541
+00:57:30,640 --> 00:57:33,200
+x you know to that hash zone file only
+
+1542
+00:57:33,200 --> 00:57:34,799
+that person could have produced you know
+
+1543
+00:57:34,799 --> 00:57:37,599
+that zone files
+
+1544
+00:57:37,599 --> 00:57:44,950
+i see thank you
+
+1545
+00:57:44,960 --> 00:57:48,079
+okay well so this is basically the big
+
+1546
+00:57:48,079 --> 00:57:48,640
+picture
+
+1547
+00:57:48,640 --> 00:57:50,960
+and if you got this is the uh if you got
+
+1548
+00:57:50,960 --> 00:57:52,720
+this part then basically
+
+1549
+00:57:52,720 --> 00:57:55,920
+the rest of the sort of details and
+
+1550
+00:57:55,920 --> 00:57:58,160
+important but maybe less important this
+
+1551
+00:57:58,160 --> 00:58:01,670
+is the key thing to understand
+
+1552
+00:58:01,680 --> 00:58:04,720
+okay um i guess a couple things i want
+
+1553
+00:58:04,720 --> 00:58:05,520
+to go over
+
+1554
+00:58:05,520 --> 00:58:06,960
+in particular i want to talk a little
+
+1555
+00:58:06,960 --> 00:58:08,319
+bit more about name creation because
+
+1556
+00:58:08,319 --> 00:58:09,520
+there's a couple little details
+
+1557
+00:58:09,520 --> 00:58:19,109
+that are actually interesting
+
+1558
+00:58:19,119 --> 00:58:20,480
+so turns out the name creation actually
+
+1559
+00:58:20,480 --> 00:58:24,470
+has two uh
+
+1560
+00:58:24,480 --> 00:58:26,559
+parts to it first of all the user needs
+
+1561
+00:58:26,559 --> 00:58:28,079
+to have of course some bitcoins because
+
+1562
+00:58:28,079 --> 00:58:37,280
+you gotta pay
+
+1563
+00:58:37,280 --> 00:58:38,319
+the reason you have to have some
+
+1564
+00:58:38,319 --> 00:58:40,079
+bitcoins is because you know you gotta
+
+1565
+00:58:40,079 --> 00:58:40,720
+convince
+
+1566
+00:58:40,720 --> 00:58:43,119
+uh one of the uh miners to actually
+
+1567
+00:58:43,119 --> 00:58:44,319
+include your transaction
+
+1568
+00:58:44,319 --> 00:58:46,960
+in the bitcoin uh ledger and so it turns
+
+1569
+00:58:46,960 --> 00:58:47,520
+out there are
+
+1570
+00:58:47,520 --> 00:58:50,480
+two transactions for every name that you
+
+1571
+00:58:50,480 --> 00:58:55,030
+create
+
+1572
+00:58:55,040 --> 00:58:58,640
+and one is basically a pre-order
+
+1573
+00:58:58,640 --> 00:59:02,150
+transaction
+
+1574
+00:59:02,160 --> 00:59:04,000
+and in the pre-order transaction you
+
+1575
+00:59:04,000 --> 00:59:06,000
+don't really list the name but actually
+
+1576
+00:59:06,000 --> 00:59:11,670
+the hash of the name
+
+1577
+00:59:11,680 --> 00:59:13,359
+so anybody who sees the pre-order
+
+1578
+00:59:13,359 --> 00:59:14,720
+transaction doesn't know what the name
+
+1579
+00:59:14,720 --> 00:59:16,000
+is but you know
+
+1580
+00:59:16,000 --> 00:59:17,359
+doesn't know what the hash of the name
+
+1581
+00:59:17,359 --> 00:59:19,680
+is and then there's the second
+
+1582
+00:59:19,680 --> 00:59:21,359
+transaction which really registers the
+
+1583
+00:59:21,359 --> 00:59:24,230
+name
+
+1584
+00:59:24,240 --> 00:59:26,880
+and you know that basically contains the
+
+1585
+00:59:26,880 --> 00:59:29,280
+actual name
+
+1586
+00:59:29,280 --> 00:59:31,760
+for which we first publish the hash and
+
+1587
+00:59:31,760 --> 00:59:41,349
+the hash of the zone file
+
+1588
+00:59:41,359 --> 00:59:44,480
+and so why why
+
+1589
+00:59:44,480 --> 00:59:46,079
+why is this done and this is actually
+
+1590
+00:59:46,079 --> 00:59:48,400
+something that uh namecoin did
+
+1591
+00:59:48,400 --> 00:59:50,559
+and they adopted it from namecoin why do
+
+1592
+00:59:50,559 --> 00:59:54,150
+it in this way
+
+1593
+00:59:54,160 --> 00:59:55,920
+because if you directly announce the
+
+1594
+00:59:55,920 --> 00:59:58,240
+name then someone else can raise you
+
+1595
+00:59:58,240 --> 01:00:01,680
+and uh try to register that name before
+
+1596
+01:00:01,680 --> 01:00:02,240
+you
+
+1597
+01:00:02,240 --> 01:00:03,920
+yeah this is a common problem it's
+
+1598
+01:00:03,920 --> 01:00:06,319
+called the front runner problem correct
+
+1599
+01:00:06,319 --> 01:00:09,589
+uh
+
+1600
+01:00:09,599 --> 01:00:28,789
+there we go again sorry
+
+1601
+01:00:28,799 --> 01:00:33,589
+um
+
+1602
+01:00:33,599 --> 01:00:36,319
+it's the front runner problem uh it's
+
+1603
+01:00:36,319 --> 01:00:36,880
+exactly
+
+1604
+01:00:36,880 --> 01:00:38,559
+described let's say you know you're
+
+1605
+01:00:38,559 --> 01:00:40,880
+trying to register google.com
+
+1606
+01:00:40,880 --> 01:00:43,599
+and uh somebody sees you doing that and
+
+1607
+01:00:43,599 --> 01:00:44,880
+of course you submit it to transaction
+
+1608
+01:00:44,880 --> 01:00:46,640
+correct it's not in the blockchain yet
+
+1609
+01:00:46,640 --> 01:00:48,319
+um for example a miner might actually
+
+1610
+01:00:48,319 --> 01:00:49,839
+see it or you know somebody else that
+
+1611
+01:00:49,839 --> 01:00:50,799
+actually sits in the
+
+1612
+01:00:50,799 --> 01:00:53,520
+the bitcoin network and decides okay i'm
+
+1613
+01:00:53,520 --> 01:00:54,880
+gonna run ahead and try and get my
+
+1614
+01:00:54,880 --> 01:00:57,119
+transaction the claiming you know
+
+1615
+01:00:57,119 --> 01:01:00,079
+google.com uh into the bitcoin before
+
+1616
+01:01:00,079 --> 01:01:00,720
+you
+
+1617
+01:01:00,720 --> 01:01:04,160
+and then i own uh google.com and so to
+
+1618
+01:01:04,160 --> 01:01:06,559
+avoid that problem uh you first actually
+
+1619
+01:01:06,559 --> 01:01:07,920
+have to enter the hash
+
+1620
+01:01:07,920 --> 01:01:10,960
+into the bitcoin chain then you wait a
+
+1621
+01:01:10,960 --> 01:01:11,680
+while
+
+1622
+01:01:11,680 --> 01:01:14,400
+to make sure that the uh that that
+
+1623
+01:01:14,400 --> 01:01:15,599
+record sits in the
+
+1624
+01:01:15,599 --> 01:01:18,640
+bitcoin uh blockchain you may have six
+
+1625
+01:01:18,640 --> 01:01:19,520
+whatever
+
+1626
+01:01:19,520 --> 01:01:21,599
+ten blocks and then after that you're
+
+1627
+01:01:21,599 --> 01:01:23,359
+sure that like you know the
+
+1628
+01:01:23,359 --> 01:01:26,079
+you burn the name in the as they called
+
+1629
+01:01:26,079 --> 01:01:26,559
+in the
+
+1630
+01:01:26,559 --> 01:01:28,799
+blockchain at that point you actually do
+
+1631
+01:01:28,799 --> 01:01:31,599
+the actual registration of the name
+
+1632
+01:01:31,599 --> 01:01:35,040
+i got a question regarding that
+
+1633
+01:01:35,040 --> 01:01:37,760
+so what why is it not possible for an
+
+1634
+01:01:37,760 --> 01:01:38,960
+attacker to say
+
+1635
+01:01:38,960 --> 01:01:40,720
+precompute internally the hash of
+
+1636
+01:01:40,720 --> 01:01:42,880
+google.com and then
+
+1637
+01:01:42,880 --> 01:01:44,319
+look through the blockchain and see if
+
+1638
+01:01:44,319 --> 01:01:46,000
+someone posted a hash of google
+
+1639
+01:01:46,000 --> 01:01:48,079
+yeah yeah yeah yeah absolutely uh so i
+
+1640
+01:01:48,079 --> 01:01:49,359
+presumably you know this is
+
+1641
+01:01:49,359 --> 01:01:50,799
+slightly more sophisticated than this
+
+1642
+01:01:50,799 --> 01:01:51,920
+you know and then just period in the
+
+1643
+01:01:51,920 --> 01:01:52,720
+hash there's
+
+1644
+01:01:52,720 --> 01:01:54,000
+a bunch of other arguments that go into
+
+1645
+01:01:54,000 --> 01:01:58,309
+it including the nons or something
+
+1646
+01:01:58,319 --> 01:02:04,829
+otherwise you could make a dictionary
+
+1647
+01:02:04,839 --> 01:02:06,640
+correct
+
+1648
+01:02:06,640 --> 01:02:08,079
+and in some ways this is like really not
+
+1649
+01:02:08,079 --> 01:02:10,000
+their invention but this is uh
+
+1650
+01:02:10,000 --> 01:02:14,390
+you know as i said before came out of uh
+
+1651
+01:02:14,400 --> 01:02:22,789
+came out of uh name coin
+
+1652
+01:02:22,799 --> 01:02:26,079
+okay um so let's you know go back to
+
+1653
+01:02:26,079 --> 01:02:28,480
+uh you know the sort of collaborative
+
+1654
+01:02:28,480 --> 01:02:35,039
+apps for you know collaborative
+
+1655
+01:02:35,039 --> 01:02:47,349
+collaborative decentralized applications
+
+1656
+01:02:47,359 --> 01:02:49,280
+so we just go back to our to-do list as
+
+1657
+01:02:49,280 --> 01:02:50,400
+an example
+
+1658
+01:02:50,400 --> 01:02:52,240
+uh and just to see you know how it
+
+1659
+01:02:52,240 --> 01:02:53,839
+really would work uh
+
+1660
+01:02:53,839 --> 01:02:55,520
+you know so sketch out again how that
+
+1661
+01:02:55,520 --> 01:02:57,839
+would work uh so basically you know what
+
+1662
+01:02:57,839 --> 01:02:58,880
+two users correct
+
+1663
+01:02:58,880 --> 01:03:00,960
+you know running you know the to-do list
+
+1664
+01:03:00,960 --> 01:03:05,910
+app
+
+1665
+01:03:05,920 --> 01:03:14,309
+give you one you know youtube
+
+1666
+01:03:14,319 --> 01:03:15,920
+and they basically exchanged you know
+
+1667
+01:03:15,920 --> 01:03:17,280
+some information with each other you
+
+1668
+01:03:17,280 --> 01:03:18,559
+know basically saying uh
+
+1669
+01:03:18,559 --> 01:03:20,640
+in some way your one has learned about
+
+1670
+01:03:20,640 --> 01:03:22,240
+youtube's name and youtube has learned
+
+1671
+01:03:22,240 --> 01:03:24,960
+about g1's name
+
+1672
+01:03:24,960 --> 01:03:26,880
+and then sort of that that step of
+
+1673
+01:03:26,880 --> 01:03:28,400
+course has to happen it has to happen
+
+1674
+01:03:28,400 --> 01:03:29,119
+securely
+
+1675
+01:03:29,119 --> 01:03:30,559
+in the sense that you won't really need
+
+1676
+01:03:30,559 --> 01:03:32,240
+to know that that actually is youtube's
+
+1677
+01:03:32,240 --> 01:03:33,039
+your name
+
+1678
+01:03:33,039 --> 01:03:36,559
+then they can you one can or
+
+1679
+01:03:36,559 --> 01:03:42,710
+uh you one can look up youtube's name
+
+1680
+01:03:42,720 --> 01:03:47,270
+you know get the zone file from that
+
+1681
+01:03:47,280 --> 01:03:49,520
+like find the entry for say the to-do
+
+1682
+01:03:49,520 --> 01:03:54,150
+list in the zone file
+
+1683
+01:03:54,160 --> 01:03:56,160
+uh again the zone file also contains you
+
+1684
+01:03:56,160 --> 01:04:00,390
+know in the public key
+
+1685
+01:04:00,400 --> 01:04:02,079
+and this might be not like you know
+
+1686
+01:04:02,079 --> 01:04:03,440
+youtube might have many
+
+1687
+01:04:03,440 --> 01:04:05,760
+public keys uh private keys uh because
+
+1688
+01:04:05,760 --> 01:04:07,359
+you probably don't want to have like one
+
+1689
+01:04:07,359 --> 01:04:08,960
+master private key that you use for
+
+1690
+01:04:08,960 --> 01:04:10,720
+everything because if you use that one
+
+1691
+01:04:10,720 --> 01:04:12,880
+master private key or somebody still you
+
+1692
+01:04:12,880 --> 01:04:14,319
+know you're in bad shape
+
+1693
+01:04:14,319 --> 01:04:16,400
+so typically i think in the block in box
+
+1694
+01:04:16,400 --> 01:04:17,920
+deck they're sort of a
+
+1695
+01:04:17,920 --> 01:04:20,960
+public private keeper application uh
+
+1696
+01:04:20,960 --> 01:04:22,960
+so you know the new one basically you
+
+1697
+01:04:22,960 --> 01:04:24,720
+can get your house due to his name
+
+1698
+01:04:24,720 --> 01:04:26,240
+looks up the zone file finds the to-do
+
+1699
+01:04:26,240 --> 01:04:28,240
+list the public key
+
+1700
+01:04:28,240 --> 01:04:32,880
+and the uri you know through the
+
+1701
+01:04:32,880 --> 01:04:35,359
+block stack file system which attracts
+
+1702
+01:04:35,359 --> 01:04:37,440
+away the different storage providers you
+
+1703
+01:04:37,440 --> 01:04:38,640
+know it actually retrieves
+
+1704
+01:04:38,640 --> 01:04:43,829
+you know the actual name the actual file
+
+1705
+01:04:43,839 --> 01:04:45,039
+you know checks the signature on the
+
+1706
+01:04:45,039 --> 01:04:47,280
+file maybe version numbers
+
+1707
+01:04:47,280 --> 01:04:49,839
+and and then basically use that to
+
+1708
+01:04:49,839 --> 01:04:50,480
+construct
+
+1709
+01:04:50,480 --> 01:04:54,160
+you know the the to-do list from u2
+
+1710
+01:04:54,160 --> 01:04:55,680
+and worked out with you once and
+
+1711
+01:04:55,680 --> 01:04:57,359
+similarly you know you basically you two
+
+1712
+01:04:57,359 --> 01:04:58,960
+just exactly the same way i think you
+
+1713
+01:04:58,960 --> 01:05:02,000
+know and as you one's name
+
+1714
+01:05:02,000 --> 01:05:04,960
+and room and goes off and uh you know
+
+1715
+01:05:04,960 --> 01:05:06,079
+you use one you
+
+1716
+01:05:06,079 --> 01:05:08,480
+you once uh to-do list and you know that
+
+1717
+01:05:08,480 --> 01:05:10,000
+way they can
+
+1718
+01:05:10,000 --> 01:05:13,359
+have a collaborative uh application
+
+1719
+01:05:13,359 --> 01:05:15,760
+and so for example when you do updates
+
+1720
+01:05:15,760 --> 01:05:17,200
+uh it's file
+
+1721
+01:05:17,200 --> 01:05:19,680
+then uh you know periodically you once
+
+1722
+01:05:19,680 --> 01:05:21,119
+have to
+
+1723
+01:05:21,119 --> 01:05:23,520
+gauche and retrieves the new uh
+
+1724
+01:05:23,520 --> 01:05:24,240
+retrieves
+
+1725
+01:05:24,240 --> 01:05:25,920
+the the to-do list and just sees if
+
+1726
+01:05:25,920 --> 01:05:30,630
+there are any updates
+
+1727
+01:05:30,640 --> 01:05:34,630
+does that sort of make sense
+
+1728
+01:05:34,640 --> 01:05:36,319
+you see here i think this is like one of
+
+1729
+01:05:36,319 --> 01:05:38,400
+these central points with decentral
+
+1730
+01:05:38,400 --> 01:05:39,520
+applications
+
+1731
+01:05:39,520 --> 01:05:42,000
+uh is these applications are built in
+
+1732
+01:05:42,000 --> 01:05:42,640
+you know
+
+1733
+01:05:42,640 --> 01:05:45,200
+quite a different way than uh the ones
+
+1734
+01:05:45,200 --> 01:05:46,559
+that we were talking about very early on
+
+1735
+01:05:46,559 --> 01:05:46,960
+correct
+
+1736
+01:05:46,960 --> 01:05:48,880
+if we go back to this picture of the
+
+1737
+01:05:48,880 --> 01:05:50,400
+centralized
+
+1738
+01:05:50,400 --> 01:05:53,680
+site that we're building a to-do list
+
+1739
+01:05:53,680 --> 01:05:55,920
+application correctly in the database
+
+1740
+01:05:55,920 --> 01:06:02,230
+yeah that would be you one's to-do list
+
+1741
+01:06:02,240 --> 01:06:08,390
+and you choose to do list
+
+1742
+01:06:08,400 --> 01:06:10,400
+and yeah you know like the to-do list
+
+1743
+01:06:10,400 --> 01:06:12,079
+app you know but basically you know
+
+1744
+01:06:12,079 --> 01:06:14,480
+retrieve these uh the content of these
+
+1745
+01:06:14,480 --> 01:06:16,880
+to-do lists with a simple sql query
+
+1746
+01:06:16,880 --> 01:06:18,240
+and you know puts them together and
+
+1747
+01:06:18,240 --> 01:06:20,240
+actually presents them to the user and
+
+1748
+01:06:20,240 --> 01:06:22,400
+we see that like in this decentralized
+
+1749
+01:06:22,400 --> 01:06:23,520
+scheme you know there's
+
+1750
+01:06:23,520 --> 01:06:25,440
+quite a lot more mechanism involved to
+
+1751
+01:06:25,440 --> 01:06:26,799
+actually make this happen
+
+1752
+01:06:26,799 --> 01:06:28,799
+and uh and the program it doesn't really
+
+1753
+01:06:28,799 --> 01:06:30,559
+have to sort of the same
+
+1754
+01:06:30,559 --> 01:06:34,240
+uh ease of you know the sql interface as
+
+1755
+01:06:34,240 --> 01:06:36,960
+uh as in the centralized case and so i
+
+1756
+01:06:36,960 --> 01:06:38,079
+think this is a
+
+1757
+01:06:38,079 --> 01:06:40,559
+uh one of the sort of maybe the sticking
+
+1758
+01:06:40,559 --> 01:06:41,839
+points of these decentralized
+
+1759
+01:06:41,839 --> 01:06:42,640
+applications
+
+1760
+01:06:42,640 --> 01:06:44,640
+how can you make them as easy to write
+
+1761
+01:06:44,640 --> 01:06:52,309
+as decentralized versions
+
+1762
+01:06:52,319 --> 01:06:54,079
+okay so i want to leave some time this
+
+1763
+01:06:54,079 --> 01:06:55,280
+time around instead of doing breakout
+
+1764
+01:06:55,280 --> 01:06:56,160
+rooms
+
+1765
+01:06:56,160 --> 01:06:58,319
+maybe just leave some time around time
+
+1766
+01:06:58,319 --> 01:07:00,319
+for just questions or discussion
+
+1767
+01:07:00,319 --> 01:07:03,039
+uh since this is a little bit more of a
+
+1768
+01:07:03,039 --> 01:07:04,799
+sort of you know thought-provoking
+
+1769
+01:07:04,799 --> 01:07:08,160
+type exercise then uh an exercise in
+
+1770
+01:07:08,160 --> 01:07:10,000
+well here's your technical problem and
+
+1771
+01:07:10,000 --> 01:07:11,520
+here's the right solution you know just
+
+1772
+01:07:11,520 --> 01:07:13,920
+learn the right solution and then use it
+
+1773
+01:07:13,920 --> 01:07:14,880
+and so
+
+1774
+01:07:14,880 --> 01:07:17,119
+uh you know i just want to hear you know
+
+1775
+01:07:17,119 --> 01:07:18,799
+people's opinion or
+
+1776
+01:07:18,799 --> 01:07:20,480
+questions about sort of any aspect of
+
+1777
+01:07:20,480 --> 01:07:22,559
+these decentralized applications for
+
+1778
+01:07:22,559 --> 01:07:24,720
+versus centralized or the particular
+
+1779
+01:07:24,720 --> 01:07:27,200
+design for block stack or any other
+
+1780
+01:07:27,200 --> 01:07:32,150
+issue and we can debate it together
+
+1781
+01:07:32,160 --> 01:07:34,079
+wait so what's the um the main
+
+1782
+01:07:34,079 --> 01:07:35,280
+difficulty
+
+1783
+01:07:35,280 --> 01:07:38,559
+in um instead of using like a file
+
+1784
+01:07:38,559 --> 01:07:40,640
+system api to use like a
+
+1785
+01:07:40,640 --> 01:07:43,119
+relational database well how do you
+
+1786
+01:07:43,119 --> 01:07:44,000
+write a
+
+1787
+01:07:44,000 --> 01:07:46,799
+how do you present the worldwide uh
+
+1788
+01:07:46,799 --> 01:07:48,480
+relational database
+
+1789
+01:07:48,480 --> 01:07:51,520
+i think all these user files
+
+1790
+01:07:51,520 --> 01:07:53,039
+all these files and different users live
+
+1791
+01:07:53,039 --> 01:07:54,640
+in all kinds of different
+
+1792
+01:07:54,640 --> 01:07:57,839
+storage providers um and
+
+1793
+01:07:57,839 --> 01:07:59,839
+uh you know you can't like room do
+
+1794
+01:07:59,839 --> 01:08:01,039
+whatever uh
+
+1795
+01:08:01,039 --> 01:08:03,599
+you can't do select across all the
+
+1796
+01:08:03,599 --> 01:08:04,400
+storage device
+
+1797
+01:08:04,400 --> 01:08:07,680
+providers regularly crazy
+
+1798
+01:08:07,680 --> 01:08:09,599
+you couldn't also download all the users
+
+1799
+01:08:09,599 --> 01:08:11,280
+data to your computer because that would
+
+1800
+01:08:11,280 --> 01:08:12,880
+be too expensive
+
+1801
+01:08:12,880 --> 01:08:15,920
+what about like uh like uh
+
+1802
+01:08:15,920 --> 01:08:19,920
+like a linked data um data database
+
+1803
+01:08:19,920 --> 01:08:21,359
+yeah you know again so i think this is
+
+1804
+01:08:21,359 --> 01:08:22,960
+like
+
+1805
+01:08:22,960 --> 01:08:24,799
+you're interested in this you know i
+
+1806
+01:08:24,799 --> 01:08:26,000
+think there's an interesting researcher
+
+1807
+01:08:26,000 --> 01:08:26,799
+actually to
+
+1808
+01:08:26,799 --> 01:08:28,880
+pursue correct but you could actually
+
+1809
+01:08:28,880 --> 01:08:29,839
+build
+
+1810
+01:08:29,839 --> 01:08:32,640
+uh sort of uh you know scalable database
+
+1811
+01:08:32,640 --> 01:08:33,679
+infrastructure
+
+1812
+01:08:33,679 --> 01:08:35,440
+where users still control their own data
+
+1813
+01:08:35,440 --> 01:08:37,040
+have the different locations yeah and
+
+1814
+01:08:37,040 --> 01:08:38,960
+provide sort of a relational data type
+
+1815
+01:08:38,960 --> 01:08:41,279
+interface
+
+1816
+01:08:41,279 --> 01:08:42,719
+certainly blocks out blocks doesn't
+
+1817
+01:08:42,719 --> 01:08:47,990
+offer you to you
+
+1818
+01:08:48,000 --> 01:08:50,000
+i guess another question is um like what
+
+1819
+01:08:50,000 --> 01:08:51,359
+are the benefits of this
+
+1820
+01:08:51,359 --> 01:08:54,640
+decentralized pki versus like a web of
+
+1821
+01:08:54,640 --> 01:08:55,679
+trust pki
+
+1822
+01:08:55,679 --> 01:08:57,759
+which i guess is also decentralized yeah
+
+1823
+01:08:57,759 --> 01:09:01,440
+so totally other you know i guess
+
+1824
+01:09:01,440 --> 01:09:04,159
+maybe some points here correct uh you
+
+1825
+01:09:04,159 --> 01:09:05,120
+know they're sort of the
+
+1826
+01:09:05,120 --> 01:09:07,520
+their other weapon trust api a web of
+
+1827
+01:09:07,520 --> 01:09:09,759
+trust
+
+1828
+01:09:09,759 --> 01:09:13,040
+uh pkis
+
+1829
+01:09:13,040 --> 01:09:15,279
+uh you know i mean the one i'm most
+
+1830
+01:09:15,279 --> 01:09:16,239
+familiar with is
+
+1831
+01:09:16,239 --> 01:09:20,560
+uh is um uh
+
+1832
+01:09:20,560 --> 01:09:24,789
+key base
+
+1833
+01:09:24,799 --> 01:09:25,839
+i think which we mentioned a couple
+
+1834
+01:09:25,839 --> 01:09:28,239
+times before uh and uh
+
+1835
+01:09:28,239 --> 01:09:30,640
+you know uh the keyboard is actually uh
+
+1836
+01:09:30,640 --> 01:09:31,920
+we haven't talked in this in greater
+
+1837
+01:09:31,920 --> 01:09:32,880
+detail but
+
+1838
+01:09:32,880 --> 01:09:34,400
+uh one of the things that does also
+
+1839
+01:09:34,400 --> 01:09:35,839
+challenge in these kinds of systems is
+
+1840
+01:09:35,839 --> 01:09:37,359
+like how do you represent groups of
+
+1841
+01:09:37,359 --> 01:09:38,159
+users
+
+1842
+01:09:38,159 --> 01:09:39,759
+like we shot a little bit in the center
+
+1843
+01:09:39,759 --> 01:09:42,080
+paper uh where you know you have group
+
+1844
+01:09:42,080 --> 01:09:42,640
+names
+
+1845
+01:09:42,640 --> 01:09:44,239
+all the keys for the group names and you
+
+1846
+01:09:44,239 --> 01:09:45,440
+know how to create them and i'll manage
+
+1847
+01:09:45,440 --> 01:09:46,799
+them and actually you know stick them in
+
+1848
+01:09:46,799 --> 01:09:48,960
+you know how do you incorporate those in
+
+1849
+01:09:48,960 --> 01:09:49,600
+the
+
+1850
+01:09:49,600 --> 01:09:52,400
+in the the chain of records name
+
+1851
+01:09:52,400 --> 01:09:53,120
+wreckage
+
+1852
+01:09:53,120 --> 01:09:54,880
+uh and key base is a really really
+
+1853
+01:09:54,880 --> 01:09:56,800
+really thought out story for that
+
+1854
+01:09:56,800 --> 01:09:59,440
+uh uh and you know actually these are
+
+1855
+01:09:59,440 --> 01:10:00,159
+very impressive
+
+1856
+01:10:00,159 --> 01:10:02,480
+it's probably you know the sort of
+
+1857
+01:10:02,480 --> 01:10:03,360
+probably
+
+1858
+01:10:03,360 --> 01:10:05,360
+probably considered the sort of the best
+
+1859
+01:10:05,360 --> 01:10:07,679
+sort of decentralized you know pti out
+
+1860
+01:10:07,679 --> 01:10:09,040
+there
+
+1861
+01:10:09,040 --> 01:10:10,400
+and the most thought out and probably
+
+1862
+01:10:10,400 --> 01:10:18,229
+most widely used
+
+1863
+01:10:18,239 --> 01:10:20,320
+so are there any benefits of doing it of
+
+1864
+01:10:20,320 --> 01:10:21,360
+like block stocks
+
+1865
+01:10:21,360 --> 01:10:23,760
+method or is it just more extensible uh
+
+1866
+01:10:23,760 --> 01:10:25,199
+well one of the things that actually
+
+1867
+01:10:25,199 --> 01:10:27,600
+blocks that gas correct is uh is this
+
+1868
+01:10:27,600 --> 01:10:28,400
+uniqueness
+
+1869
+01:10:28,400 --> 01:10:30,400
+uh properties because the web of trust
+
+1870
+01:10:30,400 --> 01:10:32,159
+there's basically not a global naming
+
+1871
+01:10:32,159 --> 01:10:32,960
+system you know
+
+1872
+01:10:32,960 --> 01:10:34,960
+like you know it is like my to-do list
+
+1873
+01:10:34,960 --> 01:10:36,960
+or my contact list
+
+1874
+01:10:36,960 --> 01:10:40,320
+uh and you know whatever who i name
+
+1875
+01:10:40,320 --> 01:10:42,320
+you know if i have a name john for some
+
+1876
+01:10:42,320 --> 01:10:44,560
+particular public key that is my john
+
+1877
+01:10:44,560 --> 01:10:47,040
+and uh if i said john to you it's like
+
+1878
+01:10:47,040 --> 01:10:48,400
+in the text you know string
+
+1879
+01:10:48,400 --> 01:10:50,480
+john probably resolves differently
+
+1880
+01:10:50,480 --> 01:10:51,920
+differently in your
+
+1881
+01:10:51,920 --> 01:10:55,440
+uh content list than the mine and so
+
+1882
+01:10:55,440 --> 01:10:58,320
+in fact uh so key base is much more is
+
+1883
+01:10:58,320 --> 01:10:59,280
+decentralized
+
+1884
+01:10:59,280 --> 01:11:01,360
+uh but origin doesn't really go for
+
+1885
+01:11:01,360 --> 01:11:03,760
+these sort of global unique names
+
+1886
+01:11:03,760 --> 01:11:05,199
+now it is the case that you know key
+
+1887
+01:11:05,199 --> 01:11:07,520
+base once in a while publishes the
+
+1888
+01:11:07,520 --> 01:11:10,480
+hash of all the names of the complete
+
+1889
+01:11:10,480 --> 01:11:12,320
+the merkle tree of all names in
+
+1890
+01:11:12,320 --> 01:11:15,600
+in in the blockchain too uh so you can
+
+1891
+01:11:15,600 --> 01:11:17,360
+sort of verify whether key base actually
+
+1892
+01:11:17,360 --> 01:11:19,199
+is uh not playing in games
+
+1893
+01:11:19,199 --> 01:11:22,800
+uh but you know the uh it's a much more
+
+1894
+01:11:22,800 --> 01:11:24,840
+it doesn't really have global unique
+
+1895
+01:11:24,840 --> 01:11:29,910
+names
+
+1896
+01:11:29,920 --> 01:11:31,760
+sorry just a clarification question
+
+1897
+01:11:31,760 --> 01:11:34,000
+earlier on in the lecture you mentioned
+
+1898
+01:11:34,000 --> 01:11:34,800
+how
+
+1899
+01:11:34,800 --> 01:11:37,520
+users have the basically they can choose
+
+1900
+01:11:37,520 --> 01:11:39,600
+who to show their data to
+
+1901
+01:11:39,600 --> 01:11:43,040
+um or who they give access to their data
+
+1902
+01:11:43,040 --> 01:11:43,600
+to
+
+1903
+01:11:43,600 --> 01:11:46,080
+um but i'm not quite sure i see how
+
+1904
+01:11:46,080 --> 01:11:47,600
+that's implemented within
+
+1905
+01:11:47,600 --> 01:11:50,709
+that system
+
+1906
+01:11:50,719 --> 01:11:53,280
+yeah they're they're the way one way to
+
+1907
+01:11:53,280 --> 01:11:54,080
+do it and
+
+1908
+01:11:54,080 --> 01:11:56,080
+i i don't know exactly you know what the
+
+1909
+01:11:56,080 --> 01:11:57,199
+block stack does
+
+1910
+01:11:57,199 --> 01:12:00,239
+is that you encrypt the same data uh
+
+1911
+01:12:00,239 --> 01:12:02,080
+for different users so i think uh if you
+
+1912
+01:12:02,080 --> 01:12:03,760
+want to uh
+
+1913
+01:12:03,760 --> 01:12:05,840
+share your data only with user one and
+
+1914
+01:12:05,840 --> 01:12:07,440
+user two
+
+1915
+01:12:07,440 --> 01:12:10,800
+then you encrypt it you know with the
+
+1916
+01:12:10,800 --> 01:12:13,040
+public keys of usual one in user two and
+
+1917
+01:12:13,040 --> 01:12:14,560
+then those are the only two that can
+
+1918
+01:12:14,560 --> 01:12:18,790
+decrypt it
+
+1919
+01:12:18,800 --> 01:12:20,000
+and so that gives you sort of extra
+
+1920
+01:12:20,000 --> 01:12:25,750
+control lists
+
+1921
+01:12:25,760 --> 01:12:28,239
+i see so you'd have to for each person
+
+1922
+01:12:28,239 --> 01:12:28,960
+you wanted
+
+1923
+01:12:28,960 --> 01:12:30,480
+to give the data to you'd have to
+
+1924
+01:12:30,480 --> 01:12:32,880
+encrypt it with like their public key
+
+1925
+01:12:32,880 --> 01:12:35,520
+yeah and you can get more sophisticated
+
+1926
+01:12:35,520 --> 01:12:36,159
+about this
+
+1927
+01:12:36,159 --> 01:12:37,360
+you know you can actually have group
+
+1928
+01:12:37,360 --> 01:12:39,600
+keys and you know give
+
+1929
+01:12:39,600 --> 01:12:41,600
+a group of users you know access to you
+
+1930
+01:12:41,600 --> 01:12:43,360
+know you have a lock box
+
+1931
+01:12:43,360 --> 01:12:47,040
+that uh has a group key in it and you
+
+1932
+01:12:47,040 --> 01:12:48,560
+encrypt the log box with the different
+
+1933
+01:12:48,560 --> 01:12:50,400
+users you know public keys
+
+1934
+01:12:50,400 --> 01:12:52,080
+and then they get access to that lock
+
+1935
+01:12:52,080 --> 01:12:53,760
+box they get the key out of it and then
+
+1936
+01:12:53,760 --> 01:12:55,199
+they can decrypt the key so that you
+
+1937
+01:12:55,199 --> 01:12:56,239
+only have to
+
+1938
+01:12:56,239 --> 01:12:58,560
+encrypt the data only once instead of
+
+1939
+01:12:58,560 --> 01:13:00,159
+multiple times
+
+1940
+01:13:00,159 --> 01:13:01,520
+and you only have to decrypt the
+
+1941
+01:13:01,520 --> 01:13:04,480
+encrypted lock box multiple times
+
+1942
+01:13:04,480 --> 01:13:07,910
+thank you
+
+1943
+01:13:07,920 --> 01:13:09,920
+um that would be done at the level of
+
+1944
+01:13:09,920 --> 01:13:11,120
+the content of this
+
+1945
+01:13:11,120 --> 01:13:14,159
+zone file right uh
+
+1946
+01:13:14,159 --> 01:13:17,520
+yeah presumably or maybe the key that is
+
+1947
+01:13:17,520 --> 01:13:19,120
+in the zone files build the key for the
+
+1948
+01:13:19,120 --> 01:13:22,080
+lock box if you will
+
+1949
+01:13:22,080 --> 01:13:23,840
+and again i'm not actually 100 sure
+
+1950
+01:13:23,840 --> 01:13:30,390
+exactly how uh
+
+1951
+01:13:30,400 --> 01:13:32,560
+how i block stack actually the the boxx
+
+1952
+01:13:32,560 --> 01:13:33,600
+file system does
+
+1953
+01:13:33,600 --> 01:13:37,199
+uh action control when it does it all
+
+1954
+01:13:37,199 --> 01:13:39,120
+but other people have done these kinds
+
+1955
+01:13:39,120 --> 01:13:41,830
+of designs
+
+1956
+01:13:41,840 --> 01:13:43,920
+do you think uh systems like this be
+
+1957
+01:13:43,920 --> 01:13:45,199
+able to compete with like the
+
+1958
+01:13:45,199 --> 01:13:46,800
+centralized model in terms of
+
+1959
+01:13:46,800 --> 01:13:49,040
+performance or scalability
+
+1960
+01:13:49,040 --> 01:13:51,920
+and what would it take i i don't know
+
+1961
+01:13:51,920 --> 01:13:54,229
+these are
+
+1962
+01:13:54,239 --> 01:13:56,320
+good questions uh i don't really know
+
+1963
+01:13:56,320 --> 01:13:58,159
+the answer it is the case correct like
+
+1964
+01:13:58,159 --> 01:13:58,640
+even
+
+1965
+01:13:58,640 --> 01:14:00,159
+the centralized sites is not that easy
+
+1966
+01:14:00,159 --> 01:14:01,679
+to scale you know we've
+
+1967
+01:14:01,679 --> 01:14:03,040
+written out quite a number of papers
+
+1968
+01:14:03,040 --> 01:14:05,920
+correctly we should see how uh
+
+1969
+01:14:05,920 --> 01:14:08,080
+how to make them uh scalable to millions
+
+1970
+01:14:08,080 --> 01:14:09,760
+of users
+
+1971
+01:14:09,760 --> 01:14:12,870
+and so you know
+
+1972
+01:14:12,880 --> 01:14:15,440
+oh yeah miss getting anything to a large
+
+1973
+01:14:15,440 --> 01:14:17,679
+large number of users is not easy
+
+1974
+01:14:17,679 --> 01:14:21,760
+uh and uh certainly uh in the case of
+
+1975
+01:14:21,760 --> 01:14:23,280
+the decentralized apps it's not gonna be
+
+1976
+01:14:23,280 --> 01:14:25,120
+easy either but on the other hand like
+
+1977
+01:14:25,120 --> 01:14:25,679
+if there's not
+
+1978
+01:14:25,679 --> 01:14:28,320
+bite sharing like the user one actually
+
+1979
+01:14:28,320 --> 01:14:29,840
+i only have a share to do this with 10
+
+1980
+01:14:29,840 --> 01:14:30,640
+other users
+
+1981
+01:14:30,640 --> 01:14:32,400
+that should probably not be a big issue
+
+1982
+01:14:32,400 --> 01:14:33,920
+correct some ways you can think about
+
+1983
+01:14:33,920 --> 01:14:35,760
+the decentralized architecture it's
+
+1984
+01:14:35,760 --> 01:14:42,159
+basically sharded by user
+
+1985
+01:14:42,159 --> 01:14:43,840
+and each app you know runs on one of the
+
+1986
+01:14:43,840 --> 01:14:46,239
+user's computers
+
+1987
+01:14:46,239 --> 01:14:47,840
+so it's like you don't need to like data
+
+1988
+01:14:47,840 --> 01:14:54,830
+centers with
+
+1989
+01:14:54,840 --> 01:14:57,199
+caches
+
+1990
+01:14:57,199 --> 01:14:58,320
+so i don't know what the answer to that
+
+1991
+01:14:58,320 --> 01:15:00,719
+question actually is
+
+1992
+01:15:00,719 --> 01:15:01,840
+i would not be able to give you a
+
+1993
+01:15:01,840 --> 01:15:06,950
+different answer
+
+1994
+01:15:06,960 --> 01:15:08,080
+it's clearly the case that you know
+
+1995
+01:15:08,080 --> 01:15:09,040
+people have demonstrated bigger
+
+1996
+01:15:09,040 --> 01:15:10,960
+scalability we have sort of these
+
+1997
+01:15:10,960 --> 01:15:14,239
+uh uh centralized designs uh
+
+1998
+01:15:14,239 --> 01:15:16,159
+at least so far we've seen them in the
+
+1999
+01:15:16,159 --> 01:15:17,760
+decent life once but you know one reason
+
+2000
+01:15:17,760 --> 01:15:19,199
+of that of course is that
+
+2001
+01:15:19,199 --> 01:15:21,600
+the the the centralized designs are like
+
+2002
+01:15:21,600 --> 01:15:22,400
+the
+
+2003
+01:15:22,400 --> 01:15:24,960
+widely used the most popular the most
+
+2004
+01:15:24,960 --> 01:15:26,159
+deployed
+
+2005
+01:15:26,159 --> 01:15:29,280
+cases i think the the
+
+2006
+01:15:29,280 --> 01:15:31,360
+to me the decentralized design is just
+
+2007
+01:15:31,360 --> 01:15:32,480
+an intriguing
+
+2008
+01:15:32,480 --> 01:15:35,600
+design and that if it could make to be
+
+2009
+01:15:35,600 --> 01:15:36,000
+work
+
+2010
+01:15:36,000 --> 01:15:45,830
+you know it would be pretty cool
+
+2011
+01:15:45,840 --> 01:15:47,280
+any other thoughts that people might
+
+2012
+01:15:47,280 --> 01:15:51,590
+have for
+
+2013
+01:15:51,600 --> 01:15:59,270
+i would like to argue about
+
+2014
+01:15:59,280 --> 01:16:03,760
+i still feel like the storage aspect
+
+2015
+01:16:03,760 --> 01:16:07,120
+is like the thing that that william will
+
+2016
+01:16:07,120 --> 01:16:08,719
+was pointing out where
+
+2017
+01:16:08,719 --> 01:16:11,600
+like you maybe have an immutable file
+
+2018
+01:16:11,600 --> 01:16:12,159
+that's
+
+2019
+01:16:12,159 --> 01:16:14,560
+the the user information but the mutable
+
+2020
+01:16:14,560 --> 01:16:15,920
+file that you have
+
+2021
+01:16:15,920 --> 01:16:19,360
+somewhere else yeah is like a a huge
+
+2022
+01:16:19,360 --> 01:16:23,440
+problem um in so much that like i i
+
+2023
+01:16:23,440 --> 01:16:24,239
+don't really
+
+2024
+01:16:24,239 --> 01:16:27,920
+understand how you can assure redundancy
+
+2025
+01:16:27,920 --> 01:16:31,440
+for the large amount of
+
+2026
+01:16:31,440 --> 01:16:34,400
+mutable storage that you might have yeah
+
+2027
+01:16:34,400 --> 01:16:35,920
+i think
+
+2028
+01:16:35,920 --> 01:16:37,360
+i think the answer the redundancy may be
+
+2029
+01:16:37,360 --> 01:16:39,199
+not that tough i think this the user is
+
+2030
+01:16:39,199 --> 01:16:41,040
+responsible for redundancy
+
+2031
+01:16:41,040 --> 01:16:43,840
+uh so if you're like you're you do this
+
+2032
+01:16:43,840 --> 01:16:45,600
+you own a to-do list file
+
+2033
+01:16:45,600 --> 01:16:47,440
+and it's your job to replicate it you
+
+2034
+01:16:47,440 --> 01:16:49,199
+know multiple times you know the
+
+2035
+01:16:49,199 --> 01:16:51,360
+block stack storage servers do that for
+
+2036
+01:16:51,360 --> 01:16:53,440
+you but you got a range you know
+
+2037
+01:16:53,440 --> 01:16:54,560
+basically for
+
+2038
+01:16:54,560 --> 01:16:57,760
+uh space and the different storage
+
+2039
+01:16:57,760 --> 01:16:58,560
+providers to
+
+2040
+01:16:58,560 --> 01:17:02,400
+uh do that and so i think in the paper
+
+2041
+01:17:02,400 --> 01:17:03,280
+they talk about like oh you're
+
+2042
+01:17:03,280 --> 01:17:04,480
+replicated at maybe
+
+2043
+01:17:04,480 --> 01:17:07,679
+uh google drive and then s3 and
+
+2044
+01:17:07,679 --> 01:17:09,440
+presumably s3 internally does its own
+
+2045
+01:17:09,440 --> 01:17:11,120
+replication right so hopefully you know
+
+2046
+01:17:11,120 --> 01:17:12,480
+maybe you just actually store it only at
+
+2047
+01:17:12,480 --> 01:17:14,719
+s3 and that should be pretty reliable
+
+2048
+01:17:14,719 --> 01:17:16,400
+probably more liable than storing data
+
+2049
+01:17:16,400 --> 01:17:21,910
+on your ssd on your laptop
+
+2050
+01:17:21,920 --> 01:17:23,679
+and the zone files are small so they're
+
+2051
+01:17:23,679 --> 01:17:24,960
+just widely replicated
+
+2052
+01:17:24,960 --> 01:17:28,840
+and you don't have to trust the storage
+
+2053
+01:17:28,840 --> 01:17:54,070
+provider
+
+2054
+01:17:54,080 --> 01:17:58,000
+any other thoughts
+
+2055
+01:17:58,000 --> 01:17:59,440
+i was thinking it's a little bit
+
+2056
+01:17:59,440 --> 01:18:01,440
+wasteful that you have in order to
+
+2057
+01:18:01,440 --> 01:18:03,280
+register a name and to use this name
+
+2058
+01:18:03,280 --> 01:18:04,719
+system you have to
+
+2059
+01:18:04,719 --> 01:18:09,280
+pay um yeah so i was thinking
+
+2060
+01:18:09,280 --> 01:18:12,640
+obviously on a blockchain based system
+
+2061
+01:18:12,640 --> 01:18:14,800
+you'll have to incentivize the miners
+
+2062
+01:18:14,800 --> 01:18:15,520
+but i was thinking
+
+2063
+01:18:15,520 --> 01:18:19,440
+maybe there's a different cheaper way
+
+2064
+01:18:19,440 --> 01:18:22,480
+i don't know yeah i'm not sure
+
+2065
+01:18:22,480 --> 01:18:24,080
+it seems in some ways you know that's
+
+2066
+01:18:24,080 --> 01:18:27,199
+sort of the currency and this is also
+
+2067
+01:18:27,199 --> 01:18:30,400
+are very coupled as a reason exactly for
+
+2068
+01:18:30,400 --> 01:18:30,960
+the reason
+
+2069
+01:18:30,960 --> 01:18:32,080
+you mentioned because you've got to have
+
+2070
+01:18:32,080 --> 01:18:34,880
+minors and you have to incentivize them
+
+2071
+01:18:34,880 --> 01:18:36,239
+now i think in general like with these
+
+2072
+01:18:36,239 --> 01:18:37,600
+transactions they're pretty cheap you
+
+2073
+01:18:37,600 --> 01:18:38,960
+know basically you know basically you
+
+2074
+01:18:38,960 --> 01:18:40,159
+have to just pay enough correct that the
+
+2075
+01:18:40,159 --> 01:18:42,080
+miner is actually willing to do to
+
+2076
+01:18:42,080 --> 01:18:46,239
+include your transaction uh and you know
+
+2077
+01:18:46,239 --> 01:18:48,159
+today you also pay for you know if you
+
+2078
+01:18:48,159 --> 01:18:50,480
+want to register a name in you know
+
+2079
+01:18:50,480 --> 01:18:52,400
+in dns you know you actually pay quite a
+
+2080
+01:18:52,400 --> 01:18:54,080
+bit of money
+
+2081
+01:18:54,080 --> 01:18:58,470
+it's not free
+
+2082
+01:18:58,480 --> 01:19:00,000
+i don't know exactly how economics would
+
+2083
+01:19:00,000 --> 01:19:02,159
+work out uh but uh
+
+2084
+01:19:02,159 --> 01:19:04,000
+it's not obviously clear that this is
+
+2085
+01:19:04,000 --> 01:19:05,199
+actually a much more expensive way of
+
+2086
+01:19:05,199 --> 01:19:06,480
+doing it other than maybe you know
+
+2087
+01:19:06,480 --> 01:19:07,760
+you're brewing the planet with
+
+2088
+01:19:07,760 --> 01:19:10,800
+electricity at least in the bitcoin case
+
+2089
+01:19:10,800 --> 01:19:13,440
+uh but you know maybe you should use uh
+
+2090
+01:19:13,440 --> 01:19:14,719
+one of the stake of work
+
+2091
+01:19:14,719 --> 01:19:20,830
+uh ledgers instead of the
+
+2092
+01:19:20,840 --> 01:19:29,830
+uh
+
+2093
+01:19:29,840 --> 01:19:32,320
+it will be possible just to swap it out
+
+2094
+01:19:32,320 --> 01:19:33,199
+in
+
+2095
+01:19:33,199 --> 01:19:35,120
+place of layer one yeah i think this is
+
+2096
+01:19:35,120 --> 01:19:36,640
+like i think this is what the papers
+
+2097
+01:19:36,640 --> 01:19:38,000
+argue correct like their particular
+
+2098
+01:19:38,000 --> 01:19:39,840
+design is really not very dependent on
+
+2099
+01:19:39,840 --> 01:19:40,159
+the
+
+2100
+01:19:40,159 --> 01:19:42,480
+uh the underlying blockchain and they
+
+2101
+01:19:42,480 --> 01:19:43,679
+could easily switch to another
+
+2102
+01:19:43,679 --> 01:19:45,040
+blockchain in fact you know this is the
+
+2103
+01:19:45,040 --> 01:19:46,640
+second blockchain that worked on correct
+
+2104
+01:19:46,640 --> 01:19:48,000
+they first used namecoin
+
+2105
+01:19:48,000 --> 01:19:50,159
+and then they switched to bitcoin and i
+
+2106
+01:19:50,159 --> 01:19:51,120
+think the argument in the paper is
+
+2107
+01:19:51,120 --> 01:19:52,560
+making uh we could actually switch to
+
+2108
+01:19:52,560 --> 01:19:53,280
+another
+
+2109
+01:19:53,280 --> 01:20:10,070
+uh blockchain we wanted to
+
+2110
+01:20:10,080 --> 01:20:11,920
+what in particular is stored in the name
+
+2111
+01:20:11,920 --> 01:20:14,550
+history
+
+2112
+01:20:14,560 --> 01:20:18,480
+in the sorry what uh what's the question
+
+2113
+01:20:18,480 --> 01:20:19,199
+uh
+
+2114
+01:20:19,199 --> 01:20:21,760
+really oh sorry the name history in the
+
+2115
+01:20:21,760 --> 01:20:23,679
+block stack database
+
+2116
+01:20:23,679 --> 01:20:25,840
+yeah this this yeah i don't really mean
+
+2117
+01:20:25,840 --> 01:20:27,920
+like these three different guys
+
+2118
+01:20:27,920 --> 01:20:29,360
+i think yeah different version of the
+
+2119
+01:20:29,360 --> 01:20:31,840
+zone file
+
+2120
+01:20:31,840 --> 01:20:34,239
+so they're just like version numbers
+
+2121
+01:20:34,239 --> 01:20:35,040
+yeah i think so
+
+2122
+01:20:35,040 --> 01:20:38,400
+i'm not 100 sure but uh
+
+2123
+01:20:38,400 --> 01:20:39,840
+it's like these correspond to the free
+
+2124
+01:20:39,840 --> 01:20:41,679
+updates to the zone file correct here's
+
+2125
+01:20:41,679 --> 01:20:45,189
+number one here's number two
+
+2126
+01:20:45,199 --> 01:20:46,560
+and maybe they keep fusion version of
+
+2127
+01:20:46,560 --> 01:20:59,590
+his own file around
+
+2128
+01:20:59,600 --> 01:21:02,800
+any other topics that people want to
+
+2129
+01:21:02,800 --> 01:21:09,350
+bring up
+
+2130
+01:21:09,360 --> 01:21:10,800
+as we end sort of the election time
+
+2131
+01:21:10,800 --> 01:21:12,719
+anyway okay so let's uh why don't we
+
+2132
+01:21:12,719 --> 01:21:14,719
+stop here for people that need uh
+
+2133
+01:21:14,719 --> 01:21:18,159
+need to leave can leave and i'll see
+
+2134
+01:21:18,159 --> 01:21:19,760
+hopefully everybody on thursday you know
+
+2135
+01:21:19,760 --> 01:21:20,400
+we're gonna see
+
+2136
+01:21:20,400 --> 01:21:23,520
+uh eight we had eight design uh eight
+
+2137
+01:21:23,520 --> 01:21:24,080
+projects
+
+2138
+01:21:24,080 --> 01:21:26,639
+and so the eight uh teams will present
+
+2139
+01:21:26,639 --> 01:21:27,360
+the first day
+
+2140
+01:21:27,360 --> 01:21:31,280
+what they've done instead of lab
+
+2141
+01:21:31,280 --> 01:21:34,159
+lab four and it should be and the the
+
+2142
+01:21:34,159 --> 01:21:35,600
+projects are quite cool and interesting
+
+2143
+01:21:35,600 --> 01:21:36,080
+so
+
+2144
+01:21:36,080 --> 01:21:37,760
+hopefully you'll be in uh you'll be
+
+2145
+01:21:37,760 --> 01:21:39,120
+entertained uh
+
+2146
+01:21:39,120 --> 01:21:41,280
+and that makes concludes this lecture
+
+2147
+01:21:41,280 --> 01:21:42,639
+hopefully uh
+
+2148
+01:21:42,639 --> 01:21:44,639
+that's a bit of a the goal is a little
+
+2149
+01:21:44,639 --> 01:21:46,320
+bit before provoking and you know sort
+
+2150
+01:21:46,320 --> 01:21:46,960
+of
+
+2151
+01:21:46,960 --> 01:21:50,000
+talk about uh designs uh the
+
+2152
+01:21:50,000 --> 01:21:51,840
+decentralized designs of the houses the
+
+2153
+01:21:51,840 --> 01:21:53,120
+nice property that the users are on
+
+2154
+01:21:53,120 --> 01:21:54,080
+their data
+
+2155
+01:21:54,080 --> 01:21:56,800
+and uh you know and we looked in the
+
+2156
+01:21:56,800 --> 01:21:57,600
+context of
+
+2157
+01:21:57,600 --> 01:21:59,440
+block stack at least one particular
+
+2158
+01:21:59,440 --> 01:22:01,360
+design uh how they
+
+2159
+01:22:01,360 --> 01:22:03,600
+did naming in a way that gives global
+
+2160
+01:22:03,600 --> 01:22:05,520
+names unique names
+
+2161
+01:22:05,520 --> 01:22:08,639
+and human uh readable ones okay
+
+2162
+01:22:08,639 --> 01:22:10,480
+so that's the end of this lecture and
+
+2163
+01:22:10,480 --> 01:22:11,679
+then hopefully we'll see you in first
+
+2164
+01:22:11,679 --> 01:22:12,000
+time
+
+2165
+01:22:12,000 --> 01:22:13,360
+which is going to be our final class
+
+2166
+01:22:13,360 --> 01:22:18,149
+meeting
+
+2167
+01:22:18,159 --> 01:22:19,520
+and if you have any questions please
+
+2168
+01:22:19,520 --> 01:22:22,239
+feel free to stick around and
+
+2169
+01:22:22,239 --> 01:22:25,920
+we can talk um um professor
+
+2170
+01:22:25,920 --> 01:22:29,040
+um for the presentation um are we are we
+
+2171
+01:22:29,040 --> 01:22:30,560
+supposed to do something like more of a
+
+2172
+01:22:30,560 --> 01:22:31,120
+demo
+
+2173
+01:22:31,120 --> 01:22:33,440
+or should we have like slides prepared
+
+2174
+01:22:33,440 --> 01:22:34,639
+or a combination both
+
+2175
+01:22:34,639 --> 01:22:46,149
+yeah you put books in so many structures
+
+2176
+01:22:46,159 --> 01:22:48,320
+the thing you want to do is convince the
+
+2177
+01:22:48,320 --> 01:22:50,560
+class and ask you know
+
+2178
+01:22:50,560 --> 01:22:53,280
+what party they did and why it's cool uh
+
+2179
+01:22:53,280 --> 01:22:54,880
+so demo is a good idea
+
+2180
+01:22:54,880 --> 01:22:56,800
+uh the other you don't have a ton of
+
+2181
+01:22:56,800 --> 01:22:58,639
+time so i think the typical thing to do
+
+2182
+01:22:58,639 --> 01:23:00,800
+is that people have a few slides for
+
+2183
+01:23:00,800 --> 01:23:01,520
+explaining
+
+2184
+01:23:01,520 --> 01:23:03,199
+what they did and then maybe a quick
+
+2185
+01:23:03,199 --> 01:23:04,880
+demo so to see how it actually
+
+2186
+01:23:04,880 --> 01:23:11,510
+materialized great okay yeah thank you
+
+2187
+01:23:11,520 --> 01:23:13,360
+yeah we don't expect you to whatever in
+
+2188
+01:23:13,360 --> 01:23:15,520
+hours we're preparing for this correct
+
+2189
+01:23:15,520 --> 01:23:18,840
+uh usually trying to share what you've
+
+2190
+01:23:18,840 --> 01:23:20,480
+done
+
+2191
+01:23:20,480 --> 01:23:25,120
+okay thank you
+
+2192
+01:23:25,120 --> 01:23:28,560
+um i just wanted to ask so it's
+
+2193
+01:23:28,560 --> 01:23:32,719
+like what is the reasoning behind
+
+2194
+01:23:32,719 --> 01:23:35,840
+just having just using the same
+
+2195
+01:23:35,840 --> 01:23:39,040
+bitcoin like the blockchain
+
+2196
+01:23:39,040 --> 01:23:42,400
+and just putting the the transactions
+
+2197
+01:23:42,400 --> 01:23:43,360
+for the naming
+
+2198
+01:23:43,360 --> 01:23:45,840
+on there together with all the rest of
+
+2199
+01:23:45,840 --> 01:23:47,040
+the things
+
+2200
+01:23:47,040 --> 01:23:49,760
+right yeah i i think these are the
+
+2201
+01:23:49,760 --> 01:23:52,149
+papers
+
+2202
+01:23:52,159 --> 01:23:54,639
+so they started out they started out
+
+2203
+01:23:54,639 --> 01:23:56,400
+building on top of name coin
+
+2204
+01:23:56,400 --> 01:23:58,159
+which is a special purpose ledger for
+
+2205
+01:23:58,159 --> 01:24:00,239
+naming
+
+2206
+01:24:00,239 --> 01:24:04,239
+and uh they discovered basically that uh
+
+2207
+01:24:04,239 --> 01:24:05,360
+there's sort of all kinds of security
+
+2208
+01:24:05,360 --> 01:24:07,520
+issues with uh namecoin
+
+2209
+01:24:07,520 --> 01:24:09,600
+uh uh and one of them being the
+
+2210
+01:24:09,600 --> 01:24:10,719
+interactions they're not that many
+
+2211
+01:24:10,719 --> 01:24:12,080
+miners
+
+2212
+01:24:12,080 --> 01:24:15,120
+and so uh they observed that they're
+
+2213
+01:24:15,120 --> 01:24:16,560
+basically their
+
+2214
+01:24:16,560 --> 01:24:18,400
+miner pools that basically had more than
+
+2215
+01:24:18,400 --> 01:24:21,350
+50 percent of the
+
+2216
+01:24:21,360 --> 01:24:25,280
+capacity and work capacity and therefore
+
+2217
+01:24:25,280 --> 01:24:26,880
+you could do anything they wanted to do
+
+2218
+01:24:26,880 --> 01:24:29,840
+to the principal to the ledger and so
+
+2219
+01:24:29,840 --> 01:24:31,600
+they wanted to sit on a
+
+2220
+01:24:31,600 --> 01:24:33,760
+a blockchain that is widely used very
+
+2221
+01:24:33,760 --> 01:24:35,520
+popular and not easy to overtake
+
+2222
+01:24:35,520 --> 01:24:40,400
+by the adversary okay i remember the 51
+
+2223
+01:24:40,400 --> 01:24:43,760
+percent yeah remember okay that makes
+
+2224
+01:24:43,760 --> 01:24:44,719
+sense
+
+2225
+01:24:44,719 --> 01:24:48,480
+um and i also wanted to ask about um
+
+2226
+01:24:48,480 --> 01:24:51,520
+the uris they are your rights to
+
+2227
+01:24:51,520 --> 01:24:54,320
+to the zone file storage system they're
+
+2228
+01:24:54,320 --> 01:24:55,920
+not just like
+
+2229
+01:24:55,920 --> 01:24:58,400
+um s3 something something right yeah it
+
+2230
+01:24:58,400 --> 01:24:58,960
+could be
+
+2231
+01:24:58,960 --> 01:25:01,280
+uh something a little bit more general
+
+2232
+01:25:01,280 --> 01:25:03,760
+because it's actually interpreted by the
+
+2233
+01:25:03,760 --> 01:25:07,520
+uh by the block stack file system uh
+
+2234
+01:25:07,520 --> 01:25:09,920
+uh so and the blocker next stack file
+
+2235
+01:25:09,920 --> 01:25:11,280
+system has back ends for the different
+
+2236
+01:25:11,280 --> 01:25:12,000
+storage provider
+
+2237
+01:25:12,000 --> 01:25:14,239
+whether it's s3 or google drive or
+
+2238
+01:25:14,239 --> 01:25:15,679
+whatever
+
+2239
+01:25:15,679 --> 01:25:17,920
+and so there's some naming scheme that
+
+2240
+01:25:17,920 --> 01:25:20,400
+the the the
+
+2241
+01:25:20,400 --> 01:25:22,560
+block stack file system can interpret
+
+2242
+01:25:22,560 --> 01:25:24,159
+and then figure out like how to retrieve
+
+2243
+01:25:24,159 --> 01:25:24,719
+the right
+
+2244
+01:25:24,719 --> 01:25:27,840
+file from the the correct
+
+2245
+01:25:27,840 --> 01:25:31,030
+uh back-end
+
+2246
+01:25:31,040 --> 01:25:33,920
+this is just to make them the same yeah
+
+2247
+01:25:33,920 --> 01:25:35,199
+exactly usually like an application
+
+2248
+01:25:35,199 --> 01:25:36,239
+writer doesn't really want to
+
+2249
+01:25:36,239 --> 01:25:37,600
+it doesn't want to care correct whether
+
+2250
+01:25:37,600 --> 01:25:39,280
+it's stored at sv or google drive will
+
+2251
+01:25:39,280 --> 01:25:40,080
+show you where
+
+2252
+01:25:40,080 --> 01:25:43,590
+there's visually have to deal with that
+
+2253
+01:25:43,600 --> 01:25:47,189
+thank you so much you're welcome
+
+2254
+01:25:47,199 --> 01:25:49,600
+i had a question about why zuko's
+
+2255
+01:25:49,600 --> 01:25:50,719
+triangle
+
+2256
+01:25:50,719 --> 01:25:53,520
+is kind of like a think that people
+
+2257
+01:25:53,520 --> 01:25:54,960
+think about a lot like it it seems like
+
+2258
+01:25:54,960 --> 01:25:56,480
+if you can have like a client side like
+
+2259
+01:25:56,480 --> 01:25:58,960
+interpret the human uh non-meaningful
+
+2260
+01:25:58,960 --> 01:25:59,840
+data
+
+2261
+01:25:59,840 --> 01:26:01,120
+that you can make kind of all the data
+
+2262
+01:26:01,120 --> 01:26:03,520
+human meaningful like on the client side
+
+2263
+01:26:03,520 --> 01:26:06,639
+to the user um and so i wasn't
+
+2264
+01:26:06,639 --> 01:26:08,639
+completely sure like what
+
+2265
+01:26:08,639 --> 01:26:11,520
+like what the innovation here is or why
+
+2266
+01:26:11,520 --> 01:26:12,639
+like people
+
+2267
+01:26:12,639 --> 01:26:15,600
+why this is necessarily like a trade-off
+
+2268
+01:26:15,600 --> 01:26:16,000
+yeah
+
+2269
+01:26:16,000 --> 01:26:18,239
+yeah well i guess this is the best slide
+
+2270
+01:26:18,239 --> 01:26:19,120
+i can give you
+
+2271
+01:26:19,120 --> 01:26:20,239
+where i can give you a whole bunch of
+
+2272
+01:26:20,239 --> 01:26:21,520
+naming examples that basically have two
+
+2273
+01:26:21,520 --> 01:26:23,600
+out of three but not all three
+
+2274
+01:26:23,600 --> 01:26:27,520
+and uh and so for example like you know
+
+2275
+01:26:27,520 --> 01:26:30,800
+uh the
+
+2276
+01:26:30,800 --> 01:26:32,239
+you know we talked about key base greg
+
+2277
+01:26:32,239 --> 01:26:33,199
+there's decent like you know
+
+2278
+01:26:33,199 --> 01:26:34,560
+decentralized
+
+2279
+01:26:34,560 --> 01:26:37,920
+uh human know but not unique
+
+2280
+01:26:37,920 --> 01:26:39,920
+uh and now you're gonna argue whether
+
+2281
+01:26:39,920 --> 01:26:41,199
+it's that important to have global
+
+2282
+01:26:41,199 --> 01:26:42,480
+unique names
+
+2283
+01:26:42,480 --> 01:26:43,679
+because like you know whatever you have
+
+2284
+01:26:43,679 --> 01:26:45,920
+some global unique name like 8684
+
+2285
+01:26:45,920 --> 01:26:48,560
+what does it mean and who's associated
+
+2286
+01:26:48,560 --> 01:26:49,040
+with it
+
+2287
+01:26:49,040 --> 01:26:50,639
+so if you're coming from that angle i
+
+2288
+01:26:50,639 --> 01:26:59,910
+think that's a very valid question
+
+2289
+01:26:59,920 --> 01:27:02,239
+so one of the things that has always
+
+2290
+01:27:02,239 --> 01:27:03,760
+kind of bothered me when we're reading
+
+2291
+01:27:03,760 --> 01:27:04,000
+through
+
+2292
+01:27:04,000 --> 01:27:06,400
+these blockchain type of papers is like
+
+2293
+01:27:06,400 --> 01:27:08,639
+what happens in 100 years when
+
+2294
+01:27:08,639 --> 01:27:11,679
+the the ledger gets to like multiple
+
+2295
+01:27:11,679 --> 01:27:12,159
+terror
+
+2296
+01:27:12,159 --> 01:27:13,920
+i don't know if it yeah like multiple
+
+2297
+01:27:13,920 --> 01:27:18,239
+terabytes or something
+
+2298
+01:27:18,239 --> 01:27:20,159
+uh yeah we were just like not do we not
+
+2299
+01:27:20,159 --> 01:27:21,520
+have an escape plan like
+
+2300
+01:27:21,520 --> 01:27:26,400
+what's gonna happen then uh i don't know
+
+2301
+01:27:26,400 --> 01:27:29,600
+hard to uh speculate hundred years out
+
+2302
+01:27:29,600 --> 01:27:30,639
+into the future
+
+2303
+01:27:30,639 --> 01:27:32,159
+uh presumably what you could do is like
+
+2304
+01:27:32,159 --> 01:27:34,560
+you know put a checkpoint in the uh
+
+2305
+01:27:34,560 --> 01:27:37,360
+i i can imagine multiple schemes getting
+
+2306
+01:27:37,360 --> 01:27:37,920
+out of this
+
+2307
+01:27:37,920 --> 01:27:41,120
+uh one you could make a checkpoint uh of
+
+2308
+01:27:41,120 --> 01:27:43,040
+the state you know build on the ledger
+
+2309
+01:27:43,040 --> 01:27:43,600
+and
+
+2310
+01:27:43,600 --> 01:27:45,440
+include the hash of that checkpoint into
+
+2311
+01:27:45,440 --> 01:27:46,639
+the ledger
+
+2312
+01:27:46,639 --> 01:27:48,560
+and then as long as you can and
+
+2313
+01:27:48,560 --> 01:27:49,840
+replicate the checkpoint
+
+2314
+01:27:49,840 --> 01:27:52,480
+widely and then you can basically start
+
+2315
+01:27:52,480 --> 01:27:53,920
+running from the checkpoint and cut out
+
+2316
+01:27:53,920 --> 01:27:55,199
+the beginning
+
+2317
+01:27:55,199 --> 01:27:56,639
+this is like not unlike you know what
+
+2318
+01:27:56,639 --> 01:27:58,480
+we're doing in lab you know what draft
+
+2319
+01:27:58,480 --> 01:28:01,280
+is doing correct
+
+2320
+01:28:01,280 --> 01:28:02,880
+would the party that does that have to
+
+2321
+01:28:02,880 --> 01:28:05,760
+be trusted or
+
+2322
+01:28:05,760 --> 01:28:10,629
+what we did i did
+
+2323
+01:28:10,639 --> 01:28:12,400
+presumably the clients want to go have
+
+2324
+01:28:12,400 --> 01:28:14,320
+to go along
+
+2325
+01:28:14,320 --> 01:28:16,159
+and you realize that they should get to
+
+2326
+01:28:16,159 --> 01:28:17,360
+get that checkpoint and
+
+2327
+01:28:17,360 --> 01:28:18,800
+be able to construct you know the
+
+2328
+01:28:18,800 --> 01:28:20,719
+current state of the world
+
+2329
+01:28:20,719 --> 01:28:22,639
+so i presume that would require some
+
+2330
+01:28:22,639 --> 01:28:26,830
+critical change and presumably some fork
+
+2331
+01:28:26,840 --> 01:28:28,719
+and
+
+2332
+01:28:28,719 --> 01:28:31,040
+now this is not a huge issue correct at
+
+2333
+01:28:31,040 --> 01:28:32,480
+least with the rate of bitcoin because
+
+2334
+01:28:32,480 --> 01:28:33,920
+like you know the number of transactions
+
+2335
+01:28:33,920 --> 01:28:34,320
+per
+
+2336
+01:28:34,320 --> 01:28:36,000
+you know second you can do is actually
+
+2337
+01:28:36,000 --> 01:28:37,840
+small like if you remember from the
+
+2338
+01:28:37,840 --> 01:28:39,600
+bitcoin paper there's some calculation
+
+2339
+01:28:39,600 --> 01:28:40,480
+like you know
+
+2340
+01:28:40,480 --> 01:28:42,480
+what the total size would be if you do
+
+2341
+01:28:42,480 --> 01:28:44,880
+this uh furthermore
+
+2342
+01:28:44,880 --> 01:28:46,639
+if you remember correctly from the
+
+2343
+01:28:46,639 --> 01:28:47,920
+bitcoin paper there's a bunch of
+
+2344
+01:28:47,920 --> 01:28:49,520
+optimizations right where
+
+2345
+01:28:49,520 --> 01:28:51,199
+you don't really have to remember every
+
+2346
+01:28:51,199 --> 01:28:52,719
+transaction uh
+
+2347
+01:28:52,719 --> 01:28:54,880
+for every uh coin you basically have to
+
+2348
+01:28:54,880 --> 01:28:56,080
+remember the last
+
+2349
+01:28:56,080 --> 01:28:58,639
+transaction for every coin and you could
+
+2350
+01:28:58,639 --> 01:29:01,520
+do that by just remembering the
+
+2351
+01:29:01,520 --> 01:29:03,040
+block headers instead of the complete
+
+2352
+01:29:03,040 --> 01:29:06,950
+block
+
+2353
+01:29:06,960 --> 01:29:08,480
+so bitcoin has sort of a built-in
+
+2354
+01:29:08,480 --> 01:29:10,719
+solution to this problem
+
+2355
+01:29:10,719 --> 01:29:13,040
+i see so the main bottleneck is more or
+
+2356
+01:29:13,040 --> 01:29:14,000
+less when
+
+2357
+01:29:14,000 --> 01:29:16,000
+new machines come up they need to verify
+
+2358
+01:29:16,000 --> 01:29:17,040
+the entity
+
+2359
+01:29:17,040 --> 01:29:19,120
+yeah after that then things are
+
+2360
+01:29:19,120 --> 01:29:21,120
+relatively more optimized yeah
+
+2361
+01:29:21,120 --> 01:29:35,590
+exactly thank you
+
+2362
+01:29:35,600 --> 01:29:39,440
+all guys done it for today
+
+2363
+01:29:39,440 --> 01:29:44,880
+thank you all see you first
+
