@@ -1,0 +1,6632 @@
+1
+00:00:00,300 --> 00:00:05,520
+Okay good afternoon, good morning, good evening, good night, wherever you are.
+
+2
+00:00:06,000 --> 00:00:08,820
+Let's get started again.
+
+3
+00:00:08,820 --> 00:00:10,980
+So, today we have a guest lecture,
+
+4
+00:00:11,670 --> 00:00:13,950
+probably speaker needs a little introduction,
+
+5
+00:00:15,420 --> 00:00:20,640
+Russ Cox, was one of the co-leads on the Go project
+
+6
+00:00:20,640 --> 00:00:22,440
+and we'll talk a lot more about it.
+
+7
+00:00:22,710 --> 00:00:28,320
+Let me say a couple words, not trying to embarrass Russ too much,
+
+8
+00:00:28,350 --> 00:00:31,860
+Russ has a long experience with distributed systems,
+
+9
+00:00:32,670 --> 00:00:40,320
+he was a developer and contributor to a plan9 when he was a high school student undergrad at Harvard,
+
+10
+00:00:41,040 --> 00:00:45,960
+he joined the PHD program at MIT, which where we met up
+
+11
+00:00:46,410 --> 00:00:50,880
+and probably if you've taken any sort of pdos class, if you will,
+
+12
+00:00:51,060 --> 00:00:55,170
+there's gonna be, you will see Russ's touches on it
+
+13
+00:00:55,800 --> 00:01:03,390
+and certainly in 6.824 you know the Go, switch to Go for us has been a wonderful thing
+
+14
+00:01:03,390 --> 00:01:11,160
+and but if you differ in opinion, of course feel free to ask Russ questions and make suggestions,
+
+15
+00:01:11,160 --> 00:01:15,940
+he's always welcome to entertain any ideas.
+
+16
+00:01:15,970 --> 00:01:17,800
+So with that, Russ, it's yours.
+
+17
+00:01:18,280 --> 00:01:21,560
+Great, thanks, can you still see the slides, is that working.
+
+18
+00:01:21,800 --> 00:01:28,280
+Okay great, so so we build Go to support writing the sort of distributed systems that we were building at Google
+
+19
+00:01:28,640 --> 00:01:32,780
+and that may Go a great fit for, what came next which is now called cloud software
+
+20
+00:01:32,810 --> 00:01:35,570
+and also a great fit for 6.824.
+
+21
+00:01:35,600 --> 00:01:40,580
+So in this lecture, I'm going to try to explain how I think about writing programs in Go.
+
+22
+00:01:41,070 --> 00:01:48,510
+I'm going to walk through the sort of design and implementation of programs for four different patterns that I see come up often.
+
+23
+00:01:49,060 --> 00:01:54,970
+And along the way I'm going to try to highlight some hints or rules of thumb that you can keep in mind when designing your own Go programs.
+
+24
+00:01:55,420 --> 00:01:57,850
+And I know the syllabus links to an older version of the slide,
+
+25
+00:01:57,850 --> 00:01:59,470
+so you might have seen them already,
+
+26
+00:01:59,680 --> 00:02:04,330
+I hope that the lecture form is a bit more intelligible than just sort of looking at the slides.
+
+27
+00:02:04,880 --> 00:02:08,360
+and I hope that in general these patterns are common enough
+
+28
+00:02:08,390 --> 00:02:10,340
+that maybe they'll be helpful by themselves,
+
+29
+00:02:10,340 --> 00:02:16,070
+but also that you know you'll hints will help you prepare for whatever it is, you need to implement.
+
+30
+00:02:18,900 --> 00:02:23,280
+So to start, it's important to distinguish between concurrency and parallelism.
+
+31
+00:02:23,810 --> 00:02:31,100
+And concurrency is about how you write your programs about being able to compose independently executing control flows
+
+32
+00:02:31,100 --> 00:02:33,950
+whether you want to call them processes or threads or Go routines,
+
+33
+00:02:34,190 --> 00:02:39,470
+so that your program can be dealing with lots of things at once without turning into a giant mess.
+
+34
+00:02:40,100 --> 00:02:47,180
+On the other hand parallelism is about how the programs get executed about allowing multiple computations to run simultaneously,
+
+35
+00:02:47,180 --> 00:02:49,910
+so that the program can be doing lots of things at once,
+
+36
+00:02:49,910 --> 00:02:51,680
+not just dealing with lots of things at once.
+
+37
+00:02:52,120 --> 00:02:55,690
+And so concurrency lends itself naturally to parallel execution,
+
+38
+00:02:55,930 --> 00:03:02,740
+but today the focus is on how to use Go's concurrency support to make your programs clearer, not to make them faster,
+
+39
+00:03:02,740 --> 00:03:05,830
+if they do get faster that's wonderful, but that's not the point today.
+
+40
+00:03:07,220 --> 00:03:16,280
+So I said I'd walked through the design and implementation of some programs for four common, excuse me concurrency patterns that I see often,
+
+41
+00:03:16,580 --> 00:03:18,260
+but before we get to those,
+
+42
+00:03:18,290 --> 00:03:20,780
+I want to start with what seems like a really trivial problem,
+
+43
+00:03:20,780 --> 00:03:26,750
+but that illustrates one of the most important points about what it means to use concurrency to structure programs.
+
+44
+00:03:27,570 --> 00:03:31,080
+A decision that comes up over and over, when you design concurrent programs
+
+45
+00:03:31,230 --> 00:03:34,980
+is whether to represent states as code or as data.
+
+46
+00:03:35,220 --> 00:03:37,980
+And by as code, I mean the control flow in the program.
+
+47
+00:03:38,780 --> 00:03:41,240
+So suppose a reading characters from a file,
+
+48
+00:03:41,270 --> 00:03:44,000
+and we need to scan over a C style quoted string.
+
+49
+00:03:44,180 --> 00:03:46,190
+Oh hello the slides aren't changing.
+
+50
+00:03:46,340 --> 00:03:50,660
+Yeah, it will, can you see prologue goroutines for state right now.
+
+51
+00:03:50,690 --> 00:03:51,920
+No, we see the title slide.
+
+52
+00:03:52,190 --> 00:03:54,500
+Oh, no yeah I was wondering about that,
+
+53
+00:03:54,500 --> 00:03:59,600
+because there was a border around this thing, when I started and then it went away.
+
+54
+00:04:00,220 --> 00:04:03,070
+So let me let me just unshare and reshare.
+
+55
+00:04:04,280 --> 00:04:07,740
+I had to figure out how to do that in zoom.
+
+56
+00:04:10,760 --> 00:04:12,980
+Unfortunately keynote menu wants to be up
+
+57
+00:04:12,980 --> 00:04:14,570
+and I don't know how to get to the zoom menu.
+
+58
+00:04:19,880 --> 00:04:23,600
+Ah, my screen sharing is paused, why is my screen sharing paused.
+
+59
+00:04:24,930 --> 00:04:26,100
+Can I resume.
+
+60
+00:04:26,600 --> 00:04:27,620
+Here we go.
+
+61
+00:04:27,650 --> 00:04:31,850
+Alright, I don't know the zoom box says you're screen sharing is paused, so that,
+
+62
+00:04:31,850 --> 00:04:34,040
+now the borders back, so I'll watch that.
+
+63
+00:04:35,630 --> 00:04:40,030
+Alright so, see I was back here,
+
+64
+00:04:40,060 --> 00:04:42,160
+so so you're reading a string,
+
+65
+00:04:42,520 --> 00:04:44,950
+it's not a parallel program is reading one character at a time,
+
+66
+00:04:44,950 --> 00:04:46,510
+so there's no opportunity for parallelism,
+
+67
+00:04:46,510 --> 00:04:48,520
+but there is a good opportunity for concurrency.
+
+68
+00:04:48,940 --> 00:04:52,660
+So we don't actually care about the exact escape sequences in the string,
+
+69
+00:04:52,960 --> 00:04:55,450
+that we need to do is match this regular expression.
+
+70
+00:04:55,880 --> 00:04:58,070
+And we don't have to worry about understanding exactly,
+
+71
+00:04:58,100 --> 00:04:59,210
+we'll come back to what it means,
+
+72
+00:04:59,210 --> 00:05:02,450
+but that's basically all you have to do is implement this regular expression
+
+73
+00:05:02,960 --> 00:05:07,100
+and so you know you probably all know you can turn a regular expression into a state machine.
+
+74
+00:05:07,280 --> 00:05:10,100
+And so we might use a tool that generates this code,
+
+75
+00:05:10,950 --> 00:05:14,730
+and in this code, there's a single variable state that's the state of the machine
+
+76
+00:05:14,910 --> 00:05:17,700
+and the loop goes over the state one character at a time,
+
+77
+00:05:17,700 --> 00:05:19,380
+reads the character depending on the state
+
+78
+00:05:19,380 --> 00:05:22,620
+and the character changes to a different state until it gets to the end,
+
+79
+00:05:23,100 --> 00:05:25,530
+and so this is a completely unreadable program,
+
+80
+00:05:25,770 --> 00:05:28,890
+but it's the kind of thing that you know an auto generated program might look like.
+
+81
+00:05:29,360 --> 00:05:34,730
+And the important point is that the program state is stored in data, in this variable, that's called state
+
+82
+00:05:35,270 --> 00:05:40,280
+and if you can change it to store the state in code that's often clearer.
+
+83
+00:05:41,260 --> 00:05:42,490
+So here's what I mean,
+
+84
+00:05:42,880 --> 00:05:47,590
+suppose we duplicate the readChar calls into each case of the switch,
+
+85
+00:05:47,890 --> 00:05:49,840
+so we haven't made any semantic changes here,
+
+86
+00:05:49,840 --> 00:05:52,780
+we just took the readChar that was at the top and we moved it into the middle.
+
+87
+00:05:53,940 --> 00:05:57,870
+Now instead of setting state and then immediately doing the switch again,
+
+88
+00:05:57,900 --> 00:05:59,820
+we can change those into gotos.
+
+89
+00:06:01,920 --> 00:06:03,930
+And then we can simplify a little bit further,
+
+90
+00:06:03,930 --> 00:06:07,650
+there's a goto state1 that's right before the state1 label, we can get rid of that.
+
+91
+00:06:08,340 --> 00:06:14,810
+Then there's, I guess, yeah, so then there's you know there's only one way to get the state2,
+
+92
+00:06:14,840 --> 00:06:18,890
+so we might as well pull the state2 code up and put it inside the if where the goto appears
+
+93
+00:06:19,340 --> 00:06:23,300
+and then both sides of that if now end in goto state1,
+
+94
+00:06:23,510 --> 00:06:24,920
+so we can hoist that out.
+
+95
+00:06:25,440 --> 00:06:28,560
+And now what's left is actually a pretty simple program,
+
+96
+00:06:28,590 --> 00:06:30,240
+you know state0 is never jumped too,
+
+97
+00:06:30,240 --> 00:06:31,680
+so it just begins there,
+
+98
+00:06:31,830 --> 00:06:33,630
+and then state1 is just a regular loop,
+
+99
+00:06:33,660 --> 00:06:36,180
+so we might as well make that look like a regular loop.
+
+100
+00:06:37,240 --> 00:06:40,930
+And now like this is you know looking like a program
+
+101
+00:06:41,320 --> 00:06:45,700
+and then finally we can get rid of some variables and simplify a little bit further.
+
+102
+00:06:46,280 --> 00:06:48,230
+And, and we can rotate the loop,
+
+103
+00:06:48,230 --> 00:06:51,140
+so that you know we don't do a return true in the middle of the loop,
+
+104
+00:06:51,140 --> 00:06:52,610
+we do the return true at the end.
+
+105
+00:06:54,220 --> 00:06:59,230
+And so now we've got this program that is actually you know reasonably nice
+
+106
+00:06:59,230 --> 00:07:03,970
+and it's worth mentioning that it's possible to clean up much less egregious examples,
+
+107
+00:07:03,970 --> 00:07:05,800
+you know if you had tried to write this by hand,
+
+108
+00:07:05,980 --> 00:07:10,240
+your first attempt might have been the thing on the left, where you've got this extra piece of state
+
+109
+00:07:10,420 --> 00:07:15,910
+and then you can apply the same kinds of transformations to move that state into the actual control flow
+
+110
+00:07:16,030 --> 00:07:19,360
+and end up at the same program that we have on the right that's cleaner.
+
+111
+00:07:20,000 --> 00:07:24,980
+So this is a useful transformation to keep in mind anytime you have state,
+
+112
+00:07:24,980 --> 00:07:28,820
+that kind of looks like it might be just reiterating,
+
+113
+00:07:28,820 --> 00:07:30,650
+what's what's happening in the program counter.
+
+114
+00:07:31,760 --> 00:07:37,220
+And so you can see this if the the original state,
+
+115
+00:07:37,220 --> 00:07:40,310
+like if state equals zero, the program counter is at the beginning of the function,
+
+116
+00:07:40,430 --> 00:07:43,880
+and if state equals one or if inEscape equals false and the other version,
+
+117
+00:07:44,060 --> 00:07:46,040
+the program counter is just inside the for loop,
+
+118
+00:07:46,040 --> 00:07:48,470
+and state equals two is further down in the for loop.
+
+119
+00:07:49,040 --> 00:07:53,780
+And the benefit of writing it this way instead of with the states is that it's much easier to understand
+
+120
+00:07:54,140 --> 00:07:56,960
+like I can actually just walk through the code and explain it to you,
+
+121
+00:07:56,960 --> 00:07:58,490
+you know if you just read through the code,
+
+122
+00:07:58,490 --> 00:08:01,040
+you read an opening quote and then you start looping
+
+123
+00:08:01,040 --> 00:08:03,620
+and then until you find the closing quote, you read a character
+
+124
+00:08:03,620 --> 00:08:05,510
+and if it's a backslash you ski[]p the next character,
+
+125
+00:08:05,510 --> 00:08:07,580
+and that's it right, you can just read that off the page,
+
+126
+00:08:07,580 --> 00:08:09,500
+which you couldn't do in the original.
+
+127
+00:08:10,790 --> 00:08:13,190
+This version also happens to run faster,
+
+128
+00:08:13,190 --> 00:08:15,320
+although that doesn't really matter for us.
+
+129
+00:08:17,270 --> 00:08:22,070
+But as I mentioned, I'm going to highlight what I think are kind of important lessons as hints for designing your own Go programs
+
+130
+00:08:22,070 --> 00:08:27,830
+and this is the first one, to convert data state into code state when it makes your programs clearer.
+
+131
+00:08:28,660 --> 00:08:30,910
+And again like these are all hints,
+
+132
+00:08:31,180 --> 00:08:36,220
+you should you should you know for all of these, you should consider it as, only if it helps you can decide.
+
+133
+00:08:38,260 --> 00:08:45,220
+So one problem with this hint is that not all programs have the luxury of having complete control over their control flow,
+
+134
+00:08:45,550 --> 00:08:50,650
+so you know here's a different example instead of having a readChar function that can be called,
+
+135
+00:08:50,830 --> 00:08:56,470
+this code is written to have a ProcessChar method that you have to hand the character to one at a time.
+
+136
+00:08:57,010 --> 00:09:03,310
+And then ProcessChar has no choice really, but to you know encoded state in an explicit state variable,
+
+137
+00:09:03,310 --> 00:09:06,160
+because after every character, it has to return back out
+
+138
+00:09:06,460 --> 00:09:09,430
+and so it can't save the state at the program counter and stack,
+
+139
+00:09:09,430 --> 00:09:12,430
+it has to have the state in an actual variable.
+
+140
+00:09:13,550 --> 00:09:16,790
+But in Go, we have another choice right,
+
+141
+00:09:16,790 --> 00:09:20,390
+because we can't save the state on that stack and in that program counter,
+
+142
+00:09:20,750 --> 00:09:24,500
+but we can make another goroutine to hold that state for us,
+
+143
+00:09:25,490 --> 00:09:28,850
+so supposing we already have this debug readString function},
+
+144
+00:09:29,120 --> 00:09:32,030
+that we really don't want to rewrite in this other way,
+
+145
+00:09:32,060 --> 00:09:32,900
+we just want to reuse it,
+
+146
+00:09:32,900 --> 00:09:35,120
+it works, maybe it's really big and hairy,
+
+147
+00:09:35,120 --> 00:09:37,130
+it's much more complicated than anything we saw,
+
+148
+00:09:37,310 --> 00:09:38,540
+we just want to reuse it.
+
+149
+00:09:38,870 --> 00:09:40,640
+And so the way we can do that in Go is
+
+150
+00:09:40,640 --> 00:09:43,820
+we can start a new goroutine that does the readString part,
+
+151
+00:09:43,820 --> 00:09:47,600
+it's the same readString code as before we pass in the character reader.
+
+152
+00:09:48,070 --> 00:09:55,210
+And now here you know the Init method makes this goroutine to do the character reading
+
+153
+00:09:55,210 --> 00:09:59,050
+and then every time the ProcessChar method is called,
+
+154
+00:10:00,250 --> 00:10:02,980
+we send a message to the goroutine on the char channel,
+
+155
+00:10:02,980 --> 00:10:04,960
+that says here's the next character
+
+156
+00:10:05,230 --> 00:10:08,320
+and then we receive a message back that says tell me the current status
+
+157
+00:10:08,320 --> 00:10:11,260
+and the current status is always either I need more input
+
+158
+00:10:11,590 --> 00:10:15,760
+or you know basically you know, was it okay or not.
+
+159
+00:10:16,620 --> 00:10:26,120
+And so, you know, this lets us move the the program counter that we couldn't do on the first stack into the other stack of the goroutine.
+
+160
+00:10:26,360 --> 00:10:30,770
+And so using additional goroutines is a great way to hold additional code state
+
+161
+00:10:30,770 --> 00:10:33,680
+and give you the ability to do these kinds of cleanups,
+
+162
+00:10:33,830 --> 00:10:37,730
+even if the original structure of the problem makes it look like you can't.
+
+163
+00:10:40,600 --> 00:10:41,080
+Russ.
+
+164
+00:10:42,160 --> 00:10:42,760
+Go ahead.
+
+165
+00:10:42,760 --> 00:10:46,360
+I assume you're fine with people asking questions.
+
+166
+00:10:46,390 --> 00:10:47,140
+Yeah, absolutely.
+
+167
+00:10:47,140 --> 00:10:48,190
+I just wanted to make sure that.
+
+168
+00:10:48,550 --> 00:10:50,590
+Yeah, definitely, please interrupt.
+
+169
+00:10:51,070 --> 00:10:56,920
+So,so the hint here is to use additional goroutines to hold additional code state
+
+170
+00:10:57,190 --> 00:10:59,770
+and there's there's one caveat to this,
+
+171
+00:10:59,770 --> 00:11:03,220
+and then it's not free to just make goroutines right,
+
+172
+00:11:03,220 --> 00:11:04,840
+you have to actually make sure that they exit,
+
+173
+00:11:04,930 --> 00:11:06,640
+because otherwise you'll just accumulate them.
+
+174
+00:11:07,080 --> 00:11:08,610
+And so you have to think about,
+
+175
+00:11:08,910 --> 00:11:10,890
+you know why does the goroutine exit,
+
+176
+00:11:10,890 --> 00:11:13,050
+like you know, is it going to get cleaned up.
+
+177
+00:11:13,230 --> 00:11:18,490
+And in this case, we know that you know q.parse is going to return,
+
+178
+00:11:19,480 --> 00:11:20,560
+where q.parse go.
+
+179
+00:11:22,390 --> 00:11:24,370
+Sorry that's not right.
+
+180
+00:11:26,420 --> 00:11:27,680
+Oh, sorry, the readString here,
+
+181
+00:11:27,680 --> 00:11:31,910
+readString is going to return, anytime it sends a message, that says need more input.
+
+182
+00:11:32,450 --> 00:11:34,580
+Where it go, there's something missing from this slide.
+
+183
+00:11:38,600 --> 00:11:41,060
+Sorry, I went through this last night.
+
+184
+00:11:43,870 --> 00:11:46,300
+So so as we go in, we go into Init,
+
+185
+00:11:46,720 --> 00:11:49,840
+we kick off this goroutine that's gonna call readChar a bunch of times
+
+186
+00:11:49,840 --> 00:11:53,590
+and then we read the status once and that first status is going to happen,
+
+187
+00:11:53,620 --> 00:11:58,600
+because the the first call to readChar from readString is going to saying I need more input,
+
+188
+00:11:58,600 --> 00:12:00,010
+and then we're going to send a character back.
+
+189
+00:12:01,080 --> 00:12:03,780
+We're going to send the character back in ProcessChar
+
+190
+00:12:04,110 --> 00:12:07,770
+and then every time ProcessChar gets called, it returns a status
+
+191
+00:12:07,830 --> 00:12:11,340
+and so up until you get, you know need more input,
+
+192
+00:12:11,340 --> 00:12:12,630
+you're going to get the.
+
+193
+00:12:15,000 --> 00:12:20,100
+Sorry, this is not working, you're going to get any more input for every time you want to read a character.
+
+194
+00:12:20,850 --> 00:12:22,350
+And then when it's done reading characters,
+
+195
+00:12:22,350 --> 00:12:25,050
+what I haven't shown you here, what seems to be missing,
+
+196
+00:12:25,080 --> 00:12:29,370
+somehow is when things exit and when things exit.
+
+197
+00:12:29,670 --> 00:12:30,900
+Let's see if it's on this slide.
+
+198
+00:12:31,200 --> 00:12:34,980
+Yeah, so there's a return Success and a return BadInput, that I'd forgotten about.
+
+199
+00:12:35,480 --> 00:12:39,050
+And so, you know these returning different status and then they're done,
+
+200
+00:12:39,680 --> 00:12:44,270
+so when ProcessChar in in the readString version,
+
+201
+00:12:44,330 --> 00:12:47,180
+when it returns BadInput or Success,
+
+202
+00:12:47,180 --> 00:12:48,650
+we say that you know it's done.
+
+203
+00:12:48,650 --> 00:12:52,580
+And so as long as the caller is going through,
+
+204
+00:12:53,520 --> 00:12:57,930
+and you know calling until it gets something that's not need more input,
+
+205
+00:12:58,080 --> 00:12:59,940
+then the goroutine will finish,
+
+206
+00:12:59,940 --> 00:13:04,350
+but maybe if we stop early, if the caller hits an EOF and stops on its own,
+
+207
+00:13:04,350 --> 00:13:06,000
+without telling us that it's done,
+
+208
+00:13:06,030 --> 00:13:07,620
+there's a goroutine leftover
+
+209
+00:13:07,680 --> 00:13:09,030
+and so that could be a problem.
+
+210
+00:13:09,610 --> 00:13:14,230
+And so you just you need to make sure that you know when and why each goroutine will exit
+
+211
+00:13:14,710 --> 00:13:17,500
+and the nice thing is that if you do make a mistake
+
+212
+00:13:17,680 --> 00:13:19,090
+and you leave goroutine stuck,
+
+213
+00:13:19,300 --> 00:13:20,350
+they just sit there,
+
+214
+00:13:20,350 --> 00:13:22,330
+it's like the best possible bug in the world,
+
+215
+00:13:22,330 --> 00:13:24,400
+because they just sit around, waiting for you to look at them
+
+216
+00:13:24,400 --> 00:13:25,990
+and all you have to do is remember to look for them.
+
+217
+00:13:26,380 --> 00:13:28,810
+And so here's a very simple program,
+
+218
+00:13:29,270 --> 00:13:31,910
+at this, goroutines and it runs an http server,
+
+219
+00:13:32,150 --> 00:13:36,140
+and so if we run this, it kicks off a whole bunch of f goroutines
+
+220
+00:13:36,200 --> 00:13:38,960
+and they all block trying to send to a channel
+
+221
+00:13:39,020 --> 00:13:40,520
+and then it makes the http server.
+
+222
+00:13:40,990 --> 00:13:43,360
+And so if I run this program, it just sits there
+
+223
+00:13:43,570 --> 00:13:45,970
+and if I type control backslash on a Unix system,
+
+224
+00:13:45,970 --> 00:13:50,380
+I get a SIGQUIT which makes it crash and dump all the stacks on the goroutines.
+
+225
+00:13:50,590 --> 00:13:53,680
+And you can see on the slide, that it's going to print over and over again,
+
+226
+00:13:53,680 --> 00:13:56,110
+here's a goroutine and h call from g call from f,
+
+227
+00:13:56,570 --> 00:13:57,920
+and in the channel send.
+
+228
+00:13:58,970 --> 00:14:00,140
+And if you look at the line numbers,
+
+229
+00:14:00,140 --> 00:14:01,640
+you can see exactly where they are.
+
+230
+00:14:02,740 --> 00:14:05,860
+Another option is that since we're in an http server.
+
+231
+00:14:06,560 --> 00:14:10,430
+and the http server imports the net http pprof package,
+
+232
+00:14:10,520 --> 00:14:14,720
+you can actually just visit the http servers, debug pprof goroutine url,
+
+233
+00:14:15,210 --> 00:14:17,790
+which gives you the stacks of all the running goroutines,
+
+234
+00:14:17,970 --> 00:14:19,470
+and unlike the crash dump,
+
+235
+00:14:19,500 --> 00:14:23,880
+it takes a little more effort and it duplicates the goroutines based on their stacks
+
+236
+00:14:24,090 --> 00:14:27,600
+and so and then it sorts them by how many there are of each stack.
+
+237
+00:14:27,600 --> 00:14:29,070
+And so if you have a goroutine leak,
+
+238
+00:14:29,370 --> 00:14:30,990
+the leak shows up at the very top.
+
+239
+00:14:30,990 --> 00:14:35,070
+So in this case, you've got a hundred goroutines stack in h called from g called from f
+
+240
+00:14:35,310 --> 00:14:37,770
+and then we can see there's one of a couple other goroutines
+
+241
+00:14:37,770 --> 00:14:39,000
+and we don't really care about them.
+
+242
+00:14:39,670 --> 00:14:41,200
+And so you know this is a new hint that,
+
+243
+00:14:41,470 --> 00:14:46,420
+it just it's really really useful to look for stuff goroutines by just going to this endpoint.
+
+244
+00:14:48,240 --> 00:14:51,240
+Alright, so that was kind of the warm up.
+
+245
+00:14:51,720 --> 00:14:54,330
+Now I want to look at the first real concurrency pattern,
+
+246
+00:14:54,330 --> 00:14:55,830
+which is a publish subscribe server.
+
+247
+00:14:56,690 --> 00:14:59,330
+So publish subscribe is a way of structuring a program,
+
+248
+00:14:59,450 --> 00:15:04,400
+that you decouple the parts that are publishing interesting events from the things that are subscribing to them
+
+249
+00:15:04,520 --> 00:15:08,420
+and there's a publish subscribe or pub sub server in the middle that connects those,
+
+250
+00:15:08,450 --> 00:15:13,760
+so the individual publishers and the individual subscribers don't have to be aware of exactly who the other ones are.
+
+251
+00:15:14,540 --> 00:15:19,070
+So you know on your android phone, an app might publish or make a phone call event
+
+252
+00:15:19,070 --> 00:15:21,440
+and then the dial might subscribe to that
+
+253
+00:15:21,440 --> 00:15:23,420
+and actually start you know help dial.
+
+254
+00:15:24,800 --> 00:15:26,420
+And so in a real pub sub server,
+
+255
+00:15:26,420 --> 00:15:29,030
+there are ways to filter events based on what kind they are,
+
+256
+00:15:29,030 --> 00:15:31,190
+so that when you publish and make a phone call event,
+
+257
+00:15:31,190 --> 00:15:32,840
+it doesn't go to your email program.
+
+258
+00:15:33,200 --> 00:15:37,190
+But for now we're just going to assume that the filtering is taken care of separately
+
+259
+00:15:37,220 --> 00:15:40,310
+and we're just worried about the actual publish and subscribe,
+
+260
+00:15:41,070 --> 00:15:42,360
+and the concurrency of that.
+
+261
+00:15:43,020 --> 00:15:45,210
+So here's an API, we want to implement,
+
+262
+00:15:45,980 --> 00:15:49,580
+with any number of clients that can call subscribe with a channel
+
+263
+00:15:49,850 --> 00:15:53,720
+and afterwards events that are published will be sent on that channel.
+
+264
+00:15:54,480 --> 00:15:56,580
+And then when a client is no longer interested,
+
+265
+00:15:56,640 --> 00:15:59,190
+it can call cancel and passing the same channel,
+
+266
+00:15:59,220 --> 00:16:01,830
+to say stop sending the events on that channel
+
+267
+00:16:02,250 --> 00:16:07,890
+and the way that cancel will signal that it really is done sending events on that channel, is it will close the channel,
+
+268
+00:16:08,070 --> 00:16:12,900
+so that the receiver caller can keep receiving events until it sees the channel get closed,
+
+269
+00:16:12,900 --> 00:16:14,940
+then it knows that the cancel has taken effect.
+
+270
+00:16:18,020 --> 00:16:22,580
+So notice that the information is only flowing one way on the channel right,
+
+271
+00:16:22,580 --> 00:16:24,530
+you can send to the channel
+
+272
+00:16:24,800 --> 00:16:26,810
+and then the receiver can receive from it
+
+273
+00:16:26,810 --> 00:16:29,180
+and the information flows from the sender to the receiver,
+
+274
+00:16:29,180 --> 00:16:30,440
+and it never goes the other way,
+
+275
+00:16:30,470 --> 00:16:36,260
+so closing is also a signal from the sender to the receiver, but all the sending is over,
+
+276
+00:16:36,620 --> 00:16:40,760
+the receiver cannot close the channel to tell the sender I don't want you to send anymore,
+
+277
+00:16:40,790 --> 00:16:43,190
+because that's information going in the opposite direction.
+
+278
+00:16:43,830 --> 00:16:48,060
+And it's just a lot easier to reason about if the information only goes one way
+
+279
+00:16:48,180 --> 00:16:53,370
+and of course if you need communication in both directions, you can use a pair of channels
+
+280
+00:16:53,430 --> 00:16:59,010
+and it often turns out to be the case that those different directions may have different types of data flowing,
+
+281
+00:16:59,070 --> 00:17:03,600
+like before we saw that there were [rooms] going in one direction and status updates going in the other direction.
+
+282
+00:17:04,560 --> 00:17:07,320
+So how do we implement this API,
+
+283
+00:17:07,870 --> 00:17:11,290
+here's a pretty basic implementation that you know could be good enough.
+
+284
+00:17:11,910 --> 00:17:17,970
+We have a server and the server state is a map of registered subscriber channels, protected by a lock,
+
+285
+00:17:18,630 --> 00:17:21,510
+we initialize the server by just allocating the map,
+
+286
+00:17:22,210 --> 00:17:26,110
+and then to publish the event, we just send it to every register channel,
+
+287
+00:17:27,060 --> 00:17:29,640
+to subscribe to new channel, we just added to the map
+
+288
+00:17:29,850 --> 00:17:31,770
+and to cancel we take it out of the map.
+
+289
+00:17:32,370 --> 00:17:37,740
+And then, because these are all, these are all methods that might be called from multiple goroutines,
+
+290
+00:17:38,190 --> 00:17:44,400
+we need to call lock and unlock around these to protect the map.
+
+291
+00:17:44,890 --> 00:17:48,310
+And notice that I wrote defer unlock right after the lock,
+
+292
+00:17:48,460 --> 00:17:50,470
+so I don't have to remember to unlock it later.
+
+293
+00:17:51,080 --> 00:17:52,550
+You've probably all seen this,
+
+294
+00:17:52,550 --> 00:17:54,800
+you know sort of a nice idiom to just do the lock unlock
+
+295
+00:17:54,800 --> 00:17:58,550
+and then you know I have a blank line and have that be its own paragraph in the code.
+
+296
+00:18:02,620 --> 00:18:05,050
+One thing I want to point out is that,
+
+297
+00:18:05,050 --> 00:18:07,540
+using defer makes sure that the mutexes gets unlocked,
+
+298
+00:18:07,660 --> 00:18:09,610
+even if you have multiple returns from the function,
+
+299
+00:18:09,610 --> 00:18:10,660
+so you can't forget,
+
+300
+00:18:10,870 --> 00:18:13,960
+but it also makes sure that it gets unlocked if you have a panic,
+
+301
+00:18:14,170 --> 00:18:18,280
+like in Subscribe and Cancel where there's panic for misuse.
+
+302
+00:18:19,010 --> 00:18:20,900
+And there is a subtlety here about,
+
+303
+00:18:21,230 --> 00:18:23,150
+if you might not want to unlock the mutex,
+
+304
+00:18:23,150 --> 00:18:27,500
+if the panic happened while the thing that was locked is in some inconsistent state,
+
+305
+00:18:27,650 --> 00:18:29,480
+but I'm gonna ignore that for now,
+
+306
+00:18:29,870 --> 00:18:35,460
+in general you try to avoid having the things that might panic happen,
+
+307
+00:18:35,460 --> 00:18:37,710
+while you're potentially inconsistent state.
+
+308
+00:18:38,700 --> 00:18:43,230
+And I should also point out that the use of panic at all in subscribe and cancel,
+
+309
+00:18:43,350 --> 00:18:46,830
+implies that you really trust your clients not to misuse the interface
+
+310
+00:18:46,830 --> 00:18:52,980
+that it is a program error worth tearing down the entire program potentially for that to happen.
+
+311
+00:18:53,630 --> 00:18:57,050
+And in a bigger program where other clients were using this API,
+
+312
+00:18:57,580 --> 00:18:59,470
+you probably want to return an error instead,
+
+313
+00:18:59,740 --> 00:19:02,350
+and not have the possibility of taking down the whole program,
+
+314
+00:19:02,470 --> 00:19:04,600
+but panic is simplifies things for now.
+
+315
+00:19:05,200 --> 00:19:08,350
+And you know error handling in general is kind of not the topic today.
+
+316
+00:19:10,930 --> 00:19:13,870
+A more important concern with this code than panics is
+
+317
+00:19:13,870 --> 00:19:18,040
+what happens if a goroutine is slow to receive events.
+
+318
+00:19:18,630 --> 00:19:21,600
+So all the operations here are done holding the mutex,
+
+319
+00:19:21,600 --> 00:19:24,660
+which means all the clients kind of have to proceed in lockstep.
+
+320
+00:19:25,210 --> 00:19:31,420
+So during publish, there's a loop that's sending, on the channels sending the event to every channel,
+
+321
+00:19:31,450 --> 00:19:33,730
+and if one subscriber falls behind,
+
+322
+00:19:33,850 --> 00:19:35,500
+the next subscriber doesn't get the event,
+
+323
+00:19:35,500 --> 00:19:40,570
+until that slow subscriber wakes up and actually get the event off of that channel.
+
+324
+00:19:41,120 --> 00:19:44,540
+And so one slow subscriber can slow down everyone else
+
+325
+00:19:44,810 --> 00:19:48,980
+and you know forcing them to proceed in lockstep this way is not always a problem,
+
+326
+00:19:49,490 --> 00:19:54,860
+if you document the restriction and for whatever reason you know how the clients are written
+
+327
+00:19:55,010 --> 00:19:57,380
+and you know that they won't ever fall too far behind,
+
+328
+00:19:57,470 --> 00:19:58,700
+this could be totally fine,
+
+329
+00:19:58,700 --> 00:20:00,380
+it's a really simple implementation.
+
+330
+00:20:01,150 --> 00:20:03,610
+And it has nice properties,
+
+331
+00:20:03,610 --> 00:20:08,890
+like on return from publish you know that the event has actually been handed off to each of the other goroutines,
+
+332
+00:20:09,040 --> 00:20:10,750
+you don't know that they've started processing it,
+
+333
+00:20:10,750 --> 00:20:12,070
+but you know it's been handed off.
+
+334
+00:20:12,560 --> 00:20:15,230
+And so, maybe that's good enough and you could stop here.
+
+335
+00:20:16,340 --> 00:20:22,190
+A second option is that if you need to tolerate just a little bit of slowness on the subscribers,
+
+336
+00:20:22,220 --> 00:20:27,710
+then you could say that they need to give you a buffered channel with room for a couple of events in the buffer,
+
+337
+00:20:27,770 --> 00:20:30,050
+so that you know when you're publishing,
+
+338
+00:20:30,610 --> 00:20:36,070
+now, as long as they're not too far behind there always be room for the new event to go into the channel buffer,
+
+339
+00:20:36,160 --> 00:20:38,770
+and then the actual published won't block for too long.
+
+340
+00:20:39,600 --> 00:20:40,980
+And again, maybe that's good enough,
+
+341
+00:20:41,010 --> 00:20:44,940
+if you're sure that they won't ever fall too far behind, you get to stop there.
+
+342
+00:20:45,780 --> 00:20:47,580
+But in a really big program,
+
+343
+00:20:48,350 --> 00:20:53,180
+you do want to cope more gracefully with arbitrarily slow subscribers
+
+344
+00:20:53,180 --> 00:20:55,010
+and so then the question is what do you do.
+
+345
+00:20:55,610 --> 00:20:57,770
+And so in general you have three options,
+
+346
+00:20:57,860 --> 00:21:02,870
+you can slow down the event generator, which is what the previous solutions implicitly do,
+
+347
+00:21:02,870 --> 00:21:06,560
+because publish stops until the subscribers catch up.
+
+348
+00:21:07,230 --> 00:21:11,850
+Or you can drop events or you can queue an arbitrary number of past events,
+
+349
+00:21:11,850 --> 00:21:13,620
+those are pretty much your only options.
+
+350
+00:21:14,350 --> 00:21:18,490
+So we talked about you know publish and slowing down the event generator.
+
+351
+00:21:19,060 --> 00:21:23,020
+There's a middle ground where you coalesce the events or you drop them,
+
+352
+00:21:24,100 --> 00:21:27,820
+so that you know the subscriber might find out that,
+
+353
+00:21:27,910 --> 00:21:31,180
+oh hey you missed some events and I can't tell you what they were, because I didn't save them,
+
+354
+00:21:31,180 --> 00:21:33,760
+but I'm at least going to tell you, you missed five events.
+
+355
+00:21:34,180 --> 00:21:36,790
+And then maybe it can do something else to try to catch up.
+
+356
+00:21:37,510 --> 00:21:41,230
+And this is the kind of approach, that we take in the profiler,
+
+357
+00:21:41,230 --> 00:21:43,090
+so in the profiler if you've used it,
+
+358
+00:21:43,420 --> 00:21:50,620
+if there's a goroutine that fills the profile on a signal handler actually with profiling events
+
+359
+00:21:50,800 --> 00:21:53,980
+and then there's a separate goroutine whose job is to read the data back out
+
+360
+00:21:53,980 --> 00:21:56,890
+and write it to disk or send it to an http request
+
+361
+00:21:56,890 --> 00:21:58,720
+or whatever it is you're doing with profile data.
+
+362
+00:21:59,200 --> 00:22:04,780
+And there's a buffer in the middle and if the receiver from the profile data falls behind,
+
+363
+00:22:04,990 --> 00:22:09,880
+when the buffer fills up, we start adding entries to a final profile entry,
+
+364
+00:22:09,940 --> 00:22:15,130
+that just has a single entry that's that's a function called runtime last profile data
+
+365
+00:22:15,370 --> 00:22:16,930
+and so if you look at the profile,
+
+366
+00:22:16,930 --> 00:22:20,020
+you see hey the program spent 5% of its time in last profile data,
+
+367
+00:22:20,110 --> 00:22:25,610
+that just means you know the profile reader was too slow and it didn't catch up,
+
+368
+00:22:26,170 --> 00:22:27,430
+and we lost some of the profile,
+
+369
+00:22:27,430 --> 00:22:31,570
+but we're clear about exactly what the error rate is in the profile
+
+370
+00:22:31,690 --> 00:22:33,310
+and you pretty much never see that,
+
+371
+00:22:33,310 --> 00:22:35,230
+because all the readers actually do keep up,
+
+372
+00:22:35,260 --> 00:22:36,790
+but just in case they didn't,
+
+373
+00:22:37,030 --> 00:22:38,470
+you have a pretty clear signal.
+
+374
+00:22:39,960 --> 00:22:44,430
+An example of purely dropping the events is the OS signal package,
+
+375
+00:22:44,460 --> 00:22:48,880
+where you have to pass in a channel,
+
+376
+00:22:48,880 --> 00:22:50,710
+that will be ready to receive the signal,
+
+377
+00:22:50,920 --> 00:22:53,290
+a signal like SIGHUP or SIGQUIT,
+
+378
+00:22:53,990 --> 00:22:55,520
+and when the signal comes in,
+
+379
+00:22:55,550 --> 00:22:59,000
+the runtime tries to send to each of the channels that subscribe to that signal,
+
+380
+00:22:59,360 --> 00:23:02,630
+and if it can't send to it, it just doesn't, it's just gone,
+
+381
+00:23:02,630 --> 00:23:04,820
+because we're in a signal handler, we can't wait
+
+382
+00:23:05,120 --> 00:23:08,990
+and so what the callers have to do is they have to pass in a buffered channel,
+
+383
+00:23:09,080 --> 00:23:14,150
+and if they pass in a buffer channel that has length at least one, buffer length at least one
+
+384
+00:23:14,540 --> 00:23:18,110
+and they only register that channel to a single signal,
+
+385
+00:23:18,230 --> 00:23:21,590
+then you know that if a signal comes in,
+
+386
+00:23:21,590 --> 00:23:23,120
+you're definitely gonna get told about it,
+
+387
+00:23:23,450 --> 00:23:26,480
+if it comes in twice you might only get told about it once,
+
+388
+00:23:26,510 --> 00:23:30,650
+but that's actually the same semantics that Unix gives to processes for signals anyway,
+
+389
+00:23:30,890 --> 00:23:31,760
+so that's fine.
+
+390
+00:23:32,220 --> 00:23:35,610
+So those are both examples of dropping a coalescing events.
+
+391
+00:23:36,840 --> 00:23:41,580
+And then the third choice is that you might actually just really not want to lose any events,
+
+392
+00:23:41,580 --> 00:23:44,400
+it might just be really important that you never lose anything,
+
+393
+00:23:44,610 --> 00:23:48,210
+in which case you know you can queue an arbitrary number of events,
+
+394
+00:23:48,210 --> 00:23:55,620
+you can somehow arrange for the program to just save all the events that the slow subscriber hasn't seen yet somewhere
+
+395
+00:23:55,890 --> 00:23:57,960
+and give them to the subscriber later.
+
+396
+00:23:58,720 --> 00:24:01,090
+And it's really important to think carefully before you do that,
+
+397
+00:24:01,240 --> 00:24:05,190
+because in a distributed system, you know there's always slow computers,
+
+398
+00:24:05,190 --> 00:24:08,340
+always computers that have fallen off line or whatever,
+
+399
+00:24:08,340 --> 00:24:09,900
+and they might be gone for a while
+
+400
+00:24:10,020 --> 00:24:12,450
+and so you don't want to introduce unbounded queuing,
+
+401
+00:24:12,750 --> 00:24:15,300
+in general you want to think very carefully before you do that
+
+402
+00:24:15,300 --> 00:24:19,050
+and think well you know how unbounded is really and can I tolerate that.
+
+403
+00:24:19,620 --> 00:24:24,120
+And so like that's a reason why channels don't have just an unbounded buffering,
+
+404
+00:24:24,120 --> 00:24:26,160
+it's really almost never the right choice,
+
+405
+00:24:26,160 --> 00:24:27,630
+and if it is the right choice,
+
+406
+00:24:27,660 --> 00:24:29,340
+you probably want to build it very carefully.
+
+407
+00:24:30,580 --> 00:24:34,780
+And so but we're going to build one just to see what it would look like.
+
+408
+00:24:35,950 --> 00:24:39,640
+And before we do that, I just want to adjust the program a little bit,
+
+409
+00:24:40,000 --> 00:24:42,640
+so we have this mutex in the code
+
+410
+00:24:43,000 --> 00:24:49,150
+and the mutex is an example of of keeping the state whether you're locked or not in a state variable,
+
+411
+00:24:49,390 --> 00:24:52,360
+but we can also move that into a program counter variable,
+
+412
+00:24:52,930 --> 00:24:54,640
+by putting it in a different goroutine.
+
+413
+00:24:55,200 --> 00:25:02,180
+And so, in this case, we can start a new goroutine that runs a program function called s.loop.
+
+414
+00:25:02,860 --> 00:25:07,150
+And it handles requests sent on three new channels publish subscribe and cancel.
+
+415
+00:25:07,870 --> 00:25:12,400
+And so in Init, we make the channels and then we kick off s.loop.
+
+416
+00:25:13,140 --> 00:25:17,670
+And s.loop is sort of the amalgamation of the previous method bodies
+
+417
+00:25:17,760 --> 00:25:20,850
+and it just receives from any of the three channels,
+
+418
+00:25:20,880 --> 00:25:23,670
+a request a publisher subscriber or cancel request
+
+419
+00:25:24,060 --> 00:25:25,740
+and it does whatever was asked
+
+420
+00:25:26,130 --> 00:25:31,770
+and now that map, the subscriber map, can be just a local variable in s.loop.
+
+421
+00:25:32,320 --> 00:25:35,050
+And and so it's the same code.
+
+422
+00:25:35,690 --> 00:25:38,840
+But now that data is clearly owned by s.loop,
+
+423
+00:25:38,840 --> 00:25:40,100
+nothing else could even get to it,
+
+424
+00:25:40,100 --> 00:25:41,360
+because it's a local variable.
+
+425
+00:25:44,080 --> 00:25:48,730
+And then we just need to change the original methods to send the work over to the loop goroutine
+
+426
+00:25:48,730 --> 00:25:55,600
+and so uppercase Publish now sends on lower case publish the channel the event that it wants to publish
+
+427
+00:25:55,600 --> 00:25:57,730
+and similarly subscribe and cancel.
+
+428
+00:25:58,230 --> 00:26:01,110
+They create a request that has a channel,
+
+429
+00:26:01,320 --> 00:26:05,040
+that we want to subscribe and also a channel to get the answer back
+
+430
+00:26:05,220 --> 00:26:08,850
+and they send that into the loop and the loop sends back the answer.
+
+431
+00:26:12,040 --> 00:26:17,470
+And so I referred to transforming the program this way as converting the mutex into a goroutine,
+
+432
+00:26:17,560 --> 00:26:19,660
+because we took the data state of the mutex,
+
+433
+00:26:19,660 --> 00:26:21,100
+there's a lock bit inside it
+
+434
+00:26:21,100 --> 00:26:24,460
+and now that lock bit is implicit in the program counter of the loop.
+
+435
+00:26:26,050 --> 00:26:30,820
+It's very clear that you can't ever have a publish and subscribe happening at the same time,
+
+436
+00:26:30,850 --> 00:26:34,990
+because it's just single thread code and just you know executed sequence.
+
+437
+00:26:36,660 --> 00:26:40,620
+On the other hand, the original version had a kind of like clarity of state,
+
+438
+00:26:40,620 --> 00:26:42,180
+where you could sort of inspect it
+
+439
+00:26:42,390 --> 00:26:45,030
+and reason about well this is the important state
+
+440
+00:26:45,360 --> 00:26:49,530
+and it's harder in the the goroutine version to see what's important state
+
+441
+00:26:49,530 --> 00:26:52,860
+and what's kind of incidental state from just having a goroutine.
+
+442
+00:26:53,680 --> 00:26:57,490
+And in a given situation, one might be more important than the other,
+
+443
+00:26:57,850 --> 00:27:02,200
+so a couple years ago I did all the labs for the class, when it first switched to go
+
+444
+00:27:02,440 --> 00:27:07,810
+and raft is a good example of where you probably prefer the state with the mutex,
+
+445
+00:27:07,810 --> 00:27:12,280
+because raft is so different from most concurrent programs
+
+446
+00:27:12,280 --> 00:27:17,110
+and that each replica is just kind of profoundly uncertain of its state right,
+
+447
+00:27:17,110 --> 00:27:18,430
+like the state transitions.
+
+448
+00:27:18,970 --> 00:27:20,590
+You know, one moment you think you're the leader
+
+449
+00:27:20,590 --> 00:27:22,210
+and the next moment you've been deposed,
+
+450
+00:27:22,210 --> 00:27:23,830
+like one moment your log has ten entries
+
+451
+00:27:23,830 --> 00:27:25,990
+and next moment to, actually know it only has two entries
+
+452
+00:27:26,170 --> 00:27:29,110
+and so being able to manipulate that state directly
+
+453
+00:27:29,140 --> 00:27:32,860
+rather than having to somehow get in and out of the program counter,
+
+454
+00:27:32,920 --> 00:27:34,660
+makes a lot more sense for raft.
+
+455
+00:27:34,780 --> 00:27:37,450
+But that's pretty unique in most situations,
+
+456
+00:27:38,010 --> 00:27:40,560
+it cleans things up to put the state in the program counter.
+
+457
+00:27:42,620 --> 00:27:45,950
+Alright, so in order to deal with the slow subscribers,
+
+458
+00:27:46,010 --> 00:27:48,170
+now we're gonna add some helper goroutines
+
+459
+00:27:48,260 --> 00:27:54,170
+and their job is to manage a particular subscribers backlog and keep the overall program from blocking.
+
+460
+00:27:54,530 --> 00:27:56,360
+And so this is the helper goroutine,
+
+461
+00:27:56,970 --> 00:28:01,890
+and the the main loop goroutine will send the events to the helper which we then trust,
+
+462
+00:28:01,890 --> 00:28:05,010
+because we wrote it, not to fall arbitrarily behind
+
+463
+00:28:05,160 --> 00:28:09,810
+and then the helper's job is to queue events if needed and send them off to the subscriber.
+
+464
+00:28:10,860 --> 00:28:14,280
+Alright, so this actually has two problems.
+
+465
+00:28:14,790 --> 00:28:17,730
+The first is that if there's nothing in the queue,
+
+466
+00:28:17,760 --> 00:28:21,270
+then the select is actually wrong to try to offer queue of zero
+
+467
+00:28:21,270 --> 00:28:24,630
+and in fact just evaluating queue of zero at the start of the select will panic,
+
+468
+00:28:24,630 --> 00:28:26,100
+because the queue is empty
+
+469
+00:28:26,580 --> 00:28:31,800
+and so we can fix these by setting up the arguments separately from the select
+
+470
+00:28:31,830 --> 00:28:36,840
+and in particular we need to make a channel send out, that's going to be nil,
+
+471
+00:28:36,840 --> 00:28:39,630
+which is never able to proceed in a select,
+
+472
+00:28:41,210 --> 00:28:42,830
+as we know when we don't want to send
+
+473
+00:28:42,830 --> 00:28:45,770
+and it's going to be the actual out channel when we do want to send
+
+474
+00:28:46,160 --> 00:28:49,520
+and then we have to have a separate variable that holds the event that we're going to send,
+
+475
+00:28:49,520 --> 00:28:52,970
+it will actually read from queue zero, if there's something in the queue.
+
+476
+00:28:55,400 --> 00:28:57,440
+The second thing that's wrong is that
+
+477
+00:28:57,440 --> 00:29:00,260
+we need to handle closing of the channel, of the input channel,
+
+478
+00:29:00,380 --> 00:29:02,330
+because when the input channel closes,
+
+479
+00:29:02,390 --> 00:29:04,070
+we need to flush the rest of the queue,
+
+480
+00:29:04,070 --> 00:29:05,870
+and then we need to close the output channel.
+
+481
+00:29:06,750 --> 00:29:13,050
+So to check for that, we change the select from just doing e equals received from in to e comma ok,
+
+482
+00:29:13,050 --> 00:29:14,820
+equals received from in the comma ok,
+
+483
+00:29:14,820 --> 00:29:19,710
+will be told whether or not the channel is actually sending real data, or else it's closed.
+
+484
+00:29:20,280 --> 00:29:21,630
+And so when ok is false,
+
+485
+00:29:21,720 --> 00:29:25,110
+we can set in to nil, to say let's stop trying to receive from him,
+
+486
+00:29:25,110 --> 00:29:27,720
+there's nothing there we're just gonna keep getting told that it's closed.
+
+487
+00:29:28,730 --> 00:29:33,950
+And then when the loop is fine, when the queue is finally empty, we can exit the loop
+
+488
+00:29:34,040 --> 00:29:40,490
+and so we change the for condition to say we want to keep acting the loop as long as there actually still is an input channel
+
+489
+00:29:40,880 --> 00:29:43,280
+and there's something to write back to the output channel
+
+490
+00:29:43,280 --> 00:29:45,890
+and then once both of those are not true anymore,
+
+491
+00:29:46,010 --> 00:29:49,220
+it's time to exit the loop and we close the output channel
+
+492
+00:29:49,490 --> 00:29:50,030
+and we're done.
+
+493
+00:29:50,030 --> 00:29:54,950
+And so now we've correctly propagated the closing of the input channel to the output channel,
+
+494
+00:29:56,640 --> 00:29:57,810
+so that was the helper.
+
+495
+00:29:58,110 --> 00:30:00,240
+And the server loop used to look like this.
+
+496
+00:30:01,470 --> 00:30:04,650
+And to update it, we just changed the subscription map,
+
+497
+00:30:04,740 --> 00:30:07,770
+before it was a map from subscribe channels to bolls,
+
+498
+00:30:07,770 --> 00:30:09,090
+it was just basically a set
+
+499
+00:30:09,480 --> 00:30:12,750
+and now it's a map from subscribe channel to helper channel
+
+500
+00:30:13,080 --> 00:30:14,880
+and every time we get a new subscription,
+
+501
+00:30:15,060 --> 00:30:18,510
+we make a helper channel, we kickoff a helper goroutine,
+
+502
+00:30:19,040 --> 00:30:23,810
+and we record the helper channel in the subscription map instead of the actual channel.
+
+503
+00:30:24,510 --> 00:30:30,470
+And then the rest of, the rest of the loop actually barely changes at all.
+
+504
+00:30:32,490 --> 00:30:33,870
+So I do want to point out that
+
+505
+00:30:33,870 --> 00:30:40,530
+if you wanted to have a different strategy for what you do with a clients that fall too far behind,
+
+506
+00:30:40,620 --> 00:30:42,390
+that can all go in the helper goroutine,
+
+507
+00:30:42,450 --> 00:30:45,330
+the code on the screen right now is completely unchanged,
+
+508
+00:30:45,330 --> 00:30:51,150
+so we've completely separated the publish subscribe maintaining the actual list of subscribers map
+
+509
+00:30:51,180 --> 00:30:55,620
+from the what do you do when things get too slow map problem
+
+510
+00:30:55,950 --> 00:31:01,690
+and so it's really nice that you've got this clean separation of concerns into completely different goroutines
+
+511
+00:31:01,690 --> 00:31:03,820
+and that can help you keep your programs similar.
+
+512
+00:31:04,360 --> 00:31:10,090
+And so that's the general hint is that you can use goroutines a lot of the time to separate independent concerns.
+
+513
+00:31:11,970 --> 00:31:18,150
+Alright, so, the second pattern for today is work scheduler
+
+514
+00:31:18,570 --> 00:31:20,880
+and you did one of these in lab one for mapreduce
+
+515
+00:31:21,060 --> 00:31:22,830
+and I'm just going to build up to that
+
+516
+00:31:23,220 --> 00:31:25,740
+and this doesn't do all the RPC stuff,
+
+517
+00:31:25,740 --> 00:31:30,390
+it just kind of assumes that there's kind of channel channel based interfaces to all the servers.
+
+518
+00:31:31,430 --> 00:31:33,920
+So you know we have this function schedule,
+
+519
+00:31:33,950 --> 00:31:35,690
+it takes a fixed list of servers,
+
+520
+00:31:36,260 --> 00:31:37,640
+has a number of tasks run
+
+521
+00:31:37,880 --> 00:31:43,880
+and it has just this abstracted function call that you call to run the task on a specific server,
+
+522
+00:31:43,940 --> 00:31:46,580
+you can imagine, it was doing the RPCs underneath.
+
+523
+00:31:48,120 --> 00:31:52,890
+So we're gonna need some way to keep track of which servers are available to execute tasks.
+
+524
+00:31:53,440 --> 00:31:56,530
+And so, one option is to use our own stack or queue implementation,
+
+525
+00:31:56,650 --> 00:31:58,690
+but another option is to use a channel,
+
+526
+00:31:58,690 --> 00:32:00,940
+because it's a good synchronized queue.
+
+527
+00:32:01,740 --> 00:32:04,770
+And so we can send into the channel to add to the queue
+
+528
+00:32:04,770 --> 00:32:06,780
+and receive from it to pop something off.
+
+529
+00:32:07,330 --> 00:32:10,480
+And in this case, we'll make the queue be a queue of servers
+
+530
+00:32:10,840 --> 00:32:13,210
+and we'll start off its a queue of idle servers,
+
+531
+00:32:13,210 --> 00:32:15,040
+servers that aren't doing any work for us right now.
+
+532
+00:32:15,880 --> 00:32:20,320
+We'll start off by just initializing it by sending all the known servers into the idle list.
+
+533
+00:32:21,880 --> 00:32:23,530
+And then we can loop over the tasks
+
+534
+00:32:23,530 --> 00:32:25,600
+and for every task we kickoff a goroutine
+
+535
+00:32:25,660 --> 00:32:28,210
+and its job is to pull a server off the idle list,
+
+536
+00:32:28,540 --> 00:32:30,970
+run the task, and then put the server back on.
+
+537
+00:32:32,060 --> 00:32:37,160
+And this loop body is another example of the earlier hint to use goroutines,
+
+538
+00:32:37,340 --> 00:32:39,020
+like independent things run independently,
+
+539
+00:32:39,140 --> 00:32:41,960
+because each task is running as a separate concern,
+
+540
+00:32:41,990 --> 00:32:43,220
+they're all running in parallel.
+
+541
+00:32:44,960 --> 00:32:47,510
+Unfortunately, there are two problems with this program.
+
+542
+00:32:48,060 --> 00:32:54,210
+The first one is that the closure that's running as a new goroutine refers to the loop iteration variable, which is task
+
+543
+00:32:54,450 --> 00:32:56,370
+and so by the time the goroutine starts exiting,
+
+544
+00:32:56,430 --> 00:32:59,160
+the loop has probably continued and done a task++
+
+545
+00:32:59,160 --> 00:33:01,320
+and so it's actually getting the wrong value of task.
+
+546
+00:33:02,490 --> 00:33:03,930
+You've probably seen this by now,
+
+547
+00:33:04,320 --> 00:33:08,100
+and of course the best way to catch this is to run the race detector.
+
+548
+00:33:08,780 --> 00:33:13,130
+And at Google, we even encourage teams to set up canary servers that run the race detector
+
+549
+00:33:13,220 --> 00:33:16,430
+and split off something like point 1% of their traffic to it,
+
+550
+00:33:16,550 --> 00:33:20,330
+just to catch you know races that might be in the production system.
+
+551
+00:33:20,860 --> 00:33:26,140
+And you know finding a bug with the race detector is way better than having to debug some corruption later.
+
+552
+00:33:27,900 --> 00:33:29,880
+So there are two ways to fix this race,
+
+553
+00:33:30,000 --> 00:33:33,450
+the first way is to give the closure an explicit parameter and pass it in
+
+554
+00:33:33,960 --> 00:33:39,210
+and Go statement requires a function call specifically for this reason,
+
+555
+00:33:39,330 --> 00:33:44,910
+so that you can set specific arguments that get evaluated in the context of the original goroutine
+
+556
+00:33:45,120 --> 00:33:46,920
+and then get copied to the new goroutine.
+
+557
+00:33:47,670 --> 00:33:50,430
+And so in this case, we can declare a new argument task2,
+
+558
+00:33:50,490 --> 00:33:52,020
+we can past task to it.
+
+559
+00:33:52,670 --> 00:33:57,290
+And then inside the goroutine task2 is a completely different copy of task.
+
+560
+00:33:57,880 --> 00:34:00,970
+And I only named it task2 to make it easier to talk about.
+
+561
+00:34:01,610 --> 00:34:02,990
+But of course there's a bug here
+
+562
+00:34:02,990 --> 00:34:09,050
+and the bug is that I forgot to update task inside the function to refer to task2 instead of task,
+
+563
+00:34:09,290 --> 00:34:12,110
+and so we basically never do that,
+
+564
+00:34:12,110 --> 00:34:15,990
+what we do instead is, we just give it the same name,
+
+565
+00:34:16,050 --> 00:34:21,060
+so that it's impossible now for the code inside the goroutine to refer to the wrong copy of task.
+
+566
+00:34:22,500 --> 00:34:24,600
+That was the first way to fix the race,
+
+567
+00:34:24,600 --> 00:34:27,630
+there's a second way which is you know sort of cryptic the first time you see it,
+
+568
+00:34:27,630 --> 00:34:29,340
+but it amounts to the same thing,
+
+569
+00:34:29,640 --> 00:34:33,810
+and that is that you just make a copy of the variable inside the loop body.
+
+570
+00:34:34,570 --> 00:34:37,840
+So every time colon equals happens,
+
+571
+00:34:37,840 --> 00:34:39,160
+that creates a new variable,
+
+572
+00:34:39,370 --> 00:34:41,200
+so in the for loop, in the outer for loop,
+
+573
+00:34:41,200 --> 00:34:42,670
+there's a colon equals at the beginning
+
+574
+00:34:42,670 --> 00:34:44,560
+and there's not one the rest of the loop,
+
+575
+00:34:44,560 --> 00:34:47,080
+so that's all just one variable for the entire loop,
+
+576
+00:34:47,290 --> 00:34:49,540
+whereas if we put a colon equals inside the body,
+
+577
+00:34:49,540 --> 00:34:52,690
+every time we run an iteration of the loop, that's a different variable,
+
+578
+00:34:52,960 --> 00:34:57,040
+so if if the Go function closure captures that variable,
+
+579
+00:34:57,070 --> 00:34:58,420
+those will all be distinct.
+
+580
+00:34:59,130 --> 00:35:01,080
+So we can do the same thing we do task2
+
+581
+00:35:01,080 --> 00:35:03,030
+and this time I remember to update the body,
+
+582
+00:35:03,210 --> 00:35:06,990
+but you just like before it's too easy to forget to update the body
+
+583
+00:35:07,080 --> 00:35:09,420
+and so typically you write task colon equals task,
+
+584
+00:35:09,420 --> 00:35:11,490
+which looks kind of magical the first time you see it,
+
+585
+00:35:11,490 --> 00:35:12,690
+but that's what it's for.
+
+586
+00:35:14,300 --> 00:35:16,820
+Alright, so I said there were two bugs in the program,
+
+587
+00:35:17,150 --> 00:35:19,190
+the first one was this race on task.
+
+588
+00:35:19,840 --> 00:35:25,990
+And the second one is that, we didn't actually do anything after we've kicked off all the tasks,
+
+589
+00:35:25,990 --> 00:35:27,160
+we're not waiting for them to be done.
+
+590
+00:35:28,560 --> 00:35:33,000
+And and in particular, we're kicking them off way too fast,
+
+591
+00:35:33,060 --> 00:35:37,050
+because you know if there's a million tasks are going to kick off a million goroutines
+
+592
+00:35:37,050 --> 00:35:39,750
+and they're all just going to sit waiting for one of the five servers,
+
+593
+00:35:39,780 --> 00:35:40,740
+which is kind of beneficial.
+
+594
+00:35:41,520 --> 00:35:48,030
+And so what we can do is we can pull the fetching of the next idle server up out of the goroutine.
+
+595
+00:35:48,820 --> 00:35:51,400
+And, we pull it up out of the goroutine,
+
+596
+00:35:51,430 --> 00:35:55,540
+now we'll only kick off a goroutine when there is an idle server to use.
+
+597
+00:35:56,290 --> 00:35:57,550
+And then we can kick it off
+
+598
+00:35:57,550 --> 00:36:00,160
+and and you know use that server and put it back
+
+599
+00:36:00,250 --> 00:36:02,770
+and using the server and put it back runs concurrently,
+
+600
+00:36:02,890 --> 00:36:06,670
+but doing the fetch of the idle server inside the loop slows things down,
+
+601
+00:36:06,670 --> 00:36:11,710
+so that there's only ever now number of servers goroutines running instead of number of tasks.
+
+602
+00:36:12,470 --> 00:36:16,130
+And that receive is essentially creating some back pressure to slow down the loop,
+
+603
+00:36:16,160 --> 00:36:17,600
+so it doesn't get too far ahead.
+
+604
+00:36:18,940 --> 00:36:21,400
+And then I mentioned we have to wait for the task to finish.
+
+605
+00:36:22,030 --> 00:36:24,340
+And so we can do that by just at the end of the loop,
+
+606
+00:36:24,370 --> 00:36:27,430
+going over the list again and pulling all the servers out
+
+607
+00:36:27,430 --> 00:36:30,370
+and we've pulled the right number of servers out of the idle list,
+
+608
+00:36:30,400 --> 00:36:31,390
+that means they're all done.
+
+609
+00:36:32,020 --> 00:36:34,180
+And so that's that's the full program.
+
+610
+00:36:35,460 --> 00:36:38,340
+Now to me the most important part of this is that,
+
+611
+00:36:38,340 --> 00:36:41,610
+you still get to write a for loop to iterate over the tasks,
+
+612
+00:36:41,640 --> 00:36:45,600
+there's lots of other languages where you have to do this with state machines or some sort of callbacks.
+
+613
+00:36:46,210 --> 00:36:49,480
+And you don't get the luxury of encoding this in the control flow
+
+614
+00:36:49,810 --> 00:36:54,580
+and so this is a much cleaner way where you can just use a regular loop.
+
+615
+00:36:55,380 --> 00:36:58,260
+But there are some some changes we could make some improvements
+
+616
+00:36:58,530 --> 00:37:05,500
+and so one improvement is to notice that, there's only one goroutine that makes requests of a server at a particular time,
+
+617
+00:37:05,890 --> 00:37:08,170
+so instead of having one goroutine for task,
+
+618
+00:37:08,290 --> 00:37:10,300
+maybe we should have one goroutine per server,
+
+619
+00:37:10,720 --> 00:37:13,960
+because there are probably going to be fewer servers than tasks.
+
+620
+00:37:14,540 --> 00:37:20,810
+And to do that we have to change from having a channel of idle servers to a channel of yet to be done tasks
+
+621
+00:37:21,080 --> 00:37:23,300
+and so we've renamed the idle channel to work.
+
+622
+00:37:24,020 --> 00:37:29,570
+And then we also need a done channel to count you know how many tasks are done,
+
+623
+00:37:29,570 --> 00:37:31,610
+so we know when we're completely finished.
+
+624
+00:37:32,300 --> 00:37:35,030
+And so here there's a new function run tasks,
+
+625
+00:37:35,030 --> 00:37:37,220
+and that's going to be the per server function,
+
+626
+00:37:37,610 --> 00:37:39,800
+and we kick off one of them for each server.
+
+627
+00:37:40,410 --> 00:37:44,820
+And runTasks, his job is just to loop over the work channel, run the tasks
+
+628
+00:37:44,820 --> 00:37:48,090
+and when the server is done, we send true to done
+
+629
+00:37:48,360 --> 00:37:51,510
+and you know the server tells us that you know it's done
+
+630
+00:37:52,020 --> 00:37:54,870
+and the server exits when the work channel gets closed,
+
+631
+00:37:54,870 --> 00:37:57,060
+that's what makes that for loop actually stop.
+
+632
+00:37:58,220 --> 00:38:01,010
+So then you having kicked off the servers,
+
+633
+00:38:01,010 --> 00:38:02,540
+we can then just sit there in a loop
+
+634
+00:38:02,570 --> 00:38:05,360
+and send each task to the work channel,
+
+635
+00:38:05,890 --> 00:38:08,050
+close the work channel and say hey there's no more work coming,
+
+636
+00:38:08,050 --> 00:38:10,180
+all the servers, you should finish and then and then exit
+
+637
+00:38:10,450 --> 00:38:12,580
+and then wait for all the servers to tell us that they're done.
+
+638
+00:38:15,320 --> 00:38:17,960
+So in the lab, there were a couple complications,
+
+639
+00:38:17,960 --> 00:38:20,990
+one was that you might get new servers at any given time
+
+640
+00:38:21,380 --> 00:38:25,580
+and so we could change that by saying the servers come in on a channel of strings.
+
+641
+00:38:26,940 --> 00:38:30,060
+And that actually fits pretty well into the current structure,
+
+642
+00:38:30,060 --> 00:38:35,790
+where when you get a new server, you just kick off a new runTasks goroutine
+
+643
+00:38:35,880 --> 00:38:39,930
+and so the only thing we have to change here is to put that loop into its own goroutine,
+
+644
+00:38:39,930 --> 00:38:41,970
+so that while we're sending tasks to servers,
+
+645
+00:38:41,970 --> 00:38:45,270
+we can still accept new servers and kickoff the helper goroutines.
+
+646
+00:38:47,340 --> 00:38:48,240
+But now we have this problem,
+
+647
+00:38:48,240 --> 00:38:51,450
+that we don't really have a good way to tell when all the servers are done,
+
+648
+00:38:51,450 --> 00:38:53,400
+because we don't know how many servers there are,
+
+649
+00:38:53,670 --> 00:38:58,190
+and so we could try to maintain that number as servers come in,
+
+650
+00:38:58,190 --> 00:38:59,480
+but it's a little tricky
+
+651
+00:38:59,600 --> 00:39:02,900
+and instead we can count the number of tasks that have finished,
+
+652
+00:39:02,930 --> 00:39:06,560
+so we just moved the done sending true done up align,
+
+653
+00:39:06,590 --> 00:39:08,420
+so that instead of doing it per server,
+
+654
+00:39:08,420 --> 00:39:09,830
+we now do it per task,
+
+655
+00:39:10,070 --> 00:39:12,200
+and at the end of the loop, at the end of the function,
+
+656
+00:39:12,200 --> 00:39:14,480
+we just have to wait for the right number of tasks to be done.
+
+657
+00:39:15,640 --> 00:39:21,130
+And so, so now again we sort of know why these are going to finish,
+
+658
+00:39:21,460 --> 00:39:23,530
+there's actually a deadlock still
+
+659
+00:39:23,620 --> 00:39:28,510
+and that is that if the number of tasks is is too big,
+
+660
+00:39:28,540 --> 00:39:29,650
+actually I think always,
+
+661
+00:39:29,800 --> 00:39:31,150
+you'll get a deadlock
+
+662
+00:39:31,180 --> 00:39:32,290
+and if you run this,
+
+663
+00:39:32,290 --> 00:39:35,800
+you know you get this nice thing where it tells you like hey your goroutines are stuck.
+
+664
+00:39:35,800 --> 00:39:40,300
+And the problem is that we have this runTasks server loop,
+
+665
+00:39:40,840 --> 00:39:42,760
+and the server loop is trying to say hey I'm done
+
+666
+00:39:43,030 --> 00:39:45,250
+and you're trying to say hey like here's some more work,
+
+667
+00:39:45,250 --> 00:39:48,040
+so if you have more than one task, you'll run into this deadlock,
+
+668
+00:39:48,730 --> 00:39:52,060
+where you're trying to send the next task to a server,
+
+669
+00:39:52,090 --> 00:39:54,160
+I guess it's a few more tasks than servers,
+
+670
+00:39:54,340 --> 00:39:55,990
+you're trying to send the next task to a server
+
+671
+00:39:55,990 --> 00:39:58,720
+and all the servers are trying to say hey I'm done with the previous task,
+
+672
+00:39:58,750 --> 00:40:00,910
+but you're not there to receive from the done channel.
+
+673
+00:40:01,920 --> 00:40:06,210
+And so again you know it's really nice that the goroutine just hang around
+
+674
+00:40:06,210 --> 00:40:07,380
+and wait for you to look at them
+
+675
+00:40:07,530 --> 00:40:08,940
+and we can fix this.
+
+676
+00:40:09,750 --> 00:40:13,530
+One way to fix this would be to add a separate loop,
+
+677
+00:40:13,530 --> 00:40:19,050
+that actually does a select that either sends some work or a counts for some of the work being done,
+
+678
+00:40:19,260 --> 00:40:21,030
+that's fine,
+
+679
+00:40:21,060 --> 00:40:22,500
+but a cleaner way to do this,
+
+680
+00:40:22,680 --> 00:40:26,250
+is to take the work sending loop that task sending loop
+
+681
+00:40:26,250 --> 00:40:28,050
+and put it in its own goroutine,
+
+682
+00:40:28,170 --> 00:40:30,930
+so now it's running independently of the counting loop
+
+683
+00:40:31,050 --> 00:40:35,750
+and the counting loop can can run and you know unblocked servers
+
+684
+00:40:35,750 --> 00:40:38,660
+that are done with certain tasks, while other tasks are still being sent.
+
+685
+00:40:41,400 --> 00:40:44,280
+But the simplest possible fix for this is
+
+686
+00:40:44,280 --> 00:40:46,170
+to just make the work channel big enough,
+
+687
+00:40:46,200 --> 00:40:48,510
+that you're never gonna run out of space.
+
+688
+00:40:49,020 --> 00:40:52,680
+Because we might decide that you know having a goroutine for task is
+
+689
+00:40:52,680 --> 00:40:54,540
+you know a couple kilobytes per task,
+
+690
+00:40:54,660 --> 00:40:58,170
+but you know an extra int in the channel is eight bytes,
+
+691
+00:40:58,200 --> 00:41:00,420
+so probably you can spend eight bytes per task.
+
+692
+00:41:01,360 --> 00:41:04,060
+And so if you can, you just make the work channel big enough,
+
+693
+00:41:04,090 --> 00:41:07,450
+that you know that all the sends on work are going to never block
+
+694
+00:41:07,450 --> 00:41:11,380
+and you'll always get down to the counting loop at the end pretty quickly.
+
+695
+00:41:12,740 --> 00:41:16,880
+And so doing that actually sets us up pretty well for the other wrinkle in the lab,
+
+696
+00:41:16,880 --> 00:41:19,130
+which is that sometimes calls can timeout
+
+697
+00:41:19,160 --> 00:41:22,100
+and here I've modeled it by the call of returning a false,
+
+698
+00:41:22,100 --> 00:41:23,330
+so just say it didn't work.
+
+699
+00:41:24,560 --> 00:41:28,220
+And so you know in runTasks is really easy to say,
+
+700
+00:41:28,220 --> 00:41:35,090
+like if it's really easy to say like if the call fails, then,
+
+701
+00:41:35,390 --> 00:41:37,190
+sorry if the call succeeds then you're done,
+
+702
+00:41:37,190 --> 00:41:40,070
+but if it fails, just put the task back on the work list,
+
+703
+00:41:40,190 --> 00:41:42,170
+and because it's a queue not a stack,
+
+704
+00:41:42,230 --> 00:41:45,530
+putting it back on the work list is very likely to hand it to some other server.
+
+705
+00:41:46,180 --> 00:41:49,630
+And so that will probably succeed,
+
+706
+00:41:49,660 --> 00:41:52,390
+because it's some other server, and this is all hypothetical,
+
+707
+00:41:52,420 --> 00:41:58,450
+but it's a really, you know it fits really well into the structure that we've created.
+
+708
+00:42:00,710 --> 00:42:02,660
+Alright, and the final change is that
+
+709
+00:42:02,750 --> 00:42:05,090
+because the server goroutines are sending on work,
+
+710
+00:42:05,180 --> 00:42:09,020
+we do have to wait to close it until we know that they're done sending.
+
+711
+00:42:09,600 --> 00:42:13,530
+And, because again you can't close before they finish sending.
+
+712
+00:42:14,370 --> 00:42:18,690
+And so we just have to move the close until after we've counted that all the tasks done
+
+713
+00:42:19,620 --> 00:42:21,540
+and sometimes we get to this point
+
+714
+00:42:21,540 --> 00:42:24,630
+and people ask why can't you just kill goroutines
+
+715
+00:42:24,630 --> 00:42:27,990
+like why not just be able to say look hey kill all the server goroutines at this point,
+
+716
+00:42:27,990 --> 00:42:29,340
+we know that they're not needed anymore.
+
+717
+00:42:29,900 --> 00:42:32,270
+And the answer is that the goroutines has state
+
+718
+00:42:32,270 --> 00:42:34,100
+and it's interacting with the rest of the program,
+
+719
+00:42:34,100 --> 00:42:35,870
+and if it all of a sudden just stops,
+
+720
+00:42:36,170 --> 00:42:37,670
+it's sort of like it hung, right
+
+721
+00:42:37,670 --> 00:42:39,440
+and maybe it was holding a lock,
+
+722
+00:42:39,530 --> 00:42:43,880
+maybe it was in the middle of some sort of communication with some other goroutines that was kind of expecting an answer.
+
+723
+00:42:44,510 --> 00:42:47,690
+So we need to find some way to tear them down more gracefully
+
+724
+00:42:47,690 --> 00:42:51,230
+and that's by telling them explicitly hey you know you're done, you can go away
+
+725
+00:42:51,230 --> 00:42:53,930
+and then they can clean up however they need to clean up.
+
+726
+00:42:57,490 --> 00:42:59,170
+You know, speaking of cleaning up,
+
+727
+00:42:59,170 --> 00:43:00,880
+there's there's actually one more thing we have to do,
+
+728
+00:43:00,880 --> 00:43:03,940
+which is to shut down the loop that's watching for new servers
+
+729
+00:43:04,120 --> 00:43:06,430
+and so we do have to put a select in here,
+
+730
+00:43:06,460 --> 00:43:11,450
+where you know the thing that's waiting for new servers on the server channel,
+
+731
+00:43:11,450 --> 00:43:15,170
+we have to go tell it, okay we're done just like stop watching new servers,
+
+732
+00:43:15,170 --> 00:43:17,390
+all the servers are gone.
+
+733
+00:43:18,180 --> 00:43:19,980
+And we could make this the caller's problem,
+
+734
+00:43:19,980 --> 00:43:21,960
+but this is actually fairly easy to do.
+
+735
+00:43:24,260 --> 00:43:30,560
+Alright, so here pattern number three, which is a client for a replicated server of service.
+
+736
+00:43:31,340 --> 00:43:33,800
+So here's the interface that we want to implement,
+
+737
+00:43:33,800 --> 00:43:39,070
+we have some service that, we want that is replicated for reliability
+
+738
+00:43:39,400 --> 00:43:42,700
+and it's okay for a client to talk to any one of these servers
+
+739
+00:43:42,910 --> 00:43:47,830
+and so the replicated client is given a list of servers,
+
+740
+00:43:47,860 --> 00:43:50,560
+the arguments to Init is a list of servers
+
+741
+00:43:50,680 --> 00:43:56,260
+and a function that lets you call one of the servers with a particular argument set and get a reply.
+
+742
+00:43:57,260 --> 00:44:00,140
+And then being given that during Init,
+
+743
+00:44:00,170 --> 00:44:06,530
+the replicated client then provides a call method that doesn't tell you what server it's going to use,
+
+744
+00:44:06,530 --> 00:44:08,510
+it just finds a good server to use
+
+745
+00:44:08,570 --> 00:44:11,780
+and it keeps the same, keeps using the same server for as long as it can
+
+746
+00:44:11,780 --> 00:44:13,610
+until it finds out that that server is no good.
+
+747
+00:44:15,240 --> 00:44:18,660
+So in this situation, there's almost no shared state that you need to
+
+748
+00:44:19,230 --> 00:44:23,130
+and so like the only state that persists from one call to next is what server did I use last time,
+
+749
+00:44:23,130 --> 00:44:24,630
+because I'm going to try to use that again.
+
+750
+00:44:25,500 --> 00:44:27,960
+So in this case that's totally fine for mutex,
+
+751
+00:44:27,960 --> 00:44:29,040
+I'm just going to leave it there,
+
+752
+00:44:29,130 --> 00:44:30,930
+it's always okay to use mutex,
+
+753
+00:44:30,930 --> 00:44:33,060
+if that's the cleanest way to write the code.
+
+754
+00:44:33,660 --> 00:44:36,750
+You know, some people get the wrong impression from how much we talk about channels,
+
+755
+00:44:36,750 --> 00:44:39,180
+but it's always okay to use mutex, if that's all you need.
+
+756
+00:44:40,880 --> 00:44:44,000
+So now we need to implement this replicated call method,
+
+757
+00:44:44,000 --> 00:44:47,240
+whose job is to try sending to lots of different servers.
+
+758
+00:44:47,890 --> 00:44:50,440
+But first to try the the original server.
+
+759
+00:44:51,090 --> 00:44:54,510
+So, so what does it mean if the try fails,
+
+760
+00:44:54,660 --> 00:44:58,110
+well there's no clear way for it to fail above,
+
+761
+00:44:58,110 --> 00:44:59,610
+it just always returns a reply
+
+762
+00:44:59,610 --> 00:45:01,980
+and so the only way it can fail is if it's taking too long,
+
+763
+00:45:02,310 --> 00:45:05,100
+so we'll assume that if it takes too long, that means it failed.
+
+764
+00:45:06,000 --> 00:45:08,010
+So in order to deal with timeouts,
+
+765
+00:45:08,010 --> 00:45:11,130
+we have to run that code in the background in a different goroutine.
+
+766
+00:45:11,640 --> 00:45:13,380
+So we can do something like this,
+
+767
+00:45:14,110 --> 00:45:16,240
+where we set a timeout,
+
+768
+00:45:16,240 --> 00:45:20,650
+we create a timer and then we use goroutine to send in the background
+
+769
+00:45:20,950 --> 00:45:25,450
+and then at the end, we wait and either we get the timeout or we get the actual reply,
+
+770
+00:45:25,540 --> 00:45:27,700
+if we get the actual reply, we return it
+
+771
+00:45:28,120 --> 00:45:30,220
+and if we get the timeout, we have to do something,
+
+772
+00:45:30,310 --> 00:45:31,420
+we have to figure out what to do.
+
+773
+00:45:32,320 --> 00:45:36,970
+It's worth pointing out that you have to call t.stop,
+
+774
+00:45:37,000 --> 00:45:39,640
+because otherwise the timer sits in a timer queue,
+
+775
+00:45:39,640 --> 00:45:41,500
+that's going to go off in one second
+
+776
+00:45:41,830 --> 00:45:43,840
+and so you know if this call took a millisecond
+
+777
+00:45:43,840 --> 00:45:46,150
+and you have this timer that's going to sit there for the next second
+
+778
+00:45:46,180 --> 00:45:47,530
+and then you do this on a loop
+
+779
+00:45:47,680 --> 00:45:50,830
+and you get a thousand timers sitting in that that queue
+
+780
+00:45:50,830 --> 00:45:53,650
+before they start actually you know a disappearing.
+
+781
+00:45:53,920 --> 00:45:56,900
+And so, this is kind of a work in the API,
+
+782
+00:45:56,900 --> 00:45:59,180
+but it's been there forever and we've never fixed it
+
+783
+00:45:59,720 --> 00:46:02,960
+and and so you just have to remember to call stop.
+
+784
+00:46:04,230 --> 00:46:07,740
+And then now we have to figure out what do we do in the case of the timeout.
+
+785
+00:46:08,880 --> 00:46:10,140
+And so in the case of the timeout,
+
+786
+00:46:10,140 --> 00:46:11,970
+we're going to need to try a different server,
+
+787
+00:46:12,000 --> 00:46:13,050
+so we'll write a loop.
+
+788
+00:46:13,660 --> 00:46:18,880
+And we'll start at the id, that id zero it says
+
+789
+00:46:18,940 --> 00:46:21,190
+and you know if a reply comes in, that's great
+
+790
+00:46:21,310 --> 00:46:24,550
+and otherwise we'll reset the timeout and go around the loop again
+
+791
+00:46:24,700 --> 00:46:26,650
+and try sending to a different server.
+
+792
+00:46:27,010 --> 00:46:30,890
+And notice, there's only one done channel in this program
+
+793
+00:46:31,250 --> 00:46:34,820
+and so on the third iteration of the loop, we might be waiting
+
+794
+00:46:35,150 --> 00:46:37,670
+and then finally the first server gives us a reply,
+
+795
+00:46:37,760 --> 00:46:40,010
+that's totally fine, we'll take that reply, that's great.
+
+796
+00:46:41,060 --> 00:46:43,730
+And so then we'll stop and return it.
+
+797
+00:46:45,120 --> 00:46:47,010
+And, but if we get all the way through the loop,
+
+798
+00:46:47,010 --> 00:46:49,590
+it means that we've sent the request to every single server,
+
+799
+00:46:49,650 --> 00:46:51,480
+in which case there's no more timeouts,
+
+800
+00:46:51,480 --> 00:46:53,460
+we just have to wait for one of them to come back
+
+801
+00:46:53,700 --> 00:46:56,760
+and so that's the plain receive and return at the end.
+
+802
+00:46:58,260 --> 00:47:02,880
+And then it's important to notice that the done channel is buffered now,
+
+803
+00:47:02,910 --> 00:47:06,180
+so that if you've sent the result to three different servers,
+
+804
+00:47:06,210 --> 00:47:08,790
+you're going to take the first reply and return,
+
+805
+00:47:08,970 --> 00:47:11,640
+but the others are going to want to send responses to.
+
+806
+00:47:12,100 --> 00:47:16,210
+And we don't want those goroutines just sit around forever, trying to send to a channel that we're not reading from,
+
+807
+00:47:16,480 --> 00:47:20,380
+so we make the buffer big enough that they can send into the buffer and then go away
+
+808
+00:47:20,380 --> 00:47:22,000
+and the channel just gets garbage collected.
+
+809
+00:47:23,930 --> 00:47:25,340
+We've got a question in the chat,
+
+810
+00:47:25,340 --> 00:47:31,730
+that says, why can't the timer, just be garbage collected when nobody's referencing it
+
+811
+00:47:31,730 --> 00:47:33,710
+instead of having to wait when it goes off
+
+812
+00:47:33,710 --> 00:47:36,860
+when you said that you have multiple waiting if he goes off in one millisecond.
+
+813
+00:47:37,250 --> 00:47:41,000
+The problem is that timer is referenced by the runtime,
+
+814
+00:47:41,030 --> 00:47:43,040
+it's in the list of active timers.
+
+815
+00:47:43,600 --> 00:47:46,360
+And so calling stop takes it out of the list of active timers.
+
+816
+00:47:46,840 --> 00:47:49,990
+And and so like that's arguably kind of a work in that,
+
+817
+00:47:50,020 --> 00:47:52,030
+like in the specific case of a timer,
+
+818
+00:47:52,030 --> 00:47:55,750
+that's like only gonna ever get used in this channel way
+
+819
+00:47:55,750 --> 00:47:58,990
+like we could have special case that by having the channel,
+
+820
+00:47:58,990 --> 00:48:01,450
+because inside the timer is this t.C channel right,
+
+821
+00:48:01,720 --> 00:48:05,710
+so we could have like a different kind of channel implementation that inside
+
+822
+00:48:05,710 --> 00:48:07,810
+had a bit that said hey I'm a timer channel right
+
+823
+00:48:08,080 --> 00:48:12,250
+and and and then like the select on it would like no to just wait,
+
+824
+00:48:12,550 --> 00:48:14,890
+but if you just let go of it, it would just disappear.
+
+825
+00:48:15,360 --> 00:48:18,480
+We've kind of thought about doing that for a while, but we never did,
+
+826
+00:48:18,570 --> 00:48:20,280
+so this is like the state of the world.
+
+827
+00:48:20,810 --> 00:48:23,270
+But but you know the garbage collector can't distinguish
+
+828
+00:48:23,270 --> 00:48:27,500
+between the reference inside the runtime and the reference and the rest of the program,
+
+829
+00:48:27,500 --> 00:48:28,730
+it's all just references,
+
+830
+00:48:29,060 --> 00:48:31,880
+and so until we special case that channel,
+
+831
+00:48:31,880 --> 00:48:34,610
+in some way we can't actually get rid of that.
+
+832
+00:48:37,540 --> 00:48:38,050
+Thank you.
+
+833
+00:48:38,290 --> 00:48:41,500
+Sure, so, so the only thing we have left is
+
+834
+00:48:41,500 --> 00:48:46,570
+to have this preference where we try to use the same id that we did the previous time.
+
+835
+00:48:47,390 --> 00:48:48,800
+And so to do that preference,
+
+836
+00:48:50,550 --> 00:48:54,900
+we you know had the server id coming back in the reply anyway in the result channel.
+
+837
+00:48:55,910 --> 00:48:58,100
+And so you know we do the same sort of loop,
+
+838
+00:48:58,100 --> 00:49:00,560
+but we loop over an offset from the actual id,
+
+839
+00:49:00,560 --> 00:49:02,930
+we're going to use which is the preferred one
+
+840
+00:49:03,260 --> 00:49:05,030
+and then we get an answer,
+
+841
+00:49:05,090 --> 00:49:09,050
+we set the preferred one to where we got the answer from and then we reply
+
+842
+00:49:09,500 --> 00:49:11,420
+and you'll notice that I used a goto statement,
+
+843
+00:49:11,510 --> 00:49:13,730
+that's okay if you need to goto it's fine,
+
+844
+00:49:14,480 --> 00:49:16,520
+it's not sort of there's no [zealotry] here.
+
+845
+00:49:18,070 --> 00:49:25,060
+Alright, so, the fourth one and then we'll do some questions is protocol multiplexer.
+
+846
+00:49:25,810 --> 00:49:29,470
+And this is the logic of a core of any RPC system
+
+847
+00:49:29,650 --> 00:49:31,210
+and this comes up a lot,
+
+848
+00:49:31,210 --> 00:49:33,160
+I feel like I wrote a lot of these in grad school
+
+849
+00:49:33,160 --> 00:49:34,270
+and sort of years after that.
+
+850
+00:49:35,760 --> 00:49:39,360
+And so the basic API of a protocol multiplexer is that
+
+851
+00:49:39,480 --> 00:49:42,900
+it's in from some service, which we're going to pass to the Init method.
+
+852
+00:49:43,600 --> 00:49:45,790
+And then having been initialized with the service,
+
+853
+00:49:45,910 --> 00:49:51,220
+you can call and you can call Call and give a message a request message
+
+854
+00:49:51,220 --> 00:49:53,740
+and then it'll give you back the reply message at some point
+
+855
+00:49:54,100 --> 00:50:02,660
+and the things it needs from the service to do multiflexing, is that given a message it has to be able to pull out the tag that uniquely identifies the message
+
+856
+00:50:02,960 --> 00:50:04,970
+and will identify the reply,
+
+857
+00:50:04,970 --> 00:50:07,100
+because it will come back in with a matching tag
+
+858
+00:50:07,430 --> 00:50:11,330
+and then it needs to be able to send a message out and to receive a message,
+
+859
+00:50:11,330 --> 00:50:15,680
+but they send and receive are arbitrary messages are not matched.
+
+860
+00:50:16,680 --> 00:50:19,080
+It's the multiplex job to actually match them.
+
+861
+00:50:21,020 --> 00:50:25,820
+So, to start with, we'll have a goroutine that's in charge of calling send
+
+862
+00:50:25,940 --> 00:50:28,130
+and another goroutine that's in charge of calling receive,
+
+863
+00:50:28,130 --> 00:50:29,480
+both in just a simple loop.
+
+864
+00:50:30,110 --> 00:50:32,930
+And so to initialize the service will set up the structure
+
+865
+00:50:32,930 --> 00:50:35,540
+and it will kick off the send loop and the receive loop
+
+866
+00:50:35,660 --> 00:50:38,480
+and then we also have a map of pending requests
+
+867
+00:50:38,720 --> 00:50:43,220
+and the maps from the tag that we saw the id number in the messages
+
+868
+00:50:43,220 --> 00:50:46,070
+to a channel where the reply is supposed to go.
+
+869
+00:50:47,960 --> 00:50:49,700
+The send loop is fairly simple,
+
+870
+00:50:49,700 --> 00:50:52,550
+you just range over the things that need to be sent and you send them
+
+871
+00:50:52,640 --> 00:50:55,490
+and this just has the effect of serializing the calls to send,
+
+872
+00:50:55,490 --> 00:51:02,510
+because we're not going to force the service implementation to deal with us sending you know from multiple goroutines at once,
+
+873
+00:51:02,510 --> 00:51:07,160
+we're serializing it, so that it can just be thinking of you sending one packet at a time.
+
+874
+00:51:09,200 --> 00:51:12,440
+And then the receive loop is a little bit more complicated,
+
+875
+00:51:12,440 --> 00:51:15,680
+it pulls a reply off the service
+
+876
+00:51:15,680 --> 00:51:18,770
+and again they're serialized or only reading one at a time
+
+877
+00:51:19,040 --> 00:51:21,230
+and then it pulls the tag out of the reply.
+
+878
+00:51:22,040 --> 00:51:25,100
+And then it says oh I need to find the channel to send this to,
+
+879
+00:51:25,520 --> 00:51:27,710
+so it pulls the channel out of the pending map,
+
+880
+00:51:27,980 --> 00:51:29,540
+it takes it out of the pending map,
+
+881
+00:51:29,540 --> 00:51:31,910
+so that you know if we accidentally get another one,
+
+882
+00:51:31,910 --> 00:51:32,900
+we won't try to send it.
+
+883
+00:51:33,640 --> 00:51:35,050
+And then it sends the reply.
+
+884
+00:51:36,190 --> 00:51:37,960
+And then to do a call,
+
+885
+00:51:38,110 --> 00:51:40,210
+you just have to set yourself up in the map,
+
+886
+00:51:40,210 --> 00:51:42,460
+and then hand it to send and wait for the reply,
+
+887
+00:51:42,490 --> 00:51:45,220
+so we start off, we get the tag out,
+
+888
+00:51:45,640 --> 00:51:47,410
+we make our own done channel,
+
+889
+00:51:47,680 --> 00:51:49,660
+we insert the tag into the map,
+
+890
+00:51:49,690 --> 00:51:51,460
+after first checking for bugs.
+
+891
+00:51:51,790 --> 00:51:55,520
+And then, we send the argument message to Send
+
+892
+00:51:55,640 --> 00:51:57,650
+and then we wait for the reply to come in on done,
+
+893
+00:51:57,710 --> 00:51:58,910
+it's very very simple,
+
+894
+00:51:58,910 --> 00:52:01,340
+I mean like I used to write these sort of things in C
+
+895
+00:52:01,340 --> 00:52:03,170
+and it was it was much much worse.
+
+896
+00:52:04,900 --> 00:52:07,810
+So that was all the patterns that I wanted to show
+
+897
+00:52:08,140 --> 00:52:13,060
+and I hope that those end up being useful for you in whatever future program yo're writing
+
+898
+00:52:13,420 --> 00:52:18,750
+and I hope that they're you know just sort of good ideas, even in non Go programs,
+
+899
+00:52:18,750 --> 00:52:20,100
+but that you know thinking about them
+
+900
+00:52:20,100 --> 00:52:22,590
+and Go can help you when you go to do other things as well.
+
+901
+00:52:23,130 --> 00:52:24,720
+So I'm going to put them all back up.
+
+902
+00:52:24,900 --> 00:52:29,010
+And then I have some questions that Frans sent, that were from all of you.
+
+903
+00:52:30,350 --> 00:52:35,030
+And, we'll probably have some time for questions from the chat as well.
+
+904
+00:52:35,640 --> 00:52:38,280
+I have no idea in zoom where the chat window is,
+
+905
+00:52:38,280 --> 00:52:41,760
+so when we get to that, people can just speak up,
+
+906
+00:52:41,760 --> 00:52:45,450
+just I don't use zoom on a daily basis, unfortunately.
+
+907
+00:52:46,150 --> 00:52:49,660
+So, and and normally I know how to use zoom regularly,
+
+908
+00:52:49,660 --> 00:52:54,310
+but with with the presentation, it's zooms in this minimized thing, that doesn't have half the things I'm used to.
+
+909
+00:52:54,910 --> 00:52:57,790
+Anyway, someone asked how long Go took.
+
+910
+00:52:57,970 --> 00:53:00,880
+And so far it's been about thirteen and a half years,
+
+911
+00:53:01,180 --> 00:53:04,510
+we started discussions in late september 2007,
+
+912
+00:53:04,660 --> 00:53:07,930
+I joined full time in august 2008 when I finished at MIT.
+
+913
+00:53:08,530 --> 00:53:11,800
+We did the initial open-source launch november 2009.
+
+914
+00:53:12,380 --> 00:53:17,750
+We released Go one the sort of first stable version in October 2011,
+
+915
+00:53:17,780 --> 00:53:21,350
+sorry the plan was October 2011, Go one itself was march 2012.
+
+916
+00:53:22,180 --> 00:53:25,210
+And then we've just been on a regular schedule since then,
+
+917
+00:53:25,450 --> 00:53:28,540
+the next major change of course is going to be generics
+
+918
+00:53:28,840 --> 00:53:32,740
+and adding generics and that's probably gonna be go one eighteen,
+
+919
+00:53:32,740 --> 00:53:34,750
+which is going to be next in February.
+
+920
+00:53:37,260 --> 00:53:41,310
+Someone asks you how big a team does it take to build a language like Go.
+
+921
+00:53:41,310 --> 00:53:44,850
+And you know for those first two years, there were just five of us
+
+922
+00:53:45,090 --> 00:53:47,220
+and that was enough to get us to
+
+923
+00:53:47,220 --> 00:53:51,120
+you know something that we release that actually could run in production.
+
+924
+00:53:51,710 --> 00:53:53,060
+But it was fairly primitive,
+
+925
+00:53:53,090 --> 00:53:56,930
+you know it was a good prototype, it was a solid working prototype,
+
+926
+00:53:56,930 --> 00:53:59,120
+but it wasn't like what it is today
+
+927
+00:53:59,660 --> 00:54:01,490
+and over time we've expanded a fair amount,
+
+928
+00:54:01,490 --> 00:54:07,070
+now we're up to something like fifty people employed directly, employed by Google to work directly on Go.
+
+929
+00:54:07,950 --> 00:54:10,140
+And then there's tons of open source contributors,
+
+930
+00:54:10,140 --> 00:54:13,920
+I mean there's literal cast of thousands that have helped us over the last thirteen years
+
+931
+00:54:14,190 --> 00:54:17,100
+and there's absolutely no way we could have done it even with fifty people,
+
+932
+00:54:17,220 --> 00:54:20,310
+without all the different contributions from the outside.
+
+933
+00:54:22,800 --> 00:54:28,020
+Someone asked about design priorities and motivations.
+
+934
+00:54:28,320 --> 00:54:30,930
+And you know we built it for us right,
+
+935
+00:54:30,930 --> 00:54:33,870
+the priority was to build something that was going to help Google
+
+936
+00:54:33,870 --> 00:54:36,000
+and it just turned out that Google was a couple years ahead,
+
+937
+00:54:36,000 --> 00:54:39,900
+we were just in a really lucky spot where Google was a couple years ahead of the rest of the industry,
+
+938
+00:54:40,080 --> 00:54:42,870
+on having to write distributed systems right now,
+
+939
+00:54:42,870 --> 00:54:48,030
+everyone using cloud software is writing programs that talk to other programs and sending messages
+
+940
+00:54:48,030 --> 00:54:51,900
+and you know there's hardly any single machine programs anymore.
+
+941
+00:54:52,610 --> 00:54:56,060
+And so you know we sort of locked into at some level
+
+942
+00:54:56,180 --> 00:55:00,560
+you know building the language that we the rest of the world needed a couple years later.
+
+943
+00:55:01,740 --> 00:55:04,140
+And then the other thing that was really a priority
+
+944
+00:55:04,140 --> 00:55:06,750
+was making it work for large numbers of programmers
+
+945
+00:55:07,140 --> 00:55:11,280
+and because Google had a very large number of programmers working in one codebase
+
+946
+00:55:11,520 --> 00:55:13,110
+and now we have open source
+
+947
+00:55:13,110 --> 00:55:15,300
+where you know even if you're a small team,
+
+948
+00:55:15,330 --> 00:55:18,480
+you're depending on code that's written by a ton of other people usually.
+
+949
+00:55:19,110 --> 00:55:24,450
+And so a lot of the issues that come up with just having many programmers still come up in that context,
+
+950
+00:55:24,840 --> 00:55:27,270
+so those were really the things we were trying to solve.
+
+951
+00:55:28,090 --> 00:55:31,570
+And you know for all of these things we took a long time
+
+952
+00:55:31,660 --> 00:55:35,320
+before we were willing to actually commit to putting something in the language
+
+953
+00:55:35,320 --> 00:55:38,620
+like everyone basically had to agree in the core original group
+
+954
+00:55:38,860 --> 00:55:44,500
+and and so that meant that it took us a while to get the pieces exactly the way we wanted them,
+
+955
+00:55:44,500 --> 00:55:50,590
+but once we got them there, they've actually been very stable and solid and really nice and they work together well.
+
+956
+00:55:50,980 --> 00:55:53,500
+And the same thing is kind of happening with generics now,
+
+957
+00:55:53,740 --> 00:55:57,340
+where we actually feel I feel personally really good about generics,
+
+958
+00:55:57,340 --> 00:56:00,100
+I feel like it feels like the rest of Go,
+
+959
+00:56:00,100 --> 00:56:02,890
+and that just wasn't the case for the proposals that we had,
+
+960
+00:56:02,920 --> 00:56:04,480
+you know even a couple years ago,
+
+961
+00:56:04,540 --> 00:56:06,490
+much less the early ones.
+
+962
+00:56:08,860 --> 00:56:12,640
+Someone said they really liked defer, which is unique to language,
+
+963
+00:56:12,640 --> 00:56:14,200
+and I do too, thank you,
+
+964
+00:56:14,590 --> 00:56:19,300
+but I wanted to point out that we did absolutely you know create defer for Go,
+
+965
+00:56:19,390 --> 00:56:21,430
+but Swift has adopted it
+
+966
+00:56:21,430 --> 00:56:24,220
+and I think there's a proposal for C++ to adopt it as well,
+
+967
+00:56:24,220 --> 00:56:26,830
+so you know hopefully it kind of moves out a little bit.
+
+968
+00:56:29,280 --> 00:56:33,780
+There was a question about Go is using capitalization for exporting.
+
+969
+00:56:34,170 --> 00:56:39,270
+And which I know is like something that you know sort of is jarring when you first see it
+
+970
+00:56:39,720 --> 00:56:44,310
+and the story behind that is that, well we needed something and we knew that we would need something,
+
+971
+00:56:44,310 --> 00:56:47,580
+but at the beginning, we just said look everything's export everything publicly visible,
+
+972
+00:56:47,580 --> 00:56:48,690
+we'll deal with it later.
+
+973
+00:56:49,520 --> 00:56:55,580
+And after about a year, it was clear that we needed some way to you know let programmers hide things from other programmers
+
+974
+00:56:55,970 --> 00:57:00,200
+and you know C++ has this public colon and private colon
+
+975
+00:57:00,380 --> 00:57:05,840
+and in a large structure it's actually really annoying that you're looking you're looking at definitions
+
+976
+00:57:05,840 --> 00:57:10,670
+and you have to scroll backwards and try to find where the most recent public colon or private colon was
+
+977
+00:57:10,940 --> 00:57:13,250
+and if it's really big, it can be hard to find one
+
+978
+00:57:13,250 --> 00:57:16,550
+and so it's hard to tell whether a particular definition is public or private.
+
+979
+00:57:17,220 --> 00:57:20,430
+And then in Java, of course it's at the beginning of every single field
+
+980
+00:57:20,820 --> 00:57:23,760
+and that seemed kind of excessive too, just too much typing.
+
+981
+00:57:24,900 --> 00:57:26,130
+And so we looked around some more
+
+982
+00:57:26,130 --> 00:57:29,310
+and and someone pointed out to us that while python has this convention
+
+983
+00:57:29,310 --> 00:57:31,860
+where you put an underscore in front to make something hidden
+
+984
+00:57:32,370 --> 00:57:33,690
+and that seemed interesting,
+
+985
+00:57:33,750 --> 00:57:36,600
+but you probably don't want the default to be not hidden,
+
+986
+00:57:36,630 --> 00:57:38,010
+you want the default to be hidden.
+
+987
+00:57:38,580 --> 00:57:42,480
+And then we thought about well we could put a plus in front of names.
+
+988
+00:57:44,510 --> 00:57:48,110
+And then someone suggested well what about uppercase could be exported,
+
+989
+00:57:48,380 --> 00:57:51,800
+and it seemed like a dumb terrible idea, it really did,
+
+990
+00:57:52,580 --> 00:57:54,020
+but as you think about it,
+
+991
+00:57:54,020 --> 00:57:55,700
+like I really didn't like this idea,
+
+992
+00:57:56,060 --> 00:57:59,870
+and I have a very clear memory of sitting in the room
+
+993
+00:57:59,870 --> 00:58:02,690
+and what I was staring at as we discussed this,
+
+994
+00:58:02,690 --> 00:58:04,400
+but I had no logical argument against it
+
+995
+00:58:04,430 --> 00:58:06,050
+and it turned out, it was fantastic,
+
+996
+00:58:06,200 --> 00:58:09,650
+it was like it seemed bad just like aesthetically,
+
+997
+00:58:09,680 --> 00:58:12,380
+but it is one of my favorite things now about Go
+
+998
+00:58:12,380 --> 00:58:14,330
+that when you look at a use of something,
+
+999
+00:58:14,360 --> 00:58:20,660
+you can see immediately, you get that bit of is this something that other people can access or not at every use,
+
+1000
+00:58:20,660 --> 00:58:24,890
+because if you see code calling a function to do you know whatever it is that it doesn't think,
+
+1001
+00:58:25,310 --> 00:58:27,470
+oh wow can other people do that,
+
+1002
+00:58:27,800 --> 00:58:29,930
+and you know your brain sort of takes care of that,
+
+1003
+00:58:29,930 --> 00:58:32,330
+but now I go to C++ and I see calls like that
+
+1004
+00:58:32,600 --> 00:58:36,950
+and I get really worried about is that is that something other classes can get at
+
+1005
+00:58:37,370 --> 00:58:41,390
+and having that bit actually turns out to be really useful for reading code.
+
+1006
+00:58:42,560 --> 00:58:44,570
+A couple people ask about generics.
+
+1007
+00:58:44,570 --> 00:58:47,600
+If you don't know, we have an active proposal for generics,
+
+1008
+00:58:47,600 --> 00:58:49,400
+we're actively working on implementing it,
+
+1009
+00:58:49,640 --> 00:58:52,910
+we hope that the released later in the year,
+
+1010
+00:58:53,120 --> 00:58:58,100
+towards the end of the year, we'll actually have a full version of generics, you can, you can actually use,
+
+1011
+00:58:58,280 --> 00:59:01,220
+the that'll be a preview release,
+
+1012
+00:59:01,250 --> 00:59:04,670
+the real release that we hope it will be in is Go on eighteen,
+
+1013
+00:59:04,670 --> 00:59:06,050
+which is February of next year,
+
+1014
+00:59:06,050 --> 00:59:09,590
+so maybe next class, we'll actually get to use generics, we'll see.
+
+1015
+00:59:10,910 --> 00:59:13,580
+But I'm certainly looking forward to having a generic min and max,
+
+1016
+00:59:13,580 --> 00:59:15,050
+the reason we don't have those is that,
+
+1017
+00:59:15,320 --> 00:59:17,030
+we have to pick which type they were for
+
+1018
+00:59:17,030 --> 00:59:18,440
+or you have a whole suite of them
+
+1019
+00:59:18,440 --> 00:59:19,430
+and it just seems silly,
+
+1020
+00:59:19,430 --> 00:59:21,110
+it seems like we should wait for generics.
+
+1021
+00:59:22,540 --> 00:59:29,140
+Someone asked, is there any area of programming, where Go may not be the best language, but it's still used.
+
+1022
+00:59:29,380 --> 00:59:31,300
+And and the answer is absolutely,
+
+1023
+00:59:31,300 --> 00:59:33,640
+like that happens all the time with every language.
+
+1024
+00:59:34,920 --> 00:59:37,860
+I think Go is actually really good all-around language,
+
+1025
+00:59:37,890 --> 00:59:41,160
+but you know you might use it for something that's not perfect for,
+
+1026
+00:59:41,730 --> 00:59:43,980
+just because the rest of your program is written in Go,
+
+1027
+00:59:43,980 --> 00:59:46,260
+and you want to inter operate with the rest of the program,
+
+1028
+00:59:46,260 --> 00:59:49,980
+so there's this website called the online encyclopedia of integer sequences,
+
+1029
+00:59:50,310 --> 00:59:52,980
+it's a search engine you type in like two three five seven eleven
+
+1030
+00:59:52,980 --> 00:59:54,300
+and it tells you those are the primes
+
+1031
+00:59:55,410 --> 00:59:57,870
+and it turns out that the backend for that is all written in Go.
+
+1032
+00:59:58,510 --> 01:00:00,310
+And if you type in a sequence,
+
+1033
+01:00:00,310 --> 01:00:02,710
+it doesn't no it actually does some pretty sophisticated math,
+
+1034
+01:00:02,710 --> 01:00:04,930
+on the numbers all with big numbers and things like that
+
+1035
+01:00:05,050 --> 01:00:06,550
+and all of that is written in Go too,
+
+1036
+01:00:06,550 --> 01:00:10,330
+because it was too annoying to shell out to maple and mathematic
+
+1037
+01:00:10,330 --> 01:00:12,070
+and sort of do that cross language thing,
+
+1038
+01:00:12,070 --> 01:00:14,440
+even though you'd much rather implement in those languages,
+
+1039
+01:00:14,620 --> 01:00:18,430
+so you run into those sorts of compromises all the time and that's fine.
+
+1040
+01:00:22,520 --> 01:00:26,300
+Someone asked about, go is supposed to be simple,
+
+1041
+01:00:26,330 --> 01:00:29,420
+so that's why there's no generics and no sets,
+
+1042
+01:00:29,420 --> 01:00:32,960
+but isn't it also for software developers and don't software developers need all this stuff
+
+1043
+01:00:32,960 --> 01:00:34,760
+and it's silly to reconstruct it.
+
+1044
+01:00:35,400 --> 01:00:38,160
+And I think that it's true that there's someone intention,
+
+1045
+01:00:38,160 --> 01:00:42,570
+but but simplicity in the sense of leaving things out was not ever the goal,
+
+1046
+01:00:42,840 --> 01:00:47,040
+so like for sets, it just seemed like maps are so close to sets,
+
+1047
+01:00:47,040 --> 01:00:51,870
+you just have a map where the value is empty or a boolean, that's a set,
+
+1048
+01:00:52,050 --> 01:00:56,940
+and for generics, like you have to remember that when we started going 2007,
+
+1049
+01:00:57,000 --> 01:01:02,520
+Java was like just finishing a true fiasco of a rollout of generics
+
+1050
+01:01:02,820 --> 01:01:04,740
+and so like we were really scared of that,
+
+1051
+01:01:04,740 --> 01:01:09,000
+we knew that if we just tried to do it, you know we would get it wrong
+
+1052
+01:01:09,060 --> 01:01:12,030
+and we knew that we could write a lot of useful programs without generics.
+
+1053
+01:01:12,200 --> 01:01:13,340
+And so that was what we did.
+
+1054
+01:01:14,110 --> 01:01:16,210
+And then we came back to it,
+
+1055
+01:01:16,210 --> 01:01:20,140
+when we felt like okay we've spent enough time writing other programs,
+
+1056
+01:01:20,140 --> 01:01:23,800
+we kind of know a lot more about what we need from from generics for Go
+
+1057
+01:01:24,010 --> 01:01:26,860
+and we can take the time to talk to real experts
+
+1058
+01:01:26,980 --> 01:01:31,240
+and I think that you know it would have been nice to have them five or ten years ago,
+
+1059
+01:01:31,240 --> 01:01:34,720
+but we wouldn't have had the really nice ones that we're going to have now,
+
+1060
+01:01:34,900 --> 01:01:36,610
+so I think it was probably the right decision.
+
+1061
+01:01:40,030 --> 01:01:44,650
+So there was a question about goroutines and the relation to the plan9 thread library,
+
+1062
+01:01:44,650 --> 01:01:46,570
+which was all cooperatively scheduled,
+
+1063
+01:01:47,020 --> 01:01:50,800
+and whether goroutines were ever properly scheduled and if that caused problems.
+
+1064
+01:01:51,430 --> 01:01:59,410
+And it is absolutely the case, that like Go and the goroutine runtime were sort of inspired by previous experience on plan9,
+
+1065
+01:01:59,650 --> 01:02:03,520
+there was actually a different language called Alef on an early version plan9
+
+1066
+01:02:03,670 --> 01:02:07,480
+that was compiled, it had channels, it had select,
+
+1067
+01:02:07,570 --> 01:02:10,870
+it had things we called tasks which were a little bit like goroutines,
+
+1068
+01:02:10,870 --> 01:02:14,710
+but it didn't have a garbage collector and that made things really annoying in a lot of cases,
+
+1069
+01:02:14,920 --> 01:02:17,140
+and also the way that tasks work,
+
+1070
+01:02:17,140 --> 01:02:18,940
+they were tied to a specific thread,
+
+1071
+01:02:18,940 --> 01:02:23,080
+so you might have three tasks in one thread and two tasks in another thread,
+
+1072
+01:02:23,600 --> 01:02:25,610
+and in the three tasks in the first thread,
+
+1073
+01:02:25,640 --> 01:02:27,680
+they only one ever ran at a time
+
+1074
+01:02:27,680 --> 01:02:30,350
+and they could only rescheduled during a channel operation
+
+1075
+01:02:30,500 --> 01:02:34,940
+and so you would write code where those three tasks were all operating on the same data structure,
+
+1076
+01:02:35,060 --> 01:02:38,120
+and you just knew because it was in your head when you wrote it.
+
+1077
+01:02:38,770 --> 01:02:43,150
+That you know it was okay for these two different tasks to be scribbling over the same data structure,
+
+1078
+01:02:43,150 --> 01:02:45,010
+because they could never be running at the same time.
+
+1079
+01:02:45,640 --> 01:02:50,320
+And, meanwhile in the other thread you've got the same situation going on with different data and different tasks
+
+1080
+01:02:50,650 --> 01:02:52,780
+and then you come back to the same program like six months later,
+
+1081
+01:02:52,780 --> 01:02:56,500
+you totally forget which task could write to different pieces of data
+
+1082
+01:02:56,650 --> 01:02:58,600
+and I'm sure that we had tons of races,
+
+1083
+01:02:58,600 --> 01:03:01,450
+I mean it was just it was a nice model for small programs
+
+1084
+01:03:01,450 --> 01:03:04,870
+and it was a terrible model for programming over a long period of time
+
+1085
+01:03:04,870 --> 01:03:07,330
+or having a big program that other people had to work on.
+
+1086
+01:03:07,960 --> 01:03:09,550
+So, so that was never the model for Go,
+
+1087
+01:03:09,550 --> 01:03:13,510
+the model for Go was always it's good to have these lightweight goroutines,
+
+1088
+01:03:13,510 --> 01:03:15,820
+but they're gonna all be running independently
+
+1089
+01:03:15,820 --> 01:03:17,860
+and if they're going to share anything they need to use locks,
+
+1090
+01:03:17,860 --> 01:03:21,820
+then they need to use channels to communicate and coordinate explicitly.
+
+1091
+01:03:22,750 --> 01:03:27,010
+And that that has definitely scaled a lot better than any of the plain line stuff ever did,
+
+1092
+01:03:27,550 --> 01:03:32,070
+you know sometimes people hear that goroutines are cooperatively scheduled
+
+1093
+01:03:32,070 --> 01:03:34,380
+and they they think you know something more like that,
+
+1094
+01:03:34,560 --> 01:03:40,800
+it's it's true that early on, the goroutines were not as preemptively scheduled as you would like,
+
+1095
+01:03:41,040 --> 01:03:43,020
+so in the very very early days,
+
+1096
+01:03:43,020 --> 01:03:45,480
+the only preemption points when you called into the runtime,
+
+1097
+01:03:45,660 --> 01:03:49,350
+shortly after that, the preemption points where any time you entered a function,
+
+1098
+01:03:50,640 --> 01:03:53,430
+but if you were in a tight loop for a very long time,
+
+1099
+01:03:53,430 --> 01:03:56,550
+that would never preempt and that would cause garbage collector delays,
+
+1100
+01:03:56,550 --> 01:03:58,800
+because the garbage collector need to stop all the goroutines
+
+1101
+01:03:58,950 --> 01:04:00,930
+and there be some goroutines stuck in a tight loop
+
+1102
+01:04:00,930 --> 01:04:02,550
+and it would take forever to finish the loop.
+
+1103
+01:04:03,100 --> 01:04:05,680
+And so actually in the last couple releases,
+
+1104
+01:04:05,680 --> 01:04:07,120
+we've finally started we figured out
+
+1105
+01:04:07,120 --> 01:04:11,050
+how to get a unique signals to deliver to threads in just the right way,
+
+1106
+01:04:11,170 --> 01:04:16,180
+so that and we can have the right bookkeeping to actually be able to use that as a preemption mechanism.
+
+1107
+01:04:16,700 --> 01:04:22,340
+And so now things are I think the preemption delays for garbage collection are actually bounded finally,
+
+1108
+01:04:22,370 --> 01:04:26,630
+but from the start, the model has been that you know they're running preemptively
+
+1109
+01:04:26,690 --> 01:04:29,030
+and they don't get control over when they get preempted.
+
+1110
+01:04:30,980 --> 01:04:32,660
+As a sort of following question,
+
+1111
+01:04:32,660 --> 01:04:39,350
+someone else asked where they can look in the source tree to learn more about goroutines and goroutine scheduler.
+
+1112
+01:04:39,620 --> 01:04:42,590
+And the answer is that, this is basically a little operating system,
+
+1113
+01:04:42,620 --> 01:04:45,890
+like it's a little operating system that sits on top of the other operating system,
+
+1114
+01:04:45,890 --> 01:04:48,590
+instead of on top of CPUs.
+
+1115
+01:04:49,100 --> 01:04:51,230
+And so the first thing to do is take 6.828,
+
+1116
+01:04:51,230 --> 01:04:55,880
+which is like I I mean I I worked on 6.828 and xv6
+
+1117
+01:04:56,060 --> 01:04:59,390
+like literally like the year or two before I went and did the Go runtime
+
+1118
+01:04:59,390 --> 01:05:01,910
+and so there's a huge amount of situate in the go runtime.
+
+1119
+01:05:02,400 --> 01:05:06,720
+And in the actual go runtime directory, there's a file called proc.go,
+
+1120
+01:05:06,720 --> 01:05:08,640
+which is you know proc stands process,
+
+1121
+01:05:08,640 --> 01:05:10,920
+because that's what it is in the operating systems
+
+1122
+01:05:11,340 --> 01:05:15,720
+and I would start there that's the file to start with and then sort of pull on strings.
+
+1123
+01:05:17,930 --> 01:05:21,350
+Someone asked about Python, sort of negative indexing,
+
+1124
+01:05:21,440 --> 01:05:23,090
+where you can write x minus one
+
+1125
+01:05:23,510 --> 01:05:26,330
+and that comes up a lot especially from Python programmers
+
+1126
+01:05:26,720 --> 01:05:30,740
+and and it seems like a really great idea you write these really nice elegant programs,
+
+1127
+01:05:30,740 --> 01:05:33,440
+where you want to get the last element, you just say x minus one.
+
+1128
+01:05:33,980 --> 01:05:36,740
+But the real problem is that you have x of i,
+
+1129
+01:05:36,860 --> 01:05:40,820
+and you have a loop that's like counting down from from you know n to zero
+
+1130
+01:05:40,880 --> 01:05:43,880
+and you have an off by one somewhere and now x of minus one
+
+1131
+01:05:43,880 --> 01:05:47,180
+instead of being x of i, when i is minus one,
+
+1132
+01:05:47,210 --> 01:05:50,870
+instead of being an error where you immediately say hey, there's a bug I need to find that,
+
+1133
+01:05:50,990 --> 01:05:54,230
+it just silently grabs the element off the other end of the array
+
+1134
+01:05:54,620 --> 01:05:57,530
+and that's where you know the sort of Python,
+
+1135
+01:05:58,610 --> 01:06:01,520
+you know, simplicity makes things worse
+
+1136
+01:06:01,880 --> 01:06:03,350
+and so that was why we left it out,
+
+1137
+01:06:03,350 --> 01:06:06,020
+because it was going to hide bugs too much, we bought.
+
+1138
+01:06:07,750 --> 01:06:13,810
+You know you could imagine something where you say like x of dollar minus one, len minus one, not line of x, but just len.
+
+1139
+01:06:14,440 --> 01:06:16,660
+But you know it seemed like too much of a special case
+
+1140
+01:06:16,660 --> 01:06:18,580
+and really it doesn't come up enough.
+
+1141
+01:06:20,430 --> 01:06:25,800
+Someone asked about you know what aspect of Go was hardest to implement.
+
+1142
+01:06:26,780 --> 01:06:29,150
+And honestly like a lot of this is not very hard,
+
+1143
+01:06:29,480 --> 01:06:32,840
+we've done most of this before, we've written operating systems
+
+1144
+01:06:32,840 --> 01:06:35,150
+and reading libraries and channel implementations,
+
+1145
+01:06:35,330 --> 01:06:37,730
+and so doing all that again was fairly straightforward,
+
+1146
+01:06:38,150 --> 01:06:40,760
+the hardest thing was probably the garbage collector.
+
+1147
+01:06:41,680 --> 01:06:44,350
+Go is unique among garbage collected languages
+
+1148
+01:06:44,350 --> 01:06:47,590
+and that it gives programmers a lot more control over memory layout,
+
+1149
+01:06:47,590 --> 01:06:50,890
+so if you want to have a structure with two different other structures inside it,
+
+1150
+01:06:51,010 --> 01:06:52,660
+that's just one big chunk of memory,
+
+1151
+01:06:52,780 --> 01:06:55,660
+it's not a struct with pointers to to other chunks of memory.
+
+1152
+01:06:56,330 --> 01:07:00,590
+And because of that, and you can take the address of the second field in struct and pass that around
+
+1153
+01:07:01,010 --> 01:07:03,770
+and that means the garbage collector has to be able to deal with a pointer
+
+1154
+01:07:03,920 --> 01:07:06,380
+that could point into the middle of an allocated object
+
+1155
+01:07:06,380 --> 01:07:09,320
+and that's just something that Java and Lisp and other things just don't do.
+
+1156
+01:07:10,360 --> 01:07:15,760
+And so that makes the garbage collector a lot more complicated in how it maintains its data structures.
+
+1157
+01:07:16,180 --> 01:07:19,570
+And we also knew from the start, that you really want low latency,
+
+1158
+01:07:19,570 --> 01:07:22,450
+because if you're handling network requests,
+
+1159
+01:07:22,450 --> 01:07:26,080
+you can't, you just pause for 200 milliseconds while
+
+1160
+01:07:26,080 --> 01:07:29,590
+and block all of those in progress request to do a garbage collection,
+
+1161
+01:07:29,590 --> 01:07:33,460
+it really needs to be you know low latency and not stop things
+
+1162
+01:07:33,460 --> 01:07:36,940
+and we thought that multi-core would be a good good opportunity there,
+
+1163
+01:07:36,940 --> 01:07:39,490
+because we could have the garbage collector doing one core
+
+1164
+01:07:39,640 --> 01:07:41,710
+and the Go program using the other cores
+
+1165
+01:07:41,710 --> 01:07:43,030
+and that might work really well
+
+1166
+01:07:43,030 --> 01:07:45,400
+and that actually did turn out to work really well,
+
+1167
+01:07:45,580 --> 01:07:48,670
+but it required hiring a real expert in garbage collection
+
+1168
+01:07:48,790 --> 01:07:53,200
+to like figure out how to do it, and make it work,
+
+1169
+01:07:53,290 --> 01:07:54,910
+but now it's really great.
+
+1170
+01:07:55,700 --> 01:07:57,470
+I I have a quick question,
+
+1171
+01:07:57,500 --> 01:08:00,950
+you said like if it's struct,
+
+1172
+01:08:01,280 --> 01:08:03,320
+like it's declared inside another struct,
+
+1173
+01:08:03,650 --> 01:08:06,080
+it actually is a big chunk of memory.
+
+1174
+01:08:06,260 --> 01:08:06,620
+Yeah.
+
+1175
+01:08:06,620 --> 01:08:08,900
+Why, why did you implement it like that,
+
+1176
+01:08:09,020 --> 01:08:10,310
+what's the reason behind that.
+
+1177
+01:08:11,210 --> 01:08:12,950
+Well, so there's a couple reasons,
+
+1178
+01:08:12,950 --> 01:08:15,470
+one is for a garbage collector, it's a service
+
+1179
+01:08:15,500 --> 01:08:19,610
+and the load on the garbage collector is proportional to the number of objects you allocate
+
+1180
+01:08:19,910 --> 01:08:22,430
+and so if you have a structure of five things in it,
+
+1181
+01:08:22,430 --> 01:08:23,900
+you can make that one allocation,
+
+1182
+01:08:23,960 --> 01:08:26,570
+that's a fifth of the load on the garbage collector
+
+1183
+01:08:26,570 --> 01:08:27,830
+and that turns out to be really important.
+
+1184
+01:08:28,450 --> 01:08:31,960
+But the other thing that's really important is cache locality right,
+
+1185
+01:08:31,960 --> 01:08:37,060
+like if you have the processor is pulling in chunks of memory in 64 byte chunks or whatever it is
+
+1186
+01:08:37,180 --> 01:08:41,050
+and it's much better reading memory that's altogether than reading memory that's scattered.
+
+1187
+01:08:41,710 --> 01:08:45,820
+And so you know we have a git server at Google called Gerrit,
+
+1188
+01:08:46,000 --> 01:08:47,380
+that is written in Java,
+
+1189
+01:08:47,410 --> 01:08:51,070
+and it was just starting at the time that Go was just coming out
+
+1190
+01:08:51,430 --> 01:08:54,970
+and we just missed like Gerrit being written and Go I think by a year,
+
+1191
+01:08:55,660 --> 01:08:58,480
+we talked to the guy who had written Gerrit
+
+1192
+01:08:58,630 --> 01:09:03,880
+and he said that one of the biggest problems in Gerrit was like you have only shot one hashes
+
+1193
+01:09:03,940 --> 01:09:06,250
+and just having the idea of twenty bytes.
+
+1194
+01:09:06,540 --> 01:09:08,070
+It is impossible to have in Java,
+
+1195
+01:09:08,100 --> 01:09:09,990
+you can't just have twenty bytes in struct,
+
+1196
+01:09:10,260 --> 01:09:12,270
+you have to have a pointer to an object
+
+1197
+01:09:12,450 --> 01:09:16,080
+and the object like you, you can't even have twenty bytes in the object,
+
+1198
+01:09:16,080 --> 01:09:19,680
+you have to declare five different insert something like that to get twenty bytes
+
+1199
+01:09:20,040 --> 01:09:22,170
+and there's just no good way to do it
+
+1200
+01:09:22,170 --> 01:09:25,080
+and it's just the overhead of just a simple thing like that,
+
+1201
+01:09:25,320 --> 01:09:26,430
+really adds up.
+
+1202
+01:09:27,080 --> 01:09:31,550
+And so you know we thought giving programmers control over memory was really important.
+
+1203
+01:09:35,180 --> 01:09:38,570
+So, another question was was about automatic parallelization,
+
+1204
+01:09:38,570 --> 01:09:40,100
+like for loops and things like that,
+
+1205
+01:09:40,130 --> 01:09:41,480
+we don't do anything like that,
+
+1206
+01:09:41,480 --> 01:09:42,770
+and the standard Go tool chain,
+
+1207
+01:09:42,890 --> 01:09:47,060
+there are go compilers for Go frontend for GCC and llvm
+
+1208
+01:09:47,390 --> 01:09:50,900
+and so to the extent that those do those kind of loop optimization in C,
+
+1209
+01:09:50,930 --> 01:09:54,170
+I think you know we get the same from the Go friends for those,
+
+1210
+01:09:54,350 --> 01:09:58,520
+but it's not the kind of parallelization that we typically need at Google,
+
+1211
+01:09:58,550 --> 01:10:02,540
+it's it's more, you know lots of servers running different things
+
+1212
+01:10:02,540 --> 01:10:07,500
+and and so you know that sort of you know, like the sort of big vector math kind of stuff,
+
+1213
+01:10:07,500 --> 01:10:08,400
+doesn't come up as much,
+
+1214
+01:10:08,400 --> 01:10:10,920
+so it just hasn't been that important to us.
+
+1215
+01:10:12,140 --> 01:10:14,840
+And then the last question I have right now,
+
+1216
+01:10:14,840 --> 01:10:19,370
+is that someone asked about how do you decide when to acquire release locks
+
+1217
+01:10:19,370 --> 01:10:20,720
+and why don't you have re-entered locks.
+
+1218
+01:10:20,960 --> 01:10:22,880
+And for that I want to go back a slide,
+
+1219
+01:10:22,880 --> 01:10:26,140
+let me see, yeah here,
+
+1220
+01:10:26,410 --> 01:10:32,890
+so like during the lecture, I said things like the lock, like new protects the map or it protects the data,
+
+1221
+01:10:33,220 --> 01:10:38,650
+but what we really mean at that point is that we're saying that a lot protects some collection of invariance
+
+1222
+01:10:38,680 --> 01:10:40,900
+that apply to the data that are true of the data
+
+1223
+01:10:41,260 --> 01:10:46,420
+and the reason we have a lock is to protect the operations that depend on the invariance
+
+1224
+01:10:46,420 --> 01:10:50,140
+and that sometimes temporarily invalidate the invariance from each other.
+
+1225
+01:10:50,860 --> 01:10:57,100
+And so when you call lock, what you're saying is I need to make use of the invariance that this lock protects
+
+1226
+01:10:57,400 --> 01:11:00,250
+and when you call unlock what you're saying is I don't need them anymore,
+
+1227
+01:11:00,280 --> 01:11:03,010
+and if I temporarily invalidated them,
+
+1228
+01:11:03,130 --> 01:11:07,930
+I've put them back, so that the next person who calls lock will see correct invariance.
+
+1229
+01:11:08,980 --> 01:11:14,650
+So in the Mux, you know we want the invariant that each registered pending channel gets at most one reply.
+
+1230
+01:11:15,700 --> 01:11:18,130
+And so to do that when we take done out of the map,
+
+1231
+01:11:18,160 --> 01:11:21,250
+we also delete it from the map before we unlock it,
+
+1232
+01:11:21,520 --> 01:11:26,050
+and if there was some separate cancel operation that was directly manipulating the map as well,
+
+1233
+01:11:26,320 --> 01:11:31,390
+it could lock the, it could call lock it could take the thing out call unlock.
+
+1234
+01:11:32,110 --> 01:11:34,510
+And then, if it actually found one it would know,
+
+1235
+01:11:34,600 --> 01:11:36,670
+no one is going to send to that anymore,
+
+1236
+01:11:36,670 --> 01:11:37,960
+because I took it out,
+
+1237
+01:11:38,170 --> 01:11:47,080
+whereas if you know we had written this code to have an extra unlock and relock between the done equals pending of tag and the delete,
+
+1238
+01:11:47,230 --> 01:11:50,890
+then you wouldn't have that protection of the invariance anymore,
+
+1239
+01:11:50,890 --> 01:11:54,190
+because you would have put things back, you've unlocked and relocked,
+
+1240
+01:11:54,190 --> 01:11:55,870
+while the invariance were broken.
+
+1241
+01:11:56,420 --> 01:12:01,970
+And so it's really important to correctness to think about locks is protecting invariance.
+
+1242
+01:12:02,860 --> 01:12:05,410
+And and so if you have reentrant locks,
+
+1243
+01:12:05,900 --> 01:12:07,880
+all that goes out the window,
+
+1244
+01:12:07,910 --> 01:12:11,270
+without the reentrant lock, when you call lock on the next line,
+
+1245
+01:12:11,270 --> 01:12:15,440
+you know, okay, the lock just got acquired all the environments are true,
+
+1246
+01:12:16,100 --> 01:12:17,390
+if you have a reentrant lock,
+
+1247
+01:12:17,420 --> 01:12:24,380
+all you know is well all the variants were true for whoever locked this the first time we might be way up here on my call stack.
+
+1248
+01:12:24,900 --> 01:12:26,280
+And you really know nothing,
+
+1249
+01:12:26,820 --> 01:12:30,720
+and so that makes it a lot harder to reason about what can you assume
+
+1250
+01:12:31,500 --> 01:12:35,190
+and so I think the reentrant locks are really unfortunate part of Java's legacy.
+
+1251
+01:12:35,770 --> 01:12:37,720
+Another big problem with reentrant locks is that
+
+1252
+01:12:37,720 --> 01:12:42,640
+if you have code where you know you call something and it is depending on a reentrant lock
+
+1253
+01:12:42,670 --> 01:12:45,100
+for something where you've acquired the lock up above.
+
+1254
+01:12:45,940 --> 01:12:47,980
+And then, at some point you say you know what,
+
+1255
+01:12:48,010 --> 01:12:50,680
+actually I want to have a timeout on this or I want to do it,
+
+1256
+01:12:50,680 --> 01:12:53,590
+you know in some other goroutine while I wait for something else,
+
+1257
+01:12:53,710 --> 01:12:55,960
+when you move that code to a different goroutine,
+
+1258
+01:12:56,140 --> 01:12:58,810
+reentrant always means locked on the same stack,
+
+1259
+01:12:58,810 --> 01:13:01,150
+that's the only plausible thing it could possibly mean
+
+1260
+01:13:01,540 --> 01:13:06,340
+and so if you move the code that was doing the reentrant lock onto a different stack,
+
+1261
+01:13:06,800 --> 01:13:07,700
+then it's going to deadlock,
+
+1262
+01:13:07,700 --> 01:13:10,910
+because deadlock is now actually going to be a real lock acquire
+
+1263
+01:13:10,910 --> 01:13:13,280
+and it's going to be waiting for you to let Go of the lock,
+
+1264
+01:13:13,280 --> 01:13:14,090
+you're not going to let Go of it,
+
+1265
+01:13:14,090 --> 01:13:16,280
+because you think that code needs to finish running.
+
+1266
+01:13:16,670 --> 01:13:21,260
+So it's actually completely fundamentally incompatible with restructurings where you take code
+
+1267
+01:13:21,260 --> 01:13:23,570
+and run it in different threads or different goroutines.
+
+1268
+01:13:24,160 --> 01:13:28,240
+And so anyway, my advice, there is to just think about locks protecting variants
+
+1269
+01:13:28,480 --> 01:13:31,450
+and then you know just avoid depending on reentrant locks,
+
+1270
+01:13:31,450 --> 01:13:35,320
+it it really just doesn't scale well to real programs.
+
+1271
+01:13:35,620 --> 01:13:37,150
+So I'll put this list back up,
+
+1272
+01:13:37,180 --> 01:13:40,330
+actually we have that up long enough I can try to figure out how to stop presenting.
+
+1273
+01:13:41,060 --> 01:13:43,340
+And then I can take a few more questions.
+
+1274
+01:13:46,560 --> 01:13:47,400
+Anyone has.
+
+1275
+01:13:47,880 --> 01:13:49,260
+I had a question,
+
+1276
+01:13:49,770 --> 01:13:55,230
+I mean I I think coming from Python gets very useful right,
+
+1277
+01:13:55,230 --> 01:14:02,820
+it's very common to use like standard functional operations like map or filter stuff like that,
+
+1278
+01:14:02,820 --> 01:14:06,070
+like, like list comprehension,
+
+1279
+01:14:06,490 --> 01:14:10,480
+and when you know I switched over to Go and started programming,
+
+1280
+01:14:10,630 --> 01:14:15,610
+it's used, I I looked it up and people say you shouldn't do this, do this with Go.
+
+1281
+01:14:15,640 --> 01:14:16,000
+Right.
+
+1282
+01:14:16,000 --> 01:14:17,020
+I was wondering why.
+
+1283
+01:14:17,750 --> 01:14:21,020
+Um, well, I mean one is that you can't do it the other way,
+
+1284
+01:14:21,020 --> 01:14:22,490
+so you might just do the way you can do it,
+
+1285
+01:14:23,540 --> 01:14:26,270
+but a bigger a bigger issue is that.
+
+1286
+01:14:27,580 --> 01:14:29,680
+Well, there's, that one answer.
+
+1287
+01:14:29,680 --> 01:14:30,940
+The other answer is that,
+
+1288
+01:14:31,390 --> 01:14:33,670
+you know if you do it that way,
+
+1289
+01:14:33,670 --> 01:14:35,560
+you actually end up creating a lot of garbage,
+
+1290
+01:14:35,590 --> 01:14:38,590
+and if you care about not putting too much load on the garbage collector,
+
+1291
+01:14:38,590 --> 01:14:40,990
+that kind of is another way to avoid that,
+
+1292
+01:14:41,590 --> 01:14:45,970
+you know, so if you've got a map and then a filter and then another map,
+
+1293
+01:14:45,970 --> 01:14:49,180
+like you can make that one loop over the data instead of three loops over the data,
+
+1294
+01:14:49,180 --> 01:14:51,100
+each of which generate a new piece of garbage.
+
+1295
+01:14:53,390 --> 01:14:55,520
+But you know now that we have generics coming,
+
+1296
+01:14:55,970 --> 01:14:57,800
+you'll actually be able to write those functions,
+
+1297
+01:14:57,800 --> 01:15:00,950
+like you couldn't actually write what the type signature of those functions were before,
+
+1298
+01:15:00,980 --> 01:15:02,630
+and so you literally couldn't write them.
+
+1299
+01:15:03,200 --> 01:15:06,620
+And python gets away with this, because there's no static types.
+
+1300
+01:15:06,710 --> 01:15:08,570
+But now we're actually going to have a way to do that
+
+1301
+01:15:08,570 --> 01:15:10,850
+and I totally expect that once new generics go in there,
+
+1302
+01:15:10,850 --> 01:15:13,160
+will be a package slices and if you import slices,
+
+1303
+01:15:13,160 --> 01:15:18,380
+you can do slices.map and slices.filter and slices.unique or something like that
+
+1304
+01:15:18,380 --> 01:15:20,000
+and I think those will all happen,
+
+1305
+01:15:20,150 --> 01:15:23,000
+and you know if if that's the right thing, then that's great.
+
+1306
+01:15:25,900 --> 01:15:26,350
+Thanks.
+
+1307
+01:15:26,620 --> 01:15:27,280
+Sure.
+
+1308
+01:15:28,820 --> 01:15:31,970
+I have, that one of the hints that you had,
+
+1309
+01:15:32,390 --> 01:15:38,870
+it was about running goroutines that are independent like concurrently,
+
+1310
+01:15:40,230 --> 01:15:43,860
+and some of the examples of the code, I think I could understand,
+
+1311
+01:15:44,660 --> 01:15:51,740
+it seems to me like you can just like call the function in the same thread rather than a different thread.
+
+1312
+01:15:52,340 --> 01:15:55,520
+And I was not sure why you would call it in a different thread.
+
+1313
+01:15:56,290 --> 01:16:01,130
+So, usually it's because you want them to proceed independently,
+
+1314
+01:16:01,250 --> 01:16:04,820
+so so in one of the one of the examples, we had,
+
+1315
+01:16:04,820 --> 01:16:09,680
+like the there was a loop that was sending you know tasks to the work queue,
+
+1316
+01:16:10,560 --> 01:16:13,740
+but there was the servers were running in different goroutines
+
+1317
+01:16:13,740 --> 01:16:15,750
+and reading from the work queue and doing work,
+
+1318
+01:16:15,900 --> 01:16:16,980
+but then when they were done,
+
+1319
+01:16:16,980 --> 01:16:20,460
+they would send a you know hey I'm done now to the done channel,
+
+1320
+01:16:20,790 --> 01:16:25,650
+but ascending Go doesn't complete until the receive actually matches with it.
+
+1321
+01:16:26,150 --> 01:16:28,910
+And so if the thing that's sending on the work queue
+
+1322
+01:16:29,240 --> 01:16:31,550
+is not going to start receiving from the done channel
+
+1323
+01:16:31,550 --> 01:16:33,710
+until it's done sending to all the work queues
+
+1324
+01:16:34,070 --> 01:16:36,890
+are sending all the work in all the tasks in the work queue,
+
+1325
+01:16:37,130 --> 01:16:38,450
+then now you have a deadlock,
+
+1326
+01:16:38,450 --> 01:16:44,150
+because the main thread, the main goroutine is trying to send new work to the servers,
+
+1327
+01:16:44,180 --> 01:16:48,110
+the servers are not taking new work, they're trying to tell the main thread that they're done,
+
+1328
+01:16:48,230 --> 01:16:51,980
+but the main thread not going to actually start at like reading from the done channel
+
+1329
+01:16:52,160 --> 01:16:54,110
+until it finishes giving out all the work
+
+1330
+01:16:54,110 --> 01:16:57,710
+and so there's just staring at each other, waiting for different things to happen,
+
+1331
+01:16:57,830 --> 01:17:03,320
+whereas if we take that loop, that if we just put the little goroutine around the loop that's sending the work,
+
+1332
+01:17:03,380 --> 01:17:05,180
+then that can go somewhere else,
+
+1333
+01:17:05,210 --> 01:17:06,590
+and then it can proceed independently,
+
+1334
+01:17:06,590 --> 01:17:10,910
+and while it's stuck, waiting for the servers to to take more work,
+
+1335
+01:17:10,970 --> 01:17:16,910
+the servers are stuck waiting for the main goroutine to acknowledge that it finished some work
+
+1336
+01:17:17,060 --> 01:17:19,670
+and now the main goroutine actually gets down to the loop,
+
+1337
+01:17:19,730 --> 01:17:24,800
+that pulls it finishes that actually acknowledges that finish the work that reads from the done channel
+
+1338
+01:17:25,070 --> 01:17:27,150
+and so it's just a way to separate out,
+
+1339
+01:17:27,150 --> 01:17:29,280
+you know these are two different things that logically,
+
+1340
+01:17:29,340 --> 01:17:31,470
+they didn't have to happen one after the other
+
+1341
+01:17:31,650 --> 01:17:34,530
+and because they were happening one after the other that caused a deadlock
+
+1342
+01:17:34,530 --> 01:17:37,350
+and by taking one out and moving, it let it run independently
+
+1343
+01:17:38,340 --> 01:17:39,840
+that removes the deadlock.
+
+1344
+01:17:41,760 --> 01:17:42,900
+Thank you so much.
+
+1345
+01:17:42,930 --> 01:17:43,530
+Sure.
+
+1346
+01:17:44,460 --> 01:17:47,640
+Could you talk a little bit about how Go's race detector is implemented?
+
+1347
+01:17:48,250 --> 01:17:50,170
+Sure, it is the llvm race detector,
+
+1348
+01:17:50,470 --> 01:17:53,020
+and so that probably doesn't help,
+
+1349
+01:17:53,020 --> 01:18:02,430
+but it is exactly the thing that llvm calls thread sanitizer. And, and so we actually have a little binary blob that we link against,
+
+1350
+01:18:02,460 --> 01:18:04,500
+because we don't want to depend on all of llvm,
+
+1351
+01:18:04,650 --> 01:18:06,510
+but it's the llvm race detector
+
+1352
+01:18:06,690 --> 01:18:11,310
+and the way the llvm race detector works is that it allocates a ton of extra virtual memory
+
+1353
+01:18:11,580 --> 01:18:15,480
+and then based on the address of of the thing being read or written,
+
+1354
+01:18:15,630 --> 01:18:18,480
+it has this other you know spot in virtual memory
+
+1355
+01:18:18,480 --> 01:18:22,830
+where it records information about like the last thread,
+
+1356
+01:18:22,950 --> 01:18:25,860
+you know it thinks of threads, but they're goroutines,
+
+1357
+01:18:25,920 --> 01:18:28,230
+has where the last thread that did a read or write
+
+1358
+01:18:28,320 --> 01:18:31,440
+and then also every time a synchronizing event happens,
+
+1359
+01:18:31,440 --> 01:18:34,200
+like you know a communication from one goroutine to another,
+
+1360
+01:18:34,690 --> 01:18:39,580
+that counts as establishing it happens before edge between two different goroutines,
+
+1361
+01:18:39,700 --> 01:18:43,690
+and if you ever get something where you have a read or write
+
+1362
+01:18:43,960 --> 01:18:46,210
+and they're not properly sequence right,
+
+1363
+01:18:46,210 --> 01:18:51,970
+like so if you have a read and then it happens before something in another goroutine which then later does the write, that's fine,
+
+1364
+01:18:52,180 --> 01:18:58,330
+but if you have a read to write and there's no happens before sequence that connects them, then that's a race,
+
+1365
+01:18:58,360 --> 01:19:04,360
+and it actually you know has some pretty clever ways to dynamically figure out quickly,
+
+1366
+01:19:04,360 --> 01:19:09,490
+you know, did this read happen, is there happens before path between this read and write as they happen
+
+1367
+01:19:09,670 --> 01:19:12,820
+and it slows down the program by maybe 10x,
+
+1368
+01:19:12,880 --> 01:19:16,990
+but you know if you just divert a small amount of traffic there, that's probably fine,
+
+1369
+01:19:17,170 --> 01:19:19,300
+if its for testing, that's also probably fine,
+
+1370
+01:19:19,570 --> 01:19:22,240
+it's way better than not finding out about the races,
+
+1371
+01:19:22,270 --> 01:19:23,290
+so it's totally worth it.
+
+1372
+01:19:23,470 --> 01:19:26,650
+And honestly ten or twenty x is fantastic,
+
+1373
+01:19:26,650 --> 01:19:30,100
+the original thread sanitize or was more like a hundred a thousand x,
+
+1374
+01:19:30,100 --> 01:19:31,390
+and that was not good enough.
+
+1375
+01:19:31,960 --> 01:19:34,600
+Well, what's the race detector called, llvm?
+
+1376
+01:19:34,750 --> 01:19:37,900
+It's called thread sanitizer, but it's part of llvm,
+
+1377
+01:19:37,930 --> 01:19:40,330
+which is the clang C compiler,
+
+1378
+01:19:40,360 --> 01:19:43,360
+the one that almost everyone uses now,
+
+1379
+01:19:43,870 --> 01:19:46,840
+is part of the llvm project.
+
+1380
+01:19:54,740 --> 01:19:57,380
+Can you talk about slices and the design choices,
+
+1381
+01:19:57,380 --> 01:19:59,360
+having them as views on arrays,
+
+1382
+01:19:59,540 --> 01:20:01,130
+which like confused me at first.
+
+1383
+01:20:01,220 --> 01:20:03,740
+Yeah, it is a little confusing at first.
+
+1384
+01:20:05,420 --> 01:20:09,200
+The main thing is that you want it to be efficient to kind of walk through an array
+
+1385
+01:20:09,200 --> 01:20:13,760
+or like if you can quick sort or merge sort or something where you have an array of things
+
+1386
+01:20:13,760 --> 01:20:16,670
+and now you want to say well now sort this half and sort the other half,
+
+1387
+01:20:16,760 --> 01:20:22,190
+you want to be able to efficiently say like here, this is half of the previous one like you know sort that
+
+1388
+01:20:22,400 --> 01:20:25,460
+and so, in C the way you do that is,
+
+1389
+01:20:25,460 --> 01:20:29,480
+you just pass in you know the pointer to the first element and the number of elements
+
+1390
+01:20:29,630 --> 01:20:31,520
+and that's basically all the slices
+
+1391
+01:20:31,700 --> 01:20:36,890
+and then the other pattern that comes up a lot when you're trying to be efficient with arrays
+
+1392
+01:20:36,920 --> 01:20:38,300
+is you have to grow them
+
+1393
+01:20:38,600 --> 01:20:43,130
+and and so you don't want to recall reallocation every single new element,
+
+1394
+01:20:43,130 --> 01:20:44,330
+you want to amortize that
+
+1395
+01:20:44,570 --> 01:20:48,170
+and so the way you do that in C again is that
+
+1396
+01:20:48,170 --> 01:20:50,810
+you have a base pointer, you have the length that you're using right now
+
+1397
+01:20:50,810 --> 01:20:52,190
+and you have the length that you allocated
+
+1398
+01:20:52,400 --> 01:20:57,200
+and then to add one, you check and see if the length is bigger than the amount you allocate,
+
+1399
+01:20:57,200 --> 01:20:59,990
+if so you reallocate and otherwise you just keep bumping it forward
+
+1400
+01:21:00,260 --> 01:21:03,710
+and and slices are really just an encoding of those idioms,
+
+1401
+01:21:03,770 --> 01:21:06,920
+because those are the most efficient way to manage the memory.
+
+1402
+01:21:07,280 --> 01:21:11,870
+And so in any kind of like C++ vector or something like that,
+
+1403
+01:21:11,900 --> 01:21:13,730
+that's what's going on underneath,
+
+1404
+01:21:13,820 --> 01:21:18,200
+but it makes it a lot harder to like the C++ vector,
+
+1405
+01:21:18,230 --> 01:21:20,060
+because of ownership reasons,
+
+1406
+01:21:20,120 --> 01:21:22,550
+the vector is tied to the actual underlying memory,
+
+1407
+01:21:22,550 --> 01:21:25,010
+it's a lot harder to get like a sub vector,
+
+1408
+01:21:25,010 --> 01:21:27,980
+that's just the view onto the second half for merge sort.
+
+1409
+01:21:28,870 --> 01:21:30,730
+So that's sort of the idea
+
+1410
+01:21:30,730 --> 01:21:34,510
+is that just like there are all these patterns for accessing memory officially that came from C
+
+1411
+01:21:34,900 --> 01:21:39,570
+and we tried to make them fit into Go in an idiomatic way, in a safe way.
+
+1412
+01:21:42,490 --> 01:21:47,890
+Can you talk about how you decided to implement the Go like remote module system,
+
+1413
+01:21:47,890 --> 01:21:50,500
+where you import directly from a url, which is like.
+
+1414
+01:21:50,500 --> 01:21:53,920
+Yeah, I mean I just didn't want to run a service
+
+1415
+01:21:53,920 --> 01:21:57,710
+and like like you know a lot of the things like ruby gems
+
+1416
+01:21:57,710 --> 01:22:02,090
+and those were not as for at the front of my mind at the time,
+
+1417
+01:22:02,090 --> 01:22:03,290
+just because they were newer,
+
+1418
+01:22:03,380 --> 01:22:05,990
+but I had used Perl for a while and like CPAN
+
+1419
+01:22:06,230 --> 01:22:08,060
+and I just thought it was insane
+
+1420
+01:22:08,060 --> 01:22:11,330
+that like everyone was fighting over these short names like db,
+
+1421
+01:22:11,480 --> 01:22:16,220
+you know there probably shouldn't be an argument over who gets to make the db package.
+
+1422
+01:22:18,070 --> 01:22:21,160
+And so putting domain names in the front, seemed like a good way to decentralize it
+
+1423
+01:22:21,760 --> 01:22:24,160
+and it was also a good way for us not to run any server,
+
+1424
+01:22:24,160 --> 01:22:27,310
+because you know we could just say well we'll recognize the hostname
+
+1425
+01:22:27,310 --> 01:22:31,390
+and then Go grab it from source control, from someone else's server,
+
+1426
+01:22:31,420 --> 01:22:33,820
+and that turned out to be a really great idea I think,
+
+1427
+01:22:34,300 --> 01:22:39,100
+because we just don't have that kind of same infrastructure, that other things depend on.
+
+1428
+01:22:40,190 --> 01:22:43,010
+But in the Java world, it's actually really problematic,
+
+1429
+01:22:43,010 --> 01:22:46,160
+there are multiple, there's no sort of standard registry,
+
+1430
+01:22:46,160 --> 01:22:47,720
+but they all use these short names
+
+1431
+01:22:47,840 --> 01:22:53,120
+and so like maven can be configured to build from multiple different registries
+
+1432
+01:22:53,480 --> 01:22:56,330
+and if you're an open-source software package provider,
+
+1433
+01:22:56,330 --> 01:22:59,810
+you actually have to go around and be sure that you upload it to all the different registries,
+
+1434
+01:22:59,900 --> 01:23:02,690
+because if you miss one and it becomes popular,
+
+1435
+01:23:02,690 --> 01:23:04,760
+someone else will upload different code to that one
+
+1436
+01:23:05,150 --> 01:23:08,990
+and then like maven actually just takes whichever one comes back first,
+
+1437
+01:23:08,990 --> 01:23:11,540
+it just sends a request to all of them and whatever comes back first,
+
+1438
+01:23:11,540 --> 01:23:14,660
+so you know if someone wants to make a malicious copy of your package,
+
+1439
+01:23:14,660 --> 01:23:17,720
+always do is find some register other people use that you forgot to upload it to
+
+1440
+01:23:17,750 --> 01:23:21,350
+and like you know they get to win the race sometimes,
+
+1441
+01:23:21,410 --> 01:23:27,740
+so it's a real problem, I think having domain there really helps split up the ownership in a really important way.
+
+1442
+01:23:29,110 --> 01:23:29,560
+Thank you. Sure.
+
+1443
+01:23:34,920 --> 01:23:37,890
+What the, maybe take a quick pause here,
+
+1444
+01:23:38,070 --> 01:23:39,510
+most people that have to go can go,
+
+1445
+01:23:39,510 --> 01:23:44,190
+I'm sure Russ is willing to stick around for a bit longer and answer any questions,
+
+1446
+01:23:44,190 --> 01:23:47,610
+but I do want to thank Russ for giving this lecture,
+
+1447
+01:23:47,730 --> 01:23:52,930
+hopefully this will help you running more good Go programs, these patterns
+
+1448
+01:23:52,930 --> 01:23:54,910
+and so thank you Russ.
+
+1449
+01:23:55,890 --> 01:23:57,180
+You're welcome, it's nice to be here.
+
+1450
+01:24:00,180 --> 01:24:02,280
+And then more questions, feel free to ask questions.
+
+1451
+01:24:02,640 --> 01:24:03,060
+Yeah.
+
+1452
+01:24:03,780 --> 01:24:05,910
+Oh just a little logistical thing,
+
+1453
+01:24:06,240 --> 01:24:12,420
+the slides that are on the 6.824 website are not exactly the same as Russ's slides.
+
+1454
+01:24:12,450 --> 01:24:15,540
+I'll get Franz a new PDF.
+
+1455
+01:24:18,340 --> 01:24:25,650
+A more general question about when is writing a new language, the like the best solution to a problem.
+
+1456
+01:24:25,920 --> 01:24:28,620
+That's a great question, it's almost never the best solution.
+
+1457
+01:24:30,340 --> 01:24:34,300
+But you know at the time we had just an enormous number of programmers
+
+1458
+01:24:34,300 --> 01:24:36,670
+like thousands of programmers working in one codebase
+
+1459
+01:24:36,940 --> 01:24:39,700
+and the compilations were just taking forever,
+
+1460
+01:24:39,730 --> 01:24:45,430
+because C++ was just not meant for efficient incremental compilation.
+
+1461
+01:24:46,030 --> 01:24:52,510
+And so it, and furthermore at the time like threading libraries were really awful
+
+1462
+01:24:52,510 --> 01:24:53,740
+like people just didn't use threads,
+
+1463
+01:24:53,740 --> 01:24:56,740
+I remember like one of the first days I was at MIT and talking to Robert
+
+1464
+01:24:56,890 --> 01:24:59,920
+and Robert said to me, like in 2001 he said to me,
+
+1465
+01:24:59,920 --> 01:25:01,930
+like we don't use threads here, because threads are slow.
+
+1466
+01:25:02,350 --> 01:25:04,360
+And and that was like totally normal,
+
+1467
+01:25:04,360 --> 01:25:07,120
+that was just the way the world at the time.
+
+1468
+01:25:07,960 --> 01:25:10,270
+And at Google we're having a lot of trouble,
+
+1469
+01:25:10,330 --> 01:25:13,660
+because it was all event based little callbacks and C++
+
+1470
+01:25:13,840 --> 01:25:18,040
+and there were these multi-core machines and we actually didn't know how to get things to work on them,
+
+1471
+01:25:18,040 --> 01:25:21,580
+because like Linux threads were not something you could rely on to work
+
+1472
+01:25:22,030 --> 01:25:25,000
+and so we ended up like if you had a four core machine,
+
+1473
+01:25:25,000 --> 01:25:28,510
+you just run four different process in completely independent processes of the web server
+
+1474
+01:25:28,510 --> 01:25:31,210
+and just treat it as like four machines,
+
+1475
+01:25:31,480 --> 01:25:33,580
+and that was clearly not very efficient,
+
+1476
+01:25:33,610 --> 01:25:37,030
+so there were a lot of good reasons to try something.
+
+1477
+01:25:38,900 --> 01:25:42,530
+But you know it's a huge amount of work to get to the point where Go is today
+
+1478
+01:25:42,530 --> 01:25:46,370
+and I think that, so much is not the language right,
+
+1479
+01:25:46,370 --> 01:25:50,930
+there were important things that we made in the language that enabled other considerations,
+
+1480
+01:25:51,050 --> 01:25:54,380
+but so much of the successful languages,
+
+1481
+01:25:54,380 --> 01:25:57,830
+the ecosystem that built up around it and the tooling that we built in the Go command,
+
+1482
+01:25:57,830 --> 01:25:59,870
+and like all these like not the language things.
+
+1483
+01:25:59,870 --> 01:26:04,580
+So, you know primary language a people who are focused on the language itself,
+
+1484
+01:26:04,880 --> 01:26:07,460
+I think sometimes get distracted by all the stuff around,
+
+1485
+01:26:07,460 --> 01:26:08,900
+like they miss all the stuff around it.
+
+1486
+01:26:15,250 --> 01:26:17,230
+Oh, can I ask a lot from that.
+
+1487
+01:26:17,440 --> 01:26:18,040
+Yeah.
+
+1488
+01:26:18,250 --> 01:26:21,580
+I was wondering how I was working on Go different now,
+
+1489
+01:26:21,580 --> 01:26:24,370
+since it's more mature than it was before.
+
+1490
+01:26:26,050 --> 01:26:28,510
+Oh, that's a great question,
+
+1491
+01:26:28,780 --> 01:26:31,810
+you know in the early days, it was so easy to make changes
+
+1492
+01:26:31,840 --> 01:26:33,670
+and now it's really hard to make changes,
+
+1493
+01:26:33,700 --> 01:26:35,740
+I think that's the number one thing.
+
+1494
+01:26:36,500 --> 01:26:41,300
+You know, in the early days, like everything was in one source code repository,
+
+1495
+01:26:41,300 --> 01:26:43,820
+literally all the Go code in the world was one source code repository,
+
+1496
+01:26:43,820 --> 01:26:45,770
+and so there were days where we changed the syntax,
+
+1497
+01:26:45,770 --> 01:26:48,800
+used to have a star before chan everytime you set a channel,
+
+1498
+01:26:48,800 --> 01:26:50,420
+because it was a pointer underneath,
+
+1499
+01:26:50,420 --> 01:26:51,920
+and it was all kind of exposed,
+
+1500
+01:26:51,920 --> 01:26:54,080
+so you'd always say star chan int instead of chan int
+
+1501
+01:26:54,470 --> 01:26:55,940
+and similarly for maps
+
+1502
+01:26:55,940 --> 01:26:58,250
+and at some point we realize like this is dumb,
+
+1503
+01:26:58,250 --> 01:27:00,230
+like you have to say the star, let's just take it out
+
+1504
+01:27:00,680 --> 01:27:03,320
+and so like we made the change to the compiler
+
+1505
+01:27:03,320 --> 01:27:07,610
+and I opened up literally like the couple hundred Go source files in the world in my editor
+
+1506
+01:27:07,610 --> 01:27:10,200
+and like the entire team stood behind me
+
+1507
+01:27:10,200 --> 01:27:13,560
+and I typed some regular expressions and we looked at the effect on the files,
+
+1508
+01:27:13,560 --> 01:27:16,530
+yep, that looks right, save it, you know compile it, we're done
+
+1509
+01:27:17,040 --> 01:27:20,850
+and like today you know we can't make backwards incompatible changes at all.
+
+1510
+01:27:21,960 --> 01:27:24,360
+And even making new changes like it.
+
+1511
+01:27:25,320 --> 01:27:26,760
+It affects a lot of people
+
+1512
+01:27:26,790 --> 01:27:30,750
+and so, you know you sort of propose something
+
+1513
+01:27:30,750 --> 01:27:32,970
+and you know put all this won't work for me
+
+1514
+01:27:32,970 --> 01:27:34,650
+and you try to adjust that maybe.
+
+1515
+01:27:35,190 --> 01:27:40,050
+It's a lot harder we estimate there's at least a million, maybe two million Go programmers in the world
+
+1516
+01:27:40,050 --> 01:27:43,650
+and is very different from when they were four or five.
+
+1517
+01:27:51,830 --> 01:27:53,210
+Not sure if this is a valid question,
+
+1518
+01:27:53,210 --> 01:27:57,050
+but what languages Go written, is written in Go also or no.
+
+1519
+01:27:57,500 --> 01:28:01,250
+Now it is, now it is, the original compiler runtime write written in C,
+
+1520
+01:28:01,400 --> 01:28:03,410
+but a few years ago we went through a big,
+
+1521
+01:28:03,950 --> 01:28:07,040
+we actually wrote a program to translate C to Go,
+
+1522
+01:28:07,250 --> 01:28:09,830
+and it only worked for our C code, but still was good enough.
+
+1523
+01:28:10,040 --> 01:28:14,030
+So that we wouldn't lose all the encoded knowledge in that code,
+
+1524
+01:28:14,090 --> 01:28:16,370
+about why things were the way they were and how things work,
+
+1525
+01:28:16,370 --> 01:28:17,570
+so we've got to start from scratch,
+
+1526
+01:28:17,660 --> 01:28:20,780
+but now it's all written in Go and a little bit of assembly.
+
+1527
+01:28:21,160 --> 01:28:24,010
+And that means that people can,
+
+1528
+01:28:24,010 --> 01:28:27,640
+you know people who know Go can help on the Go project,
+
+1529
+01:28:27,640 --> 01:28:30,880
+whereas before like if you wanted to work on the compiler or the runtime,
+
+1530
+01:28:30,880 --> 01:28:32,380
+you had to know C really well
+
+1531
+01:28:32,380 --> 01:28:35,080
+and like we weren't getting a lot of people know C really well,
+
+1532
+01:28:35,080 --> 01:28:37,000
+there's not actually that many of them proportionately,
+
+1533
+01:28:37,000 --> 01:28:40,600
+and furthermore like our entire user bases Go programmers, not C programmers,
+
+1534
+01:28:40,840 --> 01:28:42,940
+so moving to Go was a really big deal.
+
+1535
+01:28:46,230 --> 01:28:51,450
+I was wondering how do you prioritize what features to add to the language at this point,
+
+1536
+01:28:51,450 --> 01:28:55,020
+I know genetics like we're asking for that,
+
+1537
+01:28:55,020 --> 01:28:58,250
+like did you all know like how you choose what to work on.
+
+1538
+01:28:59,210 --> 01:29:02,060
+I mean we've considered language mostly frozen for a while
+
+1539
+01:29:02,330 --> 01:29:04,670
+and so we haven't been adding much,
+
+1540
+01:29:04,730 --> 01:29:06,950
+there was a long period, we said we weren't adding anything
+
+1541
+01:29:06,950 --> 01:29:10,160
+and then we added a little bit of things in the last couple years
+
+1542
+01:29:10,160 --> 01:29:12,470
+to lead up to generics just kind of shake the Rust off,
+
+1543
+01:29:12,470 --> 01:29:15,200
+like all the what breaks when you change something in the language,
+
+1544
+01:29:15,440 --> 01:29:18,080
+so you can put underscores between digits and long numbers now
+
+1545
+01:29:18,080 --> 01:29:18,860
+and things like that.
+
+1546
+01:29:20,620 --> 01:29:24,160
+But you know generics has clearly been the next thing that needed to happen
+
+1547
+01:29:24,160 --> 01:29:25,480
+and we just have to figure out how.
+
+1548
+01:29:26,430 --> 01:29:31,740
+In general, we try to only add things that don't have weird kind of interference with other features
+
+1549
+01:29:32,100 --> 01:29:36,810
+and we try to add things that are really important that will help a lot of people for the kinds of programs,
+
+1550
+01:29:36,810 --> 01:29:38,370
+that we're trying to target with Go,
+
+1551
+01:29:38,370 --> 01:29:41,190
+which is like distributed systems and that sort of thing.
+
+1552
+01:29:50,050 --> 01:29:51,220
+Cool, thank you.
+
+1553
+01:29:51,940 --> 01:29:55,120
+Oh, I had a question actually,
+
+1554
+01:29:55,120 --> 01:30:03,010
+so, for I noticed that like you know Go doesn't have like basic functions like min or max for like,
+
+1555
+01:30:03,520 --> 01:30:08,920
+yeah, so is that like something that you're considering like say adding with the generic stuff,
+
+1556
+01:30:08,920 --> 01:30:10,300
+maybe is that why you didn't.
+
+1557
+01:30:10,330 --> 01:30:14,620
+Exactly right, because you can't have a min, you have min_int [],
+
+1558
+01:30:14,620 --> 01:30:17,110
+but those have different names and that was kind of annoying.
+
+1559
+01:30:17,540 --> 01:30:19,880
+So now we can write just a generic name,
+
+1560
+01:30:20,450 --> 01:30:22,430
+over any type that has a less than operator.
+
+1561
+01:30:22,940 --> 01:30:23,480
+Yeah.
+
+1562
+01:30:23,480 --> 01:30:24,140
+That'll be good.
+
+1563
+01:30:24,140 --> 01:30:27,500
+And you know honestly like for the specific case of min and max.
+
+1564
+01:30:27,680 --> 01:30:30,350
+It's not that hard to code, I know.
+
+1565
+01:30:30,350 --> 01:30:32,690
+I was gonna say, I'm starting to feel like we should just make them buildings,
+
+1566
+01:30:32,690 --> 01:30:35,330
+like you know print and things like that,
+
+1567
+01:30:35,360 --> 01:30:37,400
+so that you can just always have them,
+
+1568
+01:30:37,520 --> 01:30:38,930
+but even if we don't,
+
+1569
+01:30:38,930 --> 01:30:41,270
+you'll be math.min and that'll be there at least.
+
+1570
+01:30:41,620 --> 01:30:42,580
+Yeah.
+
+1571
+01:30:42,700 --> 01:30:46,090
+We really didn't want to make them buildings until we could express their types
+
+1572
+01:30:46,090 --> 01:30:47,740
+and we couldn't do that until generics happened.
+
+1573
+01:30:48,300 --> 01:30:51,510
+Because there is actually a min for floating points actually.
+
+1574
+01:30:51,510 --> 01:30:53,370
+Yeah, I know it's kind of weird,
+
+1575
+01:30:53,370 --> 01:31:00,090
+because the math library is basically copied from the C math.h, set of things.
+
+1576
+01:31:00,090 --> 01:31:00,750
+Yeah.
+
+1577
+01:31:01,020 --> 01:31:01,800
+That's a good point,
+
+1578
+01:31:01,800 --> 01:31:03,060
+we can't actually put them in math,
+
+1579
+01:31:03,060 --> 01:31:04,140
+because they're already there.
+
+1580
+01:31:04,720 --> 01:31:06,130
+Okay. But.
+
+1581
+01:31:06,130 --> 01:31:06,880
+Yeah.
+
+1582
+01:31:07,090 --> 01:31:08,020
+We'll figure it out,
+
+1583
+01:31:08,020 --> 01:31:09,790
+like I think we should probably just put them in the language,
+
+1584
+01:31:09,790 --> 01:31:11,350
+but we have to get generics through first.
+
+1585
+01:31:11,650 --> 01:31:12,640
+And another thing,
+
+1586
+01:31:12,670 --> 01:31:15,970
+actually I noticed that you did USACO like competitive programming,
+
+1587
+01:31:16,420 --> 01:31:17,560
+I did it too, actually.
+
+1588
+01:31:18,100 --> 01:31:18,460
+Cool.
+
+1589
+01:31:18,490 --> 01:31:23,560
+Yeah, so how did you, so actually I included this in one of the questions that I submitted,
+
+1590
+01:31:23,560 --> 01:31:24,880
+let me pull it up,
+
+1591
+01:31:24,940 --> 01:31:27,340
+so my question was like,
+
+1592
+01:31:27,670 --> 01:31:33,250
+how did how was like how did you, go from doing competitive programming
+
+1593
+01:31:33,250 --> 01:31:36,520
+to like doing what you you're doing now at Google working on Go
+
+1594
+01:31:36,520 --> 01:31:40,810
+and how is the transition between like competitive programming to systems,
+
+1595
+01:31:40,810 --> 01:31:43,510
+also finally what made you decide to go into system,
+
+1596
+01:31:43,510 --> 01:31:45,790
+so how did it relate to programming code.
+
+1597
+01:31:45,790 --> 01:31:48,100
+I mean competitive programming at the time that I did,
+
+1598
+01:31:48,100 --> 01:31:50,830
+it was not as all consuming as I gather it is now,
+
+1599
+01:31:50,920 --> 01:31:55,940
+like, like you know you could just like be able to implement a simple dynamic programming
+
+1600
+01:31:55,940 --> 01:31:58,220
+like little two for loops, and that was fine
+
+1601
+01:31:58,220 --> 01:32:01,940
+and now you have to go with complex algorithms and all that stuff that I can't do,
+
+1602
+01:32:02,060 --> 01:32:05,960
+so at some point like somehow like it was different.
+
+1603
+01:32:06,480 --> 01:32:11,070
+But you know I was actually more interested in the sort of systems you kind of start from the start
+
+1604
+01:32:11,160 --> 01:32:14,880
+and the program contests were just something fun to do on the side.
+
+1605
+01:32:15,060 --> 01:32:15,600
+Oh.
+
+1606
+01:32:15,600 --> 01:32:17,640
+It wasn't a huge transition there,
+
+1607
+01:32:17,670 --> 01:32:20,730
+I was never into implementing complex algorithms
+
+1608
+01:32:20,970 --> 01:32:23,760
+and max flow and all those sorts of things.
+
+1609
+01:32:23,910 --> 01:32:26,910
+On the other hand, like when you start a new language,
+
+1610
+01:32:27,280 --> 01:32:30,610
+you actually do get to write a lot of core things right,
+
+1611
+01:32:30,640 --> 01:32:32,980
+like someone has to write the sort function,
+
+1612
+01:32:33,400 --> 01:32:35,470
+and it has to be a good general sort function,
+
+1613
+01:32:35,470 --> 01:32:39,040
+like I spent a while last month, like looking into [dip] algorithms
+
+1614
+01:32:39,040 --> 01:32:42,820
+and that's like matches that background pretty well,
+
+1615
+01:32:43,180 --> 01:32:44,350
+so it does come up.
+
+1616
+01:32:44,810 --> 01:32:48,050
+But you know it's just it's just a different kind of program.
+
+1617
+01:32:48,290 --> 01:32:50,900
+Oh so, you thought of it as more of a side thing, back then, no.
+
+1618
+01:32:50,900 --> 01:32:54,800
+Yeah, it was definitely not the sort of main thing I did when I was writing programs.
+
+1619
+01:32:54,890 --> 01:32:57,830
+Yeah, because like today it's effectively like the main thing.
+
+1620
+01:32:57,830 --> 01:33:02,090
+I know, if if you don't do it full time, like there's just no way you can.
+
+1621
+01:33:02,810 --> 01:33:05,870
+Okay, they just want that many people who cared in 1995.
+
+1622
+01:33:07,180 --> 01:33:09,580
+Well, yeah twenty years later.
+
+1623
+01:33:15,190 --> 01:33:17,170
+I'm gonna ask a related question to that,
+
+1624
+01:33:17,170 --> 01:33:23,410
+so how do you decide to go from like academic work into,
+
+1625
+01:33:23,500 --> 01:33:30,730
+I mean your work is still a little bit more different than like the usual like software anything, but still.
+
+1626
+01:33:32,040 --> 01:33:34,750
+Yeah, you know I got lucky,
+
+1627
+01:33:34,750 --> 01:33:37,180
+I I grew up near Bell Labs in new Jersey
+
+1628
+01:33:37,180 --> 01:33:40,930
+and so that was how I ended up working on plan a little bit in high school and college.
+
+1629
+01:33:42,550 --> 01:33:45,430
+And so you know I I sort of knew I was going to go to grad school
+
+1630
+01:33:45,430 --> 01:33:47,500
+and you know the plan was to go back to Bell Labs,
+
+1631
+01:33:47,500 --> 01:33:49,690
+but it kind of imploded, while I was in grad school,
+
+1632
+01:33:50,200 --> 01:33:52,900
+with the dot-com bubble, and the dot-com crash
+
+1633
+01:33:53,290 --> 01:34:00,190
+and and so like you know Google was was sort of just vacuuming up PhDs, systems PhD at the time,
+
+1634
+01:34:00,680 --> 01:34:02,600
+and and and doing really interesting things,
+
+1635
+01:34:02,600 --> 01:34:03,920
+I mean you probably there's,
+
+1636
+01:34:03,950 --> 01:34:05,690
+I don't know I haven't looked at syllabus for this year,
+
+1637
+01:34:05,690 --> 01:34:10,790
+but you know there's things like spanner and bigtable and chubby and and things like that
+
+1638
+01:34:10,790 --> 01:34:14,930
+and you know they they had a whole host of good distributed systems kind of stuff going on.
+
+1639
+01:34:15,460 --> 01:34:18,640
+And so it was sort of lucky to be able to go to that, too.
+
+1640
+01:34:20,660 --> 01:34:22,580
+And you know at the time I graduated,
+
+1641
+01:34:22,580 --> 01:34:24,800
+I was also looking at you know industrial research labs,
+
+1642
+01:34:24,800 --> 01:34:27,020
+like Microsoft research and places like that,
+
+1643
+01:34:27,350 --> 01:34:31,610
+so you know there's definitely an opportunity there for researching things,
+
+1644
+01:34:31,610 --> 01:34:33,740
+but not in academia, if that's what you want.
+
+1645
+01:34:34,370 --> 01:34:36,200
+It's a little harder to find, now,
+
+1646
+01:34:36,230 --> 01:34:40,670
+I mean most of the places I have like Microsoft research imploded too, a couple years later.
+
+1647
+01:34:41,200 --> 01:34:45,130
+But, you know it's, it's still an option
+
+1648
+01:34:45,310 --> 01:34:48,580
+and and you know just a slightly different path,
+
+1649
+01:34:48,880 --> 01:34:50,110
+you end up,
+
+1650
+01:34:50,140 --> 01:34:56,740
+the differences I see from academia is like you end up caring a ton more about actually making things work a hundred percent time
+
+1651
+01:34:56,740 --> 01:34:58,630
+and supporting them for a decade or more
+
+1652
+01:34:58,810 --> 01:35:02,020
+where as you finish your paper and you kind of get to put it off to the side
+
+1653
+01:35:02,020 --> 01:35:04,390
+and that's really nice actually at some level.
+
+1654
+01:35:05,890 --> 01:35:12,010
+It's, it's definitely strange to me to be you know editing source files that I wrote,
+
+1655
+01:35:12,100 --> 01:35:14,800
+you know in some cases actually twenty years ago,
+
+1656
+01:35:15,010 --> 01:35:18,700
+because I used a bunch of code that I've already written when we start to go.
+
+1657
+01:35:19,190 --> 01:35:23,630
+And it's very weird to think that I've been keeping this program running for twenty years.
+
+1658
+01:35:26,430 --> 01:35:26,820
+Think you.
+
