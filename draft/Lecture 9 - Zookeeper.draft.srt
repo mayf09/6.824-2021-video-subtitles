@@ -5497,22 +5497,22 @@ see the simple scheme that
 1101
 00:33:45,770 --> 00:33:47,140
 0,240 240,450 450,900
-doesn't really work.|
+doesn't really work,|
 
 1102
 00:33:47,550 --> 00:33:48,690
 0,240 240,330 330,510 510,930 930,1140
-Or at least violates their
+or at least violates {linearizability
 
 1103
 00:33:48,690 --> 00:33:49,920
 0,150 150,660
-rights ability.
+- -}.|
 
 1104
 00:33:50,310 --> 00:33:51,960
 0,210 210,330 330,1020 1050,1500 1500,1650
-And so what a so
+And so what {} so
 
 1105
 00:33:51,960 --> 00:33:52,500
@@ -5522,7 +5522,7 @@ we want to talk a
 1106
 00:33:52,500 --> 00:33:53,700
 0,180 180,480 480,660 660,720 720,1200
-little bit like to understand
+little bit| like to understand
 
 1107
 00:33:53,700 --> 00:33:55,140
@@ -5532,7 +5532,7 @@ what was really how did
 1108
 00:33:55,140 --> 00:33:57,810
 0,420 420,630 630,1020 1770,2220 2400,2670
-you get this and so
+you get this| and so
 
 1109
 00:33:57,810 --> 00:33:59,040
@@ -5542,42 +5542,42 @@ the first thing to really
 1110
 00:33:59,040 --> 00:34:00,330
 0,570 570,720 720,900 900,1230 1230,1290
-realize this is probably the
+realize {} is| probably the
 
 1111
 00:34:00,330 --> 00:34:01,840
 0,180 180,570 570,1050
-most important part.
+most important part
 
 1112
 00:34:02,040 --> 00:34:04,170
 0,390 390,780 930,1320 1320,1500 1500,2130
-Is that a zoo keeper.
+is that {} {zookeeper -}
 
 1113
 00:34:05,110 --> 00:34:06,880
 0,360 360,570 570,900 900,990 990,1770
-Does not provide the irritability.
+does not provide the linearizability.|
 
 1114
 00:34:08,350 --> 00:34:10,150
 0,240 240,600 600,1290 1290,1440 1440,1800
-It basically changes the correct
+It basically changes the correctness
 
 1115
 00:34:10,150 --> 00:34:11,560
 0,540
-definition.
+definition.|
 
 1116
 00:34:22,740 --> 00:34:24,420
 0,120 120,780 930,1320 1320,1470 1470,1680
-And so the zoo keeper
+And so the {zookeeper -}
 
 1117
 00:34:24,420 --> 00:34:26,190
 0,570 780,1230 1230,1410 1410,1650 1650,1770
-servers I it's not going
+servers, {} it's not going
 
 1118
 00:34:26,190 --> 00:34:27,150
@@ -5587,7 +5587,7 @@ to behave like a single
 1119
 00:34:27,150 --> 00:34:28,830
 0,420 540,1290 1290,1410 1410,1500 1500,1680
-machine, um, you know it's
+machine,| {} you know it's
 
 1120
 00:34:28,830 --> 00:34:30,960
@@ -5602,12 +5602,12 @@ never happen on a single
 1122
 00:34:32,220 --> 00:34:33,120
 0,390
-machine.
+machine.|
 
 1123
 00:34:33,450 --> 00:34:35,760
 0,540 780,1140 1140,1500 1500,2160 2190,2310
-Um, so the particular so
+{} So the particular, so
 
 1124
 00:34:35,760 --> 00:34:36,690
@@ -5617,27 +5617,27 @@ what is it, what does
 1125
 00:34:36,690 --> 00:34:39,060
 0,240 240,690 690,1140 1500,2100 2190,2370
-it provide well, um, it
+it provide.| Well, {} it
 
 1126
 00:34:39,060 --> 00:34:41,640
 0,240 240,870 870,1500 1500,2130
-does provide mineral rights.
+does provide linearizable writes,|
 
 1127
 00:34:51,880 --> 00:34:54,190
 0,390 390,720 720,1230 1230,2190 2190,2310
-So all the operations all
+so all the operations all
 
 1128
 00:34:54,190 --> 00:34:55,390
 0,90 90,330 330,780 780,1140 1140,1200
-the write operation, actually you
+the write operation actually you
 
 1129
 00:34:55,390 --> 00:34:56,710
 0,150 150,390 390,660 660,780 780,1320
-know go through the leader
+know go through the leader|
 
 1130
 00:34:56,710 --> 00:34:58,240
@@ -5657,17 +5657,17 @@ log every peer in the
 1133
 00:35:01,900 --> 00:35:03,190
 0,300 300,690 690,810 810,930 930,1290
-same order and so they're
+same order| and so they're
 
 1134
 00:35:03,190 --> 00:35:04,150
 0,210 210,270 270,450 450,600 600,960
-going to also be plugged
+going to also be applied
 
 1135
 00:35:04,150 --> 00:35:04,870
 0,60 60,120 120,420 420,570 570,720
-in the same order so
+in the same order,| so
 
 1136
 00:35:04,870 --> 00:35:06,100
@@ -5677,57 +5677,57 @@ we still have this replicated
 1137
 00:35:06,100 --> 00:35:09,460
 0,270 270,870 1080,2280 2280,2850 2850,3360
-state machine, a approach where
+state machine,| {} approach where
 
 1138
 00:35:09,460 --> 00:35:11,110
 0,330 330,510 510,810 840,1170 1170,1650
-reply all the right operational
+reply all the write operational
 
 1139
 00:35:11,110 --> 00:35:12,910
 0,480 480,780 780,1050 1050,1440 1440,1800
-operations change data into a.
+operations change data into {
 
 1140
 00:35:13,360 --> 00:35:15,520
 0,1590
-AH.
+-}
 
 1141
 00:35:17,140 --> 00:35:18,440
 0,120 120,180 180,420 420,780
-In the total order.
+in the total order.|
 
 1142
 00:35:18,680 --> 00:35:20,480
 0,510 840,1320 1320,1530 1530,1620 1620,1800
-But, um there's a couple
+But, {} there's a couple
 
 1143
 00:35:20,480 --> 00:35:22,980
 0,210 210,960 990,2010
-more properties, um.
+more properties, {}|
 
 1144
 00:35:23,040 --> 00:35:24,150
 0,360 360,510 510,570 570,840 840,1110
-So, but it does not
+so, but it does not
 
 1145
 00:35:24,150 --> 00:35:25,740
 0,270 270,630 630,960 960,1080 1080,1590
-provide memorize ability for weeks
+provide {linearizability -} for reads,|
 
 1146
 00:35:25,920 --> 00:35:27,570
 0,450 480,960 960,1380 1380,1530 1530,1650
-status provides two sort of
+{instead,it,sort,of} provides two sort of
 
 1147
 00:35:27,570 --> 00:35:29,970
 0,480 540,1410 1650,1860 1860,2100 2100,2400
-different property, um, which insists
+different property,| {} which is
 
 1148
 00:35:29,970 --> 00:35:32,550
@@ -5737,12 +5737,12 @@ that all the operations appear
 1149
 00:35:32,550 --> 00:35:34,480
 0,270 270,630 630,840 840,1410
-in fife, a water.
+in FIFO {} order,
 
 1150
 00:35:36,540 --> 00:35:40,100
 0,1080 1080,1170 1170,1530 1530,2100
-Five a client orders.
+{in,FIFO} {} client order.|
 
 1151
 00:35:40,440 --> 00:35:41,340
@@ -5752,57 +5752,57 @@ This partly has to do
 1152
 00:35:41,340 --> 00:35:43,770
 0,240 240,870 1650,2010 2010,2310 2310,2430
-with asynchronous or client may
+with asynchronous| {you,know} client may
 
 1153
 00:35:43,770 --> 00:35:46,560
 0,360 360,750 750,1380 1710,2370 2370,2790
-submit multiple requests by one
+submit multiple requests {} one
 
 1154
 00:35:46,560 --> 00:35:49,050
 0,120 120,660 840,1650 1650,2220 2220,2490
-by one a without waiting
+by one| {} without waiting
 
 1155
 00:35:49,050 --> 00:35:50,850
 0,120 120,180 180,900 1050,1680 1680,1800
-for a response and you
+for a response| and you
 
 1156
 00:35:50,850 --> 00:35:52,050
 0,480 540,810 810,870 870,960 960,1200
-know look at the rule
+know {zookeeper - -} will
 
 1157
 00:35:52,050 --> 00:35:53,820
 0,660 660,930 930,1140 1140,1320 1320,1770
-guaranteed, um, if you submit
+guarantee,| {} if you submit
 
 1158
 00:35:54,030 --> 00:35:55,440
 0,60 60,390 390,900 930,1350 1350,1410
-a claim one submitted the
+{} client one submitted the
 
 1159
 00:35:55,440 --> 00:35:56,520
 0,690
-request.
+request,|
 
 1160
 00:35:56,580 --> 00:35:57,930
 0,240 240,600 600,870 870,1140 1140,1350
-And then climb one minute,
+and then client one submitted
 
 1161
 00:35:57,930 --> 00:35:59,880
 0,330 330,990 1110,1500 1500,1650 1650,1950
-another request then that second
+another request,| then that second
 
 1162
 00:35:59,880 --> 00:36:02,850
 0,450 450,780 780,1620 1650,2280 2310,2970
-request will appear a later
+request will appear {} later,|
 
 1163
 00:36:02,880 --> 00:36:05,190
@@ -5817,7 +5817,7 @@ the result of the first
 1165
 00:36:06,150 --> 00:36:07,520
 0,840
-operation.
+operation.|
 
 1166
 00:36:08,740 --> 00:36:11,320
@@ -5827,17 +5827,16 @@ And so, in particular you
 1167
 00:36:11,320 --> 00:36:13,420
 0,180 180,690 690,1110 1110,1560 1560,2100
-know rights goes client order.
+know writes goes client order,|
 
 1168
 00:36:22,080 --> 00:36:23,380
 0,750
-I'm.
 
 1169
 00:36:23,600 --> 00:36:25,550
 0,210 210,450 450,1080 1110,1410 1410,1950
-And then reach a where
+and then reads {} where
 
 1170
 00:36:25,550 --> 00:36:26,660
@@ -5847,32 +5846,31 @@ all the action is where
 1171
 00:36:26,660 --> 00:36:29,270
 0,90 90,390 390,870 870,1260 1770,2610
-the interesting properties are are.
+the interesting properties are, {}|
 
 1172
 00:36:30,270 --> 00:36:31,560
 0,750
-Yeah.
 
 1173
 00:36:32,430 --> 00:36:35,100
 0,1080 1200,1650 1650,2130 2190,2460 2460,2670
-Reserve last right okay, so
+{the,reads,observe} last write,| okay, so
 
 1174
 00:36:35,100 --> 00:36:36,500
 0,810
-research.
+reads
 
 1175
 00:36:36,610 --> 00:36:38,400
 0,330 330,480 480,1260
-Get rich observe.
+{reads -} observe
 
 1176
 00:36:39,930 --> 00:36:41,910
 0,510 510,840 840,1020 1020,1380 1380,1980
-Last right from shame client.
+last write from same client.|
 
 1177
 00:36:51,050 --> 00:36:51,830
@@ -5887,17 +5885,17 @@ sense going basically this sort
 1179
 00:36:52,970 --> 00:36:54,410
 0,60 60,390 390,780 990,1260 1260,1440
-of sense like, um you
+of sense like,| {} you
 
 1180
 00:36:54,410 --> 00:36:55,910
 0,180 180,360 360,510 510,1050 1320,1500
-read your own rights, so
+read your own writes,| so
 
 1181
 00:36:55,910 --> 00:36:56,660
 0,120 120,270 270,390 390,480 480,750
-if you do the right
+if you do the write
 
 1182
 00:36:56,660 --> 00:36:58,100
@@ -5907,7 +5905,7 @@ operation, you immediately follow the
 1183
 00:36:58,100 --> 00:36:59,180
 0,210 210,660 660,780 780,960 960,1080
-read operation, you see at
+read operation,| you see at
 
 1184
 00:36:59,180 --> 00:37:00,680
@@ -5917,12 +5915,12 @@ least the results of your
 1185
 00:37:00,680 --> 00:37:02,140
 0,180 180,690
-own rights.
+own writes.|
 
 1186
 00:37:02,380 --> 00:37:04,090
 0,360 360,720 750,1170 1170,1470 1470,1710
-Um, but, um for rights
+{} But, {} for writes
 
 1187
 00:37:04,090 --> 00:37:05,530
@@ -5932,12 +5930,12 @@ from other operations from other
 1188
 00:37:05,530 --> 00:37:08,470
 0,630 720,1320 1590,2490 2490,2640 2640,2940
-clients, a newspaper does not
+clients,| {} {the,zookeeper} does not
 
 1189
 00:37:08,470 --> 00:37:09,790
 0,360 360,510 510,870 870,1230 1230,1320
-guarantee that property, instead what
+guarantee that property,| instead what
 
 1190
 00:37:09,790 --> 00:37:12,040
@@ -5947,32 +5945,32 @@ it guarantees is that the
 1191
 00:37:12,070 --> 00:37:13,930
 0,330 330,450 450,870 870,1080 1080,1860
-read we observe some prefix.
+read will observe some prefix
 
 1192
 00:37:16,540 --> 00:37:18,400
 0,210 210,270 270,1170
-On the blog.
+of the log.|
 
 1193
 00:37:20,920 --> 00:37:22,990
 0,390 390,810 810,1020 1020,1650 1680,2070
-Um, and um, so this
+{} And {} so this
 
 1194
 00:37:22,990 --> 00:37:24,250
 0,450 450,810 810,930 930,1020 1020,1260
-means that you can actually
+means right you can actually
 
 1195
 00:37:24,250 --> 00:37:30,490
 0,540 600,960 960,1410 5370,5610 5610,6240
-see stale data which may
+see stale data| which may
 
 1196
 00:37:30,490 --> 00:37:32,110
 0,420 420,600 600,1350 1380,1500 1500,1620
-refer a follower and that
+{read,from} a follower and that
 
 1197
 00:37:32,110 --> 00:37:34,030
@@ -5982,7 +5980,7 @@ follower has a prefix of
 1198
 00:37:34,030 --> 00:37:35,560
 0,120 120,600 750,990 990,1350 1350,1530
-the log but not only
+the log,| but not only
 
 1199
 00:37:35,560 --> 00:37:36,550
@@ -5992,12 +5990,12 @@ the last entries in the
 1200
 00:37:36,550 --> 00:37:38,890
 0,390 390,870 870,1200 1200,1560 1560,2340
-log because maybe just lag
+log,| because maybe just lag
 
 1201
 00:37:38,890 --> 00:37:40,390
 0,330 330,390 390,570 570,870 1170,1500
-behind a little bit, um
+behind a little bit, {}|
 
 1202
 00:37:40,390 --> 00:37:42,670
@@ -6007,7 +6005,7 @@ and nevertheless that followers are
 1203
 00:37:42,670 --> 00:37:45,700
 0,300 300,720 900,1890 1920,2430 2430,3030
-allowed to return a value
+allowed to return a value,|
 
 1204
 00:37:45,850 --> 00:37:46,990
@@ -6017,22 +6015,22 @@ because you know the only
 1205
 00:37:46,990 --> 00:37:49,120
 0,330 330,780 780,900 900,1650 1680,2130
-thing that's you know zoo
+thing that's you know {zookeeper
 
 1206
 00:37:49,120 --> 00:37:50,200
 0,270 270,390 390,450 450,900 900,1080
-keepers going to guarantee that
+-} going to guarantee that
 
 1207
 00:37:50,200 --> 00:37:52,510
 0,510 510,870 870,1380 1410,1710 1710,2310
-actually reach observe a prefix
+actually reads observe a prefix
 
 1208
 00:37:52,510 --> 00:37:53,260
 0,540
-block.
+log.|
 
 1209
 00:37:54,680 --> 00:37:55,700
@@ -6042,7 +6040,7 @@ So the operations can now
 1210
 00:37:55,700 --> 00:37:56,960
 0,180 180,330 330,420 420,960 1110,1260
-go out of order, you
+go out of order,| you
 
 1211
 00:37:56,960 --> 00:37:57,740
@@ -6052,17 +6050,17 @@ know once they in the
 1212
 00:37:57,740 --> 00:37:59,180
 0,570 570,780 780,870 870,1080 1080,1440
-log and you can sort
+log| and you can sort
 
 1213
 00:37:59,180 --> 00:38:00,920
 0,90 90,720 840,1110 1110,1470 1470,1740
-of a reach can't like
+of {} reads can't like
 
 1214
 00:38:00,920 --> 00:38:02,510
 0,300 330,930 930,1350 1350,1500 1500,1590
-read a operation out of
+read {} operation out of
 
 1215
 00:38:02,510 --> 00:38:03,260
@@ -6072,7 +6070,7 @@ the log in out of
 1216
 00:38:03,260 --> 00:38:04,280
 0,420 450,600 600,780 780,930 930,1020
-order, it really has to
+order,| it really has to
 
 1217
 00:38:04,280 --> 00:38:05,360
@@ -6082,7 +6080,7 @@ be a prefix, a prefix
 1218
 00:38:05,360 --> 00:38:06,380
 0,90 90,180 180,570
-of the log.
+of the log.|
 
 1219
 00:38:07,070 --> 00:38:07,880
@@ -6092,12 +6090,12 @@ And then there's a second
 1220
 00:38:07,880 --> 00:38:10,130
 0,720 960,1350 1350,1470 1470,1830 1830,2250
-requirement that you cannot do
+requirement,| that you cannot do
 
 1221
 00:38:10,160 --> 00:38:11,600
 0,270 270,600 600,750 750,840 840,1440
-know reads from the past.
+know reads from the past.|
 
 1222
 00:38:18,250 --> 00:38:19,300
@@ -6112,27 +6110,27 @@ if you saw some prefix
 1224
 00:38:20,620 --> 00:38:21,780
 0,510
-one.
+one.|
 
 1225
 00:38:22,900 --> 00:38:24,580
 0,180 180,450 450,570 570,1290 1290,1680
-And then you issue reach
+And then you issue reads
 
 1226
 00:38:24,580 --> 00:38:26,050
 0,240 240,540 540,1020 1020,1200 1200,1470
-our prefetch one and then
+some prefix one| and then
 
 1227
 00:38:26,050 --> 00:38:27,340
 0,120 120,270 270,330 330,750 750,1290
-you read the second tweet
+you read the second read,|
 
 1228
 00:38:27,700 --> 00:38:29,230
 0,570 570,750 750,1020 1020,1260 1260,1530
-then that second reed has
+then that second read has
 
 1229
 00:38:29,230 --> 00:38:30,280
@@ -6142,17 +6140,17 @@ to see at least prefix
 1230
 00:38:30,280 --> 00:38:32,160
 0,540 570,840 840,1290
-one plus more.
+one plus more.|
 
 1231
 00:38:34,780 --> 00:38:36,010
 0,210 210,360 360,480 480,870 870,1230
-It might be no it
+It might be no, it
 
 1232
 00:38:36,010 --> 00:38:37,240
 0,210 210,360 360,600 600,930 930,1230
-might be just picks one
+might be just prefix one,|
 
 1233
 00:38:37,300 --> 00:38:38,410
@@ -6162,7 +6160,7 @@ but cannot go back in
 1234
 00:38:38,410 --> 00:38:39,730
 0,330 330,480 480,570 570,990 990,1320
-time, so it cannot see
+time,| so it cannot see
 
 1235
 00:38:39,730 --> 00:38:42,310
@@ -6172,12 +6170,12 @@ a shorter prefix than prefix
 1236
 00:38:42,310 --> 00:38:43,220
 0,360
-one.
+one.|
 
 1237
 00:38:44,120 --> 00:38:45,470
 0,150 150,270 270,480 480,1140 1140,1350
-And so this basically a
+And so this basically, {}
 
 1238
 00:38:45,470 --> 00:38:46,400
@@ -6187,22 +6185,21 @@ so so if we look
 1239
 00:38:46,400 --> 00:38:48,000
 0,270 270,330 330,480 480,1020
-back at this picture.
+back at this picture,|
 
 1240
 00:38:48,000 --> 00:38:49,240
 0,690
-AH.
 
 1241
 00:38:49,690 --> 00:38:51,220
 0,600 630,810 810,1080 1080,1230 1230,1530
-The zoo keeper will allow
+the {zookeeper -} will allow
 
 1242
 00:38:51,220 --> 00:38:53,080
 0,420 420,600 600,870 870,1410 1410,1860
-this in certain cases, namely,
+this in certain cases,| namely,
 
 1243
 00:38:53,080 --> 00:38:54,880
@@ -6212,27 +6209,27 @@ if the two clients are
 1244
 00:38:54,880 --> 00:38:56,000
 0,630
-different.
+different,|
 
 1245
 00:38:56,060 --> 00:38:58,040
 0,210 210,360 360,750 750,1470
-Um, but won't allow.
+{} but {it,won't} allow
 
 1246
 00:38:58,360 --> 00:38:59,620
 0,270 270,270 510,870 870,1170 1170,1260
-This um, this you can
+this, {} this you can
 
 1247
 00:38:59,620 --> 00:39:00,820
 0,270 270,510 510,750 750,810 810,1200
-never have back in time.
+never have back in time.|
 
 1248
 00:39:01,700 --> 00:39:02,900
 0,690
-Okay.
+Okay?|
 
 1249
 00:39:04,690 --> 00:39:06,370
@@ -6242,22 +6239,22 @@ So I have a question,
 1250
 00:39:06,370 --> 00:39:07,630
 0,120 120,600 600,840 900,1140 1140,1260
-a conceptual one, so we
+a conceptual one,| so we
 
 1251
 00:39:07,630 --> 00:39:09,640
 0,180 180,360 690,930 930,1500 1500,2010
-have these two consistency guarantees,
+have these two consistency guarantees,|
 
 1252
 00:39:09,640 --> 00:39:11,200
 0,150 150,450 450,900 900,1260 1260,1560
-the linear liable rights andthe
+the {linearizable -} writes {and,the}
 
 1253
 00:39:11,200 --> 00:39:12,880
 0,180 180,480 570,870 870,1230 1440,1680
-fi fo client order, so
+{FIFO -} client order,| so
 
 1254
 00:39:12,880 --> 00:39:13,900
@@ -6267,7 +6264,7 @@ if we ignore the second
 1255
 00:39:13,900 --> 00:39:15,250
 0,450 450,690 690,780 780,1200 1200,1350
-constraint for a second and
+constraint for a second| and
 
 1256
 00:39:15,250 --> 00:39:16,180
@@ -6277,22 +6274,22 @@ if we only focus on
 1257
 00:39:16,180 --> 00:39:18,400
 0,90 90,330 330,570 930,2160 2160,2220
-the first one does the
+the first one,| does the
 
 1258
 00:39:18,400 --> 00:39:20,050
 0,600 600,780 780,1020 1020,1410 1410,1650
-definition of linear liable rights
+definition of {linearizable -} writes
 
 1259
 00:39:20,050 --> 00:39:21,250
 0,330 330,570 570,870 870,1110 1110,1200
-actually makes sense since the
+actually makes sense,| since the
 
 1260
 00:39:21,250 --> 00:39:23,500
 0,480 480,660 660,870 870,1620 1650,2250
-definition of linear liability depends
+definition of {linearizability -} depends
 
 1261
 00:39:23,500 --> 00:39:24,910
@@ -6302,57 +6299,57 @@ on having a read operation
 1262
 00:39:24,910 --> 00:39:26,710
 0,150 150,270 270,540 540,1410 1620,1800
-and a write operation so
+and a write operation.| So
 
 1263
 00:39:26,710 --> 00:39:28,750
 0,1020 1020,1380 1380,1650 1650,1800 1800,2040
-you're like hold, that thought
+you're like hold that thought
 
 1264
 00:39:28,750 --> 00:39:32,900
 0,420 930,1680 1710,2040 2040,3570
-for a because, um.
+for {a,second},| because, {}
 
 1265
 00:39:33,320 --> 00:39:34,820
 0,240 240,540 540,660 660,990 990,1500
-The way they define mineral
+the way they define linearizable
 
 1266
 00:39:34,820 --> 00:39:35,810
 0,270 270,480 480,630 630,900 900,990
-rights is not basically the
+writes is not basically the
 
 1267
 00:39:35,810 --> 00:39:36,950
 0,210 210,330 330,390 390,660 660,1140
-rights are a total order,
+writes are a total order,|
 
 1268
 00:39:37,040 --> 00:39:37,910
 0,300 300,540 540,660 660,780 780,870
-um and but there is
+{} and but there is
 
 1269
 00:39:37,910 --> 00:39:38,990
 0,120 120,600 600,810 810,900 900,1080
-a relationship between the rich
+a relationship between the read
 
 1270
 00:39:38,990 --> 00:39:40,280
 0,90 90,150 150,450 450,690 690,1290
-and the right, so hold
+and the write,| so hold
 
 1271
 00:39:40,280 --> 00:39:41,300
 0,210 210,300 300,360 360,630 630,1020
-fire for a second, okay.
+{that,far} for a second, okay.|
 
 1272
 00:39:42,160 --> 00:39:43,480
 0,450 450,690 690,1020 1020,1140 1140,1320
-A welcome back, we get
+{} {We'll,come} back,| we get
 
 1273
 00:39:43,480 --> 00:39:44,710
@@ -6362,7 +6359,7 @@ to that in a in
 1274
 00:39:44,710 --> 00:39:46,360
 0,90 90,480 510,900 900,1230 1230,1650
-a minute like one board
+a minute like one board,|
 
 1275
 00:39:46,660 --> 00:39:47,830
@@ -6372,22 +6369,22 @@ I want to make one
 1276
 00:39:47,830 --> 00:39:49,440
 0,210 210,270 270,630 660,1050
-board in between, okay.
+board in between, okay.|
 
 1277
 00:39:50,020 --> 00:39:51,240
 0,270 270,600
-Sounds good.
+Sounds good.|
 
 1278
 00:39:52,180 --> 00:39:53,620
 0,330 330,900
-Okay so.
+Okay so,
 
 1279
 00:39:53,770 --> 00:39:55,300
 0,240 240,390 390,660 660,960 1170,1530
-To look at let's look
+just {like -},| let's look
 
 1280
 00:39:55,300 --> 00:39:57,490
@@ -6397,32 +6394,32 @@ a little bit at how
 1281
 00:39:57,490 --> 00:39:59,350
 0,210 210,660 660,990 990,1500 1500,1860
-she code simply directly provides
+C code zookeeper actually provides
 
 1282
 00:39:59,350 --> 00:40:00,800
 0,180 180,960
-these guarantees.
+these guarantees.|
 
 1283
 00:40:00,890 --> 00:40:03,170
 0,690 1050,1740 1740,2070 2070,2130 2130,2280
-Um, and if we get
+{} And if we get
 
 1284
 00:40:03,170 --> 00:40:05,480
 0,60 60,840 870,1020 1020,1410 1410,2310
-the information you know, um,
+the intuition you know, {}|
 
 1285
 00:40:06,350 --> 00:40:07,700
 0,360 360,450 450,570 570,990 990,1350
-how you could implement this,
+how you could implement this,|
 
 1286
 00:40:07,970 --> 00:40:08,780
 0,210 210,330 330,570 570,780 780,810
-um, the paper checks are
+{} the paper section are
 
 1287
 00:40:08,780 --> 00:40:10,310
@@ -6432,7 +6429,7 @@ not very explicit about how
 1288
 00:40:10,310 --> 00:40:11,750
 0,150 150,540 540,930 1110,1380 1380,1440
-they implement this sort of
+they implement this,| sort of
 
 1289
 00:40:11,750 --> 00:40:12,530
@@ -6442,32 +6439,32 @@ like I'm gonna give you
 1290
 00:40:12,530 --> 00:40:14,380
 0,150 150,450 450,870 870,1440
-a roughly best guess.
+a roughly best guess.|
 
 1291
 00:40:14,640 --> 00:40:16,620
 0,630 900,1380
-Um, so.
+{} So,
 
 1292
 00:40:16,680 --> 00:40:18,510
 0,330 330,690 720,930 930,1200 1200,1830
-There's a zoo keeper client.
+there's a {zookeeper -} client,|
 
 1293
 00:40:21,150 --> 00:40:21,930
 0,180 180,360 360,450 450,510 510,780
-It runs on the client
+it runs on the client
 
 1294
 00:40:21,930 --> 00:40:24,060
 0,450 570,1260 1260,1620 1620,2010 2010,2130
-machine, um in lottery, we
+machine,| {} in {lab,3}, we
 
 1295
 00:40:24,060 --> 00:40:25,020
 0,150 150,300 300,390 390,480 480,960
-call this as a clerk
+call this as a clerk|
 
 1296
 00:40:25,050 --> 00:40:25,680
@@ -6477,7 +6474,7 @@ and so this is a
 1297
 00:40:25,680 --> 00:40:27,030
 0,180 180,240 240,690 690,1080 1080,1350
-piece of sulphur library sort
+piece of software library sort
 
 1298
 00:40:27,030 --> 00:40:28,710
@@ -6487,17 +6484,17 @@ that works collaborates with the
 1299
 00:40:28,710 --> 00:40:29,740
 0,570
-service.
+service.|
 
 1300
 00:40:30,360 --> 00:40:32,670
 0,660 690,1080 1080,1620 1620,2010 2010,2310
-In a in super k
+In {} in {zookeeper -}
 
 1301
 00:40:32,670 --> 00:40:34,230
 0,90 90,180 180,420 420,1080 1080,1560
-in the paper terminology, basically
+in the paper terminology,| basically
 
 1302
 00:40:34,230 --> 00:40:34,860
@@ -6507,7 +6504,7 @@ it is the thing that
 1303
 00:40:34,860 --> 00:40:36,840
 0,210 210,360 360,750 1170,1710 1740,1980
-has this session so a
+has this section,| so {}
 
 1304
 00:40:36,840 --> 00:40:37,920
@@ -6517,17 +6514,17 @@ when you join when a
 1305
 00:40:37,920 --> 00:40:39,030
 0,360 360,510 510,600 600,1050 1050,1110
-client wants to connect they
+client wants to connect the
 
 1306
 00:40:39,030 --> 00:40:40,080
 0,180 180,330 330,390 390,960 960,1050
-should keep the servers you
+{zookeeper - -} servers| you
 
 1307
 00:40:40,080 --> 00:40:41,010
 0,60 60,180 180,420 420,480 480,930
-know it creates a session,
+know it creates a session,|
 
 1308
 00:40:41,010 --> 00:40:42,630
@@ -6537,12 +6534,12 @@ it connects using the session
 1309
 00:40:42,630 --> 00:40:44,550
 0,660 1080,1320 1320,1440 1440,1830 1830,1920
-information to the leader and
+information to the leader| and
 
 1310
 00:40:44,550 --> 00:40:47,190
 0,600 600,1350 1530,2040 2040,2100 2100,2640
-maintains interstate across the session.
+maintains {you,know,state} across the session.|
 
 1311
 00:40:48,050 --> 00:40:49,490
@@ -6552,22 +6549,22 @@ So we have a leader
 1312
 00:40:49,520 --> 00:40:51,410
 0,300 300,690 720,1410 1410,1560 1560,1890
-a in a zoo keeper
+{} in {} {zookeeper -}
 
 1313
 00:40:51,410 --> 00:40:53,570
 0,150 150,360 360,870 990,1380 1410,2160
-as we'll see with followers,
+as we'll see with followers,|
 
 1314
 00:40:53,570 --> 00:40:54,980
 0,120 120,570 570,1170 1170,1350 1350,1410
-you're basically dissolve sort of
+{you,know} basically {this,is,all} sort of
 
 1315
 00:40:54,980 --> 00:40:56,100
 0,600
-similar.
+similar.|
 
 1316
 00:40:56,100 --> 00:40:57,510
