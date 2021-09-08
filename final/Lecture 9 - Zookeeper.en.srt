@@ -1,0 +1,5188 @@
+1
+00:00:00,450 --> 00:00:01,290
+Thank you,
+
+2
+00:00:01,470 --> 00:00:05,400
+okay, good afternoon, good morning, good evening, good night, wherever you are,
+
+3
+00:00:06,180 --> 00:00:10,230
+so today I want to talk about the zookeeper
+
+4
+00:00:10,230 --> 00:00:13,110
+and with the this background paper,
+
+5
+00:00:13,110 --> 00:00:15,300
+that we you know which is assigned for today
+
+6
+00:00:15,300 --> 00:00:16,770
+which is from 2010.
+
+7
+00:00:17,890 --> 00:00:23,710
+And, so there's gonna be referring back the last couple lectures,
+
+8
+00:00:23,710 --> 00:00:26,170
+I think we dove in quite a bit of detail into raft
+
+9
+00:00:26,170 --> 00:00:29,530
+including looking at code,
+
+10
+00:00:29,560 --> 00:00:32,530
+the lectures from now on are going to be more conceptual
+
+11
+00:00:32,800 --> 00:00:38,170
+and exploring ideas in distributed systems zookeeper's,
+
+12
+00:00:38,740 --> 00:00:43,000
+and the zookeeper, one is particularly relevant to us,
+
+13
+00:00:43,300 --> 00:00:46,360
+because it has a little bit of relationship
+
+14
+00:00:46,360 --> 00:00:47,920
+as we'll see with lab 3.
+
+15
+00:00:48,970 --> 00:00:52,420
+And so it will allow us to talk about some properties of lab 3
+
+16
+00:00:52,420 --> 00:00:54,130
+and particularly reliability,
+
+17
+00:00:54,760 --> 00:00:57,580
+but zookeeper system more importantly,
+
+18
+00:00:57,580 --> 00:01:05,350
+it's interesting because one of widely used system in practice.
+
+19
+00:01:07,700 --> 00:01:15,200
+Well beyond Apache, well beyond Yahoo is a open source Apache project,
+
+20
+00:01:15,200 --> 00:01:17,120
+that is still active.
+
+21
+00:01:17,910 --> 00:01:21,660
+What particularly interesting about it for us,
+
+22
+00:01:21,870 --> 00:01:24,480
+in the lecture like today is actually high performance
+
+23
+00:01:25,110 --> 00:01:31,770
+and high performance, I mean much higher performance than what actually lab 3 is gonna be.
+
+24
+00:01:32,840 --> 00:01:36,020
+I'll talk to talk quite a bit of detail about this
+
+25
+00:01:36,380 --> 00:01:39,740
+and there's sort of two reasons why it is high performance one,
+
+26
+00:01:39,860 --> 00:01:42,740
+it is the client operations are asynchronous,
+
+27
+00:01:47,180 --> 00:01:49,610
+and really what high performing forms here means is
+
+28
+00:01:49,610 --> 00:01:54,020
+we can, the system can process many more operations per second,
+
+29
+00:01:54,020 --> 00:01:55,940
+so it's really a throughput metric
+
+30
+00:01:56,480 --> 00:01:59,990
+and the second reason it's high performances because,
+
+31
+00:01:59,990 --> 00:02:02,510
+it doesn't provide strong consistency,
+
+32
+00:02:02,540 --> 00:02:10,900
+so it doesn't, it has an instinct consistency definition
+
+33
+00:02:11,500 --> 00:02:16,240
+and it gives us some freedom to execute basically read operations on any replica
+
+34
+00:02:16,420 --> 00:02:18,250
+and therefore reconforms can scale.
+
+35
+00:02:19,700 --> 00:02:23,030
+Then, the second aspect that is interesting from zookeeper is
+
+36
+00:02:23,030 --> 00:02:24,680
+in addition to being high performance,
+
+37
+00:02:24,890 --> 00:02:28,310
+it is sort of a generic, what they call coordination servers.
+
+38
+00:02:35,260 --> 00:02:39,220
+And the point being here is there are many applications,
+
+39
+00:02:39,550 --> 00:02:44,920
+where you need to keep track of like who's part of this cluster
+
+40
+00:02:44,920 --> 00:02:46,210
+and who's the master,
+
+41
+00:02:46,750 --> 00:02:50,920
+so think about the mapreduce or think about the GFS,
+
+42
+00:02:50,920 --> 00:02:54,670
+the master in GFS needs to keep track or like for every chunk,
+
+43
+00:02:54,820 --> 00:03:00,130
+who are the servers that actually server that [] server chunk whom servers actually is the master
+
+44
+00:03:00,820 --> 00:03:03,760
+and so tracking that sort of configuration information,
+
+45
+00:03:03,760 --> 00:03:06,490
+you know comes up in lots of different distributed applications,
+
+46
+00:03:06,730 --> 00:03:09,970
+zookeeper is really designed to support that kind of thing,
+
+47
+00:03:09,970 --> 00:03:14,260
+so you sort of outsource all the configuration management to zookeeper,
+
+48
+00:03:14,560 --> 00:03:21,880
+and then focus the rest of your application development on other aspects of your distributed system.
+
+49
+00:03:22,860 --> 00:03:25,470
+Okay, so that's sort of a brief introduction,
+
+50
+00:03:25,470 --> 00:03:28,080
+you know the topics that we're gonna be talking about.
+
+51
+00:03:30,350 --> 00:03:32,960
+And as usual, feel free to interrupt at any time
+
+52
+00:03:33,470 --> 00:03:37,130
+or you know post something in the chat message,
+
+53
+00:03:37,190 --> 00:03:38,930
+let me actually pull up the chat.
+
+54
+00:03:40,670 --> 00:03:48,440
+Okay, so we just to get start from the basics zookeeper is replicated state machine.
+
+55
+00:03:58,730 --> 00:04:02,450
+In the same way that you know the replicated state machines that we've been seeing
+
+56
+00:04:02,750 --> 00:04:05,900
+and so let's draw the usual picture,
+
+57
+00:04:06,110 --> 00:04:07,580
+um, we have some servers,
+
+58
+00:04:07,700 --> 00:04:10,790
+in this case, it's gonna be zookeeper ZK.
+
+59
+00:04:11,670 --> 00:04:14,850
+It receives requests from clients,
+
+60
+00:04:14,850 --> 00:04:25,590
+that create create z node in basically the way it interacts to distribute these operations,
+
+61
+00:04:25,590 --> 00:04:27,480
+it has sort of a separate library,
+
+62
+00:04:27,480 --> 00:04:32,370
+you know, think about this as the raft library in their case, it's called ZAB.
+
+63
+00:04:34,620 --> 00:04:42,480
+Basically, you know the leader you know sticks the operation into you know the equivalent raft library
+
+64
+00:04:42,480 --> 00:04:49,020
+that you know talks you know to you know other libraries or other peers,
+
+65
+00:04:49,440 --> 00:04:52,500
+that basically creates a log,
+
+66
+00:04:52,830 --> 00:04:56,010
+you know that conveys with all these operations and all these machines
+
+67
+00:04:56,820 --> 00:05:00,570
+and then the operations are the log of feedback to the [],
+
+68
+00:05:00,570 --> 00:05:05,070
+so in our case, we apply channel to the servers,
+
+69
+00:05:05,070 --> 00:05:07,260
+the servers applies the operation in response to the client
+
+70
+00:05:07,290 --> 00:05:10,300
+and so we have basically [diversion] is running.
+
+71
+00:05:11,090 --> 00:05:16,670
+And, so far, you know in the labs you know really focusing mostly
+
+72
+00:05:16,670 --> 00:05:19,040
+you know lab 2 is all about you know this part,
+
+73
+00:05:21,000 --> 00:05:23,160
+implementing in our case raft,
+
+74
+00:05:23,190 --> 00:05:24,390
+so instead of ZAB
+
+75
+00:05:24,690 --> 00:05:27,810
+and for the first order at a very high level,
+
+76
+00:05:27,810 --> 00:05:31,950
+you can think about ZAB being another raft,
+
+77
+00:05:31,950 --> 00:05:36,450
+you know providing sort of similar guarantees you know implemented quite differently,
+
+78
+00:05:36,750 --> 00:05:45,150
+you know it provides an order of all the operations despite failures network vacations, etc etc,
+
+79
+00:05:45,180 --> 00:05:46,830
+doesn't suffer from split brain,
+
+80
+00:05:46,830 --> 00:05:51,120
+brain all are sort of things which we associate with the raft library.
+
+81
+00:05:51,900 --> 00:05:56,970
+In you know what we're gonna be focusing in lap 3 on is
+
+82
+00:05:56,970 --> 00:05:58,650
+actually implementing a service on top of it,
+
+83
+00:05:58,890 --> 00:06:03,750
+so, this paper talks about the discoordination zookeeper in,
+
+84
+00:06:03,780 --> 00:06:06,480
+we're going to actually implement in lab 3 key value stores.
+
+85
+00:06:12,400 --> 00:06:15,760
+In the data structure is just map from keys to values
+
+86
+00:06:16,690 --> 00:06:20,530
+and so the operations there that we're going to be supporting are put and get.
+
+87
+00:06:22,650 --> 00:06:24,660
+So the clients may put get operations,
+
+88
+00:06:24,660 --> 00:06:26,400
+you know to the servers,
+
+89
+00:06:26,400 --> 00:06:28,290
+the servers runs in through raft
+
+90
+00:06:28,590 --> 00:06:31,950
+and then applies them one by one to the key value store.
+
+91
+00:06:32,810 --> 00:06:35,930
+In zookeeper you know the structures slightly different,
+
+92
+00:06:35,930 --> 00:06:37,730
+there's a tree of z nodes,
+
+93
+00:06:38,180 --> 00:06:40,700
+but the basic operation is the applys the same,
+
+94
+00:06:40,700 --> 00:06:43,740
+you know the. lower layer the ZAB
+
+95
+00:06:43,740 --> 00:06:49,740
+or the ZAB library or ZAB library orders all the operations they're applied in the same order all replicas,
+
+96
+00:06:49,920 --> 00:06:51,960
+because they are applied all in the same order,
+
+97
+00:06:51,960 --> 00:06:53,520
+there's no non-determinism,
+
+98
+00:06:53,820 --> 00:06:57,360
+the resulting state on each of the replica is going to be identical.
+
+99
+00:07:00,480 --> 00:07:01,080
+Okay?
+
+100
+00:07:01,980 --> 00:07:06,480
+That's sort of the basic setting of this paper
+
+101
+00:07:06,600 --> 00:07:13,620
+and sort of also the relation part of the relationship between lab 3 and the zookeeper service itself.
+
+102
+00:07:14,280 --> 00:07:18,360
+And mostly going to be talking in this lecture on focus on the zookeeper part itself
+
+103
+00:07:18,360 --> 00:07:19,920
+and not talk about ZAB,
+
+104
+00:07:20,280 --> 00:07:25,620
+because you're gonna assume that's similar to what we're doing and we're doing in lab 2.
+
+105
+00:07:28,370 --> 00:07:31,340
+Okay, talking a little bit about,
+
+106
+00:07:31,490 --> 00:07:34,730
+what kind of performance would you observe,
+
+107
+00:07:34,820 --> 00:07:37,040
+if you want to finish lab 3.
+
+108
+00:07:37,650 --> 00:07:42,690
+And, would measure how many you puts or gets your operation get through per second,
+
+109
+00:07:42,780 --> 00:07:47,370
+because one of the achievements, this paper is you know high performance.
+
+110
+00:07:47,760 --> 00:07:49,260
+So let's think a little bit about that,
+
+111
+00:07:49,650 --> 00:07:52,290
+so let's assume there's a operation coming in.
+
+112
+00:07:54,360 --> 00:07:56,490
+And you know put information comes in by the leader
+
+113
+00:07:56,490 --> 00:07:58,320
+and so we're just gonna go for the normal case
+
+114
+00:07:58,320 --> 00:08:03,120
+like the standard case where everything is working, no network failures, no petitions, nothing everything works out perfectly.
+
+115
+00:08:03,570 --> 00:08:04,620
+Here's the leader,
+
+116
+00:08:04,710 --> 00:08:06,000
+we've got two followers.
+
+117
+00:08:09,390 --> 00:08:13,320
+And you know, now you know that particle you probably inside out
+
+118
+00:08:13,590 --> 00:08:17,340
+you know the first thing of course it happens like you would be the leader call start,
+
+119
+00:08:17,840 --> 00:08:19,640
+to start actually writes,
+
+120
+00:08:20,530 --> 00:08:26,080
+the put operation to its, to log in the leader
+
+121
+00:08:26,260 --> 00:08:30,670
+and then the leader you know propagates it's log to the other followers.
+
+122
+00:08:31,360 --> 00:08:35,890
+And you know before it actually happens in parallel or seeing argue,
+
+123
+00:08:35,980 --> 00:08:37,660
+let me draw it slightly differently.
+
+124
+00:08:40,020 --> 00:08:46,650
+Basically it launches a bunch of RPCs almost instantaneously to the different followers,
+
+125
+00:08:46,950 --> 00:08:54,840
+each follower of course you know will append the entry to its logs so that requires a writes to storage same thing here
+
+126
+00:08:54,870 --> 00:08:56,160
+and then they respond back.
+
+127
+00:08:57,110 --> 00:08:59,090
+And so here's a response back
+
+128
+00:08:59,360 --> 00:09:02,210
+and in this case, majority has responded,
+
+129
+00:09:02,540 --> 00:09:04,820
+the leader can actually apply the operation,
+
+130
+00:09:05,000 --> 00:09:09,140
+so the leader will actually apply the operation here for indicator.
+
+131
+00:09:10,000 --> 00:09:14,680
+So do the put and send the response back to the client,
+
+132
+00:09:15,580 --> 00:09:21,010
+what curious about is like how many put per second can we actually get,
+
+133
+00:09:21,040 --> 00:09:25,340
+you know in this in this setting.
+
+134
+00:09:26,170 --> 00:09:28,330
+And you know think about it,
+
+135
+00:09:28,330 --> 00:09:32,770
+you know the you grows back of the envelope calculation,
+
+136
+00:09:32,770 --> 00:09:35,920
+we don't really care exactly about the exact numbers,
+
+137
+00:09:35,920 --> 00:09:37,990
+but you know one roundtrip,
+
+138
+00:09:38,410 --> 00:09:42,250
+we need at least one roundtrip to actually get the majority leader,
+
+139
+00:09:42,250 --> 00:09:45,160
+needs to talk to at least one follower collection maintained majority,
+
+140
+00:09:45,160 --> 00:09:47,800
+so we're going to have at least one roundtrip messaging.
+
+141
+00:09:52,340 --> 00:09:57,920
+And then you sort of need to look at the writes to stable storage,
+
+142
+00:09:57,920 --> 00:09:59,510
+because those tend to be expensive
+
+143
+00:09:59,840 --> 00:10:01,280
+and we'll see you know in this case,
+
+144
+00:10:01,280 --> 00:10:02,270
+we're going to have two writes,
+
+145
+00:10:02,270 --> 00:10:03,950
+because there's gonna be one write at the leader's,
+
+146
+00:10:03,950 --> 00:10:05,270
+one write at the follower,
+
+147
+00:10:05,270 --> 00:10:08,360
+at that point we have at least two nodes that have copy,
+
+148
+00:10:08,540 --> 00:10:10,100
+so what are the things will be committed,
+
+149
+00:10:10,430 --> 00:10:13,340
+if no further failures,
+
+150
+00:10:13,520 --> 00:10:16,190
+and so basically you know to
+
+151
+00:10:16,720 --> 00:10:18,640
+and minimum we're going to need to write.
+
+152
+00:10:20,590 --> 00:10:23,110
+So that's sort of the base and the best you could do right,
+
+153
+00:10:23,110 --> 00:10:26,080
+in this simple scheme that we discussed in discussed here,
+
+154
+00:10:26,500 --> 00:10:28,720
+sort of, we can think about the cost is,
+
+155
+00:10:29,260 --> 00:10:34,420
+in a roundtrip, you know maybe those running in the data center, networks are not across the Internet,
+
+156
+00:10:34,630 --> 00:10:37,270
+maybe you know that actually comes down to 1 millisecond.
+
+157
+00:10:40,080 --> 00:10:42,180
+We're roughly in the neighborhood for a millisecond,
+
+158
+00:10:42,180 --> 00:10:45,330
+maybe a little bit faster, but we're gonna care about this in a second.
+
+159
+00:10:45,890 --> 00:10:48,020
+We're going to do two writes to stable storage,
+
+160
+00:10:48,830 --> 00:10:51,590
+write actually to save the storage seems to be expensive
+
+161
+00:10:51,590 --> 00:10:55,910
+and it depends on what medium what technology you're using for stable storage,
+
+162
+00:10:55,970 --> 00:10:59,300
+let's assume when we're using ssd's are pretty typical,
+
+163
+00:10:59,450 --> 00:11:03,260
+then there's only one write in the order of maybe two milliseconds,
+
+164
+00:11:03,260 --> 00:11:07,280
+you know we've got to really make sure actually the write ends up on the in the ssd,
+
+165
+00:11:07,280 --> 00:11:10,070
+so we're gonna probably has to be a synchronous write.
+
+166
+00:11:10,990 --> 00:11:13,960
+So it means like two milliseconds for one write,
+
+167
+00:11:13,960 --> 00:11:17,140
+so two writes would be roughly you know 4 milliseconds.
+
+168
+00:11:19,110 --> 00:11:21,990
+So we ended up, there's going to be 5 milliseconds.
+
+169
+00:11:24,270 --> 00:11:26,070
+And so, how many operations per second.
+
+170
+00:11:28,100 --> 00:11:29,660
+Just to see if anybody still awake.
+
+171
+00:11:33,880 --> 00:11:35,200
+200.
+
+172
+00:11:35,200 --> 00:11:37,450
+Yeah so there's gonna be 200 put per second.
+
+173
+00:11:41,040 --> 00:11:42,810
+Any questions about this, doesn't make sense?
+
+174
+00:11:46,010 --> 00:11:49,040
+Okay, so now let's look at zookeeper.
+
+175
+00:11:49,070 --> 00:11:52,250
+What's the roundtrip for in the writes, I'm sorry I missed you.
+
+176
+00:11:53,300 --> 00:11:56,900
+We, yeah the formula there writes there write there's you know roundtrip,
+
+177
+00:11:56,900 --> 00:11:59,600
+there's one roundtrip direct talk from the leader to the follower
+
+178
+00:11:59,600 --> 00:12:02,480
+and the two write, one at the stable storage for the leader
+
+179
+00:12:02,570 --> 00:12:05,600
+and one stable storage for the follower.
+
+180
+00:12:07,340 --> 00:12:09,170
+And the two writes end up to 4,
+
+181
+00:12:09,200 --> 00:12:11,060
+roundtrip to roughly 1 millisecond,
+
+182
+00:12:11,060 --> 00:12:13,840
+so the total is 5 milliseconds for one put.
+
+183
+00:12:17,160 --> 00:12:19,320
+Okay, let's look at the zookeeper.
+
+184
+00:12:27,920 --> 00:12:32,390
+And again the metric that the paper is interested in is the throughput metric
+
+185
+00:12:32,390 --> 00:12:35,360
+where it basically declines you have many many many clients
+
+186
+00:12:35,630 --> 00:12:45,800
+and they pump many requests to zookeeper as much as possible
+
+187
+00:12:45,980 --> 00:12:49,220
+and pipeline them aggressively.
+
+188
+00:12:49,930 --> 00:12:54,520
+And so, so let's see what the results of that is,
+
+189
+00:12:54,790 --> 00:13:00,570
+and so let me pull up the graph of the paper.
+
+190
+00:13:04,260 --> 00:13:06,600
+And you look at that paper a little,
+
+191
+00:13:06,600 --> 00:13:07,890
+look the graph a little bit.
+
+192
+00:13:10,240 --> 00:13:12,760
+So a couple things that presumably to observe
+
+193
+00:13:12,760 --> 00:13:16,900
+on the x axis is the percentage of requests as we'll see in a second
+
+194
+00:13:16,900 --> 00:13:21,310
+and this is going to be important to distinguish read or write operations
+
+195
+00:13:21,310 --> 00:13:25,840
+and so write operations are really operations that modify any write operation that modifies state,
+
+196
+00:13:26,140 --> 00:13:28,990
+read operations or operations don't modify the state at all,
+
+197
+00:13:29,260 --> 00:13:35,380
+so in our last three terms you would be in the write operation and get the read operation.
+
+198
+00:13:36,340 --> 00:13:39,820
+And on the y axis is the number operations per second
+
+199
+00:13:39,820 --> 00:13:41,860
+and let's look at the case of 3 servers,
+
+200
+00:13:42,130 --> 00:13:46,510
+and so the first thing you notice is that zero reads,
+
+201
+00:13:46,510 --> 00:13:48,430
+so only write operations,
+
+202
+00:13:48,760 --> 00:13:58,930
+so once that modify the state you know we get roughly 21000 operations per second as throughput, right,
+
+203
+00:13:59,260 --> 00:14:03,910
+and you know look at you know if the system only has reads,
+
+204
+00:14:04,240 --> 00:14:05,380
+it actually gets a lot more
+
+205
+00:14:05,380 --> 00:14:10,270
+and gets up in the you know whatever the 60,70 reads region
+
+206
+00:14:10,570 --> 00:14:14,080
+and in fact when things go on is that the number reads,
+
+207
+00:14:14,930 --> 00:14:17,990
+but throughput in terms of reads the scales with the numerous servers.
+
+208
+00:14:25,510 --> 00:14:29,740
+So, if you're 3 servers,
+
+209
+00:14:29,740 --> 00:14:32,740
+you know you get 3 times, you know the read performers of one server,
+
+210
+00:14:32,740 --> 00:14:37,720
+if you have 5 servers, you get 5 times to read performers one server
+
+211
+00:14:38,200 --> 00:14:39,730
+that of course not true writes, correct,
+
+212
+00:14:39,730 --> 00:14:41,470
+in fact if you look at this graph,
+
+213
+00:14:41,500 --> 00:14:45,880
+you see that if with more servers the write performance actually goes down.
+
+214
+00:14:46,460 --> 00:14:49,400
+And you know that the reason for that is presumably
+
+215
+00:14:49,400 --> 00:14:54,260
+the leader has to chat, we have more servers actually gets operation through.
+
+216
+00:14:54,980 --> 00:14:57,980
+And so when we're purely doing write operations
+
+217
+00:14:58,100 --> 00:15:02,390
+were actually limited and we cannot expect more performance than a single server
+
+218
+00:15:02,390 --> 00:15:05,570
+and in fact the up servers we're going to go down performance.
+
+219
+00:15:07,540 --> 00:15:15,250
+And so, just 21000 per second you know even for single you know write operations,
+
+220
+00:15:15,250 --> 00:15:19,960
+we have a configuration of 3 servers is impressive number is quite a bit higher
+
+221
+00:15:19,960 --> 00:15:24,160
+and actually the simple calculus that we did for lab 3,
+
+222
+00:15:24,160 --> 00:15:27,880
+lab 3 will never get into will not get closer to the neighborhood at all.
+
+223
+00:15:28,570 --> 00:15:31,180
+And so we want to understand,
+
+224
+00:15:31,390 --> 00:15:33,700
+you want to see in this design,
+
+225
+00:15:33,730 --> 00:15:36,910
+what designers do to actually get that kind of performance.
+
+226
+00:15:41,950 --> 00:15:43,600
+And sort of two as I mentioned earlier,
+
+227
+00:15:43,600 --> 00:15:45,820
+there's sort of two key ideas,
+
+228
+00:15:45,820 --> 00:15:48,010
+one everything is asynchronous
+
+229
+00:15:48,040 --> 00:15:56,270
+or the clients can submit many operations to raft or zookeeper sorry, in a single shot,
+
+230
+00:15:56,750 --> 00:15:58,010
+so their own pipeline,
+
+231
+00:15:58,010 --> 00:16:02,090
+so basically wins away to think about zookeeper client,
+
+232
+00:16:02,090 --> 00:16:08,360
+basically says, please start executing this put and doesn't wait in the response of the put,
+
+233
+00:16:08,390 --> 00:16:10,760
+you know immediately issues the second put
+
+234
+00:16:10,760 --> 00:16:12,230
+and then the third and fourth and fifth.
+
+235
+00:16:12,750 --> 00:16:15,660
+So, for example a lot of these puts run will be batched together,
+
+236
+00:16:15,660 --> 00:16:19,650
+maybe even a single message will be transferred to the leader
+
+237
+00:16:19,650 --> 00:16:22,230
+and the leader will apply them all at the same time,
+
+238
+00:16:22,500 --> 00:16:26,670
+in fact world leader will write to the persistent storage only once
+
+239
+00:16:26,670 --> 00:16:28,380
+you know for a whole batch of operation,
+
+240
+00:16:28,380 --> 00:16:31,530
+so instead of having one write per operation,
+
+241
+00:16:31,560 --> 00:16:34,950
+you're going to have one disk write to many many many operations
+
+242
+00:16:35,190 --> 00:16:41,160
+and this is one reason you know they get this a very good performance on write operations.
+
+243
+00:16:41,710 --> 00:16:43,720
+And the second thing is,
+
+244
+00:16:43,900 --> 00:16:47,470
+they do something special for read operations,
+
+245
+00:16:47,530 --> 00:16:52,590
+they allow read operations to be processed by any server.
+
+246
+00:16:57,200 --> 00:16:59,600
+So instead of running all the operations through the leader,
+
+247
+00:16:59,990 --> 00:17:04,730
+they allow operations to actually be processed by any server.
+
+248
+00:17:06,060 --> 00:17:06,840
+So.
+
+249
+00:17:07,840 --> 00:17:11,560
+And then the later we want to talk a little bit more about it,
+
+250
+00:17:11,800 --> 00:17:15,130
+I think I wanted to think about what could we do something similar,
+
+251
+00:17:15,130 --> 00:17:16,870
+like let's say we want to lab 3.
+
+252
+00:17:20,570 --> 00:17:22,700
+And we're gonna do the same trick,
+
+253
+00:17:22,700 --> 00:17:32,840
+here we want to look at is basically reads from any machine or any peer.
+
+254
+00:17:36,760 --> 00:17:38,680
+So the picture would be as follows,
+
+255
+00:17:38,680 --> 00:17:39,730
+you know we have a leader,
+
+256
+00:17:40,750 --> 00:17:42,310
+we have the two followers,
+
+257
+00:17:42,910 --> 00:17:45,070
+we just stick to the case of three.
+
+258
+00:17:46,950 --> 00:17:48,240
+We have a client.
+
+259
+00:17:49,980 --> 00:17:54,330
+And, we're like consider what actually could happen.
+
+260
+00:17:55,110 --> 00:17:59,340
+If you were sort of easily follow this strategy where we're going to read from anything,
+
+261
+00:17:59,340 --> 00:18:00,270
+we use our client.
+
+262
+00:18:01,310 --> 00:18:03,260
+The leaders actually when we do puts,
+
+263
+00:18:03,260 --> 00:18:05,030
+you know they all go through the leader.
+
+264
+00:18:06,150 --> 00:18:08,250
+And so the client to basically does read
+
+265
+00:18:08,610 --> 00:18:11,580
+and let's say you know this was a read put done,
+
+266
+00:18:12,310 --> 00:18:17,470
+and at the same time roughly after after the put was now the client issues a get,
+
+267
+00:18:18,510 --> 00:18:21,300
+and talks to one of the followers an arbitrary one,
+
+268
+00:18:21,300 --> 00:18:24,000
+let's use this in case it does not talk to the leader
+
+269
+00:18:24,210 --> 00:18:28,770
+and then you know where the follower response
+
+270
+00:18:29,040 --> 00:18:32,910
+and the question is like what value does to get to observe.
+
+271
+00:18:35,320 --> 00:18:38,050
+So what are the possible values you know that the guests can observe,
+
+272
+00:18:38,080 --> 00:18:42,010
+let's say that you know we're reading whatever the key x
+
+273
+00:18:42,010 --> 00:18:44,410
+and the initial value of x is 0
+
+274
+00:18:44,590 --> 00:18:46,780
+and in the put actually put x to 1.
+
+275
+00:18:48,240 --> 00:18:50,730
+And what are the values that x actually return
+
+276
+00:18:50,760 --> 00:18:53,100
+and if we don't do anything particularly special.
+
+277
+00:18:56,520 --> 00:18:58,110
+So just a question here about the setup,
+
+278
+00:18:58,110 --> 00:19:01,560
+so if we're assuming that raft is the infrastructure here
+
+279
+00:19:01,620 --> 00:19:03,300
+and get its just another command,
+
+280
+00:19:03,420 --> 00:19:06,990
+then would the follower just redirect applying to the leader,
+
+281
+00:19:07,020 --> 00:19:12,420
+who put the get request for the leader.
+
+282
+00:19:12,420 --> 00:19:13,440
+No a lot of things we could do,
+
+283
+00:19:13,440 --> 00:19:16,350
+but like we want to get this [perfect] scalability.
+
+284
+00:19:16,850 --> 00:19:18,530
+So to get perfect scalability,
+
+285
+00:19:18,770 --> 00:19:22,130
+the follower cannot talk to the leader for read operations,
+
+286
+00:19:22,130 --> 00:19:27,740
+so basically read operations are executed by the individual followers immediately,
+
+287
+00:19:27,890 --> 00:19:28,910
+without no communication,
+
+288
+00:19:29,060 --> 00:19:31,160
+not to know the way we're going to get perfect scalability.
+
+289
+00:19:31,340 --> 00:19:33,230
+Right, there not even communicating with.
+
+290
+00:19:34,490 --> 00:19:36,410
+Yep, I'm just doing beneath plan,
+
+291
+00:19:36,410 --> 00:19:38,540
+looks like our goal is to get perfect scalability,
+
+292
+00:19:38,810 --> 00:19:40,310
+like you know zookeeper does
+
+293
+00:19:40,610 --> 00:19:43,190
+and we want to understand like you know is that difficult or easy
+
+294
+00:19:43,400 --> 00:19:44,780
+or what does that really mean
+
+295
+00:19:44,960 --> 00:19:49,010
+and so the first thing to find experiment is like would do absolutely nothing at the leaders
+
+296
+00:19:49,010 --> 00:19:53,390
+and followers followers get read operation executed and return the value.
+
+297
+00:19:55,060 --> 00:19:55,870
+And what can you know,
+
+298
+00:19:55,870 --> 00:20:01,810
+so another question what values can be returned by, again the client observe in this picture?
+
+299
+00:20:01,930 --> 00:20:02,950
+Can be either,
+
+300
+00:20:02,950 --> 00:20:07,900
+because maybe you put then they make it through the disk of the leader yet.
+
+301
+00:20:08,110 --> 00:20:09,340
+Yeah, it could be either,
+
+302
+00:20:09,340 --> 00:20:13,060
+so either going to return 0 or it could return 1, right.
+
+303
+00:20:14,180 --> 00:20:18,080
+So it can return stale data, it's possibility.
+
+304
+00:20:19,330 --> 00:20:22,270
+Let's say, let's say we do,
+
+305
+00:20:22,300 --> 00:20:24,250
+let's say return 1,
+
+306
+00:20:25,270 --> 00:20:28,540
+so this get returns 1 for a [] experiment
+
+307
+00:20:28,540 --> 00:20:30,880
+and then declined another yet.
+
+308
+00:20:33,680 --> 00:20:35,930
+I'm not going to say to where that get is going,
+
+309
+00:20:36,380 --> 00:20:43,530
+but you know and what values could we see,
+
+310
+00:20:44,750 --> 00:20:45,920
+for respond to that get.
+
+311
+00:20:46,840 --> 00:20:49,510
+Assuming there are no other writes that should be one, right.
+
+312
+00:20:50,820 --> 00:20:51,780
+Yeah, unfortunately,
+
+313
+00:20:51,810 --> 00:20:53,730
+because I have 3 servers,
+
+314
+00:20:53,850 --> 00:20:55,110
+if I had 5 servers.
+
+315
+00:21:00,660 --> 00:21:03,570
+Why, why is it different?
+
+316
+00:21:03,600 --> 00:21:05,460
+Okay let's make it different.
+
+317
+00:21:07,200 --> 00:21:11,010
+So surely can return 1, we're agreeing that,
+
+318
+00:21:11,250 --> 00:21:14,760
+because if the follower talks to the second get request,
+
+319
+00:21:14,760 --> 00:21:20,970
+you know talks to a follower that actually has seen the put operation,
+
+320
+00:21:21,150 --> 00:21:23,280
+which the majority of them have seen put operation,
+
+321
+00:21:23,280 --> 00:21:24,780
+we're going to get 1 back, right.
+
+322
+00:21:25,920 --> 00:21:28,500
+The real question is could it see 0,
+
+323
+00:21:31,670 --> 00:21:33,650
+even though it observed the 1 earlier.
+
+324
+00:21:34,930 --> 00:21:36,370
+I mean you could see that 0,
+
+325
+00:21:36,370 --> 00:21:38,470
+even in the case of a 3 servers right,
+
+326
+00:21:38,470 --> 00:21:41,260
+because let's say that you have the majority of servers.
+
+327
+00:21:41,260 --> 00:21:43,990
+Let me do first 5 case, because it's simpler to see.
+
+328
+00:21:46,750 --> 00:21:51,280
+Are we assuming that the client always asks the same peer?
+
+329
+00:21:51,550 --> 00:21:56,320
+No, there might be a little network petition or disconnection for a brief period of time,
+
+330
+00:21:56,320 --> 00:21:59,440
+so you don't actually have to talk to the same peer as the last time, right.
+
+331
+00:22:00,070 --> 00:22:03,700
+Yeah, so in that case, it can talk to a different peer,
+
+332
+00:22:03,700 --> 00:22:08,500
+who and that pair may respond with 0, that's.
+
+333
+00:22:08,500 --> 00:22:09,490
+So, this is possible,
+
+334
+00:22:09,910 --> 00:22:12,670
+so we're gonna have to sort of strange behavior
+
+335
+00:22:12,670 --> 00:22:16,000
+in this configuration where you might see a recent,
+
+336
+00:22:16,030 --> 00:22:18,940
+you know in the first case we might see actually a recent value
+
+337
+00:22:19,030 --> 00:22:22,030
+and then we read actually something from back back in time.
+
+338
+00:22:28,090 --> 00:22:28,900
+Yep.
+
+339
+00:22:30,080 --> 00:22:32,030
+So we're doing nothing special,
+
+340
+00:22:32,180 --> 00:22:35,510
+and just like naively read from any peer,
+
+341
+00:22:35,510 --> 00:22:37,610
+and you know we have sort of two side types of problems
+
+342
+00:22:37,610 --> 00:22:40,040
+I mean the get can return stale data,
+
+343
+00:22:40,460 --> 00:22:43,550
+the get return data you've gone back in time.
+
+344
+00:22:44,840 --> 00:22:45,590
+And so.
+
+345
+00:22:46,290 --> 00:22:49,890
+Sorry, wasn't this possible also with 3 followers,
+
+346
+00:22:49,890 --> 00:22:52,380
+because the majority was the leader and one follower
+
+347
+00:22:52,380 --> 00:22:53,820
+and you could ask the other one.
+
+348
+00:22:55,520 --> 00:22:57,230
+If you've seen the one in,
+
+349
+00:22:57,230 --> 00:23:00,650
+yes, it could be possible, absolutely,
+
+350
+00:23:00,710 --> 00:23:02,150
+the three will be possible too,
+
+351
+00:23:02,150 --> 00:23:04,490
+I think the five is much more clear, that this is possible.
+
+352
+00:23:09,520 --> 00:23:10,570
+Okay so.
+
+353
+00:23:12,660 --> 00:23:16,140
+So, now we're going to go back and sort of think about a little bit of this behavior,
+
+354
+00:23:16,260 --> 00:23:19,500
+you know the returning those values, is that okay?
+
+355
+00:23:20,170 --> 00:23:22,300
+And this is a very interesting question,
+
+356
+00:23:22,330 --> 00:23:24,820
+and it depends of course, what do you mean with correct.
+
+357
+00:23:25,740 --> 00:23:30,330
+And what you know, if something's okay depends on what our correct definition is.
+
+358
+00:23:31,050 --> 00:23:37,230
+And the correctness definition that we should have been peddling for the last couple lectures reflections beginning of term,
+
+359
+00:23:37,230 --> 00:23:39,300
+is this notion of linearizability.
+
+360
+00:23:45,760 --> 00:23:48,610
+And, in roughly what that means.
+
+361
+00:23:49,110 --> 00:23:52,590
+I talked a little bit about it in a week ago,
+
+362
+00:23:52,680 --> 00:23:54,780
+you know behaves like a single machine,
+
+363
+00:23:57,460 --> 00:24:01,750
+that's the intuition that we've been using since the beginning of the semester,
+
+364
+00:24:02,920 --> 00:24:06,790
+but you know the definition of linearizability is a little bit more precise
+
+365
+00:24:07,000 --> 00:24:10,960
+sort of tries to nail down what it means to behave like a single machine,
+
+366
+00:24:10,990 --> 00:24:13,480
+and so when something behaves like a single machine,
+
+367
+00:24:13,480 --> 00:24:17,350
+first of all, it has to be the case that even if the operation actually concurrently,
+
+368
+00:24:17,380 --> 00:24:19,510
+you can sort of order them in a total order.
+
+369
+00:24:20,300 --> 00:24:25,010
+So it's possible to construct a total order of all the operations,
+
+370
+00:24:25,250 --> 00:24:26,900
+because in the end, it's a single machine,
+
+371
+00:24:26,900 --> 00:24:28,880
+so it behaves as a single machine,
+
+372
+00:24:28,880 --> 00:24:30,110
+there's only one machine,
+
+373
+00:24:30,140 --> 00:24:33,620
+so virtual machine that can actually perform the operations
+
+374
+00:24:33,620 --> 00:24:36,380
+or total order of apps
+
+375
+00:24:37,370 --> 00:24:40,970
+and there has to be some properties true about that total order.
+
+376
+00:24:41,700 --> 00:24:44,460
+And so one property that has to be true is
+
+377
+00:24:44,460 --> 00:24:46,320
+that the order matches real-time.
+
+378
+00:24:51,950 --> 00:24:54,140
+And the real-time really what I mean is that
+
+379
+00:24:54,140 --> 00:24:57,140
+even operation completed before another one started,
+
+380
+00:24:58,930 --> 00:25:01,600
+then, now that first operation has to go,
+
+381
+00:25:01,600 --> 00:25:04,090
+before the second operation into total order.
+
+382
+00:25:05,870 --> 00:25:10,800
+And then there's third property, that read operation,
+
+383
+00:25:11,400 --> 00:25:16,310
+read op returns value of last write.
+
+384
+00:25:23,620 --> 00:25:26,140
+That's sort of the official definition of linearizability
+
+385
+00:25:26,140 --> 00:25:31,030
+and you can just think about this as sort of more precise definition more precise statement,
+
+386
+00:25:31,030 --> 00:25:35,470
+this first thing this intuition, namely the whole thing behaves like a single machine.
+
+387
+00:25:37,370 --> 00:25:38,570
+Now we want to go back
+
+388
+00:25:38,690 --> 00:25:44,600
+and you know think a little bit about scenario that we either have just on this whiteboard,
+
+389
+00:25:44,630 --> 00:25:47,870
+mainly these two cases of stale data and back in time,
+
+390
+00:25:48,080 --> 00:25:53,190
+and think about that think whether linearizability allows them.
+
+391
+00:25:53,400 --> 00:25:56,250
+And so let's first focus on the first one,
+
+392
+00:25:56,430 --> 00:25:57,870
+so we have a client one correct,
+
+393
+00:25:57,870 --> 00:26:00,450
+for this the way you would draw this out
+
+394
+00:26:00,450 --> 00:26:02,100
+and reasonable linearizability is
+
+395
+00:26:02,100 --> 00:26:04,020
+you could draw a diagram for this one,
+
+396
+00:26:04,350 --> 00:26:07,290
+we're going to the left bar is the start of the operation,
+
+397
+00:26:07,290 --> 00:26:09,750
+the right bar is acknowledgement to the client,
+
+398
+00:26:09,750 --> 00:26:11,250
+but the operation actually executed
+
+399
+00:26:11,640 --> 00:26:17,370
+and in this case, you know we started saying were to put to x and output the value of 1.
+
+400
+00:26:18,170 --> 00:26:21,560
+Then we had another client or in the same client,
+
+401
+00:26:22,040 --> 00:26:23,690
+let's do drawing other clients,
+
+402
+00:26:23,690 --> 00:26:25,010
+you know basically did the read
+
+403
+00:26:25,040 --> 00:26:30,080
+and the read started well past the put operations
+
+404
+00:26:30,080 --> 00:26:31,700
+there's a get of x.
+
+405
+00:26:32,220 --> 00:26:35,880
+And, we had one case where together that's actually returned to 0,
+
+406
+00:26:35,910 --> 00:26:38,040
+that was the first possibility.
+
+407
+00:26:39,820 --> 00:26:43,180
+And, so that's what actually happened on the previous board
+
+408
+00:26:43,180 --> 00:26:47,650
+and now we want to think about this, is this execution allowed by linearizability,
+
+409
+00:26:47,740 --> 00:26:50,560
+this is the correct definition that we're looking for,
+
+410
+00:26:50,680 --> 00:26:53,170
+then we want to see this execution,
+
+411
+00:26:53,170 --> 00:26:56,410
+this order of operations that happened in practice,
+
+412
+00:26:56,410 --> 00:26:58,690
+you know at least we've seen that it's possible in practice,
+
+413
+00:26:58,690 --> 00:27:01,780
+is this allowed by linearizability that is our correctness criteria.
+
+414
+00:27:03,360 --> 00:27:06,600
+This is a lot of like linearizability?
+
+415
+00:27:11,980 --> 00:27:12,370
+No.
+
+416
+00:27:12,880 --> 00:27:14,260
+No, why not?
+
+417
+00:27:14,620 --> 00:27:20,170
+Well, because the c2 file operation started after the c1 completed,
+
+418
+00:27:20,170 --> 00:27:23,320
+so in the total order you have to put x 1
+
+419
+00:27:23,320 --> 00:27:25,150
+and get x has to be 1,
+
+420
+00:27:25,150 --> 00:27:26,530
+because it should read the last write.
+
+421
+00:27:27,070 --> 00:27:28,720
+Yeah, so basically in the total order,
+
+422
+00:27:28,720 --> 00:27:33,670
+that you construct you know this guy you know this operation must be after that operation.
+
+423
+00:27:34,340 --> 00:27:35,570
+Because it started later.
+
+424
+00:27:36,150 --> 00:27:39,660
+But then you look you know that violated rule number 3 correct.
+
+425
+00:27:40,220 --> 00:27:42,500
+That operation returns the value of the last write,
+
+426
+00:27:42,500 --> 00:27:45,560
+that's actually not the case actually returns new earlier value,
+
+427
+00:27:45,590 --> 00:27:47,000
+so this is not linearizable.
+
+428
+00:27:49,790 --> 00:27:50,630
+Does that make sense?
+
+429
+00:27:53,060 --> 00:27:55,190
+And of course it's totally matches our intuition, right,
+
+430
+00:27:55,190 --> 00:27:57,500
+because a single machine just could not have happened,
+
+431
+00:27:57,560 --> 00:28:00,140
+you know you wrote a value to a single machine,
+
+432
+00:28:00,140 --> 00:28:01,130
+and then you read it back
+
+433
+00:28:01,400 --> 00:28:02,690
+and it's certainly not other value,
+
+434
+00:28:02,690 --> 00:28:03,710
+it's actually the previous value,
+
+435
+00:28:03,710 --> 00:28:04,610
+so there's not a lot.
+
+436
+00:28:06,220 --> 00:28:07,330
+Okay, let's do a second one,
+
+437
+00:28:07,330 --> 00:28:08,590
+like our other examples,
+
+438
+00:28:08,590 --> 00:28:10,360
+so we had a client one again,
+
+439
+00:28:10,390 --> 00:28:14,520
+just put, draw a little bit more compact,
+
+440
+00:28:14,520 --> 00:28:15,960
+because I don't have much space.
+
+441
+00:28:16,620 --> 00:28:18,690
+And you know we do a put,
+
+442
+00:28:18,690 --> 00:28:22,740
+then we do, there's the read where you get,
+
+443
+00:28:23,320 --> 00:28:26,620
+get the [] turns 1, so we're not in the first case,
+
+444
+00:28:26,620 --> 00:28:28,690
+but in the second, but another case,
+
+445
+00:28:28,930 --> 00:28:32,800
+and then, we have to get that returns 0.
+
+446
+00:28:35,860 --> 00:28:39,550
+And so that's the second sort of case that we looked at, correct,
+
+447
+00:28:39,550 --> 00:28:42,880
+this picture you know the back in time case.
+
+448
+00:28:43,580 --> 00:28:45,470
+And again we can ask ourselves the same question,
+
+449
+00:28:46,350 --> 00:28:49,170
+is it allowed by linearizability.
+
+450
+00:28:53,350 --> 00:28:58,750
+No, because they read wouldn't be return the value the last write.
+
+451
+00:28:58,780 --> 00:29:01,720
+Yeah, its pretty straightforward observation correct,
+
+452
+00:29:01,720 --> 00:29:02,950
+this is absolutely not the case,
+
+453
+00:29:02,950 --> 00:29:04,630
+in fact it's almost similar in the first case,
+
+454
+00:29:04,630 --> 00:29:07,540
+because even though these operations have to be in this order,
+
+455
+00:29:07,780 --> 00:29:10,840
+but you know that you could not have happened,
+
+456
+00:29:10,840 --> 00:29:13,870
+but it would violate rule 3, right.
+
+457
+00:29:16,120 --> 00:29:20,650
+Okay, so you know this gives you an intuition like linearizability means,
+
+458
+00:29:20,650 --> 00:29:21,880
+how you reason about it
+
+459
+00:29:21,880 --> 00:29:25,120
+and basically, if we don't do anything special,
+
+460
+00:29:25,300 --> 00:29:27,520
+and we do this naive scheme,
+
+461
+00:29:27,640 --> 00:29:29,650
+if you were implementing lab 3
+
+462
+00:29:29,650 --> 00:29:31,600
+and you followed this naive scheme,
+
+463
+00:29:31,810 --> 00:29:34,090
+then you would not pass the test,
+
+464
+00:29:34,090 --> 00:29:40,000
+because you know the test assume or the goal in lab 3 is actually to provide linearizability for putting gets.
+
+465
+00:29:40,320 --> 00:29:43,020
+And so the scenarios like these ones are just not allowed
+
+466
+00:29:43,050 --> 00:29:48,600
+you know your implementation has to be a in a way that these results cannot appear.
+
+467
+00:29:50,400 --> 00:29:51,150
+Does that make sense?
+
+468
+00:29:53,150 --> 00:29:57,740
+So we're going lab 3 were a shoot for linearizability
+
+469
+00:29:58,100 --> 00:30:00,560
+and what is one easy way of getting linearizability,
+
+470
+00:30:02,680 --> 00:30:06,400
+how are we going to sure that puts or gets operation are linearizable.
+
+471
+00:30:08,800 --> 00:30:11,530
+Well, I mean if you do actually we use one machine,
+
+472
+00:30:12,080 --> 00:30:14,000
+then it will be linearizable, right.
+
+473
+00:30:14,330 --> 00:30:15,950
+Yeah, so what's the easy solution,
+
+474
+00:30:16,070 --> 00:30:18,710
+we run all the reads you know for the leader, right.
+
+475
+00:30:19,600 --> 00:30:22,870
+So basically the easy solution to get linearizability
+
+476
+00:30:22,870 --> 00:30:24,880
+and in fact that's what we're gonna be doing in lab 3,
+
+477
+00:30:25,440 --> 00:30:29,700
+right lab 3 were going to be doing is
+
+478
+00:30:31,080 --> 00:30:36,410
+you know read or get operations get ops go through the log,
+
+479
+00:30:37,400 --> 00:30:38,960
+they go through raft,
+
+480
+00:30:42,470 --> 00:30:43,520
+and as you observe,
+
+481
+00:30:43,520 --> 00:30:46,640
+it seems you know if they really go all through one machine
+
+482
+00:30:46,640 --> 00:30:48,980
+or they might not go for one machine,
+
+483
+00:30:49,190 --> 00:30:50,630
+leader may change over time,
+
+484
+00:30:51,050 --> 00:30:53,240
+when we know that the leader is always totally order,
+
+485
+00:30:53,240 --> 00:30:54,830
+creating the log is total order
+
+486
+00:30:55,100 --> 00:30:58,190
+and so we're going to be able to construct you know a total order
+
+487
+00:30:58,190 --> 00:31:00,980
+that actually has the order matches real-time
+
+488
+00:31:00,980 --> 00:31:03,800
+and older each return values up the last write.
+
+489
+00:31:04,340 --> 00:31:07,610
+Because this is the raft protocol will guarantee
+
+490
+00:31:07,610 --> 00:31:12,530
+that all the entries in log are in a total order, right.
+
+491
+00:31:13,320 --> 00:31:15,540
+And of course the raft protocol do quite a bit of work
+
+492
+00:31:15,540 --> 00:31:16,830
+to actually make that all happen
+
+493
+00:31:16,980 --> 00:31:20,460
+and despite you know network failures,
+
+494
+00:31:20,460 --> 00:31:24,570
+despite network splits,
+
+495
+00:31:24,690 --> 00:31:27,510
+you know the raft protocol will guarantee us,
+
+496
+00:31:27,600 --> 00:31:30,810
+that basically all the operations happen in a total order.
+
+497
+00:31:31,390 --> 00:31:35,170
+In fact, the whole replicated state machine approaches are based on this idea, correct,
+
+498
+00:31:35,170 --> 00:31:36,880
+like all the auction auction of the total order
+
+499
+00:31:36,880 --> 00:31:38,890
+and applied in the same order all peers
+
+500
+00:31:38,890 --> 00:31:42,760
+and as a result everyone to a looks like a single machine,
+
+501
+00:31:43,420 --> 00:31:49,270
+and so the easy way to solve this problem is to run all the reads you know through the leader,
+
+502
+00:31:49,720 --> 00:31:51,760
+wherever the leaders at that particular point of time
+
+503
+00:31:51,760 --> 00:31:53,230
+and now will give us linearizability.
+
+504
+00:31:57,830 --> 00:32:00,080
+Let me pause for a second, any questions about this?
+
+505
+00:32:02,210 --> 00:32:08,060
+Sorry, matches real-time it just means that if operation one ends before operation two starts?
+
+506
+00:32:08,560 --> 00:32:15,310
+Yeah, yeah, the raft, you know you will see that this will happen automatically correct,
+
+507
+00:32:15,310 --> 00:32:20,350
+because the the if operation action completely finished,
+
+508
+00:32:20,350 --> 00:32:24,220
+that must have been the case that the leader responded to go back to our clients
+
+509
+00:32:24,220 --> 00:32:26,290
+and then if the client started operation later
+
+510
+00:32:26,410 --> 00:32:28,630
+and must end up later in the log at the leader.
+
+511
+00:32:30,720 --> 00:32:32,400
+So this is going to be a practice is true.
+
+512
+00:32:33,500 --> 00:32:36,590
+And also, so just double check, maybe reiterate,
+
+513
+00:32:36,590 --> 00:32:40,980
+so the in lab 3 all of the client requests gonna be synchronous, or, so.
+
+514
+00:32:40,980 --> 00:32:42,510
+Yes it's absolute.
+
+515
+00:32:44,830 --> 00:32:45,490
+Okay, good,
+
+516
+00:32:45,700 --> 00:32:48,550
+so, you know what Dan side of this scheme,
+
+517
+00:32:48,550 --> 00:32:51,940
+you know go back actually if you read the raft paper very carefully,
+
+518
+00:32:51,940 --> 00:32:54,280
+there's an optimization for read only operations,
+
+519
+00:32:54,640 --> 00:32:59,800
+but even that optimization requires some some communication.
+
+520
+00:33:00,530 --> 00:33:02,900
+And so like if we just follow this naive,
+
+521
+00:33:02,930 --> 00:33:06,770
+there's this trick for a plan to actually get linearizability.
+
+522
+00:33:07,360 --> 00:33:10,510
+You know, does this what does that mean for performance,
+
+523
+00:33:10,510 --> 00:33:14,050
+you know go back to sort of thinking about contrasting the zookeeper.
+
+524
+00:33:20,350 --> 00:33:24,340
+Yeah, is for example the number of read operations is going to scale with the number of servers.
+
+525
+00:33:26,660 --> 00:33:30,410
+No, because now everything has to pass through.
+
+526
+00:33:30,440 --> 00:33:32,180
+Exactly, I think I'll go for the leader again,
+
+527
+00:33:32,180 --> 00:33:33,590
+so here we are again,
+
+528
+00:33:33,590 --> 00:33:35,120
+that's a little bit undesirable, correct.
+
+529
+00:33:35,840 --> 00:33:37,520
+And so it gives you an instant question is
+
+530
+00:33:37,520 --> 00:33:39,380
+like you know how is it possible,
+
+531
+00:33:39,380 --> 00:33:42,110
+that when you go to a zookeeper,
+
+532
+00:33:42,110 --> 00:33:43,670
+zookeeper gets great performance,
+
+533
+00:33:43,700 --> 00:33:46,670
+like we see the simple scheme that doesn't really work,
+
+534
+00:33:47,550 --> 00:33:49,350
+or at least violates linearizability.
+
+535
+00:33:50,310 --> 00:33:52,980
+And so what so we want to talk a little bit
+
+536
+00:33:52,980 --> 00:33:56,160
+like to understand what was really how did you get this
+
+537
+00:33:56,910 --> 00:33:59,940
+and so the first thing to really realize is
+
+538
+00:33:59,940 --> 00:34:06,880
+probably the most important part is that zookeeper does not provide the linearizability.
+
+539
+00:34:08,350 --> 00:34:10,690
+It basically changes the correctness definition.
+
+540
+00:34:22,740 --> 00:34:27,570
+And so the zookeeper servers, it's not going to behave like a single machine,
+
+541
+00:34:27,690 --> 00:34:32,610
+you know it's gonna have results that would never happen on a single machine.
+
+542
+00:34:33,450 --> 00:34:37,380
+So the particular, so what is it, what does it provide.
+
+543
+00:34:37,380 --> 00:34:41,190
+Well, it does provide linearizable writes,
+
+544
+00:34:51,880 --> 00:34:56,710
+so all the operations all the write operation actually you know go through the leader
+
+545
+00:34:56,710 --> 00:35:02,590
+and you go through the log and appended to the log every peer in the same order
+
+546
+00:35:02,590 --> 00:35:04,720
+and so they're going to also be applied in the same order,
+
+547
+00:35:04,720 --> 00:35:06,970
+so we still have this replicated state machine,
+
+548
+00:35:07,180 --> 00:35:17,920
+approach where reply all the write operational operations change data into in the total order.
+
+549
+00:35:18,680 --> 00:35:22,490
+But, there's a couple more properties,
+
+550
+00:35:23,040 --> 00:35:25,740
+so, but it does not provide linearizability for reads,
+
+551
+00:35:25,920 --> 00:35:28,980
+instead it sort of provides two sort of different property,
+
+552
+00:35:29,220 --> 00:35:38,640
+which is that all the operations appear in FIFO order, in FIFO client order.
+
+553
+00:35:40,440 --> 00:35:42,210
+This partly has to do with asynchronous
+
+554
+00:35:42,990 --> 00:35:47,220
+you know client may submit multiple requests one by one
+
+555
+00:35:47,400 --> 00:35:49,950
+without waiting for a response
+
+556
+00:35:50,100 --> 00:35:52,710
+and you know zookeeper will guarantee,
+
+557
+00:35:52,710 --> 00:35:56,130
+if you submit client one submitted the request,
+
+558
+00:35:56,580 --> 00:35:58,920
+and then client one submitted another request,
+
+559
+00:35:59,040 --> 00:36:02,850
+then that second request will appear later,
+
+560
+00:36:02,880 --> 00:36:06,990
+in a result will observe the result of the first operation.
+
+561
+00:36:08,740 --> 00:36:13,420
+And so, in particular you know writes goes client order,
+
+562
+00:36:23,600 --> 00:36:29,270
+and then reads where all the action is where the interesting properties are,
+
+563
+00:36:32,430 --> 00:36:34,560
+the reads observe last write,
+
+564
+00:36:34,620 --> 00:36:41,910
+okay, so reads reads observe last write from same client.
+
+565
+00:36:51,050 --> 00:36:53,750
+So this sort of makes sense going basically this sort of sense like,
+
+566
+00:36:53,960 --> 00:36:55,460
+you read your own writes,
+
+567
+00:36:55,730 --> 00:36:58,760
+so if you do the write operation, you immediately follow the read operation,
+
+568
+00:36:58,760 --> 00:37:01,370
+you see at least the results of your own writes.
+
+569
+00:37:02,380 --> 00:37:06,160
+But, for writes from other operations from other clients,
+
+570
+00:37:06,250 --> 00:37:09,340
+the zookeeper does not guarantee that property,
+
+571
+00:37:09,340 --> 00:37:17,710
+instead what it guarantees is that the read will observe some prefix of the log.
+
+572
+00:37:20,920 --> 00:37:25,660
+And so this means right you can actually see stale data
+
+573
+00:37:29,620 --> 00:37:34,630
+which may read from a follower and that follower has a prefix of the log,
+
+574
+00:37:34,780 --> 00:37:36,940
+but not only the last entries in the log,
+
+575
+00:37:36,940 --> 00:37:40,390
+because maybe just lag behind a little bit,
+
+576
+00:37:40,390 --> 00:37:45,700
+and nevertheless that followers are allowed to return a value,
+
+577
+00:37:45,850 --> 00:37:53,050
+because you know the only thing that's you know zookeeper going to guarantee that actually reads observe a prefix log.
+
+578
+00:37:54,680 --> 00:37:56,660
+So the operations can now go out of order,
+
+579
+00:37:56,810 --> 00:37:58,310
+you know once they in the log
+
+580
+00:37:58,310 --> 00:38:03,680
+and you can sort of reads can't like read operation out of the log in out of order,
+
+581
+00:38:03,710 --> 00:38:05,930
+it really has to be a prefix, a prefix of the log.
+
+582
+00:38:07,070 --> 00:38:08,600
+And then there's a second requirement,
+
+583
+00:38:08,840 --> 00:38:11,600
+that you cannot do know reads from the past.
+
+584
+00:38:18,250 --> 00:38:21,130
+And it really means like if you saw some prefix one.
+
+585
+00:38:22,900 --> 00:38:25,600
+And then you issue reads some prefix one
+
+586
+00:38:25,600 --> 00:38:27,340
+and then you read the second read,
+
+587
+00:38:27,700 --> 00:38:31,570
+then that second read has to see at least prefix one plus more.
+
+588
+00:38:34,780 --> 00:38:37,240
+It might be no, it might be just prefix one,
+
+589
+00:38:37,300 --> 00:38:38,740
+but cannot go back in time,
+
+590
+00:38:38,740 --> 00:38:42,670
+so it cannot see a shorter prefix than prefix one.
+
+591
+00:38:44,120 --> 00:38:47,420
+And so this basically, so so if we look back at this picture,
+
+592
+00:38:49,690 --> 00:38:52,630
+the zookeeper will allow this in certain cases,
+
+593
+00:38:52,630 --> 00:38:55,510
+namely, if the two clients are different,
+
+594
+00:38:56,060 --> 00:39:00,820
+but it won't allow this, this you can never have back in time.
+
+595
+00:39:01,700 --> 00:39:02,390
+Okay?
+
+596
+00:39:04,690 --> 00:39:07,210
+So I have a question, a conceptual one,
+
+597
+00:39:07,270 --> 00:39:09,640
+so we have these two consistency guarantees,
+
+598
+00:39:09,640 --> 00:39:12,430
+the linearizable writes and the FIFO client order,
+
+599
+00:39:12,640 --> 00:39:15,100
+so if we ignore the second constraint for a second
+
+600
+00:39:15,100 --> 00:39:16,750
+and if we only focus on the first one,
+
+601
+00:39:17,110 --> 00:39:20,920
+does the definition of linearizable writes actually makes sense,
+
+602
+00:39:20,920 --> 00:39:26,320
+since the definition of linearizability depends on having a read operation and a write operation.
+
+603
+00:39:26,530 --> 00:39:30,430
+So you're like hold that thought for a second,
+
+604
+00:39:30,460 --> 00:39:36,950
+because, the way they define linearizable writes is not basically the writes are a total order,
+
+605
+00:39:37,040 --> 00:39:39,440
+and but there is a relationship between the read and the write,
+
+606
+00:39:39,440 --> 00:39:41,300
+so hold that far for a second, okay.
+
+607
+00:39:42,160 --> 00:39:43,180
+We'll come back,
+
+608
+00:39:43,180 --> 00:39:46,360
+we get to that in a in a minute like one board,
+
+609
+00:39:46,660 --> 00:39:48,880
+I want to make one board in between, okay.
+
+610
+00:39:50,020 --> 00:39:50,620
+Sounds good.
+
+611
+00:39:52,180 --> 00:39:54,430
+Okay so, just like,
+
+612
+00:39:54,430 --> 00:40:00,310
+let's look a little bit at how C code zookeeper actually provides these guarantees.
+
+613
+00:40:00,890 --> 00:40:05,480
+And if we get the intuition you know,
+
+614
+00:40:06,350 --> 00:40:07,700
+how you could implement this,
+
+615
+00:40:07,970 --> 00:40:11,240
+the paper section are not very explicit about how they implement this,
+
+616
+00:40:11,420 --> 00:40:13,970
+sort of like I'm gonna give you a roughly best guess.
+
+617
+00:40:14,640 --> 00:40:18,510
+So, there's a zookeeper client,
+
+618
+00:40:21,150 --> 00:40:22,380
+it runs on the client machine,
+
+619
+00:40:22,500 --> 00:40:25,020
+in lab 3, we call this as a clerk
+
+620
+00:40:25,050 --> 00:40:29,280
+and so this is a piece of software library sort that works collaborates with the service.
+
+621
+00:40:30,360 --> 00:40:33,750
+In in zookeeper in the paper terminology,
+
+622
+00:40:33,750 --> 00:40:35,610
+basically it is the thing that has this section,
+
+623
+00:40:36,030 --> 00:40:39,990
+so when you join when a client wants to connect the zookeeper servers
+
+624
+00:40:39,990 --> 00:40:41,010
+you know it creates a session,
+
+625
+00:40:41,010 --> 00:40:44,460
+it connects using the session information to the leader
+
+626
+00:40:44,460 --> 00:40:47,190
+and maintains you know state across the session.
+
+627
+00:40:48,050 --> 00:40:53,570
+So we have a leader in zookeeper as we'll see with followers,
+
+628
+00:40:53,570 --> 00:40:55,580
+you know basically this is all sort of similar,
+
+629
+00:40:56,100 --> 00:40:58,920
+to what we're used to from lab two
+
+630
+00:40:59,250 --> 00:41:03,150
+and the zookeeper client issues write you know to the leader,
+
+631
+00:41:03,180 --> 00:41:05,520
+because the writes are going to be linearizable,
+
+632
+00:41:05,520 --> 00:41:11,190
+in fact the writes basically follow exactly sort of roughly the same strategy as in the raft library,
+
+633
+00:41:11,190 --> 00:41:12,870
+so it's going to be a log
+
+634
+00:41:13,110 --> 00:41:17,970
+and in the log all the writes are entered you know whatever you know some slots,
+
+635
+00:41:18,000 --> 00:41:23,370
+let's say the leader pends this write here in this particular index,
+
+636
+00:41:23,790 --> 00:41:25,440
+so this has an index
+
+637
+00:41:25,530 --> 00:41:29,880
+and in the paper, they refer to this index as zxid.
+
+638
+00:41:31,260 --> 00:41:35,220
+So I think you can think about the zxid basically as the index in the log.
+
+639
+00:41:36,760 --> 00:41:40,570
+And when the leader basically commits,
+
+640
+00:41:40,630 --> 00:41:44,200
+an entry writes you know to the log,
+
+641
+00:41:44,200 --> 00:41:47,230
+it returns the zxid back to the client,
+
+642
+00:41:47,530 --> 00:41:49,240
+so the client maintains that state.
+
+643
+00:41:50,550 --> 00:41:56,580
+So associated with the session is basically with zxids zxid at last write.
+
+644
+00:41:59,540 --> 00:42:00,260
+Okay?
+
+645
+00:42:02,060 --> 00:42:04,550
+And so when the client later on,
+
+646
+00:42:04,580 --> 00:42:08,120
+the read, and the read it doesn't have to go to the leader,
+
+647
+00:42:08,120 --> 00:42:10,310
+because that's the whole goal to get more performance,
+
+648
+00:42:10,310 --> 00:42:14,660
+so maybe the read actually will go you know to one of the followers,
+
+649
+00:42:16,180 --> 00:42:21,910
+and but then the read will be tagged with the zxid that of the last write
+
+650
+00:42:21,910 --> 00:42:23,320
+that particular client is done.
+
+651
+00:42:24,930 --> 00:42:26,520
+And so what does that mean,
+
+652
+00:42:26,520 --> 00:42:28,830
+well let's say this following behind, right
+
+653
+00:42:28,830 --> 00:42:33,660
+and it has two entries, but hasn't actually observed, you know the write yet,
+
+654
+00:42:33,660 --> 00:42:36,420
+because whatever the leader may be committed it through these other followers.
+
+655
+00:42:37,560 --> 00:42:39,210
+And what happens in this case is that,
+
+656
+00:42:39,300 --> 00:42:43,350
+this read the follower won't really respond immediately,
+
+657
+00:42:43,350 --> 00:42:48,480
+instead it will wait until see you know the zxid.
+
+658
+00:42:49,660 --> 00:42:51,400
+And as soon as we've seen the zxid,
+
+659
+00:42:51,400 --> 00:42:52,630
+it actually will respond.
+
+660
+00:42:56,620 --> 00:42:58,390
+Now, of course there's gonna be another client.
+
+661
+00:42:59,050 --> 00:43:02,380
+And so maybe at some point this write will come through,
+
+662
+00:43:02,920 --> 00:43:07,900
+and maybe now the read the client does another read
+
+663
+00:43:07,960 --> 00:43:11,110
+and so it hasn't seen no other zxids
+
+664
+00:43:11,530 --> 00:43:14,590
+and maybe like let me make one more follower.
+
+665
+00:43:15,430 --> 00:43:16,960
+Let's see there's yet another follower
+
+666
+00:43:16,960 --> 00:43:20,590
+that actually has not observed you know that that final write yet,
+
+667
+00:43:21,340 --> 00:43:21,910
+let me.
+
+668
+00:43:22,870 --> 00:43:24,220
+So there's going to be another,
+
+669
+00:43:24,220 --> 00:43:26,140
+let's say there's another client,
+
+670
+00:43:26,170 --> 00:43:27,640
+that sticks in some other write,
+
+671
+00:43:27,850 --> 00:43:29,440
+that's the scenario I want to talk about,
+
+672
+00:43:29,560 --> 00:43:33,880
+there was another client that actually appended w after the cxid,
+
+673
+00:43:33,880 --> 00:43:36,280
+you know it is right here,
+
+674
+00:43:36,280 --> 00:43:38,320
+but it was not observed that particularly write,
+
+675
+00:43:38,320 --> 00:43:39,730
+you know what we have here,
+
+676
+00:43:40,140 --> 00:43:46,980
+is we got the, we two slots,
+
+677
+00:43:46,980 --> 00:43:47,790
+we've got to write,
+
+678
+00:43:47,790 --> 00:43:51,870
+but in the green write, hasn't really show up at particular follower,
+
+679
+00:43:52,170 --> 00:43:55,050
+so if the client now issues second read,
+
+680
+00:43:55,050 --> 00:43:56,730
+maybe that goes to the other follower,
+
+681
+00:43:57,350 --> 00:43:59,060
+you know, that's the same zxid,
+
+682
+00:43:59,060 --> 00:44:03,620
+because it hasn't seen any new, that client has not issued any new writes,
+
+683
+00:44:04,100 --> 00:44:05,150
+it will arrive there
+
+684
+00:44:05,180 --> 00:44:09,500
+and that guy is allowed to respond immediately,
+
+685
+00:44:10,600 --> 00:44:18,130
+because it has seen the zxid of the [] has seen the last zxid of that particular client,
+
+686
+00:44:18,430 --> 00:44:20,470
+of course it misses some writes,
+
+687
+00:44:20,470 --> 00:44:25,150
+you know that from other clients that are already being processed by some majority of the servers,
+
+688
+00:44:25,240 --> 00:44:27,460
+but it is not required to return that data
+
+689
+00:44:27,670 --> 00:44:28,870
+and so it can just return it.
+
+690
+00:44:29,770 --> 00:44:32,980
+And so this might actually return in stale values.
+
+691
+00:44:33,640 --> 00:44:38,200
+But you know they're allowed by the definition of the zookeeper correctness guarantees.
+
+692
+00:44:39,040 --> 00:44:41,140
+Professor, I had a question.
+
+693
+00:44:41,170 --> 00:44:41,620
+Yeah.
+
+694
+00:44:42,010 --> 00:44:46,000
+At first I I thought, I'm not sure but,
+
+695
+00:44:46,520 --> 00:44:51,380
+I understood client reads like the session leads were sticky,
+
+696
+00:44:51,800 --> 00:44:54,410
+so they would like in general go to the same.
+
+697
+00:44:54,970 --> 00:45:00,430
+Yeah you know but, of course there might be a little bit of,
+
+698
+00:45:00,430 --> 00:45:04,450
+it might be a quick network petition or anything like it
+
+699
+00:45:04,450 --> 00:45:06,340
+and so in between time you know the,
+
+700
+00:45:06,760 --> 00:45:08,680
+it might have switched to another server.
+
+701
+00:45:09,740 --> 00:45:12,320
+Okay, and then.
+
+702
+00:45:12,320 --> 00:45:15,620
+In addition turns out the zookeeper does actually do some load balancing,
+
+703
+00:45:16,370 --> 00:45:19,910
+so but but nevertheless it can happen right.
+
+704
+00:45:20,510 --> 00:45:21,080
+Right.
+
+705
+00:45:21,690 --> 00:45:29,490
+The other thing was you said write always always go to the leader,
+
+706
+00:45:29,920 --> 00:45:34,570
+and then the leader responded with zxid,
+
+707
+00:45:34,630 --> 00:45:40,420
+that doesn't the leader have to first reach consensus before responding,
+
+708
+00:45:41,120 --> 00:45:41,990
+or in this.
+
+709
+00:45:42,980 --> 00:45:44,420
+Yeah, yeah, okay,
+
+710
+00:45:44,420 --> 00:45:47,120
+but, yes I guess, so,
+
+711
+00:45:47,990 --> 00:45:49,280
+you know just to commit it,
+
+712
+00:45:49,280 --> 00:45:52,040
+otherwise it is uncommitted, right,
+
+713
+00:45:52,040 --> 00:45:54,380
+I think the exact protocol,
+
+714
+00:45:54,680 --> 00:45:58,010
+I'm abstracting away a little bit in the details of the protocol,
+
+715
+00:45:58,010 --> 00:46:00,230
+I'm just going to sketch how it works.
+
+716
+00:46:00,780 --> 00:46:02,310
+I believe you're right,
+
+717
+00:46:02,310 --> 00:46:06,750
+you know that it must return but only after you know the entries really committed.
+
+718
+00:46:08,310 --> 00:46:10,020
+Then, sorry last thing,
+
+719
+00:46:10,080 --> 00:46:13,290
+you said it always goes to the leader,
+
+720
+00:46:13,320 --> 00:46:16,410
+but I think the paper described it could go to followers,
+
+721
+00:46:16,410 --> 00:46:18,180
+or write to go to a follower and then be read.
+
+722
+00:46:18,300 --> 00:46:20,430
+But then ends up to the leader, right.
+
+723
+00:46:21,630 --> 00:46:23,010
+So it ends it go to the leader.
+
+724
+00:46:23,850 --> 00:46:24,780
+Thanks.
+
+725
+00:46:25,200 --> 00:46:25,590
+Yeah.
+
+726
+00:46:26,460 --> 00:46:32,850
+Just to clarify when you say wait for zxid like for example the second follower or second,
+
+727
+00:46:32,850 --> 00:46:36,030
+when we wait for the zxid, we're actually waiting for it to be committed,
+
+728
+00:46:36,210 --> 00:46:38,490
+it's not sufficient to just get.
+
+729
+00:46:38,490 --> 00:46:39,780
+It must be committed yet.
+
+730
+00:46:40,340 --> 00:46:40,760
+Got it.
+
+731
+00:46:42,960 --> 00:46:47,520
+Wait, but would like it would have been committed by the time
+
+732
+00:46:47,520 --> 00:46:53,640
+it was like a client wouldn't get an uncommitted zxid right, like ever, like.
+
+733
+00:46:53,640 --> 00:46:55,620
+Oh yeah, but just that's correct,
+
+734
+00:46:55,980 --> 00:46:59,310
+so if you know the this point.
+
+735
+00:47:01,260 --> 00:47:04,470
+At this point, the follower sees zxid
+
+736
+00:47:04,470 --> 00:47:07,380
+and the write is in that particular zxid,
+
+737
+00:47:07,410 --> 00:47:08,760
+now it must have been committed,
+
+738
+00:47:08,760 --> 00:47:11,340
+because you know the client could not have gotten that zxid
+
+739
+00:47:11,340 --> 00:47:14,280
+unless you know that option of zxid was committed.
+
+740
+00:47:17,350 --> 00:47:17,800
+Thanks.
+
+741
+00:47:18,760 --> 00:47:24,940
+Also, so when you say that from the read you you get stale data,
+
+742
+00:47:24,940 --> 00:47:27,130
+so like the last basic arrow,
+
+743
+00:47:27,370 --> 00:47:30,220
+but the client here in the read request,
+
+744
+00:47:30,220 --> 00:47:32,380
+it supplied these zxid within it,
+
+745
+00:47:32,410 --> 00:47:38,560
+so it's as if the client knowingly exactly wanted that location in the log,
+
+746
+00:47:38,990 --> 00:47:41,540
+that had zxid as its index,
+
+747
+00:47:41,990 --> 00:47:46,910
+so didn't it knowingly just request that prefix that specific prefix of the log.
+
+748
+00:47:47,120 --> 00:47:50,480
+No, but really says you know what this zxid actually says
+
+749
+00:47:50,480 --> 00:47:54,080
+like it's basically counters you know going back in time.
+
+750
+00:47:55,320 --> 00:47:58,260
+And, so the zxid like you know you have,
+
+751
+00:47:58,290 --> 00:48:01,050
+as a follower, you have to return to your result
+
+752
+00:48:01,080 --> 00:48:05,190
+that at least concludes the prefix of the log through zxid,
+
+753
+00:48:05,490 --> 00:48:07,680
+you might have more, that be fine too,
+
+754
+00:48:07,740 --> 00:48:09,180
+but at least zxid
+
+755
+00:48:09,180 --> 00:48:11,820
+and this just stops one case where you read back in time.
+
+756
+00:48:13,280 --> 00:48:13,670
+Okay awesome, thank you.
+
+757
+00:48:16,090 --> 00:48:18,610
+Okay, so now you might wonder,
+
+758
+00:48:19,680 --> 00:48:22,470
+you know, so this clearly does not provide linearizability
+
+759
+00:48:22,470 --> 00:48:24,900
+and one reason people are excited about the linearizability is,
+
+760
+00:48:24,900 --> 00:48:26,340
+because it behaves like a single machine,
+
+761
+00:48:26,340 --> 00:48:27,330
+so it's easier to program,
+
+762
+00:48:27,420 --> 00:48:30,000
+you know you do put, you do get,
+
+763
+00:48:30,000 --> 00:48:31,080
+you roughly know what you're gonna get,
+
+764
+00:48:31,610 --> 00:48:33,530
+and no pun intended,
+
+765
+00:48:33,800 --> 00:48:39,770
+but here you certainly have a model of programming model is different from a single machine.
+
+766
+00:48:40,560 --> 00:48:43,770
+And so, you know how do you program this thing.
+
+767
+00:48:44,700 --> 00:48:46,320
+And you know it turns out that,
+
+768
+00:48:46,320 --> 00:48:50,850
+there basically the rules you know the correct definition that you know zookeeper has
+
+769
+00:48:51,240 --> 00:48:58,950
+are basically you can think of it like those good enough to actually do for purpose to do help programming.
+
+770
+00:48:59,720 --> 00:49:01,760
+And so I want to talk a little bit about that.
+
+771
+00:49:12,470 --> 00:49:14,090
+So the real point is that,
+
+772
+00:49:14,360 --> 00:49:16,010
+you know with linearizability,
+
+773
+00:49:16,010 --> 00:49:19,010
+it's pretty clear that you know that helps programming
+
+774
+00:49:19,010 --> 00:49:20,900
+and writing intuitive programs,
+
+775
+00:49:21,020 --> 00:49:22,580
+you think are going to be slightly different
+
+776
+00:49:22,790 --> 00:49:26,690
+and we want to understand actually if things work out well,
+
+777
+00:49:26,690 --> 00:49:31,250
+and whether it's like pain in the network program is basically completely unusable.
+
+778
+00:49:32,280 --> 00:49:37,860
+So, so let's look at one of the key examples talk about in the paper.
+
+779
+00:49:38,500 --> 00:49:41,500
+And the first thing I want to do is
+
+780
+00:49:41,500 --> 00:49:43,330
+basically ignore the sync operation,
+
+781
+00:49:43,330 --> 00:49:48,340
+because you can make every operation actually linearizable by just issuing sync,
+
+782
+00:49:48,840 --> 00:49:50,340
+like before you do the read,
+
+783
+00:49:50,700 --> 00:49:53,550
+but that of course makes everything slow again,
+
+784
+00:49:53,550 --> 00:49:54,810
+and we're not going to get our performances,
+
+785
+00:49:55,050 --> 00:49:58,650
+so basically we want to avoid doing syncs,
+
+786
+00:49:58,650 --> 00:50:00,150
+and so I'm just gonna ignore syncs
+
+787
+00:50:00,150 --> 00:50:02,760
+and like program as if we don't have syncs.
+
+788
+00:50:04,200 --> 00:50:06,270
+So let's look at the following operations,
+
+789
+00:50:06,270 --> 00:50:08,220
+so here's the write order,
+
+790
+00:50:13,220 --> 00:50:14,450
+the new couple operations
+
+791
+00:50:14,450 --> 00:50:16,160
+and this is the case of the ready file,
+
+792
+00:50:16,160 --> 00:50:21,520
+so we issue a delete of the ready file.
+
+793
+00:50:23,420 --> 00:50:28,760
+So, for example, this is a, a new master,
+
+794
+00:50:28,760 --> 00:50:34,730
+that becomes, becomes the new, the new leader,
+
+795
+00:50:34,940 --> 00:50:38,960
+um and so need to write a short configuration information in it,
+
+796
+00:50:38,960 --> 00:50:43,940
+like you know who were part of the, the replicated state machine
+
+797
+00:50:43,940 --> 00:50:44,990
+and who is the leader
+
+798
+00:50:44,990 --> 00:50:47,360
+and so it writes you know some configuration files,
+
+799
+00:50:47,390 --> 00:50:58,580
+write f1, write you know f2, create of ready.
+
+800
+00:51:02,420 --> 00:51:07,080
+And then other followers might another who is the read order
+
+801
+00:51:11,430 --> 00:51:18,830
+begin you know for example call if exists ready,
+
+802
+00:51:22,650 --> 00:51:24,900
+and so zookeeper actually operation exists
+
+803
+00:51:24,900 --> 00:51:28,980
+and if ready exists,
+
+804
+00:51:28,980 --> 00:51:31,770
+then it will be a true
+
+805
+00:51:31,770 --> 00:51:35,130
+and otherwise not and so you have to wait,
+
+806
+00:51:35,520 --> 00:51:37,560
+so let's ignore that case for a second,
+
+807
+00:51:37,560 --> 00:51:40,110
+let's assume that you know the second clients,
+
+808
+00:51:40,110 --> 00:51:43,080
+so here was the one for one client did write operations,
+
+809
+00:51:43,080 --> 00:51:44,550
+second client read operations
+
+810
+00:51:45,000 --> 00:51:46,590
+and then if it exists,
+
+811
+00:51:46,590 --> 00:51:51,500
+then the client reads f1 and then reads f2.
+
+812
+00:51:55,200 --> 00:51:59,490
+And so the thing that you know we want to understand
+
+813
+00:51:59,490 --> 00:52:03,360
+like you know what values could f1 this read that can return.
+
+814
+00:52:11,850 --> 00:52:13,740
+The thing that we worry about correct,
+
+815
+00:52:13,740 --> 00:52:20,160
+is it could return could return some result of a write that was done much earlier here,
+
+816
+00:52:25,750 --> 00:52:27,460
+and we must have observed this write.
+
+817
+00:52:33,230 --> 00:52:34,940
+I think the paper mentions that,
+
+818
+00:52:34,970 --> 00:52:41,390
+the reader can watch certain things and be notified of changes.
+
+819
+00:52:41,810 --> 00:52:43,610
+Yeah, so let's assume that actually the file exists,
+
+820
+00:52:43,610 --> 00:52:45,410
+so created actually succeeds immediately,
+
+821
+00:52:45,440 --> 00:52:47,420
+so let's talk about the notifications in a second.
+
+822
+00:52:49,300 --> 00:52:51,820
+So this exists returns immediately,
+
+823
+00:52:52,530 --> 00:52:54,810
+no watches evolved, it just exist
+
+824
+00:52:55,260 --> 00:52:57,660
+and then we do that second client does a read of f1.
+
+825
+00:52:59,510 --> 00:53:03,350
+I think it should read whatever was written by the first client,
+
+826
+00:53:03,350 --> 00:53:05,480
+because the operations are in FIFO.
+
+827
+00:53:06,250 --> 00:53:08,230
+Yeah, right,
+
+828
+00:53:08,260 --> 00:53:11,830
+so the I think the real thing that actually does.
+
+829
+00:53:14,020 --> 00:53:17,290
+If we saw this option, what value correctly for some write earlier
+
+830
+00:53:17,290 --> 00:53:19,750
+that would mean that we're reading back in time, right.
+
+831
+00:53:20,600 --> 00:53:22,310
+And that is just not allowed,
+
+832
+00:53:22,340 --> 00:53:24,470
+you know the rules actually forbid that,
+
+833
+00:53:25,160 --> 00:53:31,220
+this read you know must observe you know this value of that write,
+
+834
+00:53:31,220 --> 00:53:35,690
+because this read the previous read exists observe this write right,
+
+835
+00:53:35,690 --> 00:53:42,620
+so we know that you know this exist id must have seen the zxid corresponding by that create.
+
+836
+00:53:43,580 --> 00:53:52,270
+And so that means that this read will must you know must see the last write,
+
+837
+00:53:52,270 --> 00:53:54,010
+you know that was performed in the total order,
+
+838
+00:53:54,010 --> 00:53:55,960
+that proceeded you know that particular create
+
+839
+00:53:55,960 --> 00:54:02,110
+and so the last write you know critical order before that is this particular write right,
+
+840
+00:54:02,200 --> 00:54:04,060
+because all the writes are actually linearizable.
+
+841
+00:54:05,280 --> 00:54:09,600
+And so it must be the case that this read f1 observes the result of the write f1.
+
+842
+00:54:10,240 --> 00:54:11,440
+So this is nice, correct,
+
+843
+00:54:11,440 --> 00:54:17,500
+because if you know some new leader became the primary, get raised configuration file,
+
+844
+00:54:17,590 --> 00:54:18,730
+you know we know for sure,
+
+845
+00:54:18,730 --> 00:54:23,620
+that actually we're going to see that last configuration file that was created by that by that new leader.
+
+846
+00:54:26,020 --> 00:54:29,410
+So we see here, an example that these rules are carefully chosen,
+
+847
+00:54:29,770 --> 00:54:31,900
+that you know things that you might care about,
+
+848
+00:54:31,930 --> 00:54:35,320
+if you're writing a configuration servers that actually certainly workout.
+
+849
+00:54:38,140 --> 00:54:41,680
+Sorry, I I might have not understood what you were saying before,
+
+850
+00:54:41,680 --> 00:54:44,410
+but in this case if it exists,
+
+851
+00:54:44,470 --> 00:54:45,940
+if checking exist ready,
+
+852
+00:54:46,060 --> 00:54:49,720
+couldn't read like stuff before ready was deleted?
+
+853
+00:54:52,270 --> 00:54:53,770
+Okay, all the writes in the total order,
+
+854
+00:54:53,800 --> 00:54:54,940
+so these writes in total order,
+
+855
+00:54:54,940 --> 00:54:56,050
+that write is in total order,
+
+856
+00:54:56,050 --> 00:54:57,250
+that created in total order,
+
+857
+00:54:58,150 --> 00:55:01,150
+so this read here on the other side has observed that creation.
+
+858
+00:55:02,020 --> 00:55:03,730
+So whatever read is going to do is
+
+859
+00:55:03,730 --> 00:55:05,200
+go back and go totol order right,
+
+860
+00:55:05,200 --> 00:55:08,500
+like you observed the last write in that total order
+
+861
+00:55:08,500 --> 00:55:10,240
+and at last write f1 is this one.
+
+862
+00:55:10,510 --> 00:55:12,640
+But it exists writes?
+
+863
+00:55:13,300 --> 00:55:16,150
+No, this is read, but exist observed this particular write.
+
+864
+00:55:16,780 --> 00:55:18,250
+Oh, you're saying.
+
+865
+00:55:18,250 --> 00:55:20,590
+You, you cannot read it back in time, correct,
+
+866
+00:55:20,590 --> 00:55:21,760
+I just use the whole goal.
+
+867
+00:55:21,880 --> 00:55:26,440
+Right, but how did we know that it observed, that exactly.
+
+868
+00:55:26,440 --> 00:55:28,780
+I told you that, I said like the file existed,
+
+869
+00:55:28,780 --> 00:55:30,520
+so it must be the case that it observed it.
+
+870
+00:55:31,520 --> 00:55:32,750
+Which is returned true.
+
+871
+00:55:32,990 --> 00:55:35,690
+But it but it existed before you deleted it, right.
+
+872
+00:55:37,720 --> 00:55:38,560
+Yeah yeah yeah yeah,
+
+873
+00:55:38,560 --> 00:55:41,320
+but you know okay we'll go back in a second,
+
+874
+00:55:41,320 --> 00:55:42,760
+let me okay this is the second case,
+
+875
+00:55:42,760 --> 00:55:43,600
+this is a good point,
+
+876
+00:55:43,600 --> 00:55:45,370
+let me a talk about that,
+
+877
+00:55:45,370 --> 00:55:47,380
+so there's another scenario
+
+878
+00:55:47,380 --> 00:55:49,720
+and I think this is the one you're worrying about that could have happened
+
+879
+00:55:50,050 --> 00:55:51,760
+and this is where notifications come in.
+
+880
+00:55:52,900 --> 00:55:55,780
+So this will agree that this is right, correct.
+
+881
+00:55:56,340 --> 00:55:59,740
+So the second case, more rules
+
+882
+00:56:01,570 --> 00:56:02,950
+and this is indeed interesting.
+
+883
+00:56:04,450 --> 00:56:06,520
+I think the case where you're worried about is,
+
+884
+00:56:07,100 --> 00:56:09,170
+here's our reader again,
+
+885
+00:56:09,260 --> 00:56:10,490
+here's our writer again
+
+886
+00:56:10,940 --> 00:56:16,430
+and the reader you know calls exists on ready,
+
+887
+00:56:18,600 --> 00:56:24,750
+unless the file you know is there in you know does read f1.
+
+888
+00:56:26,470 --> 00:56:28,900
+Alright, we're almost same as in the previous scenario
+
+889
+00:56:29,410 --> 00:56:32,200
+and now like you know there's some changing leadership,
+
+890
+00:56:32,200 --> 00:56:36,310
+you know there's a there's a crash we're you know recovery
+
+891
+00:56:36,310 --> 00:56:37,600
+and all that kind of stuff is happening
+
+892
+00:56:37,900 --> 00:56:42,970
+and so there's a new primary, it deletes ready,
+
+893
+00:56:46,170 --> 00:56:52,640
+you know writes f1, and writes f2,
+
+894
+00:56:54,520 --> 00:57:02,260
+and it's might creates ready like as before.
+
+895
+00:57:05,440 --> 00:57:08,170
+And let's assume that this like this read a little bit delayed,
+
+896
+00:57:08,200 --> 00:57:10,060
+and you know something else happened on the machine.
+
+897
+00:57:10,770 --> 00:57:12,990
+And you know now does the read f2.
+
+898
+00:57:15,480 --> 00:57:17,910
+And I think this is a very the question you were asking about,
+
+899
+00:57:17,910 --> 00:57:19,380
+because this is the you worry something right,
+
+900
+00:57:19,620 --> 00:57:23,040
+because now there's a configuration change,
+
+901
+00:57:23,250 --> 00:57:26,940
+and if this configuration change gets flooded in the middle here, right,
+
+902
+00:57:27,060 --> 00:57:31,860
+this read of f2 is going to return the new configuration
+
+903
+00:57:31,860 --> 00:57:35,310
+as opposed to the read of f1 that is going to return the old configuration
+
+904
+00:57:35,370 --> 00:57:37,440
+and clearly things are gonna be messed up,
+
+905
+00:57:38,200 --> 00:57:40,510
+that's not a scenario we want to be in,
+
+906
+00:57:40,510 --> 00:57:41,770
+so we terrible outcome.
+
+907
+00:57:42,870 --> 00:57:46,920
+So and how does that actually you know get rectified
+
+908
+00:57:46,920 --> 00:57:49,320
+or how this actually zookeeper deal with this,
+
+909
+00:57:49,320 --> 00:57:51,900
+well, this is where the watches come in,
+
+910
+00:57:52,320 --> 00:57:56,310
+you know the pictures I drew in the former previously board is not completely correct,
+
+911
+00:57:56,340 --> 00:58:01,710
+in addition to a calling exists with this really is going to say watch to true.
+
+912
+00:58:08,370 --> 00:58:16,790
+And what that means is that this delete you know change is the ready file,
+
+913
+00:58:16,790 --> 00:58:19,130
+and we have now set a watch on the ready file,
+
+914
+00:58:19,610 --> 00:58:25,760
+and so when the ready file gets deleted by this new primary,
+
+915
+00:58:25,790 --> 00:58:27,530
+that actually results in a notification.
+
+916
+00:58:34,780 --> 00:58:36,580
+And there's a rule for this notification,
+
+917
+00:58:37,000 --> 00:58:45,040
+another rule for the notification is that every notification will be delivered before you know writes they go after it.
+
+918
+00:58:46,320 --> 00:58:48,060
+And so what has to be the case
+
+919
+00:58:48,060 --> 00:58:54,690
+that you know the this notification will be delivered before the write to f1.
+
+920
+00:58:56,320 --> 00:59:00,520
+So when so there's two possible scenarios for the notification gets delivered here,
+
+921
+00:59:02,130 --> 00:59:05,460
+[] notification gets delivered like after the read of f2.
+
+922
+00:59:06,420 --> 00:59:08,820
+Let me move that we'd have to slightly up,
+
+923
+00:59:12,310 --> 00:59:13,390
+or yeah,
+
+924
+00:59:13,930 --> 00:59:14,860
+so it's still happening,
+
+925
+00:59:14,860 --> 00:59:18,010
+so in time behind you know the write operation,
+
+926
+00:59:18,310 --> 00:59:21,580
+but notification gets easier delivered here depending on the delays
+
+927
+00:59:21,760 --> 00:59:23,200
+or it's going to deliver it here.
+
+928
+00:59:23,930 --> 00:59:28,280
+Sorry, what's the exact wording of that rule that allows this to happen?
+
+929
+00:59:30,260 --> 00:59:32,900
+Basically, I think one way to think about it,
+
+930
+00:59:32,900 --> 00:59:35,270
+the notification is like it was always like a write operation,
+
+931
+00:59:36,200 --> 00:59:38,630
+and the followers you know implemented,
+
+932
+00:59:38,720 --> 00:59:44,300
+so that the your change happens to delete the notification goes off
+
+933
+00:59:44,300 --> 00:59:47,840
+that notification is delivered to the client with that zxid.
+
+934
+00:59:51,010 --> 01:00:00,270
+Yeah, but I still don't understand why this guarantees that it can go like before,
+
+935
+01:00:00,850 --> 01:00:03,280
+wait, so the valid places for it are,
+
+936
+01:00:03,310 --> 01:00:10,720
+before the write of f1 and also like after the write of f2, right.
+
+937
+01:00:11,340 --> 01:00:15,720
+The innovation is delivered after the after the delete of ready,
+
+938
+01:00:16,260 --> 01:00:19,770
+and before the writes, before the writes of f1 and f2 are visible,
+
+939
+01:00:20,340 --> 01:00:22,260
+where in the creator for that matter.
+
+940
+01:00:23,540 --> 01:00:24,260
+Oh, I see.
+
+941
+01:00:30,230 --> 01:00:32,870
+That's just a rule, zookeeper has to guarantee that.
+
+942
+01:00:33,480 --> 01:00:34,230
+Okay.
+
+943
+01:00:34,800 --> 01:00:37,140
+Okay, so so that means there's two cases, correct,
+
+944
+01:00:37,140 --> 01:00:41,220
+like the notification gets delivered before the read of f1 or after the read of f1.
+
+945
+01:00:42,560 --> 01:00:48,020
+If we deliver if it gets delivered after the read of f1 of f2 is there a problem?
+
+946
+01:00:50,920 --> 01:00:51,400
+No.
+
+947
+01:00:51,430 --> 01:00:54,340
+No, because then the read just happened before the writes.
+
+948
+01:00:54,610 --> 01:00:55,420
+So everything's good,
+
+949
+01:00:55,450 --> 01:00:59,470
+so this is this whole block is happening after the read of f2 is perfectly fine
+
+950
+01:00:59,470 --> 01:01:00,220
+and about here.
+
+951
+01:01:03,270 --> 01:01:08,610
+Professor, did you say that watch is like a like write something?
+
+952
+01:01:09,450 --> 01:01:11,640
+Well, you can think about it,
+
+953
+01:01:11,640 --> 01:01:13,020
+the watch is not a write operation,
+
+954
+01:01:13,020 --> 01:01:14,970
+I didn't mean to imply that the write to,
+
+955
+01:01:14,970 --> 01:01:18,420
+watch is executed with the appropriate zxid,
+
+956
+01:01:18,600 --> 01:01:21,420
+that's associated with that modification.
+
+957
+01:01:21,940 --> 01:01:23,800
+Those are local, right, watches.
+
+958
+01:01:23,800 --> 01:01:25,240
+Yeah, the watchers are local
+
+959
+01:01:25,240 --> 01:01:26,410
+and so when they're executed,
+
+960
+01:01:26,590 --> 01:01:32,110
+the it's guaranteed you know that they happened at the write,
+
+961
+01:01:32,410 --> 01:01:38,350
+when the write is observed or the client sees that's easy to watch propagated with the zxid to the client
+
+962
+01:01:38,350 --> 01:01:39,820
+and make sure they execute it.
+
+963
+01:01:41,070 --> 01:01:41,550
+Thanks.
+
+964
+01:01:44,200 --> 01:01:47,080
+Again, the papers are slightly [vapor] exactly how it's implemented,
+
+965
+01:01:47,110 --> 01:01:48,790
+but you can imagine different scenarios.
+
+966
+01:01:50,170 --> 01:01:52,330
+But the more important points like these rules guaranteed.
+
+967
+01:01:52,420 --> 01:01:54,940
+Okay, so what happens if the notification is delivered here?
+
+968
+01:01:58,140 --> 01:01:59,730
+So the client is running correct,
+
+969
+01:01:59,730 --> 01:02:02,640
+it exist to read f1 and now this notification comes in.
+
+970
+01:02:06,020 --> 01:02:07,520
+Then you have to restart probably.
+
+971
+01:02:07,520 --> 01:02:08,960
+You have to restart.
+
+972
+01:02:14,800 --> 01:02:18,800
+Okay, So what we see here basically is that
+
+973
+01:02:18,830 --> 01:02:25,250
+you know the rules you know make programming definitely a bit more a difficult, but not impossible.
+
+974
+01:02:25,840 --> 01:02:28,930
+You know with a little bit careful sort of programming,
+
+975
+01:02:28,930 --> 01:02:33,670
+you know you and understand the rules you can actually get the desirable results
+
+976
+01:02:33,670 --> 01:02:35,620
+that actually probably the application wants.
+
+977
+01:02:36,080 --> 01:02:38,150
+What happens to the read f1 though?
+
+978
+01:02:39,480 --> 01:02:41,040
+What happens to read f1.
+
+979
+01:02:41,220 --> 01:02:42,570
+You start over.
+
+980
+01:02:43,110 --> 01:02:44,190
+Including that.
+
+981
+01:02:44,250 --> 01:02:44,850
+Right.
+
+982
+01:02:47,780 --> 01:02:48,410
+Okay?
+
+983
+01:02:50,120 --> 01:02:51,410
+And you'll see this is a trick
+
+984
+01:02:51,410 --> 01:02:53,180
+that shows up in those recipes quite a bit
+
+985
+01:02:53,210 --> 01:02:58,640
+like this there's an idea of actually you bailing out and starting over again.
+
+986
+01:02:59,820 --> 01:03:03,870
+Okay, so hopefully that gives you a sense that got for two things,
+
+987
+01:03:04,110 --> 01:03:10,440
+sort of even though people, one reason like people like linearizability is because it's very intuitive,
+
+988
+01:03:10,470 --> 01:03:11,790
+very easy to program with,
+
+989
+01:03:11,790 --> 01:03:13,350
+because everything behaves like a single machine.
+
+990
+01:03:13,800 --> 01:03:16,770
+But if you want fault tolerance, scalability,
+
+991
+01:03:16,860 --> 01:03:18,570
+it's hard to get actually good performance,
+
+992
+01:03:18,570 --> 01:03:22,830
+and so one way to get good performances to compromise on the consistency guarantee
+
+993
+01:03:23,100 --> 01:03:28,080
+and in this case, you know compromising linearizability and provide some other persistent guarantee
+
+994
+01:03:28,080 --> 01:03:33,930
+and as we can see let's complicate the user experience of the programmer experienced,
+
+995
+01:03:34,020 --> 01:03:37,500
+but, these rules in zookeeper are carefully chosen,
+
+996
+01:03:37,620 --> 01:03:42,910
+so still you know things can actually work out, it's doable.
+
+997
+01:03:43,650 --> 01:03:46,950
+So it is possible to get the write to sort of guarantees.
+
+998
+01:03:48,300 --> 01:03:51,330
+So now there's another aspect to this programming model
+
+999
+01:03:51,360 --> 01:03:52,980
+and then I want to talk a little bit about now,
+
+1000
+01:03:52,980 --> 01:03:55,440
+that is really related to the coordination service part.
+
+1001
+01:04:05,830 --> 01:04:12,760
+And so examples, you know that you need to you know what does it mean to be a coordination service.
+
+1002
+01:04:13,460 --> 01:04:20,420
+One good example is probably the vm virtual machine fault tolerance paper from a little while ago that we read
+
+1003
+01:04:20,720 --> 01:04:23,570
+and that had this test and set operation.
+
+1004
+01:04:27,520 --> 01:04:31,570
+The goal of the you know the test and set operation is basically make sure that there's no split brain,
+
+1005
+01:04:31,570 --> 01:04:33,310
+because basically two clients would run
+
+1006
+01:04:33,700 --> 01:04:36,430
+and one would win the test and the other one wouldn't
+
+1007
+01:04:36,430 --> 01:04:39,040
+and as a result you know the one that won the testing set
+
+1008
+01:04:39,160 --> 01:04:42,490
+could conclude you know that that's going to be a primary.
+
+1009
+01:04:43,130 --> 01:04:50,060
+And so that is sort of a an example of featured coordination service should be able to provide.
+
+1010
+01:04:51,520 --> 01:04:56,290
+And I wanna you know just just make a little bit more concrete,
+
+1011
+01:04:56,320 --> 01:04:58,990
+let's think about one lab 3,
+
+1012
+01:04:59,020 --> 01:05:01,030
+could you get that with lab 3.
+
+1013
+01:05:01,810 --> 01:05:04,690
+You know, basically sort of test set type thing.
+
+1014
+01:05:04,690 --> 01:05:09,780
+Well, so let's do a very simple case,
+
+1015
+01:05:09,780 --> 01:05:14,850
+you know let's say we use our simple implementation of test and set,
+
+1016
+01:05:17,400 --> 01:05:20,580
+and in lab 3, we only have put get operations,
+
+1017
+01:05:20,580 --> 01:05:22,230
+there's no other operations,
+
+1018
+01:05:22,230 --> 01:05:23,460
+so those are the two operations,
+
+1019
+01:05:23,460 --> 01:05:25,020
+so like how would you write this,
+
+1020
+01:05:25,020 --> 01:05:32,000
+you know, maybe you know do a put to a key, let's say master.
+
+1021
+01:05:34,760 --> 01:05:36,560
+And we put my IP address in it
+
+1022
+01:05:36,920 --> 01:05:38,780
+the IP address of the caller
+
+1023
+01:05:40,490 --> 01:05:42,110
+and then you do get
+
+1024
+01:05:42,290 --> 01:05:50,960
+you know and we say if it gets on master is equal to my IP address,
+
+1025
+01:05:55,520 --> 01:05:59,510
+then you know act as masters or act as leader.
+
+1026
+01:06:02,550 --> 01:06:05,130
+Actually, this is our naive implementation,
+
+1027
+01:06:05,160 --> 01:06:07,110
+you know we don't have many other choices,
+
+1028
+01:06:07,110 --> 01:06:09,420
+because we put we put in and get
+
+1029
+01:06:09,810 --> 01:06:11,190
+and this is how we can implement this.
+
+1030
+01:06:13,150 --> 01:06:15,130
+Will this do the desirable thing?
+
+1031
+01:06:23,240 --> 01:06:26,960
+Oh, there's no atomicity between the put in the gaps,
+
+1032
+01:06:26,960 --> 01:06:29,030
+so maybe something changed.
+
+1033
+01:06:29,420 --> 01:06:31,610
+Correct, so basically there could be two clients, correct,
+
+1034
+01:06:31,610 --> 01:06:34,220
+both could execute both puts at the same time.
+
+1035
+01:06:36,440 --> 01:06:41,270
+And, and then observe, you know the,
+
+1036
+01:06:41,860 --> 01:06:45,790
+in roughly they could do it at the same time
+
+1037
+01:06:45,790 --> 01:06:50,800
+and the interleave correctly involve correct in both return gets you know with their particular IP address, right,
+
+1038
+01:06:51,190 --> 01:06:53,170
+so we can get 2 leaders.
+
+1039
+01:06:57,240 --> 01:06:58,560
+And of course not what we want,
+
+1040
+01:06:58,560 --> 01:07:00,630
+so the main point of this,
+
+1041
+01:07:00,630 --> 01:07:03,870
+for example is basically you just put and get,
+
+1042
+01:07:04,140 --> 01:07:06,720
+it's gonna be very hard to actually implement the test-and-set.
+
+1043
+01:07:07,580 --> 01:07:10,010
+It turns out it's possible, but very complex,
+
+1044
+01:07:10,040 --> 01:07:12,980
+use bakery algorithm, you can actually probably do it,
+
+1045
+01:07:12,980 --> 01:07:15,980
+but it's not gonna be ridiculous like to do that in a distributed system,
+
+1046
+01:07:17,090 --> 01:07:20,000
+and so what zookeeper does,
+
+1047
+01:07:20,210 --> 01:07:24,410
+it just provides some additional help,
+
+1048
+01:07:24,710 --> 01:07:27,050
+to build the sort of type primitives.
+
+1049
+01:07:27,710 --> 01:07:28,640
+We'll see in a second.
+
+1050
+01:07:31,120 --> 01:07:33,280
+The other thing that usually what you want to know
+
+1051
+01:07:33,310 --> 01:07:39,580
+and lab 3 does not provide any support for your server configuration service or coordination services
+
+1052
+01:07:39,580 --> 01:07:41,770
+that you want to know when somebody goes down,
+
+1053
+01:07:42,190 --> 01:07:43,630
+for example you want to observe that
+
+1054
+01:07:43,630 --> 01:07:44,980
+like the leader goes down,
+
+1055
+01:07:44,980 --> 01:07:47,620
+like so many other parties would like to know
+
+1056
+01:07:47,620 --> 01:07:49,060
+like is the leader down,
+
+1057
+01:07:49,060 --> 01:07:50,830
+so that we can choose a new one if it needed to.
+
+1058
+01:07:51,810 --> 01:07:56,580
+And so at least on the application of the building using a service.
+
+1059
+01:07:57,330 --> 01:08:00,390
+Okay, so, so there are two things that we really want,
+
+1060
+01:08:00,420 --> 01:08:03,720
+you know one is you know sort of way of trying to get this atomicity,
+
+1061
+01:08:04,780 --> 01:08:07,840
+that's what we're looking for in the zookeeper design
+
+1062
+01:08:07,840 --> 01:08:10,930
+and then zookeeper design second we were looking for in zookeeper design is
+
+1063
+01:08:10,930 --> 01:08:15,100
+for an application to learn whether some node goes down.
+
+1064
+01:08:16,680 --> 01:08:19,620
+So let's look at the zookeeper API
+
+1065
+01:08:19,620 --> 01:08:22,740
+and really we want to look at is znode API.
+
+1066
+01:08:27,360 --> 01:08:28,200
+And you'll see again,
+
+1067
+01:08:28,200 --> 01:08:34,320
+that is actually carefully designed to actually make it possible to do the things that we're we're looking for.
+
+1068
+01:08:34,980 --> 01:08:37,650
+Okay, so the way the system is organized is
+
+1069
+01:08:37,650 --> 01:08:39,840
+you know there's a tree of znodes,
+
+1070
+01:08:40,200 --> 01:08:46,260
+typically you know there's like one sort of app1 as a znode,
+
+1071
+01:08:46,290 --> 01:08:51,720
+that might have some children that correspond to the machines that are part of app1.
+
+1072
+01:08:52,190 --> 01:08:56,480
+So it's like peer or machine one, machine two,
+
+1073
+01:08:56,480 --> 01:08:59,180
+like maybe IP addresses or dns names,
+
+1074
+01:08:59,540 --> 01:09:03,240
+machine three, and they might actually have version numbers
+
+1075
+01:09:03,300 --> 01:09:06,000
+associated or sequence numbers with them
+
+1076
+01:09:06,330 --> 01:09:09,720
+and basically znodes can be of three types.
+
+1077
+01:09:10,450 --> 01:09:11,710
+One, they can be regular,
+
+1078
+01:09:13,030 --> 01:09:15,970
+so they're fault tolerance replicated all that kind of stuff.
+
+1079
+01:09:16,240 --> 01:09:18,100
+And then they could be ephemeral,
+
+1080
+01:09:21,220 --> 01:09:25,960
+and ephemeral basically means that the node will disappear automatically
+
+1081
+01:09:25,960 --> 01:09:31,750
+when the session with that the machine 3 goes away.
+
+1082
+01:09:32,380 --> 01:09:34,390
+So either because there's a network petition,
+
+1083
+01:09:34,390 --> 01:09:37,300
+there's no heartbeat more coming in from machine 3,
+
+1084
+01:09:37,630 --> 01:09:40,810
+but at some point zookeeper decides you know that session is gone
+
+1085
+01:09:41,050 --> 01:09:44,710
+and so then it will delete that node automatically,
+
+1086
+01:09:46,040 --> 01:09:47,750
+and so that's where ephemeral nodes.
+
+1087
+01:09:49,400 --> 01:09:52,040
+And then there's a third one which is sequential,
+
+1088
+01:09:52,930 --> 01:09:59,370
+oops, go back to the third one you type node sequential nodes
+
+1089
+01:09:59,370 --> 01:10:03,750
+and that really means that you know that version version number associated with them in their name
+
+1090
+01:10:04,140 --> 01:10:10,080
+and and they're created one by one in under particular znode,
+
+1091
+01:10:10,170 --> 01:10:15,000
+all the children will have a sequence number in their name,
+
+1092
+01:10:15,000 --> 01:10:17,370
+and the nodes are now ordered by the sequence number.
+
+1093
+01:10:19,400 --> 01:10:21,200
+And so again this might have sequence number one,
+
+1094
+01:10:21,200 --> 01:10:22,400
+this might sequence number two
+
+1095
+01:10:22,400 --> 01:10:23,870
+and this might have sequence number three
+
+1096
+01:10:23,870 --> 01:10:27,080
+and the new one gets created will have a sequence number higher than three.
+
+1097
+01:10:29,480 --> 01:10:32,990
+Okay, then, there's a API associated with that,
+
+1098
+01:10:32,990 --> 01:10:34,490
+but I want to talk a little bit about,
+
+1099
+01:10:34,490 --> 01:10:38,270
+there's create which we already mentioned a little bit.
+
+1100
+01:10:38,760 --> 01:10:40,080
+You know, takes a path,
+
+1101
+01:10:40,440 --> 01:10:43,140
+it takes some data and flags
+
+1102
+01:10:43,800 --> 01:10:46,740
+and the flags correspond to the three cases.
+
+1103
+01:10:47,850 --> 01:10:48,960
+And then there's delete,
+
+1104
+01:10:50,390 --> 01:10:52,850
+and in the previous slide effort little bit misleading
+
+1105
+01:10:52,850 --> 01:10:55,850
+and delete takes a path before it also takes a version number.
+
+1106
+01:10:57,980 --> 01:11:02,930
+And, exists takes a path in a watch.
+
+1107
+01:11:05,240 --> 01:11:07,130
+And then there's a getData,
+
+1108
+01:11:08,280 --> 01:11:11,400
+primitive takes a path and version number.
+
+1109
+01:11:14,290 --> 01:11:16,360
+And we'll see that these version numbers are the trick
+
+1110
+01:11:16,420 --> 01:11:18,430
+are the key to actually get are atomicity.
+
+1111
+01:11:18,700 --> 01:11:24,240
+And then setData have a data and version number.
+
+1112
+01:11:26,130 --> 01:11:28,320
+And there's also a call for getChildren
+
+1113
+01:11:28,350 --> 01:11:32,220
+to get actual the children of a particular znode,
+
+1114
+01:11:32,460 --> 01:11:36,370
+which takes a path, and I think the watch
+
+1115
+01:11:38,710 --> 01:11:41,530
+and they are seeing basically a pop out operation
+
+1116
+01:11:41,530 --> 01:11:43,000
+to actually ensure that everything,
+
+1117
+01:11:43,330 --> 01:11:45,910
+so if you really need strong linearizability.
+
+1118
+01:11:47,450 --> 01:11:50,810
+Okay, so I want to talk a little bit about you know why
+
+1119
+01:11:50,810 --> 01:11:53,540
+you know this version of a handy
+
+1120
+01:11:53,570 --> 01:11:58,430
+and so, let's look at a particular example, the simple example,
+
+1121
+01:11:58,430 --> 01:12:00,710
+I can come up with usually basically implementing a counter.
+
+1122
+01:12:07,090 --> 01:12:10,810
+And so the way you would write the,
+
+1123
+01:12:11,560 --> 01:12:13,360
+if you write you know,
+
+1124
+01:12:13,360 --> 01:12:15,760
+okay so, let me actually first get the write solution,
+
+1125
+01:12:15,760 --> 01:12:18,160
+so while you know true,
+
+1126
+01:12:19,450 --> 01:12:21,160
+you know the way you implement increment,
+
+1127
+01:12:21,460 --> 01:12:24,490
+so there's the pseudo code for increment of this counter
+
+1128
+01:12:24,670 --> 01:12:32,410
+is you do get x v, you know you getData of the counter,
+
+1129
+01:12:34,720 --> 01:12:37,090
+getData count.
+
+1130
+01:12:39,160 --> 01:12:48,770
+And then, if you know setData count,
+
+1131
+01:12:50,470 --> 01:12:57,820
+that's a sort of x+1, and the version numbers.
+
+1132
+01:12:59,100 --> 01:13:01,680
+And if that is the case, then break.
+
+1133
+01:13:03,920 --> 01:13:05,990
+Okay, so let me quickly go over this,
+
+1134
+01:13:06,170 --> 01:13:12,710
+so to get data returns to the current version number and the value of the key,
+
+1135
+01:13:13,280 --> 01:13:15,170
+so the key or the path you know,
+
+1136
+01:13:15,170 --> 01:13:16,400
+so for the file count,
+
+1137
+01:13:16,400 --> 01:13:18,950
+it returns the value and its version over that particular point,
+
+1138
+01:13:18,950 --> 01:13:23,660
+when they did read and then you call and setData takes three arguments,
+
+1139
+01:13:23,660 --> 01:13:26,180
+you know the path updates the new value
+
+1140
+01:13:26,180 --> 01:13:27,560
+in this case it's going to be x+1,
+
+1141
+01:13:27,560 --> 01:13:29,690
+because we want to increment the value by one
+
+1142
+01:13:29,930 --> 01:13:32,360
+and it actually passes in over the version number
+
+1143
+01:13:32,450 --> 01:13:36,360
+and the semantics of setData is that
+
+1144
+01:13:36,360 --> 01:13:39,300
+if you know the version numbers are still the same,
+
+1145
+01:13:40,330 --> 01:13:43,420
+then the setData actually happens and otherwise not.
+
+1146
+01:13:44,770 --> 01:13:46,510
+So what does this protect against.
+
+1147
+01:13:49,740 --> 01:13:55,260
+This prevents you from interleaving the get-and-set, basically.
+
+1148
+01:13:56,400 --> 01:14:00,300
+So if like two operate, two clients did get at the same time,
+
+1149
+01:14:00,510 --> 01:14:02,220
+they would read,
+
+1150
+01:14:03,980 --> 01:14:05,660
+they do get at the same time,
+
+1151
+01:14:06,640 --> 01:14:10,420
+they get both back say you know whatever x 0
+
+1152
+01:14:10,900 --> 01:14:15,400
+and version number 0 x 0 version number 0.
+
+1153
+01:14:16,170 --> 01:14:20,550
+Then they do both put where like in this case a setData.
+
+1154
+01:14:22,400 --> 01:14:26,180
+So the setData with you know whatever x is 1,
+
+1155
+01:14:27,040 --> 01:14:28,570
+you know version number 0.
+
+1156
+01:14:29,260 --> 01:14:30,940
+Also, this guy does the same thing,
+
+1157
+01:14:30,970 --> 01:14:34,130
+set you know 1 0.
+
+1158
+01:14:35,480 --> 01:14:40,670
+And you know why and so both both clients issued to two set operations
+
+1159
+01:14:40,670 --> 01:14:42,380
+are both set operation [].
+
+1160
+01:14:50,590 --> 01:14:51,280
+Well, no.
+
+1161
+01:14:51,900 --> 01:14:52,770
+And yeah, why not.
+
+1162
+01:14:53,660 --> 01:14:56,270
+Because one of the version numbers will be wrong.
+
+1163
+01:14:56,960 --> 01:14:59,570
+Yeah, right, like what one of the two goes first,
+
+1164
+01:14:59,600 --> 01:15:01,400
+why does one of the two go first.
+
+1165
+01:15:02,440 --> 01:15:04,660
+Because all writes are linearizable.
+
+1166
+01:15:04,720 --> 01:15:05,950
+Yeah, all writes are linearizable,
+
+1167
+01:15:05,950 --> 01:15:07,450
+also they're going some total order,
+
+1168
+01:15:07,480 --> 01:15:08,890
+so you know we can pick one,
+
+1169
+01:15:08,890 --> 01:15:10,240
+so let's say this guy goes first,
+
+1170
+01:15:10,240 --> 01:15:11,710
+or this the operation goes first.
+
+1171
+01:15:12,300 --> 01:15:20,160
+So that will increase the, that will increase the, the value correct,
+
+1172
+01:15:20,160 --> 01:15:22,560
+one from zero to one is correctly
+
+1173
+01:15:22,560 --> 01:15:25,080
+and but will also and will execute,
+
+1174
+01:15:25,080 --> 01:15:26,700
+because the version numbers match, right,
+
+1175
+01:15:26,700 --> 01:15:29,370
+like the version number 0 is actually what the current version number is,
+
+1176
+01:15:29,760 --> 01:15:32,370
+so the version numbers match the increment happens
+
+1177
+01:15:32,490 --> 01:15:34,770
+and setData returns true.
+
+1178
+01:15:35,360 --> 01:15:36,620
+What will happen with the second one,
+
+1179
+01:15:36,620 --> 01:15:38,420
+while the second one, the version numbers won't match,
+
+1180
+01:15:38,420 --> 01:15:40,220
+because the version number will be increased,
+
+1181
+01:15:40,220 --> 01:15:42,530
+because of previous setData operation
+
+1182
+01:15:42,710 --> 01:15:45,020
+and therefore the second setData operation will fail
+
+1183
+01:15:45,410 --> 01:15:48,410
+and so and then the client will loop back and try again
+
+1184
+01:15:48,410 --> 01:15:53,780
+and try to and try to take another shot and do the increment.
+
+1185
+01:15:54,480 --> 01:15:57,540
+And correct, so what happens in this case is correct,
+
+1186
+01:15:57,540 --> 01:16:02,130
+even though the two clients executed the operation concurrently,
+
+1187
+01:16:02,130 --> 01:16:03,540
+if the interleaving is bad,
+
+1188
+01:16:03,540 --> 01:16:06,360
+you know the this piece of code will actually do the write thing,
+
+1189
+01:16:06,360 --> 01:16:07,740
+the second client will try again
+
+1190
+01:16:07,830 --> 01:16:09,270
+and as a result you know the,
+
+1191
+01:16:09,810 --> 01:16:14,190
+what the end value will be you know to supposed to one.
+
+1192
+01:16:14,990 --> 01:16:15,710
+Okay?
+
+1193
+01:16:19,430 --> 01:16:20,210
+Does that make sense?
+
+1194
+01:16:23,860 --> 01:16:26,980
+If you've done any sort of lock-free programming in the past,
+
+1195
+01:16:27,070 --> 01:16:29,410
+then this might now look very familiar to you
+
+1196
+01:16:29,500 --> 01:16:35,440
+and so this sort of style of lock-free basically zookeeper to encourage this sort of style of lock-free programming.
+
+1197
+01:16:44,840 --> 01:16:45,890
+Okay.
+
+1198
+01:16:47,450 --> 01:16:48,890
+What I'd like to do,
+
+1199
+01:16:49,010 --> 01:16:50,420
+since I'm always running out of time,
+
+1200
+01:16:50,420 --> 01:16:52,250
+last time I ran overtime is,
+
+1201
+01:16:52,250 --> 01:16:56,060
+I'll want to talk with some points about logs,
+
+1202
+01:16:56,420 --> 01:16:58,970
+but I will do that next time,
+
+1203
+01:16:59,450 --> 01:17:01,820
+the next lecture,
+
+1204
+01:17:02,000 --> 01:17:05,000
+now let me just sort of summarize what we've learned so far
+
+1205
+01:17:05,000 --> 01:17:08,690
+and then I'll talk a little bit more about zookeeper in the next lecture.
+
+1206
+01:17:10,560 --> 01:17:13,260
+So, as summary,
+
+1207
+01:17:15,550 --> 01:17:18,910
+so basically you know just a very successful design,
+
+1208
+01:17:25,300 --> 01:17:26,230
+widely used,
+
+1209
+01:17:26,260 --> 01:17:29,230
+you can download you know on github,
+
+1210
+01:17:29,230 --> 01:17:31,330
+you can play around with it, if you wanted to
+
+1211
+01:17:31,690 --> 01:17:34,030
+and one of the things that's interesting about it,
+
+1212
+01:17:34,330 --> 01:17:36,340
+compared to all the systems that we look so far,
+
+1213
+01:17:36,520 --> 01:17:38,650
+it has weaker consistency,
+
+1214
+01:17:38,650 --> 01:17:42,280
+which weaker consistency, I mean it doesn't provide linearizability.
+
+1215
+01:17:44,350 --> 01:17:50,020
+And you know we're seeing that basically as a careful design API,
+
+1216
+01:17:50,020 --> 01:17:52,900
+at least we've seen some aspects of the careful design API,
+
+1217
+01:17:52,900 --> 01:17:55,960
+that despite the fact that actually has really good consistency,
+
+1218
+01:17:56,020 --> 01:17:57,190
+you can still use it
+
+1219
+01:17:57,190 --> 01:18:00,970
+and in fact you know you can use it actually for pretty important applications,
+
+1220
+01:18:00,970 --> 01:18:04,060
+you can actually use zookeeper as a configuration service,
+
+1221
+01:18:04,540 --> 01:18:13,210
+like its main purpose of keeping track looks like whose primary who's in the, who wants the set of replicas etc etc,
+
+1222
+01:18:13,420 --> 01:18:16,510
+and so for this sort of crucial operation of being a configuration server,
+
+1223
+01:18:16,510 --> 01:18:17,500
+that has to be correct,
+
+1224
+01:18:17,500 --> 01:18:19,750
+because otherwise we get to split brain problem,
+
+1225
+01:18:20,020 --> 01:18:22,090
+the API carefully designed,
+
+1226
+01:18:22,090 --> 01:18:30,040
+so that if you use the API correctly, you still can implement this crucial application on top of it,
+
+1227
+01:18:30,570 --> 01:18:33,480
+despite the fact that actually provides weak consistency.
+
+1228
+01:18:34,420 --> 01:18:35,980
+And the cool part of that is
+
+1229
+01:18:35,980 --> 01:18:39,790
+that this discrimination you know like sort of careful design API
+
+1230
+01:18:39,790 --> 01:18:43,750
+and the weaker consistency allows us to get you know zookeeper really high performance.
+
+1231
+01:18:49,400 --> 01:18:51,320
+And we'll see later in later lectures,
+
+1232
+01:18:51,380 --> 01:18:57,050
+more of this sort of trick of trying to weaken the consistency guarantees
+
+1233
+01:18:57,050 --> 01:19:01,010
+to actually you know get better for a get better performance
+
+1234
+01:19:01,010 --> 01:19:07,310
+or you know able to continue despite network partitions.
+
+1235
+01:19:09,810 --> 01:19:10,950
+Okay, let me stop here,
+
+1236
+01:19:10,980 --> 01:19:15,130
+and then I'll resume in a little while.
+
+1237
+01:19:15,720 --> 01:19:17,430
+The next time around for the [] lecture.
+
+1238
+01:19:19,280 --> 01:19:20,090
+Any questions?
+
+1239
+01:19:21,280 --> 01:19:22,960
+Where again as usual,
+
+1240
+01:19:22,960 --> 01:19:25,270
+if you have to go, please feel to let go,
+
+1241
+01:19:25,270 --> 01:19:27,370
+if you want to hang around and ask more questions,
+
+1242
+01:19:27,370 --> 01:19:29,560
+you know feel free, please feel free to do so.
+
+1243
+01:19:41,940 --> 01:19:48,630
+I'm sorry, can you go to this slide which said the set,
+
+1244
+01:19:49,140 --> 01:19:54,370
+the unsuccessful example for the set and for the test and set.
+
+1245
+01:19:55,380 --> 01:19:57,660
+I think it's two slides back.
+
+1246
+01:19:57,750 --> 01:19:58,320
+This one?
+
+1247
+01:19:59,160 --> 01:20:03,280
+Yeah, so the new design,
+
+1248
+01:20:03,960 --> 01:20:06,660
+it's, it is able to fix that write.
+
+1249
+01:20:07,020 --> 01:20:16,050
+[right, I mean like z] In the [] version write.
+
+1250
+01:20:16,380 --> 01:20:18,750
+Yeah, if you have to exactly,
+
+1251
+01:20:19,110 --> 01:20:20,730
+I didn't get to do that,
+
+1252
+01:20:20,730 --> 01:20:23,370
+but that was going to the rest of the lecture is to talk about,
+
+1253
+01:20:23,370 --> 01:20:26,010
+how you can implement test-and-set using the version numbers.
+
+1254
+01:20:27,100 --> 01:20:30,250
+And clearly the increment suggests you can, correct,
+
+1255
+01:20:30,250 --> 01:20:31,900
+because this is basically the same sequence.
+
+1256
+01:20:33,940 --> 01:20:34,420
+Right.
+
+1257
+01:20:35,830 --> 01:20:38,440
+Oh, if this is the same thing as the master, okay.
+
+1258
+01:20:38,440 --> 01:20:40,240
+Yeah, that exactly.
+
+1259
+01:20:41,060 --> 01:20:42,800
+Okay, thank you so much.
+
+1260
+01:20:44,780 --> 01:20:49,760
+I have a question about this version versioning to prevent lock
+
+1261
+01:20:50,000 --> 01:20:52,070
+to implement lock-free programming,
+
+1262
+01:20:52,070 --> 01:20:55,340
+is this like much more efficient lock-free programming,
+
+1263
+01:20:55,340 --> 01:20:57,590
+because you still need to read,
+
+1264
+01:20:57,890 --> 01:20:59,630
+try the operation again and again
+
+1265
+01:20:59,630 --> 01:21:00,950
+until it succeeds write.
+
+1266
+01:21:01,640 --> 01:21:05,630
+Yeah, again, this test-and-set has a similar property, correct,
+
+1267
+01:21:05,630 --> 01:21:06,830
+if the tests have failed
+
+1268
+01:21:06,890 --> 01:21:08,810
+and you wanted to become you know actually increment,
+
+1269
+01:21:08,810 --> 01:21:09,740
+you have to do that again.
+
+1270
+01:21:09,770 --> 01:21:12,960
+So, it's often the case in this lock-free style programming
+
+1271
+01:21:12,960 --> 01:21:15,030
+that you have these loops where you retry.
+
+1272
+01:21:16,420 --> 01:21:17,920
+And so if there's a lot of contention,
+
+1273
+01:21:18,310 --> 01:21:19,630
+you're gonna get a lot of retry,
+
+1274
+01:21:19,750 --> 01:21:21,730
+because there's no contention, there's no retry
+
+1275
+01:21:22,210 --> 01:21:27,250
+and typically you know these lock-free algorithms actually are pretty careful in how they do the back off,
+
+1276
+01:21:27,610 --> 01:21:29,170
+so they don't really retry immediately,
+
+1277
+01:21:29,170 --> 01:21:30,370
+you know they have some backup plan.
+
+1278
+01:21:32,150 --> 01:21:36,440
+Right, but what benefits this skip over a standard lock,
+
+1279
+01:21:36,530 --> 01:21:38,960
+because either way if you have a lot of contention,
+
+1280
+01:21:38,960 --> 01:21:42,020
+you're gonna be like sitting there and retrying a lot.
+
+1281
+01:21:42,170 --> 01:21:43,160
+Yeah, so let's,
+
+1282
+01:21:43,160 --> 01:21:44,570
+yeah so you know,
+
+1283
+01:21:44,660 --> 01:21:52,400
+so, the increment counter is an example where basically sort of implicitly do the locking,
+
+1284
+01:21:52,400 --> 01:21:56,430
+because you will see if we implement locks in zookeeper,
+
+1285
+01:21:56,430 --> 01:22:00,990
+like zookeeper implement locks with zookeeper API,
+
+1286
+01:22:01,170 --> 01:22:02,700
+and then if you do this stupid lock,
+
+1287
+01:22:02,730 --> 01:22:04,710
+you can also have this contention issue,
+
+1288
+01:22:05,220 --> 01:22:07,830
+of course, there's a way of implementing smarter lock,
+
+1289
+01:22:07,830 --> 01:22:10,560
+they talked about like without hurting
+
+1290
+01:22:10,560 --> 01:22:12,240
+and then you could do better.
+
+1291
+01:22:12,830 --> 01:22:16,760
+And so I was hoping to talk about next time.
+
+1292
+01:22:18,690 --> 01:22:19,590
+Okay, thank you.
+
+1293
+01:22:20,040 --> 01:22:22,110
+I think the real point here is you know that
+
+1294
+01:22:22,110 --> 01:22:24,720
+you can use these primitives to actually do lock-free programming.
+
+1295
+01:22:25,740 --> 01:22:29,250
+Like with the interface that the lab 3 provides, its not possible.
+
+1296
+01:22:31,820 --> 01:22:32,960
+Makes sense, thank you.
+
+1297
+01:22:42,960 --> 01:22:43,980
+Any further questions?
+
