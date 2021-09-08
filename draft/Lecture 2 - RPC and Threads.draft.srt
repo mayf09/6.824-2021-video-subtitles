@@ -1,22 +1,22 @@
 1
 00:00:02,060 --> 00:00:04,280
 0,570 1140,1530 1530,1710 1710,1830 1830,2220
-Okay, um, okay, so the
+{ -} Okay, so the
 
 2
 00:00:04,310 --> 00:00:05,930
 0,300 300,420 420,810 810,1050 1050,1620
-topic for today is a
+topic for today is {}
 
 3
 00:00:05,930 --> 00:00:08,030
 0,300 300,390 390,540 540,1170 1770,2100
-threat and our PC, second
+threads and {RPC -},| second
 
 4
 00:00:08,030 --> 00:00:10,460
 0,390 390,1140 1620,1860 1860,1980 1980,2430
-lecture in two to four
+lecture in {6.824 - -},|
 
 5
 00:00:10,550 --> 00:00:12,170
@@ -26,27 +26,27 @@ again we're going to mostly
 6
 00:00:12,170 --> 00:00:12,860
 0,150 150,270 270,480 480,570 570,690
-look at threats and our
+look at threads and {RPC
 
 7
 00:00:12,860 --> 00:00:13,880
 0,360 360,450 450,510 510,900 900,1020
-PC in the context of
+-} in the context of
 
 8
 00:00:13,880 --> 00:00:14,880
 0,480
-go.
+Go,|
 
 9
 00:00:14,880 --> 00:00:16,950
 0,540 900,1440 1440,1770 1770,1920 1920,2070
-A programming language that we're
+{you,know} programming language that we're
 
 10
 00:00:16,950 --> 00:00:18,720
 0,330 330,510 510,960 990,1620 1680,1770
-using in the collapse and
+using in the labs| and
 
 11
 00:00:18,720 --> 00:00:19,890
@@ -56,22 +56,22 @@ in fact most of this
 12
 00:00:19,890 --> 00:00:21,900
 0,330 330,420 420,690 690,1320 1680,2010
-lecture is really tailored a
+lecture is really tailored {}|
 
 13
 00:00:21,900 --> 00:00:25,020
 0,330 330,870 930,1440 1440,2670 2700,3120
-two words helping you do
+{towords -} helping you do
 
 14
 00:00:25,020 --> 00:00:27,060
 0,210 210,810 810,1410 1440,1560 1560,2040
-go programming for the lapse,
+Go programming for the labs,|
 
 15
 00:00:27,960 --> 00:00:30,330
 0,450 1170,1380 1380,1710 1710,1860 1860,2370
-a us all you've done,
+{} that's all you've done,|
 
 16
 00:00:30,330 --> 00:00:32,940
@@ -81,7 +81,7 @@ hopefully the tutorial and the
 17
 00:00:32,940 --> 00:00:34,860
 0,450 450,930 930,1110 1110,1560 1560,1920
-crawler exercise which will discuss
+crawler exercise| which will discuss
 
 18
 00:00:34,860 --> 00:00:35,460
@@ -91,7 +91,7 @@ them quite a bit of
 19
 00:00:35,460 --> 00:00:37,170
 0,750 750,1080 1080,1200 1200,1290 1290,1710
-detail later in the lecture,
+detail later in the lecture,|
 
 20
 00:00:37,410 --> 00:00:39,060
@@ -101,67 +101,67 @@ but before jumping into the
 21
 00:00:39,060 --> 00:00:40,440
 0,450 450,570 570,870 870,1170 1170,1380
-details, let me a little
+details,| let me a little
 
 22
 00:00:40,440 --> 00:00:41,940
 0,180 180,510 510,630 630,930 930,1500
-bit more of cold calling
+bit more of code calling
 
 23
 00:00:41,970 --> 00:00:43,350
 0,330 450,780 780,930 930,1200 1200,1380
-to break the Ice and
+to break the [] and
 
 24
 00:00:43,350 --> 00:00:44,670
 0,180 180,360 360,480 480,660 660,1320
-get people to ask questions.
+get people to ask questions.|
 
 25
 00:00:45,200 --> 00:00:46,520
 0,360 360,540 540,780 780,870 870,1320
-Um, so maybe you can
+{} So maybe you can
 
 26
 00:00:46,520 --> 00:00:48,200
 0,270 270,330 330,1110 1110,1470 1470,1680
-answer the question, where are
+answer the question,| where are
 
 27
 00:00:48,200 --> 00:00:49,460
 0,240 240,750 780,1020 1020,1170 1170,1260
-you, and how did you
+you and how did you
 
 28
 00:00:49,460 --> 00:00:51,110
 0,330 330,480 480,960 960,1530 1530,1650
-enjoy the tutorial what's your
+enjoy the tutorial,| what's your
 
 29
 00:00:51,110 --> 00:00:53,930
 0,210 210,660 660,1320 1350,1770 2220,2820
-first impression to go, maybe
+first impression to Go,| maybe
 
 30
 00:00:53,930 --> 00:00:56,270
 0,810 840,1320 1320,1530 1530,1980 1980,2340
-I'll yeah how about even
+I'll.| Yeah, how about Evan
 
 31
 00:00:56,270 --> 00:00:57,400
 0,600
-zelman.
+Feldman?|
 
 32
 00:00:59,940 --> 00:01:02,910
 0,390 390,900 960,1650 1860,2610 2610,2970
-Hi folks, I'm batman I'm
+Hi folks, I'm Batman,| I'm
 
 33
 00:01:02,910 --> 00:01:04,710
 0,600 600,1020 1020,1320 1320,1530 1530,1800
-in Newton which is um
+in Newton, which is {}
 
 34
 00:01:04,710 --> 00:01:05,730
@@ -171,7 +171,7 @@ on the outskirts of greater
 35
 00:01:05,730 --> 00:01:08,310
 0,540 870,1680 1680,1860 1860,2460 2460,2580
-Boston turtle was interesting, it
+Boston,| {the,tutorial} was interesting,| it
 
 36
 00:01:08,310 --> 00:01:09,960
@@ -186,7 +186,7 @@ you know an object oriented
 38
 00:01:11,700 --> 00:01:14,010
 0,540 600,1350 1380,1710 1710,1980 1980,2310
-language, um, so it's um,
+language,| {} so it's, {}
 
 39
 00:01:14,010 --> 00:01:14,730
@@ -196,57 +196,57 @@ it's kind of a change
 40
 00:01:14,730 --> 00:01:16,290
 0,240 240,540 540,630 630,1110 1110,1560
-a change in framework that
+a change in framework,| that
 
 41
 00:01:16,380 --> 00:01:18,030
 0,540 570,930 930,1020 1020,1410 1410,1650
-was interesting to adapt to.
+was interesting to adapt to.|
 
 42
 00:01:19,290 --> 00:01:22,620
 0,210 210,1290 1440,2280 2280,2700
-Hey, how Brendan well.
+Hey, {how,about} Brendan Wall?|
 
 43
 00:01:28,390 --> 00:01:30,240
 0,480 480,600 600,720 720,1290
-Brendan are you there.
+Brendan, are you there?|
 
 44
 00:01:30,530 --> 00:01:31,580
 0,300 300,420 420,540 540,690 690,1050
-Yes I was just finding
+Yes, I was just finding
 
 45
 00:01:31,760 --> 00:01:33,260
 0,450 600,840 840,1050 1050,1140 1140,1500
-new sorry was the question
+{mute,button},| sorry, {what,was} the question,
 
 46
 00:01:33,260 --> 00:01:35,000
 0,120 120,300 300,600 930,1530 1530,1740
-I just joined, um, where
+I just joined.| {} Where
 
 47
 00:01:35,000 --> 00:01:35,870
 0,150 150,270 270,690 690,750 750,870
-are you able to hear
+are you {and,what,is -} your
 
 48
 00:01:35,870 --> 00:01:38,000
 0,210 210,570 570,660 660,1050 1740,2130
-first impressions of go, um,
+first impressions of Go? {}|
 
 49
 00:01:38,000 --> 00:01:39,560
 0,450 450,990 1020,1200 1200,1380 1380,1560
-yeah it's I had used
+Yeah, it's, I had used
 
 50
 00:01:39,560 --> 00:01:40,400
 0,60 60,240 240,600 600,750 750,840
-to go before for an
+to Go before,| for an
 
 51
 00:01:40,400 --> 00:01:41,480
@@ -261,27 +261,27 @@ time actually dealing with the
 53
 00:01:42,620 --> 00:01:44,360
 0,540 540,1080 1110,1230 1230,1290 1290,1740
-currency stuff and I like
+concurrency stuff| and I like
 
 54
 00:01:44,420 --> 00:01:45,500
 0,180 180,360 360,570 570,750 750,1080
-like really working with routine
+like really working with goroutine,|
 
 55
 00:01:45,500 --> 00:01:47,920
 0,420 630,1680 1680,1980
-so kind of.
+so kind of,
 
 56
 00:01:48,010 --> 00:01:49,120
 0,390 390,450 450,660 660,960 960,1110
-Initially it was tricky to
+initially it was tricky to
 
 57
 00:01:49,120 --> 00:01:51,880
 0,210 210,420 420,1890 2190,2580 2610,2760
-think through like like as
+think through like,| like as
 
 58
 00:01:51,880 --> 00:01:52,900
@@ -291,7 +291,7 @@ soon as the main thread
 59
 00:01:52,900 --> 00:01:54,340
 0,420 420,750 750,1050 1050,1170 1170,1440
-and auto routines are ended,
+and {all,the,goroutines -} are ended,|
 
 60
 00:01:54,340 --> 00:01:55,870
@@ -306,47 +306,47 @@ those early kind of conceptual
 62
 00:01:57,250 --> 00:02:00,970
 0,360 360,480 480,930 930,1470 3420,3720
-issues but it's interesting about
+issues,| but it's interesting.| {How,about}
 
 63
 00:02:00,970 --> 00:02:02,600
 0,210 210,660 660,870 870,1170
-the corner push me.
+the [Corner] {[Prisby] -}?|
 
 64
 00:02:13,170 --> 00:02:14,820
 0,450 450,540 540,660 660,1080
-Connor, are you there.
+[Connor], are you there?|
 
 65
 00:02:19,120 --> 00:02:22,060
 0,750 750,1020 1020,1200 1200,1530 1530,2940
-Okay, you try somebody else,
+Okay, {} try somebody else,
 
 66
 00:02:22,060 --> 00:02:23,740
 0,420 420,990
-dory SHEN.
+Dory Shen.|
 
 67
 00:02:27,120 --> 00:02:29,190
 0,660 750,1140 1140,1320 1320,1560 1560,2070
-Hi um, I'm in Cambridge
+Hi, {} I'm in Cambridge
 
 68
 00:02:29,190 --> 00:02:30,600
 0,180 180,450 450,870 900,1170 1170,1410
-right now and I found
+right now| and I found
 
 69
 00:02:30,600 --> 00:02:32,520
 0,150 150,300 300,720 750,1440 1440,1920
-go to be pretty interesting
+Go to be pretty interesting,|
 
 70
 00:02:32,520 --> 00:02:33,690
 0,90 90,270 270,600 690,930 930,1170
-I thought like go through
+I thought like Go through
 
 71
 00:02:33,690 --> 00:02:34,620
@@ -356,7 +356,7 @@ through the first part of
 72
 00:02:34,620 --> 00:02:36,870
 0,90 90,660 660,1050 1050,1380 1710,2250
-the tutorial I like learning
+the tutorial,| I like learning
 
 73
 00:02:36,870 --> 00:02:37,740
@@ -371,17 +371,17 @@ the way they do for
 75
 00:02:38,610 --> 00:02:39,810
 0,420 450,810 810,960 960,1050 1050,1200
-loops I thought that was
+loops,| I thought that was
 
 76
 00:02:39,810 --> 00:02:41,250
 0,210 210,690 690,780 780,1110 1140,1440
-pretty interesting and like the
+pretty interesting| and like the
 
 77
 00:02:41,250 --> 00:02:42,450
 0,150 150,240 240,450 450,510 510,1200
-way it's kind of structured
+way it's kind of structured,|
 
 78
 00:02:42,480 --> 00:02:43,980
@@ -391,7 +391,7 @@ I think that I like
 79
 00:02:44,490 --> 00:02:46,650
 0,300 450,840 840,1500 1500,1650 1680,2160
-the the threads and I'm
+the the threads| and {}
 
 80
 00:02:46,740 --> 00:02:48,450
@@ -406,7 +406,7 @@ bit more difficult about when
 82
 00:02:50,010 --> 00:02:51,990
 0,120 120,690 690,1080 1200,1560 1560,1980
-it ended like when um,
+it ended,| like when {}
 
 83
 00:02:52,530 --> 00:02:53,910
@@ -421,12 +421,12 @@ before all the routines like
 85
 00:02:55,110 --> 00:02:56,730
 0,390 390,690 900,1080 1080,1260 1260,1620
-ended, so that was like
+ended,| so that was like
 
 86
 00:02:57,180 --> 00:02:58,350
 0,480 480,600 600,780 780,1050 1050,1170
-interesting to think about, and
+interesting to think about,| and
 
 87
 00:02:58,350 --> 00:02:59,190
@@ -436,12 +436,12 @@ like I learned more about
 88
 00:02:59,190 --> 00:03:00,090
 0,240 240,390 390,510 510,690 690,900
-that so it's pretty cool
+that,| so it's pretty cool,
 
 89
 00:03:00,090 --> 00:03:02,880
 0,120 120,390 390,540 1110,2070 2100,2790
-I liked it well, wow
+I liked it.| Well, hope
 
 90
 00:03:02,880 --> 00:03:03,600
@@ -451,12 +451,12 @@ you gonna have a very
 91
 00:03:03,600 --> 00:03:06,090
 0,390 390,990 990,1410 1410,1890 1890,2490
-positive experience would go, um
+positive experience with Go {}
 
 92
 00:03:07,440 --> 00:03:09,720
 0,150 150,720 1020,1650 1650,2100 2130,2280
-this semester, um and um,
+this semester,| {} and, {}
 
 93
 00:03:09,720 --> 00:03:10,530
@@ -471,7 +471,7 @@ little bit like you know
 95
 00:03:11,340 --> 00:03:13,740
 0,870 870,1350 1470,1980
-why go, um.
+why Go? {}|
 
 96
 00:03:14,210 --> 00:03:15,530
@@ -481,7 +481,7 @@ In principle, you know there's
 97
 00:03:15,530 --> 00:03:17,150
 0,30 30,300 300,450 720,1170 1170,1620
-a lot of programming languages
+a lot of programming languages|
 
 98
 00:03:17,150 --> 00:03:18,200
@@ -491,17 +491,17 @@ that you could have used
 99
 00:03:18,200 --> 00:03:19,670
 0,180 180,450 450,840 840,1350 1350,1470
-for doing distributed programming and
+for doing distributed programming| and
 
 100
 00:03:19,670 --> 00:03:20,780
 0,330 330,420 420,840 840,1020 1020,1110
-goals are absolutely not the
+Go is absolutely not the
 
 101
 00:03:20,780 --> 00:03:22,610
 0,180 180,540 960,1320 1320,1500 1500,1830
-only one but some reasons
+only one,| but some reasons
 
 102
 00:03:22,610 --> 00:03:24,680
@@ -511,22 +511,22 @@ why we why we chose
 103
 00:03:24,680 --> 00:03:26,000
 0,390 390,630 630,690 690,870 870,1320
-Co in a two four
+Go in {6.824 - -},|
 
 104
 00:03:26,180 --> 00:03:27,530
 0,750 750,870 870,1020 1020,1290 1290,1350
-a you know first of
+{} you know first of
 
 105
 00:03:27,530 --> 00:03:28,670
 0,120 120,210 210,360 360,540 540,1140
-all, it has good support.
+all, it has good support
 
 106
 00:03:30,320 --> 00:03:34,310
 0,360 360,840 840,990 990,1740 3270,3990
-For threats in RBC and
+for threads and RPC| and
 
 107
 00:03:34,910 --> 00:03:36,860
@@ -536,7 +536,7 @@ those two are very important
 108
 00:03:36,860 --> 00:03:39,170
 0,90 90,540 540,1110 1500,1980 2130,2310
-for distributed programming, so it
+for distributed programming,| so it
 
 109
 00:03:39,170 --> 00:03:40,850
@@ -546,12 +546,12 @@ makes sense to you know
 110
 00:03:40,850 --> 00:03:41,930
 0,420 420,690 690,840 840,900 900,1080
-it goes, there's a good
+it,| Go there's a good
 
 111
 00:03:41,930 --> 00:03:43,730
 0,210 210,300 300,630 1080,1440 1440,1800
-match for that second reason
+match for that.| Second reason
 
 112
 00:03:43,730 --> 00:03:44,420
@@ -566,7 +566,7 @@ is you know they have
 114
 00:03:45,200 --> 00:03:46,880
 0,120 120,480 480,960 1020,1620 1620,1680
-a garbage collector and if
+a garbage collector| and if
 
 115
 00:03:46,880 --> 00:03:48,440
@@ -576,12 +576,12 @@ you do share namely style
 116
 00:03:48,440 --> 00:03:50,720
 0,570 570,1080 1080,1470 1470,1740 1740,2280
-parallelism where multiple threats share
+parallelism| where multiple threads share
 
 117
 00:03:50,750 --> 00:03:53,810
 0,510 540,1260 1440,1770 1770,2460 2790,3060
-a structure where variable a
+a structure,| where variable {}
 
 118
 00:03:53,810 --> 00:03:55,340
@@ -591,32 +591,32 @@ then having a garbage collector
 119
 00:03:55,340 --> 00:03:56,690
 0,420 420,810 810,1110 1110,1260 1260,1350
-is nice because then the
+is nice,| because then the
 
 120
 00:03:56,690 --> 00:03:57,770
 0,240 240,480 480,570 570,660 660,1080
-threats don't have to decide
+threads don't have to decide
 
 121
 00:03:57,770 --> 00:03:59,420
 0,240 240,360 360,930 1080,1380 1380,1650
-who's the last a threat
+who's the last {} thread
 
 122
 00:03:59,420 --> 00:04:00,650
 0,150 150,510 510,720 720,840 840,1230
-that acne has a reference
+that actually has a reference
 
 123
 00:04:00,650 --> 00:04:02,030
 0,150 150,360 360,810 810,1140 1140,1380
-to his memory and shoot,
+to his memory| and should
 
 124
 00:04:02,030 --> 00:04:04,220
 0,450 450,630 630,1200 1290,1710 1770,2190
-therefore de allocated a garbage
+therefore {deallocated -},| a garbage
 
 125
 00:04:04,220 --> 00:04:05,420
@@ -626,17 +626,16 @@ collector just takes care of
 126
 00:04:05,420 --> 00:04:06,680
 0,180 180,360 360,1020
-all those problems.
+all those problems.|
 
 127
 00:04:06,980 --> 00:04:10,250
 0,270 270,810 1470,1980 2130,2580 2580,3270
-That's convenient a type safe.
+That's convenient {} type safe.|
 
 128
 00:04:12,800 --> 00:04:14,180
 0,780
-AH.
 
 129
 00:04:14,420 --> 00:04:16,370
@@ -646,12 +645,12 @@ It is simple, it's a
 130
 00:04:16,400 --> 00:04:18,800
 0,780 780,1080 1080,1500 1500,2040 2070,2400
-reasonable simple programming language quite
+reasonable simple programming language,| quite
 
 131
 00:04:18,800 --> 00:04:20,270
 0,570 570,690 690,1140 1140,1410 1410,1470
-easy to learn, and in
+easy to learn,| and in
 
 132
 00:04:20,270 --> 00:04:21,770
@@ -666,42 +665,42 @@ you've got that experience with
 134
 00:04:22,700 --> 00:04:24,200
 0,360 360,960 960,1200 1200,1290 1290,1500
-indigo tutorial that I want
+{in,Go} tutorial,| that I want
 
 135
 00:04:24,200 --> 00:04:25,280
 0,120 120,270 270,450 450,960 960,1080
-you to go curatorial you
+you to Go tutorial, you
 
 136
 00:04:25,280 --> 00:04:26,690
 0,360 360,750 750,930 930,1020 1020,1410
-mostly got most of go
+mostly got most of Go|
 
 137
 00:04:27,440 --> 00:04:29,810
 0,600 900,1110 1110,1590 1590,1950 1950,2370
-and then finally I have
+and then finally, {it,actually} have
 
 138
 00:04:29,810 --> 00:04:31,520
 0,240 270,810 810,930 930,1050 1050,1710
-to pilar so it's compiled.
+a compiler,| so it's compiled,|
 
 139
 00:04:32,200 --> 00:04:35,740
 0,1500 1530,2250 2280,2730 2760,3420 3420,3540
-Like python or a you
+unlike python| or {} you
 
 140
 00:04:35,740 --> 00:04:37,690
 0,210 210,870 870,1140 1140,1470 1470,1950
-know actually the quality producers
+know actually the compiler producers
 
 141
 00:04:37,690 --> 00:04:39,070
 0,270 270,540 540,960 960,1110 1110,1380
-actually usable code, so the
+actually usable code,| so the
 
 142
 00:04:39,100 --> 00:04:40,690
@@ -711,27 +710,27 @@ runtime overhead is not as
 143
 00:04:40,720 --> 00:04:43,900
 0,450 1260,1710 2460,2820 2820,3120 3120,3180
-smart I guess sort of
+large,| I guess sort of
 
 144
 00:04:43,900 --> 00:04:45,310
 0,90 90,420 420,720 720,1200 1200,1410
-the final reason why me
+the final reason why {6.824
 
 145
 00:04:45,310 --> 00:04:46,480
 0,150 150,330 330,480 480,870 870,1170
-or me two fours in
+- - - -} in
 
 146
 00:04:46,480 --> 00:04:47,920
 0,390 390,510 510,840 840,1170 1170,1440
-a in those pictures, I
+Go,| in those pictures, I
 
 147
 00:04:47,920 --> 00:04:50,380
 0,630 630,1050 1260,1620 1620,2190 2190,2460
-enjoyed writing go programs and
+enjoyed writing Go programs| and
 
 148
 00:04:50,380 --> 00:04:51,730
@@ -741,17 +740,17 @@ so that may be also
 149
 00:04:51,730 --> 00:04:53,540
 0,90 90,450 450,780
-an important reason.
+an important reason.|
 
 150
 00:04:54,140 --> 00:04:55,490
 0,570 780,960 960,1080 1080,1170 1170,1350
-Um, so what, I'm gonna
+{} So what I'm gonna
 
 151
 00:04:55,490 --> 00:04:56,420
 0,330 330,690 690,750 750,870 870,930
-do is I'm going to
+do is,| I'm going to
 
 152
 00:04:56,420 --> 00:04:57,380
@@ -761,12 +760,12 @@ talk a little bit about
 153
 00:04:57,410 --> 00:04:58,700
 0,240 240,300 300,780 780,930 930,1290
-threats in general are machine,
+threads in general, {} machine
 
 154
 00:04:58,700 --> 00:05:00,860
 0,690 840,1410 1410,1980 1980,2100 2100,2160
-general, um, and you know
+{in,general},| {} and you know
 
 155
 00:05:00,860 --> 00:05:02,000
@@ -776,22 +775,22 @@ talk a little bit about
 156
 00:05:02,030 --> 00:05:04,640
 0,1080 1110,1470 1470,1950 1950,2130 2130,2610
-a different aspects of programming,
+{} different aspects of programming
 
 157
 00:05:04,640 --> 00:05:06,320
 0,600 930,1230 1230,1350 1350,1530 1530,1680
-refresh some of that is
+{with,threads},| some of that is
 
 158
 00:05:06,320 --> 00:05:08,840
 0,330 330,1110 1140,2160 2160,2340 2340,2520
-pre tutorial, you have seen
+pretty tutorial,| you have seen
 
 159
 00:05:08,840 --> 00:05:10,820
 0,120 120,780 960,1710 1710,1800 1800,1980
-this before, um you know
+this before,| {} you know
 
 160
 00:05:10,820 --> 00:05:12,620
@@ -801,7 +800,7 @@ my apologies, I'm gonna go
 161
 00:05:12,620 --> 00:05:14,570
 0,330 330,690 690,1170 1200,1620 1620,1950
-reasonable quickly, fruit, it's definitely
+reasonable quickly {through,it},| it's definitely
 
 162
 00:05:14,570 --> 00:05:16,340
@@ -811,7 +810,7 @@ not a comprehensive introduction to
 163
 00:05:16,340 --> 00:05:18,590
 0,330 330,960 1230,1740 1740,2040 2040,2250
-quicker programming but hopefully enough
+concurrent programming,| but hopefully enough
 
 164
 00:05:18,590 --> 00:05:19,910
@@ -821,17 +820,17 @@ to remind you of what
 165
 00:05:19,910 --> 00:05:21,410
 0,60 60,450 450,840 870,1290 1290,1500
-the issues are and what
+the issues are| and what
 
 166
 00:05:21,410 --> 00:05:22,160
 0,90 90,210 210,330 330,510 510,750
-you should look out for.
+you should look out for.|
 
 167
 00:05:22,560 --> 00:05:23,700
 0,480 480,600 600,840 840,1020 1020,1140
-And will hopefully spend some
+And we also spend some
 
 168
 00:05:23,700 --> 00:05:24,930
@@ -841,7 +840,7 @@ time quite a bit of
 169
 00:05:24,930 --> 00:05:26,320
 0,150 150,300 300,360 360,810
-talk about the crawl.
+talk about the crawler.|
 
 170
 00:05:26,520 --> 00:05:28,650
@@ -856,12 +855,12 @@ a solution that I have
 172
 00:05:30,000 --> 00:05:31,500
 0,150 150,600 600,840 840,1080 1080,1500
-two solutions one using generals
+two solutions,| one using channels
 
 173
 00:05:31,500 --> 00:05:33,240
 0,120 120,300 300,780 780,1230 1230,1740
-and ones using new texas
+and ones using {mutexes -}|
 
 174
 00:05:33,360 --> 00:05:34,230
@@ -871,7 +870,7 @@ and we'll go through both
 175
 00:05:34,230 --> 00:05:35,060
 0,60 60,300
-of them.
+of them.|
 
 176
 00:05:36,140 --> 00:05:37,400
@@ -881,7 +880,7 @@ Any questions so far before
 177
 00:05:37,400 --> 00:05:39,180
 0,270 420,900 900,1140
-I dive in.
+I dive in.|
 
 178
 00:05:44,920 --> 00:05:46,840
@@ -11302,4 +11301,3 @@ one and good luck with
 01:07:05,600 --> 01:07:06,360
 0,210
 it.
-
