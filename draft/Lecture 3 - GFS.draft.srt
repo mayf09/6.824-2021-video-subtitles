@@ -1,7 +1,7 @@
 1
 00:00:00,060 --> 00:00:01,290
 0,270 270,540 750,1020 1020,1140 1140,1230
-Works again okay, so the
+Works again.| Okay, so the
 
 2
 00:00:01,290 --> 00:00:02,850
@@ -11,7 +11,7 @@ plan for today is talking
 3
 00:00:02,850 --> 00:00:04,230
 0,120 120,720 750,1050 1050,1230 1230,1380
-about gfs, I'm gonna do
+about GFS.| I'm gonna do
 
 4
 00:00:04,230 --> 00:00:05,190
@@ -21,7 +21,7 @@ it in sort of multiple
 5
 00:00:05,190 --> 00:00:08,160
 0,690 1140,1530 1530,2190 2250,2790 2790,2970
-steps a one I'm gonna
+steps,| {} one I'm gonna
 
 6
 00:00:08,160 --> 00:00:08,820
@@ -31,12 +31,12 @@ talk a little bit about
 7
 00:00:08,820 --> 00:00:10,980
 0,390 390,450 450,1020 1020,1440 1440,2160
-storage in general and why
+storage in general| and why
 
 8
 00:00:11,640 --> 00:00:14,460
 0,240 240,600 600,1620 2040,2610 2610,2820
-it's so important and why
+it's so important| and why
 
 9
 00:00:14,460 --> 00:00:15,180
@@ -51,7 +51,7 @@ time in this class talking
 11
 00:00:16,710 --> 00:00:17,580
 0,210 210,420
-about it.
+about it.|
 
 12
 00:00:17,930 --> 00:00:20,660
@@ -61,17 +61,17 @@ Then I'm going to talk
 13
 00:00:20,660 --> 00:00:22,070
 0,30 30,240 240,390 390,780 780,1410
-a little bit about um
+a little bit about {}
 
 14
 00:00:22,640 --> 00:00:24,260
 0,180 180,390 390,450 450,1170 1170,1620
-in terms of gfs and
+in terms of GFS and
 
 15
 00:00:24,260 --> 00:00:26,150
 0,120 120,360 360,1020 1200,1710 1710,1890
-it's made design a will
+it's main design,| {} we'll
 
 16
 00:00:26,150 --> 00:00:27,920
@@ -86,27 +86,27 @@ be the main theme through
 18
 00:00:29,840 --> 00:00:32,000
 0,180 180,690 1260,1740 1740,1980 1980,2160
-this lecture, um, as part
+this lecture,| {} as part
 
 19
 00:00:32,000 --> 00:00:33,710
 0,90 90,180 180,750 750,1530 1530,1710
-of the consistency, yeah we
+of the consistency,| {you,know} we
 
 20
 00:00:33,710 --> 00:00:35,600
 0,540 540,750 750,1020 1680,1770 1770,1890
-probably I do but there's
+probably I do,| hopefully there's
 
 21
 00:00:35,600 --> 00:00:36,680
 0,150 150,570 570,660 660,990 990,1080
-still time to break out
+still time to {breakout -}
 
 22
 00:00:36,680 --> 00:00:37,340
 0,60 60,120 120,360 360,480 480,660
-of the room and talk
+of the room| and talk
 
 23
 00:00:37,340 --> 00:00:38,540
@@ -116,42 +116,42 @@ a little bit about the
 24
 00:00:38,540 --> 00:00:40,420
 0,420 420,660 660,990 990,1230
-breakout rooms about the.
+breakout rooms about the
 
 25
 00:00:40,570 --> 00:00:42,220
 0,720 720,810 810,870 870,1470 1470,1650
-Lecture with a question was
+lecture| or the question was
 
 26
 00:00:42,220 --> 00:00:43,900
 0,330 330,570 570,1020 1020,1380 1380,1680
-posed for lecture and will
+posed for lecture| and we'll
 
 27
 00:00:43,900 --> 00:00:46,930
 0,600 600,1320 1320,1560 1560,2100 2430,3030
-resume discussion of um, um.
+resume discussion of { -}
 
 28
 00:00:47,680 --> 00:00:49,680
 0,720 720,1380
-Of consistency.
+of consistency.|
 
 29
 00:00:50,920 --> 00:00:53,100
 0,390 390,990 990,1590
-Okay, so um.
+Okay, so. {}|
 
 30
 00:00:53,100 --> 00:00:53,730
 0,120 120,270 270,300 300,510 510,630
-We talk a little bit
+{Let,me} talk a little bit
 
 31
 00:00:53,730 --> 00:00:55,590
 0,480 480,870 870,1230 1230,1290 1290,1860
-about storage systems in general
+about storage systems in general|
 
 32
 00:00:56,220 --> 00:00:57,930
@@ -161,27 +161,27 @@ and why they so feature
 33
 00:00:57,930 --> 00:01:00,630
 0,180 180,1080 1170,1740 1740,2220 2250,2700
-so prominently a in six
+so prominently {} in {6.824
 
 34
 00:01:00,630 --> 00:01:02,880
 0,240 240,420 420,900 1650,2100 2100,2250
-eight two four and the
+- - -}| and the
 
 35
 00:01:02,880 --> 00:01:05,010
 0,360 360,690 690,1110 1140,1770 1770,2130
-main reason is a it's
+main reason is {} it's
 
 36
 00:01:05,010 --> 00:01:06,870
 0,270 270,390 390,990 990,1350 1350,1860
-just a fantastic building block.
+just a fantastic building block|
 
 37
 00:01:07,510 --> 00:01:13,420
 0,990 1440,2040 3000,3660 3660,4290
-For a photo systems.
+for {} {fault,tolerance} systems.|
 
 38
 00:01:13,840 --> 00:01:15,130
@@ -191,22 +191,22 @@ And so the basic idea
 39
 00:01:15,130 --> 00:01:17,380
 0,120 120,360 360,1290 1920,2130 2130,2250
-is that if you if
+is that| if you if
 
 40
 00:01:17,380 --> 00:01:19,750
 0,120 120,450 450,900 900,1230 1230,2370
-you can build an audible
+you can build an durable
 
 41
 00:01:19,750 --> 00:01:22,330
 0,780 810,1170 1170,1860 1980,2460 2460,2580
-storage a system then you
+storage {} system,| then you
 
 42
 00:01:22,330 --> 00:01:23,110
 0,90 90,450 450,630 630,690 690,780
-can structure sort of {re-application
+can structure sort of {your,application
 
 43
 00:01:23,110 --> 00:01:25,330
@@ -216,22 +216,22 @@ can structure sort of {re-application
 44
 00:01:25,330 --> 00:01:28,030
 0,300 300,390 390,1230 1440,2220 2370,2700
-APP is basically you know
+app is basically you know
 
 45
 00:01:28,030 --> 00:01:29,520
 0,690
-stateless.
+{state,less},|
 
 46
 00:01:31,680 --> 00:01:33,660
 0,390 390,990 990,1080 1080,1560 1560,1980
-And then the storage holds
+and then the storage holds
 
 47
 00:01:33,660 --> 00:01:36,360
 0,210 210,600 720,1290 1290,1860
-all the persistent state.
+all the persistent state.|
 
 48
 00:01:39,660 --> 00:01:41,340
@@ -241,12 +241,12 @@ And that simplifies the design
 49
 00:01:41,340 --> 00:01:43,080
 0,120 120,210 210,480 480,1200
-of the APP tremendously.
+of the app tremendously,|
 
 50
 00:01:43,270 --> 00:01:45,730
 0,480 480,1080 1110,1470 1470,2250 2310,2460
-Um, because yeah basically you
+{} because {the,app} basically you
 
 51
 00:01:45,730 --> 00:01:47,650
@@ -256,12 +256,12 @@ know doesn't really have any
 52
 00:01:47,650 --> 00:01:48,940
 0,330 330,840 840,990 990,1080 1080,1290
-stable storage, you know that
+stable storage,| you know that
 
 53
 00:01:48,940 --> 00:01:50,140
 0,300 300,450 450,540 540,780 780,1200
-it has to maintain itself,
+it has to maintain itself,|
 
 54
 00:01:50,140 --> 00:01:51,040
@@ -276,7 +276,7 @@ that all out to storage
 56
 00:01:52,270 --> 00:01:53,890
 0,450 750,990 990,1140 1140,1260 1260,1620
-system so you can start
+system,| so you can start
 
 57
 00:01:53,890 --> 00:01:55,960
@@ -286,27 +286,27 @@ up a new application very
 58
 00:01:55,960 --> 00:01:57,250
 0,540 540,630 630,780 780,900 900,1290
-quickly, you know it crash
+quickly,| you know it crash
 
 59
 00:01:57,250 --> 00:01:58,420
 0,210 210,420 420,780 780,1050 1050,1170
-doesn't really matter because it
+doesn't really matter,| because it
 
 60
 00:01:58,420 --> 00:01:59,950
 0,240 240,360 360,660 660,960 960,1530
-only has soft state, not
+only has soft state,| not
 
 61
 00:01:59,950 --> 00:02:01,420
 0,180 180,450 450,810 1020,1200 1200,1470
-any art stage you start
+any hard state,| {and,then} start
 
 62
 00:02:01,420 --> 00:02:02,560
 0,150 150,630 630,810 810,870 870,1140
-up again when you start
+up again,| when you start
 
 63
 00:02:02,560 --> 00:02:03,640
@@ -321,7 +321,7 @@ state from the distributed storage
 65
 00:02:05,080 --> 00:02:05,880
 0,390
-system.
+system.|
 
 66
 00:02:06,340 --> 00:02:07,240
@@ -331,17 +331,17 @@ And you can see this
 67
 00:02:07,240 --> 00:02:09,070
 0,210 210,900 900,1080 1080,1260 1260,1830
-quick look at any website,
+quick look at any website,|
 
 68
 00:02:09,070 --> 00:02:10,270
 0,120 120,540 540,930 930,1020 1020,1200
-you're basically structured in that
+{you,know} basically structured in that
 
 69
 00:02:10,270 --> 00:02:12,310
 0,300 450,690 690,990 990,1470 1470,2040
-way, there's a storage backend,
+way,| there's a storage backend,|
 
 70
 00:02:12,310 --> 00:02:14,020
@@ -351,32 +351,32 @@ you know that means a
 71
 00:02:14,020 --> 00:02:15,610
 0,420 420,510 510,1080 1080,1380 1380,1590
-state and then there's the
+state| and then there's the
 
 72
 00:02:15,610 --> 00:02:18,610
 0,870 1260,1770 1770,2070 2070,2820 2820,3000
-application, a middle tier that
+application,| {} middle tier that
 
 73
 00:02:18,610 --> 00:02:20,380
 0,210 210,300 300,720 720,1020 1020,1770
-does the application specific competition
+does the application specific competition|
 
 74
 00:02:20,380 --> 00:02:22,030
 0,90 90,420 420,630 630,1290 1290,1650
-or whatever runs javascript go
+or whatever runs javascript Go
 
 75
 00:02:22,030 --> 00:02:23,980
 0,60 60,750 930,1410 1410,1860 1860,1950
-or whatever, um and you
+or whatever,| {} and you
 
 76
 00:02:23,980 --> 00:02:24,970
 0,120 120,300 300,510 510,780 780,990
-know it from thence that
+know it front ends that
 
 77
 00:02:24,970 --> 00:02:26,590
@@ -386,17 +386,17 @@ out you know to a
 78
 00:02:26,620 --> 00:02:28,100
 0,450 450,570 570,660 660,1140
-client on the Internet.
+client on the Internet.|
 
 79
 00:02:28,280 --> 00:02:30,740
 0,540 750,990 990,1350 1380,2040 2040,2460
-And, um, so stores just
+And, {} so stores just
 
 80
 00:02:30,740 --> 00:02:32,810
 0,150 150,270 270,1080 1110,1650 1650,2070
-like this fantastic building block
+like this fantastic building block|
 
 81
 00:02:32,810 --> 00:02:33,380
@@ -411,22 +411,22 @@ one reason that we're going
 83
 00:02:34,250 --> 00:02:35,390
 0,240 240,480 480,690 690,1020 1020,1140
-to sue this over and
+to see this over and
 
 84
 00:02:35,390 --> 00:02:37,460
 0,600 600,750 750,930 930,1650
-over in this class.
+over in this class.|
 
 85
 00:02:37,700 --> 00:02:39,290
 0,480 660,960 960,1230 1230,1440 1440,1590
-Um that means that you
+{} That means that you
 
 86
 00:02:39,290 --> 00:02:40,490
 0,120 120,330 360,660 660,870 870,1200
-know the storage system itself,
+know the storage system itself,|
 
 87
 00:02:40,490 --> 00:02:41,120
@@ -436,7 +436,7 @@ of course has to be
 88
 00:02:41,120 --> 00:02:42,770
 0,330 330,570 570,1050 1260,1470 1470,1650
-highly fault tolerant and as
+highly fault tolerant| and as
 
 89
 00:02:42,770 --> 00:02:43,310
@@ -451,17 +451,17 @@ a very tricky thing to
 91
 00:02:44,240 --> 00:02:45,920
 0,420 420,840 840,1020 1020,1230 1230,1680
-do and um so that
+do| and {} so that
 
 92
 00:02:45,920 --> 00:02:48,290
 0,270 930,1440 1470,1860 1860,2100 2100,2370
-is a the other side,
+is {} the other side,|
 
 93
 00:02:48,290 --> 00:02:49,130
 0,90 90,300 300,540 540,630 630,840
-the flip side of it,
+the flip side of it,|
 
 94
 00:02:49,220 --> 00:02:49,970
@@ -471,7 +471,7 @@ it will make life of
 95
 00:02:49,970 --> 00:02:51,260
 0,90 90,630 630,990 990,1200 1200,1290
-the application easy but you
+the application easy,| but you
 
 96
 00:02:51,260 --> 00:02:52,910
@@ -486,12 +486,12 @@ tolerant storage system is not
 98
 00:02:54,560 --> 00:02:55,260
 0,300
-easy.
+easy.|
 
 99
 00:02:55,710 --> 00:02:56,850
 0,180 180,390 390,480 480,570 570,1140
-So why is it hard
+So why is it hard|
 
 100
 00:03:00,480 --> 00:03:02,730
@@ -501,12 +501,12 @@ and basically come down to
 101
 00:03:02,730 --> 00:03:05,100
 0,840 870,960 960,1020 1020,1830 1950,2370
-a you know one region
+{} you know one reason
 
 102
 00:03:05,100 --> 00:03:07,200
 0,120 120,870 900,1260 1260,1620 1620,2100
-that drives a these designs
+that drives {} these designs|
 
 103
 00:03:07,200 --> 00:03:08,280
@@ -516,17 +516,17 @@ which is like we generally
 104
 00:03:08,280 --> 00:03:10,290
 0,180 180,330 330,1050 1710,1890 1890,2010
-want high performance when you
+want high performance| when you
 
 105
 00:03:10,290 --> 00:03:11,550
 0,180 180,480 480,750 750,990 990,1260
-think about NAS storage system
+think about the storage system
 
 106
 00:03:11,550 --> 00:03:13,410
 0,150 150,780 900,1200 1200,1380 1380,1860
-for today do you ask
+for today,| you know GFS
 
 107
 00:03:13,470 --> 00:03:14,760
@@ -536,22 +536,22 @@ its main goal is to
 108
 00:03:14,760 --> 00:03:16,470
 0,360 360,900 900,1140 1140,1440 1440,1710
-basically support map reduce types,
+basically support {mapreduce -} types
 
 109
 00:03:16,470 --> 00:03:18,180
 0,690 690,810 810,1170 1230,1560 1560,1710
-applications, and so, um, it
+applications,| and so, {} it
 
 110
 00:03:18,180 --> 00:03:20,190
 0,270 270,750 750,1050 1050,1290 1290,2010
-really needs a high performance.
+really needs {} high performance.|
 
 111
 00:03:20,580 --> 00:03:21,960
 0,450 450,630 630,720 720,900 900,1380
-Well, what does that mean,
+Well, what does that mean,|
 
 112
 00:03:21,990 --> 00:03:22,890
@@ -561,12 +561,12 @@ well it means that you
 113
 00:03:22,890 --> 00:03:26,490
 0,420 420,630 630,900 930,2040 2100,3600
-typically have to sharp data
+typically have to shard data
 
 114
 00:03:27,060 --> 00:03:32,790
 0,960 1170,1830 3600,4530 4530,5040 5130,5730
-across servers, use one server,
+across servers,| {so,you,cant't,use} one server,|
 
 115
 00:03:32,790 --> 00:03:33,690
@@ -576,7 +576,7 @@ you have to use multiple
 116
 00:03:33,690 --> 00:03:35,160
 0,150 570,900 900,1140 1140,1380 1380,1470
-choice and the reason you
+servers| and the reason you
 
 117
 00:03:35,160 --> 00:03:36,570
@@ -586,12 +586,12 @@ want to read from the
 118
 00:03:36,570 --> 00:03:38,640
 0,450 450,600 600,1080 1320,1710 1710,2070
-disk and often vertical machine
+disk| and often particular machine
 
 119
 00:03:38,640 --> 00:03:40,710
 0,240 240,810 990,1650 1830,1980 1980,2070
-has limited fruit, if you
+has limited throughput,| if you
 
 120
 00:03:40,710 --> 00:03:41,700
@@ -601,7 +601,7 @@ want to read more than
 121
 00:03:41,700 --> 00:03:43,770
 0,630 630,990 990,1290 1290,1620 1620,2070
-actually a single disk sustained
+actually a single disk {can,sustain},|
 
 122
 00:03:43,770 --> 00:03:44,610
@@ -611,12 +611,12 @@ you have to use multiple
 123
 00:03:44,610 --> 00:03:45,360
 0,270 270,510 510,570 570,660 660,750
-discs and you have to
+disks| and you have to
 
 124
 00:03:45,360 --> 00:03:46,650
 0,210 210,510 510,810 810,1110 1110,1290
-use multiple network cards and
+use multiple network cards| and
 
 125
 00:03:46,650 --> 00:03:47,760
@@ -631,32 +631,32 @@ into these sort of large
 127
 00:03:49,290 --> 00:03:51,570
 0,630 630,1290 1290,1530 1530,1680 1680,2280
-scale systems in the gsp
+scale systems in the GFS
 
 128
 00:03:51,570 --> 00:03:53,360
 0,330 330,840 840,960 960,1560
-three thousands of machines.
+{where,you,have} thousands of machines.|
 
 129
 00:03:54,560 --> 00:03:55,850
 0,270 270,360 360,480 480,720 720,1290
-Do you have many servers,
+{But,if} you have many servers,|
 
 130
 00:03:58,070 --> 00:03:59,060
 0,180 180,240 240,360 360,510 510,990
-so I'm not gonna fail.
+{some -} are gonna fail,|
 
 131
 00:04:00,790 --> 00:04:02,500
 0,420 420,540 540,1140
-Gonna get failure.
+{you,gonna} get failures,|
 
 132
 00:04:02,500 --> 00:04:03,640
 0,300 300,480 480,840 840,1080 1080,1140
-More than maybe just to
+more than maybe just to
 
 133
 00:04:03,640 --> 00:04:05,470
@@ -666,7 +666,7 @@ save more exclusively have constant
 134
 00:04:05,470 --> 00:04:10,840
 0,690 3240,4110 4110,4230 4230,5010 5010,5370
-false and you let's say
+faults| and {you,know} let's say
 
 135
 00:04:10,840 --> 00:04:12,340
@@ -676,12 +676,12 @@ the computer crashes, you know
 136
 00:04:12,340 --> 00:04:13,840
 0,210 210,300 300,720 840,1080 1080,1500
-once a year, you know,
+once a year,| you know,
 
 137
 00:04:13,840 --> 00:04:15,550
 0,570 810,1170 1170,1320 1320,1620 1620,1710
-um, now let's say you
+{} now let's say you
 
 138
 00:04:15,550 --> 00:04:16,630
@@ -691,42 +691,42 @@ know you have thousands of
 139
 00:04:16,630 --> 00:04:18,310
 0,420 420,660 660,990 990,1290 1290,1680
-machines like in the gfs
+machines,| like in the GFS
 
 140
 00:04:18,310 --> 00:04:19,690
 0,630 660,750 750,990 990,1290 1290,1380
-paper so many more and
+paper,| {so,actually} many more in
 
 141
 00:04:19,690 --> 00:04:20,860
 0,120 120,210 210,360 360,750 750,1170
-if I was machined aluminium,
+the {thousand -} machines,| {at,minimal}
 
 142
 00:04:20,860 --> 00:04:22,320
 0,150 150,420 420,1050
-all five machines.
+{thousand -} machines,|
 
 143
 00:04:22,320 --> 00:04:23,280
 0,210 210,390 390,780 780,810 810,960
-How many failures are going
+how many failures are going
 
 144
 00:04:23,280 --> 00:04:25,050
 0,60 60,240 240,360 360,750 1200,1770
-to see per day roughly.
+to see per day, roughly.|
 
 145
 00:04:29,210 --> 00:04:31,190
 0,390 420,750 750,1230 1470,1800 1800,1980
-I'm around three yeah around
+{} Around 3.| Yeah, around
 
 146
 00:04:31,190 --> 00:04:32,660
 0,390 420,660 660,900 900,1230 1230,1470
-three right that means that
+3, right,| that means that
 
 147
 00:04:32,660 --> 00:04:34,010
@@ -746,12 +746,12 @@ my laptop at the beginning
 150
 00:04:37,100 --> 00:04:38,480
 0,90 90,180 180,720 870,1080 1080,1380
-of the lecture, a is
+of the lecture,| {} is
 
 151
 00:04:38,480 --> 00:04:41,720
 0,270 270,1380 1380,1950 1950,2640 2760,3240
-just a common scenario and
+just a common scenario| and
 
 152
 00:04:41,720 --> 00:04:42,200
@@ -766,12 +766,12 @@ move up to more than
 154
 00:04:43,340 --> 00:04:45,050
 0,60 60,480 480,900 900,1200 1200,1710
-a thousand ten thousand machines,
+a thousand, ten thousand machines,|
 
 155
 00:04:45,050 --> 00:04:46,670
 0,120 120,360 360,690 690,1230 1410,1620
-a hundred thousand machines, you're
+a hundred thousand machines,| you're
 
 156
 00:04:46,670 --> 00:04:48,110
@@ -781,12 +781,12 @@ running applications using that kind
 157
 00:04:48,110 --> 00:04:49,310
 0,90 90,300 300,360 360,840 1020,1200
-of number of computers, you're
+of number of computers,| you're
 
 158
 00:04:49,310 --> 00:04:51,290
 0,210 210,390 390,810 810,1260 1410,1980
-gonna get false and so
+gonna get faults| and so
 
 159
 00:04:51,320 --> 00:04:52,460
@@ -796,12 +796,11 @@ that means you want a
 160
 00:04:52,460 --> 00:04:54,220
 0,210 210,450 450,990
-full time design.
+full tolerance design.|
 
 161
 00:04:59,240 --> 00:05:00,120
 0,120
-Yes.
 
 162
 00:05:01,260 --> 00:05:02,790
@@ -10867,4 +10866,3 @@ run to another class you
 01:06:15,480 --> 01:06:16,920
 0,270 270,510 510,630 630,900 900,1440
 please run to another class.
-
