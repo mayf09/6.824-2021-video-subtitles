@@ -11,32 +11,32 @@ or good evening, wherever you
 3
 00:00:07,400 --> 00:00:08,440
 0,420
-are.
+are.|
 
 4
 00:00:08,820 --> 00:00:10,080
 0,210 210,600 690,930 930,1020 1020,1260
-A I want to talk
+{} I want to talk
 
 5
 00:00:10,080 --> 00:00:11,580
 0,270 270,750 750,930 930,1200 1200,1500
-today about a primary backup
+today about {} {primary/backup -}
 
 6
 00:00:11,580 --> 00:00:13,080
 0,720 750,1230 1230,1380 1380,1440 1440,1500
-replication really sort of an
+replication,| really sort of an
 
 7
 00:00:13,080 --> 00:00:15,570
 0,570 570,1080 1110,1470 1470,1770 1770,2490
-introduction to primary backup application.
+introduction to {primary/backup -} application.|
 
 8
 00:00:16,350 --> 00:00:18,150
 0,240 240,480 480,1290 1410,1590 1590,1800
-Um, and we'll come back
+{} And we'll come back
 
 9
 00:00:18,150 --> 00:00:19,650
@@ -46,12 +46,12 @@ to this in multiple lectures
 10
 00:00:19,650 --> 00:00:21,660
 0,240 240,870 1260,1710 1710,1860 1860,2010
-during semester, but this is
+during semester,| but this is
 
 11
 00:00:21,660 --> 00:00:25,020
 0,1260 1830,2070 2070,2580 2580,2970 2970,3360
-A F mt default virtual
+{} {[fmt] } default virtual
 
 12
 00:00:25,020 --> 00:00:27,030
@@ -61,7 +61,7 @@ memory or a VMware fault
 13
 00:00:27,030 --> 00:00:29,370
 0,600 960,1620 1620,1800 1800,2100 2100,2340
-tolerance paper is a really
+tolerance paper| is a really
 
 14
 00:00:29,370 --> 00:00:30,600
@@ -71,7 +71,7 @@ nice introduction that brings out
 15
 00:00:30,600 --> 00:00:32,250
 0,30 30,300 300,420 420,1020 1230,1650
-a lot of issues that
+a lot of issues,| that
 
 16
 00:00:32,250 --> 00:00:33,690
@@ -81,7 +81,7 @@ are gonna come up throughout
 17
 00:00:33,690 --> 00:00:35,000
 0,240 270,870
-the semester.
+the semester.|
 
 18
 00:00:35,860 --> 00:00:37,480
@@ -91,7 +91,7 @@ The plan for lecture today
 19
 00:00:37,480 --> 00:00:38,940
 0,120 120,240 240,930
-is as follows.
+is as follows.|
 
 20
 00:00:41,170 --> 00:00:41,950
@@ -101,17 +101,17 @@ I'm just going to talk
 21
 00:00:41,950 --> 00:00:43,900
 0,600 600,1140 1140,1290 1290,1680 1710,1950
-about failures that you might
+about failures,| that you might
 
 22
 00:00:43,900 --> 00:00:47,200
 0,540 690,1080 1080,1770 1770,2310 2670,3300
-hope to tolerate using primary
+hope to tolerate using {primary/backup
 
 23
 00:00:47,200 --> 00:00:49,450
 0,480 510,1380 1380,1800 1800,2100 2100,2250
-backup replication and some that
+-} replication| and some that
 
 24
 00:00:49,450 --> 00:00:50,980
@@ -121,7 +121,7 @@ you might not be able
 25
 00:00:50,980 --> 00:00:51,820
 0,330
-to.
+to.|
 
 26
 00:00:51,990 --> 00:00:52,890
@@ -141,27 +141,27 @@ main challenges in sort of
 29
 00:00:55,410 --> 00:00:58,700
 0,600 900,1590 1590,2220
-any backup scheme.
+any backup scheme,|
 
 30
 00:00:58,980 --> 00:01:00,570
 0,450 450,600 600,660 660,1020 1020,1590
-A sort of broad speaking
+{} sort of broad speaking,
 
 31
 00:01:00,570 --> 00:01:02,760
 0,240 240,480 480,750 750,1440 1800,2190
-they talk about two we're
+then talk about two {you,know}
 
 32
 00:01:02,760 --> 00:01:04,620
 0,540 540,1320
-dominant approaches.
+dominant approaches,
 
 33
 00:01:04,700 --> 00:01:07,460
 0,420 420,930 930,1800
-A to replication.
+{} two application.|
 
 34
 00:01:08,300 --> 00:01:10,520
@@ -171,22 +171,22 @@ One is what's typically called
 35
 00:01:10,520 --> 00:01:13,740
 0,330 330,630 630,1080 1350,2460
-state terms for replication.
+state {transfer -} replication,|
 
 36
 00:01:15,330 --> 00:01:16,740
 0,210 210,270 270,870 960,1110 1110,1410
-And the second is typically
+and the second is typically
 
 37
 00:01:16,740 --> 00:01:19,200
 0,300 300,840 840,1080 1080,1680
-called replicated state machines.
+called replicated state machines.|
 
 38
 00:01:24,980 --> 00:01:26,000
 0,240 240,540 540,840 840,930 930,1020
-In today's paper is an
+And today's paper is an
 
 39
 00:01:26,000 --> 00:01:27,620
@@ -196,17 +196,17 @@ example of a replicated state
 40
 00:01:27,620 --> 00:01:29,780
 0,360 390,1440 1830,1980 1980,2100 2100,2160
-machine approach, and if I
+machine approach,| and if {in,fact}
 
 41
 00:01:29,780 --> 00:01:31,550
 0,90 90,360 360,720 720,1320 1320,1770
-have a lab to overlap
+you know lab 2 {or,lab}
 
 42
 00:01:31,550 --> 00:01:32,930
 0,240 240,540 540,930 930,1110 1110,1380
-three unlock for you also
+3, lab 4 {you,know} also
 
 43
 00:01:32,930 --> 00:01:34,190
@@ -216,12 +216,12 @@ will be using replicated state
 44
 00:01:34,190 --> 00:01:35,630
 0,390 390,750 750,960 960,1050 1050,1440
-machine approach and the fact
+machine approach| and the fact
 
 45
 00:01:35,630 --> 00:01:38,330
 0,120 120,450 540,1170 1170,1830 1890,2700
-that the gfs paper we're
+that the GFS paper or
 
 46
 00:01:38,360 --> 00:01:40,190
@@ -231,17 +231,17 @@ replicating chunks was using a
 47
 00:01:40,190 --> 00:01:41,900
 0,420 420,630 630,840 840,1320
-replicated state machine approach.
+replicated state machine approach.|
 
 48
 00:01:42,160 --> 00:01:43,180
 0,450 450,630 630,720 720,930 930,1020
-Um, since you're quite a
+{} Since it's quite a
 
 49
 00:01:43,180 --> 00:01:44,890
 0,270 270,840 1110,1260 1260,1650 1650,1710
-common approach and then you
+common approach| and then you
 
 50
 00:01:44,890 --> 00:01:45,460
@@ -251,7 +251,7 @@ know what I sort of
 51
 00:01:45,460 --> 00:01:46,930
 0,210 210,600 600,660 660,930 930,1470
-make everything a little courage
+make everything a little []|
 
 52
 00:01:46,930 --> 00:01:48,310
@@ -261,37 +261,37 @@ by looking at this case
 53
 00:01:48,310 --> 00:01:49,940
 0,210 300,570 570,960
-the case study.
+the case study,|
 
 54
 00:01:52,140 --> 00:01:54,780
 0,630 630,840 840,960 960,1620 2190,2640
-A of the vm being
+{} of the VM VMware
 
 55
 00:01:54,780 --> 00:01:58,590
 0,0 960,2190 2220,2940 2970,3150 3150,3810
-a tolerance scheme or implementation
+fault tolerance scheme or implementation
 
 56
 00:01:58,590 --> 00:01:59,720
 0,120 120,570
-or system.
+or system.|
 
 57
 00:02:00,020 --> 00:02:01,970
 0,480 960,1350 1350,1650 1650,1890 1890,1950
-Um, any questions before I
+{} Any questions before I
 
 58
 00:02:01,970 --> 00:02:04,490
 0,90 90,1050 1050,1260 1260,1710 2130,2520
-get started just do, um,
+get started, just to. {}|
 
 59
 00:02:04,490 --> 00:02:07,070
 0,360 1680,1860 1860,2190 2190,2310 2310,2580
-um, um I have tried
+{ -} I have tried
 
 60
 00:02:07,070 --> 00:02:07,940
@@ -301,17 +301,17 @@ to answer all the questions
 61
 00:02:07,940 --> 00:02:09,380
 0,120 120,240 240,420 420,510 510,1440
-that you send by email
+that you send by email,|
 
 62
 00:02:10,040 --> 00:02:11,690
 0,600 780,1320 1320,1410 1410,1500 1500,1650
-a ones you know they're
+{} ones you know they're
 
 63
 00:02:11,690 --> 00:02:13,160
 0,210 210,480 480,930 930,1230 1230,1470
-coming before midnight generally all
+coming before midnight,| generally all
 
 64
 00:02:13,160 --> 00:02:14,240
@@ -321,7 +321,7 @@ answer the ones that come
 65
 00:02:14,240 --> 00:02:15,500
 0,150 150,450 450,1050 1050,1140 1140,1260
-in after midnight, you know
+in after midnight,| you know
 
 66
 00:02:15,500 --> 00:02:16,880
@@ -331,12 +331,12 @@ try to answer as many
 67
 00:02:16,880 --> 00:02:18,350
 0,90 90,180 180,480 930,1350 1350,1470
-as I can, but if
+as I can,| but if
 
 68
 00:02:18,350 --> 00:02:19,520
 0,0 0,390 390,630 630,720 720,1170
-I didn't answer your question,
+I didn't answer your question,|
 
 69
 00:02:19,520 --> 00:02:21,110
@@ -346,12 +346,12 @@ then you and the topic
 70
 00:02:21,110 --> 00:02:22,250
 0,240 240,360 360,450 450,960 960,1140
-comes up and lecturer at
+comes up at {lecture,or} at
 
 71
 00:02:22,250 --> 00:02:23,240
 0,150 150,420 420,600 600,660 660,990
-any point by the time
+any point by the time|
 
 72
 00:02:23,240 --> 00:02:24,770
@@ -361,7 +361,7 @@ you feel free to interrupt
 73
 00:02:24,770 --> 00:02:25,980
 0,270 270,600 600,840
-and ask it.
+and ask it.|
 
 74
 00:02:26,920 --> 00:02:29,050
@@ -371,32 +371,29 @@ Okay, any questions before we
 75
 00:02:29,080 --> 00:02:30,420
 0,330 330,630
-dive in.
+dive in.|
 
 76
 00:02:35,720 --> 00:02:37,100
 0,750
-Ouch.
 
 77
 00:02:39,010 --> 00:02:40,380
 0,720
-Zhu.
 
 78
 00:02:40,440 --> 00:02:41,740
 0,570
-I'm.
 
 79
 00:02:41,740 --> 00:02:43,120
 0,240 240,390 390,600 600,840 840,1380
-So let's talk about failure
+So let's talk about failures
 
 80
 00:02:43,180 --> 00:02:45,550
 0,330 360,690 690,960 960,1530 1740,2370
-in a very broad sense,
+in a very broad sense,|
 
 81
 00:02:45,790 --> 00:02:46,600
@@ -416,12 +413,12 @@ for that replication scheme can
 84
 00:02:49,960 --> 00:02:51,160
 0,510
-handle.
+handle.|
 
 85
 00:02:58,610 --> 00:02:59,810
 0,210 210,420 420,480 480,750 750,1200
-So, first of all the
+So, first of all, the
 
 86
 00:03:00,230 --> 00:03:01,850
@@ -436,12 +433,12 @@ in the system that we're
 88
 00:03:02,510 --> 00:03:03,680
 0,120 120,180 180,270 270,600 600,1170
-going to be about building
+going to be about building|
 
 89
 00:03:03,890 --> 00:03:05,630
 0,480 480,780 780,1050 1050,1470 1470,1740
-a will only deal with
+{} will only deal with
 
 90
 00:03:05,630 --> 00:03:07,010
@@ -451,12 +448,11 @@ some things called were typically
 91
 00:03:07,010 --> 00:03:09,760
 0,300 300,540 540,1170 1290,2130
-called fail stock failures.
+called {fail-stop -} failures.|
 
 92
 00:03:11,940 --> 00:03:12,960
 0,540
-Cookie.
 
 93
 00:03:14,250 --> 00:03:15,330
@@ -466,7 +462,7 @@ And the basic idea is
 94
 00:03:15,330 --> 00:03:16,950
 0,180 180,300 300,900 900,1380 1380,1620
-that the infrastructure failure or
+that| the infrastructure failure or
 
 95
 00:03:16,950 --> 00:03:18,060
@@ -476,17 +472,16 @@ component of the computer doesn't
 96
 00:03:18,060 --> 00:03:20,640
 0,180 180,420 420,900 1410,1950 1980,2580
-really work well that actually
+really work well,| that actually
 
 97
 00:03:20,640 --> 00:03:22,400
 0,540 540,660 660,1170
-stops the computer.
+stops the computer.|
 
 98
 00:03:24,560 --> 00:03:25,620
 0,810
-HMM.
 
 99
 00:03:28,120 --> 00:03:29,140
@@ -496,42 +491,42 @@ So the assumption is that
 100
 00:03:29,140 --> 00:03:30,760
 0,660 660,900 930,1260 1260,1470 1470,1620
-invisibly, the computer goes from
+basically the computer goes from
 
 101
 00:03:30,760 --> 00:03:32,260
 0,510 510,690 690,930 930,1260 1260,1500
-working to not working so
+working to not working,| so
 
 102
 00:03:32,260 --> 00:03:34,810
 0,930 1110,1500 1500,1950 1950,2280 2280,2550
-instantaneously doesn't produce like weird
+instantaneously {it,doesn't} produce like weird
 
 103
 00:03:34,810 --> 00:03:35,890
 0,420 420,690 690,750 750,1020 1020,1080
-results because the computer is
+results,| because the computer is
 
 104
 00:03:35,890 --> 00:03:37,630
 0,180 180,600 660,1350 1380,1620 1620,1740
-not working correctly, so it
+not working, correctly,| so it
 
 105
 00:03:37,630 --> 00:03:39,730
 0,150 150,480 480,540 540,1350 1590,2100
-just follows the protocols, um,
+just follows the protocols, {}|
 
 106
 00:03:39,730 --> 00:03:40,900
 0,120 120,180 180,540 570,1020 1020,1170
-you know when does two
+you know when does to,
 
 107
 00:03:40,900 --> 00:03:43,210
 0,690 690,810 810,1260 1260,1770 1770,2310
-adds it to register values
+adds it to register values|
 
 108
 00:03:43,210 --> 00:03:44,080
@@ -541,7 +536,7 @@ you know that producers are
 109
 00:03:44,080 --> 00:03:46,420
 0,450 450,720 720,1290 1620,2100 2100,2340
-correct, add value, um, and
+correct, add value,| {} and
 
 110
 00:03:46,420 --> 00:03:47,530
@@ -556,47 +551,47 @@ when the computer works, it
 112
 00:03:49,060 --> 00:03:50,800
 0,210 210,780 780,1200 1200,1560 1560,1740
-works correctly and when there's
+works correctly| and when there's
 
 113
 00:03:50,800 --> 00:03:52,120
 0,60 60,510 510,630 630,780 780,1320
-a failure, it just stops.
+a failure, it just stops.|
 
 114
 00:03:53,030 --> 00:03:54,770
 0,450 660,930 930,1260 1260,1470 1470,1740
-Um, this covers in many
+{} This covers in many
 
 115
 00:03:54,770 --> 00:03:56,660
 0,750 810,870 870,1440 1440,1800 1800,1890
-scenarios for example whatever you
+scenarios,| for example whatever {you,know}
 
 116
 00:03:56,660 --> 00:03:57,980
 0,270 270,390 390,450 450,1020 1290,1320
-fan of the computer or
+fan of the computer {
 
 117
 00:03:57,980 --> 00:04:00,320
 0,0 1170,2040 2040,2130 2130,2250 2250,2340
-a fails, you know the
+-} fails,| you know the
 
 118
 00:04:00,320 --> 00:04:02,120
 0,390 390,1140 1170,1530 1530,1740 1740,1800
-computer overheat, and then the
+computer overheat,| and then the
 
 119
 00:04:02,120 --> 00:04:03,900
 0,300 300,540 540,750 750,1320
-computer shuts down itself.
+computer shuts down itself.|
 
 120
 00:04:04,080 --> 00:04:07,740
 0,750 1020,2100 2820,3060 3060,3390 3390,3660
-Um the other cases are
+{} The other cases are
 
 121
 00:04:07,740 --> 00:04:09,210
@@ -606,22 +601,22 @@ where somebody steps over the
 122
 00:04:09,210 --> 00:04:10,650
 0,300 300,660 810,1020 1020,1380 1380,1440
-power cord and boom, you
+power cord| and boom, you
 
 123
 00:04:10,650 --> 00:04:12,000
 0,120 120,210 210,360 360,690 690,1350
-know the whole computer disappears,
+know the whole computer disappears,|
 
 124
 00:04:12,090 --> 00:04:13,620
 0,360 360,450 450,1200 1200,1440 1440,1530
-or you know cuts, the
+or you know cuts the
 
 125
 00:04:13,620 --> 00:04:15,540
 0,330 330,750 780,1230 1620,1800 1800,1920
-network link and at that
+network link| and at that
 
 126
 00:04:15,540 --> 00:04:17,040
@@ -631,12 +626,12 @@ point you know the computer
 127
 00:04:17,040 --> 00:04:19,080
 0,120 120,360 360,840 840,1380 1380,2040
-by keeping running about a
+by keeping running about {}
 
 128
 00:04:19,080 --> 00:04:20,840
 0,360 360,720 720,1290
-is completely disconnected.
+is completely disconnected.|
 
 129
 00:04:21,780 --> 00:04:23,640
@@ -646,12 +641,12 @@ Sometimes you know systems or
 130
 00:04:23,640 --> 00:04:24,780
 0,300 300,570 570,780 780,840 840,1140
-shop or on the computer
+{software -} on the computer
 
 131
 00:04:24,780 --> 00:04:26,130
 0,390 390,480 480,810 810,1290 1290,1350
-tells it doesn't best you
+itself,| it does best you
 
 132
 00:04:26,130 --> 00:04:27,270
@@ -666,17 +661,17 @@ failures into a stop fail,
 134
 00:04:29,040 --> 00:04:30,840
 0,270 270,780 1200,1320 1320,1710 1710,1800
-stop failures, for example you
+stop failures,| for example you
 
 135
 00:04:30,840 --> 00:04:32,610
 0,390 750,1050 1050,1230 1230,1560 1560,1770
-might suffer my compute check
+might software might compute {checksums
 
 136
 00:04:32,610 --> 00:04:34,350
 0,390 390,600 600,870 870,1230 1230,1740
-sums on data and then
+-} on data| and then
 
 137
 00:04:34,350 --> 00:04:35,160
@@ -686,32 +681,32 @@ if it sees that the
 138
 00:04:35,160 --> 00:04:36,360
 0,360 360,450 450,960 960,1050 1050,1200
-checksum is incorrect, you know
+checksum is incorrect,| you know
 
 139
 00:04:36,360 --> 00:04:37,650
 0,360 480,990 1020,1110 1110,1200 1200,1290
-just stop, you know the
+just stop you know the
 
 140
 00:04:37,650 --> 00:04:38,620
 0,510
-computer.
+computer.|
 
 141
 00:04:39,080 --> 00:04:41,150
 0,540 1110,1530 1530,1680 1680,1800 1800,2070
-Um, um, and so those
+{ -} And so those
 
 142
 00:04:41,150 --> 00:04:43,040
 0,210 240,540 540,1140 1140,1680 1680,1890
-are quite common a and
+are quite common {} and
 
 143
 00:04:43,040 --> 00:04:44,030
 0,90 90,210 210,390 390,570 570,990
-to do so, the basic
+to do so,| the basic
 
 144
 00:04:44,030 --> 00:04:45,200
@@ -721,17 +716,17 @@ model of the world is
 145
 00:04:45,620 --> 00:04:46,760
 0,120 120,300 300,480 480,960 960,1140
-going to work correctly, then
+going to work correctly,| then
 
 146
 00:04:46,760 --> 00:04:48,020
 0,60 60,360 360,780
-the computer stocks.
+the computer stops.|
 
 147
 00:04:48,810 --> 00:04:50,130
 0,240 240,360 360,510 510,660 660,1320
-So what does this exclude
+So what does this exclude,|
 
 148
 00:04:50,160 --> 00:04:51,120
@@ -746,7 +741,7 @@ bunch of sort of failures
 150
 00:04:52,320 --> 00:04:54,180
 0,270 270,600 600,720 720,1320 1560,1860
-that exclude for example a
+that exclude,| for example {}
 
 151
 00:04:54,180 --> 00:04:55,470
@@ -756,17 +751,17 @@ it doesn't really deal well
 152
 00:04:55,470 --> 00:04:57,080
 0,180 180,480 480,930
-with logic bugs.
+with logic bugs,|
 
 153
 00:04:57,140 --> 00:04:58,400
 0,210 210,420 420,630 630,1140 1170,1260
-Like if you have an
+like if you have an
 
 154
 00:04:58,400 --> 00:04:59,540
 0,300 300,390 390,510 510,780 780,1140
-error in your shop for
+error in your software,| {you,know}
 
 155
 00:04:59,600 --> 00:05:01,220
@@ -781,7 +776,7 @@ and incorrectly you were where
 157
 00:05:03,890 --> 00:05:05,570
 0,60 60,360 360,690 1050,1500 1500,1680
-you shouldn't have then now
+you shouldn't have,| then {you,know}
 
 158
 00:05:05,570 --> 00:05:06,560
@@ -796,27 +791,27 @@ the backup will do exactly
 160
 00:05:07,640 --> 00:05:08,990
 0,90 90,300 300,570 630,1170 1170,1350
-the same thing because one
+the same thing,| because one
 
 161
 00:05:08,990 --> 00:05:09,560
 0,60 60,120 120,330 330,480 480,570
-of the shop which is
+of the software which is
 
 162
 00:05:09,560 --> 00:05:11,840
 0,570 570,1080 1080,1500 1740,1950 1950,2280
-broken and so it's broken
+broken| and so it's broken
 
 163
 00:05:11,840 --> 00:05:12,920
 0,90 90,150 150,690 690,810 810,1080
-on the primary it's broken
+on the primary, it's broken
 
 164
 00:05:12,920 --> 00:05:14,090
 0,90 90,150 150,480 630,960 960,1170
-on the back and so
+on the backup| and so
 
 165
 00:05:14,090 --> 00:05:16,550
@@ -831,17 +826,17 @@ really not does not solve
 167
 00:05:17,870 --> 00:05:20,270
 0,150 150,450 450,690 690,840 1650,2400
-that problem for you similar,
+that problem for you,| similar,
 
 168
 00:05:20,360 --> 00:05:22,190
 0,360 360,480 480,630 630,1230 1230,1830
-if you have configuration errors.
+if you have configuration errors,|
 
 169
 00:05:26,150 --> 00:05:27,560
 0,630 630,990 990,1170 1170,1290 1290,1410
-Graham murdock is not going
+{primary/backup -} is not going
 
 170
 00:05:27,560 --> 00:05:28,730
@@ -851,32 +846,32 @@ to solve you the problem
 171
 00:05:28,730 --> 00:05:29,900
 0,180 180,390 510,870 870,960 960,1170
-for you, if you know
+for you,| if you know
 
 172
 00:05:29,900 --> 00:05:31,040
 0,510
-the.
+the,
 
 173
 00:05:31,160 --> 00:05:32,870
 0,630 750,960 960,1350 1350,1560 1560,1710
-Um the files that you
+{} the files that you
 
 174
 00:05:32,870 --> 00:05:34,550
 0,600 600,720 720,1080 1080,1440 1440,1680
-specify the replica said jeanne
+specify the replica said that
 
 175
 00:05:34,550 --> 00:05:36,590
 0,450 480,1290 1380,1590 1590,1890 1890,2040
-correct then the system will
+incorrect,| then the system will
 
 176
 00:05:36,590 --> 00:05:39,260
 0,210 210,390 390,840 1440,1980 1980,2670
-not work correctly a similarly
+not work correctly,| {} similarly
 
 177
 00:05:39,440 --> 00:05:40,490
@@ -886,7 +881,7 @@ we're not really in this
 178
 00:05:40,490 --> 00:05:41,810
 0,510 510,900 900,1080 1080,1140 1140,1320
-class, we'll talk a little
+class,| we'll talk a little
 
 179
 00:05:41,810 --> 00:05:42,530
@@ -896,32 +891,32 @@ bit at the end of
 180
 00:05:42,530 --> 00:05:44,630
 0,210 210,630 630,840 840,1320 1500,2100
-the semester but we're dealing
+the semester,| but {we're,not} dealing
 
 181
 00:05:44,630 --> 00:05:48,740
 0,150 150,900 1080,1770 3540,3900 3900,4110
-with malicious errors were not
+with malicious errors,| {so,we're} not
 
 182
 00:05:48,740 --> 00:05:50,750
 0,330 330,480 480,1110 1110,1500 1530,2010
-dealing with attackers to try
+dealing with attackers {you,know} try
 
 183
 00:05:50,750 --> 00:05:53,420
 0,330 330,570 570,660 660,1560 1770,2670
-to fake the protocol a
+to fake the protocol {}|
 
 184
 00:05:53,420 --> 00:05:54,440
 0,120 120,270 270,330 330,720 750,1020
-you know a half run
+you know {} have run
 
 185
 00:05:54,440 --> 00:05:56,660
 0,420 420,630 630,900 900,1350 1350,2220
-servers that send incorrect messages
+servers that send incorrect messages|
 
 186
 00:05:56,840 --> 00:05:57,920
@@ -931,12 +926,12 @@ and try to sort of
 187
 00:05:57,920 --> 00:05:59,870
 0,630 630,750 750,990 990,1380 1500,1950
-spoof the whole system, we're
+spoof the whole system,| we're
 
 188
 00:05:59,870 --> 00:06:01,190
 0,150 150,390 390,480 480,1050 1050,1320
-just not in consideration, so
+just not in consideration.| So
 
 189
 00:06:01,190 --> 00:06:02,570
@@ -946,22 +941,22 @@ in the for most of
 190
 00:06:02,570 --> 00:06:04,040
 0,60 60,690 750,960 960,1350 1350,1470
-the semester, we assume that
+the semester,| we assume that
 
 191
 00:06:04,040 --> 00:06:05,660
 0,210 210,510 510,750 750,1380 1410,1620
-the software works correctly does
+the software works correctly,| does
 
 192
 00:06:05,660 --> 00:06:07,100
 0,180 180,330 330,660 660,1200 1230,1440
-not have logic bugs that
+not have logic bugs,| that
 
 193
 00:06:07,100 --> 00:06:08,420
 0,120 120,330 330,450 450,780 780,1320
-no cutting or Asian areas
+{you,know} {configuration - -} errors|
 
 194
 00:06:08,510 --> 00:06:09,020
@@ -976,7 +971,7 @@ focusing on is actually handling
 196
 00:06:10,640 --> 00:06:11,720
 0,300 300,810
-stop failures.
+stop failures.|
 
 197
 00:06:12,950 --> 00:06:14,270
@@ -986,22 +981,22 @@ There's some failures that sort
 198
 00:06:14,270 --> 00:06:16,610
 0,60 60,1080 1260,1950 1950,2130 2130,2340
-of fall zac you'd be
+of fail {} {that,could} be
 
 199
 00:06:16,610 --> 00:06:18,440
 0,570 630,1140 1140,1350 1350,1470 1470,1830
-handled or may be handled
+handled| or may be handled
 
 200
 00:06:18,440 --> 00:06:21,770
 0,390 390,930 1590,2220 2220,2520 2520,3330
-with a primary backup replication
+with {} {primary/backup -} replication
 
 201
 00:06:22,010 --> 00:06:24,200
 0,600 600,780 780,1230 1530,2010 2010,2190
-or or not, um, as
+or or not,| {} as
 
 202
 00:06:24,200 --> 00:06:25,280
@@ -1011,27 +1006,27 @@ an example, you might think
 203
 00:06:25,280 --> 00:06:27,000
 0,360 360,660 660,1290
-about an earthquake.
+about an earthquake,|
 
 204
 00:06:29,690 --> 00:06:30,860
 0,180 180,330 330,450 450,840 840,1170
-Now, if the primary back,
+{you,know} if the {primary/backup -}
 
 205
 00:06:30,860 --> 00:06:32,480
 0,180 180,690 690,1410 1410,1500 1500,1620
-um are physically, you know
+{} are physically you know
 
 206
 00:06:32,480 --> 00:06:34,850
 0,780 930,1500 1500,1770 1770,2160 2160,2370
-separated, um in completely different
+separated,| {} in completely different
 
 207
 00:06:34,850 --> 00:06:36,380
 0,390 390,510 510,690 690,930 930,1530
-parts, you know different continents
+parts,| you know different continents
 
 208
 00:06:36,440 --> 00:06:37,220
@@ -1041,7 +1036,7 @@ or different parts of the
 209
 00:06:37,220 --> 00:06:38,870
 0,180 180,810 1080,1320 1320,1440 1440,1650
-same continent when I'm not,
+same continent,| when {} that,
 
 210
 00:06:38,870 --> 00:06:40,130
@@ -1056,7 +1051,7 @@ might have some hope that
 212
 00:06:41,090 --> 00:06:43,550
 0,450 810,1800 1800,1980 1980,2160 2160,2460
-the backer could take over
+the backup could take over
 
 213
 00:06:43,550 --> 00:06:45,890
@@ -1066,7 +1061,7 @@ if the primary fails due
 214
 00:06:45,890 --> 00:06:48,260
 0,90 90,210 210,690 870,1800 1890,2370
-to an earthquake, but, um
+to an earthquake,| but, {}
 
 215
 00:06:48,260 --> 00:06:49,910
@@ -1076,17 +1071,17 @@ you know some other primary
 216
 00:06:49,910 --> 00:06:51,380
 0,570 570,990 990,1230 1230,1350 1350,1470
-replication schemes, this is not
+replication schemes,| this is not
 
 217
 00:06:51,380 --> 00:06:52,160
 0,120 120,180 180,270 270,360 360,780
-going to be the case
+going to be the case|
 
 218
 00:06:52,160 --> 00:06:53,240
 0,90 90,510 540,930 930,1020 1020,1080
-you order general at the
+{you,know} order general at the
 
 219
 00:06:53,240 --> 00:06:54,230
@@ -1096,12 +1091,12 @@ primary and the backup on
 220
 00:06:54,230 --> 00:06:55,370
 0,120 120,420 420,660 660,1020 1020,1140
-the same data center and
+the same data center| and
 
 221
 00:06:55,370 --> 00:06:57,260
 0,60 60,240 240,480 480,1230 1230,1890
-the whole data center disappears,
+the whole data center disappears,|
 
 222
 00:06:57,470 --> 00:06:58,460
@@ -1111,12 +1106,12 @@ then you know sort of
 223
 00:06:58,460 --> 00:06:59,440
 0,150 150,240 240,600
-end of story.
+end of story.|
 
 224
 00:07:00,220 --> 00:07:01,990
 0,630 840,1230 1230,1590 1590,1710 1710,1770
-Okay, the overlay gives you
+Okay?| So {hopefully,that} gives you
 
 225
 00:07:01,990 --> 00:07:02,830
@@ -1126,17 +1121,17 @@ a little bit of context
 226
 00:07:02,830 --> 00:07:04,000
 0,300 300,390 390,630 630,690 690,1170
-of the type of failure
+of the type of failures
 
 227
 00:07:04,000 --> 00:07:05,500
 0,360 360,870 870,960 960,1200 1200,1500
-you're trying to shoot for.
+you're trying to shoot for.|
 
 228
 00:07:06,510 --> 00:07:07,530
 0,150 150,510 510,690 690,840 840,1020
-Now, even with this sort
+{You,know}, even with this sort
 
 229
 00:07:07,530 --> 00:07:09,690
@@ -1146,7 +1141,7 @@ of just focusing on stop
 230
 00:07:09,720 --> 00:07:11,520
 0,510 510,690 690,930 930,1410 1620,1800
-a fail stop failures that
+{} fail stop failures,| that
 
 231
 00:07:11,520 --> 00:07:13,110
@@ -1156,7 +1151,7 @@ turns out to be difficult
 232
 00:07:13,110 --> 00:07:14,880
 0,60 60,450 630,870 870,1170 1170,1770
-to build fault tolerant systems
+to build fault tolerant systems,|
 
 233
 00:07:15,060 --> 00:07:15,600
@@ -1171,7 +1166,7 @@ little bit about the general
 235
 00:07:16,920 --> 00:07:18,120
 0,360 360,510 510,630 630,870 870,1200
-issues that will show up,
+issues that will show up,|
 
 236
 00:07:18,120 --> 00:07:18,900
@@ -1181,12 +1176,12 @@ you know if we're going
 237
 00:07:18,900 --> 00:07:21,960
 0,60 60,420 420,1650 2130,2760 2760,3060
-to build a primary backup
+to build a {primary/backup -}
 
 238
 00:07:21,960 --> 00:07:23,460
 0,390
-system.
+system.|
 
 239
 00:07:25,040 --> 00:07:26,870
@@ -1196,17 +1191,17 @@ And also concrete exam instances
 240
 00:07:26,870 --> 00:07:27,920
 0,90 90,240 240,810 810,870 870,1050
-of these problems in a
+of these problems in {}
 
 241
 00:07:27,920 --> 00:07:30,350
 0,330 330,840 870,1050 1050,2070 2070,2430
-in the the mfg paper.
+in the the {VM,FT} paper.|
 
 242
 00:07:31,010 --> 00:07:33,980
 0,570 750,900 900,1080 1080,2010 2310,2970
-So no one challenges, um,
+So {you,know} one {challenge,is}
 
 243
 00:07:33,980 --> 00:07:35,720
@@ -1216,12 +1211,12 @@ you know if a failure
 244
 00:07:35,720 --> 00:07:37,640
 0,690 840,1050 1050,1500 1530,1830 1830,1920
-happens, you know has the
+happens,| you know has the
 
 245
 00:07:37,640 --> 00:07:39,840
 0,420 420,630 630,1170
-primary action failed.
+primary actually failed?|
 
 246
 00:07:47,690 --> 00:07:49,190
@@ -1236,7 +1231,7 @@ that makes this challenging is
 248
 00:07:50,360 --> 00:07:51,800
 0,210 210,750 750,1110 1110,1200 1200,1440
-that interesting systems, you can't
+that| {in,distributed} systems, you can't
 
 249
 00:07:51,800 --> 00:07:52,790
@@ -1251,22 +1246,22 @@ network petition and a machine
 251
 00:07:54,080 --> 00:07:54,950
 0,330 330,540 540,630 630,780 780,870
-failed so it might be
+failed,| so it might be
 
 252
 00:07:54,950 --> 00:07:57,350
 0,450 450,900 900,1080 1080,1320 1560,2400
-perfectly possible that the network,
+perfectly possible that the network,|
 
 253
 00:07:57,770 --> 00:07:58,790
 0,330 330,540 540,630 630,960 960,1020
-um that the primary is
+{} that the primary is
 
 254
 00:07:58,790 --> 00:07:59,870
 0,240 240,510 510,690 690,900 900,1080
-still up but you know
+still up,| but you know
 
 255
 00:07:59,870 --> 00:08:01,280
@@ -1276,12 +1271,12 @@ that some computers cannot talk
 256
 00:08:01,280 --> 00:08:03,350
 0,90 90,180 180,660 660,1380 1470,2070
-to the primary because the
+to the primary,| because the
 
 257
 00:08:03,350 --> 00:08:04,730
 0,330 330,450 450,960 960,1230 1230,1380
-network has petitioned and so
+network has petitioned| and so
 
 258
 00:08:04,730 --> 00:08:05,780
@@ -1296,17 +1291,17 @@ decide that you know the
 260
 00:08:06,800 --> 00:08:08,120
 0,360 360,420 420,690 690,960 960,1320
-primary is dead because networks
+primary is dead,| because networks
 
 261
 00:08:08,120 --> 00:08:09,830
 0,540 720,990 990,1230 1230,1320 1320,1710
-petitioned that fact the primaries
+petitioned,| {but,in} fact the {primary,is}
 
 262
 00:08:09,830 --> 00:08:11,300
 0,240 240,510 870,1230 1230,1380 1380,1470
-not that maybe some of
+not that,| maybe some of
 
 263
 00:08:11,300 --> 00:08:12,320
@@ -1316,7 +1311,7 @@ the clients are still able
 264
 00:08:12,320 --> 00:08:13,280
 0,90 90,330 330,450 450,540 540,960
-to talk to the primary
+to talk to the primary,|
 
 265
 00:08:13,400 --> 00:08:14,060
@@ -1341,7 +1336,7 @@ in a situation where you
 269
 00:08:19,670 --> 00:08:20,960
 0,120 120,330 330,1050
-have two primaries.
+have two primaries.|
 
 270
 00:08:21,360 --> 00:08:22,860
@@ -1356,17 +1351,17 @@ talked a little bit about
 272
 00:08:23,760 --> 00:08:24,660
 0,240 240,480 480,570 570,750 750,900
-last time, it shows up
+last time,| it shows up
 
 273
 00:08:24,660 --> 00:08:25,560
 0,60 60,240 240,510 510,810 810,900
-in this paper again will
+in this paper again,| will
 
 274
 00:08:25,560 --> 00:08:26,970
 0,210 210,660 660,900 900,1110 1110,1410
-show up next week too
+show up next week too,|
 
 275
 00:08:27,120 --> 00:08:28,050
@@ -1381,27 +1376,27 @@ to avoid that we get
 277
 00:08:29,100 --> 00:08:30,210
 0,180 180,210 210,720 720,930 930,1110
-into a situation where there's
+into a situation,| where there's
 
 278
 00:08:30,210 --> 00:08:32,680
 0,300 300,690 690,1020 1020,1530
-a split brain system.
+a split brain system,|
 
 279
 00:08:35,090 --> 00:08:36,020
 0,390 390,540 540,750 750,840 840,930
-Where we need to have
+where we {basically -} have
 
 280
 00:08:36,020 --> 00:08:38,600
 0,570 600,1440 1440,1710 1710,2220 2220,2580
-two primaries and one subset
+two primaries| and one subset
 
 281
 00:08:38,600 --> 00:08:40,160
 0,60 60,450 450,840 840,1140 1140,1560
-of decline products, one primary
+of client {talks,to} one primary|
 
 282
 00:08:40,160 --> 00:08:40,880
@@ -1411,32 +1406,32 @@ and the other subset of
 283
 00:08:40,880 --> 00:08:41,780
 0,330 330,540 540,630 630,720 720,900
-decline talks to the other
+client talks to the other
 
 284
 00:08:41,780 --> 00:08:43,370
 0,270 540,900 900,1260 1260,1440 1440,1590
-prime and clearly that's going
+primary| and clearly that's going
 
 285
 00:08:43,370 --> 00:08:45,050
 0,210 300,1050 1050,1200 1200,1380 1380,1680
-to diverge in the state
+to diverge {you,know} the state
 
 286
 00:08:45,050 --> 00:08:47,360
 0,120 120,210 210,1110 1230,2010 2040,2310
-of the system when the
+of the system| {and,when} the
 
 287
 00:08:47,360 --> 00:08:49,580
 0,300 300,990 1140,1530 1530,1800 1800,2220
-network heels, um, we are
+network heals, {} we are
 
 288
 00:08:49,580 --> 00:08:51,320
 0,150 150,330 330,810 810,1260 1410,1740
-in an incorrect state, so
+in an incorrect state,| so
 
 289
 00:08:51,320 --> 00:08:52,160
@@ -1446,32 +1441,32 @@ we have to avoid this
 290
 00:08:52,160 --> 00:08:53,360
 0,240 240,390 390,840
-at all cost.
+at all cost.|
 
 291
 00:08:54,230 --> 00:08:56,540
 0,270 270,780 810,2100 2100,2160 2160,2310
-The second Zhen a ul
+The second { -} general
 
 292
 00:08:56,540 --> 00:08:59,030
 0,960 1290,1650 1650,1740 1740,1890 1890,2490
-challenges, how do we keep
+{challenge,is},| how do we keep
 
 293
 00:08:59,330 --> 00:09:01,100
 0,930 960,1290 1290,1500 1500,1680 1680,1770
-the you know how do
+the,| you know how do
 
 294
 00:09:01,100 --> 00:09:03,050
 0,90 90,390 390,780 960,1500 1500,1950
-we keep the primary backup
+we keep the {primary/backup -}
 
 295
 00:09:03,050 --> 00:09:04,160
 0,90 90,570
-and sync.
+in sync.|
 
 296
 00:09:14,000 --> 00:09:14,780
@@ -1481,12 +1476,12 @@ Our goal is going to
 297
 00:09:14,780 --> 00:09:16,820
 0,210 210,570 570,1200 1200,1770 1770,2040
-be that, um, if the
+be that,| {} if the
 
 298
 00:09:16,820 --> 00:09:17,900
 0,360 360,750 750,870 870,960 960,1080
-primary fails then we can
+primary fails,| then we can
 
 299
 00:09:17,900 --> 00:09:19,850
@@ -1496,27 +1491,27 @@ just gracefully fail over to
 300
 00:09:19,880 --> 00:09:21,140
 0,510 510,600 600,660 660,990 990,1260
-backup and the backup just
+backup| and the backup just
 
 301
 00:09:21,170 --> 00:09:22,340
 0,270 270,420 420,750 750,960 960,1170
-picks up right where their
+picks up right where the
 
 302
 00:09:22,340 --> 00:09:23,800
 0,330 330,600 600,900
-primary left off.
+primary left off.|
 
 303
 00:09:23,920 --> 00:09:25,330
 0,270 270,780 780,900 900,960 960,1410
-That requires that the backdrop
+That requires that the backup
 
 304
 00:09:25,330 --> 00:09:26,350
 0,360 360,480 480,630 630,720 720,1020
-actually is up to date
+actually is up to date|
 
 305
 00:09:26,350 --> 00:09:27,700
@@ -1531,7 +1526,7 @@ are primary actually has written
 307
 00:09:29,410 --> 00:09:32,230
 0,1080 1230,2070 2070,2250 2250,2520 2520,2820
-a status so that action
+{} {to,its,state},| so that action
 
 308
 00:09:32,230 --> 00:09:33,700
@@ -1541,27 +1536,27 @@ can pick up seamlessly and
 309
 00:09:33,700 --> 00:09:36,610
 0,780 780,1230 1230,1710 1710,2130 2160,2910
-don't return errors were responses
+don't return errors or responses
 
 310
 00:09:36,610 --> 00:09:37,750
 0,90 90,510 510,570 570,690 690,1140
-to decline to a completely
+to {the,client} to {} completely
 
 311
 00:09:37,750 --> 00:09:38,920
 0,720
-unexpected.
+unexpected,|
 
 312
 00:09:38,980 --> 00:09:40,720
 0,210 210,270 270,630 630,1290 1380,1740
-From the client's perspective really
+from the client's perspective,| really
 
 313
 00:09:40,720 --> 00:09:41,530
 0,120 120,270 270,450 450,720 720,810
-what should look like you
+what should look like,| you
 
 314
 00:09:41,530 --> 00:09:42,580
@@ -1571,7 +1566,7 @@ know the whole thing even
 315
 00:09:42,580 --> 00:09:43,870
 0,120 120,210 210,870 990,1170 1170,1290
-though it's replicated so a
+though it's replicated,| like a
 
 316
 00:09:43,870 --> 00:09:45,220
@@ -1581,12 +1576,12 @@ single computer just happens to
 317
 00:09:45,220 --> 00:09:46,360
 0,90 90,150 150,360 360,510 510,1140
-be a little more tolerant
+be a little more {fault,tolerant}
 
 318
 00:09:46,360 --> 00:09:47,740
 0,120 120,180 180,450 450,870
-than a single computer.
+than a single computer.|
 
 319
 00:09:48,680 --> 00:09:49,430
@@ -1596,7 +1591,7 @@ And that turns out to
 320
 00:09:49,430 --> 00:09:51,140
 0,420 420,630 630,1260 1290,1410 1410,1710
-be a difficult you know
+be a difficult,| you know
 
 321
 00:09:51,140 --> 00:09:52,310
@@ -1611,7 +1606,7 @@ to make sure that we
 323
 00:09:53,000 --> 00:09:54,770
 0,660 780,1110 1110,1560 1560,1680 1680,1770
-apply all changes we have
+apply all changes,| we have
 
 324
 00:09:54,770 --> 00:09:55,670
@@ -1621,37 +1616,37 @@ to apply to change in
 325
 00:09:55,670 --> 00:09:57,160
 0,90 90,300 300,780
-the right order.
+the right order.|
 
 326
 00:10:01,880 --> 00:10:04,460
 0,330 330,1170 1170,1830 1830,2100 2100,2580
-And a continuous a issue
+And {you,know} {in,continuous} {} issue
 
 327
 00:10:04,460 --> 00:10:06,530
 0,150 150,510 510,1140 1530,1920 1920,2070
-in areas that we have
+in [] that we have
 
 328
 00:10:06,530 --> 00:10:07,460
 0,90 90,300 300,360 360,720 720,930
-to sort of avoid non
+to sort of avoid {non-determinism
 
 329
 00:10:07,460 --> 00:10:09,560
 0,720 1200,1530 1530,1830 1830,2010 2010,2100
-determinism where you have to
+-}| or you have to
 
 330
 00:10:09,560 --> 00:10:11,500
 0,270 270,420 420,630 630,1320
-deal with non determinism.
+deal with {non-determinism -}.|
 
 331
 00:10:13,610 --> 00:10:14,930
 0,240 240,330 330,420 420,750 750,1320
-Many of the same change
+I mean the same change
 
 332
 00:10:14,960 --> 00:10:16,820
@@ -1661,7 +1656,7 @@ on the primary behaves different
 333
 00:10:16,820 --> 00:10:17,960
 0,150 150,240 240,300 300,720 720,1140
-than on the backup because
+than on the backup,| because
 
 334
 00:10:17,960 --> 00:10:19,010
@@ -1671,7 +1666,7 @@ for some reason that would
 335
 00:10:19,010 --> 00:10:20,060
 0,90 90,300 300,570 600,720 720,1050
-be not good, you know
+be not good,| you know
 
 336
 00:10:20,060 --> 00:10:20,780
@@ -1686,17 +1681,17 @@ that we make a change
 338
 00:10:21,710 --> 00:10:22,730
 0,90 90,150 150,480 480,780 780,1020
-in the primary backup very
+in the {primary/backup -} very
 
 339
 00:10:22,730 --> 00:10:25,280
 0,720 720,1320 1800,2010 2010,2160 2160,2550
-identical effects to the primary
+identical effects to the {primary/backup
 
 340
 00:10:25,280 --> 00:10:26,280
 0,510
-tobacco.
+-}.|
 
 341
 00:10:27,740 --> 00:10:30,080
@@ -1706,17 +1701,17 @@ A similar issue that always
 342
 00:10:30,080 --> 00:10:31,700
 0,210 210,630 630,840 840,1140 1140,1620
-shows up, you know challenges
+shows up,| you know {challenge,is}
 
 343
 00:10:31,700 --> 00:10:33,020
 0,300 300,690
-family over.
+fail over,|
 
 344
 00:10:35,460 --> 00:10:37,740
 0,270 270,690 690,1230 1260,1920 1920,2280
-You've actually the primary fields
+{you,have} actually the primary fails|
 
 345
 00:10:37,740 --> 00:10:38,400
@@ -1726,7 +1721,7 @@ and we need to fail
 346
 00:10:38,400 --> 00:10:40,320
 0,480 480,870 870,960 960,1470 1710,1920
-over to the backup and
+over to the backup| and
 
 347
 00:10:40,320 --> 00:10:41,130
@@ -1741,7 +1736,7 @@ make sure that there are
 349
 00:10:42,840 --> 00:10:45,180
 0,210 210,510 510,990 990,1440 1560,2340
-other primaries definitely a dead
+other primaries definitely {} dead,|
 
 350
 00:10:45,390 --> 00:10:47,430
@@ -1756,12 +1751,12 @@ might have was in the
 352
 00:10:48,390 --> 00:10:50,130
 0,240 240,330 330,390 390,1110 1110,1740
-middle of an operation and
+middle of an operation| and
 
 353
 00:10:50,370 --> 00:10:51,540
 0,540 540,660 660,780 780,1110 1110,1170
-um, it was about to
+{} it was about to
 
 354
 00:10:51,540 --> 00:10:52,350
@@ -1776,7 +1771,7 @@ the response to the client,
 356
 00:10:53,760 --> 00:10:55,530
 0,120 120,390 390,870 1140,1620 1620,1770
-or maybe not, and so
+or maybe not,| and so
 
 357
 00:10:55,530 --> 00:10:56,370
@@ -1791,27 +1786,26 @@ what that response that you
 359
 00:10:57,300 --> 00:10:58,290
 0,210 210,300 300,540 540,660 660,990
-send or not being sent
+send or not being sent|
 
 360
 00:10:58,320 --> 00:10:59,340
 0,330 330,510 510,600 600,870 870,1020
-or is the key for
+or is it okay for
 
 361
 00:10:59,340 --> 00:11:00,120
 0,60 60,180 180,360 360,450 450,780
-us to send it again.
+us to send it again.|
 
 362
 00:11:01,960 --> 00:11:03,140
 0,570
-AH.
 
 363
 00:11:04,300 --> 00:11:05,890
 0,660 660,720 720,990 990,1200 1200,1590
-There's a question here chaps
+There's a question {in,the} chat,|
 
 364
 00:11:05,890 --> 00:11:07,150
@@ -1821,7 +1815,7 @@ like when would fail over
 365
 00:11:07,150 --> 00:11:08,410
 0,180 180,360 360,690 690,930 930,1260
-need to happen no fail,
+need to happen,| no fail
 
 366
 00:11:08,410 --> 00:11:09,190
@@ -1831,7 +1825,7 @@ need to happen when the
 367
 00:11:09,190 --> 00:11:11,440
 0,420 420,750 810,1170 1350,1920 1920,2250
-primaries gone right because then
+{primary,is} gone, right,| because then
 
 368
 00:11:11,440 --> 00:11:12,310
@@ -1846,27 +1840,27 @@ to the backup to determine
 370
 00:11:13,720 --> 00:11:15,000
 0,240 240,360 360,780
-all you used.
+all you used.|
 
 371
 00:11:16,860 --> 00:11:18,660
 0,150 150,300 300,720 720,1410 1410,1800
-And then often another issue,
+And then often another issue
 
 372
 00:11:18,660 --> 00:11:20,160
 0,120 120,330 330,690 690,1050 1170,1500
-we fail over is who
+we fail over is| who
 
 373
 00:11:20,160 --> 00:11:21,090
 0,270 270,540 540,600 600,840 840,930
-actually has to know, we
+actually has to know we
 
 374
 00:11:21,090 --> 00:11:22,500
 0,150 150,480 480,990 990,1260 1260,1410
-have multiple backups which is
+have multiple backups,| which is
 
 375
 00:11:22,500 --> 00:11:23,340
@@ -1876,12 +1870,12 @@ not the case in today's
 376
 00:11:23,340 --> 00:11:24,810
 0,480 540,900 900,1020 1020,1230 1230,1470
-paper, a yeah we actually
+paper,| {} yeah we actually
 
 377
 00:11:24,810 --> 00:11:25,890
 0,180 180,270 270,570 570,930 930,1080
-ask the latest stage like
+ask the latest stage,| like
 
 378
 00:11:25,890 --> 00:11:26,910
@@ -1891,7 +1885,7 @@ for example, maybe they all
 379
 00:11:26,910 --> 00:11:28,650
 0,450 450,750 750,870 870,1110 1110,1740
-crash after a few operations,
+crash after a few operations,|
 
 380
 00:11:28,650 --> 00:11:30,180
@@ -1901,7 +1895,7 @@ they come back up and
 381
 00:11:30,510 --> 00:11:33,120
 0,540 540,1140 1140,1980 2250,2460 2460,2610
-um and um, and we're
+{} and {} and we're
 
 382
 00:11:33,120 --> 00:11:33,720
@@ -1916,7 +1910,7 @@ we're actually talking to one
 384
 00:11:34,680 --> 00:11:36,450
 0,480 480,960 960,1380 1380,1710 1710,1770
-accident motivation states, this is
+that {in,the,most,recent} states,| this is
 
 385
 00:11:36,450 --> 00:11:37,200
@@ -1926,7 +1920,7 @@ going to be an issue
 386
 00:11:37,200 --> 00:11:38,850
 0,300 300,600 600,750 750,1200 1440,1650
-today tomorrow so much as
+today,| [] so much as
 
 387
 00:11:38,850 --> 00:11:39,570
@@ -1936,12 +1930,12 @@ we'll see in a second
 388
 00:11:39,570 --> 00:11:40,950
 0,570 630,930 930,1050 1050,1200 1200,1380
-why better will come up
+why,| but we'll come up
 
 389
 00:11:40,950 --> 00:11:42,930
 0,360 360,630 630,900 900,1320 1320,1980
-later in other application protocols.
+later in other replication protocols.|
 
 390
 00:11:45,640 --> 00:11:46,720
@@ -1951,17 +1945,17 @@ Yeah, so basically fail over
 391
 00:11:46,720 --> 00:11:48,190
 0,390 390,600 600,930 930,1140 1140,1470
-means the backup takes over.
+means the backup takes over.|
 
 392
 00:11:51,280 --> 00:11:53,170
 0,540 660,1230 1350,1500 1500,1770 1770,1890
-Um, okay, so that's sort
+{} Okay, so that's sort
 
 393
 00:11:53,170 --> 00:11:54,520
 0,270 420,630 630,1050 1080,1230 1230,1350
-of the main you know
+of, the main you know
 
 394
 00:11:54,520 --> 00:11:55,900
@@ -1976,27 +1970,27 @@ that we hope to handle
 396
 00:11:57,100 --> 00:11:59,320
 0,240 240,480 480,720 720,1440 1740,2220
-and the main challenges, um
+and the main challenges, {}|
 
 397
 00:11:59,320 --> 00:12:00,940
 0,240 240,690 690,990 990,1170 1170,1620
-in will deepen those challenges
+in we'll deepen those challenges
 
 398
 00:12:00,940 --> 00:12:02,770
 0,180 180,330 330,540 540,1020 1140,1830
-out if we go, um,
+out if we go, {}|
 
 399
 00:12:03,070 --> 00:12:04,030
 0,270 270,630 630,750 750,810 810,960
-you don't want to talk
+you {know,I} want to talk
 
 400
 00:12:04,030 --> 00:12:06,160
 0,420 420,960 960,1230 1230,1440 1440,2130
-about two two main approaches
+about two two main approaches|
 
 401
 00:12:06,190 --> 00:12:06,970
@@ -2006,42 +2000,42 @@ that we'll see in a
 402
 00:12:06,970 --> 00:12:09,490
 0,660 810,1260 1260,1470 1470,2190 2190,2520
-semester, um for dealing with
+semester,| {} for dealing with
 
 403
 00:12:09,490 --> 00:12:11,420
 0,300 300,780 810,1500
-primary backup replication.
+{primary/backup -} replication.|
 
 404
 00:12:19,000 --> 00:12:20,140
 0,480 480,570 570,780 780,810 810,1140
-One you said I mentioned
+One is as I mentioned
 
 405
 00:12:20,140 --> 00:12:23,050
 0,660 1170,1410 1410,1680 1710,2160 2160,2910
-earlier that is state transfer.
+earlier that is state transfer.|
 
 406
 00:12:27,780 --> 00:12:29,070
 0,120 120,240 240,480 480,1200 1200,1290
-We've got these original at
+{You,know} {} these reasonable at
 
 407
 00:12:29,070 --> 00:12:30,570
 0,60 60,540 540,780 780,1440 1440,1500
-a high-level very straightforward, you
+a high-level very straightforward,| you
 
 408
 00:12:30,570 --> 00:12:31,740
 0,120 120,240 240,390 390,450 450,1170
-know we've got a primary.
+know we've got a primary,|
 
 409
 00:12:32,360 --> 00:12:33,380
 0,360 360,450 450,570 570,930 930,1020
-Um, you know if you
+{} you know if you
 
 410
 00:12:33,380 --> 00:12:34,250
@@ -2051,12 +2045,12 @@ know the clients talk to
 411
 00:12:34,250 --> 00:12:36,320
 0,90 90,810 1140,1410 1410,1500 1500,2070
-the primary and the primary
+the primary| and the primary
 
 412
 00:12:36,320 --> 00:12:38,270
 0,600 600,990 990,1260 1260,1560 1560,1950
-updated state wants a updated
+updated state once {} updated
 
 413
 00:12:38,270 --> 00:12:39,680
@@ -2066,32 +2060,31 @@ state in response to client
 414
 00:12:39,680 --> 00:12:41,420
 0,630 720,960 960,1170 1170,1260 1260,1740
-request and once a while
+request| and once a while,
 
 415
 00:12:41,420 --> 00:12:43,400
 0,270 270,480 480,1230
-it makes checkpoint.
+it makes checkpoint,|
 
 416
 00:12:46,280 --> 00:12:47,400
 0,570
-AH.
 
 417
 00:12:48,240 --> 00:12:50,010
 0,150 150,270 270,420 420,960 960,1770
-What do I basically checkpoints
+once a while, basically checkpoints
 
 418
 00:12:50,010 --> 00:12:51,780
 0,120 120,720
-at state.
+{} state,
 
 419
 00:12:56,160 --> 00:12:58,000
 0,210 210,360 360,540 540,1170
-It's day two tobacco.
+it's stay {to,the} backup.|
 
 420
 00:13:01,120 --> 00:13:01,750
@@ -2101,7 +2094,7 @@ And of course if we
 421
 00:13:01,750 --> 00:13:02,920
 0,210 210,450 450,1020 1020,1110 1110,1170
-want to back up in
+want to {backup -} in
 
 422
 00:13:02,920 --> 00:13:03,970
@@ -2111,7 +2104,7 @@ the primary to be in
 423
 00:13:03,970 --> 00:13:05,200
 0,540 540,660 660,900 900,1050 1050,1230
-sync that means that every
+sync,| that means that every
 
 424
 00:13:05,200 --> 00:13:06,610
@@ -2126,7 +2119,7 @@ the operation before it responds
 426
 00:13:08,950 --> 00:13:10,660
 0,90 90,780 840,990 990,1350 1350,1710
-to decline, it basically has
+to {the,client},| it basically has
 
 427
 00:13:10,660 --> 00:13:12,400
@@ -2141,42 +2134,42 @@ that were made by the
 429
 00:13:13,240 --> 00:13:14,860
 0,570 570,1110
-operation tobacco.
+operation backup.|
 
 430
 00:13:15,480 --> 00:13:17,580
 0,450 450,570 570,900 900,1470 1500,2100
-Um, so that's one scheme,
+{} So that's one scheme,|
 
 431
 00:13:17,970 --> 00:13:20,100
 0,360 360,960 960,1200 1260,1830 1830,2130
-um, one a high-level approach,
+{} one a high-level approach.|
 
 432
 00:13:20,100 --> 00:13:22,140
 0,60 60,270 270,960 1080,1800 1800,2040
-a second approach, a is
+{} Second approach {} is
 
 433
 00:13:22,140 --> 00:13:23,910
 0,690 990,1140 1140,1350 1350,1380 1380,1770
-what is called a replicated
+what is called {} replicated
 
 434
 00:13:23,910 --> 00:13:26,460
 0,240 240,900
-state machine.
+state machine,
 
 435
 00:13:27,510 --> 00:13:29,660
 0,360 360,660 660,1470
-State machine replication.
+state machine replication,
 
 436
 00:13:32,920 --> 00:13:35,110
 0,690 720,1290 1290,1470 1470,1740 1740,2190
-Often shortened to our gem.
+often shortened to {RSM -}.|
 
 437
 00:13:36,180 --> 00:13:37,440
@@ -2186,22 +2179,22 @@ And here you know the
 438
 00:13:37,830 --> 00:13:39,060
 0,510 510,600 600,690 690,840 840,1230
-um, you know the picture
+{} you know the picture
 
 439
 00:13:39,060 --> 00:13:40,440
 0,630 690,960 960,1170 1170,1290 1290,1380
-is we still got the
+is| we still got the
 
 440
 00:13:40,440 --> 00:13:41,820
 0,480 480,630 630,750 750,810 810,1380
-primary we've got the client
+primary, we've got the client
 
 441
 00:13:41,910 --> 00:13:43,470
 0,300 300,390 390,480 480,1170 1410,1560
-talking to the primary and
+talking to the primary| and
 
 442
 00:13:43,470 --> 00:13:44,400
@@ -2216,27 +2209,27 @@ primary talking to backup to
 444
 00:13:45,690 --> 00:13:46,830
 0,180 180,240 240,570 570,690 690,1140
-keep the backup they sink
+keep the backup in sync,|
 
 445
 00:13:47,040 --> 00:13:48,360
 0,240 240,660 660,780 780,960 960,1320
-but instead it {was's -}
+but instead it { -}
 
 446
 00:13:48,360 --> 00:13:51,240
 0,240 240,420 450,1140 2010,2760 2760,2880
-ending the state changes or
+sending the state changes or
 
 447
 00:13:51,240 --> 00:13:52,410
 0,630 630,720 720,810 810,1080 1080,1170
-modifications to the state for
+modifications to the state format
 
 448
 00:13:52,410 --> 00:13:53,310
 0,90 90,330 330,420 420,480 480,900
-the crime to the background,
+the primary to the backup,|
 
 449
 00:13:53,400 --> 00:13:54,390
@@ -2246,12 +2239,12 @@ but we do actually sent
 450
 00:13:54,390 --> 00:13:55,780
 0,120 120,1020
-the operations.
+the operations
 
 451
 00:13:56,190 --> 00:13:57,580
 0,210 210,270 270,750
-Through the background.
+to the backup.|
 
 452
 00:13:58,990 --> 00:14:00,730
@@ -2261,22 +2254,22 @@ So before the primary response
 453
 00:14:00,730 --> 00:14:02,290
 0,150 150,840 840,960 960,1080 1080,1560
-to declines, you know executing
+to {the,client},| you know executing
 
 454
 00:14:02,290 --> 00:14:04,240
 0,120 120,810 1020,1320 1320,1590 1590,1950
-its operation, we sent the
+its operation,| we sent the
 
 455
 00:14:04,240 --> 00:14:05,560
 0,480 480,570 570,960 960,1200 1200,1320
-operation that decline sent to
+operation that {the,client} sent to
 
 456
 00:14:05,560 --> 00:14:07,090
 0,210 210,510 510,600 600,1140 1320,1530
-us through the backup, the
+us, to the backup,| the
 
 457
 00:14:07,090 --> 00:14:08,530
@@ -2286,17 +2279,17 @@ backup can execute the operation
 458
 00:14:08,530 --> 00:14:11,470
 0,540 840,1320 1320,1830 1830,2430 2430,2940
-to a updated state acknowledged
+to {} updated state,| {acknowledge,it}
 
 459
 00:14:11,470 --> 00:14:12,820
 0,150 150,240 240,690 690,1050 1050,1350
-through the primary primary actually
+to the primary, primary actually
 
 460
 00:14:12,820 --> 00:14:14,140
 0,300 300,450 450,720 720,990 990,1320
-updates its state to we
+updates its state too,| {you,know}
 
 461
 00:14:14,140 --> 00:14:15,550
@@ -2311,7 +2304,7 @@ sends a response back to
 463
 00:14:17,260 --> 00:14:18,200
 0,60 60,510
-the client.
+the client.|
 
 464
 00:14:19,500 --> 00:14:21,360
@@ -2321,12 +2314,12 @@ And so in all these
 465
 00:14:21,390 --> 00:14:23,490
 0,270 270,540 960,1470 1470,1650 1650,2100
-sort of in all these
+sort of, in all these
 
 466
 00:14:23,520 --> 00:14:25,560
 0,630 630,1290 1350,1470 1470,1590 1590,2040
-both approaches you know the
+both approaches,| you know the
 
 467
 00:14:25,560 --> 00:14:27,030
@@ -2336,17 +2329,17 @@ scheme is the primacy of
 468
 00:14:27,030 --> 00:14:28,980
 0,150 150,480 480,1020 1380,1770 1770,1950
-some particular state a we
+some particular state,| {} we
 
 469
 00:14:28,980 --> 00:14:30,690
 0,480 480,960 960,1080 1080,1170 1170,1710
-apply changes to the state
+apply changes to the state|
 
 470
 00:14:31,020 --> 00:14:32,940
 0,600 690,870 870,1110 1110,1260 1260,1920
-a and we do exactly
+{} and we do exactly
 
 471
 00:14:32,940 --> 00:14:33,510
@@ -2356,7 +2349,7 @@ the same thing as the
 472
 00:14:33,510 --> 00:14:34,650
 0,360 360,450 450,540 540,870 870,1140
-backup to the backup system
+backup, to the backup system
 
 473
 00:14:34,650 --> 00:14:35,520
@@ -2366,7 +2359,7 @@ starts out in the same
 474
 00:14:35,520 --> 00:14:36,870
 0,300 300,450 450,540 540,1140 1200,1350
-state as the primary we
+state as the primary,| we
 
 475
 00:14:36,870 --> 00:14:38,100
@@ -2376,12 +2369,12 @@ apply the same changes to
 476
 00:14:38,100 --> 00:14:38,910
 0,60 60,360 360,510 510,630 630,810
-the state where it's through
+the state,| where it's through
 
 477
 00:14:38,910 --> 00:14:40,500
 0,60 60,720 720,960 960,1200 1200,1590
-an operational state term, for
+an operation state {transfer -},|
 
 478
 00:14:40,530 --> 00:14:41,100
@@ -2391,7 +2384,7 @@ we end up in a
 479
 00:14:41,100 --> 00:14:42,330
 0,210 210,660 780,870 870,990 990,1230
-new state and that state
+new state| and that state
 
 480
 00:14:42,330 --> 00:14:43,290
@@ -2406,7 +2399,7 @@ the state that the primary
 482
 00:14:44,220 --> 00:14:44,920
 0,390
-has.
+has.|
 
 483
 00:14:45,200 --> 00:14:46,580
@@ -2416,7 +2409,7 @@ And so even ever there's
 484
 00:14:46,580 --> 00:14:48,170
 0,60 60,690 870,1350 1350,1440 1440,1590
-a failure, um, you know,
+a failure,| {} you know,
 
 485
 00:14:48,170 --> 00:14:49,250
@@ -2426,7 +2419,7 @@ we know that when we
 486
 00:14:49,250 --> 00:14:50,450
 0,180 180,390 390,570 570,1050 1050,1200
-fail over to backup and
+fail over to backup| and
 
 487
 00:14:50,450 --> 00:14:51,800
@@ -2436,17 +2429,16 @@ it's exactly the same state
 488
 00:14:51,800 --> 00:14:52,790
 0,120 120,210 210,720 720,810 810,990
-as the primary and so
+as the primary| and so
 
 489
 00:14:52,790 --> 00:14:54,440
 0,390 390,570 570,780 780,1110
-it can take over.
+it can take over.|
 
 490
 00:14:55,750 --> 00:14:56,900
 0,600
-I'm.
 
 491
 00:14:57,190 --> 00:14:58,090
@@ -2461,37 +2453,37 @@ is actually challenging to actually
 493
 00:14:59,470 --> 00:15:00,700
 0,150 150,570 570,840 840,1140 1140,1230
-make happen but that's the
+make happen,| but that's the
 
 494
 00:15:00,700 --> 00:15:04,240
 0,330 330,720 1290,1890 2370,2970
-basic point, um the.
+basic point,| {} the
 
 495
 00:15:04,300 --> 00:15:06,130
 0,930 930,1200 1200,1500 1500,1740 1740,1830
-Primarily a bow brooch is
+primary {} goal approach is
 
 496
 00:15:06,130 --> 00:15:08,110
 0,330 330,660 660,1470 1470,1650 1650,1980
-actually reasonable popular, the primary
+actually reasonable popular,| the primary
 
 497
 00:15:08,110 --> 00:15:10,720
 0,960 960,1620 1620,2040 2040,2460 2460,2610
-disadvantages, EST transfer approach is
+disadvantages, {the,state} transfer approach is
 
 498
 00:15:10,720 --> 00:15:12,340
 0,300 300,630 630,690 690,1230 1230,1620
-that if an operation generates
+that,| if an operation generates
 
 499
 00:15:12,340 --> 00:15:13,870
 0,60 60,300 300,360 360,930 1290,1530
-a lot of state a
+a lot of state, {}|
 
 500
 00:15:13,870 --> 00:15:14,410
@@ -2501,12 +2493,12 @@ then it's going to be
 501
 00:15:14,410 --> 00:15:16,540
 0,660 1230,1350 1350,1380 1380,1650 1650,2130
-expensive for a single operation
+expensive,| for a single operation
 
 502
 00:15:16,540 --> 00:15:17,530
 0,210 210,270 270,630 630,690 690,990
-writes a gigabyte of data,
+writes {} gigabyte of data,|
 
 503
 00:15:17,530 --> 00:15:18,880
@@ -2516,12 +2508,12 @@ then gigabyte of data needs
 504
 00:15:18,880 --> 00:15:20,590
 0,90 90,180 180,630 630,1140 1170,1710
-to be transferred to priority
+to be transferred to primary
 
 505
 00:15:20,890 --> 00:15:22,060
 0,180 180,240 240,510 510,780 930,1170
-due to back up and
+or to {backup -}| and
 
 506
 00:15:22,060 --> 00:15:22,960
@@ -2531,7 +2523,7 @@ it might be much more
 507
 00:15:22,960 --> 00:15:25,090
 0,480 480,720 720,960 960,1560 1560,2130
-expensive much more less expensive
+expensive, much more less expensive|
 
 508
 00:15:25,090 --> 00:15:26,290
@@ -2541,12 +2533,12 @@ to basically just send over
 509
 00:15:26,290 --> 00:15:27,520
 0,120 120,630 630,750 750,810 810,1230
-the operation through the backups
+the operation to the backups,
 
 510
 00:15:27,670 --> 00:15:29,820
 0,600 600,750 750,1200 1200,1740
-backup can executing operation.
+backup can executing operation.|
 
 511
 00:15:30,710 --> 00:15:32,120
@@ -2556,12 +2548,12 @@ So many of the systems
 512
 00:15:32,120 --> 00:15:35,210
 0,330 330,1860 1920,2490 2490,2760 2760,3090
-that we're talking about actually
+that we're talking about| actually
 
 513
 00:15:35,210 --> 00:15:36,800
 0,360 360,600 600,720 720,990 990,1590
-therefore follow the second approach
+therefore follow the second approach|
 
 514
 00:15:37,010 --> 00:15:38,840
@@ -2571,37 +2563,37 @@ where they send the operation
 515
 00:15:38,840 --> 00:15:40,220
 0,150 150,420 420,510 510,780 780,1380
-but not the state transfer.
+but not the state transfer.|
 
 516
 00:15:41,080 --> 00:15:43,000
 0,630 780,1260 1260,1380 1380,1650 1650,1920
-In a in fact if
+And {} in fact if
 
 517
 00:15:43,000 --> 00:15:45,580
 0,420 450,690 690,1230 1260,1740 1740,2580
-you think about a gfs,
+you think about {} GFS,|
 
 518
 00:15:45,640 --> 00:15:47,590
 0,720 720,1170 1170,1560 1560,1650 1650,1950
-um the discussion from last
+{} the discussion from last
 
 519
 00:15:47,590 --> 00:15:49,030
 0,390 540,870 870,1110 1110,1260 1260,1440
-week when we just saw
+week,| when we just saw
 
 520
 00:15:49,030 --> 00:15:50,500
 0,180 180,480 480,570 570,1140 1140,1470
-that visiting the primary since
+that basically the primary since
 
 521
 00:15:50,500 --> 00:15:52,540
 0,450 480,1110 1110,1290 1290,1920 1920,2040
-the ep ent operations or
+the {append -} operations or
 
 522
 00:15:52,540 --> 00:15:54,340
@@ -2611,7 +2603,7 @@ the write operations to the
 523
 00:15:54,340 --> 00:15:56,260
 0,630 750,1290 1290,1410 1410,1500 1500,1920
-backups doesn't do the append
+backups,| does do the append
 
 524
 00:15:56,260 --> 00:15:57,400
@@ -2621,12 +2613,12 @@ and then send the result
 525
 00:15:57,580 --> 00:15:58,960
 0,210 210,600 630,1020 1020,1140 1140,1380
-to the backups that actually
+to the backups,| that actually
 
 526
 00:15:58,960 --> 00:16:00,370
 0,210 210,330 330,1050 1050,1170 1170,1410
-sends the operations so that's
+sends the operations,| so that's
 
 527
 00:16:00,370 --> 00:16:01,990
@@ -2636,12 +2628,12 @@ an example of a replicated
 528
 00:16:01,990 --> 00:16:03,550
 0,210 210,450 450,1080 1170,1410 1410,1560
-state machine approach where we'll
+state machine approach,| where we'll
 
 529
 00:16:03,550 --> 00:16:05,060
 0,90 90,390 390,1110
-be sending operations.
+be sending operations.|
 
 530
 00:16:05,060 --> 00:16:06,500
@@ -2656,67 +2648,67 @@ also follows this replicated state
 532
 00:16:08,060 --> 00:16:09,770
 0,240 240,660 660,1080 1080,1170 1170,1710
-machine approach where the operations
+machine approach| where the operations
 
 533
 00:16:09,770 --> 00:16:11,750
 0,120 120,660 810,1350 1350,1560 1560,1980
-are not penned and write
+are not {you,know,append} and write|
 
 534
 00:16:12,050 --> 00:16:13,220
 0,300 300,540 540,840 840,960 960,1170
-a file system up into
+{} file system {append -},
 
 535
 00:16:13,220 --> 00:16:14,480
 0,240 240,510 510,930 960,1170 1170,1260
-file system right, but the
+file system write,| but the
 
 536
 00:16:14,480 --> 00:16:16,670
 0,480 480,690 690,990 990,1650 1650,2190
-operations are actually x86 structures,
+operations are actually xv6 instructions,|
 
 537
 00:16:16,670 --> 00:16:18,650
 0,360 510,1020 1350,1770 1770,1920 1920,1980
-you know we'll see you
+you know we'll see {}
 
 538
 00:16:18,650 --> 00:16:19,520
 0,390
-later.
+later.|
 
 539
 00:16:19,640 --> 00:16:21,920
 0,300 300,450 450,1200 1410,2220 2220,2280
-Um, but they both you
+{} But they both you
 
 540
 00:16:21,920 --> 00:16:23,500
 0,90 90,330 330,1080
-know send operations.
+know send operations,|
 
 541
 00:16:24,560 --> 00:16:26,810
 0,720 1200,1800 1800,1920 1920,1950 1950,2250
-In laps as I mentioned
+in labs, as I mentioned
 
 542
 00:16:26,810 --> 00:16:28,280
 0,330 330,660 660,840 840,960 960,1470
-earlier laps three and four
+earlier, lab 3 and 4
 
 543
 00:16:28,340 --> 00:16:30,590
 0,540 540,780 780,1740 1740,1860 1860,2250
-a are also a replicated
+{} are also a replicated
 
 544
 00:16:30,590 --> 00:16:32,570
 0,180 180,630 690,1170 1170,1710 1710,1980
-state machine, a approach where
+state machine {} approach| where
 
 545
 00:16:32,570 --> 00:16:34,070
@@ -2726,17 +2718,17 @@ we're gonna be sending operations
 546
 00:16:34,070 --> 00:16:35,660
 0,180 180,570 570,690 690,1050
-from primary to backup.
+from primary to backup.|
 
 547
 00:16:40,710 --> 00:16:42,120
 0,150 150,390 390,840
-Um, so yeah.
+{} As a.|
 
 548
 00:16:47,330 --> 00:16:48,350
 0,330 330,330 330,660 660,750 750,1020
-Because a question to check
+Because {there's,a} question to chat,|
 
 549
 00:16:48,350 --> 00:16:49,340
@@ -2751,12 +2743,12 @@ not send not need to
 551
 00:16:50,810 --> 00:16:51,950
 0,330 330,450 450,720 720,870 870,1140
-send the data to back
+send the data to {backup
 
 552
 00:16:51,950 --> 00:16:53,240
 0,150 150,390 390,810 810,990 990,1290
-up your reputation state machine
+-} {in,our} reputation state machine,|
 
 553
 00:16:53,240 --> 00:16:55,730
@@ -2766,7 +2758,7 @@ because the the idea is
 554
 00:16:55,730 --> 00:16:57,530
 0,120 120,300 300,780 780,900 900,1800
-that these operations are deterministic
+that these operations are deterministic|
 
 555
 00:16:57,560 --> 00:16:58,700
@@ -2776,7 +2768,7 @@ and so the primary and
 556
 00:16:58,700 --> 00:16:59,960
 0,210 210,450 450,570 570,990 990,1260
-this you know, remember to
+this you know remember to
 
 557
 00:17:00,110 --> 00:17:00,920
@@ -2786,27 +2778,27 @@ talk about this in much
 558
 00:17:00,920 --> 00:17:01,790
 0,90 90,330 330,420 420,510 510,870
-more detail, but the primary
+more detail,| but the {primary/backup
 
 559
 00:17:01,790 --> 00:17:02,780
 0,390 390,570 570,660 660,720 720,990
-backup are in the same
+-} are in the same
 
 560
 00:17:02,780 --> 00:17:04,680
 0,360 360,630 630,930 930,1350
-state same state s.
+state, same state as
 
 561
 00:17:04,680 --> 00:17:07,320
 0,540 690,1260 1650,2160 2160,2550 2550,2640
-Um the um, if the
+{} the,| {} if the
 
 562
 00:17:07,320 --> 00:17:09,270
 0,480 480,570 570,1500 1530,1860 1860,1950
-operation is deterministic and you
+operation is deterministic| and you
 
 563
 00:17:09,270 --> 00:17:10,020
@@ -2816,7 +2808,7 @@ apply it to the same
 564
 00:17:10,020 --> 00:17:10,980
 0,480 480,570 570,690 690,840 840,960
-state, you know they will
+state,| you know they will
 
 565
 00:17:10,980 --> 00:17:11,730
@@ -2826,7 +2818,7 @@ end up in the same
 566
 00:17:11,730 --> 00:17:13,220
 0,360 360,510 510,960
-state as prime.
+state as primary.|
 
 567
 00:17:13,400 --> 00:17:14,480
@@ -2836,7 +2828,7 @@ And so there's no reason
 568
 00:17:14,480 --> 00:17:15,890
 0,330 330,600 600,930 960,1350 1350,1410
-for the APP declined to
+for the application, {the,client} to
 
 569
 00:17:15,890 --> 00:17:17,060
@@ -2846,12 +2838,12 @@ send the data in this
 570
 00:17:17,060 --> 00:17:18,470
 0,210 210,480 480,660 660,990 990,1410
-case because by just sending
+case,| because by just sending
 
 571
 00:17:18,470 --> 00:17:20,480
 0,180 180,840 840,1470 1590,1800 1800,2010
-this deterministic operation, it is
+this deterministic operation,| it is
 
 572
 00:17:20,480 --> 00:17:22,340
@@ -2861,12 +2853,12 @@ guaranteed that operation will generate
 573
 00:17:22,340 --> 00:17:23,520
 0,60 60,300 300,660
-the same data.
+the same data.|
 
 574
 00:17:26,800 --> 00:17:28,420
 0,270 300,510 510,1110 1110,1470 1470,1620
-Um, so subsequent questions, how
+{} So subsequent {question,is},| how
 
 575
 00:17:28,420 --> 00:17:29,350
@@ -2876,27 +2868,27 @@ do you know for all
 576
 00:17:29,350 --> 00:17:30,670
 0,450 450,540 540,660 660,1140 1140,1320
-programs in their operations whether
+programs in their operations,| whether
 
 577
 00:17:30,670 --> 00:17:31,930
 0,90 90,270 300,720 810,930 930,1260
-they are or are not
+they are deterministic or {non-deterministic
 
 578
 00:17:31,930 --> 00:17:33,490
 0,570 690,840 840,960 960,1140 1140,1560
-interested to know what information
+-}| to know what information
 
 579
 00:17:33,490 --> 00:17:34,870
 0,120 120,180 180,270 270,660 1140,1380
-needs to be sent a
+needs to be sent, {}|
 
 580
 00:17:34,870 --> 00:17:36,280
 0,150 150,270 270,600 600,1110 1110,1410
-so the typical approaches to
+so the typical approaches is
 
 581
 00:17:36,280 --> 00:17:37,330
@@ -2911,32 +2903,32 @@ approach is to make all
 583
 00:17:38,620 --> 00:17:40,320
 0,450 450,1230
-operations deterministic.
+operations deterministic,|
 
 584
 00:17:40,320 --> 00:17:42,060
 0,450 450,990 990,1410 1410,1500 1500,1740
-Non deterministic operations are not
+{non-deterministic -} operations are not
 
 585
 00:17:42,060 --> 00:17:43,290
 0,450 540,840 840,990 990,1170 1170,1230
-allowed and will see in
+allowed| and we'll see in
 
 586
 00:17:43,290 --> 00:17:43,920
 0,30 30,300 300,420 420,540 540,630
-a second how you do
+a second how to do
 
 587
 00:17:43,920 --> 00:17:44,800
 0,300
-that.
+that.|
 
 588
 00:17:48,650 --> 00:17:50,750
 0,570 660,840 840,1380 1380,1500 1500,2100
-OK, so before you go
+OK, so before {you,know} go
 
 589
 00:17:50,750 --> 00:17:51,440
@@ -2946,22 +2938,22 @@ into a little bit more
 590
 00:17:51,440 --> 00:17:53,840
 0,660 990,1830
-specific, um.
+specific, {}|
 
 591
 00:17:54,660 --> 00:17:56,610
 0,390 390,480 480,780 780,1440 1620,1950
-And a hybrid approaches I
+and a [hybrid] approaches,| I
 
 592
 00:17:56,610 --> 00:17:58,200
 0,390 390,540 540,840 840,1410 1440,1590
-guess you know, um a
+guess you know, {} a
 
 593
 00:17:58,200 --> 00:17:59,400
 0,390 390,960 960,1050 1050,1140 1140,1200
-hardback approaches you know, for
+hardware approaches,| you know, for
 
 594
 00:17:59,400 --> 00:18:01,020
@@ -2971,22 +2963,22 @@ example you can run sort
 595
 00:18:01,020 --> 00:18:01,830
 0,60 60,210 210,660 660,750 750,810
-of by default, in a
+of by default in a
 
 596
 00:18:01,830 --> 00:18:05,670
 0,420 420,630 630,870 870,1560 1830,3840
-replicated state machine approach, a
+replicated state machine approach, {}|
 
 597
 00:18:05,670 --> 00:18:07,020
 0,480 480,810 810,960 960,1140 1140,1350
-effect, so in some ways
+{in,effect}, so in some ways
 
 598
 00:18:07,020 --> 00:18:09,180
 0,90 90,870 870,1140 1140,1590 1710,2160
-the paper does this then
+the paper does this,| then
 
 599
 00:18:09,180 --> 00:18:12,690
@@ -2996,12 +2988,12 @@ if a backup fails or
 600
 00:18:12,690 --> 00:18:13,650
 0,360 360,660 660,750 750,870 870,960
-primary fails, and you go
+primary fails,| and you go
 
 601
 00:18:13,650 --> 00:18:14,850
 0,210 210,300 300,360 360,630 630,1200
-back to a single machine,
+back to a single machine,|
 
 602
 00:18:15,030 --> 00:18:16,620
@@ -3011,7 +3003,7 @@ then you need to create
 603
 00:18:16,620 --> 00:18:18,060
 0,30 30,180 180,690 720,870 870,1440
-a new replica and offer
+a new replica| and often
 
 604
 00:18:18,120 --> 00:18:19,200
@@ -3021,7 +3013,7 @@ new replica the way you
 605
 00:18:19,200 --> 00:18:20,190
 0,180 180,300 300,420 420,660 660,990
-do, it is actually by
+do,| it is actually by
 
 606
 00:18:20,280 --> 00:18:21,930
@@ -3041,37 +3033,37 @@ of the state of existing
 609
 00:18:24,630 --> 00:18:25,800
 0,360 360,450 450,510 510,690 690,1170
-replica to the new replica.
+replica to the new replica,|
 
 610
 00:18:26,990 --> 00:18:29,150
 0,450 450,1020 1050,1560 1560,1800 1800,2160
-Without like hopefully less frequent
+without like hopefully less frequent
 
 611
 00:18:29,150 --> 00:18:30,360
 0,630
-operation.
+operation.|
 
 612
 00:18:30,760 --> 00:18:32,080
 0,240 240,420 420,810 810,900 900,1320
-And then actually you during,
+And then actually {you,know} during,|
 
 613
 00:18:32,080 --> 00:18:35,950
 0,0 1260,1950 2460,3210 3210,3300 3300,3870
-um, I'm replicating the operations
+{} then replicating the operations
 
 614
 00:18:35,950 --> 00:18:37,150
 0,150 150,450 450,630 630,750 750,1200
-you're doing much more frequently.
+you're doing much more frequently.|
 
 615
 00:18:39,810 --> 00:18:41,400
 0,480 540,900 900,1200 1200,1440 1440,1590
-Um, also free, I feel
+{} Also free, {} feel
 
 616
 00:18:41,400 --> 00:18:42,930
@@ -3086,12 +3078,12 @@ real time as opposed to
 618
 00:18:44,490 --> 00:18:45,510
 0,270 270,450 450,540 540,810 840,1020
-typing in the chat, either
+typing in the chat,| either
 
 619
 00:18:45,510 --> 00:18:46,980
 0,150 150,240 240,570 630,930 1110,1470
-way is fine, but um.
+way is fine, but. {}|
 
 620
 00:18:48,080 --> 00:18:49,970
@@ -14392,4 +14384,3 @@ But you know I can
 01:32:58,130 --> 01:32:59,755
 0,810 810,1020 1020,1530
 remember it like.
-
