@@ -28,7 +28,7 @@
 | 10   | &check; | &check; |         |
 | 11   | &check; |         |         |
 | 12   | &check; |         |         |
-| 13   | &check; |         |         |
+| 13   | &check; | &check; |         |
 | 14   | &check; |         |         |
 | 15   | &check; |         |         |
 | 16   | &check; |         |         |
