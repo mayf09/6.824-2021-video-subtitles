@@ -11275,7 +11275,7 @@ something that you mentioned about
 2260
 01:17:41,320 --> 01:17:42,670
 0,420 420,600 600,840 840,1170 1170,1350
-raft so you mentioned that
+raft,| so you mentioned that
 
 2261
 01:17:42,670 --> 01:17:43,960
@@ -11290,32 +11290,32 @@ go through the majority of
 2263
 01:17:45,070 --> 01:17:46,570
 0,660 810,930 930,1020 1020,1260 1260,1500
-servers but I'm not quite
+servers,| but I'm not quite
 
 2264
 01:17:46,570 --> 01:17:48,220
 0,210 210,210 210,690 690,1140 1140,1650
-sure I understand why, because
+sure I understand why,| because
 
 2265
 01:17:48,400 --> 01:17:51,100
 0,180 180,780 1080,1920 1950,2340 2340,2700
-the leader has evolved committed
+the leader has {all,of,the} committed
 
 2266
 01:17:51,100 --> 01:17:52,990
 0,540 540,840 840,1350 1350,1590 1590,1890
-entries right, yeah there's two
+entries, right.| Yeah, there's two
 
 2267
 01:17:52,990 --> 01:17:55,690
 0,150 150,600 630,1410 2340,2580 2580,2700
-two schemes a if the
+two schemes, {} if the
 
 2268
 01:17:55,690 --> 01:17:57,760
 0,660 780,1500 1530,1800 1800,1890 1890,2070
-leader Otto either you run
+leader,| so either you run
 
 2269
 01:17:57,760 --> 01:17:58,660
@@ -11325,27 +11325,27 @@ into a situation where all
 2270
 01:17:58,660 --> 01:18:00,250
 0,270 270,780 780,1200 1200,1500 1500,1590
-recent rights are served by
+recent writes are served by
 
 2271
 01:18:00,250 --> 01:18:01,320
 0,180 180,720
-your leader.
+the leader,
 
 2272
 01:18:01,410 --> 01:18:02,440
 0,450
-Right.
+right,|
 
 2273
 01:18:02,440 --> 01:18:03,490
 0,600 630,720 720,840 840,1020 1020,1050
-Or you know there's a
+or you know there's a
 
 2274
 01:18:03,490 --> 01:18:05,200
 0,540 540,660 660,930 930,1020 1020,1710
-possibility to serve from principle
+possibility to serve from principle|
 
 2275
 01:18:05,200 --> 01:18:06,700
@@ -11355,17 +11355,17 @@ and read operation from another
 2276
 01:18:06,700 --> 01:18:07,900
 0,360 360,570 570,900 900,1050 1050,1200
-peer, but then you have
+peer,| but then you have
 
 2277
 01:18:07,900 --> 01:18:10,480
 0,90 90,690 690,990 990,1740 2160,2580
-to contact first majority, um
+to contact first majority {}
 
 2278
 01:18:10,480 --> 01:18:11,260
 0,120 120,210 210,480 480,570 570,780
-of the service to make
+of the servers| to make
 
 2279
 01:18:11,260 --> 01:18:12,250
@@ -11375,12 +11375,12 @@ absolute sure that you have
 2280
 01:18:12,250 --> 01:18:13,720
 0,90 90,390 390,930
-the last operation.
+the last operation.|
 
 2281
 01:18:14,990 --> 01:18:16,400
 0,270 270,420 420,840 840,1200 1200,1410
-Got it, so that that
+Got it,| so that that
 
 2282
 01:18:16,430 --> 01:18:17,840
@@ -11395,12 +11395,12 @@ to spread all the reads
 2284
 01:18:19,370 --> 01:18:21,890
 0,690 720,1230 1320,1860 1860,2400 2400,2520
-across every period, we have
+across every peer.| We have
 
 2285
 01:18:21,890 --> 01:18:23,600
 0,90 90,210 210,450 450,1110 1350,1710
-to be more sophisticated and
+to be more sophisticated| and
 
 2286
 01:18:23,900 --> 01:18:24,890
@@ -11410,12 +11410,12 @@ we cannot do it on
 2287
 01:18:24,890 --> 01:18:25,790
 0,120 120,330 330,570 570,720 720,900
-our own because that would
+our own,| because that would
 
 2288
 01:18:25,790 --> 01:18:27,260
 0,390 390,600 600,720 720,1020 1020,1470
-definitely bring to interact ability.
+definitely break {linearizability - -}.|
 
 2289
 01:18:28,450 --> 01:18:29,710
@@ -11425,12 +11425,12 @@ Right, but if everything goes
 2290
 01:18:29,710 --> 01:18:31,390
 0,90 90,210 210,690 930,1350 1440,1680
-to the leader, then when
+to the leader.| Then when
 
 2291
 01:18:31,390 --> 01:18:32,560
 0,210 210,390 390,540 540,900 900,1170
-you're doing your golden correct
+you're doing {there -}, correct,|
 
 2292
 01:18:32,560 --> 01:18:33,610
@@ -11440,12 +11440,12 @@ except you have to do
 2293
 01:18:33,610 --> 01:18:35,020
 0,300 330,690 690,1020 1020,1140 1140,1410
-this trick where you ask
+this trick,| where you ask
 
 2294
 01:18:35,020 --> 01:18:37,210
 0,90 90,180 180,570 570,1260 1770,2190
-for an empty agreement, a
+for an empty agreement, {}|
 
 2295
 01:18:37,210 --> 01:18:38,320
@@ -11455,7 +11455,7 @@ at the beginning of every
 2296
 01:18:38,320 --> 01:18:39,820
 0,510 540,1020
-new term.
+new term.|
 
 2297
 01:18:41,120 --> 01:18:41,900
@@ -11470,22 +11470,22 @@ you actually are up to
 2299
 01:18:42,650 --> 01:18:43,580
 0,390
-date.
+date.|
 
 2300
 01:18:45,710 --> 01:18:47,300
 0,510 540,810 810,1050
-Okay, thank you.
+Okay, thank you.|
 
 2301
 01:18:48,130 --> 01:18:50,050
 0,180 180,540 540,990 1350,1770 1770,1920
-Could you, um quickly go
+Could you, {} quickly go
 
 2302
 01:18:50,050 --> 01:18:51,850
 0,270 270,840 960,1260 1260,1590 1590,1800
-over again, um when you're
+over again,| {} when you're
 
 2303
 01:18:51,850 --> 01:18:52,900
@@ -11495,17 +11495,17 @@ adding a new server at
 2304
 01:18:52,900 --> 01:18:54,100
 0,90 90,720
-the tail.
+the tail,|
 
 2305
 01:18:54,360 --> 01:18:55,560
 0,450 480,690 690,960 960,1020 1020,1200
-Um, so just to make
+{} so just to make
 
 2306
 01:18:55,560 --> 01:18:57,540
 0,390 390,450 450,1050 1050,1170 1170,1980
-sure I understand so essentially
+sure I understand,| so essentially
 
 2307
 01:18:57,990 --> 01:18:59,670
@@ -11520,7 +11520,7 @@ copying all the data from
 2309
 01:19:00,780 --> 01:19:01,860
 0,180 180,360 360,420 420,660 660,1080
-s two to s three
+{S2 -} to {S3 -}|
 
 2310
 01:19:02,430 --> 01:19:03,450
@@ -11535,27 +11535,27 @@ requests for any of that
 2312
 01:19:05,010 --> 01:19:06,440
 0,330 330,990
-data while.
+data,| while
 
 2313
 01:19:06,440 --> 01:19:08,180
 0,420 630,780 780,1050 1050,1590 1590,1740
-That is still happening then
+that is still happening,| then
 
 2314
 01:19:08,180 --> 01:19:09,290
 0,180 180,360 360,480 480,690 690,1110
-s three is going to
+{S3 -} is going to
 
 2315
 01:19:09,770 --> 01:19:11,360
 0,480 480,750 750,1050 1050,1230 1230,1590
-ask s two four anything
+ask {S2 -} for anything
 
 2316
 01:19:11,360 --> 01:19:12,710
 0,150 150,240 240,510 510,870 870,1350
-that it still has directly
+that it still has directly|
 
 2317
 01:19:12,710 --> 01:19:13,430
@@ -11565,7 +11565,7 @@ and it's going to get
 2318
 01:19:13,430 --> 01:19:15,080
 0,60 60,150 150,270 270,900 1170,1650
-it and then respond yep.
+it and then respond.| Yep.|
 
 2319
 01:19:15,600 --> 01:19:16,410
@@ -11575,7 +11575,7 @@ And then it keeps doing
 2320
 01:19:16,410 --> 01:19:18,120
 0,210 210,690 690,810 810,1320 1320,1710
-that until it gets data
+that until it gets data|
 
 2321
 01:19:18,120 --> 01:19:19,320
@@ -11585,17 +11585,17 @@ that as to no longer
 2322
 01:19:19,320 --> 01:19:20,040
 0,270 270,360 360,450 450,540 540,720
-has and then it just
+has| and then it just
 
 2323
 01:19:20,040 --> 01:19:22,140
 0,240 240,570 600,1170 1500,1950 1950,2100
-goes live essentially yeah or
+goes live essentially.| Yeah, or
 
 2324
 01:19:22,140 --> 01:19:23,310
 0,120 120,210 210,300 300,630 630,1170
-you could do slightly differently,
+you could do slightly differently,|
 
 2325
 01:19:23,310 --> 01:19:24,330
@@ -11605,37 +11605,37 @@ you know you could actually
 2326
 01:19:24,330 --> 01:19:26,730
 0,360 360,540 540,840 840,1260 1650,2400
-have s three could a
+have {S3 -} could {}
 
 2327
 01:19:26,730 --> 01:19:29,610
 0,510 510,1050 1050,1170 1170,1770 2070,2880
-basically tell s to a.
+basically tell {S2 -} {},|
 
 2328
 01:19:31,820 --> 01:19:33,560
 0,210 210,390 390,630 630,1170 1200,1740
-It's really can become the
+{S3 -} can become the
 
 2329
 01:19:33,590 --> 01:19:35,630
 0,600 630,1050 1050,1320 1320,1380 1380,2040
-leader or sort of detail
+leader or sort of {the,tail}|
 
 2330
 01:19:35,660 --> 01:19:37,520
 0,660 660,1020 1020,1320 1320,1710 1710,1860
-and basically don't process, any
+and basically don't process any
 
 2331
 01:19:37,520 --> 01:19:40,070
 0,1470 1530,2040 2040,2160 2160,2220 2220,2550
-comma operations from the client
+common operations from the client
 
 2332
 01:19:40,070 --> 01:19:41,510
 0,240 240,510 510,720 720,1020 1020,1440
-get into what actually has
+yet,| until it actually has
 
 2333
 01:19:41,540 --> 01:19:43,550
@@ -11645,27 +11645,27 @@ has received the remaining operations
 2334
 01:19:43,610 --> 01:19:44,960
 0,300 300,480 480,840
-from h two.
+from {S2 -}.|
 
 2335
 01:19:47,140 --> 01:19:48,160
 0,180 180,360 360,510 510,780 780,1020
-Oh, so now case s
+Oh, so {in,that} case {S2
 
 2336
 01:19:48,160 --> 01:19:49,690
 0,240 240,390 390,750 750,840 840,1530
-two is still the tail.
+-} is still the tail.|
 
 2337
 01:19:50,970 --> 01:19:53,490
 0,900 900,1140 1140,1680 1680,1980 1980,2520
-Yeah that's three that's everything,
+Yeah.| {So,S3 -} gets everything.|
 
 2338
 01:19:53,730 --> 01:19:54,740
 0,450
-yeah.
+Yeah.|
 
 2339
 01:19:56,910 --> 01:19:59,130
@@ -11675,7 +11675,7 @@ Basically, the paper describes one
 2340
 01:19:59,130 --> 01:20:00,180
 0,330 330,480 480,570 570,780 780,1050
-particular way of doing it,
+particular way of doing it,|
 
 2341
 01:20:00,180 --> 01:20:00,960
@@ -11685,7 +11685,7 @@ you know there's a couple
 2342
 01:20:00,960 --> 01:20:02,240
 0,180 180,240 240,480 480,660
-ways of doing it.
+ways of doing it.|
 
 2343
 01:20:04,000 --> 01:20:05,290
@@ -11695,22 +11695,21 @@ But if you do that
 2344
 01:20:05,290 --> 01:20:06,280
 0,420
-then.
+then,|
 
 2345
 01:20:06,430 --> 01:20:08,440
 0,510 510,990 1230,1590 1590,1890 1890,2010
-I'm like how long do
+{} like how long do
 
 2346
 01:20:08,440 --> 01:20:11,260
 0,180 180,660 660,1200 1560,1980 1980,2820
-you wait to get everything,
+you wait to get everything,|
 
 2347
 01:20:11,440 --> 01:20:13,140
 0,750
-um.
 
 2348
 01:20:13,140 --> 01:20:14,070
@@ -11720,12 +11719,12 @@ I think I also had
 2349
 01:20:14,070 --> 01:20:15,180
 0,90 90,270 270,690 690,810 810,1110
-the same conclusion as someone
+the same confusion as someone
 
 2350
 01:20:15,180 --> 01:20:16,500
 0,390 390,510 510,720 720,1080 1080,1320
-else, you know you know
+else.| You know, you know
 
 2351
 01:20:16,500 --> 01:20:17,700
@@ -11735,37 +11734,37 @@ in what order the switch
 2352
 01:20:17,700 --> 01:20:19,590
 0,60 60,450 480,990 990,1320 1320,1890
-is happening correctly, so example
+is happening, correct,| so example
 
 2353
 01:20:19,590 --> 01:20:21,720
 0,210 210,1020 1050,1740 1740,1950 1950,2130
-like {esri's -} use let's
+like {S3,so -} S2 let's
 
 2354
 01:20:21,720 --> 01:20:22,950
 0,210 210,630 630,930 930,1230 1230,1230
-say maybe has a um,
+say maybe has a {}
 
 2355
 01:20:22,950 --> 01:20:25,340
 0,630 630,1170 1170,1380 1380,1890
-big operations through hundreds.
+big operations through hundreds,|
 
 2356
 01:20:25,460 --> 01:20:26,870
 0,150 150,390 390,450 450,780 780,1410
-You start to copy operations
+you start to copy operations,|
 
 2357
 01:20:26,870 --> 01:20:28,700
 0,330 330,990 990,1170 1170,1260 1260,1830
-likely snapshots with a raft
+likely snapshots with a raft,|
 
 2358
 01:20:28,970 --> 01:20:30,320
 0,150 150,420 420,510 510,810 810,1350
-you start the copy operation,
+you start the copy operation,|
 
 2359
 01:20:30,320 --> 01:20:31,430
@@ -11775,52 +11774,52 @@ so when the copy operation
 2360
 01:20:31,430 --> 01:20:32,510
 0,120 120,450 450,630 630,930 930,1080
-is done as frees up
+is done,| {S3,is -} up
 
 2361
 01:20:32,510 --> 01:20:34,160
 0,360 360,660 660,1080
-today's little enders.
+{to,data} until hundred,
 
 2362
 01:20:34,390 --> 01:20:35,920
 0,510
-Brooke.
+right.|
 
 2363
 01:20:36,390 --> 01:20:37,710
 0,570 570,630 630,750 750,1140 1140,1320
-Then you know maybe as
+Then you know maybe {S2
 
 2364
 01:20:37,710 --> 01:20:39,240
 0,150 150,480 480,900 930,1230 1230,1530
-two already has ten more
+-} already has ten more
 
 2365
 01:20:39,240 --> 01:20:40,860
 0,660 690,870 870,1020 1020,1290 1290,1620
-operations so it has one
+operations,| so it has {101
 
 2366
 01:20:40,860 --> 01:20:42,660
 0,450 450,750 750,1080 1080,1440 1440,1800
-one one two and three
+-} {102 -} and 103,
 
 2367
 01:20:42,900 --> 01:20:44,220
 0,630
-right.
+right,|
 
 2368
 01:20:44,220 --> 01:20:46,800
 0,450 450,1260 1260,1860 1860,2190 2190,2580
-And basically a as free,
+and basically {} {S3 -}
 
 2369
 01:20:46,800 --> 01:20:48,240
 0,390 390,480 480,990 990,1200 1200,1440
-can you contact us to
+can you contact {S2 -},|
 
 2370
 01:20:48,240 --> 01:20:49,830
@@ -11830,22 +11829,22 @@ say give me your remaining
 2371
 01:20:49,830 --> 01:20:51,210
 0,690 690,840 840,990 990,1230 1230,1380
-operations as to says, like
+operations,| {and,S2 -} says, like
 
 2372
 01:20:51,210 --> 01:20:52,920
 0,330 330,630 630,1050 1050,1290 1290,1710
-well remaining operations one one
+well remaining operations {101 -}
 
 2373
 01:20:52,920 --> 01:20:54,380
 0,240 240,450 450,600 600,930
-three one and ten.
+through one to ten,|
 
 2374
 01:20:55,000 --> 01:20:56,770
 0,900 900,1110 1110,1140 1140,1410 1410,1770
-And as a side effect,
+and as a side effect,|
 
 2375
 01:20:56,770 --> 01:20:58,390
@@ -11855,32 +11854,32 @@ you know as we also
 2376
 01:20:58,390 --> 01:20:59,740
 0,390 390,540 540,780 780,1020 1020,1350
-tells as to like stop
+tells {S2 -} like stop
 
 2377
 01:20:59,740 --> 01:21:01,020
 0,240 240,330 330,720
-being the tail.
+being the tail,|
 
 2378
 01:21:01,540 --> 01:21:03,670
 0,900 900,1200 1200,1470 1470,1710 1710,2130
-And, um as to response
+and, {} {S2 -} response
 
 2379
 01:21:03,670 --> 01:21:05,740
 0,120 120,330 330,1230 1470,1860 1860,2070
-with those operations, um as
+with those operations,| {} {S3
 
 2380
 01:21:05,740 --> 01:21:07,330
 0,210 210,870 870,1110 1110,1230 1230,1590
-free applies, there's no operation
+-} applies,| there's {} operation
 
 2381
 01:21:07,330 --> 01:21:08,740
 0,210 210,540 540,690 690,870 870,1410
-one one three one ten
+{101 -} through one {to,ten},|
 
 2382
 01:21:08,890 --> 01:21:11,290
@@ -11890,7 +11889,7 @@ and then tells client it
 2383
 01:21:11,290 --> 01:21:12,310
 0,210 210,450 450,600 600,900 900,1020
-means it is tail, but
+means it is tail,| but
 
 2384
 01:21:12,310 --> 01:21:13,660
@@ -11900,22 +11899,22 @@ it doesn't process any commands
 2385
 01:21:13,660 --> 01:21:15,190
 0,150 150,510 510,840 1110,1320 1320,1530
-from clients yet or read
+from clients yet| or read
 
 2386
 01:21:15,190 --> 01:21:16,210
 0,270 270,390 390,690 690,870 870,1020
-operates from client yet due
+operation from client yet,| until
 
 2387
 01:21:16,210 --> 01:21:17,770
 0,330 330,600 720,1080 1080,1290 1290,1560
-to actually process one one
+it actually process {101 -}
 
 2388
 01:21:17,770 --> 01:21:18,860
 0,120 120,300 300,630
-three one ten.
+to {110 -}.|
 
 2389
 01:21:21,380 --> 01:21:23,540
