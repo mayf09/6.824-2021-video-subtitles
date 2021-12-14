@@ -1,0 +1,5720 @@
+1
+00:00:00,000 --> 00:00:02,790
+Good evening or good night wherever you are,
+
+2
+00:00:02,820 --> 00:00:03,780
+let's get started.
+
+3
+00:00:04,440 --> 00:00:08,310
+So today, I wanna talk a little bit about chain replication,
+
+4
+00:00:08,310 --> 00:00:12,450
+the paper aside for today from 2004,
+
+5
+00:00:12,450 --> 00:00:14,280
+before diving into the paper,
+
+6
+00:00:14,280 --> 00:00:18,270
+a couple quick logistic things I just want to remind you of,
+
+7
+00:00:18,810 --> 00:00:22,530
+one is we have a quiz on Thursday,
+
+8
+00:00:23,830 --> 00:00:29,770
+and you know the instructions of topics that actually being covered all the quizzes are on the schedule page,
+
+9
+00:00:29,800 --> 00:00:34,480
+we'll try to send out an announcement of piazza for more details
+
+10
+00:00:34,780 --> 00:00:37,720
+about exactly how we'll do the quiz,
+
+11
+00:00:38,020 --> 00:00:39,700
+it's going to be in grade scope,
+
+12
+00:00:39,730 --> 00:00:44,380
+and it's basically during class hours 80 minutes,
+
+13
+00:00:44,470 --> 00:00:48,130
+and more details to follow.
+
+14
+00:00:49,010 --> 00:00:55,340
+The second you know I want to remind people of is projects,
+
+15
+00:00:56,790 --> 00:00:59,730
+if you'd like to do a project instead of lab 4,
+
+16
+00:01:00,120 --> 00:01:05,090
+then you can do so,
+
+17
+00:01:05,090 --> 00:01:07,880
+but you should submit a proposal for a project
+
+18
+00:01:07,880 --> 00:01:12,920
+and there's a couple paragraphs to through the submission website,
+
+19
+00:01:12,950 --> 00:01:14,840
+so that we can give you feedback
+
+20
+00:01:14,840 --> 00:01:19,790
+and to tell you what this project actually appropriate for a final project in 6.824,
+
+21
+00:01:20,300 --> 00:01:22,310
+if you're just planning to lab 4,
+
+22
+00:01:22,340 --> 00:01:23,930
+there's absolutely nothing you have to do at all.
+
+23
+00:01:25,240 --> 00:01:31,830
+Any questions about these two logistical points?
+
+24
+00:01:36,270 --> 00:01:41,910
+Okay, then, let me move on to one other point, I wanted to bring up,
+
+25
+00:01:41,910 --> 00:01:50,550
+which is the sort of correction from a lecturer a little while ago,
+
+26
+00:01:50,760 --> 00:01:57,570
+we, we walked through the Go code for the raft implementation of 2a 2b that I had
+
+27
+00:01:57,840 --> 00:02:02,010
+and we talked a little bit about the go defer statement
+
+28
+00:02:02,400 --> 00:02:07,470
+and I mentioned that you can actually have the defer statement inside of a base block
+
+29
+00:02:07,530 --> 00:02:09,300
+and that is correct
+
+30
+00:02:09,750 --> 00:02:11,970
+and I think maybe it was [Philip] who asked the question,
+
+31
+00:02:11,970 --> 00:02:14,880
+what is exactly when is that get executed
+
+32
+00:02:14,880 --> 00:02:16,680
+and I answered that question incorrectly,
+
+33
+00:02:17,040 --> 00:02:21,150
+you know the defer statement that gets executed at the point that gets return out of the function,
+
+34
+00:02:21,150 --> 00:02:22,920
+not in your return out of the base block.
+
+35
+00:02:23,350 --> 00:02:26,860
+And so that my apologizes that caused any confusion.
+
+36
+00:02:29,980 --> 00:02:34,390
+Any questions about the that clarification?
+
+37
+00:02:37,610 --> 00:02:40,130
+Okay, good, there's sort of two topics
+
+38
+00:02:40,130 --> 00:02:41,900
+and really talk to technical talks,
+
+39
+00:02:41,900 --> 00:02:44,330
+I want to talk about today is the zookeeper locks,
+
+40
+00:02:44,450 --> 00:02:47,450
+which I didn't get to finish the last time,
+
+41
+00:02:48,250 --> 00:02:50,770
+and then I'll talk about chain replication.
+
+42
+00:02:51,790 --> 00:02:52,390
+Alright?
+
+43
+00:02:52,900 --> 00:02:56,770
+So both for chain replication and zookeeper,
+
+44
+00:02:56,770 --> 00:03:01,060
+you know we're sort of still in the same context as before,
+
+45
+00:03:01,610 --> 00:03:05,660
+namely we're doing you know replicated state machines.
+
+46
+00:03:07,240 --> 00:03:09,700
+And you know just a usual diagram,
+
+47
+00:03:10,270 --> 00:03:12,370
+you know we have servers,
+
+48
+00:03:12,370 --> 00:03:17,950
+you know that runs on some replication libraries like ZAB or Raft,
+
+49
+00:03:20,220 --> 00:03:22,950
+we have clients talking to the servers,
+
+50
+00:03:22,950 --> 00:03:27,480
+for example in the case of zookeeper might actually send to create call,
+
+51
+00:03:28,440 --> 00:03:31,890
+you know zookeeper internally how some states you know some z nodes,
+
+52
+00:03:31,890 --> 00:03:34,470
+you know that are hanging off in a form of tree
+
+53
+00:03:34,860 --> 00:03:36,480
+and so when an operation comes in,
+
+54
+00:03:36,480 --> 00:03:41,910
+you know zookeeper you know forwards that operation basically to the Raft ZAB library,
+
+55
+00:03:41,910 --> 00:03:43,830
+it does some chatting back and forth,
+
+56
+00:03:44,240 --> 00:03:46,280
+and to get a majority of the servers
+
+57
+00:03:46,280 --> 00:03:48,830
+to accept you know that command
+
+58
+00:03:49,070 --> 00:03:50,990
+and then at some point you know once it's accepted,
+
+59
+00:03:50,990 --> 00:03:54,320
+it comes out the servers applies the operation
+
+60
+00:03:54,530 --> 00:03:56,390
+and sends a response back to the client,
+
+61
+00:03:56,690 --> 00:03:59,450
+so the standard story of replicated state machine,
+
+62
+00:03:59,450 --> 00:04:02,930
+if you start, all the replicated state machine starting the same state,
+
+63
+00:04:02,930 --> 00:04:05,120
+you apply the same operation in the same order,
+
+64
+00:04:05,180 --> 00:04:06,950
+then you will end up in the same state
+
+65
+00:04:06,950 --> 00:04:09,770
+and so any of the machines can take over if necessary.
+
+66
+00:04:11,430 --> 00:04:15,300
+Now, one of the things that was cool, that were interesting about zookeeper is
+
+67
+00:04:15,300 --> 00:04:20,610
+that you know read operations can be served for many servers
+
+68
+00:04:20,820 --> 00:04:23,340
+for any of the peers or any of the one of the servers
+
+69
+00:04:23,790 --> 00:04:26,280
+and this allows zookeeper to extremely high performance,
+
+70
+00:04:26,280 --> 00:04:31,650
+because you can actually scale the number of read operations with the number of servers,
+
+71
+00:04:32,190 --> 00:04:34,320
+as a flip side of that
+
+72
+00:04:34,350 --> 00:04:39,150
+you know zookeeper actually gave up on that particular scenario,
+
+73
+00:04:39,150 --> 00:04:40,650
+gave up on linearizability.
+
+74
+00:04:49,920 --> 00:04:52,530
+Because we know from for example in Raft,
+
+75
+00:04:52,530 --> 00:04:56,430
+you can't actually arbitrary serve read from any server,
+
+76
+00:04:56,550 --> 00:05:00,900
+because I have not seen the latest update yet,
+
+77
+00:05:00,900 --> 00:05:02,250
+and so in case of zookeeper,
+
+78
+00:05:02,250 --> 00:05:04,080
+that is a [true] too
+
+79
+00:05:04,260 --> 00:05:08,940
+and, and so read operations are not you know
+
+80
+00:05:08,940 --> 00:05:13,200
+or the operation zookeeper defines don't provide a linearizable interface.
+
+81
+00:05:13,960 --> 00:05:17,050
+But nevertheless you know we saw that actually is
+
+82
+00:05:17,080 --> 00:05:20,770
+it provides a slightly different sort of correctness guarantee that linearizability,
+
+83
+00:05:21,070 --> 00:05:25,390
+and that actually correctness guarantee is useful,
+
+84
+00:05:25,600 --> 00:05:28,750
+and useful enough to be able to write actually programs,
+
+85
+00:05:28,750 --> 00:05:34,570
+and the particular set of programs that you know zookeeper was you know focusing on is
+
+86
+00:05:34,600 --> 00:05:43,760
+these what they call now configuration or coordination programs.
+
+87
+00:05:52,220 --> 00:05:53,780
+And so the thing to think about it,
+
+88
+00:05:53,780 --> 00:05:56,630
+there's a lot of systems that we looked at in the past,
+
+89
+00:05:56,630 --> 00:05:58,850
+they typically have some replication story
+
+90
+00:05:58,850 --> 00:06:05,090
+and they have coordinator master that sort of coordinates the the group
+
+91
+00:06:05,090 --> 00:06:08,750
+and zookeeper really intended you know for as a server
+
+92
+00:06:08,750 --> 00:06:12,560
+for that kind of you know master or coordinator role
+
+93
+00:06:12,770 --> 00:06:16,280
+and it provides a bunch of primitives you know to make that doable
+
+94
+00:06:16,370 --> 00:06:22,670
+and the two the you know we talked a little bit about atomic increment last week,
+
+95
+00:06:22,670 --> 00:06:28,130
+and with some the other [surface] and want to finish off, you know talking about locks.
+
+96
+00:06:28,840 --> 00:06:31,840
+One, because there were a lot of questions about it
+
+97
+00:06:31,840 --> 00:06:33,310
+and two actually is quite interesting
+
+98
+00:06:33,760 --> 00:06:36,370
+and there's sort of two different locking in limitations
+
+99
+00:06:36,370 --> 00:06:38,050
+and first I want to talk about the simple one,
+
+100
+00:06:38,290 --> 00:06:42,700
+namely where, let me write down the pseudo code,
+
+101
+00:06:42,820 --> 00:06:45,460
+then we can talk about it again a little bit in detail,
+
+102
+00:06:45,670 --> 00:06:50,530
+so the pseudo code for the lock was
+
+103
+00:06:50,890 --> 00:06:54,130
+something like this, you know acquire in an infinite loop
+
+104
+00:06:54,400 --> 00:06:56,410
+you know try to create the lock file,
+
+105
+00:07:01,190 --> 00:07:05,310
+name lf, and set ephemeral to true.
+
+106
+00:07:11,460 --> 00:07:12,510
+And we'll talk about that in a second
+
+107
+00:07:12,510 --> 00:07:15,300
+why you know if the create succeeds,
+
+108
+00:07:16,120 --> 00:07:20,290
+then you know the that process where the client was the first one
+
+109
+00:07:20,290 --> 00:07:21,160
+to create that file
+
+110
+00:07:21,160 --> 00:07:23,860
+and basically successfully gets the lock
+
+111
+00:07:23,860 --> 00:07:26,080
+and so it breaks out of the for loop and returns.
+
+112
+00:07:26,980 --> 00:07:31,160
+If the client did not,
+
+113
+00:07:31,190 --> 00:07:32,630
+you know be able to create a file,
+
+114
+00:07:32,630 --> 00:07:34,340
+then it calles exists,
+
+115
+00:07:34,920 --> 00:07:39,060
+and the call exists is not really for you know see if it exists or not,
+
+116
+00:07:39,060 --> 00:07:41,010
+because you know it doesn't exist,
+
+117
+00:07:41,310 --> 00:07:43,020
+basically set a watch,
+
+118
+00:07:47,420 --> 00:07:51,230
+and the idea is that you know the watch will go off,
+
+119
+00:07:51,230 --> 00:07:52,940
+if actually the file disappears,
+
+120
+00:07:53,900 --> 00:07:57,860
+and if it disappears, then you know the client will get a notification,
+
+121
+00:07:57,860 --> 00:08:01,640
+so basically we're going to be doing here is just wait for that notification.
+
+122
+00:08:09,390 --> 00:08:11,490
+So that's sort of the acquire operation,
+
+123
+00:08:11,640 --> 00:08:14,790
+then the release is very simple.
+
+124
+00:08:17,080 --> 00:08:19,180
+The release basically is that does nothing else
+
+125
+00:08:19,180 --> 00:08:22,600
+than sending the delete operation to the zookeeper servers,
+
+126
+00:08:22,810 --> 00:08:24,640
+you know for the for the lock file,
+
+127
+00:08:25,440 --> 00:08:26,880
+so lf in this case.
+
+128
+00:08:27,800 --> 00:08:29,030
+And so what does that do,
+
+129
+00:08:29,030 --> 00:08:32,540
+well if the delete you know sent to the zookeeper servers,
+
+130
+00:08:32,540 --> 00:08:36,650
+you know the zookeeper serves a performance delete operation,
+
+131
+00:08:37,010 --> 00:08:38,030
+that will actually,
+
+132
+00:08:38,180 --> 00:08:42,020
+let's that make the file would go away,
+
+133
+00:08:42,140 --> 00:08:44,000
+that will fire to watch
+
+134
+00:08:44,150 --> 00:08:46,490
+and so every client that actually is waiting,
+
+135
+00:08:46,490 --> 00:08:48,920
+you know for the notification
+
+136
+00:08:48,920 --> 00:08:50,060
+will get a notification
+
+137
+00:08:50,300 --> 00:08:51,440
+and then they go retry.
+
+138
+00:08:52,100 --> 00:08:57,290
+And you know one of them will be successful in the retry, will get the lock file or create a lock file,
+
+139
+00:08:57,350 --> 00:08:58,160
+and then proceed
+
+140
+00:08:58,340 --> 00:09:03,860
+and then the others ones go back into there call exists
+
+141
+00:09:03,890 --> 00:09:06,080
+and going to wait for a notification.
+
+142
+00:09:07,280 --> 00:09:10,460
+And the zoo keeper semantics, you know good enough,
+
+143
+00:09:10,490 --> 00:09:15,290
+you know the strong the linearizability for write operations,
+
+144
+00:09:15,350 --> 00:09:18,590
+plus you know the rules for when notifications go off
+
+145
+00:09:18,650 --> 00:09:21,770
+are strong enough that basically this actually implements a faithful lock,
+
+146
+00:09:21,950 --> 00:09:23,630
+where only one client,
+
+147
+00:09:23,630 --> 00:09:25,820
+if there are any clients at the same time trying to get the lock,
+
+148
+00:09:25,820 --> 00:09:26,840
+only one will get it.
+
+149
+00:09:27,260 --> 00:09:29,870
+And when the release is done
+
+150
+00:09:29,870 --> 00:09:31,670
+or when the file has been deleted,
+
+151
+00:09:31,730 --> 00:09:33,860
+only one in the next round will get it.
+
+152
+00:09:34,620 --> 00:09:36,510
+So that's sort of cool,
+
+153
+00:09:36,900 --> 00:09:42,480
+and it's interesting that you could build you know sort of sort of the foundational primitive
+
+154
+00:09:42,570 --> 00:09:45,600
+on using the primitives that the zookeeper offers.
+
+155
+00:09:46,280 --> 00:09:50,600
+And you see here, both the role of the you know the the watch
+
+156
+00:09:50,810 --> 00:09:52,910
+and then there's the second role for the ephemeral,
+
+157
+00:09:52,910 --> 00:09:54,770
+you know the ephemeral is there,
+
+158
+00:09:54,770 --> 00:09:59,090
+because, what happens if a client fails to crash,
+
+159
+00:09:59,090 --> 00:10:00,440
+before it calls release
+
+160
+00:10:00,680 --> 00:10:03,740
+and the semantics of the ephemeral files,
+
+161
+00:10:03,740 --> 00:10:07,370
+that zookeeper servers will, if it decides that the client has crashed,
+
+162
+00:10:07,370 --> 00:10:09,740
+it will do the operation,
+
+163
+00:10:09,740 --> 00:10:13,250
+it will remove the file on behalf of the client,
+
+164
+00:10:13,340 --> 00:10:16,460
+so even if the client fails or crashes,
+
+165
+00:10:16,760 --> 00:10:19,910
+zookeeper serve the site at some point the client is done,
+
+166
+00:10:20,060 --> 00:10:22,520
+and that will remove the file lock f,
+
+167
+00:10:22,580 --> 00:10:26,570
+which will cause notifications to be sent to other clients actually are waiting for it.
+
+168
+00:10:27,450 --> 00:10:34,680
+So, it's a cool set of primitives to build powerful abstraction that can be useful in applications.
+
+169
+00:10:35,870 --> 00:10:40,830
+One downside of this particular implementation is that,
+
+170
+00:10:41,100 --> 00:10:43,110
+it has what's called a herding effect,
+
+171
+00:10:43,470 --> 00:10:46,860
+namely you know let's say you have a thousand clients,
+
+172
+00:10:46,860 --> 00:10:51,750
+you know want to go grab the lock file or make the lock file, required lock,
+
+173
+00:10:51,960 --> 00:10:54,210
+now one is going to succeed
+
+174
+00:10:54,360 --> 00:10:59,190
+and 999 are going to call exists and wait for a notification.
+
+175
+00:10:59,700 --> 00:11:04,860
+Then when the first a client deletes the file or releases the file lock,
+
+176
+00:11:05,940 --> 00:11:10,110
+999 are going to try to actually acquire the lock.
+
+177
+00:11:10,750 --> 00:11:12,460
+And of course only one is going to succeed,
+
+178
+00:11:12,460 --> 00:11:15,010
+and 998 are going to be sitting for a notification,
+
+179
+00:11:15,790 --> 00:11:18,400
+but you know the did this,
+
+180
+00:11:18,400 --> 00:11:20,500
+you know every sort of random disappearance,
+
+181
+00:11:20,500 --> 00:11:21,760
+a huge amount of traffic,
+
+182
+00:11:21,910 --> 00:11:25,120
+and you know basically bombarding,
+
+183
+00:11:25,120 --> 00:11:30,250
+you know the zookeeper serve 999 to try to do it again,
+
+184
+00:11:30,340 --> 00:11:33,880
+you know all but one are are gonna fail.
+
+185
+00:11:34,610 --> 00:11:40,490
+And so that's a little bit of undesirable property, this herding effect,
+
+186
+00:11:40,490 --> 00:11:42,260
+and it's a real problem in practice,
+
+187
+00:11:42,260 --> 00:11:45,950
+you know move on a small scale multi core machines
+
+188
+00:11:45,950 --> 00:11:47,810
+as well as of course setting like this
+
+189
+00:11:47,810 --> 00:11:54,540
+where network messages are not free. So it's interesting that actually zookeeper provides enough primitives,
+
+190
+00:11:54,540 --> 00:11:56,070
+that you could actually do quite a bit better
+
+191
+00:11:56,070 --> 00:11:57,390
+and you can actually build a lock,
+
+192
+00:11:57,480 --> 00:12:00,420
+that doesn't have suffered from the herding effect.
+
+193
+00:12:01,310 --> 00:12:02,660
+So a better lock,
+
+194
+00:12:08,950 --> 00:12:10,180
+and it's very interesting,
+
+195
+00:12:10,180 --> 00:12:14,560
+let me a pull out the pseudo code for this,
+
+196
+00:12:15,180 --> 00:12:16,260
+which is in the paper,
+
+197
+00:12:16,290 --> 00:12:17,790
+so we can look at it,
+
+198
+00:12:18,730 --> 00:12:21,250
+and discuss you know why you know this lock is better
+
+199
+00:12:21,940 --> 00:12:24,550
+and particularly what we'll see is that this lock is better,
+
+200
+00:12:24,550 --> 00:12:28,130
+because basically there's no, there's no retry,
+
+201
+00:12:28,130 --> 00:12:33,740
+were all clients that didn't succeed getting the lock will retry to try to get
+
+202
+00:12:33,770 --> 00:12:37,700
+instead you know basically do all the clients are sort of for a line,
+
+203
+00:12:37,850 --> 00:12:40,280
+and they get to log one by one.
+
+204
+00:12:40,900 --> 00:12:43,390
+And the way you know that you can program that
+
+205
+00:12:43,390 --> 00:12:46,990
+using zookeeper's primitives as in this particular pseudo code.
+
+206
+00:12:47,740 --> 00:12:51,310
+And there are a couple differences that compared to the previous one,
+
+207
+00:12:51,730 --> 00:12:53,680
+first of all, the,
+
+208
+00:12:56,180 --> 00:13:00,200
+there's an additional flag, you pass to create namely SEQUENTIAL,
+
+209
+00:13:00,560 --> 00:13:04,490
+which basically means that as a these files are created,
+
+210
+00:13:04,520 --> 00:13:06,320
+the lock file is created,
+
+211
+00:13:06,320 --> 00:13:10,160
+but it will be created as the first one, it will be lock-0,
+
+212
+00:13:10,190 --> 00:13:12,980
+then the next one will be lock-1, etc.
+
+213
+00:13:16,920 --> 00:13:22,170
+So we have like a thousand clients rushing you know to the servers to actually try to acquire to lock,
+
+214
+00:13:22,260 --> 00:13:24,540
+basically a thousand files will be created,
+
+215
+00:13:24,570 --> 00:13:27,420
+all numbered from 0 to 999.
+
+216
+00:13:28,750 --> 00:13:31,030
+Then, so.
+
+217
+00:13:31,600 --> 00:13:33,370
+So, I'll succeed creating a file,
+
+218
+00:13:33,400 --> 00:13:39,940
+the creator returns actually the number that that you got,
+
+219
+00:13:39,940 --> 00:13:44,680
+so if the client 0, if the first client gets you know block creates lock 0,
+
+220
+00:13:44,770 --> 00:13:46,480
+then it will get 0 back
+
+221
+00:13:46,510 --> 00:13:48,760
+and the second will get 1 back, etc, etc.
+
+222
+00:13:49,780 --> 00:13:55,240
+Then you know that you can basically ask you to get all the children in that directory
+
+223
+00:13:55,270 --> 00:13:57,100
+under which you know these files are created,
+
+224
+00:13:57,130 --> 00:14:01,840
+and so in this case maybe that would be a thousand children and found z nodes,
+
+225
+00:14:02,200 --> 00:14:04,990
+and then you can just look at the n,
+
+226
+00:14:05,480 --> 00:14:08,210
+and see if you're n,
+
+227
+00:14:08,270 --> 00:14:11,240
+in this case 0 is the load znode to see,
+
+228
+00:14:11,240 --> 00:14:13,370
+and if that's the case, that means you got the lock.
+
+229
+00:14:13,880 --> 00:14:15,020
+And so that makes total sense,
+
+230
+00:14:15,020 --> 00:14:17,780
+but the first line gets actually 0 back,
+
+231
+00:14:17,780 --> 00:14:19,280
+all the other clients have a higher number,
+
+232
+00:14:19,280 --> 00:14:20,540
+because they're sequentially numbered
+
+233
+00:14:20,840 --> 00:14:23,120
+and so the first client will succeed in getting it
+
+234
+00:14:23,120 --> 00:14:26,240
+and all the other ones, what they're gonna do is,
+
+235
+00:14:26,420 --> 00:14:31,760
+they're going to look at, they're going to find the p you know the number that is right in front of them,
+
+236
+00:14:31,790 --> 00:14:33,530
+so for example if this is client,
+
+237
+00:14:33,950 --> 00:14:36,320
+that got back you know lock-10,
+
+238
+00:14:36,410 --> 00:14:40,340
+it's going to look you know for znode 9 you know lock-9
+
+239
+00:14:40,400 --> 00:14:42,260
+and basically put a watch on that file.
+
+240
+00:14:45,760 --> 00:14:50,680
+So this means that every client will have a watch basically on its predecessor,
+
+241
+00:14:50,770 --> 00:14:53,950
+so it goes to see that's all the clients form a line
+
+242
+00:14:54,250 --> 00:15:00,260
+and and then you know the client just gonna wait for that notification to go off.
+
+243
+00:15:00,850 --> 00:15:05,110
+And so that means for example when client 0 you know we got 0 back,
+
+244
+00:15:05,110 --> 00:15:06,790
+you know releases the lock,
+
+245
+00:15:06,820 --> 00:15:07,960
+it will delete n,
+
+246
+00:15:08,470 --> 00:15:12,220
+this will get a notification to go off for the file one.
+
+247
+00:15:13,010 --> 00:15:18,260
+And so the client is actually waiting for that particular notification, then will run,
+
+248
+00:15:18,500 --> 00:15:20,540
+but it's the only one that runs
+
+249
+00:15:20,840 --> 00:15:24,050
+and a it will succeed.
+
+250
+00:15:25,330 --> 00:15:29,500
+And so here we see you know this is sometimes easier type of locks,called ticket locks.
+
+251
+00:15:30,640 --> 00:15:32,500
+In a multi-core programming,
+
+252
+00:15:32,500 --> 00:15:33,520
+if you're familiar with them,
+
+253
+00:15:33,670 --> 00:15:37,600
+and they are sort of the same same idea of ticket locks,
+
+254
+00:15:37,600 --> 00:15:41,890
+actually you're building into this, using zookeeper primitives.
+
+255
+00:15:42,580 --> 00:15:44,830
+Again, what is interesting about it is that,
+
+256
+00:15:45,190 --> 00:15:47,170
+you know these primitives are powerful enough,
+
+257
+00:15:47,170 --> 00:15:48,850
+that you can actually build these kind of locks.
+
+258
+00:15:51,260 --> 00:15:52,370
+Any questions about this?
+
+259
+00:15:57,840 --> 00:16:01,410
+Okay, I want to make one more comment you know about the these locks,
+
+260
+00:16:01,620 --> 00:16:05,070
+before moving onto chain application.
+
+261
+00:16:05,340 --> 00:16:06,540
+We have a question in the chat.
+
+262
+00:16:06,690 --> 00:16:08,430
+Yeah, okay, what's the question in chat.
+
+263
+00:16:08,430 --> 00:16:11,550
+What is the watch for on line 4?
+
+264
+00:16:12,140 --> 00:16:15,230
+Good, go back, on this one line 4?
+
+265
+00:16:17,480 --> 00:16:18,560
+Yeah, I think that's the question.
+
+266
+00:16:19,580 --> 00:16:23,060
+Yeah, well, that watch my comment,
+
+267
+00:16:23,060 --> 00:16:25,940
+with the watch actually should go with you know line 5,
+
+268
+00:16:26,500 --> 00:16:28,540
+so there's no watch on line 4, right,
+
+269
+00:16:29,590 --> 00:16:34,090
+line 4 just finds p you know the numbers right before you're n,
+
+270
+00:16:39,850 --> 00:16:41,050
+if that doesn't answer the question,
+
+271
+00:16:41,050 --> 00:16:42,880
+please, if you come back later and that's fine.
+
+272
+00:16:43,570 --> 00:16:45,220
+Actually, I have another question.
+
+273
+00:16:45,370 --> 00:16:45,910
+Yeah.
+
+274
+00:16:45,910 --> 00:16:48,040
+This is going actually I think back a few slides,
+
+275
+00:16:48,040 --> 00:16:51,430
+but how does zookeeper determine that a client has failed
+
+276
+00:16:51,430 --> 00:16:53,440
+and thus release the ephemeral lock,
+
+277
+00:16:53,740 --> 00:16:56,980
+I can often, it's just like partitions for a moment.
+
+278
+00:16:57,440 --> 00:17:00,650
+Yeah, so, well, yeah so that could happen,
+
+279
+00:17:00,650 --> 00:17:01,820
+so the client might actually,
+
+280
+00:17:01,820 --> 00:17:05,600
+so the client has a session right with the zookeeper servers
+
+281
+00:17:06,020 --> 00:17:08,480
+and the client needs to,
+
+282
+00:17:08,480 --> 00:17:12,890
+actually the zookeeper and client basically sends heartbeats to each other,
+
+283
+00:17:12,890 --> 00:17:17,450
+if zookeeper servers doesn't hear from a client for a little while,
+
+284
+00:17:17,540 --> 00:17:20,510
+then it's just desides that client is down and close the session.
+
+285
+00:17:21,600 --> 00:17:24,450
+And so the client is trying to send messages on the session,
+
+286
+00:17:24,450 --> 00:17:26,010
+but the session is just closed is gone
+
+287
+00:17:26,550 --> 00:17:28,470
+and any files that were created in the,
+
+288
+00:17:28,470 --> 00:17:32,700
+ephemeral files that were created during that session are basically deleted.
+
+289
+00:17:34,860 --> 00:17:39,780
+And so if the network reconvenes or [reveals],
+
+290
+00:17:39,870 --> 00:17:42,780
+then the client will try to send messages over that session
+
+291
+00:17:42,780 --> 00:17:46,590
+and basically zookeeper servers say like that session doesn't exist anymore,
+
+292
+00:17:47,370 --> 00:17:49,470
+you gotta retry or restart a new session.
+
+293
+00:17:50,830 --> 00:17:51,700
+Got it, thank you.
+
+294
+00:17:53,470 --> 00:17:56,500
+Okay good, so there's one important point about this,
+
+295
+00:17:56,500 --> 00:17:59,860
+I'll call zlocks, where zookeeper locks
+
+296
+00:18:00,850 --> 00:18:05,110
+and that is they're not the same or have similar semantics,
+
+297
+00:18:05,110 --> 00:18:08,080
+like the locks that you were using or Go locks of mutexes.
+
+298
+00:18:09,360 --> 00:18:11,400
+And it's sort of an important point to realize
+
+299
+00:18:11,400 --> 00:18:12,960
+you know even though they're different,
+
+300
+00:18:12,960 --> 00:18:14,490
+we'll see in a second, they're still useful,
+
+301
+00:18:14,490 --> 00:18:17,610
+but they're not as strong as sort of the Go locks,
+
+302
+00:18:18,090 --> 00:18:20,490
+in particular the case is that is interesting is,
+
+303
+00:18:20,490 --> 00:18:22,020
+like when the lock holder fails,
+
+304
+00:18:23,360 --> 00:18:25,070
+so if lock holder fails,
+
+305
+00:18:27,930 --> 00:18:31,200
+basically zookeeper decides that lock holder has failed, correct,
+
+306
+00:18:31,200 --> 00:18:32,400
+as we just discussed,
+
+307
+00:18:32,520 --> 00:18:37,050
+then it is possible, that we're going to see some intermediate state.
+
+308
+00:18:42,820 --> 00:18:45,100
+And remember like the whole rule that locks is,
+
+309
+00:18:45,100 --> 00:18:48,580
+like its critical section you know you're some invariant is true,
+
+310
+00:18:48,610 --> 00:18:51,160
+while you're going through the critical section,
+
+311
+00:18:51,160 --> 00:18:52,600
+so that it might not be true,
+
+312
+00:18:52,600 --> 00:18:54,820
+but then at the end you reestablish new [variants].
+
+313
+00:18:56,320 --> 00:18:59,350
+In here, it's the case, like it required lock,
+
+314
+00:18:59,350 --> 00:19:01,210
+client requires lock, does some steps
+
+315
+00:19:01,240 --> 00:19:05,200
+and then you know maybe zookeeper decides if the client decides the client crash
+
+316
+00:19:05,260 --> 00:19:07,600
+and basically revokes lock,
+
+317
+00:19:07,750 --> 00:19:11,440
+but you know the state, you know the system might actually be some intermediate state
+
+318
+00:19:11,440 --> 00:19:14,080
+from which the environment was not true right,
+
+319
+00:19:14,080 --> 00:19:15,280
+so it's not the case,
+
+320
+00:19:15,280 --> 00:19:19,990
+that basically these logs guarantee adamicity of the critical section.
+
+321
+00:19:21,180 --> 00:19:26,490
+So what, so what they do, what they useful for,
+
+322
+00:19:29,510 --> 00:19:31,010
+is for some other purposes,
+
+323
+00:19:33,640 --> 00:19:35,860
+in fact sort of two primary use cases,
+
+324
+00:19:35,860 --> 00:19:37,810
+one I think is leader election,
+
+325
+00:19:43,380 --> 00:19:46,560
+so basically if we need a set of clients,
+
+326
+00:19:46,560 --> 00:19:48,090
+that need to select the leader among them,
+
+327
+00:19:48,090 --> 00:19:52,140
+you know we can all try to basically create the lock file,
+
+328
+00:19:52,170 --> 00:19:53,490
+one of them succeed,
+
+329
+00:19:53,520 --> 00:19:55,170
+that's basically then becomes a leader.
+
+330
+00:19:55,860 --> 00:20:00,660
+And that leader could clean up any intermediate states if possible if necessary,
+
+331
+00:20:02,070 --> 00:20:04,800
+or you know do these atomic updates,
+
+332
+00:20:04,800 --> 00:20:05,790
+using the ready trick,
+
+333
+00:20:05,820 --> 00:20:08,370
+where basically you do a bunch of writes to some file,
+
+334
+00:20:08,370 --> 00:20:10,500
+but then you expose the file only at the very end,
+
+335
+00:20:10,500 --> 00:20:15,810
+and that way make a set of writes actually are more transactional work.
+
+336
+00:20:16,390 --> 00:20:19,090
+So that's one use case for these kind of locks,
+
+337
+00:20:19,240 --> 00:20:22,630
+the second use case is what I call soft locks,
+
+338
+00:20:27,260 --> 00:20:30,380
+the soft locks you know the way to think about is that,
+
+339
+00:20:30,560 --> 00:20:34,250
+let's say we have a worker in the mapreduce style
+
+340
+00:20:34,340 --> 00:20:43,310
+and the map I want to basically arrange that you know every worker executes a particular map task only once
+
+341
+00:20:43,460 --> 00:20:45,200
+and so the one way to do that,
+
+342
+00:20:45,200 --> 00:20:46,760
+we basically take a lock out
+
+343
+00:20:46,760 --> 00:20:49,640
+you know for that particular input file,
+
+344
+00:20:49,880 --> 00:20:52,010
+run you know the computation
+
+345
+00:20:52,160 --> 00:20:55,070
+and then you know once the map is done,
+
+346
+00:20:55,070 --> 00:20:56,450
+then you release the lock file,
+
+347
+00:20:56,600 --> 00:21:03,650
+so this will cost only one mapper to the common case to execute a particular task
+
+348
+00:21:04,070 --> 00:21:06,800
+and and that's exactly what we want,
+
+349
+00:21:06,800 --> 00:21:09,440
+but of course you know if the mapper would fail,
+
+350
+00:21:09,440 --> 00:21:10,910
+then the lock will be released
+
+351
+00:21:11,060 --> 00:21:13,490
+and then we might execute it a second time,
+
+352
+00:21:13,490 --> 00:21:15,740
+because somebody else will try to acquire a lock
+
+353
+00:21:16,040 --> 00:21:17,000
+and so in that case,
+
+354
+00:21:17,000 --> 00:21:19,430
+you know for the case of mapreduce, that's perfectly fine, right,
+
+355
+00:21:19,640 --> 00:21:22,700
+the, it's okay if the task is executed twice,
+
+356
+00:21:24,870 --> 00:21:26,280
+it happens twice.
+
+357
+00:21:29,680 --> 00:21:31,240
+And in some ways what it really is,
+
+358
+00:21:31,240 --> 00:21:32,590
+it's more performance optimization,
+
+359
+00:21:32,590 --> 00:21:36,970
+in the usual case you wanted to you wanted that actually is execute the only once,
+
+360
+00:21:37,120 --> 00:21:38,920
+but you know if there's a failure,
+
+361
+00:21:38,920 --> 00:21:41,440
+it might be the case, that you're executing a map job twice,
+
+362
+00:21:41,740 --> 00:21:46,660
+then that thing, and the mapreduce means you set up in such a way that actually that's okay.
+
+363
+00:21:47,870 --> 00:21:48,890
+And so in those cases,
+
+364
+00:21:48,890 --> 00:21:51,170
+these sort of locks are really useful, too.
+
+365
+00:21:52,780 --> 00:21:57,240
+Any questions about this, about this perspective for locks,
+
+366
+00:21:57,240 --> 00:21:59,970
+you know the zookeeper locks are not exactly like the Go locks
+
+367
+00:21:59,970 --> 00:22:02,340
+and it's just an important thing to keep in mind.
+
+368
+00:22:03,760 --> 00:22:03,970
+Oh.
+
+369
+00:22:03,970 --> 00:22:06,820
+Yeah, go ahead, Alexander.
+
+370
+00:22:06,850 --> 00:22:08,830
+Yeah, I had a question,
+
+371
+00:22:08,830 --> 00:22:12,100
+you said that, one of the differences is that,
+
+372
+00:22:12,850 --> 00:22:20,730
+in zlocks, the, if, if the, if the server holding the lock dies,
+
+373
+00:22:20,730 --> 00:22:22,770
+then the lock can be revoked,
+
+374
+00:22:22,800 --> 00:22:27,300
+but, does that still happen if you don't pass the,
+
+375
+00:22:27,540 --> 00:22:32,140
+because there's that flag called EPHEMERAL.
+
+376
+00:22:32,140 --> 00:22:35,800
+EPHEMERAL, yeah, it only happens with the ephemeral file.
+
+377
+00:22:36,350 --> 00:22:42,080
+Right, so can we just like emulate the Go locks by not passing EPHEMERAL.
+
+378
+00:22:46,570 --> 00:22:47,470
+Okay good, what would happen then,
+
+379
+00:22:47,470 --> 00:22:48,490
+you create basically a persistent file,
+
+380
+00:22:49,040 --> 00:22:50,240
+the client dies.
+
+381
+00:22:51,400 --> 00:22:52,510
+You said the lock?
+
+382
+00:22:53,640 --> 00:22:57,570
+And so the lock will keep on existing and nobody will release it.
+
+383
+00:22:58,450 --> 00:22:59,950
+And we have a deadlock.
+
+384
+00:23:02,050 --> 00:23:07,350
+Because the one person that could release it is dead or crushed.
+
+385
+00:23:09,000 --> 00:23:11,340
+And in fact, this is why EPHEMERAL parties there.
+
+386
+00:23:13,350 --> 00:23:18,450
+Is, is it actually the only, the only person who could release it,
+
+387
+00:23:18,450 --> 00:23:20,430
+because anyone can delete that file, right,
+
+388
+00:23:20,850 --> 00:23:22,890
+you have a background, like.
+
+389
+00:23:23,220 --> 00:23:26,730
+That will break, you know maybe the other client is still running,
+
+390
+00:23:26,730 --> 00:23:28,650
+and also still thinks it holds a lock.
+
+391
+00:23:32,370 --> 00:23:33,000
+That's true.
+
+392
+00:23:33,750 --> 00:23:36,390
+You guys are getting sort of, basically you're,
+
+393
+00:23:36,390 --> 00:23:38,400
+this is consensus problem all over again, right.
+
+394
+00:23:39,350 --> 00:23:41,480
+And you know we,
+
+395
+00:23:44,820 --> 00:23:47,460
+so this is sort of a clean way to get most of it,
+
+396
+00:23:47,760 --> 00:23:50,250
+but not all of it, if you will
+
+397
+00:23:50,490 --> 00:23:52,380
+and I think if you want to make things atomic,
+
+398
+00:23:52,380 --> 00:23:55,350
+across a number of a set of writes atomic,
+
+399
+00:23:55,530 --> 00:23:58,740
+so you basically use this trick of,
+
+400
+00:24:01,540 --> 00:24:03,610
+use this trick, basically the ready trick,
+
+401
+00:24:03,610 --> 00:24:06,070
+where you do a bunch of writes and expose them at the same time.
+
+402
+00:24:10,640 --> 00:24:13,100
+Could you explain those soft locks again?
+
+403
+00:24:13,640 --> 00:24:17,510
+Okay, soft locks means that basically an operation can happen twice.
+
+404
+00:24:18,200 --> 00:24:20,120
+And so in the common case,
+
+405
+00:24:20,120 --> 00:24:22,220
+if there's no crashes, you know it will happen once,
+
+406
+00:24:22,220 --> 00:24:26,180
+you know because they are the client will take a lock out, will do the operation release,
+
+407
+00:24:26,720 --> 00:24:31,280
+and, but if their client failed, halfway through,
+
+408
+00:24:31,280 --> 00:24:34,280
+for example, then the lock would be automatically released by zookeeper
+
+409
+00:24:34,280 --> 00:24:37,640
+and then maybe a second client who execute the same map task.
+
+410
+00:24:41,710 --> 00:24:43,720
+So in the case of leader election,
+
+411
+00:24:43,720 --> 00:24:46,660
+I, what's the intermediate state could get exposed here,
+
+412
+00:24:47,080 --> 00:24:48,430
+it seems that first.
+
+413
+00:24:49,090 --> 00:24:52,090
+Okay, pure leader election there would be no intermediate state,
+
+414
+00:24:52,090 --> 00:24:54,940
+but typically the leader will create a configuration file right,
+
+415
+00:24:55,090 --> 00:24:58,720
+as we saw in zookeeper where you know using the ready trick.
+
+416
+00:25:00,060 --> 00:25:02,040
+I see, and so you just write the whole file,
+
+417
+00:25:02,040 --> 00:25:03,960
+and then convert it atomic, use name.
+
+418
+00:25:03,960 --> 00:25:04,710
+Yep.
+
+419
+00:25:06,870 --> 00:25:12,240
+Sorry, could you explain what the ready trick is, exactly.
+
+420
+00:25:13,830 --> 00:25:15,300
+I was hoping, I think we talked about last time.
+
+421
+00:25:15,660 --> 00:25:17,010
+Sorry.
+
+422
+00:25:17,010 --> 00:25:20,310
+So so maybe we, you can hold that question,
+
+423
+00:25:20,310 --> 00:25:22,230
+well I'm happy to do it at the end of the lecture again.
+
+424
+00:25:25,980 --> 00:25:29,640
+Because otherwise I have little time to actually talk about chain replication.
+
+425
+00:25:35,560 --> 00:25:37,870
+Any other [last minute] questions?
+
+426
+00:25:40,290 --> 00:25:44,550
+Okay, let me set the states where chain replication a little bit
+
+427
+00:25:44,550 --> 00:25:47,910
+and it will also come back to zookeeper in some sense
+
+428
+00:25:47,910 --> 00:25:54,030
+and basically turns out there's sort of two common approaches to build replicated state machines
+
+429
+00:25:54,330 --> 00:25:56,730
+and we really haven't called out these two approaches
+
+430
+00:25:56,850 --> 00:25:58,020
+and we've seen them,
+
+431
+00:25:58,020 --> 00:25:59,700
+but I really talked explicitly about them,
+
+432
+00:25:59,700 --> 00:26:01,470
+I want to do this, this time explicitly.
+
+433
+00:26:01,960 --> 00:26:02,530
+So.
+
+434
+00:26:05,790 --> 00:26:11,280
+Because there's some interesting observations to be made approaches to building replicated state machines.
+
+435
+00:26:14,550 --> 00:26:20,040
+And the first one is the one we've basically seen the labs,
+
+436
+00:26:20,100 --> 00:26:26,610
+which is you run all operations you know through raft,
+
+437
+00:26:30,330 --> 00:26:35,620
+raft, zookeeper raft or you know paxos whatever you know consensus,
+
+438
+00:26:35,620 --> 00:26:37,840
+you know the consensus algorithm you're using
+
+439
+00:26:38,350 --> 00:26:41,470
+and so this is sort of like the key value store, right,
+
+440
+00:26:41,500 --> 00:26:47,020
+in lab 3 where you put get operations you run older put get operations through raft
+
+441
+00:26:47,170 --> 00:26:55,410
+and you know the servers basically update you know the key value store state as the operations are coming in on the apply channel.
+
+442
+00:26:56,060 --> 00:27:00,140
+And, you know, and basically we have our replicated states,
+
+443
+00:27:00,710 --> 00:27:02,990
+so this is how lab 3 works.
+
+444
+00:27:05,960 --> 00:27:08,120
+It turns out that style,
+
+445
+00:27:08,120 --> 00:27:13,550
+where basically raft is used to also run all the operations is actually not that common,
+
+446
+00:27:14,030 --> 00:27:16,730
+we'll see some other designs later in the semester to do that too,
+
+447
+00:27:16,730 --> 00:27:17,930
+like spanner does it,
+
+448
+00:27:18,200 --> 00:27:21,380
+but it's not actually completely the standard approach
+
+449
+00:27:21,380 --> 00:27:34,470
+or more common approach actually is to have a configuration server, like zookeeper servers
+
+450
+00:27:34,860 --> 00:27:42,930
+and the configuration servers itself internally might use paxos raft or or ZAB or whatever
+
+451
+00:27:43,230 --> 00:27:50,010
+and really in the configuration servers really plays the role of the coordinator or the master,
+
+452
+00:27:50,010 --> 00:27:51,570
+like the GFS master,
+
+453
+00:27:52,140 --> 00:27:56,850
+and in addition to basically having configuration servers actually implemented,
+
+454
+00:27:57,090 --> 00:28:01,050
+using one of these raft paxos algorithms,
+
+455
+00:28:01,230 --> 00:28:04,680
+you actually run a primary backup replication.
+
+456
+00:28:12,680 --> 00:28:18,650
+And so we think about GFS you know we saw early in the semester has that sort of structure,
+
+457
+00:28:18,650 --> 00:28:20,270
+like in the GFS was a master
+
+458
+00:28:20,480 --> 00:28:24,770
+and that basically determines which set of servers hold a particular chunk,
+
+459
+00:28:25,070 --> 00:28:27,860
+so basically determined the replica group for a chunk
+
+460
+00:28:28,250 --> 00:28:33,020
+and then the replica chunk group basically executed the primary backup replication,
+
+461
+00:28:33,170 --> 00:28:35,210
+one of the chunks was the primary
+
+462
+00:28:35,330 --> 00:28:36,740
+and the other ones were the backups
+
+463
+00:28:36,740 --> 00:28:40,100
+and they basically had a protocol that they use for primary backup replication.
+
+464
+00:28:41,140 --> 00:28:43,900
+You can think about VM-FT in a similar style,
+
+465
+00:28:43,900 --> 00:28:46,510
+where configuration server is basically test and set server,
+
+466
+00:28:46,600 --> 00:28:49,000
+which basically recorded who was actually the primary
+
+467
+00:28:49,270 --> 00:28:51,250
+and then the primary backup have a protocol
+
+468
+00:28:51,250 --> 00:28:54,370
+to basically send you know channel operation down to channel
+
+469
+00:28:54,550 --> 00:28:58,180
+and so the primary backup is roughly in sync
+
+470
+00:28:58,210 --> 00:29:01,360
+and implement a replicated state machine.
+
+471
+00:29:02,540 --> 00:29:05,930
+And this approach tends to be served a more common approach,
+
+472
+00:29:10,230 --> 00:29:13,680
+although the approach number one also happens,
+
+473
+00:29:14,250 --> 00:29:16,950
+one one way to think about this,
+
+474
+00:29:16,950 --> 00:29:21,250
+is that you know if the raft states,
+
+475
+00:29:21,250 --> 00:29:24,100
+like for example our key value servers would be gigantic,
+
+476
+00:29:24,100 --> 00:29:26,260
+you know have a huge amount of this state,
+
+477
+00:29:26,290 --> 00:29:28,510
+you know terabytes of key value server,
+
+478
+00:29:28,810 --> 00:29:32,110
+would raft be very good match for that kind of application,
+
+479
+00:29:34,740 --> 00:29:35,940
+or what is the risk,
+
+480
+00:29:38,610 --> 00:29:39,900
+or the potential problem.
+
+481
+00:29:47,380 --> 00:29:50,470
+We flush the log very often,
+
+482
+00:29:50,470 --> 00:29:53,360
+so maybe that could be problematic.
+
+483
+00:29:53,750 --> 00:29:57,920
+Could be problematic, what how what's the size of the checkpoint,
+
+484
+00:29:59,740 --> 00:30:02,080
+if our key value server is really big.
+
+485
+00:30:04,930 --> 00:30:07,450
+It's linear in the size of the key values.
+
+486
+00:30:07,450 --> 00:30:09,550
+Yeah, so that could also be gigantic,
+
+487
+00:30:09,640 --> 00:30:12,790
+so at any you know any time the checkpoint has to be sent,
+
+488
+00:30:12,820 --> 00:30:14,320
+you know it's going to be a big checkpoint.
+
+489
+00:30:14,900 --> 00:30:17,150
+And so the raft it's not really sort of set up,
+
+490
+00:30:17,150 --> 00:30:20,780
+you know, so the primary is going to communicate,
+
+491
+00:30:20,780 --> 00:30:23,270
+you know the new primary is going to communicate these snapshots
+
+492
+00:30:23,270 --> 00:30:25,910
+you did in lab 2d you know to the the backups,
+
+493
+00:30:25,910 --> 00:30:27,020
+they're gonna be big.
+
+494
+00:30:27,760 --> 00:30:31,210
+And so you often want to be a little bit more clever plan
+
+495
+00:30:31,390 --> 00:30:34,840
+to synchronize and re-synchronize new servers
+
+496
+00:30:35,020 --> 00:30:40,840
+and so and one reason that basically often these things are split into two different pieces
+
+497
+00:30:40,840 --> 00:30:44,290
+where the configuration servers that basically small in terms of state
+
+498
+00:30:44,590 --> 00:30:49,450
+and then you know primary backup plan actually may replicate huge amount of data.
+
+499
+00:30:50,390 --> 00:30:53,510
+And so this is why, one reason you see sort of both approaches.
+
+500
+00:30:54,920 --> 00:30:55,640
+Does that make sense?
+
+501
+00:30:57,620 --> 00:30:59,630
+I'll come back to that at the end of the lecture again,
+
+502
+00:30:59,690 --> 00:31:01,820
+but it's important to keep this in mind.
+
+503
+00:31:02,470 --> 00:31:06,130
+So what approach or what benefits does 1 give over 2.
+
+504
+00:31:07,360 --> 00:31:10,150
+You don't have to have two of them, right,
+
+505
+00:31:10,150 --> 00:31:12,160
+in one you basically have raft,
+
+506
+00:31:12,160 --> 00:31:15,520
+you run the operations for [] and then does the configuration for you too,
+
+507
+00:31:15,880 --> 00:31:19,450
+so everything is in a single, single component,
+
+508
+00:31:20,320 --> 00:31:22,690
+and here in number two, we have two components,
+
+509
+00:31:22,690 --> 00:31:25,600
+you know we have a configuration service, that includes raft
+
+510
+00:31:25,690 --> 00:31:27,820
+and we have a primary backup scheme.
+
+511
+00:31:30,400 --> 00:31:33,820
+So maybe this will become more clear, as we talk about chain replication.
+
+512
+00:31:36,480 --> 00:31:37,470
+Yeah.
+
+513
+00:31:37,470 --> 00:31:39,150
+I had a really quick question,
+
+514
+00:31:39,180 --> 00:31:41,070
+so I especially for two,
+
+515
+00:31:41,400 --> 00:31:45,270
+I guess would like what the advantage being that you have like,
+
+516
+00:31:45,270 --> 00:31:47,250
+if consensus reached through the leader
+
+517
+00:31:47,370 --> 00:31:49,320
+and the leader never fails, right, like.
+
+518
+00:31:50,220 --> 00:31:52,110
+Yeah, so the advantage of two is that,
+
+519
+00:31:52,110 --> 00:31:54,150
+as we see in second in chain replication
+
+520
+00:31:54,300 --> 00:31:57,840
+is there's a separate process that takes care of the configuration part
+
+521
+00:31:57,870 --> 00:32:01,710
+and you don't have to worry about in terms of your primary backup replication scheme.
+
+522
+00:32:02,600 --> 00:32:05,270
+And that just decides like GFS,
+
+523
+00:32:05,270 --> 00:32:07,760
+that's sort of like the master, it just decides for a couple of here,
+
+524
+00:32:07,760 --> 00:32:10,100
+set up have the servers to form this particular replica group.
+
+525
+00:32:10,620 --> 00:32:14,610
+And backup primary backup protocol doesn't have to think about this.
+
+526
+00:32:16,240 --> 00:32:16,690
+Thanks.
+
+527
+00:32:17,370 --> 00:32:20,790
+And so this is a good introduction to chain replication,
+
+528
+00:32:20,790 --> 00:32:30,030
+because the chain replication is exactly that sort of a primary backup replication scheme for approach two.
+
+529
+00:32:35,650 --> 00:32:38,980
+And that is to say that you know chain replication issues,
+
+530
+00:32:39,010 --> 00:32:41,980
+there is a configuration servers,
+
+531
+00:32:42,430 --> 00:32:45,010
+then I think they called the master process in paper.
+
+532
+00:32:45,880 --> 00:32:50,050
+Then chain replication themselves, there's a couple of cool properties,
+
+533
+00:32:50,580 --> 00:32:58,670
+one read operations, or as they call them query operations involve only one server,
+
+534
+00:33:01,430 --> 00:33:04,490
+namely the tail as we've seen in a second.
+
+535
+00:33:07,120 --> 00:33:11,620
+Another nice property about chain replication that has a very simple recovery plan.
+
+536
+00:33:13,510 --> 00:33:15,940
+I'm going to talk about all of these in more detail in the second.
+
+537
+00:33:18,910 --> 00:33:21,040
+And there's only something that you started,
+
+538
+00:33:21,220 --> 00:33:23,890
+have you you appreciate given the fact
+
+539
+00:33:23,890 --> 00:33:25,780
+how complicated can be in raft,
+
+540
+00:33:26,230 --> 00:33:33,610
+and it provides actually strong strong properties, namely linearizability,
+
+541
+00:33:34,550 --> 00:33:36,140
+if we put in the get operations
+
+542
+00:33:36,650 --> 00:33:38,960
+and finally just a lot of people ask,
+
+543
+00:33:38,960 --> 00:33:41,180
+there's actually a reasonable influential design,
+
+544
+00:33:43,020 --> 00:33:45,180
+and used by quite a number of systems,
+
+545
+00:33:46,640 --> 00:33:48,530
+so these are used in practice.
+
+546
+00:33:50,080 --> 00:33:52,210
+This is going to talk about each of these components
+
+547
+00:33:52,210 --> 00:33:53,470
+and we'll get more detail
+
+548
+00:33:53,710 --> 00:33:57,220
+and then we'll come back to this sort of approach one versus approach two.
+
+549
+00:34:00,250 --> 00:34:02,050
+So in terms of an overview,
+
+550
+00:34:07,060 --> 00:34:09,880
+oops, there's an overview,
+
+551
+00:34:10,210 --> 00:34:19,230
+new sort of [delay] of the land, you know there is a massive process or a configuration service.
+
+552
+00:34:23,820 --> 00:34:29,640
+And then basically keep track you know which server is going to belong to a particular change.
+
+553
+00:34:30,320 --> 00:34:34,850
+So S1 S2 S3 you know basically have a record of what the chain is,
+
+554
+00:34:34,970 --> 00:34:37,130
+who the head is and who the tail is
+
+555
+00:34:37,160 --> 00:34:39,440
+and so that could be configuration servers
+
+556
+00:34:39,440 --> 00:34:41,750
+and here we do actually have our servers,
+
+557
+00:34:41,750 --> 00:34:47,120
+you know S1 S2 S3,
+
+558
+00:34:49,870 --> 00:34:55,770
+and one of them is the head, typically the one with the smaller number
+
+559
+00:34:55,770 --> 00:34:57,570
+and one is the tail.
+
+560
+00:35:00,160 --> 00:35:01,780
+And so we have a client,
+
+561
+00:35:03,190 --> 00:35:05,590
+the client may talk to the configuration server,
+
+562
+00:35:05,590 --> 00:35:08,860
+who are actually part of the chain
+
+563
+00:35:09,130 --> 00:35:12,700
+and then it sends a write request to the head,
+
+564
+00:35:13,370 --> 00:35:15,770
+so this is a protocol in chain replication,
+
+565
+00:35:15,770 --> 00:35:19,960
+the write request always goes to the, the head
+
+566
+00:35:20,230 --> 00:35:22,360
+and what the head does, the head basically pushes,
+
+567
+00:35:22,360 --> 00:35:25,780
+you know the head actually applies the operation on its state
+
+568
+00:35:25,780 --> 00:35:28,030
+and maybe it has a disk associated with it,
+
+569
+00:35:28,030 --> 00:35:30,250
+whatever the key value server on it,
+
+570
+00:35:30,790 --> 00:35:33,130
+and then it sends the update,
+
+571
+00:35:33,160 --> 00:35:40,910
+you know there's all of the operation down the chain in FIFO order and reliably,
+
+572
+00:35:41,090 --> 00:35:44,450
+so S1 will send the update to S2,
+
+573
+00:35:44,810 --> 00:35:46,520
+S2 it has make its own disk,
+
+574
+00:35:46,550 --> 00:35:51,050
+apply the operation or the state change to its state,
+
+575
+00:35:51,500 --> 00:35:53,300
+once actually applyed it,
+
+576
+00:35:53,510 --> 00:35:58,400
+you know it will forward it to the last node in the chain,
+
+577
+00:35:58,400 --> 00:36:00,560
+this, because there are only three nodes in this particular chain,
+
+578
+00:36:00,560 --> 00:36:04,070
+you could have chains are longer, if you want more availability.
+
+579
+00:36:04,690 --> 00:36:10,270
+And when the last node gets the message which state change,
+
+580
+00:36:10,360 --> 00:36:12,640
+it applies to its state
+
+581
+00:36:13,510 --> 00:36:18,700
+and then this is the charge actually we're sending an acknowledgment back to the client,
+
+582
+00:36:20,440 --> 00:36:22,660
+so it's the tail who sends the acknowledgement back.
+
+583
+00:36:25,180 --> 00:36:28,810
+And so one way to think about this is that,
+
+584
+00:36:28,810 --> 00:36:33,700
+when the tail or in this case as 3 you know actually applies to state change,
+
+585
+00:36:33,730 --> 00:36:35,080
+that's sort of the commit point.
+
+586
+00:36:39,080 --> 00:36:40,760
+And the reason that this is the commit point
+
+587
+00:36:40,760 --> 00:36:44,660
+is because subsequent reads always come from the tail,
+
+588
+00:36:44,720 --> 00:36:50,010
+so if anybody or any other client you know does a read operation,
+
+589
+00:36:50,010 --> 00:36:51,300
+they always go to the tail,
+
+590
+00:36:52,160 --> 00:36:54,500
+and the tail basically responds immediately back to them.
+
+591
+00:36:55,360 --> 00:36:57,160
+So read operations go to the tail,
+
+592
+00:36:57,190 --> 00:36:59,320
+so here's client 1, here is client 2,
+
+593
+00:36:59,560 --> 00:37:01,720
+client 2 does read operation,
+
+594
+00:37:01,720 --> 00:37:03,490
+it goes through the tail,
+
+595
+00:37:03,490 --> 00:37:04,960
+the tail responds and that's it.
+
+596
+00:37:06,630 --> 00:37:09,030
+And so there's a couple things that I wanted to point out,
+
+597
+00:37:09,270 --> 00:37:12,960
+the one of the interesting points out is that,
+
+598
+00:37:12,960 --> 00:37:16,400
+the read operations just involve one server, right,
+
+599
+00:37:16,400 --> 00:37:18,950
+like if you remember from lab 3
+
+600
+00:37:18,980 --> 00:37:21,860
+or if you have any progress, we've started to do lab 3,
+
+601
+00:37:21,950 --> 00:37:26,420
+read operations actually involved you know in our implementation,
+
+602
+00:37:26,420 --> 00:37:30,140
+read operation go through the raft log
+
+603
+00:37:30,140 --> 00:37:34,310
+and all that kind of stuff the paper discusses an optimization,
+
+604
+00:37:34,550 --> 00:37:36,800
+but the read operation always goes to the leader
+
+605
+00:37:36,800 --> 00:37:39,950
+and the leader first has to contact the majority of the servers,
+
+606
+00:37:39,950 --> 00:37:41,990
+before it can execute the operation local.
+
+607
+00:37:42,410 --> 00:37:44,180
+So what you see here is that,
+
+608
+00:37:44,330 --> 00:37:46,100
+the read operation actually go to complete,
+
+609
+00:37:46,100 --> 00:37:49,910
+so that different server from write operations,
+
+610
+00:37:49,910 --> 00:37:53,480
+so the read and write workload is excellent spread at least over two servers,
+
+611
+00:37:54,360 --> 00:37:58,560
+for more read operation involves only one server,
+
+612
+00:37:58,560 --> 00:38:01,260
+there's never, doesn't have to talk to any other server,
+
+613
+00:38:01,260 --> 00:38:02,250
+it can just respond immediately
+
+614
+00:38:02,400 --> 00:38:03,600
+and we'll see a little bit later
+
+615
+00:38:03,810 --> 00:38:06,180
+why this is actually important
+
+616
+00:38:06,180 --> 00:38:09,360
+or why this is actually what further optimization this allows.
+
+617
+00:38:10,400 --> 00:38:13,070
+So the commit point is really you know the point,
+
+618
+00:38:13,070 --> 00:38:15,650
+that the write actually happens at the tail end,
+
+619
+00:38:15,800 --> 00:38:19,640
+because at that point the write operation is visible to readers
+
+620
+00:38:19,640 --> 00:38:21,500
+and not before any other points.
+
+621
+00:38:22,780 --> 00:38:26,260
+And this also you know provides this linearizability,
+
+622
+00:38:26,260 --> 00:38:27,580
+so it's pretty easy to see that,
+
+623
+00:38:27,580 --> 00:38:31,270
+in the case of no crashes, scheme guarantees linearizability,
+
+624
+00:38:31,270 --> 00:38:34,840
+because the writes are all applied in sum total order at the head
+
+625
+00:38:35,380 --> 00:38:40,150
+and when the tail receives you know that update,
+
+626
+00:38:40,180 --> 00:38:41,800
+it's, it's the commit point,
+
+627
+00:38:41,800 --> 00:38:44,800
+it wants to respond to the client and sent the request back.
+
+628
+00:38:45,240 --> 00:38:48,150
+If you know that same client immediately does a read operation,
+
+629
+00:38:48,270 --> 00:38:49,710
+it will go to the tail
+
+630
+00:38:49,710 --> 00:38:51,600
+and it will observe the last change.
+
+631
+00:38:52,200 --> 00:38:55,140
+So, certainly within a single client,
+
+632
+00:38:55,140 --> 00:38:57,030
+basically all operations are totally ordered,
+
+633
+00:38:57,760 --> 00:38:59,830
+it's pretty easy to see that in client,
+
+634
+00:38:59,830 --> 00:39:04,810
+if client 2 start to read operation after client 1 operation is finished,
+
+635
+00:39:05,020 --> 00:39:07,810
+and when it finished, when the tail has responded,
+
+636
+00:39:07,990 --> 00:39:11,020
+so any read operation that starts after a write operation
+
+637
+00:39:11,290 --> 00:39:15,070
+will observe you know the last or the result of the most recent write
+
+638
+00:39:15,460 --> 00:39:17,680
+and so it's pretty easy to get an intuition here,
+
+639
+00:39:17,680 --> 00:39:20,230
+that you know this is going to provide us with linearizability.
+
+640
+00:39:22,050 --> 00:39:22,650
+Okay?
+
+641
+00:39:23,460 --> 00:39:28,410
+So, what I like to do now is actually to take a quick break out room section
+
+642
+00:39:28,410 --> 00:39:32,130
+and I would like you to discuss the question
+
+643
+00:39:32,130 --> 00:39:33,570
+that was a post in lecture,
+
+644
+00:39:33,720 --> 00:39:35,010
+you know what could go wrong
+
+645
+00:39:35,010 --> 00:39:38,400
+or like what a great linearizability,
+
+646
+00:39:38,400 --> 00:39:42,030
+if instead of having the tail responds to the client,
+
+647
+00:39:42,330 --> 00:39:46,920
+have the head responded to the client immediately after it is received,
+
+648
+00:39:46,950 --> 00:39:50,070
+you know the write request.
+
+649
+00:39:51,360 --> 00:39:54,630
+And maybe those are good topics or to debate a little bit
+
+650
+00:39:54,630 --> 00:39:58,470
+and if you want to go in any other direction to talk about chain replication [] welcome,
+
+651
+00:39:58,470 --> 00:40:00,090
+maybe that's something to start with.
+
+652
+00:40:00,720 --> 00:40:02,550
+So let's take a five minute breakout room
+
+653
+00:40:02,550 --> 00:40:06,760
+and then we'll do this and I think,
+
+654
+00:40:07,280 --> 00:40:09,500
+let me see, or [] you're going to do it.
+
+655
+00:40:10,320 --> 00:40:13,530
+And yet and okay.
+
+656
+00:40:13,530 --> 00:40:15,120
+You have to make you something, or.
+
+657
+00:40:15,120 --> 00:40:16,860
+I don't think it's necessary.
+
+658
+00:40:17,460 --> 00:40:20,790
+I think it zoom change, so it should be possible there, too.
+
+659
+00:40:24,760 --> 00:40:28,260
+Zooms, yep, that's right.
+
+660
+00:40:31,810 --> 00:40:33,250
+Yep, okay.
+
+661
+00:47:43,180 --> 00:47:44,740
+Hey, we're coming back.
+
+662
+00:47:45,250 --> 00:47:46,810
+Yeah, whenever you.
+
+663
+00:47:46,990 --> 00:47:47,770
+I'm ready.
+
+664
+00:47:48,100 --> 00:47:51,160
+Okay, I mean I think I can close to [zooms].
+
+665
+00:48:57,530 --> 00:48:59,240
+Right, back.
+
+666
+00:49:07,090 --> 00:49:11,710
+Okay, so you know just quickly to summarize,
+
+667
+00:49:11,740 --> 00:49:15,370
+why you know that would break the linearizability,
+
+668
+00:49:15,400 --> 00:49:24,130
+so protocol change change that was contemplated was to you know both keep propagating to S1 and S2 S3,
+
+669
+00:49:24,310 --> 00:49:27,250
+but you know as soon as S1 actually has done,
+
+670
+00:49:27,310 --> 00:49:31,120
+which propagation as it responds back to a client
+
+671
+00:49:31,720 --> 00:49:34,930
+and clearly this will break the linearizability,
+
+672
+00:49:34,930 --> 00:49:39,010
+because, let's say the client 1 to write got the acknowledgement back,
+
+673
+00:49:39,010 --> 00:49:40,420
+you know from S1,
+
+674
+00:49:40,480 --> 00:49:43,990
+S1 of course has the write also in progress S2 and S3,
+
+675
+00:49:44,110 --> 00:49:47,620
+but maybe before you know S2 actually context S3,
+
+676
+00:49:47,620 --> 00:49:52,400
+the client actually sends a read operation you know to S3
+
+677
+00:49:52,550 --> 00:49:56,990
+and of course now it will return a value from before the write stops,
+
+678
+00:49:56,990 --> 00:49:59,810
+so the client doesn't even observe its own writes
+
+679
+00:49:59,810 --> 00:50:02,660
+and so clearly a break linearizability,
+
+680
+00:50:03,020 --> 00:50:05,960
+and so it's very important, that you know as I said earlier,
+
+681
+00:50:05,960 --> 00:50:11,870
+that's the tail actually since the acknowledgement back to the client,
+
+682
+00:50:12,110 --> 00:50:17,120
+because really the once the tail has processed the write operation,
+
+683
+00:50:17,120 --> 00:50:19,430
+that is actually really what the commit point is.
+
+684
+00:50:22,200 --> 00:50:23,370
+Any questions about that?
+
+685
+00:50:28,400 --> 00:50:31,040
+Okay, so this was sort of normal operations
+
+686
+00:50:31,370 --> 00:50:33,860
+and let me talk a little bit about crashes,
+
+687
+00:50:35,870 --> 00:50:37,550
+since it's 6.824 distributed systems,
+
+688
+00:50:37,550 --> 00:50:40,220
+so all the action is where when the failures happen.
+
+689
+00:50:42,850 --> 00:50:47,260
+And one of the things that is cool about chain replication is
+
+690
+00:50:47,290 --> 00:50:50,140
+you know the number of failure scenarios is actually quite limited.
+
+691
+00:50:50,810 --> 00:50:54,230
+And so, let me basically three cases,
+
+692
+00:50:54,230 --> 00:50:58,250
+namely the head fails, the one of the intermediate server fails, or tail fails,
+
+693
+00:50:58,760 --> 00:51:01,580
+so let's look at one of each one of each of those cases,
+
+694
+00:51:01,580 --> 00:51:06,080
+so here's are you know the case we have a head S1,
+
+695
+00:51:06,320 --> 00:51:11,500
+let's say that it applied U1, U2 and U3 sort for updates,
+
+696
+00:51:12,330 --> 00:51:14,100
+talks to S2,
+
+697
+00:51:15,050 --> 00:51:18,620
+maybe S2 has done U2 and U1,
+
+698
+00:51:19,930 --> 00:51:23,320
+and you know where we have S3 which is the tail,
+
+699
+00:51:23,940 --> 00:51:26,130
+and it only has done one so far
+
+700
+00:51:26,310 --> 00:51:30,420
+and so the client client was talking to S1,
+
+701
+00:51:31,500 --> 00:51:35,220
+and we don't want to think about what happens
+
+702
+00:51:35,220 --> 00:51:38,130
+and what needs to happen in one of these crashes.
+
+703
+00:51:38,310 --> 00:51:42,180
+So let's start with the case that the head crashes,
+
+704
+00:51:42,730 --> 00:51:45,370
+and so the head crashes what needs to be done,
+
+705
+00:51:47,530 --> 00:51:50,020
+this is an easy case or hard case.
+
+706
+00:51:53,070 --> 00:51:53,850
+Easier.
+
+707
+00:51:54,060 --> 00:51:55,980
+I hope in easy case, why [].
+
+708
+00:51:56,780 --> 00:52:00,050
+You can just caught off the head,
+
+709
+00:52:00,470 --> 00:52:02,390
+oh, sorry the yeah the head,
+
+710
+00:52:02,390 --> 00:52:05,900
+and you know make S2 a head now.
+
+711
+00:52:06,170 --> 00:52:10,070
+Yeah, you know, so what's going to happen correct is
+
+712
+00:52:10,070 --> 00:52:12,590
+the configuration server discovers that S1 is gone,
+
+713
+00:52:13,080 --> 00:52:14,610
+what decides if S1 is gone
+
+714
+00:52:14,880 --> 00:52:23,880
+and then basically can promote S2 to be the head in the subsequent operations
+
+715
+00:52:24,120 --> 00:52:26,970
+and clients now in the future and talk to this guy
+
+716
+00:52:27,120 --> 00:52:28,440
+and why is this correct,
+
+717
+00:52:29,690 --> 00:52:31,400
+so what operation have we lost.
+
+718
+00:52:33,100 --> 00:52:34,630
+We lost U3.
+
+719
+00:52:34,720 --> 00:52:36,130
+Yeah, is that a problem?
+
+720
+00:52:36,840 --> 00:52:39,150
+That's valid to lose operations.
+
+721
+00:52:39,360 --> 00:52:42,690
+Yeah, yeah, it's fair game to lose U3,
+
+722
+00:52:42,720 --> 00:52:44,370
+U3 has not been committed,
+
+723
+00:52:44,400 --> 00:52:46,500
+because only operations at the tail committed
+
+724
+00:52:46,980 --> 00:52:49,290
+and so just as if the operation never happens,
+
+725
+00:52:49,290 --> 00:52:51,420
+you know the client could not even have observed,
+
+726
+00:52:51,450 --> 00:52:55,890
+you know that actually you this U2 or U3 actually it happens,
+
+727
+00:52:55,890 --> 00:52:56,820
+or U3 it should happen.
+
+728
+00:52:57,310 --> 00:53:00,010
+Okay, so it's perfectly fine to do this,
+
+729
+00:53:00,130 --> 00:53:03,580
+why is it important configuration servers actually involved here,
+
+730
+00:53:03,580 --> 00:53:06,610
+could like S2 decide on its own to become the head,
+
+731
+00:53:07,380 --> 00:53:07,860
+let's say yes,
+
+732
+00:53:07,860 --> 00:53:09,150
+you couldn't talk to anyone anymore
+
+733
+00:53:09,150 --> 00:53:11,160
+and decides like whatever I want to become head,
+
+734
+00:53:11,780 --> 00:53:12,680
+would that be valid?
+
+735
+00:53:14,770 --> 00:53:18,790
+What is that, like maybe create a split.
+
+736
+00:53:18,940 --> 00:53:22,270
+Yeah, yeah, that would create a split ring, right,
+
+737
+00:53:22,270 --> 00:53:23,320
+because it might get S2,
+
+738
+00:53:23,320 --> 00:53:25,750
+might just be partitioned from S1
+
+739
+00:53:26,140 --> 00:53:27,940
+and so now both are heads,
+
+740
+00:53:28,210 --> 00:53:30,100
+maybe both are processing commands,
+
+741
+00:53:30,100 --> 00:53:31,870
+will be you know violate are,
+
+742
+00:53:32,170 --> 00:53:37,000
+you know basically trying to do this whole property having the total order,
+
+743
+00:53:38,190 --> 00:53:38,550
+we can now.
+
+744
+00:53:38,550 --> 00:53:43,440
+Also, does this two even know that this one is a head,
+
+745
+00:53:43,560 --> 00:53:45,660
+because it just receives.
+
+746
+00:53:46,360 --> 00:53:49,900
+You probably got it from the configuration information in previous time,
+
+747
+00:53:50,350 --> 00:53:53,620
+like when configuration service decides a new configuration,
+
+748
+00:53:53,620 --> 00:53:57,010
+they can tell all the servers and whatever and the clients actually care
+
+749
+00:53:57,040 --> 00:53:58,300
+you know here's the new configuration.
+
+750
+00:54:00,090 --> 00:54:03,870
+Does this only happen when S1 to S2 connection is separate
+
+751
+00:54:03,870 --> 00:54:06,870
+or wait what, what causes the split brain again?
+
+752
+00:54:07,760 --> 00:54:12,650
+Split brain would happen if S2 on its own decided that S1 has failed and became the head.
+
+753
+00:54:13,220 --> 00:54:15,290
+So we're not allowed to have that happen
+
+754
+00:54:15,290 --> 00:54:18,440
+and the way actually the little work out in practice is that,
+
+755
+00:54:18,440 --> 00:54:19,790
+there is a configuration server
+
+756
+00:54:20,030 --> 00:54:22,610
+that actually decides what is actually the current configuration
+
+757
+00:54:23,300 --> 00:54:26,810
+and so if it decides that S1 is dead,
+
+758
+00:54:27,170 --> 00:54:29,630
+then it can inform S2 S3
+
+759
+00:54:29,630 --> 00:54:34,310
+saying like hey you guys are now the new chain and S2 the head.
+
+760
+00:54:35,030 --> 00:54:36,590
+And when that change happens,
+
+761
+00:54:36,590 --> 00:54:38,660
+so in this case basically S1 is dropped,
+
+762
+00:54:38,690 --> 00:54:40,850
+nothing else has to happen,
+
+763
+00:54:40,850 --> 00:54:43,310
+because S2 has,
+
+764
+00:54:43,550 --> 00:54:45,170
+the only update that we lost,
+
+765
+00:54:45,170 --> 00:54:46,730
+the one actually was not committed anyway,
+
+766
+00:54:46,730 --> 00:54:48,320
+so there's nothing to be repaired further.
+
+767
+00:54:49,990 --> 00:54:54,730
+So making this go from this setting from three replica with the dropping the head
+
+768
+00:54:54,730 --> 00:54:56,620
+is basically pretty straightforward operation.
+
+769
+00:55:00,140 --> 00:55:00,950
+Okay?
+
+770
+00:55:01,450 --> 00:55:03,640
+Professor, I have a question,
+
+771
+00:55:03,640 --> 00:55:06,400
+so there's there's an assumption here,
+
+772
+00:55:06,400 --> 00:55:10,720
+that like the commands that,
+
+773
+00:55:10,720 --> 00:55:17,620
+like like leave S1 like will arrive in order and S2,
+
+774
+00:55:17,950 --> 00:55:21,530
+is that like, is that a reasonable assumption, for like.
+
+775
+00:55:21,830 --> 00:55:23,450
+Well, I think the way they,
+
+776
+00:55:23,480 --> 00:55:28,070
+so they basically say we need a reliable FIFO between S1 and S2 right,
+
+777
+00:55:28,070 --> 00:55:29,000
+S2 to S3
+
+778
+00:55:29,060 --> 00:55:32,330
+and I think the way they implement, that is probably using TCP connection.
+
+779
+00:55:36,470 --> 00:55:39,690
+Okay thanks. Okay, so let's look at the second case.
+
+780
+00:55:40,200 --> 00:55:47,510
+So we're have you know S1, you know S2, S3
+
+781
+00:55:47,660 --> 00:55:50,060
+and of course there could be more you know servers into chain,
+
+782
+00:55:50,060 --> 00:55:53,480
+but like you know three enough for us to consider all the cases
+
+783
+00:55:54,020 --> 00:55:57,950
+and so now what we want to do take the case where a middle one crashes,
+
+784
+00:55:58,790 --> 00:55:59,720
+this one crashes.
+
+785
+00:56:00,780 --> 00:56:05,760
+And, so the configuration server at some point besides S2 crash
+
+786
+00:56:05,760 --> 00:56:07,530
+you know informs S1 S3,
+
+787
+00:56:07,530 --> 00:56:10,050
+that basically they form the new chain,
+
+788
+00:56:10,730 --> 00:56:14,660
+and we're wondering about like what else needs to happen.
+
+789
+00:56:16,010 --> 00:56:18,110
+We saw in the first case, the head drops,
+
+790
+00:56:18,140 --> 00:56:20,000
+then nothing really has to be done,
+
+791
+00:56:20,000 --> 00:56:21,260
+other than updating the chain,
+
+792
+00:56:21,260 --> 00:56:22,400
+now we're updating the chain,
+
+793
+00:56:22,400 --> 00:56:24,740
+the question is is anything needs to happen.
+
+794
+00:56:26,850 --> 00:56:29,880
+The S1 needs to send to S3,
+
+795
+00:56:29,880 --> 00:56:31,650
+the request that it sent to S2,
+
+796
+00:56:31,650 --> 00:56:37,770
+but didn't make it to S3.
+
+797
+00:56:38,220 --> 00:56:41,400
+Yes, we have you know U1 U2 U3,
+
+798
+00:56:41,400 --> 00:56:43,410
+this guy had see U1 and U2,
+
+799
+00:56:43,920 --> 00:56:47,280
+and this guy see U1, and the U2 that's actually in progress,
+
+800
+00:56:47,280 --> 00:56:52,440
+you know the I got lost S2,
+
+801
+00:56:52,440 --> 00:56:54,900
+basically S1 has to bring S3 up to date,
+
+802
+00:56:54,930 --> 00:56:57,030
+basically forward U2 and U3.
+
+803
+00:56:58,120 --> 00:57:00,430
+Okay, so that's a little bit of work involved,
+
+804
+00:57:00,700 --> 00:57:03,900
+let's consider the final case, the tail.
+
+805
+00:57:04,820 --> 00:57:06,890
+So here we go again,
+
+806
+00:57:06,920 --> 00:57:08,090
+we have three cases,
+
+807
+00:57:09,200 --> 00:57:14,540
+S1 or three servers S2, the third one is 3.
+
+808
+00:57:16,240 --> 00:57:21,820
+And, let's see, so the tail crashes.
+
+809
+00:57:22,990 --> 00:57:25,300
+And so at some point in time,
+
+810
+00:57:25,300 --> 00:57:30,730
+the configuration server notices decides that the new chain is going to be S1 and S2
+
+811
+00:57:30,730 --> 00:57:33,220
+tells S1 and S2 that they are part of the new chain
+
+812
+00:57:33,670 --> 00:57:36,370
+and what else needs to happen.
+
+813
+00:57:38,240 --> 00:57:39,770
+Well, let's write down,
+
+814
+00:57:40,160 --> 00:57:44,710
+we know, these guys have seen U1 U2 and U3,
+
+815
+00:57:44,710 --> 00:57:46,750
+this guy I've seen U1 U2,
+
+816
+00:57:48,040 --> 00:57:50,710
+so who becomes the new tail in this scenario?
+
+817
+00:57:51,990 --> 00:57:52,590
+S2.
+
+818
+00:57:52,860 --> 00:57:54,480
+Yes, S2 becomes new tail
+
+819
+00:57:54,690 --> 00:57:56,340
+and anything else that needs to happen?
+
+820
+00:57:57,380 --> 00:58:01,850
+I guess the client needs to be informed that S2 is the.
+
+821
+00:58:02,300 --> 00:58:04,970
+Yeah, that's the client might learn from the configuration server, correct.
+
+822
+00:58:05,750 --> 00:58:08,120
+And so yeah, but nothing else has to happen, right,
+
+823
+00:58:08,120 --> 00:58:14,900
+because the, all the committed, you know the no committed operations are lost,
+
+824
+00:58:15,080 --> 00:58:23,810
+and you know, and as we are still in needs to still be actually propagated to S2 will be just happening.
+
+825
+00:58:24,740 --> 00:58:26,750
+Okay, so dropping the tail is also reasonable straightforward.
+
+826
+00:58:26,750 --> 00:58:29,300
+So dropping the tail, the head is a reasonable straightforward,
+
+827
+00:58:29,510 --> 00:58:31,460
+dropping the middle one is a bit more complicated,
+
+828
+00:58:31,670 --> 00:58:33,050
+but not much more complicated,
+
+829
+00:58:33,320 --> 00:58:37,270
+and the key thing go I want to sort of emphasize here is,
+
+830
+00:58:37,420 --> 00:58:40,600
+how does this compare to figure 7 and 8 in the raft paper.
+
+831
+00:58:49,080 --> 00:58:51,180
+Maybe to, yeah, go ahead.
+
+832
+00:58:52,620 --> 00:59:02,700
+Question, so,
+
+833
+00:59:02,700 --> 00:59:05,280
+that these new operations have been automatically.
+
+834
+00:59:06,210 --> 00:59:08,100
+Um, sorry I didn't hear you,
+
+835
+00:59:08,130 --> 00:59:11,520
+were pretty pretty noisy connection there.
+
+836
+00:59:12,890 --> 00:59:16,970
+Yeah, like I'm just saying, that S2 becomes new tail,
+
+837
+00:59:17,360 --> 00:59:19,910
+don't have to send acknowledgment back to the client
+
+838
+00:59:19,910 --> 00:59:22,310
+and there are some entries that have been automatically committed.
+
+839
+00:59:23,810 --> 00:59:25,430
+Yeah, that might be the case,
+
+840
+00:59:25,430 --> 00:59:29,390
+that what happens is the client is probably going to retry, right
+
+841
+00:59:29,870 --> 00:59:35,240
+and we have to have a separate duplication scheme like in lab 3 anyway.
+
+842
+00:59:36,470 --> 00:59:39,920
+And so there's kind of a couple different ways about how to do it,
+
+843
+00:59:39,920 --> 00:59:42,170
+the paper are not particularly clear which one it will take.
+
+844
+00:59:43,610 --> 00:59:44,660
+Okay, I see, thank you.
+
+845
+00:59:45,660 --> 00:59:47,850
+Yeah, like in that in that case,
+
+846
+00:59:47,850 --> 00:59:49,470
+didn't didn't the paper just say like,
+
+847
+00:59:50,120 --> 00:59:51,590
+you know it might like,
+
+848
+00:59:52,160 --> 00:59:53,480
+even if it doesn't respond it,
+
+849
+00:59:53,480 --> 00:59:55,460
+could or could not have succeeded.
+
+850
+00:59:57,950 --> 00:59:59,930
+Okay, so back to my actual original question,
+
+851
+00:59:59,930 --> 01:00:02,090
+which is like, you know how does this contrast,
+
+852
+01:00:02,090 --> 01:00:05,720
+this picture of my my drawn picture here on this white board,
+
+853
+01:00:05,720 --> 01:00:07,490
+how does that contrast to figure 7 and 8?
+
+854
+01:00:08,610 --> 01:00:09,240
+Simpler?
+
+855
+01:00:09,780 --> 01:00:13,200
+Yeah, I mean that's the key point I wanted to get across, right,
+
+856
+01:00:13,200 --> 01:00:15,810
+you know there's not that many cases to consider here,
+
+857
+01:00:15,810 --> 01:00:16,920
+basically three cases,
+
+858
+01:00:17,280 --> 01:00:23,400
+which is like slightly you know quite a bit simpler than the case of the raft paper,
+
+859
+01:00:23,400 --> 01:00:26,910
+where the many [] to consider the scenarios are quite complicated,
+
+860
+01:00:27,060 --> 01:00:30,510
+now part of that is because you know it's a chain, right,
+
+861
+01:00:30,510 --> 01:00:36,420
+you know things are pushed down in a very sort of straightforward manner,
+
+862
+01:00:36,420 --> 01:00:37,710
+down the replication chain,
+
+863
+01:00:38,070 --> 01:00:43,800
+and part of that is, of course, the configuration part is sort of outsource to configuration manager manager.
+
+864
+01:00:44,540 --> 01:00:48,260
+But for the primary backup part of the recovery plan,
+
+865
+01:00:48,320 --> 01:00:49,490
+that's a reasonable straightforward,
+
+866
+01:00:49,520 --> 01:00:51,800
+there are only three configurations to consider.
+
+867
+01:00:54,920 --> 01:00:56,690
+One more point I want to make,
+
+868
+01:00:56,690 --> 01:00:58,400
+which is like how to add a replica,
+
+869
+01:00:58,520 --> 01:01:01,820
+because any system you know that here going to run for real time,
+
+870
+01:01:01,820 --> 01:01:05,410
+really at some point you gotta add a new one in,
+
+871
+01:01:05,680 --> 01:01:07,930
+because otherwise you're gonna lose,
+
+872
+01:01:07,930 --> 01:01:08,800
+you start the three,
+
+873
+01:01:08,800 --> 01:01:10,720
+then you have two, then get one and then you have zero
+
+874
+01:01:10,720 --> 01:01:11,680
+and then you're on the [].
+
+875
+01:01:11,710 --> 01:01:15,520
+So, you know you have to add new replica,
+
+876
+01:01:15,520 --> 01:01:17,170
+so let's to consider the case,
+
+877
+01:01:17,620 --> 01:01:20,200
+so here's S1, it is the head,
+
+878
+01:01:21,820 --> 01:01:23,170
+let's say we're in a scenario,
+
+879
+01:01:23,170 --> 01:01:26,710
+where you know we have S1 and S2 who's the tail
+
+880
+01:01:26,710 --> 01:01:29,800
+and basically we want to bring up S3,
+
+881
+01:01:32,190 --> 01:01:34,200
+and it turns out, you know as the paper described,
+
+882
+01:01:34,200 --> 01:01:40,080
+it was most convenient to actually do this at the tail end of it,
+
+883
+01:01:40,260 --> 01:01:44,490
+so basically make the new server, the new tail.
+
+884
+01:01:45,170 --> 01:01:46,970
+And so the way that we proceed is
+
+885
+01:01:46,970 --> 01:01:48,380
+select the client is here,
+
+886
+01:01:48,740 --> 01:01:50,750
+talking to S2,
+
+887
+01:01:50,750 --> 01:01:52,430
+because that's the current tail,
+
+888
+01:01:52,550 --> 01:01:54,020
+S3 comes up
+
+889
+01:01:54,140 --> 01:01:59,090
+and basically the first thing it does is it actually copies you know old state from S3 to,
+
+890
+01:01:59,180 --> 01:02:00,080
+from S2 to S3.
+
+891
+01:02:01,040 --> 01:02:03,170
+And so this may take hours, right,
+
+892
+01:02:03,170 --> 01:02:06,680
+where you know tens of minutes, or maybe indeed multiple hours
+
+893
+01:02:06,680 --> 01:02:11,360
+you're going we're copying gigabytes of data or terabytes of data from S2 to S3,
+
+894
+01:02:11,630 --> 01:02:12,830
+but while that's happening,
+
+895
+01:02:12,830 --> 01:02:16,220
+you know S2 and S3 can just serve request,
+
+896
+01:02:16,880 --> 01:02:23,690
+of course it does have to remember which ones are came in after S3 start copy,
+
+897
+01:02:23,720 --> 01:02:25,580
+so keep a list of all the updates,
+
+898
+01:02:25,580 --> 01:02:27,500
+that are sort of happened,
+
+899
+01:02:27,500 --> 01:02:29,780
+but there have not been propagated to S3 yet,
+
+900
+01:02:29,900 --> 01:02:32,900
+at some point S3 done with all the copying
+
+901
+01:02:33,080 --> 01:02:37,310
+and basically tells S2 okay, man, I'm ready you know to become the tail,
+
+902
+01:02:37,310 --> 01:02:39,440
+I got all the state S2,
+
+903
+01:02:39,440 --> 01:02:42,890
+so sends an email basically email message,
+
+904
+01:02:42,890 --> 01:02:46,580
+S2 saying okay I want to be the tail,
+
+905
+01:02:46,610 --> 01:02:48,860
+S2 responses, like yeah that's okay,
+
+906
+01:02:48,980 --> 01:02:52,130
+but once your applied all the updates.
+
+907
+01:02:54,030 --> 01:02:57,930
+And so basically S2 sends the updates in response to this,
+
+908
+01:02:57,930 --> 01:03:02,330
+I want to go on to come to a tail request,
+
+909
+01:03:02,330 --> 01:03:05,000
+in response that to S3,
+
+910
+01:03:05,090 --> 01:03:06,530
+S3 replies the updates
+
+911
+01:03:06,710 --> 01:03:09,140
+and then becomes you know the tail,
+
+912
+01:03:09,650 --> 01:03:12,200
+and you know clients that we're talking to S2
+
+913
+01:03:12,200 --> 01:03:13,670
+and S2 can tell the client,
+
+914
+01:03:13,670 --> 01:03:15,320
+you know from now on, I'm not tail anymore,
+
+915
+01:03:15,320 --> 01:03:16,220
+you should talk to S3
+
+916
+01:03:16,310 --> 01:03:18,860
+and so they can swap you know that direction.
+
+917
+01:03:19,470 --> 01:03:23,820
+And so that's the way to add a replica into a chain.
+
+918
+01:03:26,160 --> 01:03:28,020
+So question on this,
+
+919
+01:03:28,140 --> 01:03:30,300
+don't you run into this like infinite loop problem,
+
+920
+01:03:30,300 --> 01:03:32,340
+where S2 sends updates to S3
+
+921
+01:03:32,340 --> 01:03:36,360
+and when S3 is like updating, its also serving more requests,
+
+922
+01:03:36,360 --> 01:03:39,660
+so as more updates than needs to send and goes back and forth.
+
+923
+01:03:40,280 --> 01:03:43,940
+No, no, once S2 have sent the updates,
+
+924
+01:03:43,940 --> 01:03:47,120
+S3 have not seen yet you know to S2 to S3,
+
+925
+01:03:47,240 --> 01:03:49,730
+then from then on the normal chain replication,
+
+926
+01:03:49,730 --> 01:03:51,620
+whenever S2 gets a request,
+
+927
+01:03:51,620 --> 01:03:54,590
+an update from S1 it forwards it to S3.
+
+928
+01:03:57,400 --> 01:04:02,110
+Right, but S3 can become the tail until it is successfully processed all the updates.
+
+929
+01:04:02,110 --> 01:04:05,980
+Oh, yeah so, yeah, once it sets up the TCP channel,
+
+930
+01:04:05,980 --> 01:04:08,140
+basically S2 can just say like for,
+
+931
+01:04:08,320 --> 01:04:09,910
+once you've processed these guys,
+
+932
+01:04:09,940 --> 01:04:10,930
+you can become the tail,
+
+933
+01:04:10,930 --> 01:04:11,950
+because you've seen everything,
+
+934
+01:04:12,310 --> 01:04:15,760
+I mean and everything else you can be pipe lined after that, right,
+
+935
+01:04:15,760 --> 01:04:17,170
+in the same TCP channel.
+
+936
+01:04:19,040 --> 01:04:22,010
+It could become the tail, right, right after,
+
+937
+01:04:22,040 --> 01:04:23,870
+like even before it processes the update,
+
+938
+01:04:23,870 --> 01:04:26,180
+as long as it doesn't serve requests.
+
+939
+01:04:26,660 --> 01:04:28,670
+As long as it doesn't serve requests exactly, right,
+
+940
+01:04:28,670 --> 01:04:30,110
+it just has to process all the updates,
+
+941
+01:04:30,110 --> 01:04:32,000
+that S2 is received S3 not,
+
+942
+01:04:32,390 --> 01:04:33,680
+once we updated those,
+
+943
+01:04:33,680 --> 01:04:37,280
+then it becomes tail and start processing request.
+
+944
+01:04:38,780 --> 01:04:41,600
+I see, so blocks like requests for a moment,
+
+945
+01:04:41,600 --> 01:04:43,550
+while it processes new update.
+
+946
+01:04:48,820 --> 01:04:49,420
+Okay?
+
+947
+01:04:52,900 --> 01:04:55,480
+Okay, so now I wanna come back,
+
+948
+01:04:55,480 --> 01:04:58,090
+you know to basically questions, lots of people ask,
+
+949
+01:04:58,090 --> 01:05:00,340
+how this contrast to sort of,
+
+950
+01:05:01,270 --> 01:05:04,660
+how our CR properties chain replication properties,
+
+951
+01:05:04,810 --> 01:05:06,370
+how do how does it compare,
+
+952
+01:05:07,700 --> 01:05:09,770
+and one of the good, one of the good properties
+
+953
+01:05:09,770 --> 01:05:13,430
+and mostly with respectful in comparison to raft.
+
+954
+01:05:15,320 --> 01:05:16,910
+And of course I got to say,
+
+955
+01:05:16,910 --> 01:05:22,520
+of course like the chain replication just influence the primary backup scheme,
+
+956
+01:05:22,520 --> 01:05:24,350
+but not the configuration servers,
+
+957
+01:05:24,470 --> 01:05:26,270
+so we'll come back to that a little bit more in detail,
+
+958
+01:05:26,270 --> 01:05:27,470
+but a couple things that we can know,
+
+959
+01:05:27,470 --> 01:05:34,910
+if we just compare sort of the way the raft protocol works with the chain replication protocol.
+
+960
+01:05:35,480 --> 01:05:38,300
+And first of all you know we can achieve a positive aspect,
+
+961
+01:05:38,300 --> 01:05:52,810
+that's gonna chain replication is that the client RPCs are in split between to the head and the tail.
+
+962
+01:05:56,600 --> 01:06:00,200
+That's a load of actually serving any client operation
+
+963
+01:06:00,200 --> 01:06:02,120
+that can be split actually between two of them,
+
+964
+01:06:02,210 --> 01:06:05,420
+they don't have to run through the leader as in in raft.
+
+965
+01:06:06,410 --> 01:06:12,060
+Furthermore, the head sends the update once,
+
+966
+01:06:12,600 --> 01:06:18,510
+so unlike in raft, where the head or the leader basically sends updates,
+
+967
+01:06:18,510 --> 01:06:21,240
+the log entry to every appear,
+
+968
+01:06:21,330 --> 01:06:27,870
+in this particular scheme actually it's only happened the head always sends one basically RPC.
+
+969
+01:06:28,580 --> 01:06:30,470
+And so there are fewer messages involved,
+
+970
+01:06:31,220 --> 01:06:42,160
+reads or create operations involve only, only the tail,
+
+971
+01:06:43,160 --> 01:06:44,510
+unlike in the raft,
+
+972
+01:06:44,510 --> 01:06:48,950
+you know the if you even if you implement the read only optimization,
+
+973
+01:06:49,130 --> 01:06:55,070
+the read only optimization avoid having read operation go through the log
+
+974
+01:06:55,220 --> 01:06:57,740
+and being appended to all the logs appears,
+
+975
+01:06:57,920 --> 01:07:02,960
+but it still requires that the leader actually contact the majority of the peers
+
+976
+01:07:03,020 --> 01:07:08,180
+to decide when it's actually a operation can be served.
+
+977
+01:07:09,820 --> 01:07:15,730
+So, another positive aspect of this [] is a simple crash recovery as we talked about,
+
+978
+01:07:23,620 --> 01:07:28,150
+but you know a major downside compared to sort of the raft scheme
+
+979
+01:07:28,180 --> 01:07:35,890
+is that you have one failure requires reconfiguration.
+
+980
+01:07:44,720 --> 01:07:48,230
+And the reason now that the reconfiguration are required is
+
+981
+01:07:48,230 --> 01:07:51,740
+because like write actually have to go through the whole chain,
+
+982
+01:07:52,340 --> 01:07:58,250
+and so, and the write cannot acknowledge until that every server in the chain actually has processes.
+
+983
+01:07:58,880 --> 01:08:00,440
+And that is actually slightly different, correct,
+
+984
+01:08:00,440 --> 01:08:01,640
+raft as you well know,
+
+985
+01:08:01,790 --> 01:08:08,750
+because assume it's basically majority, the peers actually accepted the particular write operation independent to their logs,
+
+986
+01:08:08,750 --> 01:08:10,040
+the system can just proceed,
+
+987
+01:08:10,640 --> 01:08:13,010
+and so there's actually no interruption at all,
+
+988
+01:08:13,010 --> 01:08:14,450
+if one server fails,
+
+989
+01:08:14,450 --> 01:08:18,220
+for example, if the remaining servers still form a majority,
+
+990
+01:08:18,580 --> 01:08:20,170
+while in chain replication,
+
+991
+01:08:20,260 --> 01:08:22,150
+if one server would fail,
+
+992
+01:08:22,210 --> 01:08:24,490
+then you know somebody's reconfiguration actually has to happen
+
+993
+01:08:24,490 --> 01:08:29,000
+which means there's gonna be a short period probably downtime, right.
+
+994
+01:08:29,540 --> 01:08:30,260
+Does that make sense?
+
+995
+01:08:35,010 --> 01:08:37,050
+Now I want to make one more point
+
+996
+01:08:37,050 --> 01:08:42,300
+sort of in contrast you know to sort of the raft replication scheme is this,
+
+997
+01:08:42,600 --> 01:08:45,150
+because the read operations involve only one server,
+
+998
+01:08:45,150 --> 01:08:48,400
+there's a cool extension,
+
+999
+01:08:48,400 --> 01:08:50,980
+if you will that actually gets really high read performance,
+
+1000
+01:08:51,160 --> 01:08:53,470
+and so the basic idea is as follows,
+
+1001
+01:09:10,550 --> 01:09:13,040
+the basic idea is basically to split
+
+1002
+01:09:13,070 --> 01:09:17,470
+you know the split objects or they call volumes in the paper,
+
+1003
+01:09:17,500 --> 01:09:21,000
+split the objects across multiple chains.
+
+1004
+01:09:27,360 --> 01:09:30,780
+So instead of having one chain that I've done in the previous boards,
+
+1005
+01:09:30,780 --> 01:09:32,250
+we're going to have multiple chains
+
+1006
+01:09:32,430 --> 01:09:37,560
+and so for example we might have CH1 in chain one,
+
+1007
+01:09:37,740 --> 01:09:42,600
+S1 is the head, S2 is the middle guy and S3 is the tail.
+
+1008
+01:09:43,260 --> 01:09:47,720
+And chain two, you know we're going to rotate things around,
+
+1009
+01:09:47,780 --> 01:09:51,920
+S2 as the head, S3 is the middle guy,
+
+1010
+01:09:51,950 --> 01:09:56,960
+oops, S3 is the middle guy and S1 is the tail.
+
+1011
+01:09:57,630 --> 01:10:02,550
+And chain 3, we're going to arrange basically S3 as the head guy,
+
+1012
+01:10:02,550 --> 01:10:08,760
+S2 as, oops S1 the middle guy and S2 is the tail.
+
+1013
+01:10:09,710 --> 01:10:10,730
+Basically we're gonna do is
+
+1014
+01:10:10,730 --> 01:10:13,730
+we're going to split objects across these multiple chains,
+
+1015
+01:10:13,730 --> 01:10:15,980
+so the configuration server basically has a map,
+
+1016
+01:10:15,980 --> 01:10:20,300
+you know saying let go shard one you know objects in shard one go to chain one,
+
+1017
+01:10:20,540 --> 01:10:23,810
+object shard two go to chain two,
+
+1018
+01:10:23,810 --> 01:10:25,910
+objects shard three now go to chain three.
+
+1019
+01:10:27,140 --> 01:10:29,600
+And what is the cool part about it is that,
+
+1020
+01:10:29,870 --> 01:10:32,540
+you know, we have multiple tails
+
+1021
+01:10:32,930 --> 01:10:35,600
+and as well as three tail for some chain,
+
+1022
+01:10:35,630 --> 01:10:38,600
+S1 is it's a tale for some chain,
+
+1023
+01:10:38,690 --> 01:10:40,520
+S2 is a tail for some chain
+
+1024
+01:10:41,030 --> 01:10:43,670
+and basically read operations produce different chain
+
+1025
+01:10:43,790 --> 01:10:46,340
+can now be completely executed in parallel,
+
+1026
+01:10:46,400 --> 01:10:49,910
+so if the read operations hit all the different shards,
+
+1027
+01:10:50,120 --> 01:10:51,740
+sort of uniform spread,
+
+1028
+01:10:51,740 --> 01:10:57,230
+basically you know our read throughput is going to increase linearly with the number of tails that we have
+
+1029
+01:10:57,260 --> 01:10:58,580
+and in this case, we have three tails,
+
+1030
+01:10:58,580 --> 01:11:00,230
+so we get three times to read performance.
+
+1031
+01:11:01,260 --> 01:11:02,580
+So we did basically the same,
+
+1032
+01:11:02,580 --> 01:11:05,460
+so we get a little bit of the same properties the zookeeper had,
+
+1033
+01:11:05,730 --> 01:11:07,680
+where the read performance can be excellent,
+
+1034
+01:11:08,070 --> 01:11:09,630
+scale with the number of servers,
+
+1035
+01:11:09,990 --> 01:11:12,090
+but we also get not only that,
+
+1036
+01:11:12,090 --> 01:11:13,470
+we get the scale part,
+
+1037
+01:11:13,980 --> 01:11:15,990
+but we maintain the linearizability,
+
+1038
+01:11:17,880 --> 01:11:20,790
+in this scheme, we don't have to actually give up on linearizability.
+
+1039
+01:11:22,580 --> 01:11:26,030
+So when we get to two nice properties,
+
+1040
+01:11:26,030 --> 01:11:29,330
+namely good read performance and effective scaling with the number of servers,
+
+1041
+01:11:29,720 --> 01:11:32,660
+at least for each of two different chains,
+
+1042
+01:11:32,660 --> 01:11:35,990
+and we got actually and we maintain linearizability.
+
+1043
+01:11:43,420 --> 01:11:44,440
+Any questions about this?
+
+1044
+01:11:49,540 --> 01:11:50,350
+Sorry, in this case,
+
+1045
+01:11:50,350 --> 01:11:55,840
+the client when they are deciding which chain to read from,
+
+1046
+01:11:56,260 --> 01:12:00,580
+would they be able to, to do like to decide themselves
+
+1047
+01:12:00,580 --> 01:12:04,810
+or do they need to contact the configuration server to decide.
+
+1048
+01:12:05,140 --> 01:12:06,760
+Yeah, so this is a great question,
+
+1049
+01:12:06,760 --> 01:12:10,480
+so typically and the paper actually doesn't really explicit about it,
+
+1050
+01:12:10,480 --> 01:12:14,890
+you know they talk about maybe talking through proxy to servers,
+
+1051
+01:12:15,160 --> 01:12:18,610
+what you will do in lab 4 is basically you will download the configuration,
+
+1052
+01:12:18,850 --> 01:12:21,430
+the configuration will include the shard assignment,
+
+1053
+01:12:21,880 --> 01:12:24,880
+and you download that from the configuration server.
+
+1054
+01:12:28,820 --> 01:12:32,240
+You need to be careful about how you order the servers in each of the chains,
+
+1055
+01:12:32,240 --> 01:12:35,120
+prevent like a particular chain from being oversaturated
+
+1056
+01:12:35,300 --> 01:12:37,550
+or particular link between like two servers.
+
+1057
+01:12:38,140 --> 01:12:42,490
+Yeah, this, this, this, this scheme doesn't really take that into account,
+
+1058
+01:12:42,490 --> 01:12:49,510
+you can imagine like the configuration plan or the configuration manager has a sophisticated model of actually how the network is laid out
+
+1059
+01:12:49,510 --> 01:12:51,970
+and you know can be very careful about how the chains are done.
+
+1060
+01:12:53,810 --> 01:12:57,740
+Maybe even shard more shards to one chain of fewer shards to another chain,
+
+1061
+01:12:57,740 --> 01:12:59,540
+all the stuff is in principle possible,
+
+1062
+01:12:59,630 --> 01:13:03,380
+because the configuration can just manage to just compute anything it likes,
+
+1063
+01:13:03,380 --> 01:13:05,510
+in basically says use the assignment.
+
+1064
+01:13:08,220 --> 01:13:08,670
+Thank you.
+
+1065
+01:13:09,030 --> 01:13:10,860
+Can even read balance if it wants to.
+
+1066
+01:13:18,560 --> 01:13:22,550
+Answer the question, could you explain again how linearizability is kept under this extension,
+
+1067
+01:13:22,550 --> 01:13:24,620
+well, nothing has really changed,
+
+1068
+01:13:24,650 --> 01:13:27,800
+we're still doing primary backup using a chain,
+
+1069
+01:13:28,070 --> 01:13:35,690
+in and so you know we basically carry over the linearizability from the single chain
+
+1070
+01:13:35,720 --> 01:13:36,440
+and that's it.
+
+1071
+01:13:42,470 --> 01:13:44,180
+This might be like speculative,
+
+1072
+01:13:44,180 --> 01:13:45,830
+but how this compared to,
+
+1073
+01:13:47,020 --> 01:13:51,430
+I guess maybe it's equivalent of just having groups of servers for each like link,
+
+1074
+01:13:51,790 --> 01:13:53,500
+instead of having reusing the same ones,
+
+1075
+01:13:53,530 --> 01:13:58,330
+or not for each link, but for each step in the chain,
+
+1076
+01:13:58,330 --> 01:14:00,400
+so like S1 is like three servers,
+
+1077
+01:14:00,400 --> 01:14:01,750
+S2 as three servers,
+
+1078
+01:14:02,050 --> 01:14:03,910
+instead of reusing the same one
+
+1079
+01:14:04,180 --> 01:14:05,650
+and entering from different points.
+
+1080
+01:14:06,190 --> 01:14:11,260
+Yeah yeah, what would be the advantage of that scheme that you imagine.
+
+1081
+01:14:11,260 --> 01:14:12,850
+I mean just for scalability,
+
+1082
+01:14:14,860 --> 01:14:17,320
+while also maintain linearizability.
+
+1083
+01:14:17,530 --> 01:14:20,680
+Well, the the reason that this scheme is attractive is that,
+
+1084
+01:14:20,680 --> 01:14:22,630
+because we have the tail might have quite a bit of load,
+
+1085
+01:14:22,630 --> 01:14:23,770
+but the middle guy doesn't
+
+1086
+01:14:23,800 --> 01:14:26,110
+and you know by having sort of this arrangement,
+
+1087
+01:14:26,230 --> 01:14:28,150
+we spread the load across all servers.
+
+1088
+01:14:30,910 --> 01:14:31,810
+I see, okay.
+
+1089
+01:14:40,090 --> 01:14:40,750
+Okay, good.
+
+1090
+01:14:41,450 --> 01:14:43,790
+So maybe I want to summarize here,
+
+1091
+01:14:47,850 --> 01:14:50,220
+and sort of talk a little bit about,
+
+1092
+01:14:50,220 --> 01:14:51,720
+so we saw this approach one,
+
+1093
+01:14:52,830 --> 01:14:54,480
+which we're do in lab,
+
+1094
+01:14:55,610 --> 01:14:56,810
+which we do in lab 3,
+
+1095
+01:14:56,810 --> 01:14:59,990
+which is run all the operations through raft
+
+1096
+01:14:59,990 --> 01:15:07,040
+and or the replication, you know the configuration and replication is all built using raft
+
+1097
+01:15:07,040 --> 01:15:08,360
+and nothing else is involved
+
+1098
+01:15:08,660 --> 01:15:10,430
+and then sort of this approach two,
+
+1099
+01:15:10,460 --> 01:15:13,970
+you know which is the topic of this particular paper,
+
+1100
+01:15:13,970 --> 01:15:16,340
+where there's a configuration server,
+
+1101
+01:15:16,400 --> 01:15:24,710
+perhaps built using raft or paxos or a new one in a primary backup replication scheme,
+
+1102
+01:15:26,010 --> 01:15:32,410
+and primary backup using chain replication.
+
+1103
+01:15:39,690 --> 01:15:43,170
+And you can see, you know hopefully there's a little clear,
+
+1104
+01:15:43,170 --> 01:15:45,660
+there's some attractive properties to approach 2,
+
+1105
+01:15:45,990 --> 01:15:47,610
+in the sense that,
+
+1106
+01:15:47,940 --> 01:15:50,250
+you can get scalable re-performance
+
+1107
+01:15:50,370 --> 01:15:52,530
+on the primary backups,
+
+1108
+01:15:52,830 --> 01:15:54,510
+of course not on the configuration server,
+
+1109
+01:15:54,510 --> 01:15:56,850
+because it runs raft,
+
+1110
+01:15:56,850 --> 01:15:58,620
+like you know you're doing approach 1,
+
+1111
+01:15:58,950 --> 01:16:03,990
+but you can at least you know, maybe scale re-performs for actual operations on the replicas
+
+1112
+01:16:03,990 --> 01:16:06,240
+or on the primary backup scheme,
+
+1113
+01:16:06,270 --> 01:16:07,470
+put in get operations.
+
+1114
+01:16:08,270 --> 01:16:12,290
+The other thing that is nice about this is that,
+
+1115
+01:16:12,770 --> 01:16:15,710
+the if you have data is very very large,
+
+1116
+01:16:15,740 --> 01:16:20,600
+you know you can have more specialized synchronization
+
+1117
+01:16:20,600 --> 01:16:25,580
+or scheme to basically copy the state from one machine to another machine.
+
+1118
+01:16:26,180 --> 01:16:30,650
+And you know the chain replication or when any sort of primary backup schemes
+
+1119
+01:16:30,650 --> 01:16:32,360
+are separated from the relationship
+
+1120
+01:16:32,390 --> 01:16:33,710
+allows you to do that easily.
+
+1121
+01:16:34,500 --> 01:16:37,710
+And so it's quite common that you know the practice,
+
+1122
+01:16:37,710 --> 01:16:39,360
+you know people will approach 2,
+
+1123
+01:16:39,600 --> 01:16:46,710
+although it is also not impossible to actually use approach 1 for your replicated state machine
+
+1124
+01:16:46,710 --> 01:16:51,330
+including serving operations like put get operations
+
+1125
+01:16:51,330 --> 01:16:53,220
+and in fact, the lab 3 would do it,
+
+1126
+01:16:53,220 --> 01:16:57,090
+we will see later paper in this semester Spanner
+
+1127
+01:16:57,150 --> 01:17:00,780
+and that actually uses [access] to actually also do the operations.
+
+1128
+01:17:03,780 --> 01:17:05,010
+Any further questions here?
+
+1129
+01:17:14,710 --> 01:17:18,340
+If not, then I wish you all good luck on the Mid-term on Thursday,
+
+1130
+01:17:18,610 --> 01:17:23,260
+and I'll see you in person, while virtually in person next week.
+
+1131
+01:17:28,780 --> 01:17:29,950
+And if you have any questions,
+
+1132
+01:17:30,100 --> 01:17:32,110
+please feel free to hang around
+
+1133
+01:17:32,560 --> 01:17:35,500
+and I'll do my best to answer them.
+
+1134
+01:17:36,520 --> 01:17:41,740
+I have a question about something that you mentioned about raft,
+
+1135
+01:17:41,740 --> 01:17:45,730
+so you mentioned that all the reads have to go through the majority of servers,
+
+1136
+01:17:45,880 --> 01:17:47,710
+but I'm not quite sure I understand why,
+
+1137
+01:17:47,710 --> 01:17:51,940
+because the leader has all of the committed entries, right.
+
+1138
+01:17:51,940 --> 01:17:56,350
+Yeah, there's two two schemes, if the leader,
+
+1139
+01:17:56,470 --> 01:18:01,860
+so either you run into a situation where all recent writes are served by the leader, right,
+
+1140
+01:18:02,440 --> 01:18:05,200
+or you know there's a possibility to serve from principle
+
+1141
+01:18:05,200 --> 01:18:07,060
+and read operation from another peer,
+
+1142
+01:18:07,060 --> 01:18:10,960
+but then you have to contact first majority of the servers
+
+1143
+01:18:10,960 --> 01:18:13,180
+to make absolute sure that you have the last operation.
+
+1144
+01:18:14,990 --> 01:18:15,410
+Got it,
+
+1145
+01:18:15,410 --> 01:18:21,230
+so that that requirement is if we want to spread all the reads across every peer.
+
+1146
+01:18:21,230 --> 01:18:23,000
+We have to be more sophisticated
+
+1147
+01:18:23,240 --> 01:18:25,220
+and we cannot do it on our own,
+
+1148
+01:18:25,220 --> 01:18:27,260
+because that would definitely break linearizability.
+
+1149
+01:18:28,450 --> 01:18:30,400
+Right, but if everything goes to the leader.
+
+1150
+01:18:30,640 --> 01:18:32,560
+Then when you're doing there, correct,
+
+1151
+01:18:32,560 --> 01:18:34,300
+except you have to do this trick,
+
+1152
+01:18:34,300 --> 01:18:37,210
+where you ask for an empty agreement,
+
+1153
+01:18:37,210 --> 01:18:39,340
+at the beginning of every new term.
+
+1154
+01:18:41,120 --> 01:18:43,040
+Just to make sure that you actually are up to date.
+
+1155
+01:18:45,710 --> 01:18:46,760
+Okay, thank you.
+
+1156
+01:18:48,130 --> 01:18:50,890
+Could you, quickly go over again,
+
+1157
+01:18:51,010 --> 01:18:53,620
+when you're adding a new server at the tail,
+
+1158
+01:18:54,360 --> 01:18:56,610
+so just to make sure I understand,
+
+1159
+01:18:56,610 --> 01:19:01,860
+so essentially it starts this process for copying all the data from S2 to S3
+
+1160
+01:19:02,430 --> 01:19:05,340
+and then if it receives requests for any of that data,
+
+1161
+01:19:05,340 --> 01:19:08,030
+while that is still happening,
+
+1162
+01:19:08,030 --> 01:19:12,710
+then S3 is going to ask S2 for anything that it still has directly
+
+1163
+01:19:12,710 --> 01:19:14,330
+and it's going to get it and then respond.
+
+1164
+01:19:14,600 --> 01:19:15,080
+Yep.
+
+1165
+01:19:15,600 --> 01:19:18,120
+And then it keeps doing that until it gets data
+
+1166
+01:19:18,120 --> 01:19:19,590
+that as to no longer has
+
+1167
+01:19:19,590 --> 01:19:21,210
+and then it just goes live essentially.
+
+1168
+01:19:21,540 --> 01:19:23,310
+Yeah, or you could do slightly differently,
+
+1169
+01:19:23,310 --> 01:19:29,610
+you know you could actually have S3 could basically tell S2,
+
+1170
+01:19:31,820 --> 01:19:35,630
+S3 can become the leader or sort of the tail
+
+1171
+01:19:35,660 --> 01:19:40,310
+and basically don't process any common operations from the client yet,
+
+1172
+01:19:40,310 --> 01:19:44,450
+until it actually has has received the remaining operations from S2.
+
+1173
+01:19:47,140 --> 01:19:49,690
+Oh, so in that case S2 is still the tail.
+
+1174
+01:19:50,970 --> 01:19:51,870
+Yeah.
+
+1175
+01:19:51,870 --> 01:19:53,490
+So S3 gets everything.
+
+1176
+01:19:53,730 --> 01:19:54,180
+Yeah.
+
+1177
+01:19:56,910 --> 01:20:00,180
+Basically, the paper describes one particular way of doing it,
+
+1178
+01:20:00,180 --> 01:20:01,620
+you know there's a couple ways of doing it.
+
+1179
+01:20:04,000 --> 01:20:05,710
+But if you do that then,
+
+1180
+01:20:06,430 --> 01:20:11,260
+like how long do you wait to get everything,
+
+1181
+01:20:13,140 --> 01:20:15,570
+I think I also had the same confusion as someone else.
+
+1182
+01:20:15,570 --> 01:20:18,690
+You know, you know in what order the switch is happening, correct,
+
+1183
+01:20:18,690 --> 01:20:24,840
+so example like S3 so S2 let's say maybe has a big operations through hundreds,
+
+1184
+01:20:25,460 --> 01:20:26,870
+you start to copy operations,
+
+1185
+01:20:26,870 --> 01:20:28,700
+likely snapshots with a raft,
+
+1186
+01:20:28,970 --> 01:20:30,320
+you start the copy operation,
+
+1187
+01:20:30,320 --> 01:20:31,880
+so when the copy operation is done,
+
+1188
+01:20:31,880 --> 01:20:34,900
+S3 is up to data until hundred, right.
+
+1189
+01:20:36,390 --> 01:20:39,900
+Then you know maybe S2 already has ten more operations,
+
+1190
+01:20:39,930 --> 01:20:43,530
+so it has 101 102 and 103, right,
+
+1191
+01:20:44,220 --> 01:20:48,240
+and basically S3 can you contact S2,
+
+1192
+01:20:48,240 --> 01:20:50,520
+say give me your remaining operations,
+
+1193
+01:20:50,520 --> 01:20:53,850
+and S2 says, like well remaining operations 101 through one to ten,
+
+1194
+01:20:55,000 --> 01:20:56,770
+and as a side effect,
+
+1195
+01:20:56,770 --> 01:21:00,460
+you know as we also tells S2 like stop being the tail,
+
+1196
+01:21:01,540 --> 01:21:04,900
+and, S2 response with those operations,
+
+1197
+01:21:05,140 --> 01:21:06,610
+S3 applies,
+
+1198
+01:21:06,610 --> 01:21:08,740
+there's operation 101 through one to ten,
+
+1199
+01:21:08,890 --> 01:21:12,190
+and then tells client it means it is tail,
+
+1200
+01:21:12,190 --> 01:21:14,500
+but it doesn't process any commands from clients yet
+
+1201
+01:21:14,770 --> 01:21:16,060
+or read operation from client yet,
+
+1202
+01:21:16,060 --> 01:21:18,400
+until it actually process 101 to 110.
+
+1203
+01:21:21,380 --> 01:21:24,050
+Okay, okay I see, I see.
+
+1204
+01:21:26,850 --> 01:21:28,410
+Okay, I have another question,
+
+1205
+01:21:29,280 --> 01:21:29,970
+oh sorry.
+
+1206
+01:21:31,560 --> 01:21:32,730
+No, go ahead, go ahead.
+
+1207
+01:21:33,000 --> 01:21:37,920
+Okay, my question was a little similar to the extension
+
+1208
+01:21:37,920 --> 01:21:39,900
+that he talked about.
+
+1209
+01:21:40,660 --> 01:21:42,640
+I thought I thought about,
+
+1210
+01:21:42,790 --> 01:21:46,990
+could you could you do a tree instead of a chain, so.
+
+1211
+01:21:47,630 --> 01:21:51,500
+I think there's the,
+
+1212
+01:21:52,100 --> 01:21:54,290
+there other data structures possible,
+
+1213
+01:21:54,320 --> 01:21:58,340
+like for example, you know number of people in email proposed
+
+1214
+01:21:58,520 --> 01:22:00,020
+that you could have S1,
+
+1215
+01:22:00,140 --> 01:22:04,010
+then you could have like S3 4 5 all the intermediate ones,
+
+1216
+01:22:04,010 --> 01:22:07,430
+you know S1 talks to them in parallel to all the intermediate ones
+
+1217
+01:22:07,430 --> 01:22:11,810
+and the intermediate ones all to the tail,
+
+1218
+01:22:12,320 --> 01:22:14,810
+is that what you mean with a tree?
+
+1219
+01:22:15,080 --> 01:22:20,210
+I meant more if there would be,
+
+1220
+01:22:20,780 --> 01:22:26,230
+like a number of leaves there would be at all roughly the same height,
+
+1221
+01:22:26,260 --> 01:22:27,580
+so like a balanced tree,
+
+1222
+01:22:27,790 --> 01:22:31,840
+and then the leaves will have like a chain going through them,
+
+1223
+01:22:33,400 --> 01:22:39,370
+and I think the linearizability can be broken here,
+
+1224
+01:22:39,430 --> 01:22:43,360
+if you like, oh, if you'd think harder about it,
+
+1225
+01:22:43,360 --> 01:22:46,960
+but it would have the nice property that you wouldn't,
+
+1226
+01:22:46,990 --> 01:22:51,960
+like, they now the propagation can delay would be like [logarithmic]
+
+1227
+01:22:51,990 --> 01:22:53,850
+instead of linear as here
+
+1228
+01:22:53,850 --> 01:22:55,380
+and you could read from all the leaves.
+
+1229
+01:22:55,380 --> 01:22:58,290
+Yeah, okay, reading from all the leaves is dangerous, right,
+
+1230
+01:22:58,290 --> 01:23:00,240
+because they might have,
+
+1231
+01:23:00,270 --> 01:23:04,050
+you know one client might have talked to a another leave earlier
+
+1232
+01:23:04,080 --> 01:23:05,910
+and leaves might not be in sync,
+
+1233
+01:23:06,770 --> 01:23:11,240
+so that sounds dangerous to me,
+
+1234
+01:23:11,240 --> 01:23:14,870
+maybe your your scheme is a little bit more sophisticated than I'm thinking,
+
+1235
+01:23:15,470 --> 01:23:23,270
+the depth of the tree or the depth of the chain really governed by the meantime between failure, right,
+
+1236
+01:23:23,890 --> 01:23:25,780
+if you're on the,
+
+1237
+01:23:26,020 --> 01:23:28,600
+if you typically run with 3 server, 3 to 5 serves,
+
+1238
+01:23:28,600 --> 01:23:32,080
+because that's good enough for your high availability,
+
+1239
+01:23:32,200 --> 01:23:35,740
+then because you can recover from 4 servers,
+
+1240
+01:23:35,740 --> 01:23:37,390
+before the whole thing is down,
+
+1241
+01:23:37,780 --> 01:23:42,640
+then, that really covers the depth of the chain,
+
+1242
+01:23:43,260 --> 01:23:46,260
+and yeah we'll introduce some latency.
+
+1243
+01:23:49,770 --> 01:23:51,630
+Okay, that make sence, thank you.
+
+1244
+01:23:51,630 --> 01:23:53,280
+Chain will generally be short.
+
+1245
+01:23:53,930 --> 01:23:56,780
+Okay okay, that makes sense, thanks.
+
+1246
+01:23:57,260 --> 01:23:57,740
+You're welcome.
+
+1247
+01:23:59,030 --> 01:24:02,030
+Is this the only case where the entire train would go down,
+
+1248
+01:24:02,580 --> 01:24:04,920
+if all the servers in the chain went down.
+
+1249
+01:24:05,190 --> 01:24:05,610
+Yeah.
+
+1250
+01:24:07,370 --> 01:24:07,820
+Thank you.
+
+1251
+01:24:09,640 --> 01:24:14,050
+I also was curious how you maintain the strong consistency,
+
+1252
+01:24:14,050 --> 01:24:19,750
+when like S1 S2 and S3 can all do the read in this slide.
+
+1253
+01:24:21,340 --> 01:24:25,990
+You get strong consistency per per shard or per object,
+
+1254
+01:24:25,990 --> 01:24:27,670
+you know that's assigned to the chain, right.
+
+1255
+01:24:28,520 --> 01:24:32,570
+So if you read you write one object,
+
+1256
+01:24:32,780 --> 01:24:35,060
+you write object one, you read object one,
+
+1257
+01:24:35,210 --> 01:24:37,280
+all those operations are going to go through the same chain
+
+1258
+01:24:37,280 --> 01:24:40,070
+and so you get strong consistency for that particular object.
+
+1259
+01:24:40,610 --> 01:24:41,810
+Oh, got it.
+
+1260
+01:24:41,900 --> 01:24:42,860
+But it may not be the case,
+
+1261
+01:24:43,280 --> 01:24:45,560
+across all the objects we have strong consistency.
+
+1262
+01:24:45,770 --> 01:24:52,340
+No, I don't, I will, let me hesitate that.
+
+1263
+01:24:57,270 --> 01:25:00,630
+Let me hesitate, I think you know that requires maybe more machinery.
+
+1264
+01:25:00,990 --> 01:25:05,130
+Well, what does that mean like across all the objects getting stronger.
+
+1265
+01:25:05,220 --> 01:25:10,590
+I think the you read write object one, you read or write object two,
+
+1266
+01:25:11,150 --> 01:25:14,810
+and then some client read object one,
+
+1267
+01:25:15,620 --> 01:25:17,300
+Are you going to yet.
+
+1268
+01:25:18,210 --> 01:25:20,730
+Basically, you know if you have a client to read both objects,
+
+1269
+01:25:20,730 --> 01:25:24,300
+are you are guaranteed to see total order and linearizability.
+
+1270
+01:25:24,300 --> 01:25:26,310
+Is that like serializability?
+
+1271
+01:25:27,030 --> 01:25:28,890
+Serializability slightly different,
+
+1272
+01:25:28,950 --> 01:25:31,860
+you know maybe, let's not talk about serializability,
+
+1273
+01:25:31,860 --> 01:25:34,230
+we'll come back, we'll get that later in a couple weeks.
+
+1274
+01:25:34,680 --> 01:25:36,510
+Yeah, and.
+
+1275
+01:25:40,740 --> 01:25:43,290
+I [managed] to actually make a commitment right now,
+
+1276
+01:25:43,500 --> 01:25:44,940
+I need to think a little bit about it.
+
+1277
+01:25:45,300 --> 01:25:46,290
+Okay, that's totally fair.
+
+1278
+01:25:48,280 --> 01:25:50,170
+So the question is like
+
+1279
+01:25:50,440 --> 01:25:54,880
+you know you have consistency or linearizability for a single client reading and writing,
+
+1280
+01:25:55,210 --> 01:25:58,450
+but not for multiple, on multiple objects.
+
+1281
+01:25:58,630 --> 01:26:01,930
+You have even multiple clients talking to this,
+
+1282
+01:26:01,930 --> 01:26:04,510
+you know are doing operations on the same object,
+
+1283
+01:26:04,510 --> 01:26:07,060
+have strongly linearizability correct in this scheme,
+
+1284
+01:26:07,420 --> 01:26:12,040
+the question is we have linearizability across objects too.
+
+1285
+01:26:13,410 --> 01:26:20,040
+But, why is that important and honestly where like where that would be important like,
+
+1286
+01:26:21,600 --> 01:26:28,060
+because you, you gonna like, you can't group operations right,
+
+1287
+01:26:28,180 --> 01:26:30,850
+so like a write and a write.
+
+1288
+01:26:31,000 --> 01:26:34,510
+I mean you read object one, you write object one, you read object one,
+
+1289
+01:26:34,510 --> 01:26:36,730
+you read object two, you write object two,
+
+1290
+01:26:37,030 --> 01:26:43,070
+and you know the, the question is you know in linearizability,
+
+1291
+01:26:43,070 --> 01:26:45,410
+you know those operations need to be total order
+
+1292
+01:26:45,740 --> 01:26:51,020
+and they need to preserve this property of real time.
+
+1293
+01:26:52,740 --> 01:26:56,280
+And since you have different chains that might actually not happen,
+
+1294
+01:26:56,280 --> 01:27:00,900
+but I don't want to commit to no statement about all across chains.
+
+1295
+01:27:01,380 --> 01:27:04,020
+You know with the chain is actually guaranteed to linearizability,
+
+1296
+01:27:04,020 --> 01:27:05,370
+even if you have different objects.
+
+1297
+01:27:08,290 --> 01:27:09,970
+There's something I don't understand in the paper,
+
+1298
+01:27:09,970 --> 01:27:13,330
+which is the update propagation invariant,
+
+1299
+01:27:14,110 --> 01:27:20,820
+where like sort of the, for in this order of the chain.
+
+1300
+01:27:21,030 --> 01:27:21,570
+Yep.
+
+1301
+01:27:21,630 --> 01:27:27,630
+The like commits are prefix of each successors commits,
+
+1302
+01:27:28,920 --> 01:27:33,870
+is that guaranteed after like a full pass has gone through the chain.
+
+1303
+01:27:34,620 --> 01:27:35,700
+Well, it's always true right,
+
+1304
+01:27:35,700 --> 01:27:38,070
+like if you go back through this picture here.
+
+1305
+01:27:42,020 --> 01:27:44,390
+I think they make a very simple observation,
+
+1306
+01:27:44,390 --> 01:27:46,580
+which is, let's see if we can find a good picture.
+
+1307
+01:27:47,960 --> 01:27:49,670
+I probably scribbled over everything,
+
+1308
+01:27:49,670 --> 01:27:52,250
+so it's gonna be maybe not as clean,
+
+1309
+01:27:52,730 --> 01:27:55,700
+basically what they're saying like if you look at this figure, correct,
+
+1310
+01:27:55,970 --> 01:28:02,070
+that S3 always has a prefix of S2 and S2 always has a prefix of S1,
+
+1311
+01:28:05,960 --> 01:28:08,840
+and that's the only thing that basically that's invariant says.
+
+1312
+01:28:09,440 --> 01:28:16,630
+Oh, so i and j, so the one out the successor has the prefix of the predecessor?
+
+1313
+01:28:16,660 --> 01:28:18,820
+Yeah, and this is slightly confusing,
+
+1314
+01:28:18,820 --> 01:28:20,020
+I just realized that later,
+
+1315
+01:28:20,020 --> 01:28:22,360
+after somebody else asked this question,
+
+1316
+01:28:22,720 --> 01:28:28,960
+in the definition, the i and j is in two different ways,
+
+1317
+01:28:29,020 --> 01:28:30,430
+well, not really different ways,
+
+1318
+01:28:30,430 --> 01:28:31,630
+one is definition,
+
+1319
+01:28:32,100 --> 01:28:35,460
+and ones is actually the invariant
+
+1320
+01:28:36,030 --> 01:28:38,970
+and you're gonna be a little careful,
+
+1321
+01:28:39,060 --> 01:28:42,630
+the role of i and j in the chain.
+
+1322
+01:28:42,630 --> 01:28:43,230
+Go around.
+
+1323
+01:28:43,260 --> 01:28:44,250
+Yeah exactly.
+
+1324
+01:28:44,250 --> 01:28:45,030
+How is that possible.
+
+1325
+01:28:45,780 --> 01:28:46,650
+Exactly.
+
+1326
+01:28:47,140 --> 01:28:47,740
+Thank you.
+
+1327
+01:28:48,100 --> 01:28:48,670
+You're welcome.
+
+1328
+01:28:50,060 --> 01:28:51,620
+I was oops.
+
+1329
+01:28:52,070 --> 01:28:53,150
+Yeah.
+
+1330
+01:28:54,390 --> 01:28:59,610
+I was just gonna ask what happens when you have a network partition instead of crash,
+
+1331
+01:28:59,790 --> 01:29:03,210
+so if you go to the crash slide,
+
+1332
+01:29:03,610 --> 01:29:04,810
+what happens to the chain,
+
+1333
+01:29:04,810 --> 01:29:06,100
+if there's a network partition,
+
+1334
+01:29:06,100 --> 01:29:11,200
+so maybe ask something like, like S2 is actually still alive,
+
+1335
+01:29:11,380 --> 01:29:15,640
+but there's a partition between the configuration manager and S2 or something,
+
+1336
+01:29:15,880 --> 01:29:18,700
+and so now both S1 and S2 are pointing to S3.
+
+1337
+01:29:20,130 --> 01:29:23,220
+No, no, yeah yeah,
+
+1338
+01:29:23,280 --> 01:29:26,010
+okay, there's gonna be some obviously,
+
+1339
+01:29:26,010 --> 01:29:28,200
+when I I think people are talking about this,
+
+1340
+01:29:28,200 --> 01:29:30,060
+but I presume that all configurations are numbered,
+
+1341
+01:29:30,570 --> 01:29:35,880
+like view number and S3 will not accept any commands from S2,
+
+1342
+01:29:35,880 --> 01:29:38,010
+if the view numbers don't match.
+
+1343
+01:29:39,560 --> 01:29:40,790
+Oh, you got it, thank you.
+
+1344
+01:29:41,410 --> 01:29:44,290
+So related to that, one thing I couldn't figure out is
+
+1345
+01:29:44,290 --> 01:29:47,230
+even with like configuration numbers or something,
+
+1346
+01:29:47,230 --> 01:29:49,870
+how do you make sure that when you get rid of the tail
+
+1347
+01:29:49,870 --> 01:29:51,370
+in like the third scenario you drawn,
+
+1348
+01:29:51,610 --> 01:29:55,540
+now when you get through the tail, that all the clients that might issue a read
+
+1349
+01:29:55,780 --> 01:29:57,850
+are aware that this old server no longer.
+
+1350
+01:29:58,270 --> 01:30:00,940
+Clients, I think the way you would do is
+
+1351
+01:30:00,940 --> 01:30:04,990
+that the configuration when the client download the configuration from configuration manager,
+
+1352
+01:30:04,990 --> 01:30:06,430
+they also include the view number
+
+1353
+01:30:06,670 --> 01:30:13,350
+and every operation includes the number and S3 will say hi, there's an old view number,
+
+1354
+01:30:13,470 --> 01:30:14,520
+don't talk to me.
+
+1355
+01:30:14,850 --> 01:30:19,440
+I I guess, when the clients talk the configurations over to get view numbers,
+
+1356
+01:30:19,440 --> 01:30:20,820
+I'm going to start with is a client,
+
+1357
+01:30:21,030 --> 01:30:21,780
+that has an old.
+
+1358
+01:30:21,780 --> 01:30:26,160
+You know, so for example the S2 could just say retry
+
+1359
+01:30:26,490 --> 01:30:30,690
+and the client then go back to the configuration server and reread to the state.
+
+1360
+01:30:32,380 --> 01:30:33,910
+I guess what I'm worried about is
+
+1361
+01:30:33,910 --> 01:30:38,680
+like S3 has been network partitioned away from from the coordinator
+
+1362
+01:30:38,770 --> 01:30:41,260
+and so the coordinator gets rid of S3 from the tail
+
+1363
+01:30:41,260 --> 01:30:42,580
+and increase the version number,
+
+1364
+01:30:42,850 --> 01:30:46,150
+but some client out there doesn't find out that the version numbers increase
+
+1365
+01:30:46,210 --> 01:30:47,800
+and still think S3 tail,
+
+1366
+01:30:47,830 --> 01:30:49,450
+talks to S3 doesn't read,
+
+1367
+01:30:49,570 --> 01:30:51,910
+meanwhile people are doing write to S1 S2
+
+1368
+01:30:51,910 --> 01:30:55,420
+and they have haven't seen that basically.
+
+1369
+01:30:55,800 --> 01:30:59,190
+Yeah, this is probably the reason why the paper go through the proxy.
+
+1370
+01:31:01,870 --> 01:31:05,250
+I see, okay.
+
+1371
+01:31:07,460 --> 01:31:10,160
+I have a question kind of going back to that,
+
+1372
+01:31:10,520 --> 01:31:16,750
+like unanswered questions about kind of like cross object when linearizability,
+
+1373
+01:31:16,990 --> 01:31:23,830
+I guess like, is that a whole other can of [] that we haven't really talked about
+
+1374
+01:31:23,830 --> 01:31:25,510
+which is like if you want to do,
+
+1375
+01:31:25,540 --> 01:31:26,500
+I don't know what the right term is,
+
+1376
+01:31:26,500 --> 01:31:31,780
+but like transactions that like cross multiple pieces of state,
+
+1377
+01:31:31,780 --> 01:31:34,860
+like if you're trying to implement an operation,
+
+1378
+01:31:34,860 --> 01:31:37,110
+where it's like you're setting a to one and b to two
+
+1379
+01:31:37,110 --> 01:31:39,660
+and you should only see those together or not at all,
+
+1380
+01:31:39,660 --> 01:31:40,890
+like [] of that,
+
+1381
+01:31:40,920 --> 01:31:44,100
+have we talked about that in any of the things we've seen before.
+
+1382
+01:31:44,220 --> 01:31:46,200
+No and we'll talk about a couple weeks,
+
+1383
+01:31:47,040 --> 01:31:48,450
+it going to be a big topic,
+
+1384
+01:31:48,570 --> 01:31:50,250
+basically how to do transactions.
+
+1385
+01:31:50,740 --> 01:31:53,140
+Okay, that's good to know, thanks.
+
+1386
+01:31:54,980 --> 01:31:57,260
+You mind going back to like the third slide?
+
+1387
+01:31:58,100 --> 01:31:58,580
+Yep.
+
+1388
+01:32:00,050 --> 01:32:01,430
+I can go to the third slide,
+
+1389
+01:32:03,580 --> 01:32:05,620
+maybe not, fourth slide.
+
+1390
+01:32:09,110 --> 01:32:11,210
+Oh, it's fifth slide, sorry,
+
+1391
+01:32:12,410 --> 01:32:13,940
+so I was a little bit confused,
+
+1392
+01:32:13,970 --> 01:32:17,570
+when you mention like if lock holder failed intermediate stage stuff,
+
+1393
+01:32:17,840 --> 01:32:21,470
+what exactly on this slide applies to zlocks
+
+1394
+01:32:21,470 --> 01:32:23,090
+and what applies to the go locks again.
+
+1395
+01:32:24,160 --> 01:32:27,640
+The these almost all statements about zlocks.
+
+1396
+01:32:29,760 --> 01:32:32,730
+So is the first statement that if the lock holder fails,
+
+1397
+01:32:32,730 --> 01:32:36,180
+then the intermediate state is not cleaned up, or is cleaned up.
+
+1398
+01:32:36,270 --> 01:32:39,270
+No, immediate state is visible,
+
+1399
+01:32:39,540 --> 01:32:43,350
+but then generally you have a leader election you could clean up the intermediate state,
+
+1400
+01:32:43,350 --> 01:32:47,230
+that was just like the point.
+
+1401
+01:32:47,230 --> 01:32:49,090
+Oh, so with with go locks
+
+1402
+01:32:49,090 --> 01:32:50,410
+is that also not the case
+
+1403
+01:32:50,410 --> 01:32:53,650
+like if there's a machine that's holding a go lock that's doing stuff
+
+1404
+01:32:53,680 --> 01:32:56,020
+and then all of [] [],
+
+1405
+01:32:56,170 --> 01:32:58,330
+isn't still the intermediate state visible.
+
+1406
+01:32:59,410 --> 01:33:02,170
+Okay, I I think what talking about go locks,
+
+1407
+01:33:02,170 --> 01:33:05,110
+you know is something that's a statement about multiple threads
+
+1408
+01:33:05,110 --> 01:33:06,700
+running on the same machine right
+
+1409
+01:33:07,000 --> 01:33:10,150
+and so if the Go lock disappears,
+
+1410
+01:33:10,150 --> 01:33:11,020
+because machine crashes,
+
+1411
+01:33:11,020 --> 01:33:12,790
+all the threads on that machine crash too.
+
+1412
+01:33:20,680 --> 01:33:26,740
+Right, but, when you say that the intermediate state is visible to other people,
+
+1413
+01:33:27,430 --> 01:33:29,620
+that's still true for Go locks though right.
+
+1414
+01:33:30,640 --> 01:33:36,100
+You know if they written persistent state to disk, or into some shared file system,
+
+1415
+01:33:36,100 --> 01:33:37,210
+like no the machine is gone,
+
+1416
+01:33:37,210 --> 01:33:38,590
+the disk is gone, everything is gone.
+
+1417
+01:33:40,220 --> 01:33:41,390
+Oh got it, okay,
+
+1418
+01:33:41,420 --> 01:33:44,120
+so it's saying that the like the persistence
+
+1419
+01:33:44,300 --> 01:33:45,980
+like intermediate state persistent.
+
+1420
+01:33:46,010 --> 01:33:48,620
+Zookeeper intermediate state might be visible,
+
+1421
+01:33:48,650 --> 01:33:51,920
+we're gonna delete the guy might have created some more files
+
+1422
+01:33:51,920 --> 01:33:53,480
+and those are visible now.
+
+1423
+01:33:54,550 --> 01:33:56,320
+Okay I see, thank you.
+
+1424
+01:33:56,740 --> 01:33:58,390
+so just follow that,
+
+1425
+01:33:58,390 --> 01:34:03,520
+since the implication that if a Go routine ever dies while holding the lock,
+
+1426
+01:34:04,100 --> 01:34:06,260
+the entire Go program must have died too.
+
+1427
+01:34:07,820 --> 01:34:10,880
+And as you can never have a Go routine die holding a lock with that
+
+1428
+01:34:10,970 --> 01:34:13,220
+and have other parts of the program continuously.
+
+1429
+01:34:14,000 --> 01:34:14,330
+Okay.
+
+1430
+01:34:15,070 --> 01:34:17,230
+The Go routine crashes, the application crashes.
+
