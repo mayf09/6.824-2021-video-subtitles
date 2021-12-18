@@ -1835,27 +1835,27 @@ we talked a lot about
 368
 00:11:52,290 --> 00:11:53,970
 0,420 420,540 540,690 690,900 900,1680
-is to think about GFS.|
+is to think about GFS,|
 
 369
 00:11:54,360 --> 00:11:56,190
 0,750 750,870 870,990 990,1290 1290,1830
-Um, you know would Jesus
+{} you know would GFS
 
 370
 00:11:56,190 --> 00:11:57,990
 0,510 510,930 930,1380 1380,1500 1500,1800
-be a substitute for France
+be a substitute for {Frangipani
 
 371
 00:11:57,990 --> 00:11:58,830
 0,390 390,480 480,570 570,720 720,840
-pan or the other way
+-} or the other way
 
 372
 00:11:58,830 --> 00:12:00,420
 0,420 420,540 540,690 690,870 870,1590
-around, how do they contrast.
+around how do they contrast.|
 
 373
 00:12:00,870 --> 00:12:01,980
@@ -1865,7 +1865,7 @@ And one way to think
 374
 00:12:01,980 --> 00:12:03,780
 0,180 180,330 330,420 420,990 1020,1800
-about this is that GPS
+about this is| that GFS
 
 375
 00:12:03,780 --> 00:12:05,460
@@ -1875,7 +1875,7 @@ is really file system designed
 376
 00:12:05,460 --> 00:12:07,620
 0,90 90,300 300,630 630,1470 1800,2160
-for map reduce applications and
+for {mapreduce -} applications| and
 
 377
 00:12:07,620 --> 00:12:08,850
@@ -1885,7 +1885,7 @@ so it's a file system
 378
 00:12:08,850 --> 00:12:12,840
 0,690 810,2340 2340,2910 2940,3390 3390,3990
-where files are not cached,
+where files are not cached,|
 
 379
 00:12:12,840 --> 00:12:14,100
@@ -1895,22 +1895,22 @@ in fact the files tend
 380
 00:12:14,100 --> 00:12:14,850
 0,60 60,180 180,360 360,630 630,750
-to be so big that
+to be so big,| that
 
 381
 00:12:14,850 --> 00:12:16,020
 0,120 120,420 420,600 600,960 960,1170
-they wouldn't even fit in
+they wouldn't even fit| in
 
 382
 00:12:16,020 --> 00:12:16,980
 0,150 150,330 330,390 390,780 780,960
-the type of cash that
+the type of cache that
 
 383
 00:12:16,980 --> 00:12:18,810
 0,360 360,750 750,1140 1440,1620 1620,1830
-we're talking about it's also
+we're talking about,| it's also
 
 384
 00:12:18,810 --> 00:12:20,490
@@ -1920,47 +1920,47 @@ basically sort of read sequentially
 385
 00:12:20,490 --> 00:12:21,630
 0,150 150,480 480,600 600,960 990,1140
-from beginning to end, and
+from beginning to end,| and
 
 386
 00:12:21,630 --> 00:12:23,280
 0,210 210,450 810,1020 1020,1560 1560,1650
-that's it, and maybe you
+that's it,| and maybe you
 
 387
 00:12:23,280 --> 00:12:25,170
 0,120 120,270 270,810 810,1530 1530,1890
-know some other a computer
+know some other {} computer
 
 388
 00:12:25,170 --> 00:12:26,400
 0,180 180,330 330,480 480,870 870,1230
-will read that file because
+will read that file,| because
 
 389
 00:12:26,400 --> 00:12:27,690
 0,120 120,330 330,540 540,810 810,1290
-some other map, reduce application
+some other {mapreduce -} application
 
 390
 00:12:27,690 --> 00:12:28,420
 0,240 240,450
-running on.
+running on.|
 
 391
 00:12:28,830 --> 00:12:30,210
 0,270 270,540 540,750 750,930 930,1380
-So think you think about
+So think, you think about
 
 392
 00:12:30,210 --> 00:12:32,010
 0,540 600,900 900,1140 1140,1470 1470,1800
-gfs, there's really no data
+GFS,| there's really no data
 
 393
 00:12:32,010 --> 00:12:33,180
 0,360 360,570 570,810 810,870 870,1170
-caching going on at all,
+caching going on at all,|
 
 394
 00:12:33,210 --> 00:12:33,930
@@ -1970,17 +1970,17 @@ there's a little bit of
 395
 00:12:33,930 --> 00:12:35,310
 0,300 300,510 510,750 750,1140 1170,1380
-action going on to keep
+caching going on to keep
 
 396
 00:12:35,310 --> 00:12:38,100
 0,390 390,600 960,1770 1770,1770 2430,2790
-track of where a chunk
+track of| where a chunk
 
 397
 00:12:38,100 --> 00:12:39,630
 0,300 300,720 840,1170 1170,1350 1350,1530
-servers were but there's actually
+servers were,| but there's actually
 
 398
 00:12:39,630 --> 00:12:40,860
@@ -1990,17 +1990,17 @@ no caching of data going
 399
 00:12:40,860 --> 00:12:42,090
 0,210 210,300 300,540 540,660 660,1230
-on at all in gfs,
+on at all in GFS,|
 
 400
 00:12:42,240 --> 00:12:43,200
 0,150 150,300 300,510 510,630 630,960
-so there's also no cash
+so there's also no cache
 
 401
 00:12:43,200 --> 00:12:45,300
 0,570 570,990 990,1080 1080,1770 1980,2100
-persistency probably in gfs and
+consistency probably in GFS| and
 
 402
 00:12:45,300 --> 00:12:46,170
@@ -2010,7 +2010,7 @@ so there's a type of
 403
 00:12:46,170 --> 00:12:47,760
 0,600 600,720 720,780 780,930 930,1590
-applications that they were targeting
+applications that they were targeting|
 
 404
 00:12:47,850 --> 00:12:49,020
@@ -2020,12 +2020,12 @@ that just didn't make sense
 405
 00:12:49,020 --> 00:12:49,780
 0,90 90,450
-at all.
+at all.|
 
 406
 00:12:50,080 --> 00:12:52,150
 0,450 450,540 540,1230 1320,1860 1860,2070
-Similarly in gfs gfs actually
+Similarly in GFS,| GFS actually
 
 407
 00:12:52,150 --> 00:12:53,500
@@ -2035,7 +2035,7 @@ it's not really a real
 408
 00:12:53,500 --> 00:12:54,520
 0,300 300,600 600,690 690,750 750,1020
-file system in the sense
+file system| in the sense
 
 409
 00:12:54,520 --> 00:12:55,990
@@ -2050,17 +2050,17 @@ intended to run like VI,
 411
 00:12:57,880 --> 00:13:00,040
 0,1110 1260,1650 1650,1830 1830,1950 1950,2160
-GCC, um, and so didn't
+GCC,| {} and so didn't
 
 412
 00:13:00,040 --> 00:13:01,870
 0,660 660,1080 1080,1230 1230,1710 1710,1830
-provide strips are positive for
+provide straight {sort,of} [positive] or
 
 413
 00:13:01,870 --> 00:13:04,840
 0,270 270,1020 1050,2490 2520,2850 2850,2970
-u.s compatibility inch pan, you
+unique compatibility,| {in,Frangipani -}, you
 
 414
 00:13:04,840 --> 00:13:06,130
@@ -2070,12 +2070,12 @@ can just run your standard
 415
 00:13:06,130 --> 00:13:08,260
 0,240 240,1050 1350,1740 1740,1950 1950,2130
-unix applications and things should
+Unix applications| and things should
 
 416
 00:13:08,260 --> 00:13:10,390
 0,210 210,540 690,1470 1500,1590 1590,2130
-work out and the applications
+work out| and the applications
 
 417
 00:13:10,390 --> 00:13:12,070
@@ -2090,22 +2090,22 @@ as if there was not
 419
 00:13:13,180 --> 00:13:14,470
 0,60 60,450 450,660 660,930 930,1290
-a distributed file system, basically
+a distributed file system,| basically
 
 420
 00:13:14,470 --> 00:13:15,480
 0,300 300,570 570,900
-single file system.
+single file system.|
 
 421
 00:13:16,990 --> 00:13:23,800
 0,600 630,1230 1260,1920 1950,6300 6300,6810
-Again in {gsk's -} ethical
+Again in GFS, {there,is} {basically,a,little,bit,of}
 
 422
 00:13:23,800 --> 00:13:25,600
 0,540 540,690 690,990 990,1290 1290,1800
-library, you know actually application
+library| you know actually application
 
 423
 00:13:25,600 --> 00:13:26,800
@@ -2115,27 +2115,27 @@ used to read or write
 424
 00:13:26,800 --> 00:13:28,660
 0,630 840,1080 1080,1500 1500,1710 1710,1860
-files, a mg 's, but
+files,| {} {in,GFS -}, but
 
 425
 00:13:28,660 --> 00:13:29,950
 0,60 60,180 180,510 510,990 990,1290
-it was not a hundred
+it was not one hundred
 
 426
 00:13:29,950 --> 00:13:31,480
 0,300 300,540 540,1110 1110,1200 1200,1530
-percent duties compatible at all.
+percent duties compatible at all.|
 
 427
 00:13:32,640 --> 00:13:33,540
 0,150 150,540 570,720 720,780 780,900
-Um, so let me give
+{} So let me give
 
 428
 00:13:33,540 --> 00:13:34,470
 0,60 60,120 120,480 480,720 720,930
-you a sense that we
+you a sense,| that we
 
 429
 00:13:34,470 --> 00:13:37,080
@@ -2150,17 +2150,17 @@ the design of these different
 431
 00:13:38,550 --> 00:13:39,930
 0,600 600,720 720,840 840,1080 1080,1380
-systems, you know in case
+systems,| you know in case
 
 432
 00:13:39,930 --> 00:13:41,970
 0,210 210,600 810,1140 1140,1440 1440,2040
-g fast map, reduce application
+{GFS -},| {mapreduce -} application
 
 433
 00:13:41,970 --> 00:13:43,770
 0,150 150,480 480,540 540,1080 1290,1800
-that drove the design a
+that drive the design, {}|
 
 434
 00:13:43,770 --> 00:13:45,390
@@ -2170,7 +2170,7 @@ in case of you know
 435
 00:13:45,420 --> 00:13:46,440
 0,180 180,570 570,720 720,810 810,1020
-from Japan or the shared
+from Frangipani or the shared
 
 436
 00:13:46,440 --> 00:13:47,610
@@ -2185,22 +2185,22 @@ of users working on shared
 438
 00:13:49,590 --> 00:13:50,730
 0,300 300,630 630,750 750,1020 1020,1140
-file system, but most of
+file system,| but most of
 
 439
 00:13:50,730 --> 00:13:52,560
 0,90 90,840 840,1290 1290,1560 1560,1830
-the operations error for me
+the operations {you,know} their performing
 
 440
 00:13:52,650 --> 00:13:54,480
 0,390 390,600 660,1170 1170,1380 1380,1830
-probably just files day own
+probably just files day own|
 
 441
 00:13:54,540 --> 00:13:56,900
 0,720 720,840 1470,1830 1830,2220
-a and performed locally.
+{} and performed locally.|
 
 442
 00:13:57,900 --> 00:13:59,070
@@ -2210,7 +2210,7 @@ That makes sense in terms
 443
 00:13:59,070 --> 00:14:00,990
 0,240 240,870 870,1050 1050,1650 1710,1920
-of contrast in settings so
+of contrast in settings,| so
 
 444
 00:14:00,990 --> 00:14:01,710
@@ -2225,7 +2225,7 @@ quite a different number of
 446
 00:14:02,640 --> 00:14:04,680
 0,270 270,630 630,1080 1320,1860 1860,2040
-file systems, rap, cuz yeah
+file systems around,| {like,zookeeper} yet
 
 447
 00:14:04,680 --> 00:14:06,330
@@ -2235,12 +2235,12 @@ another sort of provides file
 448
 00:14:06,330 --> 00:14:07,380
 0,270 270,660 660,750 750,840 840,1050
-system interface but it's not
+system interface,| but it's not
 
 449
 00:14:07,380 --> 00:14:08,670
 0,180 180,270 270,510 510,930 930,1290
-really a file system, it's
+really a file system,| it's
 
 450
 00:14:08,670 --> 00:14:10,050
@@ -2250,37 +2250,36 @@ like more intended as a
 451
 00:14:10,050 --> 00:14:11,550
 0,510 510,870 870,960 960,1170 1170,1500
-coordination shares you wouldn't store
+coordination service,| you wouldn't store
 
 452
 00:14:11,550 --> 00:14:13,380
 0,210 210,840 1020,1440 1440,1650 1650,1830
-big files, um in zoo
+big files {} in {zookeeper
 
 453
 00:14:13,380 --> 00:14:13,960
 0,390
-keeper.
+-}.|
 
 454
 00:14:16,130 --> 00:14:18,590
 0,240 240,570 570,780 780,1320 1680,2460
-Any questions about this a
+Any questions about this {}
 
 455
 00:14:18,920 --> 00:14:19,960
 0,630
-setting.
+setting?|
 
 456
 00:14:20,220 --> 00:14:21,560
 0,480
-Wow.
 
 457
 00:14:21,780 --> 00:14:23,700
 0,210 210,390 390,630 630,1530 1560,1920
-Um, can you briefly repeat
+{} Can you briefly repeat
 
 458
 00:14:23,700 --> 00:14:25,080
@@ -2295,27 +2294,26 @@ code running on the client
 460
 00:14:26,490 --> 00:14:29,880
 0,540 1290,2010 2010,2340 2340,3150
-machine enhances a scalability.
+machine enhances {} scalability,|
 
 461
 00:14:30,110 --> 00:14:31,250
 0,360 360,630 630,690 690,1050 1050,1140
-Versus having the client and
+versus having the client and
 
 462
 00:14:31,250 --> 00:14:32,810
 0,90 90,270 270,780 1050,1380 1380,1560
-the file server being on
+the file server| being on
 
 463
 00:14:32,810 --> 00:14:34,490
 0,270 270,750 930,1140 1140,1260 1260,1680
-different machines or on different,
+different machines or on different.|
 
 464
 00:14:34,490 --> 00:14:35,420
 0,390
-um.
 
 465
 00:14:35,840 --> 00:14:36,680
@@ -2330,7 +2328,7 @@ you'd like to go back
 467
 00:14:37,880 --> 00:14:39,650
 0,90 90,390 420,870 870,1170 1170,1770
-to this previous slide here
+to this previous slide here,|
 
 468
 00:14:39,650 --> 00:14:40,610
@@ -2340,17 +2338,17 @@ on the left the network
 469
 00:14:40,610 --> 00:14:41,930
 0,240 240,720 720,930 930,1050 1050,1320
-file system go so there's
+file system go,| so there's
 
 470
 00:14:41,930 --> 00:14:43,820
 0,240 240,420 420,630 630,1290 1440,1890
-many many many clients let's
+many many many clients,| let's
 
 471
 00:14:43,820 --> 00:14:45,470
 0,300 300,480 480,720 720,1170 1200,1650
-figure there's only one there's
+figure there's only one,| there's
 
 472
 00:14:45,470 --> 00:14:46,550
@@ -2360,17 +2358,17 @@ let me simplify this picture
 473
 00:14:46,550 --> 00:14:48,350
 0,90 90,120 120,480 870,1200 1230,1800
-for a second and ignore
+for a second| and ignore
 
 474
 00:14:48,350 --> 00:14:49,430
 0,90 90,360 360,570 570,900 900,1080
-the second file servers one
+the second file server, one
 
 475
 00:14:49,430 --> 00:14:50,720
 0,270 270,540 540,810 810,990 990,1290
-one file server, so everybody
+one file server,| so everybody
 
 476
 00:14:50,720 --> 00:14:51,770
@@ -2380,22 +2378,22 @@ can share the files from
 477
 00:14:51,770 --> 00:14:53,060
 0,120 120,360 360,750 900,1140 1140,1290
-the file server, then all
+the file server,| then all
 
 478
 00:14:53,060 --> 00:14:54,290
 0,210 210,630 630,750 750,840 840,1230
-these clients will be hammering
+these clients will be handling
 
 479
 00:14:54,290 --> 00:14:55,640
 0,120 120,390 390,720 720,990 990,1350
-on that single file server,
+on that single file server,|
 
 480
 00:14:56,300 --> 00:14:57,200
 0,270 270,450 450,690 690,840 840,900
-and so only read or
+and so {all,the} read or
 
 481
 00:14:57,200 --> 00:14:58,250
@@ -2410,32 +2408,32 @@ be sent to the file
 483
 00:14:58,970 --> 00:15:00,980
 0,510 510,600 600,840 840,1200 1440,2010
-server, the file server directory
+server,| the file server directory
 
 484
 00:15:00,980 --> 00:15:04,070
 0,630 660,1530 1950,2130 2130,2460 2460,3090
-lookout, a it opens files
+lookout,| {} it opens files
 
 485
 00:15:04,070 --> 00:15:05,780
 0,90 90,390 390,840 840,1470 1530,1710
-and adjust security checks and
+and adjust security checks| and
 
 486
 00:15:05,780 --> 00:15:06,410
 0,120 120,210 210,360 360,420 420,630
-all that kind of stuff
+all that kind of stuff,|
 
 487
 00:15:06,410 --> 00:15:07,910
 0,90 90,270 270,360 360,1080 1080,1500
-so all the competition really
+so all the computation really
 
 488
 00:15:07,910 --> 00:15:09,590
 0,600 630,720 720,1020 1020,1320 1320,1680
-for the file system itself
+for the file system itself,|
 
 489
 00:15:09,590 --> 00:15:11,030
@@ -2450,22 +2448,22 @@ file server itself in the
 491
 00:15:12,830 --> 00:15:14,510
 0,570 570,840 840,1020 1020,1290 1290,1680
-traditional network file system design
+traditional network file system design,|
 
 492
 00:15:14,840 --> 00:15:15,710
 0,240 240,300 300,510 510,780 780,870
-in the French upon me
+in the {Frangipani - -},
 
 493
 00:15:15,710 --> 00:15:17,090
 0,240 240,390 390,450 450,990 1320,1380
-that's not the case in
+that's not the case,| in
 
 494
 00:15:17,090 --> 00:15:18,050
 0,240 240,540 540,690 690,870 870,960
-front upon me all the
+{Frangipani - -} all the
 
 495
 00:15:18,050 --> 00:15:19,670
@@ -2475,7 +2473,7 @@ file system operations are executed
 496
 00:15:19,670 --> 00:15:20,820
 0,150 150,240 240,1080
-on the workstations.
+on the workstations.|
 
 497
 00:15:21,260 --> 00:15:22,820
@@ -2485,17 +2483,17 @@ And so we have multiple
 498
 00:15:22,820 --> 00:15:24,350
 0,750 750,840 840,1320 1320,1380 1380,1530
-workstations are basically you know
+workstations| are basically you know
 
 499
 00:15:24,350 --> 00:15:26,150
 0,240 240,960 960,1110 1110,1200 1200,1800
-the workload that the spouses
+the workload that the {file,system}
 
 500
 00:15:26,150 --> 00:15:27,260
 0,120 120,660 660,870 870,960 960,1110
-can scale or it can
+can scale| or it can
 
 501
 00:15:27,260 --> 00:15:28,430
@@ -2505,7 +2503,7 @@ support scales with the number
 502
 00:15:28,430 --> 00:15:29,540
 0,90 90,870
-of workstations.
+of workstations.|
 
 503
 00:15:31,330 --> 00:15:32,230
@@ -2515,12 +2513,12 @@ I see, and then be
 504
 00:15:32,230 --> 00:15:34,600
 0,270 270,1230 1260,1800 1800,2130 2130,2370
-a traditional architecture, so every
+a traditional architecture,| so every
 
 505
 00:15:34,600 --> 00:15:37,240
 0,180 180,510 510,1170 1170,1620 1950,2640
-file server contains our stores,
+file server contains or stores,|
 
 506
 00:15:37,240 --> 00:15:38,740
@@ -2530,22 +2528,22 @@ let's say a section of
 507
 00:15:38,800 --> 00:15:40,390
 0,420 450,660 660,1050 1050,1290 1290,1590
-the the empire file system
+the the entire file system
 
 508
 00:15:40,390 --> 00:15:41,680
 0,210 210,450 450,840 840,1050 1050,1290
-right, so it so it's
+right,| so it so it's
 
 509
 00:15:41,680 --> 00:15:42,820
 0,180 180,270 270,540 540,870 870,1140
-not the case that a.
+not the case that {}
 
 510
 00:15:43,260 --> 00:15:44,880
 0,300 300,540 540,780 780,1110 1110,1620
-Every single file server has
+every single file server has
 
 511
 00:15:44,880 --> 00:15:46,110
@@ -2555,27 +2553,27 @@ a copy of the entire
 512
 00:15:46,110 --> 00:15:47,790
 0,450 840,1020 1020,1290 1290,1500 1500,1680
-system is that it might
+system,| is that it might
 
 513
 00:15:47,790 --> 00:15:51,270
 0,120 120,570 600,1140 1170,1680 1860,3480
-be partitioned across files Xiaoli
+be partitioned across files.| {Yes,,that,might,be}
 
 514
 00:15:51,270 --> 00:15:52,620
 0,630 630,840 840,1080 1080,1140 1140,1350
-naif asked Greg you know
+across,| {for,example} AFS you know
 
 515
 00:15:52,620 --> 00:15:55,650
 0,420 420,600 600,870 870,1680 1860,3030
-there are different volumes and
+there are different volumes| and
 
 516
 00:15:55,680 --> 00:15:57,720
 0,300 300,720 720,1320 1320,1560 1560,2040
-file servers managed different volumes
+file servers managed different volumes|
 
 517
 00:15:57,720 --> 00:15:58,740
@@ -2585,12 +2583,12 @@ and the data of all
 518
 00:15:58,740 --> 00:16:00,510
 0,390 390,840 840,1140 1140,1500 1500,1770
-users, MIT spread across different
+users MIT spread across different
 
 519
 00:16:00,510 --> 00:16:01,360
 0,630
-volumes.
+volumes.|
 
 520
 00:16:01,710 --> 00:16:02,910
@@ -2605,7 +2603,7 @@ one volumes are going to
 522
 00:16:03,870 --> 00:16:05,190
 0,150 150,480 480,750 750,1140 1140,1320
-be one file server, and
+be one file server,| and
 
 523
 00:16:05,190 --> 00:16:06,570
@@ -2615,17 +2613,17 @@ so that file volume gets
 524
 00:16:06,570 --> 00:16:07,950
 0,150 150,630 720,900 900,1050 1050,1380
-his heart, you know you're
+hit head,| you know you're
 
 525
 00:16:07,950 --> 00:16:09,480
 0,150 150,210 210,540 540,870 870,1530
-going to get forms bottlenecks.
+going to get performance bottlenecks.|
 
 526
 00:16:10,000 --> 00:16:11,360
 0,390 420,720 720,870 870,1050
-Okay awesome, thank you.
+Okay awesome, thank you.|
 
 527
 00:16:13,700 --> 00:16:14,810
@@ -2635,17 +2633,17 @@ Any more questions about sort
 528
 00:16:14,810 --> 00:16:16,850
 0,90 90,330 330,780 780,1260 1290,2040
-of the shedding here before
+of the setting here,| before
 
 529
 00:16:16,850 --> 00:16:18,040
 0,210 210,510 510,870
-we dive in.
+we dive in
 
 530
 00:16:18,300 --> 00:16:20,220
 0,420 420,690 690,1170 1170,1470 1470,1920
-To a more French pie.
+to {} more {Frangipani -}.|
 
 531
 00:16:25,660 --> 00:16:26,660
