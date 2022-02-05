@@ -1,0 +1,6128 @@
+1
+00:00:00,210 --> 00:00:03,450
+So I want to talk today about memcache,
+
+2
+00:00:03,450 --> 00:00:08,100
+this is a paper from Facebook from 2013,
+
+3
+00:00:08,740 --> 00:00:15,400
+memcache are still widely used in many websites or big Internet websites you use,
+
+4
+00:00:15,400 --> 00:00:17,860
+have ideas or architecture is very similar to it.
+
+5
+00:00:18,460 --> 00:00:22,420
+The paper is an experience paper,
+
+6
+00:00:30,200 --> 00:00:38,120
+so the goal of the paper is not so much to introduce new ideas or new concepts or new innovative ways of building systems,
+
+7
+00:00:38,120 --> 00:00:43,820
+so again there's more to report on actual practical experience in trying to build systems,
+
+8
+00:00:43,820 --> 00:00:50,300
+that in this particular case can have support a billion requests per seconds or multiple billion requests per seconds.
+
+9
+00:00:51,070 --> 00:00:57,430
+And so there are three lessons you know you can take away from this particular paper.
+
+10
+00:01:01,060 --> 00:01:05,170
+One is they got very impressive performance
+
+11
+00:01:05,650 --> 00:01:11,560
+out of building out of building system with an off the shelf component.
+
+12
+00:01:16,300 --> 00:01:20,140
+So the system consist of standard open software packages,
+
+13
+00:01:20,140 --> 00:01:22,660
+like mysql memcached
+
+14
+00:01:22,870 --> 00:01:26,740
+and they combine that together to actually build a system
+
+15
+00:01:26,740 --> 00:01:27,910
+or scale that out to a system
+
+16
+00:01:27,910 --> 00:01:30,430
+that actually support a billion requests per seconds,
+
+17
+00:01:31,030 --> 00:01:34,360
+as you can see, as we see in this lecture,
+
+18
+00:01:34,360 --> 00:01:43,480
+there's sort of continuously in tension between performance and consistency.
+
+19
+00:01:48,760 --> 00:01:50,110
+And as you'll see in this paper,
+
+20
+00:01:50,110 --> 00:01:54,040
+the design is mostly driven by performance,
+
+21
+00:01:54,040 --> 00:01:59,680
+you know they want to find some degree of consistency
+
+22
+00:01:59,680 --> 00:02:06,490
+is sort of added to you know make the system at least be usable for the application that actually Facebook has,
+
+23
+00:02:06,700 --> 00:02:12,520
+in fact you know the consistency model is quite different from the consistency models that we've seen before,
+
+24
+00:02:12,610 --> 00:02:18,910
+most of the system we talked about so far actually provides either external consistency or linearizability,
+
+25
+00:02:19,180 --> 00:02:21,850
+they're very strong for consistency
+
+26
+00:02:22,030 --> 00:02:24,310
+and then in the case of Facebook,
+
+27
+00:02:25,000 --> 00:02:28,870
+their applications don't really need linearizability,
+
+28
+00:02:28,870 --> 00:02:31,540
+if the user is reading news articles
+
+29
+00:02:31,720 --> 00:02:34,360
+and the news feed is a couple of seconds behind,
+
+30
+00:02:34,450 --> 00:02:35,530
+it doesn't really matter,
+
+31
+00:02:35,800 --> 00:02:43,420
+and so they are, they have absolutely not the goal of providing sort of linearizability or strict consistency.
+
+32
+00:02:44,360 --> 00:02:46,880
+So that's an important thing to keep in mind,
+
+33
+00:02:48,150 --> 00:02:51,390
+despite that they're not shooting for strong you know consistency,
+
+34
+00:02:51,420 --> 00:02:53,760
+there are some sort of cautionary tales,
+
+35
+00:02:55,270 --> 00:03:01,120
+in the paper that you know adding consistency measures is not easy
+
+36
+00:03:01,120 --> 00:03:05,530
+and you should not have, prepared for it to start,
+
+37
+00:03:06,380 --> 00:03:12,440
+but nevertheless you know the you really can't argue with the success of the system,
+
+38
+00:03:12,560 --> 00:03:15,020
+it really very successful
+
+39
+00:03:15,380 --> 00:03:24,710
+and allows Facebook websites you know follow or accompany the follow similar strategies to actually scaled a large large number of users.
+
+40
+00:03:28,260 --> 00:03:31,260
+So my plan for this lecture basically first to talk about performance,
+
+41
+00:03:31,260 --> 00:03:34,950
+because really the performance is the driving force behind this design
+
+42
+00:03:35,190 --> 00:03:38,670
+and then at the end you know talk more about consistency.
+
+43
+00:03:39,690 --> 00:03:43,530
+Before jumping in to, let me know if there's any questions?
+
+44
+00:03:50,010 --> 00:03:55,620
+Okay, so, let me start with a little bit of broader introduction to performance
+
+45
+00:03:55,740 --> 00:03:59,580
+and basically talk about website evolution.
+
+46
+00:04:05,930 --> 00:04:08,960
+I'm sure many of you actually have built websites
+
+47
+00:04:09,410 --> 00:04:11,420
+and you know if you sort of start out
+
+48
+00:04:11,420 --> 00:04:12,620
+and you don't have any users,
+
+49
+00:04:12,620 --> 00:04:13,910
+you know that's pretty straightforward,
+
+50
+00:04:15,410 --> 00:04:18,830
+buy a machine or run a machine on Amazon or anywhere else,
+
+51
+00:04:19,070 --> 00:04:21,980
+and you just basically need three components,
+
+52
+00:04:21,980 --> 00:04:25,280
+you need web server, let's say Apache,
+
+53
+00:04:27,230 --> 00:04:31,820
+you need an application framework to build your website in,
+
+54
+00:04:32,090 --> 00:04:34,430
+maybe PHP, maybe Python,
+
+55
+00:04:34,430 --> 00:04:38,990
+you know in case of Facebook, I think they use PHP,
+
+56
+00:04:39,770 --> 00:04:45,070
+and you need a database that actually stores the data of your website,
+
+57
+00:04:45,340 --> 00:04:49,450
+will be able to use whatever mysql you know Facebook is doing.
+
+58
+00:04:50,960 --> 00:04:54,050
+And so you know clients you know connect to your website,
+
+59
+00:04:54,110 --> 00:04:57,980
+rung you know the whatever application code
+
+60
+00:04:58,010 --> 00:05:01,310
+or whatever application service the website provides
+
+61
+00:05:01,610 --> 00:05:05,440
+and store and retrieve data using the database,
+
+62
+00:05:05,440 --> 00:05:07,840
+the database provides transactions,
+
+63
+00:05:07,990 --> 00:05:10,000
+it has sql,
+
+64
+00:05:10,000 --> 00:05:15,070
+so it's easy to query over the data in different ways,
+
+65
+00:05:15,070 --> 00:05:17,710
+and all the persistent state you know store in the database,
+
+66
+00:05:17,710 --> 00:05:19,750
+so you know just to backup the database
+
+67
+00:05:19,750 --> 00:05:23,020
+and you basically have a good sort of fault tolerance plan.
+
+68
+00:05:23,830 --> 00:05:26,650
+And that's sort of, and for any website,
+
+69
+00:05:26,650 --> 00:05:29,140
+that's a small number of users is completely sufficient,
+
+70
+00:05:29,260 --> 00:05:32,350
+and way many websites are built,
+
+71
+00:05:32,470 --> 00:05:36,790
+however you know when the, the number of users increases,
+
+72
+00:05:36,880 --> 00:05:40,060
+you probably need to go to a little bit more sophisticated design.
+
+73
+00:05:40,710 --> 00:05:43,050
+So this is sort of step one in the evolution.
+
+74
+00:05:43,260 --> 00:05:45,150
+In step two,
+
+75
+00:05:50,990 --> 00:05:54,410
+sort of trying to address getting the first bottleneck that we're running to,
+
+76
+00:05:54,560 --> 00:05:56,480
+when you have a larger number of users
+
+77
+00:05:56,480 --> 00:05:58,940
+and typically the bottleneck you are run into
+
+78
+00:05:59,120 --> 00:06:02,990
+is basically the computation of cycles being used by the application,
+
+79
+00:06:02,990 --> 00:06:06,380
+so if you have thousands of users running at the website at the same time
+
+80
+00:06:06,650 --> 00:06:09,710
+or 10 000 or whatever number of users it is
+
+81
+00:06:09,710 --> 00:06:15,320
+and you know just running you know the application code on a single CPU or a single computer,
+
+82
+00:06:15,440 --> 00:06:21,710
+gets to drive basically CPU you know if you load up 200%,
+
+83
+00:06:21,710 --> 00:06:23,270
+then you can't support more.
+
+84
+00:06:23,940 --> 00:06:27,600
+And so, fortunately this is actually straightforwardly solved,
+
+85
+00:06:27,810 --> 00:06:31,290
+because the database actually has all the persistent state,
+
+86
+00:06:31,830 --> 00:06:33,870
+so typically way you solve this is
+
+87
+00:06:33,870 --> 00:06:38,070
+you keep the one machine with the database or keep the machine on the database,
+
+88
+00:06:38,280 --> 00:06:41,070
+and I just buy a bunch of different machines for the frontends,
+
+89
+00:06:41,100 --> 00:06:42,330
+I'm just going to talk about the frontend,
+
+90
+00:06:42,330 --> 00:06:49,320
+that is one thing which is you know typically the website Apache plus you know some application code,
+
+91
+00:06:49,320 --> 00:06:53,070
+if you get more users, you'll buy more machines,
+
+92
+00:07:00,350 --> 00:07:03,290
+you know they all connect to the database you know to get their data,
+
+93
+00:07:03,530 --> 00:07:08,300
+and and actually this design works out extremely well,
+
+94
+00:07:08,330 --> 00:07:12,970
+because basically frontends are stateless,
+
+95
+00:07:13,210 --> 00:07:15,460
+you know all this data again is in the database,
+
+96
+00:07:15,790 --> 00:07:17,710
+and so adding a new server,
+
+97
+00:07:17,710 --> 00:07:22,420
+it's pretty trivial, all the frontend actually will see the latest writes,
+
+98
+00:07:22,420 --> 00:07:24,520
+because all the data is actually stored in the database,
+
+99
+00:07:24,610 --> 00:07:26,140
+so there's no consistency issues,
+
+100
+00:07:26,470 --> 00:07:28,120
+in terms of fault tolerance is easy,
+
+101
+00:07:28,120 --> 00:07:29,500
+if one of these machines fails,
+
+102
+00:07:29,500 --> 00:07:30,670
+you know no problem at all,
+
+103
+00:07:30,910 --> 00:07:34,180
+and maybe the machines have to take over the load
+
+104
+00:07:34,420 --> 00:07:36,640
+or you have to bring on a new machine of frontend,
+
+105
+00:07:36,640 --> 00:07:43,240
+but you don't actually have to do anything in terms of complicated data restoration or restoration,
+
+106
+00:07:43,240 --> 00:07:45,280
+because all the data is actually in the database.
+
+107
+00:07:46,540 --> 00:07:48,760
+And so this is a good,
+
+108
+00:07:48,760 --> 00:07:51,010
+just typically just the first thing that happens
+
+109
+00:07:51,280 --> 00:07:53,170
+and as a website to your scales.
+
+110
+00:07:55,340 --> 00:07:59,480
+Now, of course, and your website scales further,
+
+111
+00:07:59,840 --> 00:08:02,240
+and you need to support,
+
+112
+00:08:02,390 --> 00:08:07,310
+more than say you know for example a simple mysql setup can probably support
+
+113
+00:08:07,310 --> 00:08:13,100
+and a thousand you know simple read transactions or simple read queries you know per second,
+
+114
+00:08:13,580 --> 00:08:17,330
+probably you know thousands you know write transactions
+
+115
+00:08:17,570 --> 00:08:23,300
+and so if the total requests from your users actually goes over hundred thousand,
+
+116
+00:08:23,680 --> 00:08:25,720
+then, you need a different plan.
+
+117
+00:08:26,530 --> 00:08:30,130
+And so, then the next one is typically is sharding.
+
+118
+00:08:38,270 --> 00:08:41,360
+And you know so far this is all pretty standard
+
+119
+00:08:41,360 --> 00:08:46,790
+and so what you do is actually take the storage machine be split in multiple machines,
+
+120
+00:08:49,730 --> 00:08:51,530
+the frontends basically stay the same,
+
+121
+00:08:51,530 --> 00:08:54,500
+we still have our any frontend machines,
+
+122
+00:09:02,070 --> 00:09:05,670
+and we have our sharded database,
+
+123
+00:09:07,940 --> 00:09:17,060
+and basically you know some range of keys lives on whatever maybe 1 to 40 live on you know shard one,
+
+124
+00:09:17,150 --> 00:09:21,500
+might from 40 to whatever 70 live on shard two,
+
+125
+00:09:21,500 --> 00:09:25,700
+and 70 to 100 you know just to make stuff up, there's a shard three,
+
+126
+00:09:25,700 --> 00:09:31,430
+so basically you take the tables in the database or the rows in the database and sharded by key.
+
+127
+00:09:32,440 --> 00:09:34,750
+And so when the frontend needs to know,
+
+128
+00:09:34,750 --> 00:09:36,310
+of course which database there are
+
+129
+00:09:36,490 --> 00:09:39,580
+and even though it needs to get you know key 32,
+
+130
+00:09:39,940 --> 00:09:41,560
+you know will go to shard one,
+
+131
+00:09:41,560 --> 00:09:44,680
+it needs to get you know to key 50, it will go to sharp two.
+
+132
+00:09:46,340 --> 00:09:50,240
+And so this gives us database parallelism.
+
+133
+00:09:56,310 --> 00:10:02,580
+So like every, in most, request actually are on two different shard,
+
+134
+00:10:02,580 --> 00:10:06,510
+you know basically instead of actually limited by the one machine,
+
+135
+00:10:06,510 --> 00:10:08,790
+we're actually getting the throughput of one machine,
+
+136
+00:10:08,790 --> 00:10:11,850
+say a hundred thousand times in the number of machines that we have.
+
+137
+00:10:13,540 --> 00:10:18,220
+And so that is typically the next step
+
+138
+00:10:18,220 --> 00:10:19,840
+and of course this actually has,
+
+139
+00:10:19,930 --> 00:10:23,290
+this step is a little bit more painful than the first step,
+
+140
+00:10:23,560 --> 00:10:28,030
+because now you might actually have cross shards transactions,
+
+141
+00:10:28,150 --> 00:10:28,960
+if you need them
+
+142
+00:10:29,350 --> 00:10:35,710
+or if you want to avoid them, you got group the keys you know that go go together on the same machine,
+
+143
+00:10:35,800 --> 00:10:40,450
+otherwise, you know you need some two-phase commit protocol,
+
+144
+00:10:40,600 --> 00:10:42,820
+if you do transaction cross shards,
+
+145
+00:10:42,820 --> 00:10:47,380
+so, this, this step from the first you know design two to design three,
+
+146
+00:10:47,530 --> 00:10:51,040
+is a significant, a significant step.
+
+147
+00:10:54,390 --> 00:10:57,780
+Now, if you grow further and further,
+
+148
+00:10:57,960 --> 00:11:01,590
+you might say well you know you could just shard the database further and further,
+
+149
+00:11:01,890 --> 00:11:04,410
+sort of fewer queues of keys per server,
+
+150
+00:11:04,470 --> 00:11:12,000
+but that actually increases you know the risk that you actually have to do cross shard transactions.
+
+151
+00:11:12,680 --> 00:11:15,110
+So there's another way of going,
+
+152
+00:11:15,110 --> 00:11:17,270
+which is observed like well,
+
+153
+00:11:17,300 --> 00:11:18,770
+maybe it's not really important
+
+154
+00:11:18,830 --> 00:11:22,760
+that the database actually supports the reads,
+
+155
+00:11:22,760 --> 00:11:25,760
+you know we can offload the reads you know from the database,
+
+156
+00:11:25,970 --> 00:11:28,550
+and basically the database only does the writes,
+
+157
+00:11:28,670 --> 00:11:31,670
+then maybe we can get a big performance gain.
+
+158
+00:11:32,380 --> 00:11:37,120
+And so that's basically the next common step that the websites take,
+
+159
+00:11:37,180 --> 00:11:41,170
+if they scale up is, you know add cache,
+
+160
+00:11:51,660 --> 00:11:54,990
+and you know it could be in the form of memcached or redis,
+
+161
+00:11:55,380 --> 00:12:00,000
+you know sort of popular you know open source packages for caching
+
+162
+00:12:00,390 --> 00:12:02,460
+and and then the basic plan is,
+
+163
+00:12:02,460 --> 00:12:04,800
+you know so is roughly as follows,
+
+164
+00:12:04,800 --> 00:12:07,230
+you have a lot of frontends as before,
+
+165
+00:12:13,720 --> 00:12:16,840
+and we have a set of caches on the site,
+
+166
+00:12:16,990 --> 00:12:19,570
+we'l talk a little bit about that in a second bit more,
+
+167
+00:12:19,810 --> 00:12:25,180
+in case case, we get here caches, cache layer,
+
+168
+00:12:26,650 --> 00:12:28,630
+cache 1, cache 2, cache 3
+
+169
+00:12:28,810 --> 00:12:30,580
+and in the case of Facebook,
+
+170
+00:12:30,580 --> 00:12:35,050
+these are called, each individual server is called memcached daemon
+
+171
+00:12:35,260 --> 00:12:39,280
+and the whole cluster or the collection of cache is called memcache.
+
+172
+00:12:43,520 --> 00:12:50,930
+And you know there's still our database you know sharded across maybe multiple machines,
+
+173
+00:12:52,690 --> 00:12:54,310
+there's sort of a storage layer.
+
+174
+00:12:57,800 --> 00:13:01,610
+And so the idea is you know pretty straightforward,
+
+175
+00:13:01,910 --> 00:13:06,350
+if you know frontend needs to, want to read a particular key,
+
+176
+00:13:06,470 --> 00:13:07,910
+it first tries to cache,
+
+177
+00:13:10,120 --> 00:13:12,370
+and hopefully you know will hit in the cache,
+
+178
+00:13:12,370 --> 00:13:14,140
+so basically get a quick response back,
+
+179
+00:13:14,140 --> 00:13:17,490
+you know from the cache,
+
+180
+00:13:17,490 --> 00:13:18,750
+if it's not in the cache,
+
+181
+00:13:18,750 --> 00:13:22,470
+and it can retrieve it you know from the storage system,
+
+182
+00:13:22,650 --> 00:13:25,560
+and then install you know the data in the cache,
+
+183
+00:13:26,490 --> 00:13:30,660
+writes you know basically go straight to the storage server.
+
+184
+00:13:36,440 --> 00:13:39,920
+And, this, you know this sort of kind of design,
+
+185
+00:13:39,950 --> 00:13:41,960
+we'll talk about it much more in the details in a second,
+
+186
+00:13:41,960 --> 00:13:46,940
+but this sort of design where you have a caching layer works extremely well for read heavy workloads
+
+187
+00:13:46,940 --> 00:13:48,680
+and so if you think about Facebook,
+
+188
+00:13:48,830 --> 00:13:51,920
+it is going to be you know a whole lot of users
+
+189
+00:13:52,250 --> 00:13:55,610
+and what they're doing is reading out of people's posts,
+
+190
+00:13:55,610 --> 00:13:57,440
+you know looking at the timelines,
+
+191
+00:13:57,440 --> 00:14:00,440
+you know maybe watching looking at pictures,
+
+192
+00:14:00,650 --> 00:14:05,150
+reading the news, articles etc etc,
+
+193
+00:14:05,150 --> 00:14:13,400
+so it's very heavily oriented workload oriented to read
+
+194
+00:14:15,050 --> 00:14:17,060
+and you know in this case,
+
+195
+00:14:17,060 --> 00:14:19,310
+you know the read to be almost surfed from these caches
+
+196
+00:14:19,310 --> 00:14:21,230
+and these caches can be like dirt simple.
+
+197
+00:14:23,410 --> 00:14:27,040
+And think about like the caching,
+
+198
+00:14:27,040 --> 00:14:29,140
+the key value server you built in lab 3,
+
+199
+00:14:29,320 --> 00:14:32,650
+you know the key value server itself is actually nothing more than a hash table,
+
+200
+00:14:32,650 --> 00:14:37,420
+maybe you know you want to be a little bit smart about having locks for bucket
+
+201
+00:14:37,420 --> 00:14:41,710
+and so you have a bunch of currency within the cache server itself
+
+202
+00:14:41,980 --> 00:14:44,110
+or the key value server itself,
+
+203
+00:14:44,170 --> 00:14:46,060
+but it is basically pretty straightforward.
+
+204
+00:14:50,160 --> 00:14:54,570
+There are two challenges that come along with this,
+
+205
+00:14:54,600 --> 00:15:03,660
+where the main challenge basically is a how to keep the database and the cache consistent.
+
+206
+00:15:09,360 --> 00:15:10,830
+That's sort of challenge one,
+
+207
+00:15:10,920 --> 00:15:15,480
+you know a lot of the paper is devoted to talking about that.
+
+208
+00:15:15,970 --> 00:15:20,320
+And the second challenge,
+
+209
+00:15:20,590 --> 00:15:22,720
+which is also the main theme from the paper
+
+210
+00:15:22,720 --> 00:15:25,030
+is how to make sure that the database doesn't get overloaded.
+
+211
+00:15:35,970 --> 00:15:38,610
+And the the issue here is that,
+
+212
+00:15:38,940 --> 00:15:45,030
+once you know scale up say to a billion requests per second here by using caches,
+
+213
+00:15:45,030 --> 00:15:46,980
+if any of the caches fail,
+
+214
+00:15:47,100 --> 00:15:52,080
+that load will shift you know from the frontend you know perhaps the database
+
+215
+00:15:52,470 --> 00:15:58,380
+and of course you know the database is completely not designed to support that kind of workload,
+
+216
+00:15:58,500 --> 00:15:59,760
+basically will fall over.
+
+217
+00:16:00,140 --> 00:16:05,360
+And so a key challenge in the whole set of lessons,
+
+218
+00:16:05,360 --> 00:16:07,850
+that you learn from this particular paper
+
+219
+00:16:07,940 --> 00:16:11,600
+is a techniques to basically void going to the database,
+
+220
+00:16:11,600 --> 00:16:15,530
+so there's no risk that actually you overload the database.
+
+221
+00:16:19,520 --> 00:16:21,140
+Okay, any other questions so far?
+
+222
+00:16:27,310 --> 00:16:30,040
+Let me say a little bit about consistency,
+
+223
+00:16:30,100 --> 00:16:31,480
+because that will be,
+
+224
+00:16:31,480 --> 00:16:33,070
+although I'm going to talk mostly about performance,
+
+225
+00:16:33,070 --> 00:16:35,560
+you know it's gonna be important to keep in mind
+
+226
+00:16:35,560 --> 00:16:38,890
+even in the sort of section about consistency about performance.
+
+227
+00:16:39,760 --> 00:16:42,130
+Oh, I have a quick question, sorry,
+
+228
+00:16:42,520 --> 00:16:48,630
+it goes back to like having this state like the clients be stateless,
+
+229
+00:16:49,520 --> 00:16:50,630
+so what,
+
+230
+00:16:50,630 --> 00:16:53,330
+yeah there we go, on the second part of website solution,
+
+231
+00:16:53,330 --> 00:16:56,390
+why is it important for the clients to be stateless?
+
+232
+00:16:56,780 --> 00:16:59,180
+That makes the replication easy, right,
+
+233
+00:16:59,180 --> 00:17:01,610
+the clients don't actually, you don't replicate the data,
+
+234
+00:17:01,610 --> 00:17:03,110
+so you don't have to keep the data consistent,
+
+235
+00:17:04,480 --> 00:17:06,250
+you know all data lives in one place,
+
+236
+00:17:06,880 --> 00:17:08,350
+maybe there is a database server.
+
+237
+00:17:09,300 --> 00:17:14,730
+Okay, yeah, so the idea is like any any client can fail and it doesn't matter.
+
+238
+00:17:14,910 --> 00:17:15,840
+Yeah, it doesn't matter,
+
+239
+00:17:15,840 --> 00:17:18,630
+you know keep going computing
+
+240
+00:17:18,690 --> 00:17:21,690
+and you don't have to worry about actually keeping data consistent,
+
+241
+00:17:21,690 --> 00:17:23,130
+because data is only in one place,
+
+242
+00:17:25,300 --> 00:17:27,490
+like a lot of the things we've been talking about this semester,
+
+243
+00:17:27,490 --> 00:17:29,680
+doesn't show up in this particular design.
+
+244
+00:17:32,820 --> 00:17:33,660
+Okay?
+
+245
+00:17:35,730 --> 00:17:37,860
+Okay, so getting back to sort of,
+
+246
+00:17:37,860 --> 00:17:42,330
+once you do actually cache data, you do have this consistency issue,right,
+
+247
+00:17:42,810 --> 00:17:46,650
+and and so you know the instant question is
+
+248
+00:17:46,650 --> 00:17:49,200
+like what database what is Facebook shooting for.
+
+249
+00:17:49,770 --> 00:17:52,170
+And something is typically called almost,
+
+250
+00:17:52,170 --> 00:17:54,000
+like it's called eventual consistency,
+
+251
+00:17:54,000 --> 00:17:55,380
+which a pretty vague term,
+
+252
+00:17:55,740 --> 00:17:59,460
+but basically you know maybe to contrast it is
+
+253
+00:17:59,460 --> 00:18:02,640
+to say it actually does not shoot for linearizability,
+
+254
+00:18:03,480 --> 00:18:07,680
+and in fact what they sort of shooting for is
+
+255
+00:18:07,680 --> 00:18:09,720
+you know they do want write ordering,
+
+256
+00:18:14,670 --> 00:18:18,300
+write are all applies in some consistent you know total order,
+
+257
+00:18:18,300 --> 00:18:21,930
+so that you don't get weird going back in time problems,
+
+258
+00:18:22,140 --> 00:18:24,570
+and that is all done basically by the database.
+
+259
+00:18:28,180 --> 00:18:33,250
+So not really a big concern you know for the memcache layer itself.
+
+260
+00:18:34,350 --> 00:18:38,670
+In terms of reads, it's okay if reads are behind,
+
+261
+00:18:48,590 --> 00:18:52,760
+and that is really the property of the applications that you know Facebook wants to support,
+
+262
+00:18:53,030 --> 00:18:57,740
+again, you know the data that's in these caches,
+
+263
+00:18:57,740 --> 00:18:59,630
+the data that the user actually consume,
+
+264
+00:18:59,900 --> 00:19:08,290
+web pages, post timelines, friend lists and all that kind of stuff, and or status,
+
+265
+00:19:08,410 --> 00:19:13,150
+and none of that actually is really that important for users to see,
+
+266
+00:19:13,150 --> 00:19:16,510
+very you know update your picture,
+
+267
+00:19:16,510 --> 00:19:19,660
+you know it is behind a little bit one or two seconds,
+
+268
+00:19:19,660 --> 00:19:20,650
+no problem at all,
+
+269
+00:19:21,070 --> 00:19:23,860
+certainly left behind for hundreds of milliseconds,
+
+270
+00:19:24,100 --> 00:19:25,540
+you know user won't even notice,
+
+271
+00:19:25,540 --> 00:19:26,980
+you know there's not perceptible
+
+272
+00:19:27,400 --> 00:19:29,380
+and so it's okay to behind,
+
+273
+00:19:29,380 --> 00:19:31,720
+you know of course you don't want to be behind for hours,
+
+274
+00:19:31,720 --> 00:19:33,400
+you know use it might actually notice,
+
+275
+00:19:33,610 --> 00:19:37,840
+but you know for a little while behind this actually are not a particular big deal.
+
+276
+00:19:38,660 --> 00:19:43,400
+So they're really shoot you know for serializability linearizability,
+
+277
+00:19:43,400 --> 00:19:45,290
+where we observe the last write,
+
+278
+00:19:45,500 --> 00:19:48,560
+you know if it's some reason write, you know that's fine.
+
+279
+00:19:49,140 --> 00:19:51,150
+There's one exception to that,
+
+280
+00:19:51,360 --> 00:19:53,610
+which is that they do want to arrange that
+
+281
+00:19:53,610 --> 00:19:56,400
+you know your clients read their own writes,
+
+282
+00:20:06,760 --> 00:20:13,690
+and and meaning that you know if one client updates key k
+
+283
+00:20:13,900 --> 00:20:16,150
+and then immediately read that at key k,
+
+284
+00:20:16,240 --> 00:20:21,520
+it's very desirable that client actually does observe its own write,
+
+285
+00:20:21,610 --> 00:20:23,350
+because actually makes it more complicated
+
+286
+00:20:23,350 --> 00:20:26,980
+to otherwise maybe branding complications would be even more complicated.
+
+287
+00:20:27,670 --> 00:20:29,980
+So this is roughly what they're shooting for.
+
+288
+00:20:30,760 --> 00:20:33,850
+And you know just quite a bit weaker
+
+289
+00:20:33,880 --> 00:20:36,190
+than some of the models that we've seen before
+
+290
+00:20:36,490 --> 00:20:43,360
+and remind me a little bit from the zookeeper sort of style of contract,
+
+291
+00:20:43,360 --> 00:20:44,770
+you know it can provide.
+
+292
+00:20:48,320 --> 00:20:50,690
+Okay, so one other thing that I want to say,
+
+293
+00:20:50,690 --> 00:20:51,800
+go back a little bit,
+
+294
+00:20:52,130 --> 00:20:54,860
+so we need to keep the databases in caches
+
+295
+00:20:54,860 --> 00:20:57,170
+and cache consistency in some manner.
+
+296
+00:20:57,950 --> 00:21:03,020
+Okay, so the basic plans that Facebook follows,
+
+297
+00:21:05,490 --> 00:21:10,310
+is an invalidation plan or cache invalidation plan.
+
+298
+00:21:16,780 --> 00:21:20,200
+And we'll see later in the lecture why that's the case,
+
+299
+00:21:20,260 --> 00:21:23,770
+basically what happens if the frontend does write,
+
+300
+00:21:25,650 --> 00:21:28,230
+you know it goes actually to the database,
+
+301
+00:21:30,200 --> 00:21:31,490
+here's mysql,
+
+302
+00:21:35,000 --> 00:21:39,440
+but they run on next to the database you know another program,
+
+303
+00:21:40,280 --> 00:21:41,690
+whatever called squeal,
+
+304
+00:21:45,170 --> 00:21:47,900
+and basically it looks at the transaction log,
+
+305
+00:21:48,650 --> 00:21:52,700
+so mysql maintains transaction log you know to implement transactions
+
+306
+00:21:52,940 --> 00:21:58,190
+and you know squeal looks like this transaction log, sees what things get modified
+
+307
+00:21:58,430 --> 00:22:04,530
+and basically if there's a key gets modified,
+
+308
+00:22:04,530 --> 00:22:06,630
+so it seems like key k gets modified,
+
+309
+00:22:06,690 --> 00:22:09,360
+it will send an invalidation message to the cache,
+
+310
+00:22:09,450 --> 00:22:16,010
+basically deleting, actually it just issues a delete of that key k,
+
+311
+00:22:16,160 --> 00:22:17,750
+you know to the appropriate cache
+
+312
+00:22:17,780 --> 00:22:19,850
+and that way you know the data will be removed
+
+313
+00:22:20,060 --> 00:22:21,350
+and then at some point later,
+
+314
+00:22:22,030 --> 00:22:24,580
+when a client comes along,
+
+315
+00:22:25,730 --> 00:22:28,940
+doesn't read, it will get a miss,
+
+316
+00:22:29,680 --> 00:22:38,900
+in the cache, read retrieves the data from and read from there,
+
+317
+00:22:39,020 --> 00:22:40,340
+so here it does get,
+
+318
+00:22:40,340 --> 00:22:41,660
+let me call this a get,
+
+319
+00:22:41,810 --> 00:22:44,390
+there's a reed, gets the data from the read
+
+320
+00:22:44,390 --> 00:22:46,430
+and then actually installs it in the cache.
+
+321
+00:22:48,100 --> 00:22:55,090
+And so one thing you might wonder like why actually does the application itself installed the data into the cache,
+
+322
+00:22:55,120 --> 00:22:55,960
+so it does put
+
+323
+00:22:56,860 --> 00:22:59,860
+and this has to do with actually these caches
+
+324
+00:22:59,860 --> 00:23:02,110
+you know what they call are look-aside caches,
+
+325
+00:23:05,090 --> 00:23:06,770
+and the reason they're sort of look-aside is that,
+
+326
+00:23:06,770 --> 00:23:09,380
+because typically what the application will do with the data
+
+327
+00:23:09,380 --> 00:23:10,970
+that actually read from the database,
+
+328
+00:23:11,120 --> 00:23:12,470
+it's maybe massage it a little bit,
+
+329
+00:23:12,470 --> 00:23:13,670
+there's some computation on it
+
+330
+00:23:13,730 --> 00:23:15,920
+and it'll take the text of the page
+
+331
+00:23:15,920 --> 00:23:19,190
+and actually turn it into an html page or html5,
+
+332
+00:23:19,490 --> 00:23:24,320
+and then store the result of that html version of the page actually into the cache,
+
+333
+00:23:24,560 --> 00:23:26,930
+or maybe you know reads a bunch of different records
+
+334
+00:23:26,960 --> 00:23:28,820
+aggregates you know some data
+
+335
+00:23:28,910 --> 00:23:31,640
+and it puts the aggregated result into cache.
+
+336
+00:23:32,150 --> 00:23:34,280
+So the application is sort of in control,
+
+337
+00:23:34,370 --> 00:23:37,190
+in this design, what to put in the cache
+
+338
+00:23:37,220 --> 00:23:41,120
+and it puts a little bit more burden on the frontend
+
+339
+00:23:41,120 --> 00:23:43,460
+or in the application or the client in this case,
+
+340
+00:23:43,730 --> 00:23:47,990
+but it has the advantage you know that you can sort of do some pre processing,
+
+341
+00:23:47,990 --> 00:23:50,000
+before actually sticking something in the cache.
+
+342
+00:23:50,690 --> 00:23:53,000
+And this sort of contrast where the cache would be transparent
+
+343
+00:23:53,000 --> 00:23:56,660
+where the cache would be sitting between the frontend and the storage server,
+
+344
+00:23:56,690 --> 00:23:57,770
+and if you're missing the cache,
+
+345
+00:23:57,770 --> 00:23:58,910
+then the cache will choose the data,
+
+346
+00:24:00,130 --> 00:24:01,930
+but of course the cache in the database
+
+347
+00:24:01,930 --> 00:24:04,660
+don't really know what the application exactly what's stored in the cache
+
+348
+00:24:04,990 --> 00:24:06,670
+and so in the look-aside design,
+
+349
+00:24:06,910 --> 00:24:11,290
+this is the application is sort of control the cache,
+
+350
+00:24:14,540 --> 00:24:15,800
+So a little bit more detail,
+
+351
+00:24:15,800 --> 00:24:17,420
+we can look at this,
+
+352
+00:24:17,990 --> 00:24:22,550
+picture that looks like how actually read or write implemented.
+
+353
+00:24:23,090 --> 00:24:28,450
+So here's read, oops sorry.
+
+354
+00:24:39,590 --> 00:24:43,910
+So this is a figure 2 from the paper,
+
+355
+00:24:47,230 --> 00:24:49,690
+and so here's our web servers or clients,
+
+356
+00:24:51,950 --> 00:24:55,820
+you know the clients to retrieve a k for memcache,
+
+357
+00:24:55,940 --> 00:24:56,900
+as we'll see in a second,
+
+358
+00:24:56,900 --> 00:25:00,500
+they are typically actually will ask for a whole bunch of keys,
+
+359
+00:25:00,500 --> 00:25:05,720
+there's not uncommon that you know the web server will ask for 20 to 100 of keys,
+
+360
+00:25:05,720 --> 00:25:07,880
+you know presumably and starting to compute some web page,
+
+361
+00:25:07,880 --> 00:25:11,990
+the web page contains aggregates data from lots of different places
+
+362
+00:25:12,020 --> 00:25:13,340
+and for every piece of data,
+
+363
+00:25:13,340 --> 00:25:15,710
+that needs to be put into that web page,
+
+364
+00:25:15,860 --> 00:25:18,020
+the client issues,
+
+365
+00:25:18,020 --> 00:25:21,980
+the get request we've made perhaps with many many, many keys,
+
+366
+00:25:23,660 --> 00:25:25,520
+that goes to memcache,
+
+367
+00:25:25,820 --> 00:25:27,080
+it gets results back
+
+368
+00:25:27,110 --> 00:25:30,050
+and when sending that get to memcache,
+
+369
+00:25:30,050 --> 00:25:33,350
+we might contact many memcached servers,
+
+370
+00:25:33,930 --> 00:25:35,910
+the results come back to the web server,
+
+371
+00:25:36,150 --> 00:25:39,330
+if if anything's missing,
+
+372
+00:25:39,330 --> 00:25:42,420
+you know can process the ones that actually returns a positive result,
+
+373
+00:25:42,420 --> 00:25:43,770
+but we get nil back,
+
+374
+00:25:43,830 --> 00:25:52,080
+then the client you know goes does select the database, runs a sql query,
+
+375
+00:25:52,230 --> 00:25:59,370
+that returns some data and the results you know that clients might do some computation,
+
+376
+00:25:59,550 --> 00:26:02,820
+and then actually installed the process and values
+
+377
+00:26:02,970 --> 00:26:05,940
+that came back from the select into memcache,
+
+378
+00:26:06,410 --> 00:26:07,700
+that's sort of the read side,
+
+379
+00:26:07,850 --> 00:26:13,640
+again and again here you can see the looks look-aside property or aspect of this design,
+
+380
+00:26:13,790 --> 00:26:17,600
+where memcache is not really sitting straight between the web server and database,
+
+381
+00:26:17,600 --> 00:26:18,770
+but sits on this side,
+
+382
+00:26:19,160 --> 00:26:20,360
+is managed by the client.
+
+383
+00:26:22,390 --> 00:26:25,090
+So here's the write side,
+
+384
+00:26:28,130 --> 00:26:34,370
+so, for example, if the web server or the application needs to whatever add a post
+
+385
+00:26:34,610 --> 00:26:39,560
+or you know put a picture in the post or whatever,
+
+386
+00:26:39,560 --> 00:26:42,850
+the server does updates,
+
+387
+00:26:42,850 --> 00:26:46,480
+you know sends basically the update to the database,
+
+388
+00:26:46,780 --> 00:26:50,140
+this is just performed like a normal transaction,
+
+389
+00:26:50,410 --> 00:26:53,050
+and then of course the database on the side,
+
+390
+00:26:53,110 --> 00:26:54,400
+you know as we saw before,
+
+391
+00:26:54,610 --> 00:26:56,020
+will do invalidation,
+
+392
+00:26:56,050 --> 00:27:00,640
+using you know the squeal demon,
+
+393
+00:27:02,110 --> 00:27:06,520
+and with that squeal daemon your operate asynchronously,
+
+394
+00:27:13,240 --> 00:27:13,960
+oops sorry,
+
+395
+00:27:18,920 --> 00:27:23,450
+and so the client, the writers really wait until that invalidation is happen,
+
+396
+00:27:23,450 --> 00:27:25,190
+again once the update in the transaction,
+
+397
+00:27:25,490 --> 00:27:27,230
+once the update is done in the database,
+
+398
+00:27:27,230 --> 00:27:30,500
+transaction is completely completed and returned to the client
+
+399
+00:27:30,710 --> 00:27:35,240
+and then in parallel the squeal actually as well see the invalidation,
+
+400
+00:27:36,020 --> 00:27:42,140
+and and because you know the squeal does the invalidation asynchronously,
+
+401
+00:27:42,380 --> 00:27:45,920
+the web server just do precaution,
+
+402
+00:27:45,980 --> 00:27:49,790
+doesn't delete of the key in the cache immediately,
+
+403
+00:27:50,270 --> 00:27:56,120
+and so when the reason for that delete is only because we want to read our own writes.
+
+404
+00:28:08,060 --> 00:28:11,150
+So when the web server for example look for that key k,
+
+405
+00:28:11,390 --> 00:28:13,580
+right after it did the update,
+
+406
+00:28:13,730 --> 00:28:16,280
+then it will miss in memcached
+
+407
+00:28:16,370 --> 00:28:21,050
+and it will go and actually retrieve new value and then install it,
+
+408
+00:28:21,050 --> 00:28:27,830
+and but just a case where web server immediately reads its own, reads up that reads the key k,
+
+409
+00:28:27,830 --> 00:28:30,560
+that just actually updated a little while ago.
+
+410
+00:28:33,080 --> 00:28:33,740
+Okay?
+
+411
+00:28:33,980 --> 00:28:37,310
+Where in principal is not necessary to do this delete,
+
+412
+00:28:37,310 --> 00:28:40,850
+the invalidation at some point will happen
+
+413
+00:28:40,850 --> 00:28:43,730
+and will kick out you know that key k out of cache
+
+414
+00:28:44,030 --> 00:28:46,610
+and that's fine for basically other clients,
+
+415
+00:28:46,610 --> 00:28:47,870
+but just with this client,
+
+416
+00:28:47,870 --> 00:28:51,440
+we want to make sure that actually reads its own its own writes.
+
+417
+00:28:53,250 --> 00:28:54,180
+I have a question,
+
+418
+00:28:55,020 --> 00:28:59,400
+so why doesn't it set after the delete?
+
+419
+00:29:00,080 --> 00:29:01,850
+Yeah, that's a very good question,
+
+420
+00:29:01,850 --> 00:29:03,830
+like why doesn't do update immediately, right.
+
+421
+00:29:04,590 --> 00:29:10,350
+And I think that so that's called update scheme
+
+422
+00:29:10,350 --> 00:29:12,360
+and that's in principle possible here too,
+
+423
+00:29:12,570 --> 00:29:15,000
+but I think it's a little bit tricky for them to make work,
+
+424
+00:29:15,000 --> 00:29:20,250
+because I think it was going to require some cooperation between the database, the cache and the client.
+
+425
+00:29:20,670 --> 00:29:23,010
+And I think the issue is follows,
+
+426
+00:29:23,310 --> 00:29:26,250
+let's say we have a client C1,
+
+427
+00:29:27,160 --> 00:29:28,630
+we have a client C2,
+
+428
+00:29:29,560 --> 00:29:32,950
+and we'll see similar type [] showing up,
+
+429
+00:29:32,950 --> 00:29:35,080
+let's say client x 1,
+
+430
+00:29:35,620 --> 00:29:38,380
+sets x to 1 and sends that to the database.
+
+431
+00:29:41,860 --> 00:29:44,470
+And then, so like you know,
+
+432
+00:29:44,470 --> 00:29:47,170
+like so this is a hypothetical update scheme,
+
+433
+00:29:50,320 --> 00:29:53,620
+it's, the main point of this slide will be
+
+434
+00:29:53,620 --> 00:29:58,090
+or this board will be sort of talk about like doing action update is not completely trivial,
+
+435
+00:29:58,540 --> 00:30:00,640
+let's say client 2 at the same time,
+
+436
+00:30:00,640 --> 00:30:02,050
+we're running after it,
+
+437
+00:30:02,050 --> 00:30:05,170
+says x to 2, sends that to the database,
+
+438
+00:30:06,570 --> 00:30:09,690
+and let's say the client 1 has got a little bit delayed
+
+439
+00:30:10,140 --> 00:30:12,360
+and so we're implement your scheme correct,
+
+440
+00:30:12,360 --> 00:30:16,380
+then we immediately do set of k to 2,
+
+441
+00:30:17,960 --> 00:30:20,570
+and let me say k with 0 at the end in the beginning,
+
+442
+00:30:21,010 --> 00:30:23,530
+so this will update memcached correct,
+
+443
+00:30:23,530 --> 00:30:26,140
+cache is now going to have a value of you know whatever,
+
+444
+00:30:26,500 --> 00:30:29,050
+k to 2,
+
+445
+00:30:29,170 --> 00:30:34,090
+then you know client 1 actually you know comes around to do actually it's set,
+
+446
+00:30:34,360 --> 00:30:36,700
+so it will do set here or put,
+
+447
+00:30:37,900 --> 00:30:42,760
+put put oops set k to 1,
+
+448
+00:30:44,240 --> 00:30:46,100
+and so this will overwrite the 2
+
+449
+00:30:46,190 --> 00:30:52,530
+and now we have a stale value in the cache
+
+450
+00:30:53,760 --> 00:31:00,960
+and worse you know this value is there sort of persistently stale,
+
+451
+00:31:01,200 --> 00:31:03,450
+you know any you know get later on,
+
+452
+00:31:03,450 --> 00:31:05,220
+will see actually the stale value.
+
+453
+00:31:05,900 --> 00:31:07,760
+And so this is not so desirable
+
+454
+00:31:08,180 --> 00:31:09,440
+and so you want to avoid that
+
+455
+00:31:09,500 --> 00:31:12,470
+and then of course you can make maybe update scheme work
+
+456
+00:31:12,680 --> 00:31:16,580
+by for example you know ordering a time stamping
+
+457
+00:31:16,580 --> 00:31:19,430
+or assigning a sequence number to the updates,
+
+458
+00:31:19,760 --> 00:31:21,440
+and then by the database,
+
+459
+00:31:21,440 --> 00:31:29,750
+and then the key value server or memcached could basically not perform updates that are out of order,
+
+460
+00:31:30,240 --> 00:31:33,750
+but a scheme like that was going to require some participation of the database,
+
+461
+00:31:33,780 --> 00:31:36,570
+I mean required modifications to mysql
+
+462
+00:31:36,690 --> 00:31:40,230
+and one of their goals was to actually build everything from off the shelf components,
+
+463
+00:31:41,180 --> 00:31:44,510
+and so you know they prefer to go this invalidation scheme,
+
+464
+00:31:44,660 --> 00:31:47,030
+which I think is just simpler to implement,
+
+465
+00:31:47,360 --> 00:31:51,620
+because basically your database, the only thing it has to do
+
+466
+00:31:51,710 --> 00:31:54,980
+is this additional process data sits on the site
+
+467
+00:31:55,220 --> 00:32:01,610
+and uses the standard you know delete the operation, that memcached already supports.
+
+468
+00:32:04,620 --> 00:32:05,130
+Thank you.
+
+469
+00:32:05,550 --> 00:32:06,240
+Does that make sense?
+
+470
+00:32:08,620 --> 00:32:11,590
+And we'll see similar issue like this one show up later again correct,
+
+471
+00:32:11,590 --> 00:32:15,490
+because there's, you remember from the paper,
+
+472
+00:32:15,550 --> 00:32:18,670
+there's some discussion about these tokens or leases
+
+473
+00:32:18,850 --> 00:32:20,500
+to deal with stale values,
+
+474
+00:32:20,500 --> 00:32:24,100
+but that's going to be, as we'll see stale values on the read side
+
+475
+00:32:24,250 --> 00:32:30,730
+or inter stale values as sort of an interesting interaction between readers or writers,
+
+476
+00:32:30,910 --> 00:32:34,600
+but can be solved totally in the context of memcached
+
+477
+00:32:34,600 --> 00:32:36,760
+without actually making any database modifications.
+
+478
+00:32:37,910 --> 00:32:42,800
+So why do we have a separate process to basically issue the invalidation,
+
+479
+00:32:42,980 --> 00:32:45,200
+so this squeal, I think it was called,
+
+480
+00:32:45,740 --> 00:32:48,080
+so why so why do we have this process,
+
+481
+00:32:48,080 --> 00:32:52,640
+if the frontend itself will issue a delete k anyway?
+
+482
+00:32:53,390 --> 00:32:57,680
+We'll see you later on, why this is going to be very useful,
+
+483
+00:32:58,100 --> 00:33:00,380
+particularly what we're gonna do is,
+
+484
+00:33:00,380 --> 00:33:02,120
+we'll see is that the cache is going to be replicated
+
+485
+00:33:02,570 --> 00:33:04,910
+and we need to set a new validation to every replica.
+
+486
+00:33:05,330 --> 00:33:06,350
+Okay I see, thank you.
+
+487
+00:33:07,590 --> 00:33:13,260
+Well, you know it's not gonna send a delete to every memcache replica?
+
+488
+00:33:14,120 --> 00:33:15,260
+The squeal, yeah,
+
+489
+00:33:15,260 --> 00:33:16,130
+we'll see in a second,
+
+490
+00:33:16,130 --> 00:33:17,840
+hold on and we'll see that in a second.
+
+491
+00:33:19,250 --> 00:33:24,080
+In fact, I'm gonna go talk about it right now.
+
+492
+00:33:25,350 --> 00:33:30,150
+So so so far actually most of the story is pretty standard,
+
+493
+00:33:30,330 --> 00:33:33,330
+you know small changes here
+
+494
+00:33:33,510 --> 00:33:36,120
+and what you know we've talked about so far,
+
+495
+00:33:36,540 --> 00:33:39,180
+nothing really too exceptional,
+
+496
+00:33:39,480 --> 00:33:42,120
+things get more interesting right after this,
+
+497
+00:33:42,360 --> 00:33:49,230
+and and so we get more into sort of Facebook specific optimization performs tricks.
+
+498
+00:33:49,850 --> 00:33:55,070
+And, one first thing that we're going to see,
+
+499
+00:33:55,070 --> 00:33:59,760
+let me get this in order, [] to go back,
+
+500
+00:33:59,880 --> 00:34:02,250
+the first thing is actually a sort of,
+
+501
+00:34:02,250 --> 00:34:07,530
+becomes unusual is that actually Facebook basically replicates a complete data center,
+
+502
+00:34:07,950 --> 00:34:09,900
+at the time of the writing of this paper,
+
+503
+00:34:09,900 --> 00:34:11,460
+there were basically two data centers,
+
+504
+00:34:11,810 --> 00:34:13,370
+one on the west coast,
+
+505
+00:34:13,580 --> 00:34:15,710
+we switch back to blue,
+
+506
+00:34:16,760 --> 00:34:19,580
+so data center one they called regions,
+
+507
+00:34:22,630 --> 00:34:24,070
+here's data center two,
+
+508
+00:34:25,980 --> 00:34:33,260
+and they basically have you know, they're all have a client layer,
+
+509
+00:34:34,900 --> 00:34:36,430
+so a lot of frontends,
+
+510
+00:34:43,290 --> 00:34:45,150
+and maybe this is the one on the west coast,
+
+511
+00:34:48,580 --> 00:34:51,640
+and then you know this is the memcached or a memcache layer,
+
+512
+00:34:52,520 --> 00:34:55,370
+they both have their own memcache layer,
+
+513
+00:34:56,180 --> 00:34:58,520
+so here there are frontends again,
+
+514
+00:34:59,050 --> 00:35:00,220
+a lot of frontends,
+
+515
+00:35:00,730 --> 00:35:03,010
+so here are a lot of memcached,
+
+516
+00:35:05,360 --> 00:35:06,290
+a lot of memcached,
+
+517
+00:35:06,290 --> 00:35:09,020
+a lot of memcached here
+
+518
+00:35:09,380 --> 00:35:11,420
+and then you know there's the storage layer,
+
+519
+00:35:11,570 --> 00:35:15,620
+which are sort of sharded databases,
+
+520
+00:35:18,410 --> 00:35:20,090
+so a log of machines here too,
+
+521
+00:35:22,140 --> 00:35:26,880
+and basically the data center two, the one on the east coast,
+
+522
+00:35:27,240 --> 00:35:30,840
+is a direct replica of the one on the west coast,
+
+523
+00:35:31,340 --> 00:35:35,660
+and, and the scheme that they use for right,
+
+524
+00:35:36,080 --> 00:35:38,690
+because now we have two replica of the data, correct,
+
+525
+00:35:38,690 --> 00:35:41,120
+data of the database stored in two places,
+
+526
+00:35:41,270 --> 00:35:44,630
+so we need to keep in some way you know these two copies up to date
+
+527
+00:35:45,050 --> 00:35:47,990
+and the basic plan at least on the right side is
+
+528
+00:35:47,990 --> 00:35:50,840
+through all the writes are going through the primary
+
+529
+00:35:50,990 --> 00:35:53,630
+and one of the regions is primary, the other is a backup region,
+
+530
+00:35:54,250 --> 00:35:55,540
+so this is region 2,
+
+531
+00:35:56,440 --> 00:35:59,440
+the fact I've been going to the west coast is the primary,
+
+532
+00:36:02,060 --> 00:36:05,450
+and the east coast is the backup
+
+533
+00:36:06,470 --> 00:36:13,400
+and so all write actually go you know through the storage layer on the primary,
+
+534
+00:36:13,400 --> 00:36:17,690
+so even writes you know issued by the frontends on the east coast,
+
+535
+00:36:17,690 --> 00:36:20,390
+you know go to the database here,
+
+536
+00:36:20,390 --> 00:36:24,050
+so the database there on the primary just runs the transaction
+
+537
+00:36:24,350 --> 00:36:29,030
+and you know and basically propagates you know these invalidation message,
+
+538
+00:36:29,030 --> 00:36:33,040
+well, first of all, takes the log that actually sits at this side
+
+539
+00:36:33,490 --> 00:36:37,180
+and basically copies or transmitted over to the other side,
+
+540
+00:36:37,920 --> 00:36:39,660
+and so this is the squeal process,
+
+541
+00:36:39,660 --> 00:36:41,670
+that basically does that in
+
+542
+00:36:41,700 --> 00:36:47,790
+you know that process basically applies the log to storage in the database on the other side,
+
+543
+00:36:48,150 --> 00:36:50,490
+so keeping the two databases in sync
+
+544
+00:36:50,730 --> 00:36:56,940
+and as a side effect, it might actually send invalidation messages or delete messages to invalid k,
+
+545
+00:37:01,040 --> 00:37:02,720
+and so you might wonder like,
+
+546
+00:37:02,720 --> 00:37:03,890
+why do it this way,
+
+547
+00:37:03,890 --> 00:37:06,140
+you know why not keep for example everything on the west coast
+
+548
+00:37:06,260 --> 00:37:11,300
+and basically double the number of you know memcache and all that kind of stuff,
+
+549
+00:37:11,720 --> 00:37:14,330
+you know the one primary reason to do this is
+
+550
+00:37:14,330 --> 00:37:20,290
+this good read performance for users,
+
+551
+00:37:21,600 --> 00:37:24,360
+good read performance for users actually sitting on east coast,
+
+552
+00:37:24,890 --> 00:37:28,550
+you know the, they they will connect you know to one of these guys,
+
+553
+00:37:28,730 --> 00:37:32,330
+they will look up the data in the cache,
+
+554
+00:37:32,360 --> 00:37:34,550
+their memcache on the east coast
+
+555
+00:37:34,550 --> 00:37:36,770
+and basically return the data straight out of the memcache,
+
+556
+00:37:37,090 --> 00:37:39,370
+so we're basically going to get really good you know,
+
+557
+00:37:39,370 --> 00:37:41,320
+one we still get a good read performance,
+
+558
+00:37:41,380 --> 00:37:43,360
+in fact we can also get low latency,
+
+559
+00:37:43,360 --> 00:37:46,840
+because we're basically reading from a replica now that's close by.
+
+560
+00:37:48,280 --> 00:37:53,140
+Of course, you know the these caches you might get a little bit more out of sync,
+
+561
+00:37:53,170 --> 00:37:55,090
+than example that in the same data center,
+
+562
+00:37:55,090 --> 00:37:59,200
+because like this whole updates and the validation, it all happens asynchronously.
+
+563
+00:38:05,230 --> 00:38:07,210
+But, that's more or less a little bit okay, correct,
+
+564
+00:38:07,210 --> 00:38:09,460
+because we already said,
+
+565
+00:38:09,460 --> 00:38:14,500
+that we're actually not looking for you know strict consistency or reliabi- or reliability.
+
+566
+00:38:15,120 --> 00:38:17,670
+I have a question,
+
+567
+00:38:17,700 --> 00:38:23,620
+so, if, so, if someone in the east coast of client,
+
+568
+00:38:23,620 --> 00:38:30,040
+the east coast write, it writes directly to to storage on west, right?
+
+569
+00:38:30,760 --> 00:38:31,390
+Yeah.
+
+570
+00:38:31,540 --> 00:38:35,380
+Which, it doesn't invalidate.
+
+571
+00:38:35,590 --> 00:38:40,270
+Okay this guy also goes invalidate to each cache.
+
+572
+00:38:41,770 --> 00:38:43,660
+Oh, but we said, right,
+
+573
+00:38:43,660 --> 00:38:49,330
+but we said like the client itself to read its own write, its own write.
+
+574
+00:38:49,330 --> 00:38:51,430
+Yeah so where does that where does this go that,
+
+575
+00:38:51,430 --> 00:38:52,150
+of course goes through here,right.
+
+576
+00:38:52,150 --> 00:38:55,300
+Yeah, yeah that makes sense, okay.
+
+577
+00:38:57,340 --> 00:38:58,060
+Okay.
+
+578
+00:38:59,090 --> 00:38:59,840
+Okay?
+
+579
+00:38:59,930 --> 00:39:01,880
+I got a question to you,
+
+580
+00:39:03,200 --> 00:39:07,290
+do clients always talk,
+
+581
+00:39:07,380 --> 00:39:10,860
+said well given client always talk to the same memcache server?
+
+582
+00:39:11,890 --> 00:39:16,610
+No, because I'll go back a little bit earlier
+
+583
+00:39:16,820 --> 00:39:18,050
+and we'll talk about this in a second,
+
+584
+00:39:18,050 --> 00:39:21,680
+because actually is a a problem as we'll see,
+
+585
+00:39:21,830 --> 00:39:24,140
+so if a frontend basically talks,
+
+586
+00:39:24,140 --> 00:39:28,040
+the the keys are shared across the memcache servers, right,
+
+587
+00:39:28,640 --> 00:39:31,010
+and so like whatever key k1,
+
+588
+00:39:31,010 --> 00:39:32,210
+k1 lives in C1,
+
+589
+00:39:32,210 --> 00:39:34,070
+k2 lives in C2 etc etc,
+
+590
+00:39:34,600 --> 00:39:38,470
+and typically from them, when it needs to construct a web page,
+
+591
+00:39:38,470 --> 00:39:40,000
+it needs to get a whole bunch of keys
+
+592
+00:39:40,390 --> 00:39:47,260
+and so sends actually these requests basically parallel to the different memcacheds
+
+593
+00:39:47,260 --> 00:39:48,850
+and gets all the responses back,
+
+594
+00:39:49,610 --> 00:39:58,340
+and the, and so in fact you know the frontends are very likely to talk to every memcached in the system.
+
+595
+00:39:59,860 --> 00:40:02,470
+I see, but for, but for a given key,
+
+596
+00:40:02,470 --> 00:40:04,000
+would always talk to the same server.
+
+597
+00:40:04,030 --> 00:40:08,020
+Yeah yeah, they they actually happened to use consistent hashing,
+
+598
+00:40:08,530 --> 00:40:12,010
+so if we'll talk a little bit about second a little bit more,
+
+599
+00:40:12,010 --> 00:40:14,620
+like one of the one memcached server goes down, correct,
+
+600
+00:40:14,920 --> 00:40:16,390
+it can't talk to that one anymore
+
+601
+00:40:16,630 --> 00:40:23,530
+and so it might be over time that the assignment from shards to servers will change a little bit.
+
+602
+00:40:26,010 --> 00:40:27,780
+Sorry, actually just to follow up on that,
+
+603
+00:40:27,990 --> 00:40:31,950
+so the requirement for clients to read their own writes,
+
+604
+00:40:32,360 --> 00:40:35,720
+is is kind of like a weak guarantee right,
+
+605
+00:40:35,720 --> 00:40:38,570
+because if the server that it deletes from goes down
+
+606
+00:40:38,810 --> 00:40:41,240
+and then it has to read from a different replica,
+
+607
+00:40:41,240 --> 00:40:42,860
+it might end up not reading its write,
+
+608
+00:40:43,520 --> 00:40:45,410
+if in the presence of a failure.
+
+609
+00:40:45,470 --> 00:40:48,380
+Hold on, hold on, hold that for a little while, okay,
+
+610
+00:40:49,050 --> 00:40:51,630
+then we'll see there's a number of consistency or races,
+
+611
+00:40:51,630 --> 00:40:54,510
+if you will and they have different techniques for solving those races.
+
+612
+00:40:55,150 --> 00:40:57,160
+Oh, sorry, final question.
+
+613
+00:40:57,910 --> 00:41:01,030
+Yeah, final, go ahead.
+
+614
+00:41:01,990 --> 00:41:06,370
+Oh, so we're doing,
+
+615
+00:41:06,860 --> 00:41:09,560
+we like for read for read our own writes,
+
+616
+00:41:09,770 --> 00:41:12,980
+we make sure that we go directly to the storage servers
+
+617
+00:41:12,980 --> 00:41:15,230
+right after, right correct.
+
+618
+00:41:15,230 --> 00:41:15,650
+Yes.
+
+619
+00:41:15,680 --> 00:41:17,000
+Not in the cache,
+
+620
+00:41:17,180 --> 00:41:20,630
+but you also said the.
+
+621
+00:41:20,660 --> 00:41:21,650
+No, hold on hold on,
+
+622
+00:41:22,430 --> 00:41:23,450
+when you do write,
+
+623
+00:41:23,480 --> 00:41:25,160
+you do the update in the database.
+
+624
+00:41:25,190 --> 00:41:25,520
+Right.
+
+625
+00:41:25,520 --> 00:41:29,270
+Then you delete the key from your system,
+
+626
+00:41:29,270 --> 00:41:31,250
+so for example in this particular case,
+
+627
+00:41:32,300 --> 00:41:36,440
+you know you would you do it write you know through the primary,
+
+628
+00:41:36,650 --> 00:41:39,770
+delete the key k from your local cache,
+
+629
+00:41:39,830 --> 00:41:42,170
+so when the next time you do get,
+
+630
+00:41:42,170 --> 00:41:45,710
+you're gonna read from the storage server again.
+
+631
+00:41:45,770 --> 00:41:50,800
+Right, exactly, yeah, but I was curious,
+
+632
+00:41:50,800 --> 00:41:56,590
+so that you also said the write to storage happen asynchronously, right?
+
+633
+00:41:57,450 --> 00:42:05,010
+The the, this this replication happens asynchronously and the invalidation happens asynchronously, not the write.
+
+634
+00:42:05,190 --> 00:42:06,750
+Okay, the writes are synchronous.
+
+635
+00:42:07,660 --> 00:42:09,640
+So you delete after you finish the write.
+
+636
+00:42:09,790 --> 00:42:11,500
+Okay, great, thanks.
+
+637
+00:42:12,720 --> 00:42:14,430
+A question here,
+
+638
+00:42:14,910 --> 00:42:17,620
+so if you do a write
+
+639
+00:42:17,860 --> 00:42:19,360
+and you're from the,
+
+640
+00:42:20,080 --> 00:42:22,780
+so you're not, you're not from the primary region,
+
+641
+00:42:22,810 --> 00:42:25,840
+you do a write to the primary storage
+
+642
+00:42:25,900 --> 00:42:28,060
+and then you invalidate your memcache,
+
+643
+00:42:28,060 --> 00:42:31,540
+and then do a read, but read from your storage
+
+644
+00:42:31,540 --> 00:42:34,720
+and maybe your storage isn't up to date yet.
+
+645
+00:42:35,410 --> 00:42:36,400
+Yeah so you gotta risk,
+
+646
+00:42:36,430 --> 00:42:38,800
+so we'll see how they solve that. Okay.
+
+647
+00:42:40,750 --> 00:42:41,260
+That's correct,
+
+648
+00:42:41,740 --> 00:42:43,450
+but first let's talk more about performance,
+
+649
+00:42:43,450 --> 00:42:45,340
+because it's not good enough for them yet,
+
+650
+00:42:45,370 --> 00:42:46,570
+they want more performance.
+
+651
+00:42:48,320 --> 00:42:52,370
+And so you know if you sort of broadly speaking,
+
+652
+00:42:52,400 --> 00:42:55,310
+there are two strategies to getting performance.
+
+653
+00:42:55,770 --> 00:42:58,470
+I'm just stepping back a little bit,
+
+654
+00:43:05,940 --> 00:43:09,600
+we already seen them a little bit, in a very high level,
+
+655
+00:43:09,600 --> 00:43:11,280
+so there are two business plan,
+
+656
+00:43:11,370 --> 00:43:15,000
+one is to petition or shard,
+
+657
+00:43:23,060 --> 00:43:24,290
+and that's very cool,
+
+658
+00:43:24,290 --> 00:43:29,090
+because in fact we see this being use basically both on the storage layer and the memcache layer,
+
+659
+00:43:29,270 --> 00:43:31,730
+and so if you you need more capacity,
+
+660
+00:43:31,910 --> 00:43:34,010
+you should buy another server,
+
+661
+00:43:34,010 --> 00:43:37,070
+change the hashing function
+
+662
+00:43:37,370 --> 00:43:40,070
+and so you've got more capacity in your memcached
+
+663
+00:43:40,070 --> 00:43:41,990
+and you can hold more data, right,
+
+664
+00:43:42,290 --> 00:43:44,300
+and that data can be accessed in parallel,
+
+665
+00:43:44,890 --> 00:43:46,630
+so you know we've got a lot of capacity,
+
+666
+00:43:53,310 --> 00:43:55,590
+lots of capacity, lots of parallelism side,
+
+667
+00:43:59,400 --> 00:44:03,240
+but you know if you have particular key that's extremely hot,
+
+668
+00:44:03,480 --> 00:44:07,620
+a lot of clients actually need to get that key,
+
+669
+00:44:07,620 --> 00:44:09,060
+you know whatever a particular person
+
+670
+00:44:09,060 --> 00:44:13,140
+and Facebook who has a timeline that everybody's you know following,
+
+671
+00:44:13,320 --> 00:44:16,680
+then you know that that key is going to hit a lot
+
+672
+00:44:17,010 --> 00:44:18,660
+and it is being served,
+
+673
+00:44:18,840 --> 00:44:21,420
+luckily in this case being served maybe by two different servers,
+
+674
+00:44:21,420 --> 00:44:23,520
+one in the west coast, one on the east coast,
+
+675
+00:44:23,790 --> 00:44:26,250
+but they are presumably a lot of clients on the east coast
+
+676
+00:44:26,250 --> 00:44:28,230
+and the west coast, we're gonna hit the same,
+
+677
+00:44:28,380 --> 00:44:31,320
+what the two memcached server on the west coast
+
+678
+00:44:31,320 --> 00:44:33,570
+and memcache server east coast hold that key,
+
+679
+00:44:34,410 --> 00:44:36,930
+and so that's not gonna be that good, right,
+
+680
+00:44:36,930 --> 00:44:40,260
+because like you know that single server might actually get overloaded
+
+681
+00:44:40,380 --> 00:44:43,830
+and it turns out the key distribution varies widely,
+
+682
+00:44:44,770 --> 00:44:45,820
+and so that's not so good.
+
+683
+00:44:45,820 --> 00:44:47,530
+And so to solve problems like that,
+
+684
+00:44:47,620 --> 00:44:57,680
+and the second sort of approach is to replicate, replicate data, so here is petition data and then it is replicate data,
+
+685
+00:44:59,460 --> 00:45:01,590
+that's great you know for hot keys,
+
+686
+00:45:03,610 --> 00:45:07,420
+if you can take the same key propagated on a bunch of different memcached servers,
+
+687
+00:45:07,630 --> 00:45:11,980
+then the clients that all hit that key can be spread across you know those memcached servers
+
+688
+00:45:11,980 --> 00:45:13,660
+and get the keys basically in parallel,
+
+689
+00:45:14,370 --> 00:45:18,300
+and so that it works actually good for hot keys.
+
+690
+00:45:20,100 --> 00:45:22,140
+It doesn't really increase your capacity,
+
+691
+00:45:22,260 --> 00:45:25,230
+so you just just takes more,
+
+692
+00:45:27,240 --> 00:45:29,520
+and in some ways we can see this in the previous picture,
+
+693
+00:45:29,520 --> 00:45:31,170
+we have replication in action here,
+
+694
+00:45:31,200 --> 00:45:33,480
+we have replicated one data center,
+
+695
+00:45:33,600 --> 00:45:35,940
+you know from the west coast completely to the east coast,
+
+696
+00:45:36,090 --> 00:45:40,650
+that hasn't introduced increase the total capacity for the memcached,
+
+697
+00:45:40,650 --> 00:45:47,160
+because both memcache the memcache layers store store the same amount of data
+
+698
+00:45:47,190 --> 00:45:49,710
+and increase the capacity of the memcache layer,
+
+699
+00:45:50,220 --> 00:45:54,330
+but you know you're allowed to you know read from these two different
+
+700
+00:45:54,330 --> 00:45:56,640
+and memcache layers on the east and west coast in parallel.
+
+701
+00:45:57,850 --> 00:45:58,420
+Okay?
+
+702
+00:45:58,900 --> 00:46:01,240
+So we see a little form of replication going on
+
+703
+00:46:01,600 --> 00:46:04,900
+and you might wonder like what else is left to be done.
+
+704
+00:46:05,590 --> 00:46:09,160
+And this comes to a question was asked a little bit earlier,
+
+705
+00:46:09,220 --> 00:46:11,860
+let's say you need more capacity, right,
+
+706
+00:46:11,860 --> 00:46:14,830
+so well one solution to you know more capacity,
+
+707
+00:46:14,830 --> 00:46:15,940
+even in a single data center,
+
+708
+00:46:15,940 --> 00:46:17,350
+so forget that there's two data centers,
+
+709
+00:46:17,350 --> 00:46:20,350
+just look for things from the perspective of a single data center,
+
+710
+00:46:20,410 --> 00:46:21,580
+we want more capacity,
+
+711
+00:46:21,790 --> 00:46:26,320
+well, one option correct would be to whatever you buy more memcached servers
+
+712
+00:46:26,590 --> 00:46:27,880
+and just keep buying more of them,
+
+713
+00:46:29,220 --> 00:46:33,980
+and that turns out to be slightly problematic,
+
+714
+00:46:33,980 --> 00:46:36,980
+and one reason that that is problematic is
+
+715
+00:46:36,980 --> 00:46:43,850
+because these frontends talk to basically every memcache server,
+
+716
+00:46:46,020 --> 00:46:49,650
+and so they you know almost at least for writes,
+
+717
+00:46:49,680 --> 00:46:51,750
+you know we know that TCP connections open
+
+718
+00:46:51,990 --> 00:46:54,960
+and so there's a large number of TCP connections,
+
+719
+00:46:55,750 --> 00:47:00,280
+and furthermore, as we, as I said before
+
+720
+00:47:00,280 --> 00:47:03,160
+is actually a particular key heart hit heart,
+
+721
+00:47:03,370 --> 00:47:09,030
+then the, that there's really solved by shard,
+
+722
+00:47:09,980 --> 00:47:11,600
+so you can buy more machines,
+
+723
+00:47:11,600 --> 00:47:13,760
+but there's not one keys hot and lives in one machine
+
+724
+00:47:13,760 --> 00:47:15,800
+that actually is not going to improve your performance.
+
+725
+00:47:16,650 --> 00:47:21,600
+So their next step in terms of performance improvement
+
+726
+00:47:21,840 --> 00:47:26,340
+is to actually replicate with inside a single data center.
+
+727
+00:47:26,640 --> 00:47:33,030
+So, more performance, so this is this idea of clusters,
+
+728
+00:47:35,810 --> 00:47:37,880
+and this is really a story about replication.
+
+729
+00:47:40,960 --> 00:47:42,700
+And so what they actually do is
+
+730
+00:47:42,700 --> 00:47:44,440
+like if we look at a single data center,
+
+731
+00:47:46,970 --> 00:47:49,070
+we got our storage layer,
+
+732
+00:47:53,400 --> 00:47:54,990
+and then within the storage layer,
+
+733
+00:47:55,510 --> 00:47:59,050
+basically we're gonna replicate a set of frontends,
+
+734
+00:47:59,780 --> 00:48:01,250
+so here's frontend layer,
+
+735
+00:48:01,550 --> 00:48:04,940
+and here's our memcache layer,
+
+736
+00:48:08,110 --> 00:48:13,080
+I'm gonna take that and just replicate multiple times,
+
+737
+00:48:15,720 --> 00:48:17,340
+and then the call is a cluster.
+
+738
+00:48:21,040 --> 00:48:23,590
+And the reason this is good,
+
+739
+00:48:23,740 --> 00:48:27,910
+you know, is this actually deals deal well with its good for popular keys,
+
+740
+00:48:31,560 --> 00:48:35,520
+popular key, it will now be replicated you know potentially multiple clusters
+
+741
+00:48:35,880 --> 00:48:39,060
+and so that is nice,
+
+742
+00:48:39,330 --> 00:48:42,090
+second, it reduces the number of connections,
+
+743
+00:48:47,790 --> 00:48:51,360
+and this is actually particularly there are multiple reasons why this important,
+
+744
+00:48:51,630 --> 00:48:54,780
+it avoids what they call the,
+
+745
+00:48:57,000 --> 00:49:01,200
+before incast problems incast congestion,
+
+746
+00:49:04,640 --> 00:49:10,730
+as I said before, one of these frontends may have to retrieve 500 you know whatever
+
+747
+00:49:10,730 --> 00:49:13,430
+and you know tens to hundreds of keys
+
+748
+00:49:13,640 --> 00:49:21,230
+and so it will send them in parallel to all the particular memcache that are important they all respond,
+
+749
+00:49:22,060 --> 00:49:26,680
+and of course you know we have many, many more memcaches,
+
+750
+00:49:26,770 --> 00:49:28,540
+we're going to have lots more parallelism,
+
+751
+00:49:28,570 --> 00:49:31,420
+a lot of packets will come back exactly at the same time,
+
+752
+00:49:31,600 --> 00:49:34,660
+they can easily read into queue,
+
+753
+00:49:35,080 --> 00:49:38,410
+queues being overloaded or queues being full
+
+754
+00:49:38,410 --> 00:49:39,790
+and therefore packets getting dropped,
+
+755
+00:49:40,480 --> 00:49:42,610
+and so by reducing the number of connections,
+
+756
+00:49:42,610 --> 00:49:44,230
+not actually every frontend talks to,
+
+757
+00:49:44,230 --> 00:49:46,390
+you know reduces where responses are going to come back
+
+758
+00:49:46,660 --> 00:49:49,720
+and we avoid this incast congestion problem.
+
+759
+00:49:50,580 --> 00:49:53,340
+And in general, sort of reduce the pressure of the network,
+
+760
+00:49:55,600 --> 00:49:59,440
+it's actually hard to build networks that have bi section bandwidth,
+
+761
+00:49:59,440 --> 00:50:01,930
+that could sustain a huge load,
+
+762
+00:50:02,110 --> 00:50:05,260
+and here by sort of making using replication,
+
+763
+00:50:05,380 --> 00:50:10,240
+basically network for one cluster really has to support that one cluster well.
+
+764
+00:50:17,110 --> 00:50:19,780
+Now, now this is all good,
+
+765
+00:50:19,810 --> 00:50:23,110
+of course you know this is the downside of a design like this is that,
+
+766
+00:50:23,110 --> 00:50:24,760
+if you have unpopular keys,
+
+767
+00:50:25,060 --> 00:50:29,620
+there's unpopular keys is gonna get stored in multiple regions
+
+768
+00:50:29,620 --> 00:50:31,210
+and basically you know do nothing
+
+769
+00:50:31,690 --> 00:50:35,200
+or then really contribute to improvement in performance
+
+770
+00:50:35,500 --> 00:50:37,960
+and so in fact what they do is,
+
+771
+00:50:37,960 --> 00:50:41,170
+they have one additional sort of pool that they have
+
+772
+00:50:41,500 --> 00:50:43,360
+and they call this the regional pool,
+
+773
+00:50:46,010 --> 00:50:51,710
+and applications can decide to store,
+
+774
+00:50:52,480 --> 00:50:55,780
+you know not so popular keys into the regional pool,
+
+775
+00:50:56,250 --> 00:50:57,900
+to stick it inside
+
+776
+00:50:57,960 --> 00:51:00,180
+and so the these,
+
+777
+00:51:00,180 --> 00:51:06,210
+so they, they don't are replicated in times across all clusters,
+
+778
+00:51:06,210 --> 00:51:09,870
+so you can think about the regional pool being shared among multiple clusters
+
+779
+00:51:10,080 --> 00:51:14,340
+and used for the less popular keys or less frequently used keys.
+
+780
+00:51:15,370 --> 00:51:16,090
+Okay?
+
+781
+00:51:17,900 --> 00:51:20,870
+So is this going to help with popular keys,
+
+782
+00:51:20,870 --> 00:51:26,040
+because each cluster is gonna have its own memcache.
+
+783
+00:51:26,160 --> 00:51:28,830
+Yeah, every cluster has its own memcache,
+
+784
+00:51:31,580 --> 00:51:33,350
+has his own frontends,
+
+785
+00:51:33,380 --> 00:51:34,940
+has his own memcache,
+
+786
+00:51:37,720 --> 00:51:44,470
+and basically users you know the users are basically load balance across all these clusters.
+
+787
+00:51:45,890 --> 00:51:48,560
+But this still does not increase capacity, right?
+
+788
+00:51:49,330 --> 00:51:51,220
+This not increase capacity,
+
+789
+00:51:51,220 --> 00:51:55,060
+if you want to increase capacity,
+
+790
+00:51:55,060 --> 00:51:57,310
+the you,
+
+791
+00:51:57,790 --> 00:52:00,130
+well, it increase capacity a little bit, correct,
+
+792
+00:52:00,130 --> 00:52:02,860
+because all the unpopular stuff is not being extra cache
+
+793
+00:52:02,860 --> 00:52:04,150
+and stuck in the regional pool,
+
+794
+00:52:05,560 --> 00:52:08,650
+and so that space is now free to actually store other keys.
+
+795
+00:52:14,490 --> 00:52:16,860
+So to avoid incast congestion,
+
+796
+00:52:16,890 --> 00:52:20,550
+they would also reduce the number of shards per cluster, right?
+
+797
+00:52:20,700 --> 00:52:23,130
+Yeah, don't increase, they don't grow it.
+
+798
+00:52:25,090 --> 00:52:27,430
+The alternative plan correct was not introduce clusters,
+
+799
+00:52:27,550 --> 00:52:31,870
+but basically keep growing the memcache's shards,
+
+800
+00:52:31,870 --> 00:52:34,720
+with the number of shards in a single memcache,
+
+801
+00:52:35,900 --> 00:52:38,300
+and you know that has its own limitations.
+
+802
+00:52:39,830 --> 00:52:40,880
+Makes sense, thank you.
+
+803
+00:52:46,640 --> 00:52:53,030
+Okay, well, so this sort of the base design,
+
+804
+00:52:53,150 --> 00:52:55,370
+except there are all kinds of performance challenges,
+
+805
+00:52:55,370 --> 00:52:59,270
+that they had to resolve most of these performance challenges,
+
+806
+00:52:59,450 --> 00:53:01,280
+really had to do with,
+
+807
+00:53:01,280 --> 00:53:03,950
+I think the way to think about is protecting the database.
+
+808
+00:53:22,270 --> 00:53:24,190
+So, you like go back to this picture correct,
+
+809
+00:53:24,190 --> 00:53:28,420
+we have now designed apparently to support billions requests per second,
+
+810
+00:53:29,340 --> 00:53:33,990
+and but the storage layer itself you know is sharded,
+
+811
+00:53:34,260 --> 00:53:38,070
+because certainly not you know sustain billions requests per second
+
+812
+00:53:38,610 --> 00:53:42,270
+and it would be a disaster if for example,
+
+813
+00:53:42,270 --> 00:53:44,550
+let's say all the memcaches failed in some way or another
+
+814
+00:53:44,730 --> 00:53:45,930
+or whole cluster failed
+
+815
+00:53:46,080 --> 00:53:48,810
+and all the frontends you know would hit the storage servers,
+
+816
+00:53:49,110 --> 00:53:51,540
+then you know the storage servers would fail over,
+
+817
+00:53:51,570 --> 00:53:53,460
+you know couldn't handle that kind of load
+
+818
+00:53:53,670 --> 00:53:56,610
+and so they got to be very very careful,
+
+819
+00:53:56,610 --> 00:54:02,610
+we actually putting doing anything that requires more load on the storage server.
+
+820
+00:54:03,890 --> 00:54:06,470
+So, so one for example challenge,
+
+821
+00:54:06,470 --> 00:54:08,810
+I'm going to talk about the number of them is
+
+822
+00:54:08,810 --> 00:54:10,220
+to bring up a new cluster,
+
+823
+00:54:15,280 --> 00:54:17,200
+you know easy way to bring up a new cluster
+
+824
+00:54:17,200 --> 00:54:20,800
+would be just to you know build a cluster,
+
+825
+00:54:20,800 --> 00:54:25,270
+turn the machines on, installed the software and then be done,
+
+826
+00:54:25,630 --> 00:54:28,390
+and basically rely on the fact,
+
+827
+00:54:28,390 --> 00:54:31,030
+that you know if the data is not in the cache,
+
+828
+00:54:31,030 --> 00:54:34,210
+you'll have missed and will miss will go to the database,
+
+829
+00:54:34,210 --> 00:54:36,100
+actually you know collect the necessary data,
+
+830
+00:54:37,080 --> 00:54:41,190
+and you know what's the problem about the kind of design?
+
+831
+00:54:45,510 --> 00:54:47,430
+It's gonna have a lot of cache misses,
+
+832
+00:54:47,430 --> 00:54:49,050
+because there's nothing in the cache.
+
+833
+00:54:49,620 --> 00:54:52,320
+Yeah for example, let's say you have you had one cluster,
+
+834
+00:54:52,890 --> 00:54:54,540
+and you had the second cluster, right,
+
+835
+00:54:54,540 --> 00:54:57,690
+you move half of your users to the second cluster, right,
+
+836
+00:54:57,690 --> 00:55:02,070
+then 50% of your requests are going to miss in the cache
+
+837
+00:55:02,220 --> 00:55:03,600
+and they're gonna hit the database,
+
+838
+00:55:03,980 --> 00:55:05,960
+and the database will fall over, correct.
+
+839
+00:55:07,070 --> 00:55:09,140
+So how do they deal with this?
+
+840
+00:55:11,700 --> 00:55:12,510
+Gutter?
+
+841
+00:55:13,400 --> 00:55:15,200
+No, not the gutter, this is the.
+
+842
+00:55:17,030 --> 00:55:24,770
+I think they were making the new cluster read some entries from the cache of an old cluster.
+
+843
+00:55:24,860 --> 00:55:26,750
+Yeah gets in the new cluster,
+
+844
+00:55:27,880 --> 00:55:29,350
+if they miss in the new cluster,
+
+845
+00:55:29,350 --> 00:55:32,350
+they go to the old cluster from an existing one,
+
+846
+00:55:36,250 --> 00:55:40,570
+and then they set in the new cluster,
+
+847
+00:55:42,310 --> 00:55:44,110
+so basically one way to think about is
+
+848
+00:55:44,110 --> 00:55:47,920
+they fill up a new cluster or warm up a new cluster
+
+849
+00:55:48,190 --> 00:55:51,910
+by reading from an existing cluster
+
+850
+00:55:52,060 --> 00:55:55,270
+and so that maybe increase the load on an existing cluster a little bit,
+
+851
+00:55:55,600 --> 00:55:58,930
+but at least don't actually put a lot of pressure on the database.
+
+852
+00:56:00,080 --> 00:56:01,100
+As we see is the second,
+
+853
+00:56:01,130 --> 00:56:05,240
+that also introduces again some consistency issues,
+
+854
+00:56:05,420 --> 00:56:08,180
+and you know we'll see that a little bit later.
+
+855
+00:56:09,060 --> 00:56:09,570
+Okay?
+
+856
+00:56:10,070 --> 00:56:14,540
+So that's one you know example of performing challenge the the address,
+
+857
+00:56:15,080 --> 00:56:20,150
+the other performance is popular term used in many contexts,
+
+858
+00:56:20,150 --> 00:56:22,100
+that are called the thundering herd problem,
+
+859
+00:56:25,460 --> 00:56:26,930
+what's the thundering herd problem?
+
+860
+00:56:31,070 --> 00:56:37,520
+I guess when there are a lot of writes and reads approximately at the same time,
+
+861
+00:56:37,520 --> 00:56:40,100
+and because there are a lot of writes,
+
+862
+00:56:40,100 --> 00:56:43,730
+the data will be invalidated many times
+
+863
+00:56:43,820 --> 00:56:48,020
+and the database will be assaulted with request.
+
+864
+00:56:48,020 --> 00:56:50,270
+Yeah, you can make it simple,
+
+865
+00:56:50,270 --> 00:56:54,290
+like a single write cause an invalidation of a key, right,
+
+866
+00:56:54,850 --> 00:56:58,990
+and anybody, any client that reads key right after it,
+
+867
+00:56:58,990 --> 00:57:00,760
+so you could have the following situation,
+
+868
+00:57:00,940 --> 00:57:02,410
+you have a very very popular key,
+
+869
+00:57:02,620 --> 00:57:05,560
+the you invalidate the key,
+
+870
+00:57:05,590 --> 00:57:07,090
+so you delete the key from the cache,
+
+871
+00:57:07,240 --> 00:57:13,330
+all the machines are on the frontends that meet popular key
+
+872
+00:57:13,420 --> 00:57:14,920
+will do a get on that key,
+
+873
+00:57:15,130 --> 00:57:16,390
+all get back nil,
+
+874
+00:57:16,450 --> 00:57:20,140
+and then they're all want to like read select from the database, correct,
+
+875
+00:57:20,930 --> 00:57:25,160
+and now you know might cost you know they put a lot of pressure on the database,
+
+876
+00:57:25,580 --> 00:57:28,580
+so, they want to avoid that problem,
+
+877
+00:57:28,580 --> 00:57:29,600
+so how do you do that,
+
+878
+00:57:30,130 --> 00:57:31,750
+how do they avoid that problem?
+
+879
+00:57:33,080 --> 00:57:34,490
+They used leases.
+
+880
+00:57:34,550 --> 00:57:38,780
+Yeah, exactly go ahead, say more.
+
+881
+00:57:38,780 --> 00:57:41,300
+Yeah, I think they give like a time,
+
+882
+00:57:41,330 --> 00:57:45,050
+like for key specific for for the user,
+
+883
+00:57:45,050 --> 00:57:47,120
+and then like some like sometime,
+
+884
+00:57:47,120 --> 00:57:49,130
+what I understood, it was like kind of a lock
+
+885
+00:57:49,130 --> 00:57:54,050
+and then like if another user tries to to use it,
+
+886
+00:57:54,350 --> 00:57:57,980
+they would like wait and then hopefully it will be updated fast enough,
+
+887
+00:57:57,980 --> 00:57:59,960
+so that in the next retry they'll get it.
+
+888
+00:58:02,770 --> 00:58:05,200
+If you do a get, you get nil back,
+
+889
+00:58:06,310 --> 00:58:07,420
+you get two situations,
+
+890
+00:58:07,420 --> 00:58:09,130
+either you've got a lease,
+
+891
+00:58:10,920 --> 00:58:13,680
+right, the first line basically that doesn't get and misses,
+
+892
+00:58:13,680 --> 00:58:15,570
+you know gets released from memcached
+
+893
+00:58:15,930 --> 00:58:19,440
+and that memcached at least gives you the right to update
+
+894
+00:58:19,890 --> 00:58:22,710
+or tells the clients like you know you're responsible for doing the update,
+
+895
+00:58:23,160 --> 00:58:25,920
+and if you don't,
+
+896
+00:58:25,950 --> 00:58:26,940
+you know the first one,
+
+897
+00:58:27,060 --> 00:58:33,280
+then you get a basically a retry message or result
+
+898
+00:58:33,280 --> 00:58:36,370
+and that basically tells the client like oh you should retry it soon,
+
+899
+00:58:36,370 --> 00:58:38,710
+not immediately and maybe spread around a little bit,
+
+900
+00:58:39,100 --> 00:58:41,980
+they probably do some binary backup type style thing,
+
+901
+00:58:42,310 --> 00:58:44,080
+and we try to get
+
+902
+00:58:44,470 --> 00:58:49,540
+and in most cases the clients that you know the first line that missed
+
+903
+00:58:49,810 --> 00:58:53,980
+will have updated the key k you know reasonably soon,
+
+904
+00:58:53,980 --> 00:58:55,750
+like in the order of milliseconds
+
+905
+00:58:56,080 --> 00:58:59,530
+and then these retries actual will succeed, right
+
+906
+00:58:59,530 --> 00:59:05,320
+and and there's no really and there's no explosion on the number of requests to the database with this scheme.
+
+907
+00:59:06,260 --> 00:59:10,310
+Of course, it introduces as we'll see in a second more you know race conditions,
+
+908
+00:59:10,670 --> 00:59:15,140
+but you know first let's keep focusing on performance.
+
+909
+00:59:18,450 --> 00:59:20,460
+There was another thing about leases, right,
+
+910
+00:59:20,490 --> 00:59:26,160
+where where they fit like address still sets.
+
+911
+00:59:26,250 --> 00:59:28,650
+Yeah, so that leases form two roles,
+
+912
+00:59:28,830 --> 00:59:30,120
+as we'll see in a second,
+
+913
+00:59:30,120 --> 00:59:32,430
+one for consistency and one for performance,
+
+914
+00:59:32,670 --> 00:59:34,080
+this one is for performance,
+
+915
+00:59:35,870 --> 00:59:37,430
+and so we'll talk about consistency in a second
+
+916
+00:59:37,430 --> 00:59:38,750
+and I will see the second reviews
+
+917
+00:59:38,840 --> 00:59:40,910
+as one way to solve one of these race conditions.
+
+918
+00:59:46,390 --> 00:59:49,060
+Okay, one more, there are many more in the paper,
+
+919
+00:59:49,090 --> 00:59:50,950
+but just one more that's sort of interesting,
+
+920
+00:59:50,950 --> 00:59:53,410
+at least I find interesting,
+
+921
+00:59:53,920 --> 00:59:58,960
+you know what happens if they have a memcached or memcache server failure.
+
+922
+01:00:08,750 --> 01:00:09,500
+It depends,
+
+923
+01:00:09,500 --> 01:00:16,190
+if it's the whole data center that both the whole collection of memcache servers that failed.
+
+924
+01:00:17,450 --> 01:00:20,050
+Just consider a handful, I was to do.
+
+925
+01:00:20,080 --> 01:00:22,570
+These kind that someone mentioned before,
+
+926
+01:00:23,620 --> 01:00:26,680
+that they memcache the failed memcache,
+
+927
+01:00:27,040 --> 01:00:29,980
+but they don't delete them.
+
+928
+01:00:30,460 --> 01:00:32,770
+Yeah, so look at the scenario, correct,
+
+929
+01:00:32,770 --> 01:00:35,890
+problematic scenario is like a memcached server fails,
+
+930
+01:00:36,340 --> 01:00:39,310
+that will result in a bunch of misses,
+
+931
+01:00:39,310 --> 01:00:40,900
+those misses will hit the database
+
+932
+01:00:40,900 --> 01:00:43,090
+and I want to avoid hitting the database, right,
+
+933
+01:00:43,660 --> 01:00:46,330
+any client that actually has a couple keys in those servers
+
+934
+01:00:46,660 --> 01:00:50,740
+and is gonna try to retrieve the key will fail
+
+935
+01:00:50,740 --> 01:00:52,270
+and then you know have to do something.
+
+936
+01:00:53,260 --> 01:00:55,180
+So when it get fails,
+
+937
+01:00:56,890 --> 01:00:59,890
+you know the easy solution is to go to the database,
+
+938
+01:00:59,920 --> 01:01:02,350
+but we want to protect the database
+
+939
+01:01:02,620 --> 01:01:04,840
+and so that doesn't seem to be a great idea
+
+940
+01:01:04,990 --> 01:01:08,560
+and so what they do is actually have a small other cluster or another pool
+
+941
+01:01:08,560 --> 01:01:11,020
+like the regional pool or they called the gutter pool.
+
+942
+01:01:15,070 --> 01:01:19,750
+And the gunner pool is basically sort of handful memcached machines,
+
+943
+01:01:19,870 --> 01:01:21,010
+that is just available,
+
+944
+01:01:21,370 --> 01:01:25,300
+and they're available for a short period of time,
+
+945
+01:01:25,510 --> 01:01:28,360
+the system sort of reconfigures and repairs itself
+
+946
+01:01:28,360 --> 01:01:30,190
+and adds new memcached servers,
+
+947
+01:01:30,190 --> 01:01:32,170
+you know to to replace the one that failed.
+
+948
+01:01:32,930 --> 01:01:34,280
+But in that period of time,
+
+949
+01:01:34,280 --> 01:01:37,280
+you know there's a new order of minutes or maybe a little bit more,
+
+950
+01:01:37,370 --> 01:01:40,760
+they don't want to get requests
+
+951
+01:01:40,760 --> 01:01:42,560
+or select to go to the database
+
+952
+01:01:42,680 --> 01:01:44,660
+instead of what they do when they get fails,
+
+953
+01:01:44,810 --> 01:01:46,820
+you go try first the gutter pool,
+
+954
+01:01:47,540 --> 01:01:49,820
+and you know the gutter pool will,
+
+955
+01:01:50,060 --> 01:01:54,440
+you know the first one that hits the gutter pool you know will fail
+
+956
+01:01:54,440 --> 01:01:57,560
+or will miss do selecting the database,
+
+957
+01:01:57,560 --> 01:01:59,570
+get results ticket into the gutter pool
+
+958
+01:01:59,600 --> 01:02:04,310
+and then subsequent request or guests will actually then be answered from the gutter pool
+
+959
+01:02:04,700 --> 01:02:08,690
+and at some point you know the memcached machine never scaled,
+
+960
+01:02:08,720 --> 01:02:12,320
+it has either been replaced or replaced with another machine or recovered
+
+961
+01:02:12,650 --> 01:02:16,940
+and then you know the loads shift back to this memcached server and the gutter pool,
+
+962
+01:02:16,940 --> 01:02:21,260
+so it's again in the site to sort of carry over between these sort of transition periods.
+
+963
+01:02:23,610 --> 01:02:24,090
+Okay?
+
+964
+01:02:25,120 --> 01:02:28,750
+So this sort of gets us to the reading question for today,
+
+965
+01:02:28,750 --> 01:02:34,180
+as you just mentioned, the gutter pools you don't do a delete from the gutter pool,
+
+966
+01:02:34,870 --> 01:02:38,260
+and invalidation is actually also not sent to the gutter pool
+
+967
+01:02:38,710 --> 01:02:43,630
+and the question is like why or can we speculate on why,
+
+968
+01:02:43,720 --> 01:02:47,200
+so maybe this is a good time for a quick breakthrough couple minutes,
+
+969
+01:02:47,200 --> 01:02:50,950
+you know to either discuss other aspects from the memcached design,
+
+970
+01:02:50,950 --> 01:02:53,710
+that you want to discuss work trying to figure out the answer to that question is.
+
+971
+01:02:56,080 --> 01:02:58,540
+So we're gonna break up, yes, thank you, lily.
+
+972
+01:09:03,340 --> 01:09:04,570
+Okay, so is everybody back?
+
+973
+01:09:10,310 --> 01:09:11,210
+Yep,it looks like it.
+
+974
+01:09:11,980 --> 01:09:12,880
+Yep, okay good.
+
+975
+01:09:13,490 --> 01:09:17,960
+Okay, so anybody you know the paper doesn't answer this question very precisely,
+
+976
+01:09:17,960 --> 01:09:22,660
+but anybody want to dare to speculate what the answer is on the deletes,
+
+977
+01:09:23,520 --> 01:09:26,700
+no delete you know no invalidation to the gutter cluster.
+
+978
+01:09:27,830 --> 01:09:29,570
+Oh, what are.
+
+979
+01:09:29,990 --> 01:09:30,440
+Go ahead.
+
+980
+01:09:31,550 --> 01:09:33,650
+Oh, what we said was something like,
+
+981
+01:09:34,450 --> 01:09:38,050
+if you do then you would have a lot of pressure on the gutter pool,
+
+982
+01:09:38,050 --> 01:09:39,760
+because there are so few machines
+
+983
+01:09:40,030 --> 01:09:41,620
+and for every cache miss,
+
+984
+01:09:41,770 --> 01:09:45,460
+there are two requests for cache [] are just one,
+
+985
+01:09:45,610 --> 01:09:50,260
+so if you do that, after every write, you have an extra request,
+
+986
+01:09:50,540 --> 01:09:52,340
+on the gutter pool, it's so small,
+
+987
+01:09:52,340 --> 01:09:53,570
+so you don't want to do that
+
+988
+01:09:53,570 --> 01:09:56,600
+and also you would protect the database as well,
+
+989
+01:09:56,600 --> 01:10:01,640
+because you would constantly query it after a write request.
+
+990
+01:10:02,750 --> 01:10:06,800
+Yeah,in general, the delete messages, also have to go to two polls, correct,
+
+991
+01:10:06,800 --> 01:10:08,330
+the original memcached pool,
+
+992
+01:10:08,630 --> 01:10:11,390
+all the memcached pools and invalidate it into the gutter,
+
+993
+01:10:11,750 --> 01:10:14,360
+and so you also double the delete traffic,
+
+994
+01:10:14,480 --> 01:10:15,800
+so I think that's a perfectly,
+
+995
+01:10:16,220 --> 01:10:18,380
+I think that's the reason,
+
+996
+01:10:18,440 --> 01:10:27,710
+it's a small set of machines, just there to sort of over basically get through that transformation from a deleted memcached server,
+
+997
+01:10:27,770 --> 01:10:30,920
+failed memcached server to a new memcached server.
+
+998
+01:10:32,200 --> 01:10:32,620
+Good.
+
+999
+01:10:33,120 --> 01:10:36,810
+Okay, so it's all I want to say about performance,
+
+1000
+01:10:36,840 --> 01:10:39,480
+even though there's more in the paper about performance,
+
+1001
+01:10:39,480 --> 01:10:43,680
+instead I want to talk a little bit about some of these races
+
+1002
+01:10:43,890 --> 01:10:46,470
+and sort of come about, because of this,
+
+1003
+01:10:46,470 --> 01:10:50,640
+trying to achieve high performance that I've been talking about.
+
+1004
+01:10:51,170 --> 01:10:53,330
+They're gonna be three races I want to talk about
+
+1005
+01:10:53,510 --> 01:10:56,360
+and in fact I think all three you already identified.
+
+1006
+01:10:57,100 --> 01:11:00,430
+And so amazingly most discussions presumably gonna be about
+
+1007
+01:11:00,730 --> 01:11:03,850
+how you know how they avoid them.
+
+1008
+01:11:05,300 --> 01:11:08,780
+And so race 1 is what they call stale sets
+
+1009
+01:11:08,810 --> 01:11:12,080
+and scenario as follows,
+
+1010
+01:11:12,440 --> 01:11:15,290
+we have client one, use one region,
+
+1011
+01:11:15,320 --> 01:11:19,010
+nothing, one cluster nothing a particular special setup,
+
+1012
+01:11:19,660 --> 01:11:23,680
+so client one, does get of k,
+
+1013
+01:11:24,370 --> 01:11:28,090
+you know that turns out to get a nil in the scenario,
+
+1014
+01:11:28,090 --> 01:11:30,820
+it will read the value from the database,
+
+1015
+01:11:32,130 --> 01:11:35,220
+maybe this is the client that actually got the token, right,
+
+1016
+01:11:35,610 --> 01:11:39,660
+and it's the one that actually is allowed to set it,
+
+1017
+01:11:40,080 --> 01:11:42,330
+but before it actually gets to set,
+
+1018
+01:11:42,360 --> 01:11:44,310
+another client you know comes in
+
+1019
+01:11:44,310 --> 01:11:49,560
+and writes you know k is 2 to the database,
+
+1020
+01:11:50,160 --> 01:11:53,850
+and then there's a put of k on 2
+
+1021
+01:11:55,650 --> 01:11:59,580
+and then you know the other clients,
+
+1022
+01:11:59,580 --> 01:12:02,400
+you know actually finally gets around to doing actual puts,
+
+1023
+01:12:02,400 --> 01:12:05,460
+you know that puts you know k comma,
+
+1024
+01:12:05,460 --> 01:12:07,170
+and this is like maybe 1,
+
+1025
+01:12:07,760 --> 01:12:09,410
+okay comma v1
+
+1026
+01:12:10,100 --> 01:12:15,430
+and now can we have a stale value in the cache
+
+1027
+01:12:15,430 --> 01:12:18,280
+and that you know stale value is sort of permanent there,
+
+1028
+01:12:19,150 --> 01:12:20,890
+until somebody else does an update,
+
+1029
+01:12:21,460 --> 01:12:22,090
+okay,
+
+1030
+01:12:22,390 --> 01:12:23,800
+and that sort of undesirable,
+
+1031
+01:12:23,800 --> 01:12:26,890
+that really breaks their contract with the applications
+
+1032
+01:12:27,130 --> 01:12:28,660
+and they don't want to go back in time,
+
+1033
+01:12:28,810 --> 01:12:31,060
+you know would be anonymous,
+
+1034
+01:12:31,060 --> 01:12:33,280
+actually user could observe that,
+
+1035
+01:12:33,280 --> 01:12:34,690
+I want to try to avoid that.
+
+1036
+01:12:35,650 --> 01:12:39,550
+So what they do, how do they solve this problem?
+
+1037
+01:12:42,630 --> 01:12:43,590
+Would use lease?
+
+1038
+01:12:44,740 --> 01:12:47,410
+Yeah great, some say it's the lease help out here,
+
+1039
+01:12:47,410 --> 01:12:48,490
+they already have a lease right,
+
+1040
+01:12:48,490 --> 01:12:50,170
+because this guy got at lease for,
+
+1041
+01:12:51,290 --> 01:12:52,220
+must have gotten lease,
+
+1042
+01:12:52,220 --> 01:12:54,620
+because otherwise he's not reading from the database,
+
+1043
+01:12:55,040 --> 01:12:59,030
+and so at the client one presents this lease at the put,
+
+1044
+01:13:02,010 --> 01:13:04,740
+or can put a present to lease at the put,
+
+1045
+01:13:04,770 --> 01:13:09,330
+and in fact it will and what is the additional step basically?
+
+1046
+01:13:15,140 --> 01:13:18,950
+To check that the this hasn't expired or something,
+
+1047
+01:13:18,950 --> 01:13:22,100
+because if the other client was able to.
+
+1048
+01:13:23,000 --> 01:13:25,910
+Sorry I I mean I just realized I made a mistake,
+
+1049
+01:13:26,150 --> 01:13:28,700
+so this is why the question is also not so good,
+
+1050
+01:13:28,850 --> 01:13:31,700
+let me see the client 2 doesn't do put, correct,
+
+1051
+01:13:32,090 --> 01:13:33,560
+that was invalidation consistency,
+
+1052
+01:13:34,090 --> 01:13:35,380
+I got myself confused here,
+
+1053
+01:13:35,380 --> 01:13:37,270
+so what does the client actually the client 2 do,
+
+1054
+01:13:38,920 --> 01:13:40,510
+after it sets the database.
+
+1055
+01:13:44,080 --> 01:13:44,860
+Go back.
+
+1056
+01:13:44,860 --> 01:13:45,490
+Delete?
+
+1057
+01:13:45,550 --> 01:13:46,780
+Yeah, it does delete,
+
+1058
+01:13:47,920 --> 01:13:49,810
+for the reason that we talked about earlier, correct,
+
+1059
+01:13:49,810 --> 01:13:51,040
+so it does delete of k,
+
+1060
+01:13:51,760 --> 01:13:56,140
+and what's the side effect of what happens with the release of the k being deleted?
+
+1061
+01:13:59,420 --> 01:14:02,690
+But it doesn't like verify or it does it.
+
+1062
+01:14:03,320 --> 01:14:06,110
+Yeah actually what happens is a side effect of the delete,
+
+1063
+01:14:06,140 --> 01:14:11,060
+the lease is invalidated,
+
+1064
+01:14:12,420 --> 01:14:14,100
+so it invalidates the lease,
+
+1065
+01:14:17,590 --> 01:14:19,240
+and so when the put comes along,
+
+1066
+01:14:19,270 --> 01:14:20,770
+so my timeline is a little bit,
+
+1067
+01:14:20,770 --> 01:14:25,210
+you know this happens quite well before, right,
+
+1068
+01:14:25,210 --> 01:14:28,120
+so the put happens after the delete,
+
+1069
+01:14:28,120 --> 01:14:31,000
+the put will present the lease I've gotta get,
+
+1070
+01:14:31,000 --> 01:14:33,760
+but that lease has been invalidated by the delete,
+
+1071
+01:14:33,760 --> 01:14:35,800
+and so this put gets rejected.
+
+1072
+01:14:41,520 --> 01:14:43,740
+So basically one way to think about this is that,
+
+1073
+01:14:43,740 --> 01:14:48,750
+they leverage you know the lease mechanism to avoid the thundering hurt problem,
+
+1074
+01:14:48,780 --> 01:14:54,870
+they extended to basically also avoid this steal set problem.
+
+1075
+01:14:58,280 --> 01:14:59,150
+Right, does that make sense?
+
+1076
+01:15:01,490 --> 01:15:07,670
+So, even if we don't have this lease invalidation mechanism,
+
+1077
+01:15:07,760 --> 01:15:10,430
+we would still obey the weak consistency,
+
+1078
+01:15:10,430 --> 01:15:14,720
+that you would have ordered writes that happened at some point in the past,
+
+1079
+01:15:14,720 --> 01:15:18,560
+but I believe that the thing of this thing ensures that you observe your own writes,right?
+
+1080
+01:15:19,520 --> 01:15:20,690
+You're sure, you're right,
+
+1081
+01:15:20,690 --> 01:15:22,700
+they also ensures that you don't go back in time,
+
+1082
+01:15:23,820 --> 01:15:25,230
+like if you read something,
+
+1083
+01:15:25,680 --> 01:15:31,650
+in, and like everybody else that comes now after this client two,
+
+1084
+01:15:31,650 --> 01:15:33,930
+will see you know the old v1
+
+1085
+01:15:34,020 --> 01:15:36,090
+and so a client might get well behind
+
+1086
+01:15:36,180 --> 01:15:39,240
+and not see that new write for long, long periods of time,
+
+1087
+01:15:39,240 --> 01:15:40,830
+in fact might seem not at all.
+
+1088
+01:15:41,440 --> 01:15:44,800
+Yeah, but, I mean would this be actually going back in time,
+
+1089
+01:15:44,800 --> 01:15:47,920
+because clients did not read anything after.
+
+1090
+01:15:48,100 --> 01:15:50,320
+Maybe maybe back in time is the wrong word,
+
+1091
+01:15:50,350 --> 01:15:53,410
+but it won't observe v2 for a long, long time,
+
+1092
+01:15:53,740 --> 01:15:55,150
+I see right.
+
+1093
+01:15:55,150 --> 01:15:56,890
+That was not something that we wanted to happen.
+
+1094
+01:15:58,400 --> 01:15:59,570
+It's okay to be a little bit,
+
+1095
+01:15:59,570 --> 01:16:01,100
+but not you know for a long, long time.
+
+1096
+01:16:03,030 --> 01:16:07,740
+Okay, second race which you know guys already mentioned,
+
+1097
+01:16:07,740 --> 01:16:09,840
+already identified too,
+
+1098
+01:16:10,590 --> 01:16:15,360
+because advantage of many I guess lab debugging,
+
+1099
+01:16:15,360 --> 01:16:16,860
+you know all about the races,
+
+1100
+01:16:18,050 --> 01:16:21,890
+race 2 and this is the cold cluster race,
+
+1101
+01:16:25,460 --> 01:16:27,110
+and sort of in a similar style,
+
+1102
+01:16:27,350 --> 01:16:29,990
+we have two clients,
+
+1103
+01:16:30,640 --> 01:16:33,220
+client 1,client 2.
+
+1104
+01:16:37,300 --> 01:16:41,470
+And, let's say k is v1 originally
+
+1105
+01:16:41,470 --> 01:16:43,960
+and so we're in both clients are in the cold cluster,
+
+1106
+01:16:44,640 --> 01:16:51,650
+client 1 sets the k to a new value in the database,
+
+1107
+01:16:53,070 --> 01:16:59,160
+delete the k in the cold cluster correct,
+
+1108
+01:16:59,160 --> 01:17:00,390
+current cluster actually in,
+
+1109
+01:17:01,200 --> 01:17:08,230
+and then this client does get in the cold cluster,
+
+1110
+01:17:10,600 --> 01:17:15,700
+sees that it actually is not there
+
+1111
+01:17:16,150 --> 01:17:17,740
+and what is gonna do,
+
+1112
+01:17:17,740 --> 01:17:22,270
+get from the warm cluster,
+
+1113
+01:17:23,280 --> 01:17:24,630
+get the value back.
+
+1114
+01:17:26,870 --> 01:17:29,150
+I mean that like you know get actually gets there
+
+1115
+01:17:29,150 --> 01:17:35,670
+before actually the the cold cluster or the warm cluster actually has been updated.
+
+1116
+01:17:36,290 --> 01:17:41,910
+And so now it will do a set of you know this key to v1
+
+1117
+01:17:41,910 --> 01:17:44,250
+or put sorry, let me be consistent,
+
+1118
+01:17:44,280 --> 01:17:50,490
+put k to v1 in the cold cluster
+
+1119
+01:17:50,640 --> 01:17:53,850
+and now we have to sort of the same situation as before,
+
+1120
+01:17:53,850 --> 01:18:01,370
+and we're you know we have sort of a permanent stale value in the cold cluster.
+
+1121
+01:18:07,070 --> 01:18:09,500
+And how do they solve that problem?
+
+1122
+01:18:15,810 --> 01:18:16,800
+Anybody remember?
+
+1123
+01:18:27,590 --> 01:18:31,010
+So they have a small extension that avoids this problem.
+
+1124
+01:18:31,800 --> 01:18:33,330
+And guess what it could be if you.
+
+1125
+01:18:38,780 --> 01:18:41,630
+Which are c1 and the warm cluster or cold cluster.
+
+1126
+01:18:41,630 --> 01:18:42,650
+Both the cold clusters.
+
+1127
+01:18:47,070 --> 01:18:50,490
+And they're different, they're in different cold clusters, right?
+
+1128
+01:18:50,940 --> 01:18:53,610
+I'm not sure that matters.
+
+1129
+01:18:54,600 --> 01:18:56,310
+Yeah, actually it doesn't.
+
+1130
+01:19:29,900 --> 01:19:30,560
+Anybody?
+
+1131
+01:19:52,340 --> 01:19:55,250
+I think they mentioned like hold-off for two seconds,
+
+1132
+01:19:55,250 --> 01:19:58,520
+though entirely shared all the details of that.
+
+1133
+01:20:01,680 --> 01:20:08,280
+Yeah, the basically the, this actually causes they put hold-off,
+
+1134
+01:20:09,030 --> 01:20:11,250
+they call this a hold-off, of two-second hold-off,
+
+1135
+01:20:15,510 --> 01:20:18,000
+on any set to that key,
+
+1136
+01:20:18,000 --> 01:20:23,100
+so this particular after you do a delete in the cold cluster,
+
+1137
+01:20:23,100 --> 01:20:25,800
+you can't do any sets to that key for two seconds
+
+1138
+01:20:26,400 --> 01:20:29,010
+and so this particular put will be rejected,
+
+1139
+01:20:31,790 --> 01:20:34,160
+and this is only during the warm up to their face, right,
+
+1140
+01:20:34,160 --> 01:20:36,500
+so when the cluster comes up, it's cold,
+
+1141
+01:20:36,740 --> 01:20:38,330
+you know for a couple hours,
+
+1142
+01:20:38,330 --> 01:20:40,550
+it runs you know to start warming up
+
+1143
+01:20:40,550 --> 01:20:42,230
+and get its content in place
+
+1144
+01:20:42,500 --> 01:20:45,140
+and once you know sort of warmed up,
+
+1145
+01:20:45,320 --> 01:20:47,360
+then you know they stopped doing this trick,
+
+1146
+01:20:47,510 --> 01:20:52,520
+but basically sort of you know just paste this problem over,
+
+1147
+01:20:52,610 --> 01:20:55,610
+they think two seconds is sufficient,
+
+1148
+01:20:56,340 --> 01:21:02,670
+and that sufficient for basically that write to propagate to the cold database too.
+
+1149
+01:21:05,090 --> 01:21:05,690
+Okay?
+
+1150
+01:21:09,240 --> 01:21:11,940
+But there's one more write the problem is,
+
+1151
+01:21:11,940 --> 01:21:13,140
+let me quickly mention that,
+
+1152
+01:21:13,140 --> 01:21:14,640
+because again you already mentioned it,
+
+1153
+01:21:15,060 --> 01:21:18,960
+so race number 3 that they talked about in the paper
+
+1154
+01:21:18,960 --> 01:21:19,860
+and I'm sure there's more,
+
+1155
+01:21:19,860 --> 01:21:21,030
+but you know the one they say,
+
+1156
+01:21:21,030 --> 01:21:22,920
+that the one they talk to the paper about
+
+1157
+01:21:23,190 --> 01:21:25,500
+and this is between regions,
+
+1158
+01:21:26,730 --> 01:21:29,760
+it has to do with the primary backup problem,
+
+1159
+01:21:30,030 --> 01:21:30,960
+primary backup.
+
+1160
+01:21:32,200 --> 01:21:33,790
+It's sort of a similar problem,
+
+1161
+01:21:36,560 --> 01:21:46,270
+and where you know the client one does write to the database, the database,
+
+1162
+01:21:47,350 --> 01:21:48,730
+and this is a client in the background,
+
+1163
+01:21:48,790 --> 01:21:51,310
+so this is a backup clients in the backup region,
+
+1164
+01:21:51,310 --> 01:21:55,480
+so that's write to the database in the primary region,
+
+1165
+01:21:55,980 --> 01:22:03,780
+that sort of goes off and then this delete of the key,
+
+1166
+01:22:04,080 --> 01:22:05,790
+in of course the backup region,
+
+1167
+01:22:06,380 --> 01:22:07,760
+from it's cache
+
+1168
+01:22:08,180 --> 01:22:12,170
+and then in principle it would do immediately,
+
+1169
+01:22:12,170 --> 01:22:13,730
+and this is like one of you mentioned this,
+
+1170
+01:22:13,730 --> 01:22:16,490
+like you can either do get that particular k, right,
+
+1171
+01:22:16,880 --> 01:22:24,620
+then, and and won't see the, will fetch from the,
+
+1172
+01:22:27,120 --> 01:22:30,630
+yeah, you know it won't see actually the result of that write,
+
+1173
+01:22:30,990 --> 01:22:34,560
+so we won't see its own write,
+
+1174
+01:22:34,590 --> 01:22:38,610
+because of write is still on the way to the backup or to the primary,
+
+1175
+01:22:38,610 --> 01:22:45,120
+the primary will send through the sql thing, squeal thing,
+
+1176
+01:22:45,120 --> 01:22:49,710
+propagate update to the database in the backup area
+
+1177
+01:22:49,710 --> 01:22:53,730
+and so only then you know again the backup will actually in the backup area,
+
+1178
+01:22:53,730 --> 01:22:55,950
+in the backup region will actually see the k change,
+
+1179
+01:22:56,310 --> 01:22:58,350
+so we're sort of, we have a problem here, right,
+
+1180
+01:22:58,350 --> 01:23:04,140
+where if this k would proceed without any modifications,
+
+1181
+01:23:04,230 --> 01:23:07,440
+then, we would see not our own writes.
+
+1182
+01:23:07,930 --> 01:23:10,210
+And anybody remember how they solve this problem?
+
+1183
+01:23:13,630 --> 01:23:16,150
+Was this remote marker?
+
+1184
+01:23:16,180 --> 01:23:17,650
+Yeah, absolutely, it is,
+
+1185
+01:23:17,650 --> 01:23:20,260
+so when they delete k k key,
+
+1186
+01:23:20,590 --> 01:23:25,630
+and they are they may, they, they keep it in the memcached of the backup,
+
+1187
+01:23:25,630 --> 01:23:27,160
+and mark it as remote,
+
+1188
+01:23:30,490 --> 01:23:34,210
+and so when this the client 1 does get,
+
+1189
+01:23:34,330 --> 01:23:37,330
+they'll see, hey, I'm gonna get,
+
+1190
+01:23:37,360 --> 01:23:41,680
+basically gets remote back from its local memcache
+
+1191
+01:23:41,920 --> 01:23:49,200
+and then goes basically to fetch it from the primary, from primary region.
+
+1192
+01:23:54,910 --> 01:23:55,540
+Okay?
+
+1193
+01:23:59,220 --> 01:24:03,220
+But then the the remote marker will be removed,
+
+1194
+01:24:03,220 --> 01:24:06,130
+when it's safe to read from the backup.
+
+1195
+01:24:06,160 --> 01:24:08,200
+Yes, I think one of the database,
+
+1196
+01:24:08,200 --> 01:24:12,160
+the backup database gets the data from the primary,
+
+1197
+01:24:12,220 --> 01:24:13,840
+that can remove the marker,
+
+1198
+01:24:17,590 --> 01:24:21,280
+because then it's safe to read from the primary database, from the backup database.
+
+1199
+01:24:24,430 --> 01:24:25,240
+Does that make sense?
+
+1200
+01:24:28,000 --> 01:24:30,280
+Okay, so let me do a quick summary,
+
+1201
+01:24:32,160 --> 01:24:35,310
+and because I'm running a little bit over time,
+
+1202
+01:24:35,310 --> 01:24:38,960
+so quick summaries, you know caching is vital,
+
+1203
+01:24:42,100 --> 01:24:46,270
+basically get in capacity that we're talking about this paper,
+
+1204
+01:24:46,270 --> 01:24:48,850
+like billions of operations per second,
+
+1205
+01:24:49,480 --> 01:24:52,990
+there are two strategies to sort of get this high capacity,
+
+1206
+01:24:52,990 --> 01:24:54,040
+one is petitioning,
+
+1207
+01:24:57,990 --> 01:25:00,420
+which gives you parallelism or sharding,
+
+1208
+01:25:03,550 --> 01:25:06,160
+and the other strategy is you know replication,
+
+1209
+01:25:06,220 --> 01:25:07,840
+is really good for hot keys,
+
+1210
+01:25:08,970 --> 01:25:12,030
+Keys are being requested by lots and lots of clients,
+
+1211
+01:25:12,120 --> 01:25:15,480
+so that's the keys get replicated on multiple machines.
+
+1212
+01:25:16,350 --> 01:25:23,550
+And you know we also see you know there's a bunch of almost ad hoc techniques
+
+1213
+01:25:23,550 --> 01:25:28,860
+to sort of get around some of the serious consistency issues,
+
+1214
+01:25:28,860 --> 01:25:30,120
+that are pop up,
+
+1215
+01:25:30,150 --> 01:25:33,510
+even if the systems are designed to give weak consistency
+
+1216
+01:25:33,840 --> 01:25:46,040
+and so this whole sort of consistency between the database, between db and caches or memcache is tricky,
+
+1217
+01:25:46,070 --> 01:25:48,980
+maybe much more tricky than you might found,
+
+1218
+01:25:49,220 --> 01:25:53,060
+because of memcache, the cache you know what could be the problem,
+
+1219
+01:25:53,180 --> 01:25:55,700
+but you know as you can see it's actually pretty tricky,
+
+1220
+01:25:55,790 --> 01:26:00,050
+in fact there's a more quite a bit of research going on,
+
+1221
+01:26:00,050 --> 01:26:01,790
+trying to figure out how could you do better.
+
+1222
+01:26:03,070 --> 01:26:04,660
+Okay, with that I want to conclude,
+
+1223
+01:26:04,660 --> 01:26:06,580
+that people that need to run, can run,
+
+1224
+01:26:06,580 --> 01:26:08,680
+you know go to their next zoom meeting
+
+1225
+01:26:09,100 --> 01:26:10,690
+and I'll see you around
+
+1226
+01:26:10,750 --> 01:26:13,780
+or answer any questions, if you have any questions remaining,
+
+1227
+01:26:14,630 --> 01:26:17,840
+and otherwise, I'll see you first, thank you.
+
+1228
+01:26:21,780 --> 01:26:23,970
+Sorry, I have a question about,
+
+1229
+01:26:24,870 --> 01:26:29,970
+so, for example, for the last thing we talked about with the remote marker,
+
+1230
+01:26:30,850 --> 01:26:36,150
+how did they know that this is gonna be a relevant data race,
+
+1231
+01:26:36,710 --> 01:26:45,470
+or how did they decide that it is going to be more useful to do this additional stuffs of remote marker
+
+1232
+01:26:45,590 --> 01:26:47,930
+versus just getting stable data.
+
+1233
+01:26:47,990 --> 01:26:51,320
+Well, I think there is because they have this requirement right up front,
+
+1234
+01:26:51,320 --> 01:26:54,710
+although the people didn't really stipulate very clearly,
+
+1235
+01:26:55,070 --> 01:26:57,290
+they really want this,
+
+1236
+01:26:59,570 --> 01:27:04,700
+like, for example you do a user adds something to their timeline,
+
+1237
+01:27:05,180 --> 01:27:07,040
+read it again, and it's not there,
+
+1238
+01:27:07,640 --> 01:27:12,230
+and so now is a thing that could be observed directly by users
+
+1239
+01:27:12,230 --> 01:27:14,420
+and strange inconsistency
+
+1240
+01:27:14,420 --> 01:27:16,640
+and they they they want to avoid that.
+
+1241
+01:27:19,600 --> 01:27:21,460
+Okay, that makes sense, that makes sense.
+
+1242
+01:27:21,670 --> 01:27:22,810
+And my other question was,
+
+1243
+01:27:22,810 --> 01:27:29,890
+on the one of the first slides where you had invalidation of the memcache.
+
+1244
+01:27:30,100 --> 01:27:31,720
+Let me find where I had that.
+
+1245
+01:27:34,140 --> 01:27:36,870
+Oh, here.
+
+1246
+01:27:37,290 --> 01:27:41,640
+Well, yeah, this is the database like a little bit wild now, but.
+
+1247
+01:27:42,090 --> 01:27:44,940
+Oh no, it was one of the later ones.
+
+1248
+01:27:45,900 --> 01:27:48,960
+Also have some invalidation on it or it doesn't.
+
+1249
+01:27:50,550 --> 01:27:51,780
+Maybe the next one.
+
+1250
+01:27:52,440 --> 01:27:52,920
+Yes.
+
+1251
+01:27:52,950 --> 01:28:02,990
+Yeah, yeah, so the client is going to set the invalidation only for its local region
+
+1252
+01:28:02,990 --> 01:28:05,450
+and the squeal is going to do it,
+
+1253
+01:28:06,080 --> 01:28:09,960
+what the transfer and for the non-local.
+
+1254
+01:28:09,990 --> 01:28:10,440
+Yeah.
+
+1255
+01:28:10,850 --> 01:28:14,370
+Okay, make sense, thank you so much.
+
+1256
+01:28:14,400 --> 01:28:14,970
+You're welcome.
+
+1257
+01:28:16,620 --> 01:28:18,870
+Professor, I had two.
+
+1258
+01:28:18,870 --> 01:28:20,790
+You had your final question,
+
+1259
+01:28:22,350 --> 01:28:27,930
+sorry sorry sorry, go ahead please ask your questions.
+
+1260
+01:28:28,860 --> 01:28:30,270
+These after class.
+
+1261
+01:28:30,540 --> 01:28:32,370
+They don't count.
+
+1262
+01:28:33,420 --> 01:28:39,420
+So for servers servers in in a region are assigned,
+
+1263
+01:28:39,420 --> 01:28:42,720
+when we have classes, each one are assigned to a cluster, right.
+
+1264
+01:28:43,430 --> 01:28:47,600
+Yeah yeah yeah, every clusters really replicate.
+
+1265
+01:28:48,170 --> 01:28:49,550
+Okay, nice, yeah.
+
+1266
+01:28:49,790 --> 01:28:54,610
+I mean like like servers are assigned to one single replica.
+
+1267
+01:28:56,110 --> 01:29:02,020
+Nice and then the second one was like straight from the paper and very precise,
+
+1268
+01:29:02,020 --> 01:29:05,950
+but it says like okay here,
+
+1269
+01:29:06,680 --> 01:29:10,670
+in I think generic cache page two,
+
+1270
+01:29:11,090 --> 01:29:17,540
+it says like use memcache as more general key-value store
+
+1271
+01:29:17,630 --> 01:29:24,500
+and I particularly say it takes little effort for new services to leverage the existing marcher infrastructure
+
+1272
+01:29:24,500 --> 01:29:27,200
+without the burden of tuning optimizing provisioning
+
+1273
+01:29:27,500 --> 01:29:29,390
+and maintaining a large sort of lead,
+
+1274
+01:29:29,390 --> 01:29:31,070
+so I wasn't sure and I looked up
+
+1275
+01:29:31,070 --> 01:29:34,880
+and I couldn't find what like what's existing marcher infrastructure.
+
+1276
+01:29:34,970 --> 01:29:37,280
+I don't actually know exactly what they're referring to, so.
+
+1277
+01:29:37,310 --> 01:29:41,380
+Okay, all right cool, thanks.
+
+1278
+01:29:42,430 --> 01:29:42,850
+Okay.
+
+1279
+01:29:43,460 --> 01:29:44,780
+See you.
+
+1280
+01:29:49,200 --> 01:29:51,330
+I wanted to pull up on a question,
+
+1281
+01:29:51,330 --> 01:29:54,720
+that I think well you asked about a certain failure mode,
+
+1282
+01:29:54,840 --> 01:29:57,570
+if memcached server fails,
+
+1283
+01:29:58,540 --> 01:30:00,520
+I think there's,
+
+1284
+01:30:00,520 --> 01:30:03,520
+I'm trying to think which slide would be helpful to look at,
+
+1285
+01:30:05,100 --> 01:30:08,100
+was earlier,
+
+1286
+01:30:08,220 --> 01:30:09,930
+maybe that one you just,
+
+1287
+01:30:11,240 --> 01:30:12,950
+just anything that kind of shows memcached,
+
+1288
+01:30:12,950 --> 01:30:15,410
+the the overall system diagram I guess.
+
+1289
+01:30:15,470 --> 01:30:17,390
+Okay, well, the multiple [],
+
+1290
+01:30:18,200 --> 01:30:22,010
+but this is the one basically if you think about as a single cluster, if you will.
+
+1291
+01:30:22,070 --> 01:30:22,910
+Yeah, okay.
+
+1292
+01:30:23,660 --> 01:30:25,520
+Yeah.
+
+1293
+01:30:25,520 --> 01:30:26,780
+We look at another one,
+
+1294
+01:30:26,780 --> 01:30:28,700
+but I think this is sort of probably good enough.
+
+1295
+01:30:29,180 --> 01:30:30,830
+Yeah, I think this is, this is good,
+
+1296
+01:30:32,620 --> 01:30:35,590
+yeah, I think this question was,
+
+1297
+01:30:36,310 --> 01:30:40,360
+so, try to,
+
+1298
+01:30:40,480 --> 01:30:42,310
+but it was something about like,
+
+1299
+01:30:42,460 --> 01:30:47,080
+if a client frontend writes,
+
+1300
+01:30:48,540 --> 01:30:51,930
+yeah, if a client writes to its memcached server
+
+1301
+01:30:52,140 --> 01:30:54,810
+and that memcached server crashes
+
+1302
+01:30:54,870 --> 01:31:00,660
+and then the client immediately tries, then which is presumably switches to another memcached server,
+
+1303
+01:31:00,660 --> 01:31:01,890
+and then read it again,
+
+1304
+01:31:02,780 --> 01:31:07,250
+what mechanism makes sure it doesn't see that it's a result of its previous write.
+
+1305
+01:31:07,250 --> 01:31:10,130
+I I think what happens is we probably go to the gutter,
+
+1306
+01:31:12,500 --> 01:31:14,660
+when the memcached fails, correct,
+
+1307
+01:31:14,660 --> 01:31:17,210
+client will get no response back,
+
+1308
+01:31:17,940 --> 01:31:21,390
+and when that no response comes back,
+
+1309
+01:31:21,390 --> 01:31:22,620
+it actually goes to the gutter,
+
+1310
+01:31:22,620 --> 01:31:23,910
+which has nothing in it,
+
+1311
+01:31:24,270 --> 01:31:26,460
+probably in the first try
+
+1312
+01:31:26,670 --> 01:31:28,920
+and will read it from whatever database.
+
+1313
+01:31:31,230 --> 01:31:34,620
+Oh, okay, okay, that that makes sense.
+
+1314
+01:31:35,410 --> 01:31:36,760
+And yeah, it's a little bit unclear
+
+1315
+01:31:36,760 --> 01:31:38,890
+exactly what happens when a new machine gets added,
+
+1316
+01:31:38,920 --> 01:31:41,020
+you know they don't really talk much about in the paper,
+
+1317
+01:31:41,740 --> 01:31:45,130
+I presume this is actually consistent action part,
+
+1318
+01:31:45,160 --> 01:31:49,000
+where keys will be automatically shifted from one machine to another.
+
+1319
+01:31:51,530 --> 01:31:56,340
+I guess, what if there were multiple clusters,
+
+1320
+01:31:56,730 --> 01:31:58,470
+wouldn't it not,
+
+1321
+01:31:58,650 --> 01:32:00,330
+maybe I just need to read about the gutter,
+
+1322
+01:32:00,330 --> 01:32:03,330
+but wouldn't it potentially shift to another memcached
+
+1323
+01:32:03,330 --> 01:32:05,280
+and oh actually, yeah.
+
+1324
+01:32:05,280 --> 01:32:08,040
+I think it always when get fails,
+
+1325
+01:32:08,570 --> 01:32:09,770
+the client goes to the gutter.
+
+1326
+01:32:10,460 --> 01:32:11,330
+Right.
+
+1327
+01:32:12,120 --> 01:32:14,670
+Okay, yeah, these clusters are kind of self-contained,
+
+1328
+01:32:15,000 --> 01:32:16,440
+different and then the memcache.
+
+1329
+01:32:16,650 --> 01:32:20,600
+Okay, okay, that makes, yeah that makes perfect sense, thank you.
+
+1330
+01:32:20,900 --> 01:32:21,320
+You're welcome.
+
+1331
+01:32:21,320 --> 01:32:23,180
+Follow follow up on that,
+
+1332
+01:32:23,210 --> 01:32:24,680
+when it falls back to the gutter
+
+1333
+01:32:24,680 --> 01:32:27,830
+or what is like two different clusters,
+
+1334
+01:32:27,950 --> 01:32:30,890
+their memcache server fails at the same time
+
+1335
+01:32:30,890 --> 01:32:32,450
+and so they both go to the gutter,
+
+1336
+01:32:32,660 --> 01:32:35,360
+and now doing like concurrent writes to the gutter,
+
+1337
+01:32:35,840 --> 01:32:39,410
+how do we ensure that those writes don't go out of order?
+
+1338
+01:32:40,870 --> 01:32:43,270
+You know they do sets, correct,
+
+1339
+01:32:43,990 --> 01:32:51,480
+and the the writes always go to the database to the primary,
+
+1340
+01:32:51,480 --> 01:32:52,800
+the primary orders all of them,
+
+1341
+01:32:55,260 --> 01:32:56,910
+so I think writes are always ordered,
+
+1342
+01:32:58,930 --> 01:33:06,620
+the only thing that you know the clients might do is go set a value in or put a value into the kv server,
+
+1343
+01:33:07,710 --> 01:33:10,920
+but then they have done that after they read from the database.
+
+1344
+01:33:13,370 --> 01:33:17,420
+Right, so what if someone is like doing a, they do a read,
+
+1345
+01:33:17,900 --> 01:33:20,390
+and then they're setting it into the database,
+
+1346
+01:33:20,390 --> 01:33:23,840
+but like let's say two different clusters fail,
+
+1347
+01:33:23,990 --> 01:33:27,410
+and then I'm not sure if this possible actually,
+
+1348
+01:33:27,410 --> 01:33:33,020
+but let's say like one, cluster one first reads from a key, gets back the value
+
+1349
+01:33:33,110 --> 01:33:34,940
+and then there's a write in between,
+
+1350
+01:33:35,150 --> 01:33:37,580
+and then the second cluster then reads
+
+1351
+01:33:37,610 --> 01:33:40,280
+and then they both try to put into their memcache servers,
+
+1352
+01:33:40,700 --> 01:33:44,990
+but, but let's say those servers failed.
+
+1353
+01:33:44,990 --> 01:33:46,370
+Yeah, maybe, yeah maybe,
+
+1354
+01:33:46,370 --> 01:33:48,470
+yeah, it's a good question,
+
+1355
+01:33:48,470 --> 01:33:50,060
+I think there's all kinds of little corner cases,
+
+1356
+01:33:50,060 --> 01:33:51,380
+that actually not describe the case,
+
+1357
+01:33:51,470 --> 01:33:53,390
+I I think maybe leases will help out,
+
+1358
+01:33:53,390 --> 01:33:57,620
+because that server you're gonna set to doesn't have the lease,
+
+1359
+01:33:57,860 --> 01:34:03,710
+for, the first one we did get a lease back correct to the set,
+
+1360
+01:34:04,210 --> 01:34:09,220
+and if in the meantime,
+
+1361
+01:34:09,220 --> 01:34:10,420
+the servers gets replaced
+
+1362
+01:34:10,630 --> 01:34:14,320
+the replacement server does not know that actually the lease was granted
+
+1363
+01:34:14,740 --> 01:34:16,300
+and so will reject the set,
+
+1364
+01:34:18,410 --> 01:34:19,640
+I'm just speculating, correct.
+
+1365
+01:34:19,940 --> 01:34:23,030
+Okay, yeah, so for the gutter,
+
+1366
+01:34:23,030 --> 01:34:24,980
+how does it control leases there.
+
+1367
+01:34:25,460 --> 01:34:26,330
+I don't know.
+
+1368
+01:34:26,630 --> 01:34:28,280
+Okay, I see.
+
+1369
+01:34:28,830 --> 01:34:31,500
+Sorry, I can speculate,
+
+1370
+01:34:31,500 --> 01:34:34,500
+but you know you know certainly I don't know.
+
+1371
+01:34:36,430 --> 01:34:38,260
+What would you say, if you had to speculate?
+
+1372
+01:34:39,100 --> 01:34:41,380
+Well, I would first have to go sit down
+
+1373
+01:34:41,380 --> 01:34:42,490
+and think a little bit about it.
+
+1374
+01:34:43,270 --> 01:34:46,210
+Okay, makes sense, yeah, thank you.
+
+1375
+01:34:49,120 --> 01:34:50,770
+I have a bit of a tangential question,
+
+1376
+01:34:50,770 --> 01:34:57,250
+which is, I thought it was really cool that they were using UDP for the get request and TCP for the others,
+
+1377
+01:34:57,250 --> 01:34:58,960
+and I was wondering how common that is,
+
+1378
+01:34:58,960 --> 01:35:02,380
+is that like a very standard thing to do?
+
+1379
+01:35:02,500 --> 01:35:05,380
+Yes, yes and no,
+
+1380
+01:35:06,320 --> 01:35:13,820
+it is, you know I think people prefer generally to use TCP provides reliability ordering and all the good great stuff,
+
+1381
+01:35:14,030 --> 01:35:15,710
+but there's real overheads with it,
+
+1382
+01:35:15,740 --> 01:35:20,690
+you know like the you know the state that needs to be maintained for connections, for connection
+
+1383
+01:35:20,960 --> 01:35:22,790
+and so there's always a little bit of struggle,
+
+1384
+01:35:22,790 --> 01:35:26,090
+when machines a lot of incoming TCP connection,
+
+1385
+01:35:26,090 --> 01:35:27,800
+a lot of outbound connections,
+
+1386
+01:35:27,800 --> 01:35:29,150
+that always causes problems
+
+1387
+01:35:29,660 --> 01:35:34,070
+and in the default, you know if you run into that problem is
+
+1388
+01:35:34,070 --> 01:35:35,690
+to basically do UDP type stuff.
+
+1389
+01:35:38,580 --> 01:35:39,090
+Sometimes.
+
+1390
+01:35:39,090 --> 01:35:41,250
+Like normal from this paper?
+
+1391
+01:35:41,610 --> 01:35:44,040
+No, not from this paper.
+
+1392
+01:35:45,990 --> 01:35:50,250
+Some people like to roll their own sort of like reliably transport critical over UDP.
+
+1393
+01:35:51,040 --> 01:35:51,940
+Like quick?
+
+1394
+01:35:52,460 --> 01:35:53,810
+Yep, for example.
+
+1395
+01:35:55,800 --> 01:36:01,590
+Yeah, because they mentioned they also do like sequence numbers UDP connections down.
+
+1396
+01:36:02,960 --> 01:36:06,620
+But persumably overtake congestion windows and all the other scaling
+
+1397
+01:36:06,620 --> 01:36:08,990
+and all the other TCP features that TCP has.
+
+1398
+01:36:10,650 --> 01:36:11,640
+Thank you.
+
+1399
+01:36:11,940 --> 01:36:12,570
+You're welcome.
+
+1400
+01:36:18,300 --> 01:36:20,900
+So, another, oops, sorry, go ahead.
+
+1401
+01:36:25,180 --> 01:36:32,460
+Okay, I guess, I just wanted to quickly ask about Kind of the replication between the different clusters,
+
+1402
+01:36:32,670 --> 01:36:35,730
+but basically they don't do any formal replication.
+
+1403
+01:36:35,730 --> 01:36:36,630
+Yeah that correctly,
+
+1404
+01:36:36,660 --> 01:36:41,670
+well, yeah, no, well, yes or no, right,
+
+1405
+01:36:41,670 --> 01:36:44,340
+because you know the database need to be updated,
+
+1406
+01:36:45,120 --> 01:36:45,960
+hold on, hold on,
+
+1407
+01:36:45,960 --> 01:36:49,530
+let me actually go back and make sure you know what you're talking about.
+
+1408
+01:36:51,070 --> 01:36:52,330
+Let's see clusters,
+
+1409
+01:36:54,120 --> 01:36:55,380
+yeah, we have multiple clusters,
+
+1410
+01:36:55,530 --> 01:36:58,110
+yeah there's no real replication going on between the clusters, right,
+
+1411
+01:36:58,110 --> 01:36:59,790
+because there's one single storage in there.
+
+1412
+01:37:01,890 --> 01:37:09,570
+Right, and so there are kind of like depending on these leases to keep the cache is up-to-date or.
+
+1413
+01:37:10,260 --> 01:37:12,540
+The the every cluster is completely independent,
+
+1414
+01:37:13,380 --> 01:37:14,730
+they have nothing to do with each other,
+
+1415
+01:37:15,820 --> 01:37:19,120
+and users are divided over these questions,
+
+1416
+01:37:20,280 --> 01:37:22,260
+and so one user talks to one cluster
+
+1417
+01:37:22,260 --> 01:37:29,250
+and and then you know within the cluster, you know they use leases or,
+
+1418
+01:37:31,630 --> 01:37:35,110
+and this database invalidates leases and keys.
+
+1419
+01:37:36,650 --> 01:37:37,610
+Right, got it, okay,
+
+1420
+01:37:37,640 --> 01:37:40,430
+yeah, so it's like the squeal and the storage [].
+
+1421
+01:37:41,570 --> 01:37:45,380
+Yeah, all the writes basically and just go through this storage correct,
+
+1422
+01:37:45,740 --> 01:37:47,180
+all writes go through here,
+
+1423
+01:37:49,240 --> 01:37:50,410
+they get ordered,
+
+1424
+01:37:51,260 --> 01:37:54,080
+and you know they pop out invalidation messages.
+
+1425
+01:37:57,660 --> 01:37:59,160
+Got it [], thank you.
+
+1426
+01:38:03,320 --> 01:38:04,940
+Yeah, go ahead.
+
+1427
+01:38:04,970 --> 01:38:09,320
+Yeah, so tangential question,
+
+1428
+01:38:10,400 --> 01:38:11,810
+I guess I'm not sure this is,
+
+1429
+01:38:11,810 --> 01:38:15,230
+because of the way we've kind of presented papers in the class,
+
+1430
+01:38:15,350 --> 01:38:18,080
+but it kind of seems like,
+
+1431
+01:38:18,780 --> 01:38:21,750
+the way these systems are developed is
+
+1432
+01:38:21,750 --> 01:38:27,130
+like okay, we have like these these systems like our needs are continuing to scale,
+
+1433
+01:38:27,130 --> 01:38:30,580
+so let's like maybe this is also not an accurate representation,
+
+1434
+01:38:30,580 --> 01:38:35,430
+but it sounds like let's add another layer to kind of handle this load,
+
+1435
+01:38:35,430 --> 01:38:40,380
+or that kind of you know cache something or add another layer of complexity on top of it,
+
+1436
+01:38:40,980 --> 01:38:45,360
+is it fair to say that like system development has generally been like,
+
+1437
+01:38:45,540 --> 01:38:48,480
+let's just add another layer to kind of deal with.
+
+1438
+01:38:48,920 --> 01:38:50,690
+Yes or no,
+
+1439
+01:38:50,750 --> 01:38:53,990
+I think the designer system took a very pragmatic approach,
+
+1440
+01:38:53,990 --> 01:38:57,620
+you know figure out like run into a real problem and solve the real problem,
+
+1441
+01:38:58,280 --> 01:39:03,050
+and in basically you think about it not a lot of additional mechanism
+
+1442
+01:39:03,860 --> 01:39:05,480
+to actually make it all work,
+
+1443
+01:39:05,780 --> 01:39:07,250
+so in terms of,
+
+1444
+01:39:07,760 --> 01:39:11,900
+I mean I mean I think it's pretty impressive and this kind of performance
+
+1445
+01:39:11,900 --> 01:39:13,430
+and they've often shelf components,
+
+1446
+01:39:14,090 --> 01:39:18,680
+the absolute people also go back once in a while,
+
+1447
+01:39:18,680 --> 01:39:22,640
+said okay, how would I design a system to get better performance
+
+1448
+01:39:22,910 --> 01:39:26,480
+and don't for example have this inconsistency between the database and caches,
+
+1449
+01:39:27,120 --> 01:39:32,010
+and you know it actually turns out to be a research problem,
+
+1450
+01:39:32,370 --> 01:39:34,590
+because people figured out how to do that
+
+1451
+01:39:34,590 --> 01:39:38,250
+and so you'll see recent research papers that describe alternative solutions
+
+1452
+01:39:39,680 --> 01:39:41,630
+or new components of the solution,
+
+1453
+01:39:41,630 --> 01:39:44,780
+because like you know any of the proposals I know of,
+
+1454
+01:39:45,080 --> 01:39:47,210
+you know cannot support a billion operations per second.
+
+1455
+01:39:47,770 --> 01:39:49,030
+Yeah, right.
+
+1456
+01:39:50,880 --> 01:39:52,800
+Okay, that's interesting, thank you.
+
+1457
+01:39:52,950 --> 01:39:54,750
+Yeah, this is fascinating stuff,
+
+1458
+01:39:54,900 --> 01:39:57,780
+it's like a real world system design.
+
+1459
+01:39:59,040 --> 01:40:01,110
+I have one more question, if you don't mind.
+
+1460
+01:40:01,290 --> 01:40:02,340
+Yeah, go ahead.
+
+1461
+01:40:02,370 --> 01:40:05,160
+So in the design here,
+
+1462
+01:40:05,160 --> 01:40:07,320
+where they replicate across different regions,
+
+1463
+01:40:07,470 --> 01:40:11,160
+so sorry just to clarify when the first clarification question I have is,
+
+1464
+01:40:11,190 --> 01:40:13,170
+when they were okay against different regions,
+
+1465
+01:40:13,200 --> 01:40:16,680
+each region has a bunch of internal clusters, right.
+
+1466
+01:40:17,880 --> 01:40:21,330
+And then, my follow-up question to that is,
+
+1467
+01:40:21,360 --> 01:40:22,650
+it seems like everything is,
+
+1468
+01:40:22,650 --> 01:40:24,960
+yeah everything is hitting the primary storage,
+
+1469
+01:40:25,500 --> 01:40:27,540
+if let's say we wanted to scale up,
+
+1470
+01:40:27,540 --> 01:40:31,140
+so that we didn't have all the writes hitting the primary storage,
+
+1471
+01:40:31,680 --> 01:40:33,900
+how would you go about designing.
+
+1472
+01:40:33,930 --> 01:40:39,720
+Yeah, my suspicion is that, they're actually a design described okay,
+
+1473
+01:40:39,720 --> 01:40:41,870
+so there's a bunch of points,
+
+1474
+01:40:41,870 --> 01:40:45,650
+there's a whole other paper on this topic about actually how to do the replication,
+
+1475
+01:40:46,340 --> 01:40:49,640
+so this is not the only Facebook paper on scaling things up
+
+1476
+01:40:49,670 --> 01:40:53,270
+and there's a system was published in 2015 or [],
+
+1477
+01:40:53,850 --> 01:40:58,860
+were you know they have a scalable design to propagate these writes,
+
+1478
+01:40:59,220 --> 01:41:08,130
+my speaking is also that they will or have a shard the users to a particular regions,
+
+1479
+01:41:08,620 --> 01:41:13,300
+and make some regions, the primary for those users.
+
+1480
+01:41:16,040 --> 01:41:20,360
+I see, so they assigned different regions primaries for different shards.
+
+1481
+01:41:20,570 --> 01:41:21,470
+Yeah, I think so,
+
+1482
+01:41:21,620 --> 01:41:23,330
+that's why I would do, we're trying to do,
+
+1483
+01:41:24,370 --> 01:41:26,020
+and I'm speculating here now.
+
+1484
+01:41:28,170 --> 01:41:32,910
+Would it be a wise decision to do like consensus protocol across the storage layers,
+
+1485
+01:41:32,910 --> 01:41:35,610
+or would that just be like too high you know.
+
+1486
+01:41:35,610 --> 01:41:38,040
+You could do that, like Spanner does that, correct.
+
+1487
+01:41:39,410 --> 01:41:39,920
+Right.
+
+1488
+01:41:40,280 --> 01:41:41,540
+And how fast is spanner?
+
+1489
+01:41:43,140 --> 01:41:43,860
+Pretty fast.
+
+1490
+01:41:44,570 --> 01:41:47,600
+You look back into it back into the table,
+
+1491
+01:41:47,870 --> 01:41:49,640
+how many transactions per second could do?
+
+1492
+01:41:51,040 --> 01:41:54,070
+I do not remember the exact number.
+
+1493
+01:41:54,560 --> 01:41:55,700
+I think about a hundred.
+
+1494
+01:41:57,690 --> 01:41:58,260
+Oh oh.
+
+1495
+01:41:58,260 --> 01:42:00,300
+In fact, for I think write area ten.
+
+1496
+01:42:01,400 --> 01:42:03,740
+Right, this is for write transactions, right.
+
+1497
+01:42:04,010 --> 01:42:06,770
+Right, the write, the write transactions are very slow.
+
+1498
+01:42:11,550 --> 01:42:17,220
+Sorry, I think I realized that I do not understand race one.
+
+1499
+01:42:17,710 --> 01:42:21,190
+Okay, let me see if I can replicate it.
+
+1500
+01:42:22,960 --> 01:42:25,480
+Now let's see where we race one.
+
+1501
+01:42:27,490 --> 01:42:30,520
+I think I'm just confused what is v2.
+
+1502
+01:42:32,350 --> 01:42:34,300
+Um, v2 is this, right.
+
+1503
+01:42:35,660 --> 01:42:36,800
+Hold on I'll mark it.
+
+1504
+01:42:39,360 --> 01:42:39,960
+Okay.
+
+1505
+01:42:42,430 --> 01:42:43,900
+And the problem is that,
+
+1506
+01:42:43,900 --> 01:42:48,280
+it is like wedged in between the first one.
+
+1507
+01:42:51,810 --> 01:42:52,470
+Okay.
+
+1508
+01:42:55,100 --> 01:42:59,990
+Okay, so like, we wanted it to be deleted,
+
+1509
+01:42:59,990 --> 01:43:04,930
+so that the next person can read, refresh it from the database,
+
+1510
+01:43:04,960 --> 01:43:07,120
+but now it's there with the old value.
+
+1511
+01:43:07,150 --> 01:43:09,370
+Yeah, so basically we have a permanent stable value,
+
+1512
+01:43:09,400 --> 01:43:15,010
+really the issue is this permanent business, or you permitted between quotes, correct,
+
+1513
+01:43:15,010 --> 01:43:19,570
+because it's a cache, but like you know this, this put,
+
+1514
+01:43:20,060 --> 01:43:28,670
+that came after you know basically the k be k the k being updated to v2,
+
+1515
+01:43:28,670 --> 01:43:30,980
+so we have k 2 here really, correct,
+
+1516
+01:43:30,980 --> 01:43:32,390
+that's what the right value should be,
+
+1517
+01:43:32,780 --> 01:43:34,640
+and here actually this is v1,
+
+1518
+01:43:34,640 --> 01:43:35,870
+so let's say there's just 1,
+
+1519
+01:43:36,440 --> 01:43:37,460
+what we've done here is,
+
+1520
+01:43:37,460 --> 01:43:41,150
+we took a key 1 in after,
+
+1521
+01:43:43,220 --> 01:43:44,660
+and that's just not the right thing.
+
+1522
+01:43:47,440 --> 01:43:49,780
+Everybody that comes after now
+
+1523
+01:43:49,780 --> 01:43:52,060
+and doesn't get on okay great,
+
+1524
+01:43:52,060 --> 01:43:53,680
+we're gonna get 1 back instead of 2.
+
+1525
+01:43:54,540 --> 01:43:55,890
+Okay, that makes sense, okay.
+
+1526
+01:43:55,890 --> 01:43:58,860
+Including client 2, which is going to be bizarre.
+
+1527
+01:43:59,770 --> 01:44:03,550
+Right, right, okay that makes sense, thank you so much.
+
+1528
+01:44:03,610 --> 01:44:04,210
+You're welcome.
+
+1529
+01:44:04,950 --> 01:44:10,260
+I will take part in the beginning about the evolution was also pretty helpful, I think.
+
+1530
+01:44:10,290 --> 01:44:11,670
+Okay, good good.
+
+1531
+01:44:11,760 --> 01:44:13,320
+Thank you so much.
+
+1532
+01:44:13,380 --> 01:44:14,100
+You're welcome.
+
