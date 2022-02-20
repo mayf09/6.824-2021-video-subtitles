@@ -10777,7 +10777,7 @@ Okay?|
 2160
 01:19:10,860 --> 01:19:11,820
 0,660
-Okay.
+Okay.|
 
 2161
 01:19:12,280 --> 01:19:14,230
@@ -10787,32 +10787,32 @@ Alright, so let's try to
 2162
 01:19:14,230 --> 01:19:15,940
 0,420 420,480 480,630 630,1020 1110,1710
-summarize a little bit, um.
+summarize a little bit. {}|
 
 2163
 01:19:23,560 --> 01:19:25,420
 0,690 750,1290 1320,1560 1560,1770 1770,1860
-So a read write in
+So {} {read-write -} {transactions
 
 2164
 01:19:25,420 --> 01:19:26,580
 0,990
-sections.
+-}
 
 2165
 01:19:27,220 --> 01:19:28,780
 0,240 240,390 390,1170
-There are basically.
+{you,know} are basically
 
 2166
 01:19:30,200 --> 01:19:32,480
 0,480 480,840 840,1110 1110,1890 1890,2280
-Global reward a realizable external
+global ordered,| or serializable {external,consistency}
 
 2167
 01:19:32,990 --> 01:19:36,140
 0,690 690,1050 1080,1770 1770,2520 2670,3150
-reliability plus external consistency due
+serializability plus external consistency| due
 
 2168
 01:19:36,140 --> 01:19:37,280
@@ -10822,22 +10822,22 @@ to the fact that they
 2169
 01:19:37,280 --> 01:19:39,260
 0,360 360,540 540,690 690,1320 1440,1980
-basically do two face commit
+basically do {two-phase -} commit
 
 2170
 01:19:39,290 --> 01:19:41,640
 0,300 300,450 450,660 660,1050
-much to face locking.
+plus {two-phase -} locking.|
 
 2171
 01:19:42,760 --> 01:19:44,290
 0,240 240,450 450,720 720,1350 1380,1530
-They read only transactions are
+The {read-only -} transactions are
 
 2172
 01:19:44,290 --> 01:19:45,670
 0,60 60,330 330,480 480,690 690,1380
-the ones that are special
+the ones that are special,|
 
 2173
 01:19:46,450 --> 01:19:48,910
@@ -10847,7 +10847,7 @@ because they are only contact
 2174
 01:19:48,910 --> 01:19:50,440
 0,60 60,360 360,990 1140,1470 1470,1530
-a local replica and the
+a local replica| and the
 
 2175
 01:19:50,440 --> 01:19:52,150
@@ -10857,52 +10857,52 @@ reason they actually see you
 2176
 01:19:52,150 --> 01:19:53,620
 0,120 120,210 210,510 510,1050 1050,1470
-know the correct value is
+know the correct value is,|
 
 2177
 01:19:53,620 --> 01:19:55,400
 0,270 270,360 360,810 810,1470
-because of snapshot isolation.
+because of snapshot isolation,|
 
 2178
 01:19:59,950 --> 01:20:03,640
 0,660 1680,2490 2490,2820 2820,2940 2940,3690
-Each data item is actually
+each data item is actually
 
 2179
 01:20:03,640 --> 01:20:05,680
 0,120 120,570 750,1380 1380,1530 1530,2040
-a version and a stamped
+{} versioned| and {} stamped
 
 2180
 01:20:05,680 --> 01:20:07,810
 0,240 240,1260 1260,1470 1470,1800 1800,2130
-with z time stamp which
+with the {timestamp -} which
 
 2181
 01:20:07,810 --> 01:20:09,850
 0,300 300,450 450,1110 1530,1680 1680,2040
-text was modified and so,
+actually was modified| and so,
 
 2182
 01:20:09,850 --> 01:20:11,050
 0,660 690,780 780,930 930,1050 1050,1200
-um, you know you can
+{} you know you can
 
 2183
 01:20:11,050 --> 01:20:13,060
 0,240 240,330 330,390 390,1020 1080,2010
-read in the past, um
+read in the past {}
 
 2184
 01:20:13,060 --> 01:20:15,310
 0,240 240,480 480,1110 1620,1770 1770,2250
-using steps regulation and then
+using snapshot isolation| and then
 
 2185
 01:20:15,430 --> 01:20:16,840
 0,300 300,840 840,1020 1020,1290 1290,1410
-to ensure that yeah so
+to ensure that,| {} so
 
 2186
 01:20:16,840 --> 01:20:18,610
@@ -10912,17 +10912,17 @@ this snapshot isolation really gives
 2187
 01:20:18,610 --> 01:20:22,340
 0,420 450,720 720,1380 1380,1980
-us a accessorize ability.
+us {} {extra,serializability -}.|
 
 2188
 01:20:25,090 --> 01:20:27,310
 0,330 330,450 450,780 1590,1860 1860,2220
-But you know a spanner
+But you know {} Spanner
 
 2189
 01:20:27,310 --> 01:20:28,690
 0,180 180,450 450,570 570,810 810,1380
-actually shoots for something stronger,
+actually shoots for something stronger,|
 
 2190
 01:20:28,720 --> 01:20:30,640
@@ -10932,17 +10932,17 @@ namely it actually shoots for
 2191
 01:20:30,730 --> 01:20:32,590
 0,270 270,720 720,1260 1260,1710 1710,1860
-this external consistency property, which
+this external consistency property,| which
 
 2192
 01:20:32,590 --> 01:20:34,270
 0,120 120,390 390,1290 1290,1500 1500,1680
-is like vulnerability, yeah so
+is like linearizability,| {} so
 
 2193
 01:20:34,270 --> 01:20:35,890
 0,300 300,840 840,1290 1290,1440 1440,1620
-there's real-time component to it.
+there's real-time component to it.|
 
 2194
 01:20:38,990 --> 01:20:41,030
@@ -10952,57 +10952,56 @@ And to actually ensure that
 2195
 01:20:41,030 --> 01:20:42,830
 0,870 900,1140 1140,1290 1290,1500 1500,1800
-um, we got actually external
+{} we got actually external
 
 2196
 01:20:42,830 --> 01:20:44,960
 0,810 1050,1260 1260,1530 1530,1950 1950,2130
-consistency, um, we execute the
+consistency,| {} we execute the
 
 2197
 01:20:44,960 --> 01:20:46,790
 0,240 240,480 480,1200 1200,1590 1590,1830
-read only operations in time
+{read-only -} operations in {timestamp
 
 2198
 01:20:46,790 --> 01:20:48,060
 0,330 330,810
-stamp order.
+-} order,|
 
 2199
 01:20:52,890 --> 01:20:54,390
 0,510 510,720 720,1260 1260,1380 1380,1500
-And now, because you know
+and {you,know} because you know
 
 2200
 01:20:54,390 --> 01:20:56,130
 0,270 270,600 600,1140 1140,1230 1230,1740
-time stamp order, it requires
+{timestamp -} order,| it requires
 
 2201
 01:20:56,130 --> 01:20:58,740
 0,570 570,1170 1200,1620 1620,2100 2100,2610
-on a perfectly synchronized clocks,
+on {} perfectly synchronized clocks,|
 
 2202
 01:20:59,010 --> 01:21:01,860
 0,510 510,1350 1350,2220 2250,2760 2760,2850
-um z scanner relaxes the
+{} the Spanner relies the
 
 2203
 01:21:01,860 --> 01:21:03,750
 0,210 210,270 270,510 510,870 1080,1890
-rules a little bit by
+rules a little bit| by
 
 2204
 01:21:03,750 --> 01:21:08,100
 0,360 360,1050 1470,2340 2370,3690 3690,4350
-actually using by type intervals.
+actually using {} time intervals.|
 
 2205
 01:21:11,640 --> 01:21:12,460
 0,600
-Eggs.
 
 2206
 01:21:14,520 --> 01:21:16,230
@@ -11012,27 +11011,27 @@ And the whole goal correctly,
 2207
 01:21:16,230 --> 01:21:17,820
 0,90 90,600 690,1170 1170,1470 1470,1590
-the hole by using the
+the whole,| by using the
 
 2208
 01:21:17,820 --> 01:21:19,470
 0,180 180,270 270,960 1080,1410 1410,1650
-set of techniques, it turns
+set of techniques,| it turns
 
 2209
 01:21:19,470 --> 01:21:21,090
 0,180 180,360 360,510 510,780 780,1620
-out that read only transactions
+out that {read-only -} transactions
 
 2210
 01:21:21,330 --> 01:21:23,280
 0,330 330,600 600,1170
-are very fast.
+are very fast,|
 
 2211
 01:21:24,840 --> 01:21:26,430
 0,180 180,360 360,840 870,1500 1500,1590
-So read write transactions are
+so {read-write -} transactions are
 
 2212
 01:21:26,430 --> 01:21:27,570
@@ -11042,47 +11041,47 @@ basically you know not actually
 2213
 01:21:27,570 --> 01:21:28,830
 0,390 390,780 780,990 990,1110 1110,1260
-particularly fast, if you look
+particularly fast,| if you look
 
 2214
 01:21:28,830 --> 01:21:30,810
 0,120 120,840 870,1170 1170,1530 1530,1980
-at the table six you
+at the table 6,| {you,know}
 
 2215
 01:21:30,810 --> 01:21:32,190
 0,210 210,330 330,570 570,870 1020,1380
-it's you know that middle
+it's you know 100 {milliseconds
 
 2216
 01:21:32,190 --> 01:21:33,900
 0,330 330,900 900,1080 1080,1260 1260,1710
-seconds for read, write transaction
+-} for {read-write -} transaction,|
 
 2217
 01:21:33,900 --> 01:21:34,800
 0,150 150,360 360,690 690,780 780,900
-that means vision you can
+that means basically you can
 
 2218
 01:21:34,800 --> 01:21:35,880
 0,180 180,300 300,540 540,990 990,1080
-only do ten transactions per
+only do 10 transactions per
 
 2219
 01:21:35,880 --> 01:21:37,680
 0,300 360,750 930,1260 1260,1380 1380,1800
-second right, this is really
+second, right,| this is really
 
 2220
 01:21:37,680 --> 01:21:39,810
 0,240 240,660 960,1500 1500,1770 1770,2130
-not much but the renewal
+not much,| but the read-only
 
 2221
 01:21:39,810 --> 01:21:41,560
 0,780 870,1050 1050,1620
-introductions are fast.
+transactions are fast.|
 
 2222
 01:21:42,450 --> 01:21:43,290
@@ -11092,7 +11091,7 @@ Now, this is the case
 2223
 01:21:43,290 --> 01:21:44,850
 0,210 210,450 450,510 510,990 990,1560
-though like you know, um,
+though like you know, {}|
 
 2224
 01:21:45,090 --> 01:21:46,620
@@ -11102,27 +11101,27 @@ you know the although the
 2225
 01:21:46,620 --> 01:21:48,330
 0,300 300,630 630,870 870,1500 1500,1710
-writing sections are maybe not
+read-write transactions are maybe not
 
 2226
 01:21:48,330 --> 01:21:50,070
 0,180 180,660 750,1080 1080,1350 1350,1740
-that fast they they are
+that fast,| they they are
 
 2227
 01:21:50,070 --> 01:21:52,320
 0,240 240,720 780,1230 1230,1680 1680,2250
-very powerful, you're basically doing
+very powerful,| you're basically doing
 
 2228
 01:21:52,590 --> 01:21:55,830
 0,810 900,1920 1920,2550 2550,2880 2880,3240
-a transactional operations across multiple
+{} transactional operations across multiple
 
 2229
 01:21:55,830 --> 01:21:56,850
 0,390 390,570 570,660 660,900 900,1020
-sharks that is sitting in
+shards,| that is sitting in
 
 2230
 01:21:56,850 --> 01:21:58,410
@@ -11132,42 +11131,42 @@ different data centers in different
 2231
 01:21:58,410 --> 01:21:59,360
 0,210 210,270 270,360 360,690
-parts of the world.
+parts of the world,|
 
 2232
 01:21:59,700 --> 01:22:00,750
 0,240 240,390 390,540 540,780 780,1050
-And that each day for
+and that {just -} for
 
 2233
 01:22:00,750 --> 01:22:03,720
 0,600 600,1110 1110,1740 2100,2580 2580,2970
-programmers, incredibly convenient and powerful
+programmers incredibly convenient and powerful
 
 2234
 01:22:03,720 --> 01:22:05,310
 0,540 750,1110 1110,1260 1260,1410 1410,1590
-tool, um that you can
+tool,| {} that you can
 
 2235
 01:22:05,310 --> 01:22:08,490
 0,330 330,930 930,1560 1560,1980 2250,3180
-acid semantics across shards in
+ACID semantics across shards in
 
 2236
 01:22:08,610 --> 01:22:11,370
 0,630 660,1560 1560,2250 2250,2550 2550,2760
-a replicated in all over
+{} replicated in all over
 
 2237
 01:22:11,370 --> 01:22:12,020
 0,90 90,420
-the world.
+the world.|
 
 2238
 01:22:15,900 --> 01:22:16,950
 0,360 360,720 750,870 870,930 930,1050
-So, um, this is all
+So, {} this is all
 
 2239
 01:22:16,950 --> 01:22:18,120
@@ -11177,27 +11176,27 @@ I wanted to say actually
 2240
 01:22:18,120 --> 01:22:20,070
 0,330 330,750 750,1290 1320,1800 1800,1950
-about scanner, I hope this
+about Spanner,| I hope this
 
 2241
 01:22:20,070 --> 01:22:21,690
 0,600 600,750 750,1290 1290,1500 1500,1620
-actually was helpful and that
+actually was helpful| and that
 
 2242
 01:22:21,690 --> 01:22:24,090
 0,180 180,540 1020,1650 1770,2190 2190,2400
-you're not a maybe less
+you're not {} maybe less
 
 2243
 01:22:24,090 --> 01:22:26,400
 0,420 420,540 540,900 900,1560 1560,2310
-confused and more confused because
+confused and more confused,| because
 
 2244
 01:22:26,400 --> 01:22:27,960
 0,60 60,210 210,810 810,1020 1290,1560
-of this lecture, but, um,
+of this lecture,| but, {}
 
 2245
 01:22:27,960 --> 01:22:29,490
@@ -11207,7 +11206,7 @@ if you have questions, feel
 2246
 01:22:29,490 --> 01:22:30,630
 0,180 180,240 240,420 420,810 810,1140
-free to hang around and
+free to hang around| and
 
 2247
 01:22:30,630 --> 01:22:32,730
@@ -11222,12 +11221,12 @@ this or any other aspect
 2249
 01:22:34,470 --> 01:22:35,080
 0,60 60,480
-of spinner.
+of Spanner.|
 
 2250
 01:22:37,240 --> 01:22:39,130
 0,480 480,630 630,840 840,1230 1230,1890
-And good luck finishing freebie,
+And good luck finishing 3b,|
 
 2251
 01:22:39,160 --> 01:22:40,660
@@ -11242,12 +11241,12 @@ time to enjoy the long
 2253
 01:22:42,520 --> 01:22:43,240
 0,390
-weekend.
+weekend.|
 
 2254
 01:22:47,560 --> 01:22:49,220
 0,150 150,660 660,1020
-Aw, thank you.
+{} Thank you.|
 
 2255
 01:22:51,000 --> 01:22:52,110
