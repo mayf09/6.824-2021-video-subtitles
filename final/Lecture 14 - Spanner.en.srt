@@ -1,0 +1,5296 @@
+1
+00:00:00,000 --> 00:00:03,270
+Good afternoon, good evening, good night, good morning, wherever you are
+
+2
+00:00:03,600 --> 00:00:05,040
+or whenever you're watching this.
+
+3
+00:00:05,580 --> 00:00:11,310
+So today I wanna talk about Spanner,
+
+4
+00:00:11,820 --> 00:00:14,220
+is a paper from 2012,
+
+5
+00:00:14,220 --> 00:00:17,340
+but the Spanner system is in active use
+
+6
+00:00:17,340 --> 00:00:20,100
+and also still continuously under development,
+
+7
+00:00:20,970 --> 00:00:22,410
+so it's a real system.
+
+8
+00:00:23,130 --> 00:00:26,520
+The main topic and why you Spanner is really interesting,
+
+9
+00:00:26,550 --> 00:00:28,710
+is supports wide-area transactions,
+
+10
+00:00:38,400 --> 00:00:42,510
+and this is a really powerful programming model,
+
+11
+00:00:42,510 --> 00:00:47,790
+so even though the data, maybe the data shared across multiple servers
+
+12
+00:00:47,790 --> 00:00:49,740
+and the servers being in different data centers
+
+13
+00:00:49,740 --> 00:00:52,590
+and different pieces on on the planet,
+
+14
+00:00:52,950 --> 00:00:54,990
+you can just run transactions
+
+15
+00:00:54,990 --> 00:00:58,560
+and they have ACID semantics
+
+16
+00:00:58,560 --> 00:01:00,570
+and their atomic you know respect failure,
+
+17
+00:01:00,570 --> 00:01:02,130
+that all the writes happen or none of them
+
+18
+00:01:02,430 --> 00:01:04,650
+and they provide serializability.
+
+19
+00:01:05,230 --> 00:01:09,790
+And so that's an incredibly powerful programming abstraction
+
+20
+00:01:10,060 --> 00:01:13,690
+and of course the challenge is to implement it efficiently,
+
+21
+00:01:13,750 --> 00:01:18,550
+and one big challenge is like a law of physics you know the speed of light,
+
+22
+00:01:18,550 --> 00:01:20,200
+you know sending a packet from one end
+
+23
+00:01:20,890 --> 00:01:22,810
+in one part of the US to the other part of the US
+
+24
+00:01:22,810 --> 00:01:24,040
+or to another continent
+
+25
+00:01:24,160 --> 00:01:25,210
+and it takes a lot of time,
+
+26
+00:01:25,420 --> 00:01:28,000
+you know we're talking about tens of milliseconds.
+
+27
+00:01:28,870 --> 00:01:32,080
+So, what we see in this paper is that
+
+28
+00:01:32,080 --> 00:01:36,280
+read-write transactions are actually, are indeed quite expensive,
+
+29
+00:01:36,520 --> 00:01:42,940
+but they work very hard to make read-only transactions very inexpensive.
+
+30
+00:01:43,780 --> 00:01:52,690
+And so the read-write transactions are are implemented using two-phase commit,
+
+31
+00:01:53,810 --> 00:01:55,580
+as we talked about last week
+
+32
+00:01:55,580 --> 00:01:56,900
+and two-phase locking
+
+33
+00:01:57,260 --> 00:02:01,130
+and one of the things that is interesting about it is that,
+
+34
+00:02:01,460 --> 00:02:05,600
+the participants in this protocol are just basically Paxos groups.
+
+35
+00:02:11,400 --> 00:02:17,590
+The read-only transactions can execute at any data center,
+
+36
+00:02:19,570 --> 00:02:21,070
+and they're going to run very fast,
+
+37
+00:02:21,070 --> 00:02:24,370
+in fact you look at the table six in the back of the paper,
+
+38
+00:02:24,490 --> 00:02:29,050
+you'll see that read-only transaction somewhere like ten times faster read-write transactions.
+
+39
+00:02:29,630 --> 00:02:31,430
+And there are two key ideas there,
+
+40
+00:02:31,550 --> 00:02:33,110
+and we'll talk about this lecture,
+
+41
+00:02:33,110 --> 00:02:36,470
+one is snapshot isolation,
+
+42
+00:02:36,950 --> 00:02:39,440
+which actually is a standard database idea,
+
+43
+00:02:39,440 --> 00:02:43,430
+but I use it here to make the read fast,
+
+44
+00:02:43,430 --> 00:02:48,290
+in particular you know to make it actually work well in a distributed wide-area setting,
+
+45
+00:02:48,380 --> 00:02:51,530
+they rely on synchronized clocks or [],
+
+46
+00:02:54,300 --> 00:02:56,460
+you know those clocks are perfectly synchronized
+
+47
+00:02:56,970 --> 00:03:05,280
+and so, their transaction scheme must deal with a little bit of [] or drift or error margin
+
+48
+00:03:05,310 --> 00:03:08,310
+in exactly know what the true time is.
+
+49
+00:03:09,590 --> 00:03:16,290
+As I said is widely used, both in internal Google,
+
+50
+00:03:16,380 --> 00:03:20,280
+but also as a Google customer, you can use it,
+
+51
+00:03:20,280 --> 00:03:24,600
+spanner is basically a cloud service that you can use as a Google customer,
+
+52
+00:03:24,600 --> 00:03:30,780
+if you use gmail, probably your email or parts of the email system actually go through Spanner.
+
+53
+00:03:32,520 --> 00:03:36,510
+Maybe before diving into a more detail,
+
+54
+00:03:36,840 --> 00:03:39,690
+I want to make one logistic comment,
+
+55
+00:03:39,720 --> 00:03:41,580
+not related to Spanner,
+
+56
+00:03:41,760 --> 00:03:44,550
+as you may already have seen,
+
+57
+00:03:44,580 --> 00:03:56,010
+we made some adjustments for the long weekend, long upcoming weekend, first of all, lab 4a is not as heavy duty as the other labs
+
+58
+00:03:56,010 --> 00:03:57,810
+and hopefully take them less time,
+
+59
+00:03:58,050 --> 00:04:00,180
+we also cancelled next week's lecture,
+
+60
+00:04:00,180 --> 00:04:04,620
+so that you can actually use that as time to work on 4a
+
+61
+00:04:04,860 --> 00:04:07,950
+and we made the deadline for 4a more flexible,
+
+62
+00:04:07,980 --> 00:04:10,380
+so your next Friday is now convenient for you,
+
+63
+00:04:10,620 --> 00:04:15,840
+you can actually choose to have another extra late hours to submit it later.
+
+64
+00:04:16,870 --> 00:04:21,130
+And hopefully that will allow you to enjoy the long weekend
+
+65
+00:04:21,130 --> 00:04:28,060
+and perhaps get some sleep and maybe do something else than debugging your labs.
+
+66
+00:04:29,100 --> 00:04:32,580
+The second point I want to make is directly related to Spanner,
+
+67
+00:04:32,730 --> 00:04:37,650
+you know some of you noticed this and came through the questions,
+
+68
+00:04:37,830 --> 00:04:39,870
+this paper is quite complicated
+
+69
+00:04:40,530 --> 00:04:43,020
+and there are many reasons why it's complicated,
+
+70
+00:04:43,020 --> 00:04:44,460
+but one reason is that
+
+71
+00:04:44,460 --> 00:04:46,500
+actually there's a lot of things going on,
+
+72
+00:04:47,370 --> 00:04:48,600
+that's a powerful system,
+
+73
+00:04:48,600 --> 00:04:50,310
+has a lot of different components to it,
+
+74
+00:04:50,550 --> 00:04:54,630
+and you know the interaction between different components is important,
+
+75
+00:04:54,990 --> 00:04:59,130
+and so there's a lot of material in this paper,
+
+76
+00:04:59,130 --> 00:05:01,650
+and so although I'll try to do in this lecture
+
+77
+00:05:01,650 --> 00:05:03,000
+is try to to make that more clear
+
+78
+00:05:03,210 --> 00:05:05,910
+by focusing on a couple aspects of the paper
+
+79
+00:05:05,910 --> 00:05:08,970
+and I'm not going to do a full treatment of the paper,
+
+80
+00:05:09,210 --> 00:05:12,840
+but you know, of course I think what are the most important ideas
+
+81
+00:05:12,840 --> 00:05:14,970
+and why we're reading it in 6.824.
+
+82
+00:05:15,830 --> 00:05:19,340
+That took me actually a little bit of time
+
+83
+00:05:19,340 --> 00:05:23,870
+or few years to figure out actually how to present this paper
+
+84
+00:05:23,870 --> 00:05:28,550
+or explain it in a way that I think it's a maybe easier to understand
+
+85
+00:05:28,550 --> 00:05:31,700
+you know if you are for the concept of 6.824.
+
+86
+00:05:32,210 --> 00:05:34,370
+Okay, but ask questions as always.
+
+87
+00:05:36,650 --> 00:05:42,410
+Okay, so let's dive in and talk a little bit of the high-level organization.
+
+88
+00:05:49,430 --> 00:05:51,620
+And more from the point of view
+
+89
+00:05:51,620 --> 00:05:55,520
+from the way I want to talk about this Spanner in this lecture.
+
+90
+00:05:56,240 --> 00:05:57,470
+So there's multiple data centers
+
+91
+00:05:57,470 --> 00:06:01,130
+and you know for convenience for simplicity,
+
+92
+00:06:01,130 --> 00:06:05,510
+you know, just think about there 3 data centers, A B and C,
+
+93
+00:06:08,900 --> 00:06:10,670
+I mean it can be anywhere in the world,
+
+94
+00:06:12,480 --> 00:06:16,440
+and the goal is that basically you know data will be like,
+
+95
+00:06:16,440 --> 00:06:19,020
+we have a data like like a shard,
+
+96
+00:06:19,020 --> 00:06:23,790
+you know that you know contains some database rows or some key value pairs,
+
+97
+00:06:24,350 --> 00:06:26,270
+so after shard,
+
+98
+00:06:26,840 --> 00:06:29,630
+maybe it has the keys a to you know m,
+
+99
+00:06:31,080 --> 00:06:34,830
+and the basic idea is actually going to replicate that shard across data centers,
+
+100
+00:06:37,440 --> 00:06:41,100
+and with the goal that like even if complete data center goes down,
+
+101
+00:06:41,890 --> 00:06:44,350
+then you know we can proceed
+
+102
+00:06:44,350 --> 00:06:46,060
+you know the way we're going to arrange,
+
+103
+00:06:46,060 --> 00:06:47,740
+that we're going to be able to proceed is that
+
+104
+00:06:47,890 --> 00:06:53,160
+basically these shards you're going to form these replicas,
+
+105
+00:06:53,160 --> 00:06:56,730
+that are sitting in different data center will form one paxos group,
+
+106
+00:07:03,520 --> 00:07:04,960
+so if you're thinking about this,
+
+107
+00:07:04,960 --> 00:07:07,690
+we're trying to think about this in terms of lab 3,
+
+108
+00:07:07,840 --> 00:07:09,250
+then you can think about that,
+
+109
+00:07:09,250 --> 00:07:11,020
+you know we have a key value store
+
+110
+00:07:11,140 --> 00:07:15,370
+where the key value servers are spread around different data centers
+
+111
+00:07:15,610 --> 00:07:18,490
+and the keys are updated,
+
+112
+00:07:18,490 --> 00:07:21,730
+the [] raft writes,
+
+113
+00:07:21,730 --> 00:07:23,440
+you know through the raft log
+
+114
+00:07:23,590 --> 00:07:26,590
+and then we go to the individual key kvs,
+
+115
+00:07:26,680 --> 00:07:27,880
+you know update their state,
+
+116
+00:07:28,750 --> 00:07:31,660
+and so you can think about you know lab 3 being here
+
+117
+00:07:31,660 --> 00:07:35,080
+instead of running you know 3 kv servers on your machine,
+
+118
+00:07:35,080 --> 00:07:39,580
+you're going to run one kv server in different data centers.
+
+119
+00:07:42,080 --> 00:07:43,670
+Okay?
+
+120
+00:07:44,170 --> 00:07:48,550
+So we, then look there's gonna be a paxos group per shard,
+
+121
+00:07:48,550 --> 00:07:55,800
+so there, it might be other shards
+
+122
+00:07:55,800 --> 00:08:02,320
+that hold other parts of the, the key-value space or database rows,
+
+123
+00:08:02,680 --> 00:08:04,810
+so let's say you know we have only two shards,
+
+124
+00:08:04,810 --> 00:08:08,680
+you know for this particular database, you know shards containing a to m,
+
+125
+00:08:08,680 --> 00:08:10,210
+and then the shard containing n to z,
+
+126
+00:08:11,280 --> 00:08:14,280
+then they have form their own access group,
+
+127
+00:08:17,110 --> 00:08:21,550
+and the reason we want to get multiple shards is to get parallelism.
+
+128
+00:08:31,110 --> 00:08:35,490
+So that we can you know transactions involve different shards,
+
+129
+00:08:35,490 --> 00:08:38,310
+you know disjoint set of shards,
+
+130
+00:08:38,580 --> 00:08:41,340
+you know they can be used disjoint can actually proceed completely in parallel.
+
+131
+00:08:42,860 --> 00:08:44,120
+So, as mentioned earlier,
+
+132
+00:08:44,120 --> 00:08:54,120
+we have paxos group shard you know for replication,
+
+133
+00:08:54,120 --> 00:08:59,160
+but you know paxos actually provides us you know an additional sort of benefit,
+
+134
+00:08:59,850 --> 00:09:04,680
+you know the communication costs right for a to b or from b to c might be very expensive,
+
+135
+00:09:04,890 --> 00:09:07,770
+and seems you know paxos allows to proceed,
+
+136
+00:09:07,770 --> 00:09:10,230
+where raft allows us to proceed with just majority,
+
+137
+00:09:10,380 --> 00:09:14,370
+you know the slow machine might actually have not that much performance impact
+
+138
+00:09:14,730 --> 00:09:18,750
+and so we can sort of easily tolerate either slow machines
+
+139
+00:09:18,780 --> 00:09:22,110
+or actually one you know data center being down.
+
+140
+00:09:22,830 --> 00:09:26,970
+So, the majority rule helps us in two ways,
+
+141
+00:09:27,700 --> 00:09:31,300
+you know we get data center fault tolerance,
+
+142
+00:09:35,920 --> 00:09:37,570
+and through slowness.
+
+143
+00:09:41,480 --> 00:09:46,700
+The final goal as we'll see in a little bit more detail is that,
+
+144
+00:09:46,940 --> 00:09:51,710
+a client of Spanner,
+
+145
+00:09:51,800 --> 00:09:55,510
+so let's say here's some server that uses Spanner,
+
+146
+00:09:55,780 --> 00:09:57,460
+would like it to be the case
+
+147
+00:09:57,460 --> 00:10:00,430
+that you know this server can actually use a close replica,
+
+148
+00:10:01,200 --> 00:10:10,170
+and so the replica you know typically are placed closed, close to the clients that actually use them.
+
+149
+00:10:11,760 --> 00:10:18,150
+In fact, we'll see that read-only transactions can be executed basically by the local replica
+
+150
+00:10:18,300 --> 00:10:21,480
+without any communication to the other data centers.
+
+151
+00:10:22,210 --> 00:10:23,530
+And when I talk about client,
+
+152
+00:10:23,620 --> 00:10:30,940
+here, this is typically sort of the backend servers of some Google servers,
+
+153
+00:10:30,970 --> 00:10:33,670
+for example, this might be the Gmail server,
+
+154
+00:10:33,670 --> 00:10:37,360
+that's sitting also in some data center
+
+155
+00:10:37,360 --> 00:10:38,920
+and maybe the same data center
+
+156
+00:10:38,920 --> 00:10:41,260
+and talks to the replica in that particular data centers
+
+157
+00:10:41,710 --> 00:10:47,860
+and of course outside our real clients like users you know you read or write email.
+
+158
+00:10:48,860 --> 00:10:53,000
+Okay, any sort of questions about this high-level organization?
+
+159
+00:11:01,470 --> 00:11:06,420
+Okay, let me sort of layout the challenges,
+
+160
+00:11:06,420 --> 00:11:10,170
+that I wanna focus on in this lecture,
+
+161
+00:11:10,820 --> 00:11:14,870
+I mean, we're going to sort of three main challenges.
+
+162
+00:11:17,490 --> 00:11:21,360
+One is, the way is it like I said,
+
+163
+00:11:21,360 --> 00:11:26,730
+we want to actually read-only transactions without actually having to communicate with any other server,
+
+164
+00:11:26,970 --> 00:11:30,390
+but you know we got to make sure that the reads sees the latest write,
+
+165
+00:11:47,960 --> 00:11:50,930
+this sort of classic challenge that we've seen before,
+
+166
+00:11:50,930 --> 00:11:56,180
+you know zookeeper, zookeeper sort of avoid, doesn't really address the challenge direct head on
+
+167
+00:11:56,180 --> 00:11:57,890
+and just like weaken consistency,
+
+168
+00:11:58,340 --> 00:12:00,470
+but here in this design,
+
+169
+00:12:00,470 --> 00:12:04,610
+we'd like to arrange in a way that actually we still keep linearizability,
+
+170
+00:12:04,610 --> 00:12:09,530
+in fact you know Spanner shoot for [] stronger property than linearizability.
+
+171
+00:12:10,940 --> 00:12:13,130
+Second thing is when you want to support,
+
+172
+00:12:13,160 --> 00:12:16,340
+Spanner wants to support transactions across shards,
+
+173
+00:12:21,240 --> 00:12:23,940
+so even this is actually like we do a bank transfer
+
+174
+00:12:23,940 --> 00:12:26,070
+and one account in one shard,
+
+175
+00:12:26,070 --> 00:12:28,440
+the other account, the destination account, there's another shard,
+
+176
+00:12:28,650 --> 00:12:35,670
+we want to arrange you know it still can be executed like a introduction and have ACID semantics.
+
+177
+00:12:36,960 --> 00:12:39,810
+Finally, you know the transactions both read-only ones
+
+178
+00:12:39,810 --> 00:12:43,470
+and read-write ones must be serializable,
+
+179
+00:12:45,420 --> 00:12:47,820
+in fact a little bit stronger than serializable.
+
+180
+00:12:53,150 --> 00:12:56,060
+And you know we'll see that,
+
+181
+00:12:56,210 --> 00:13:00,920
+you know for this, you know for basically for the read-write transactions,
+
+182
+00:13:00,920 --> 00:13:03,110
+we're going to use two-phase locking, two-phase commit
+
+183
+00:13:03,470 --> 00:13:09,350
+and basically two [] that we talked about in the last lecture.
+
+184
+00:13:10,300 --> 00:13:12,940
+And so what I'd like to do first is
+
+185
+00:13:12,940 --> 00:13:14,920
+talk about read-write transactions
+
+186
+00:13:15,190 --> 00:13:20,650
+and then talk in more detail how read-only transactions are executed,
+
+187
+00:13:20,650 --> 00:13:24,190
+so that they can run very efficiently.
+
+188
+00:13:27,370 --> 00:13:32,080
+Okay, so read-write transactions you know basically two-phase locking and two-phase commit.
+
+189
+00:13:33,300 --> 00:13:37,260
+So hopefully this is pretty easy to understand,
+
+190
+00:13:42,650 --> 00:13:48,350
+and there going to involve these sort of complex timing diagrams, that we looked at last week
+
+191
+00:13:49,070 --> 00:13:51,710
+and so the way it's set up
+
+192
+00:13:51,860 --> 00:13:53,870
+and I'm going to simplify a bit,
+
+193
+00:13:53,900 --> 00:13:56,900
+looking at the way it's set up in Spanner,
+
+194
+00:13:56,990 --> 00:13:58,850
+is we have the client
+
+195
+00:13:59,450 --> 00:14:02,690
+and the client is sort of in charge of really running the transaction
+
+196
+00:14:02,870 --> 00:14:06,290
+and user transaction manager transaction library,
+
+197
+00:14:06,620 --> 00:14:09,920
+actually runs on the client machine
+
+198
+00:14:10,550 --> 00:14:15,870
+and in charge of basically you know orchestrate this transaction
+
+199
+00:14:15,930 --> 00:14:20,100
+and again the client here is not you know the user web browser or gmail,
+
+200
+00:14:20,100 --> 00:14:25,080
+but basically the servers server on, the gmail server in the data center,
+
+201
+00:14:25,200 --> 00:14:26,850
+that's the client of Spanner.
+
+202
+00:14:28,100 --> 00:14:30,350
+And so let's make the picture reasonable simple,
+
+203
+00:14:30,380 --> 00:14:34,040
+so we have two shards instead of three four five,
+
+204
+00:14:34,310 --> 00:14:36,980
+so we have shard a and we have shard b.
+
+205
+00:14:38,000 --> 00:14:43,880
+And let's assume we're going to just execute the transfer transaction, the same one as before,
+
+206
+00:14:43,880 --> 00:14:47,270
+we're going to deduct some money from one account, then add it to another account.
+
+207
+00:14:48,690 --> 00:14:51,510
+And initially, I'm going to talk about this [without] the timestamps,
+
+208
+00:14:57,690 --> 00:15:00,750
+in some ways you know the one reason to do so is that,
+
+209
+00:15:00,750 --> 00:15:04,050
+actually for the read-write transaction timestamps are not very important,
+
+210
+00:15:04,560 --> 00:15:07,740
+the timestamps actually are mostly there for read-only transactions
+
+211
+00:15:07,890 --> 00:15:11,880
+and they need a little tweaking to the read-write transactions to support,
+
+212
+00:15:11,940 --> 00:15:13,230
+that we don't need transactions
+
+213
+00:15:13,230 --> 00:15:19,560
+and therefore the timestamps are sort of in drifting to read-write transactions too,
+
+214
+00:15:19,590 --> 00:15:25,350
+but in essence you know the read-write transactions are basically straight two-phase locking and two-phase commit.
+
+215
+00:15:26,610 --> 00:15:28,740
+So the client is going to reads these accounts,
+
+216
+00:15:28,740 --> 00:15:32,370
+for example let's assume that you know read x,
+
+217
+00:15:33,220 --> 00:15:38,740
+so we just gonna do the transfer transaction from moving money, form adding 1 to x,
+
+218
+00:15:38,740 --> 00:15:42,580
+you know subtracting subtracting 1 dollar from x
+
+219
+00:15:42,580 --> 00:15:44,470
+and adding a dollar to y,
+
+220
+00:15:44,920 --> 00:15:45,910
+it's going to be x,
+
+221
+00:15:45,910 --> 00:15:48,190
+and let's assume that x sits in one shard,
+
+222
+00:15:48,460 --> 00:15:51,040
+so it's going to be a cross shard transaction
+
+223
+00:15:51,400 --> 00:15:55,270
+and and you have to read of y,
+
+224
+00:15:55,770 --> 00:16:00,600
+and, there's gonna be,
+
+225
+00:16:00,630 --> 00:16:04,770
+when the client executes these read operations,
+
+226
+00:16:04,770 --> 00:16:09,060
+they go to the shards and shards actually keep lock table,
+
+227
+00:16:10,090 --> 00:16:12,820
+and so they record basically this transaction,
+
+228
+00:16:12,850 --> 00:16:15,790
+you know so let's say this is transaction whatever TID,
+
+229
+00:16:16,620 --> 00:16:21,180
+and they're gonna record that you know the x is owned you know,
+
+230
+00:16:22,050 --> 00:16:24,420
+lock table actually owned by the clients,
+
+231
+00:16:24,420 --> 00:16:27,390
+you know and here is y owned by the client
+
+232
+00:16:28,110 --> 00:16:31,890
+and that sort of a very standards you know we've seen before.
+
+233
+00:16:32,630 --> 00:16:35,480
+You know the thing that is slightly different here
+
+234
+00:16:35,480 --> 00:16:38,990
+and not fully drawing it out here is that,
+
+235
+00:16:39,200 --> 00:16:41,240
+when we're talking to one shard a,
+
+236
+00:16:41,300 --> 00:16:44,360
+shard a is really one of these paxos groups,
+
+237
+00:16:44,800 --> 00:16:51,640
+and so it has you know three in this case, you know a group of three peers
+
+238
+00:16:51,970 --> 00:16:58,450
+and so SA really replicated servers consisting of multiple peers,
+
+239
+00:16:58,900 --> 00:17:01,390
+in when executing read-only transaction,
+
+240
+00:17:01,540 --> 00:17:03,880
+we're gonna be talking to the leader of that peers,
+
+241
+00:17:03,880 --> 00:17:05,440
+so if you think in terms raft style,
+
+242
+00:17:05,440 --> 00:17:06,370
+you can just think about it,
+
+243
+00:17:06,610 --> 00:17:12,850
+the read request goes to the leader of the paxos group.
+
+244
+00:17:13,760 --> 00:17:22,040
+And, another, so every time I sort of draw this one single arrow here for SA or for SB,
+
+245
+00:17:22,100 --> 00:17:25,250
+you know it's a much more complicated story,
+
+246
+00:17:25,250 --> 00:17:26,660
+particularly when writes get involved,
+
+247
+00:17:26,810 --> 00:17:30,200
+because writes actually going to go through the paxos of raft group.
+
+248
+00:17:33,100 --> 00:17:37,180
+The read-only or lock tables actually not replicated,
+
+249
+00:17:37,270 --> 00:17:42,610
+it is stored at the leader of the paxos group,
+
+250
+00:17:43,090 --> 00:17:46,090
+and if the leader goes down during the transaction,
+
+251
+00:17:46,330 --> 00:17:50,170
+then you know basically the transaction has to be restarted,
+
+252
+00:17:50,170 --> 00:17:51,730
+where the transaction will be aborted,
+
+253
+00:17:51,910 --> 00:17:54,160
+because the lock information is lost.
+
+254
+00:17:55,320 --> 00:18:03,620
+The reason that these lock table is not, -} is not the replica,
+
+255
+00:18:03,620 --> 00:18:05,000
+this is may read operation fast.
+
+256
+00:18:05,840 --> 00:18:13,320
+Okay, so once you know the client actually has gotten the values of x and y
+
+257
+00:18:13,320 --> 00:18:16,710
+and it's taken out the locks you know sort of two-phase locking style,
+
+258
+00:18:16,890 --> 00:18:24,000
+the it's gonna subtract one from x, you know add one you know y,
+
+259
+00:18:24,240 --> 00:18:26,640
+and then basically going to submit a transaction.
+
+260
+00:18:27,430 --> 00:18:30,670
+So basically all the writes are done locally at the client,
+
+261
+00:18:30,670 --> 00:18:33,700
+again so this is the gmail server
+
+262
+00:18:33,700 --> 00:18:37,990
+and one [] thing is, when the client is done with transaction,
+
+263
+00:18:37,990 --> 00:18:41,590
+it submits transaction to to Spanner,
+
+264
+00:18:42,320 --> 00:18:46,340
+and, it submits to a transaction coordinator,
+
+265
+00:18:48,600 --> 00:18:55,170
+so some you know set of servers you know or some machines you pick as the transaction coordinator
+
+266
+00:18:55,380 --> 00:18:58,110
+and again the transaction coordinator is paxos group,
+
+267
+00:18:58,560 --> 00:19:02,970
+as I said it's multiple appears in a different data centers.
+
+268
+00:19:03,890 --> 00:19:07,760
+And one reason we want this to be a paxos group is,
+
+269
+00:19:07,760 --> 00:19:10,190
+so that as we've seen before,
+
+270
+00:19:10,190 --> 00:19:12,680
+in two-phase protocol or the two-phase commit,
+
+271
+00:19:12,830 --> 00:19:15,290
+that if the coordinator fails,
+
+272
+00:19:15,560 --> 00:19:19,130
+it might actually block the participants, right,
+
+273
+00:19:19,130 --> 00:19:23,030
+if participants have prepared and agreed to go along with the transaction,
+
+274
+00:19:23,240 --> 00:19:27,110
+but then the coordinate fails you knwo this petition to have to hold on to their locks
+
+275
+00:19:27,290 --> 00:19:30,740
+and have to wait until the coordinator comes back
+
+276
+00:19:30,800 --> 00:19:33,920
+by replicating the coordinator using paxos
+
+277
+00:19:34,130 --> 00:19:37,160
+and we make the coordinate highly available
+
+278
+00:19:37,160 --> 00:19:42,050
+and so basically avoid that particular sort of disaster scenario.
+
+279
+00:19:43,340 --> 00:19:43,880
+Okay?
+
+280
+00:19:44,420 --> 00:19:49,250
+So the transaction coordinators then basically in charge of running the two-phase commit protocol
+
+281
+00:19:49,550 --> 00:19:57,580
+and so it will send you know the updates for x and y to the leader of shard a,
+
+282
+00:19:57,670 --> 00:20:01,420
+x y to the leaders of a shard b,
+
+283
+00:20:03,390 --> 00:20:05,370
+the they you know grab the logs
+
+284
+00:20:05,370 --> 00:20:09,120
+you know in this case, you know, you know the already hold the locks,
+
+285
+00:20:09,120 --> 00:20:11,730
+or promote locks write, read-write locks
+
+286
+00:20:12,150 --> 00:20:15,900
+and basically prepare you know transaction,
+
+287
+00:20:15,900 --> 00:20:17,340
+so they don't really execute it yet,
+
+288
+00:20:17,340 --> 00:20:21,540
+but just make the you know typically using write ahead logging,
+
+289
+00:20:21,540 --> 00:20:23,400
+you know prepared to changes
+
+290
+00:20:23,730 --> 00:20:25,320
+and if everything is okay,
+
+291
+00:20:25,380 --> 00:20:32,280
+then they basically commit to the transaction by entering sort of this prepared state,
+
+292
+00:20:35,460 --> 00:20:36,960
+and this is sort of a big moment,
+
+293
+00:20:37,750 --> 00:20:39,220
+because at this point,
+
+294
+00:20:39,430 --> 00:20:44,590
+the transaction is what appears, when participants are committed to this transaction
+
+295
+00:20:44,590 --> 00:20:46,390
+and we know from last lecture,
+
+296
+00:20:46,390 --> 00:20:49,510
+you know the participants do actually have to record state,
+
+297
+00:20:49,660 --> 00:20:51,910
+so that if they fail and they come back up,
+
+298
+00:20:51,910 --> 00:20:54,940
+they can recover and pick up from where they left off,
+
+299
+00:20:55,420 --> 00:20:57,700
+so, at the prepared state,
+
+300
+00:20:57,700 --> 00:21:00,310
+basically this results into a paxos write,
+
+301
+00:21:04,370 --> 00:21:06,500
+you know recording the state of the transaction,
+
+302
+00:21:06,770 --> 00:21:18,470
+and 2PC state the logs that participate holding etc etc
+
+303
+00:21:18,500 --> 00:21:20,690
+and so this paxos write,
+
+304
+00:21:20,960 --> 00:21:23,030
+so the leader of this particular shard,
+
+305
+00:21:23,030 --> 00:21:28,070
+there's a push paxos write across you know the different peers in the group
+
+306
+00:21:28,280 --> 00:21:31,760
+to ensure that state is replicated fault tolerant.
+
+307
+00:21:33,480 --> 00:21:40,380
+So once you know the, the participants have prepared and agreed to prepared,
+
+308
+00:21:40,650 --> 00:21:42,810
+then you know they sent back okay,
+
+309
+00:21:42,840 --> 00:21:44,370
+you know, okay,
+
+310
+00:21:45,560 --> 00:21:48,860
+this is very similar two-phase protocol that we talked before
+
+311
+00:21:49,190 --> 00:21:52,340
+and at this point you know the coordinator can commit,
+
+312
+00:21:55,180 --> 00:22:00,520
+and of course the point to commit, the coordinated, these records actually made the commit decision,
+
+313
+00:22:00,550 --> 00:22:02,830
+because when our participants may come back later,
+
+314
+00:22:02,830 --> 00:22:04,420
+and want to know and find out about it
+
+315
+00:22:04,420 --> 00:22:05,770
+and we might have failures,
+
+316
+00:22:06,220 --> 00:22:17,470
+so again the paxos state with PC two-phase commit state is written to using paxos and replicated using paxos.
+
+317
+00:22:18,790 --> 00:22:21,130
+And from this whole presentation,
+
+318
+00:22:21,130 --> 00:22:25,330
+you can just think about paxos as being complete substitute or equivalent to raft,
+
+319
+00:22:25,360 --> 00:22:29,770
+you know spanner predates raft,
+
+320
+00:22:29,770 --> 00:22:33,640
+but like you know for perceptually and you know through first order,
+
+321
+00:22:33,640 --> 00:22:35,470
+you know for this paper is basically the same.
+
+322
+00:22:38,150 --> 00:22:40,070
+So this point is actually commits,
+
+323
+00:22:40,070 --> 00:22:41,750
+this you know is really commit point,
+
+324
+00:22:42,080 --> 00:22:45,020
+which ones transaction coordinator,
+
+325
+00:22:45,020 --> 00:22:47,600
+has written down the transaction is committed,
+
+326
+00:22:47,900 --> 00:22:50,330
+that is actual commit point
+
+327
+00:22:50,330 --> 00:22:52,520
+and then informs you know their participants,
+
+328
+00:22:52,520 --> 00:22:56,230
+you know that has happened.
+
+329
+00:22:58,650 --> 00:23:01,170
+And you know they're going to respond back, if okay,
+
+330
+00:23:01,170 --> 00:23:02,610
+great transaction is committed
+
+331
+00:23:02,610 --> 00:23:04,890
+and the transaction coordinator can clean up its state
+
+332
+00:23:05,220 --> 00:23:10,080
+and at some point later the shards can also clean up their state,
+
+333
+00:23:10,290 --> 00:23:14,760
+and that at the point of commit and the participants release their locks.
+
+334
+00:23:25,860 --> 00:23:30,900
+Okay, so that is sort of the basic story for read-write transactions
+
+335
+00:23:30,990 --> 00:23:33,270
+and so any questions about this?
+
+336
+00:23:34,250 --> 00:23:36,500
+And I think the simple way to think about is,
+
+337
+00:23:36,530 --> 00:23:39,080
+this is two-phase commit, two-phase locking,
+
+338
+00:23:39,350 --> 00:23:42,710
+with the main difference between what we talked about last week
+
+339
+00:23:42,710 --> 00:23:47,660
+and this week is that the participant, the transaction coordinator,
+
+340
+00:23:47,780 --> 00:23:50,570
+the participants are all paxos groups,
+
+341
+00:23:50,570 --> 00:23:52,640
+or they replicated their highly available,
+
+342
+00:23:52,730 --> 00:23:59,420
+and some of the problems that we talked about the two-phase commit last time are less, less relevant here,
+
+343
+00:23:59,420 --> 00:24:02,540
+because the participants are much more highly available.
+
+344
+00:24:04,420 --> 00:24:09,550
+So the each shard is replicating the lock table or not?
+
+345
+00:24:10,410 --> 00:24:12,690
+Yeah well, it's not replicating the lock table,
+
+346
+00:24:12,690 --> 00:24:15,840
+it's replicating the lock that's holding when it does the prepare.
+
+347
+00:24:17,000 --> 00:24:19,430
+So only the lock when it's that it's holding during.
+
+348
+00:24:20,360 --> 00:24:22,760
+Yeah the state that it needs to do two-phase commit.
+
+349
+00:24:25,870 --> 00:24:33,680
+So then they like the current locks for some transaction that hasn't reach the prepared stage,
+
+350
+00:24:33,710 --> 00:24:35,960
+it will they just lost.
+
+351
+00:24:36,390 --> 00:24:38,550
+They will be lost and then the transaction will abort,
+
+352
+00:24:38,580 --> 00:24:40,350
+participant does not participate,
+
+353
+00:24:41,710 --> 00:24:44,980
+and tell the coordinator hey I lost my locks to that, can't do it.
+
+354
+00:24:47,100 --> 00:24:48,060
+Thank you.
+
+355
+00:24:50,230 --> 00:24:54,820
+Okay, so that the rest of this lecture is about the read-only transactions,
+
+356
+00:24:55,350 --> 00:25:07,710
+and, so these transactions are only do reads no writes,
+
+357
+00:25:09,360 --> 00:25:10,980
+and they are common
+
+358
+00:25:11,220 --> 00:25:14,460
+and so one of the goals is to actually make them very fast.
+
+359
+00:25:18,560 --> 00:25:24,350
+And the way you're, there, the way they achieve you know high performance
+
+360
+00:25:24,350 --> 00:25:26,270
+is the range that the reads,
+
+361
+00:25:26,720 --> 00:25:30,830
+Spanner makes high performance because reads are only for local shards,
+
+362
+00:25:38,040 --> 00:25:40,800
+and they have no locks,
+
+363
+00:25:43,040 --> 00:25:44,030
+and no lock is good,
+
+364
+00:25:44,030 --> 00:25:47,750
+because it means that read-write transactions can block the read-write transactions
+
+365
+00:25:47,750 --> 00:25:51,710
+or another way saying is read-only transactions can't block read-write transactions,
+
+366
+00:25:52,370 --> 00:25:55,610
+and no no two-phase commit
+
+367
+00:25:56,900 --> 00:25:59,630
+and so that means also no wide-area communication necessary
+
+368
+00:25:59,750 --> 00:26:03,830
+and so that the reads can definitely execute from a local replica.
+
+369
+00:26:05,320 --> 00:26:09,550
+And you know also see of course you know this is the read from a local shards,
+
+370
+00:26:09,550 --> 00:26:17,190
+the the real challenge here is like how to still get consistency or you know serializability,
+
+371
+00:26:18,010 --> 00:26:19,870
+but it's important to point out
+
+372
+00:26:19,870 --> 00:26:22,570
+you know, but for a moment you know assume
+
+373
+00:26:22,570 --> 00:26:24,760
+that we know how to do this, you know we could,
+
+374
+00:26:25,150 --> 00:26:31,270
+then reading from only local shard, holding no locks, not doing two-phase commit
+
+375
+00:26:31,270 --> 00:26:35,590
+means that all the communication is local within within that particular data center
+
+376
+00:26:35,980 --> 00:26:38,230
+and it can be very fast,
+
+377
+00:26:38,230 --> 00:26:43,090
+then if you look at the end in table 3 and 6 in the paper,
+
+378
+00:26:45,260 --> 00:26:46,940
+you basically see that,
+
+379
+00:26:46,970 --> 00:26:56,200
+basically you know read-only transactions are ten times faster than read-write transactions,
+
+380
+00:26:56,350 --> 00:26:59,170
+read-write transactions are in the order of hundreds of milliseconds,
+
+381
+00:26:59,290 --> 00:27:00,310
+which sort of makes sense,
+
+382
+00:27:00,310 --> 00:27:03,610
+because they have to communicate long distance
+
+383
+00:27:03,850 --> 00:27:10,150
+and but read-only transactions on a new order of a 5 to 10 milliseconds.
+
+384
+00:27:12,940 --> 00:27:15,790
+Okay, so the key challenge of course is always going to be
+
+385
+00:27:15,820 --> 00:27:19,570
+we've executed local replica, how to get correctness.
+
+386
+00:27:21,240 --> 00:27:22,590
+So let me talk a little bit about it,
+
+387
+00:27:22,590 --> 00:27:26,640
+because it's slightly different than what we've seen before,
+
+388
+00:27:26,790 --> 00:27:28,920
+so correctness means two things here,
+
+389
+00:27:28,920 --> 00:27:31,140
+one you know that transactions are serializable,
+
+390
+00:27:32,860 --> 00:27:35,320
+so they must execute in some serial order,
+
+391
+00:27:35,500 --> 00:27:36,550
+so if you think about it,
+
+392
+00:27:36,550 --> 00:27:38,080
+we have a read-write transaction,
+
+393
+00:27:39,220 --> 00:27:42,130
+we, and we have another read-write transaction,
+
+394
+00:27:42,550 --> 00:27:44,350
+then we have a read-only transaction,
+
+395
+00:27:44,590 --> 00:27:48,610
+you know the read-only transaction has to sort of fit between the two read-write transactions
+
+396
+00:27:48,850 --> 00:27:55,180
+and read-only transaction should not observe some part of the read-write transaction,
+
+397
+00:27:55,180 --> 00:27:58,030
+so the read-write transactions does multiple writes like the first one,
+
+398
+00:27:58,800 --> 00:28:02,100
+then the read-only transaction you know see all those writes with none of them,
+
+399
+00:28:03,190 --> 00:28:05,560
+and similarly for the one that actually is past them.
+
+400
+00:28:05,800 --> 00:28:06,490
+Okay?
+
+401
+00:28:06,940 --> 00:28:12,100
+So the second, this is a standard thing that we talked about last week, serializability
+
+402
+00:28:12,100 --> 00:28:14,440
+and then would they go for something stronger?
+
+403
+00:28:14,950 --> 00:28:17,110
+And what they call external consistency,
+
+404
+00:28:24,900 --> 00:28:34,450
+and external consistency means that if a transaction 2 start after transaction 1 has committed,
+
+405
+00:28:35,820 --> 00:28:43,730
+then you know t2 must see t1's write.
+
+406
+00:28:48,250 --> 00:28:50,470
+So we'll go back into this previous picture,
+
+407
+00:28:50,470 --> 00:28:57,190
+like if read-only transaction, this one started after the first transaction committed,
+
+408
+00:28:57,310 --> 00:29:04,000
+then is read-only transaction must see the reads the writes of that transaction t1,
+
+409
+00:29:05,080 --> 00:29:10,000
+and, and so the idea is if you think about this,
+
+410
+00:29:10,030 --> 00:29:15,880
+basically this sort of external consistency means serializability plus this real-time requirement
+
+411
+00:29:16,270 --> 00:29:20,170
+and in fact you know it is very similar to linearizability.
+
+412
+00:29:28,560 --> 00:29:36,540
+Except you know the one way to contrast external consistency for transactions,
+
+413
+00:29:36,900 --> 00:29:41,100
+with linearizability is that external consistency really transaction level property
+
+414
+00:29:41,400 --> 00:29:44,370
+and the way we've been talking about linearizability so far
+
+415
+00:29:44,490 --> 00:29:47,010
+and always has been sort of individual reads and writes.
+
+416
+00:29:47,410 --> 00:29:51,100
+And but to the first order,
+
+417
+00:29:51,100 --> 00:29:53,410
+you know I think you should think about exactly the same way.
+
+418
+00:29:54,340 --> 00:29:58,630
+And like linearizability, external consistency is pleasant for programs,
+
+419
+00:29:59,290 --> 00:30:04,240
+is very strong consistency to require property.
+
+420
+00:30:06,200 --> 00:30:12,140
+Okay, any questions about the correctness definition there or the correctness goal that the Spanner has.
+
+421
+00:30:17,900 --> 00:30:18,440
+Okay.
+
+422
+00:30:18,980 --> 00:30:23,300
+Okay, let's then talk about how to actually achieve this correctness for read-only transactions,
+
+423
+00:30:23,780 --> 00:30:28,070
+and let me start out by explaining that plan that actually doesn't work
+
+424
+00:30:28,490 --> 00:30:31,220
+and then we're going to talk about a better plan.
+
+425
+00:30:33,520 --> 00:30:34,780
+So the bad plan is,
+
+426
+00:30:34,840 --> 00:30:39,880
+we're going to read the range that we read always the latest committed value,
+
+427
+00:30:43,550 --> 00:30:46,940
+that seems about write, right,
+
+428
+00:30:47,030 --> 00:30:51,560
+because we have to arrange that if t2 starts after t1 committed,
+
+429
+00:30:51,560 --> 00:30:53,270
+we'll see, you have to see it's right,
+
+430
+00:30:53,270 --> 00:30:55,340
+so why not read the latest committed value,
+
+431
+00:30:55,340 --> 00:30:56,870
+then we should be maybe we're good.
+
+432
+00:30:58,270 --> 00:30:59,320
+So here is the,
+
+433
+00:30:59,350 --> 00:31:02,530
+the problem case of course it doesn't actually work,
+
+434
+00:31:03,120 --> 00:31:10,970
+so t1 namely t1 does a write of x, does write of y,
+
+435
+00:31:11,030 --> 00:31:12,980
+as transfer commits,
+
+436
+00:31:13,670 --> 00:31:17,090
+then you know we have another t transaction,
+
+437
+00:31:17,090 --> 00:31:18,620
+we have transaction t3
+
+438
+00:31:18,620 --> 00:31:20,420
+or t3 is the read-only action,
+
+439
+00:31:20,450 --> 00:31:22,220
+it actually does a read of x,
+
+440
+00:31:22,850 --> 00:31:24,290
+so this is sort of real time
+
+441
+00:31:24,560 --> 00:31:27,140
+and then after t2,
+
+442
+00:31:27,380 --> 00:31:29,480
+then after t1 t3 starts,
+
+443
+00:31:29,480 --> 00:31:32,930
+t2 runs runs quickly,
+
+444
+00:31:32,930 --> 00:31:35,270
+[] the write of x, the write of y,
+
+445
+00:31:35,510 --> 00:31:38,450
+commits and then you know t3 got a little bit delayed
+
+446
+00:31:38,450 --> 00:31:41,000
+and then actually does secondary read read of y,
+
+447
+00:31:42,510 --> 00:31:46,410
+sort of time you know as usual going that way.
+
+448
+00:31:50,100 --> 00:31:56,160
+And you know if you're following a release the latest committed value,
+
+449
+00:31:56,160 --> 00:31:58,200
+then what is this really going to return,
+
+450
+00:31:58,470 --> 00:32:01,860
+it's going to return the value from this transaction t1,
+
+451
+00:32:02,360 --> 00:32:04,610
+and this read is going to return,
+
+452
+00:32:05,210 --> 00:32:07,070
+the value from y and that objection,
+
+453
+00:32:07,070 --> 00:32:09,230
+because you know that's why this commited value.
+
+454
+00:32:09,910 --> 00:32:11,680
+And that would be wrong, right,
+
+455
+00:32:19,360 --> 00:32:26,020
+because now we're actually in a situation where basically you know t3 observes the writes you know from different transactions
+
+456
+00:32:26,080 --> 00:32:27,760
+and not get a consistent [].
+
+457
+00:32:29,620 --> 00:32:32,740
+So, so this rule is not good enough,
+
+458
+00:32:33,080 --> 00:32:38,750
+and to avoid this problem and not use this bad plan,
+
+459
+00:32:38,900 --> 00:32:40,880
+Spanner uses a different plan.
+
+460
+00:32:41,480 --> 00:32:45,320
+And that's plan is called snapshot isolation,
+
+461
+00:32:53,520 --> 00:32:56,580
+this actually is a standard database idea,
+
+462
+00:32:56,670 --> 00:33:02,580
+and mostly sort of local databases
+
+463
+00:33:02,580 --> 00:33:04,800
+and not actually across the wide-area.
+
+464
+00:33:05,820 --> 00:33:10,560
+And so we'll talk about in the sort of white-area aspect in a second,
+
+465
+00:33:10,560 --> 00:33:13,410
+but just let me first explain what's snapshot isolation is.
+
+466
+00:33:14,230 --> 00:33:16,390
+And so what snapshot isolation does is,
+
+467
+00:33:16,450 --> 00:33:23,580
+we're going to assign a timestamp to a transaction,
+
+468
+00:33:26,930 --> 00:33:28,520
+and you know there's two different points,
+
+469
+00:33:28,520 --> 00:33:34,250
+we're gonna assign this timestamps for read-write transactions,
+
+470
+00:33:35,420 --> 00:33:37,880
+it's gonna be you know the commit started to commit.
+
+471
+00:33:40,690 --> 00:33:42,610
+And for read-only transactions,
+
+472
+00:33:43,270 --> 00:33:46,030
+it is going to be the start of the transactions.
+
+473
+00:33:48,900 --> 00:33:54,240
+And then we're gonna execute all operations,
+
+474
+00:33:55,920 --> 00:33:58,860
+transaction in timestamp order.
+
+475
+00:34:01,950 --> 00:34:04,560
+I will explain in a second, but whatever I mean that.
+
+476
+00:34:05,180 --> 00:34:10,040
+And be able to execute all the operation in timestamp order, you know each replica,
+
+477
+00:34:11,750 --> 00:34:15,140
+this is store one value for a particular key,
+
+478
+00:34:15,560 --> 00:34:20,840
+replica actually stores multiple values for key namely with their timestamp.
+
+479
+00:34:34,670 --> 00:34:36,500
+So, for example at a particular replica,
+
+480
+00:34:36,500 --> 00:34:39,920
+we can ask, please give me the value of x at time 10
+
+481
+00:34:39,980 --> 00:34:44,390
+or give me the value of timestamp x at 20
+
+482
+00:34:44,840 --> 00:34:50,030
+and so sometimes this is called multi version databases or multi version storage,
+
+483
+00:34:50,030 --> 00:34:52,430
+you know what basically keep for every update,
+
+484
+00:34:52,430 --> 00:34:54,950
+you basically keep a version of the data item,
+
+485
+00:34:54,950 --> 00:34:56,240
+so you can go back in time.
+
+486
+00:34:58,340 --> 00:35:03,350
+And, so this fixes you know the problem that I showed in the first case,
+
+487
+00:35:03,350 --> 00:35:04,730
+because basically what's going to happen,
+
+488
+00:35:04,730 --> 00:35:06,440
+let's look at the three transaction again,
+
+489
+00:35:06,560 --> 00:35:11,860
+so we got T1, we've got T2, we got T3,
+
+490
+00:35:12,190 --> 00:35:14,350
+T1 just write one,
+
+491
+00:35:14,440 --> 00:35:18,130
+you know there's a write, write of x, write of y,
+
+492
+00:35:18,280 --> 00:35:19,060
+let's commit,
+
+493
+00:35:19,300 --> 00:35:23,290
+let's say the commit actually happens at you know 10,
+
+494
+00:35:24,220 --> 00:35:27,220
+so this transaction basically runs at timestamp 10,
+
+495
+00:35:27,970 --> 00:35:30,850
+then you know at some point,
+
+496
+00:35:31,500 --> 00:35:32,970
+we're going to get our read of x,
+
+497
+00:35:33,030 --> 00:35:35,370
+we'll talk about that in a second,
+
+498
+00:35:35,370 --> 00:35:37,470
+and here we have this other transaction,
+
+499
+00:35:37,470 --> 00:35:39,450
+we get the write of y,
+
+500
+00:35:39,990 --> 00:35:44,250
+the write sort of write x, write y, the commit,
+
+501
+00:35:44,520 --> 00:35:46,980
+let's say this transaction commit at timestamp 20,
+
+502
+00:35:47,580 --> 00:35:52,980
+just run basically at that timestamp
+
+503
+00:35:53,340 --> 00:35:54,420
+and then we have to read of x
+
+504
+00:35:54,420 --> 00:35:55,500
+and we have the read of y,
+
+505
+00:35:56,250 --> 00:35:58,140
+now when the read of x happens,
+
+506
+00:35:58,470 --> 00:36:02,250
+it's going to be assigned to timestamp starting type type of transaction,
+
+507
+00:36:02,280 --> 00:36:03,780
+so starting times,
+
+508
+00:36:03,780 --> 00:36:07,080
+let's say the starting time of this transaction is 15,
+
+509
+00:36:07,670 --> 00:36:11,510
+so T2 runs at 15,
+
+510
+00:36:12,940 --> 00:36:16,000
+and so when the read of x is executed,
+
+511
+00:36:16,000 --> 00:36:20,860
+it needs basically to read the latest value of x,
+
+512
+00:36:20,890 --> 00:36:25,420
+after, after, before 15,
+
+513
+00:36:25,720 --> 00:36:32,410
+and you know we do that you know the latest committed value for timestamp 15,
+
+514
+00:36:32,410 --> 00:36:37,540
+before timestamp 15 is going to be times the the values from this transaction.
+
+515
+00:36:38,720 --> 00:36:41,390
+So read x, reads the value of transaction one,
+
+516
+00:36:41,750 --> 00:36:47,030
+but of course, read y also will execute at the timestamp of the start of the transaction,
+
+517
+00:36:47,030 --> 00:36:50,300
+so it's going to also read y at that time at 15
+
+518
+00:36:50,660 --> 00:36:54,260
+and you know there's going to be only one value for y 15,
+
+519
+00:36:54,290 --> 00:36:57,980
+namely that is the one produced by the transaction T1
+
+520
+00:36:57,980 --> 00:37:03,590
+and so read one, read y will also reads from T1
+
+521
+00:37:03,590 --> 00:37:06,350
+and so we avoid this problem that we had before,
+
+522
+00:37:06,530 --> 00:37:09,650
+where we read from different transactions.
+
+523
+00:37:10,590 --> 00:37:15,540
+And so this gives the linearizability or serializability that we're looking for,
+
+524
+00:37:15,780 --> 00:37:19,080
+all the transactions are executed in a global timestamp order.
+
+525
+00:37:22,770 --> 00:37:23,550
+Does that make sense?
+
+526
+00:37:25,670 --> 00:37:28,880
+So what you can think about is that every replica basically keeps a table,
+
+527
+00:37:30,700 --> 00:37:33,100
+write of values and timestamps
+
+528
+00:37:33,100 --> 00:37:39,190
+and so we're gonna have like x at value 9 at 10
+
+529
+00:37:39,520 --> 00:37:44,230
+and x at value 8 at 20.
+
+530
+00:37:45,260 --> 00:37:48,140
+And so when the read comes in you know at a particular replica,
+
+531
+00:37:48,290 --> 00:37:49,400
+reads 15 comes in,
+
+532
+00:37:49,400 --> 00:37:52,550
+I can just pick out you know the latest write,
+
+533
+00:37:52,550 --> 00:37:54,110
+you know preceding its timestamp.
+
+534
+00:37:56,690 --> 00:37:57,560
+So I have a question,
+
+535
+00:37:57,560 --> 00:37:59,870
+so when we do the read x,
+
+536
+00:37:59,930 --> 00:38:01,580
+let's say, so let's just focus on read x,
+
+537
+00:38:01,910 --> 00:38:05,000
+so x itself exists on some shard,
+
+538
+00:38:05,000 --> 00:38:08,020
+which is replicated on a paxos group,
+
+539
+00:38:08,020 --> 00:38:12,220
+which let's say you know there are like three servers that replicate x
+
+540
+00:38:12,580 --> 00:38:13,690
+and when you read from x,
+
+541
+00:38:13,690 --> 00:38:16,150
+because we want to read-only transactions to be very fast,
+
+542
+00:38:16,150 --> 00:38:19,000
+we just read from the local replica,
+
+543
+00:38:19,060 --> 00:38:21,190
+which need not necessarily be the leader,
+
+544
+00:38:22,240 --> 00:38:25,030
+so like how do we guarantee that we don't read the stale,
+
+545
+00:38:25,570 --> 00:38:27,430
+how do that we don't make a [].
+
+546
+00:38:28,190 --> 00:38:29,690
+You know brilliant question
+
+547
+00:38:29,720 --> 00:38:33,710
+and that's exactly the topic I want to talk about next.
+
+548
+00:38:34,520 --> 00:38:38,060
+The problem as you point out,
+
+549
+00:38:38,060 --> 00:38:41,420
+you know there's a challenge that maybe the replica hasn't seen,
+
+550
+00:38:45,920 --> 00:38:52,800
+as in seeing the write to x at timestamp whatever 10, right.
+
+551
+00:38:54,500 --> 00:39:00,950
+And so the way you know this problem solved in the Spanner,
+
+552
+00:39:00,950 --> 00:39:03,710
+the solution they called something that's called "safe time".
+
+553
+00:39:09,560 --> 00:39:12,950
+And, so the way this result is that,
+
+554
+00:39:12,950 --> 00:39:21,670
+basically paxos or raft you know sends all writes also in timestamp order,
+
+555
+00:39:25,280 --> 00:39:35,810
+so there's not you know you can think about the total order is not a counter as usual for example maybe in lab, lab 3,
+
+556
+00:39:35,840 --> 00:39:37,520
+but it actually is literally a timestamp
+
+557
+00:39:37,610 --> 00:39:42,140
+and since the timestamp also form global order, that global order of timestamps,
+
+558
+00:39:42,140 --> 00:39:44,150
+you know sufficient to order all the writes.
+
+559
+00:39:45,000 --> 00:39:47,160
+And then there's a rule,
+
+560
+00:39:47,160 --> 00:39:48,780
+there's an additional rule for read,
+
+561
+00:39:49,800 --> 00:39:51,300
+before you do read,
+
+562
+00:39:52,980 --> 00:40:00,640
+so before read of x at you know timestamp 15,
+
+563
+00:40:00,820 --> 00:40:05,630
+the replica has to wait for write,
+
+564
+00:40:07,020 --> 00:40:10,020
+that is with timestamp bigger than 15,
+
+565
+00:40:11,810 --> 00:40:14,570
+this C write with timestamp bigger than 15,
+
+566
+00:40:14,810 --> 00:40:17,780
+it knows that there's certainly no writes anymore before 15,
+
+567
+00:40:18,300 --> 00:40:22,740
+and so therefore for safe to execute the read at timestamp 15,
+
+568
+00:40:23,270 --> 00:40:25,550
+and know what value actually needs to be returned.
+
+569
+00:40:26,520 --> 00:40:28,500
+And so for services that are,
+
+570
+00:40:28,770 --> 00:40:32,610
+so this means that the read action may have to get a delayed a little bit until the next write,
+
+571
+00:40:32,610 --> 00:40:34,050
+now of course for busy servers,
+
+572
+00:40:34,050 --> 00:40:36,090
+these writes will come along all the time
+
+573
+00:40:36,300 --> 00:40:40,050
+and so that wait probably non-existence or almost non-existence.
+
+574
+00:40:40,930 --> 00:40:41,530
+Okay?
+
+575
+00:40:41,830 --> 00:40:43,630
+But this is the rule that needs to be followed
+
+576
+00:40:43,630 --> 00:40:48,790
+to make sure that indeed this problem of replica actually have not seen the write yet,
+
+577
+00:40:49,060 --> 00:40:51,010
+returning the wrong value.
+
+578
+00:40:52,250 --> 00:40:54,110
+The real slightly more complicated,
+
+579
+00:40:54,470 --> 00:40:56,450
+you also have to wait,
+
+580
+00:40:57,260 --> 00:41:00,620
+also wait for transactions that have prepared but not committed,
+
+581
+00:41:19,410 --> 00:41:21,630
+for example, this action might have been prepared,
+
+582
+00:41:21,630 --> 00:41:24,480
+basically you know timestamp 14,
+
+583
+00:41:24,690 --> 00:41:26,910
+but it hasn't maybe committed write yet,
+
+584
+00:41:26,910 --> 00:41:29,910
+you know to the key value store
+
+585
+00:41:30,090 --> 00:41:34,560
+and so we got to make sure that you know any transaction that was going to prepare it,
+
+586
+00:41:34,650 --> 00:41:40,890
+before our read timestamp that actually commits before we actually return the value of the read.
+
+587
+00:41:40,920 --> 00:41:41,520
+Okay?
+
+588
+00:41:44,050 --> 00:41:44,920
+Does this make sense?
+
+589
+00:41:46,510 --> 00:41:50,710
+Would this also be the case for different shards,
+
+590
+00:41:50,710 --> 00:41:53,830
+do we consider different shards separately.
+
+591
+00:41:55,770 --> 00:41:58,890
+The read just hit a local shard,
+
+592
+00:42:01,740 --> 00:42:04,470
+right, the local replica, and,
+
+593
+00:42:05,090 --> 00:42:07,670
+so I'm not hundred percent sure what the question you ask me.
+
+594
+00:42:07,880 --> 00:42:09,950
+I think I think the question I'm asking is,
+
+595
+00:42:10,310 --> 00:42:15,770
+the correctness guarantees do they apply across shards.
+
+596
+00:42:16,830 --> 00:42:19,860
+Yes, you know they apply the level of transactions right,
+
+597
+00:42:19,860 --> 00:42:23,520
+so so if a read-only read a local replica,
+
+598
+00:42:23,580 --> 00:42:27,360
+we still have to make sure that the transactions are extremely consistent,
+
+599
+00:42:27,810 --> 00:42:30,360
+and by following these rules we achieved that goal.
+
+600
+00:42:31,910 --> 00:42:33,770
+Okay, make sense, thank you.
+
+601
+00:42:37,150 --> 00:42:46,270
+Okay, now what you know, we're going to sort of the core part of the Spanner paper,
+
+602
+00:42:46,270 --> 00:42:47,050
+which is really,
+
+603
+00:42:47,290 --> 00:42:51,420
+what we want to reason about time like timestamps in this case,
+
+604
+00:42:51,420 --> 00:42:59,280
+then you know the clocks, you know different servers must be,
+
+605
+00:42:59,310 --> 00:43:00,870
+clock must be good,
+
+606
+00:43:01,140 --> 00:43:01,950
+it must be perfect,
+
+607
+00:43:02,070 --> 00:43:06,330
+people must have, different participants must agree on the timestamp order
+
+608
+00:43:06,450 --> 00:43:09,450
+and if the transaction takes a particular timestamp,
+
+609
+00:43:09,690 --> 00:43:13,200
+you know that timestamp must be the sort of same timestamp everywhere in the system,
+
+610
+00:43:14,060 --> 00:43:21,200
+so, and so the way I've described it in his previous slides,
+
+611
+00:43:21,200 --> 00:43:24,830
+you know whatever participant data picks the the read transaction,
+
+612
+00:43:24,920 --> 00:43:27,170
+assigns a timestamp to like 15,
+
+613
+00:43:27,440 --> 00:43:28,970
+which maybe go back a little bit,
+
+614
+00:43:29,210 --> 00:43:33,200
+you know here you know we're just assigning timestamp to these transactions
+
+615
+00:43:33,500 --> 00:43:38,540
+and it better be the case that like actually t1 and t2 t3 agree on these timestamps,
+
+616
+00:43:39,650 --> 00:43:41,420
+and that they are comparable
+
+617
+00:43:42,170 --> 00:43:46,880
+and so as we'll see in a, in a second,
+
+618
+00:43:47,120 --> 00:43:50,600
+this only matters really for read-only transactions,
+
+619
+00:43:54,830 --> 00:44:08,550
+and we can you know consider the two cases,
+
+620
+00:44:08,550 --> 00:44:09,900
+like what happens,
+
+621
+00:44:09,930 --> 00:44:11,490
+here's a question that we want to ask is,
+
+622
+00:44:11,640 --> 00:44:15,570
+what happens is like one replica or one server just has the wrong time right,
+
+623
+00:44:16,400 --> 00:44:19,490
+and so it doesn't agree with the time that the other servers,
+
+624
+00:44:20,120 --> 00:44:23,240
+what kind of problems could introduce,
+
+625
+00:44:23,240 --> 00:44:24,830
+so let's first think about the case,
+
+626
+00:44:25,160 --> 00:44:26,930
+what the timestamp is too large.
+
+627
+00:44:32,740 --> 00:44:38,530
+So, for example you know, let's go back to our version here, with this case,
+
+628
+00:44:38,860 --> 00:44:42,910
+so let's say the read-only transaction starts reading
+
+629
+00:44:43,150 --> 00:44:48,940
+and it reads actually instead of you know 15,
+
+630
+00:44:48,940 --> 00:44:53,420
+maybe whatever the value returns actually is 25,
+
+631
+00:44:55,630 --> 00:44:57,250
+and what would I do,
+
+632
+00:44:58,930 --> 00:45:01,420
+or let make it a little simpler, you know 18,
+
+633
+00:45:04,310 --> 00:45:05,360
+to get less confusion,
+
+634
+00:45:06,210 --> 00:45:10,050
+you know what, what is the outcome of actually having timestamp that is off,
+
+635
+00:45:10,050 --> 00:45:12,540
+but often in the direction of being too large.
+
+636
+00:45:15,780 --> 00:45:17,280
+It's still less than 25,
+
+637
+00:45:17,280 --> 00:45:20,160
+doesn't it still read further than 20,
+
+638
+00:45:20,190 --> 00:45:22,980
+doesn't it still read from the first one,
+
+639
+00:45:22,980 --> 00:45:23,790
+but if it's later,
+
+640
+00:45:23,790 --> 00:45:25,500
+it'll read from the second one.
+
+641
+00:45:25,680 --> 00:45:27,570
+Yeah, which if either one is fine, correct,
+
+642
+00:45:27,570 --> 00:45:30,180
+the real key issue here is that,
+
+643
+00:45:31,200 --> 00:45:35,550
+you know before reading, remember you have to wait until you see a write, right,
+
+644
+00:45:35,550 --> 00:45:38,760
+so if you are, so what happens if your timestamp is too large,
+
+645
+00:45:40,220 --> 00:45:41,900
+we're often from the too large side.
+
+646
+00:45:42,370 --> 00:45:44,830
+You have to wait for.
+
+647
+00:45:44,860 --> 00:45:47,320
+Yeah,you have to wait, a little longer maybe,
+
+648
+00:45:48,740 --> 00:45:49,940
+nothing goes wrong.
+
+649
+00:45:54,920 --> 00:45:57,950
+So now the other question is,
+
+650
+00:45:57,950 --> 00:46:00,710
+what if the timestamp is too small,
+
+651
+00:46:04,010 --> 00:46:05,630
+so for example the read,
+
+652
+00:46:05,750 --> 00:46:09,620
+when the t3 the machine that executes t3 you know ask for the time,
+
+653
+00:46:09,620 --> 00:46:12,200
+instead of time 10,
+
+654
+00:46:12,320 --> 00:46:14,150
+actually gets back you know say 9,
+
+655
+00:46:14,150 --> 00:46:17,990
+then this is a variation of the lecture question,
+
+656
+00:46:17,990 --> 00:46:21,080
+so basically like t3 runs at 9.
+
+657
+00:46:22,840 --> 00:46:26,470
+And maybe this is a good time for actually so take a break out room
+
+658
+00:46:26,710 --> 00:46:28,660
+and you can think and argue,
+
+659
+00:46:28,660 --> 00:46:30,250
+what, what is the outcome,
+
+660
+00:46:30,430 --> 00:46:32,020
+what is the potential outcomes
+
+661
+00:46:32,020 --> 00:46:33,610
+you know or what could go wrong,
+
+662
+00:46:33,730 --> 00:46:40,300
+if actually the timestamp that got assigned at t3 is 9 instead of 10.
+
+663
+00:46:43,630 --> 00:46:45,070
+So maybe we can do a breakout here,
+
+664
+00:46:45,100 --> 00:46:46,330
+Lily would be possible,
+
+665
+00:46:49,270 --> 00:46:51,040
+okay, I think Lily is back soon,
+
+666
+00:46:59,210 --> 00:47:00,620
+hold on a second here.
+
+667
+00:47:18,080 --> 00:47:21,020
+Okay, anybody else getting that noise?
+
+668
+00:53:42,920 --> 00:53:44,990
+Okay, everybody back and everybody can hear me again?
+
+669
+00:53:46,800 --> 00:53:47,700
+Yep.
+
+670
+00:53:51,630 --> 00:53:52,200
+We're all good?
+
+671
+00:53:57,090 --> 00:53:58,770
+Assume we're all good.
+
+672
+00:54:00,090 --> 00:54:01,110
+Yes yes, we're good.
+
+673
+00:54:01,260 --> 00:54:02,100
+We're all good.
+
+674
+00:54:04,250 --> 00:54:08,690
+Okay, okay, so back, you know so this question here,
+
+675
+00:54:08,690 --> 00:54:16,400
+usual we're investigating, we're relying on scheme where the clocks on different machines are perfectly synchronized,
+
+676
+00:54:16,400 --> 00:54:20,540
+as I mentioned, matters only for read-only transactions,
+
+677
+00:54:20,540 --> 00:54:25,280
+because read-write transactions you know grab logs and use two-phase locking to get a total order,
+
+678
+00:54:25,870 --> 00:54:30,790
+so they were executing some serializable external consistent order,
+
+679
+00:54:31,090 --> 00:54:36,160
+where we see that for read-only transactions, the timestamps crucial,
+
+680
+00:54:36,640 --> 00:54:39,400
+at least, we think it's crucial for if they're too large,
+
+681
+00:54:39,400 --> 00:54:41,950
+you know not maybe just affect performance negatively,
+
+682
+00:54:42,130 --> 00:54:45,580
+but the question is what happens if the timestamp is too small
+
+683
+00:54:45,880 --> 00:54:49,570
+and so the particular question we're asking is
+
+684
+00:54:49,570 --> 00:54:58,140
+like what, what would happen if in the scenario that we looked at a second,
+
+685
+00:54:58,140 --> 00:55:02,370
+where we have transactions you know t1 actually I wrote this wrong,
+
+686
+00:55:02,370 --> 00:55:04,050
+you know t2 and t3
+
+687
+00:55:04,350 --> 00:55:05,850
+or t3 is doing the read
+
+688
+00:55:06,120 --> 00:55:12,330
+and this read instead of actually happening maybe at 15
+
+689
+00:55:12,360 --> 00:55:16,890
+and it actually happens you know because the clock you know 3 wrong,
+
+690
+00:55:16,920 --> 00:55:18,210
+it actually happens at 9,
+
+691
+00:55:19,800 --> 00:55:22,170
+and you know how bad would that be?
+
+692
+00:55:27,830 --> 00:55:29,630
+Break our serializability?
+
+693
+00:55:30,820 --> 00:55:31,540
+Anybody?
+
+694
+00:55:32,270 --> 00:55:33,740
+Okay, looks like,
+
+695
+00:55:34,320 --> 00:55:35,820
+okay, sorry, I didn't hear you,
+
+696
+00:55:35,820 --> 00:55:39,000
+because I actually had some problem on my side tonight,
+
+697
+00:55:39,000 --> 00:55:40,740
+I can hear you I think,
+
+698
+00:55:40,800 --> 00:55:41,970
+can you repeat the answer.
+
+699
+00:55:42,330 --> 00:55:44,790
+Sorry, I said it would break serializability.
+
+700
+00:55:45,000 --> 00:55:45,690
+Yeah, why?
+
+701
+00:55:46,440 --> 00:55:50,040
+Because then you're you're read would happen,
+
+702
+00:55:50,400 --> 00:55:53,730
+would you assume to be happening after your latest write,
+
+703
+00:55:53,820 --> 00:55:57,150
+would then happen before which you wouldn't yield the the write.
+
+704
+00:55:57,420 --> 00:55:59,820
+Yeah, so just make the story complete,
+
+705
+00:55:59,820 --> 00:56:04,530
+you know t3 really is executing at time 15, right,
+
+706
+00:56:04,920 --> 00:56:08,370
+which is after t2 t1 committed,
+
+707
+00:56:08,710 --> 00:56:11,830
+so, t3 must see t1's write,
+
+708
+00:56:11,980 --> 00:56:13,540
+but if the clock is wrong
+
+709
+00:56:13,570 --> 00:56:18,160
+and timestamp 9 got assigned to to t3
+
+710
+00:56:18,310 --> 00:56:25,330
+and t3 will actually read the value of x before transaction t1 executed,
+
+711
+00:56:25,570 --> 00:56:26,860
+and that will be wrong,
+
+712
+00:56:26,860 --> 00:56:30,170
+that will break external consistency.
+
+713
+00:56:32,630 --> 00:56:33,170
+Okay?
+
+714
+00:56:34,100 --> 00:56:35,060
+Everybody clear on that?
+
+715
+00:56:50,590 --> 00:56:53,740
+Okay, so clearly we'd like to avoid this
+
+716
+00:56:54,190 --> 00:56:58,090
+and and sort of the central problems,
+
+717
+00:56:58,090 --> 00:57:02,110
+the [] is how do we get clocks,
+
+718
+00:57:02,140 --> 00:57:03,670
+how do we keep clocks synchronized.
+
+719
+00:57:04,330 --> 00:57:06,670
+Oh, wait, I just have one more question about.
+
+720
+00:57:07,180 --> 00:57:09,790
+So this scenario basically can happen,
+
+721
+00:57:09,790 --> 00:57:18,220
+because it's always the coordinator for read-write transaction that assigns the timestamp,
+
+722
+00:57:18,250 --> 00:57:21,700
+so even if the read is local and it happens on,
+
+723
+00:57:21,730 --> 00:57:30,180
+so it's possible for the machine that was running behind to have a version, that's in the future of its local clock.
+
+724
+00:57:30,570 --> 00:57:34,120
+Yeah, or in the past, that in the future, yeah.
+
+725
+00:57:35,620 --> 00:57:36,640
+Okay, and that can happen,
+
+726
+00:57:36,640 --> 00:57:40,120
+because it's not at machine who decided the timestamp.
+
+727
+00:57:40,870 --> 00:57:43,450
+No, okay, so forget about which machine it is,
+
+728
+00:57:43,450 --> 00:57:48,460
+like t3 is going to decide on the timestamp for transaction, right.
+
+729
+00:57:48,460 --> 00:57:50,080
+We go back here to this picture,
+
+730
+00:57:50,790 --> 00:57:52,320
+so here we got t3,
+
+731
+00:57:52,900 --> 00:58:03,520
+so t3 starts and t3 starts in principle a absolute time in true time after 10, right,
+
+732
+00:58:03,520 --> 00:58:06,520
+because t3 starts after t1 as we can see from this picture.
+
+733
+00:58:08,100 --> 00:58:10,500
+So this particular read x you know
+
+734
+00:58:10,500 --> 00:58:13,500
+and so we assign the timestamp to read-only transaction,
+
+735
+00:58:13,500 --> 00:58:16,320
+we start, we assign the timestamp for read-only transactions,
+
+736
+00:58:16,320 --> 00:58:18,150
+at the point of the start of transaction,
+
+737
+00:58:18,620 --> 00:58:21,710
+so the read of the x is the start of the transaction for t3,
+
+738
+00:58:22,130 --> 00:58:24,590
+t3 basically needs to get the timestamp,
+
+739
+00:58:24,590 --> 00:58:27,440
+so it asks you know please give me the current value of its clock.
+
+740
+00:58:28,110 --> 00:58:31,980
+And you know if you know the clock is reliable and correct
+
+741
+00:58:31,980 --> 00:58:33,690
+you know it will give back the time,
+
+742
+00:58:33,690 --> 00:58:35,490
+sometime after 10 for sure,
+
+743
+00:58:35,520 --> 00:58:38,220
+because t3 started after 10.
+
+744
+00:58:39,210 --> 00:58:43,950
+But let's you know we were hypothesizes that the clock of t3 is not,
+
+745
+00:58:43,980 --> 00:58:46,140
+you know clear [] synchronized
+
+746
+00:58:46,410 --> 00:58:48,330
+and the clock actually return 9.
+
+747
+00:58:49,210 --> 00:58:54,070
+And so now transaction 3 will execute timestamp 9
+
+748
+00:58:54,190 --> 00:58:58,030
+and that will cause you to read the value from before t1
+
+749
+00:58:58,030 --> 00:59:01,450
+and that will break external consistency.
+
+750
+00:59:03,520 --> 00:59:07,020
+Okay, but if, if the,
+
+751
+00:59:08,340 --> 00:59:14,130
+if the replication which we execute the t3 had the,
+
+752
+00:59:17,460 --> 00:59:23,490
+it may have the version 10 of variable x, right.
+
+753
+00:59:24,750 --> 00:59:29,310
+It might,but you know it's executing transaction at time 9,
+
+754
+00:59:29,310 --> 00:59:32,250
+so we'll get the value for before 10, this version memory.
+
+755
+00:59:32,250 --> 00:59:32,850
+Yeah yeah.
+
+756
+00:59:33,330 --> 00:59:33,750
+Yep?
+
+757
+00:59:35,510 --> 00:59:35,750
+Yeah.
+
+758
+00:59:35,750 --> 00:59:37,340
+Just making sure this is a very good question,
+
+759
+00:59:37,340 --> 00:59:40,880
+I think this very important point to get crystal clear what's going on here.
+
+760
+00:59:42,790 --> 00:59:46,120
+Okay, so so I think we're now hopefully on the same page,
+
+761
+00:59:46,120 --> 00:59:51,520
+you know it's very important that these clocks, these different machines are perfectly synchronized
+
+762
+00:59:52,030 --> 00:59:56,680
+and of course you know it's not possible to get perfect clock synchronization
+
+763
+00:59:56,680 --> 00:59:58,120
+and sort of a couple of difficulties,
+
+764
+01:00:01,590 --> 01:00:03,600
+it's difficult to get clocks synchronization,
+
+765
+01:00:03,660 --> 01:00:06,060
+because of clocks naturally drift.
+
+766
+01:00:09,160 --> 01:00:14,500
+And so you know when you think it's you know whatever 10pm and plus one microsecond
+
+767
+01:00:14,500 --> 01:00:20,560
+you know my machine might think it's you know 10pm and two plus two microseconds.
+
+768
+01:00:20,830 --> 01:00:25,570
+And just basically because you know they're sort of in your machine or in the servers,
+
+769
+01:00:25,570 --> 01:00:28,270
+that oscillators you know that keep track of time,
+
+770
+01:00:28,420 --> 01:00:33,040
+they are supposed to run at a particular frequency,
+
+771
+01:00:33,040 --> 01:00:35,170
+but the frequency you know it's not perfect,
+
+772
+01:00:35,380 --> 01:00:43,360
+you know and better clocks you know atom clocks you know have better oscillators that are much more precise
+
+773
+01:00:43,360 --> 01:00:47,770
+and as sort of the kind of clocks that Spanner is sort of relying on,
+
+774
+01:00:47,770 --> 01:00:49,510
+that you know pretty high precision,
+
+775
+01:00:49,630 --> 01:00:54,700
+but there's still, they need to synchronize once in a while with common you know global time
+
+776
+01:00:54,700 --> 01:00:59,070
+and so to avoid the problem of drift,
+
+777
+01:00:59,070 --> 01:01:02,730
+you know pretty precise clocks, they use atomic clocks,
+
+778
+01:01:04,600 --> 01:01:07,780
+which are more precise than like the clocks in your computer
+
+779
+01:01:08,200 --> 01:01:11,290
+and then they synchronize with global time,
+
+780
+01:01:13,750 --> 01:01:19,330
+so to make sure like all clocks sort of agree on the global time
+
+781
+01:01:19,330 --> 01:01:23,320
+and then they sort of keep ticking ticking ticking and then resynchronized periodically,
+
+782
+01:01:25,040 --> 01:01:28,280
+synchronized clocks and with global time
+
+783
+01:01:28,280 --> 01:01:34,400
+and they use GPS global position system that broadcast time,
+
+784
+01:01:34,400 --> 01:01:38,210
+as a way to synchronize these different atom clocks
+
+785
+01:01:38,210 --> 01:01:40,310
+and then keep them running in sync.
+
+786
+01:01:41,210 --> 01:01:47,540
+And so it looks like, the paper doesn't really say too much about actually how the true time system works,
+
+787
+01:01:47,780 --> 01:01:53,060
+but it looks like they have maybe few or one atomic clock per data center,
+
+788
+01:01:53,570 --> 01:02:02,210
+servers you know synchronize you know without time server to regularly synchronize their local clocks with that time master
+
+789
+01:02:02,720 --> 01:02:04,820
+and different time master, in the different data centers,
+
+790
+01:02:04,820 --> 01:02:09,800
+you know synchronize themselves through the GPS system.
+
+791
+01:02:11,260 --> 01:02:13,510
+But and so as a result,
+
+792
+01:02:13,510 --> 01:02:17,110
+the clocks are actually on the different servers are pretty close,
+
+793
+01:02:17,260 --> 01:02:21,880
+in terms of you know they talk about the ε you know what the error rate is
+
+794
+01:02:21,880 --> 01:02:25,000
+and so it seems like the ε for their clocks,
+
+795
+01:02:25,000 --> 01:02:27,520
+you can look at one of the tables at the end of the paper
+
+796
+01:02:27,580 --> 01:02:29,680
+is in the order of a few microseconds,
+
+797
+01:02:30,060 --> 01:02:32,250
+to you know a few milliseconds.
+
+798
+01:02:35,440 --> 01:02:37,750
+And so when a machine reach,
+
+799
+01:02:37,780 --> 01:02:41,890
+you know ask the operating system, please give me what the current time is,
+
+800
+01:02:42,220 --> 01:02:48,130
+the current time that gets returned maybe a few microseconds off from ture time
+
+801
+01:02:48,160 --> 01:02:50,680
+or even a few milliseconds off from true time.
+
+802
+01:02:53,160 --> 01:02:53,820
+Okay?
+
+803
+01:02:55,110 --> 01:02:56,280
+So there's a bit of [].
+
+804
+01:02:56,280 --> 01:02:57,840
+Yeah, go ahead before.
+
+805
+01:02:58,200 --> 01:03:00,930
+Yeah so, so like the paper,
+
+806
+01:03:00,930 --> 01:03:03,720
+I mean as you mentioned, we did not really go into that,
+
+807
+01:03:03,720 --> 01:03:09,420
+but just like the process of synchronizing the clocks or even measuring how different they are.
+
+808
+01:03:09,420 --> 01:03:09,810
+Yeah.
+
+809
+01:03:09,960 --> 01:03:13,920
+I mean shouldn't we also account for the time of the message travel, I mean.
+
+810
+01:03:13,920 --> 01:03:16,350
+Yeah, yeah, I think that's what they mean,
+
+811
+01:03:16,350 --> 01:03:17,700
+I'm sorry I didn't say much about this,
+
+812
+01:03:17,700 --> 01:03:18,540
+but that's what they mean,
+
+813
+01:03:18,540 --> 01:03:21,390
+so they sort of keep a running estimate about what they think,
+
+814
+01:03:21,390 --> 01:03:24,630
+you know the for example to synchronize with the time master,
+
+815
+01:03:24,840 --> 01:03:31,890
+the presumably the time library on the local machine keeps track of the start to make an estimate
+
+816
+01:03:31,890 --> 01:03:35,520
+of what is the average delay or normal delay
+
+817
+01:03:35,520 --> 01:03:38,100
+for sending or receiving a message to the time master
+
+818
+01:03:38,700 --> 01:03:43,920
+and basically use that to correct for any small mistakes,
+
+819
+01:03:45,300 --> 01:03:49,020
+then they also the protocol clearly have support for outliers
+
+820
+01:03:49,020 --> 01:03:50,460
+and so your outliers,
+
+821
+01:03:50,460 --> 01:03:51,990
+I mean something bad happened in the network,
+
+822
+01:03:51,990 --> 01:03:55,020
+and therefore a your timestamp got delayed in a lot,
+
+823
+01:03:55,110 --> 01:03:57,030
+so you should not include those,
+
+824
+01:03:57,150 --> 01:03:58,980
+and I guess there's a third problem,
+
+825
+01:03:58,980 --> 01:04:02,490
+which is you know sometimes these oscillators go [kaput],
+
+826
+01:04:02,580 --> 01:04:05,460
+you know just are not correct anymore
+
+827
+01:04:05,610 --> 01:04:08,010
+and so they may return incorrect values
+
+828
+01:04:08,010 --> 01:04:12,300
+and so you know again the, they don't talk about the great amount of detail,
+
+829
+01:04:12,300 --> 01:04:16,230
+but it seems those just use similar techniques like ntp
+
+830
+01:04:16,410 --> 01:04:18,030
+to deal with those kinds of problems.
+
+831
+01:04:19,680 --> 01:04:20,550
+I see, thank you.
+
+832
+01:04:23,600 --> 01:04:26,420
+So if you're interested in this kind of stuff,
+
+833
+01:04:26,420 --> 01:04:27,980
+there's protocol called ntp,
+
+834
+01:04:27,980 --> 01:04:34,370
+that actually when your computer and [] uses to actually synchronize its clock with you know global time,
+
+835
+01:04:34,670 --> 01:04:38,780
+and ntp has all these kind of mechanism built into it,
+
+836
+01:04:39,020 --> 01:04:44,660
+but ntp is not, it doesn't have the same position or the same small margins,
+
+837
+01:04:44,930 --> 01:04:47,240
+that actually true time has.
+
+838
+01:04:49,390 --> 01:04:56,140
+And so I think ntp could be you know you should be thinking that these error rates are in order of you know milliseconds to ten milliseconds,
+
+839
+01:04:56,140 --> 01:04:58,510
+basically it has to do mostly with the roundtrip time.
+
+840
+01:05:03,060 --> 01:05:04,320
+And you further questions about this?
+
+841
+01:05:07,600 --> 01:05:10,840
+Okay, so clocks are not perfectly synchronized,
+
+842
+01:05:10,870 --> 01:05:13,300
+you know there's basically, there's a margin of error
+
+843
+01:05:13,720 --> 01:05:16,780
+and what basically the true time does is
+
+844
+01:05:16,780 --> 01:05:21,250
+actually giving true time gives an answer,
+
+845
+01:05:21,250 --> 01:05:26,050
+you know gives you certain best estimated guess of what the current absolute timer or true time is
+
+846
+01:05:26,290 --> 01:05:29,470
+plus you know what the machine things is the margin of error.
+
+847
+01:05:30,400 --> 01:05:40,840
+And so, and and so the solution or to solve to deal with this clock drift,
+
+848
+01:05:40,840 --> 01:05:45,940
+is to not use timestamps you know true time
+
+849
+01:05:45,940 --> 01:05:47,650
+or just just pure timestamps,
+
+850
+01:05:47,830 --> 01:05:50,320
+but basically timestamps are intervals.
+
+851
+01:06:00,120 --> 01:06:06,840
+And so every value return from now, from the current time,
+
+852
+01:06:07,080 --> 01:06:12,550
+basically has the earliest and the latest.
+
+853
+01:06:15,190 --> 01:06:18,160
+And so, for example we ask for the current time,
+
+854
+01:06:18,370 --> 01:06:23,020
+and it is true time is 10 am or 2 pm,
+
+855
+01:06:23,140 --> 01:06:25,210
+it might return interval,
+
+856
+01:06:25,210 --> 01:06:37,730
+saying well the earliest it could be is you know 1 pm 1:59, and you know 59 seconds and you know whatever 20 microseconds
+
+857
+01:06:38,030 --> 01:06:44,000
+you know and latest might be you know 2 pm and plus you know two microseconds.
+
+858
+01:06:45,340 --> 01:06:48,280
+And some machines might be more than a couple of microseconds,
+
+859
+01:06:48,280 --> 01:06:50,020
+some machine might even milliseconds
+
+860
+01:06:50,380 --> 01:06:52,390
+and I guess some things in the paper,
+
+861
+01:06:52,390 --> 01:06:56,530
+the margin sometimes are in order of 10 milliseconds or multiple milliseconds,
+
+862
+01:06:57,490 --> 01:06:59,230
+but it gives an interval
+
+863
+01:06:59,320 --> 01:07:02,830
+and it's guaranteed that the true time is within that interval.
+
+864
+01:07:04,110 --> 01:07:07,530
+It's a, it's a interval epsilon to epsilon?
+
+865
+01:07:11,560 --> 01:07:13,060
+The paper doesn't really talk about it,
+
+866
+01:07:13,060 --> 01:07:17,800
+in that sense, it is just an estimate about what the margin of error is.
+
+867
+01:07:22,170 --> 01:07:25,380
+And I think if you look at the details of the protocol,
+
+868
+01:07:25,380 --> 01:07:27,960
+often that margin area boils down to two epsilon.
+
+869
+01:07:32,570 --> 01:07:33,110
+Okay?
+
+870
+01:07:34,840 --> 01:07:35,680
+Now to deal,
+
+871
+01:07:35,680 --> 01:07:39,580
+so now we need to adjust our protocols right,
+
+872
+01:07:39,580 --> 01:07:45,760
+because our protocols have some rules that setting the start time for timestamp
+
+873
+01:07:45,790 --> 01:07:49,300
+or sending the start time for transaction using a timestamp
+
+874
+01:07:49,690 --> 01:07:57,820
+and in a rule for you know reach the way to the next write,
+
+875
+01:07:58,000 --> 01:08:01,060
+and we'll see you know basically there's a couple of rules that need to be changed
+
+876
+01:08:01,090 --> 01:08:06,760
+to deal with intervals as opposed to with a true time.
+
+877
+01:08:08,030 --> 01:08:11,770
+So, first of all the start rule is different,
+
+878
+01:08:14,480 --> 01:08:21,170
+so start rule is the current time,
+
+879
+01:08:21,890 --> 01:08:24,530
+you know we asked the computer, please tell me the current time is,
+
+880
+01:08:24,530 --> 01:08:25,610
+get some info back
+
+881
+01:08:25,880 --> 01:08:29,660
+and then the start time that we pick is the latest.
+
+882
+01:08:32,690 --> 01:08:41,390
+And so that just means correct, whatever timestamp their start rule actually is [science] is guaranteed to be after true time.
+
+883
+01:08:42,540 --> 01:08:44,430
+So we know that true times in the past.
+
+884
+01:08:45,300 --> 01:08:49,920
+And if for read-only transactions you know this is assign to the start of the transaction,
+
+885
+01:08:53,180 --> 01:08:55,760
+and for read-write transaction before,
+
+886
+01:08:55,880 --> 01:08:58,100
+it actually has at the point that the commit starts.
+
+887
+01:09:00,250 --> 01:09:01,660
+So that part doesn't change,
+
+888
+01:09:01,720 --> 01:09:03,550
+the only part that really changes is that,
+
+889
+01:09:03,670 --> 01:09:05,170
+you get the end point of the interval,
+
+890
+01:09:06,050 --> 01:09:07,730
+and we can get the end point of the interval,
+
+891
+01:09:07,730 --> 01:09:12,740
+so that at least true time past, has past.
+
+892
+01:09:13,480 --> 01:09:18,100
+Okay, then there's a second rule that we didn't have before,
+
+893
+01:09:18,700 --> 01:09:20,140
+which is to commit wait rule.
+
+894
+01:09:21,260 --> 01:09:24,020
+And we're gonna delay in transaction,
+
+895
+01:09:24,020 --> 01:09:28,340
+so if that is actually got some timestamp at the commit time,
+
+896
+01:09:28,580 --> 01:09:30,350
+with the start to commit
+
+897
+01:09:30,350 --> 01:09:32,750
+and then we get to the end of the commit,
+
+898
+01:09:33,310 --> 01:09:35,170
+then we're going to delay that commit,
+
+899
+01:09:36,260 --> 01:09:43,010
+delay commit until the timestamp that was assigned at the starting of the commit,
+
+900
+01:09:43,520 --> 01:09:50,450
+is is the past.
+
+901
+01:09:50,450 --> 01:09:53,000
+Oh, my notes are wrong here, for one second.
+
+902
+01:10:11,180 --> 01:10:20,580
+We're going to delay until the timestamp is before now earliest,
+
+903
+01:10:26,390 --> 01:10:28,940
+so we know that actually is definitely before true time.
+
+904
+01:10:32,180 --> 01:10:36,830
+Okay, so so that's sort of the modifications to the protocol,
+
+905
+01:10:36,830 --> 01:10:38,450
+and let's see how that works,
+
+906
+01:10:38,450 --> 01:10:39,800
+with a simple example,
+
+907
+01:10:39,800 --> 01:10:41,870
+they get a little more feel for it.
+
+908
+01:10:48,890 --> 01:10:52,100
+So, for example, I'm going to use a slightly simpler than the previous one,
+
+909
+01:10:52,100 --> 01:10:54,770
+I'm just gonna focus on the transaction, but just writes x.
+
+910
+01:10:55,750 --> 01:10:58,000
+And we still have 3 transactions,
+
+911
+01:10:58,730 --> 01:11:00,410
+so here's t1,
+
+912
+01:11:01,110 --> 01:11:05,140
+and t1 does write to x and then commits
+
+913
+01:11:05,560 --> 01:11:09,130
+and just you know, let's you know we don't really care too much about these transactions,
+
+914
+01:11:09,130 --> 01:11:11,350
+so let's see the commit at 1,
+
+915
+01:11:12,360 --> 01:11:13,500
+so true time 1,
+
+916
+01:11:14,950 --> 01:11:17,350
+so now we're gonna run transaction t2
+
+917
+01:11:17,920 --> 01:11:19,810
+and it's gonna write,
+
+918
+01:11:21,020 --> 01:11:24,350
+yeah, so transaction t2 of course runs after t1,
+
+919
+01:11:25,900 --> 01:11:28,720
+and it writes you know say x2,
+
+920
+01:11:29,280 --> 01:11:32,910
+so here write x1, writes 2 to x,
+
+921
+01:11:32,910 --> 01:11:35,400
+it starts to prepare which was the beginning of the commit,
+
+922
+01:11:35,860 --> 01:11:40,480
+and so, at the beginning of the commit to ask for a time,
+
+923
+01:11:41,320 --> 01:11:44,290
+and so it's going to get an interval back.
+
+924
+01:11:44,770 --> 01:11:52,420
+And you know we know that a true time that's going to get back as some goal line that interval,
+
+925
+01:11:52,540 --> 01:11:54,160
+but somewhere in that interval,
+
+926
+01:11:54,340 --> 01:11:58,300
+so the interval in fact you might you know start well before you are a true time,
+
+927
+01:11:58,690 --> 01:12:01,720
+let's say you know interval starts even at you know one
+
+928
+01:12:01,960 --> 01:12:04,450
+which overlaps with the transaction t1
+
+929
+01:12:04,720 --> 01:12:09,670
+and you know maybe the latest value of true times is interval 10,
+
+930
+01:12:09,850 --> 01:12:11,620
+so that's what it gets back
+
+931
+01:12:11,800 --> 01:12:16,930
+and what we're going to pick as the timestamp is going to pick this value 10,
+
+932
+01:12:19,930 --> 01:12:22,180
+and we want to pick the latest value,
+
+933
+01:12:22,180 --> 01:12:24,310
+because we want to be absolutely sure that,
+
+934
+01:12:24,340 --> 01:12:29,740
+you know if there's a transaction that started before you know the true time,
+
+935
+01:12:29,890 --> 01:12:33,220
+that you know we pick a time that is definitely after that transaction,
+
+936
+01:12:33,220 --> 01:12:34,150
+that's the true time,
+
+937
+01:12:34,150 --> 01:12:36,790
+so we're gonna pick 10, which is definitely beyond one
+
+938
+01:12:37,030 --> 01:12:40,000
+and so we'll never get confused about this previous transactions.
+
+939
+01:12:41,460 --> 01:12:42,600
+Then, at some point,
+
+940
+01:12:43,270 --> 01:12:46,570
+you know, so this transaction you know takes timestamp 10,
+
+941
+01:12:46,570 --> 01:12:50,740
+and the 10 you know might be a little bit further in the future of true time, right,
+
+942
+01:12:51,370 --> 01:12:56,110
+so transaction doesn't prepare all whatever necessary work,
+
+943
+01:12:56,110 --> 01:12:59,170
+you know the two-phase commit actually hits the real commit point,
+
+944
+01:13:00,160 --> 01:13:04,120
+and there and may have to wait, right,
+
+945
+01:13:04,120 --> 01:13:05,620
+because this is a commit rule,
+
+946
+01:13:05,620 --> 01:13:07,270
+we have to wait a little while,
+
+947
+01:13:07,300 --> 01:13:12,400
+until we're actually sure that 10 exactly in the past.
+
+948
+01:13:13,280 --> 01:13:15,740
+And so, this basically the commit time,
+
+949
+01:13:15,740 --> 01:13:21,080
+what you know just actually coordinate will do is look at commit time,
+
+950
+01:13:21,110 --> 01:13:22,850
+just keep reading his local clock
+
+951
+01:13:23,120 --> 01:13:26,120
+and we'll keep reading his local clock until it gets an interval back,
+
+952
+01:13:26,360 --> 01:13:29,540
+where the earliest time is past 10.
+
+953
+01:13:30,870 --> 01:13:33,690
+So maybe at some point you know reading boom boom reading,
+
+954
+01:13:33,690 --> 01:13:35,250
+read gets actual interval back
+
+955
+01:13:35,250 --> 01:13:39,030
+and then interval and the interval starts to say at 9 or 7,
+
+956
+01:13:39,150 --> 01:13:44,430
+it keeps reading until it actually gets a value that's bigger than 10
+
+957
+01:13:44,580 --> 01:13:50,160
+and then we know for sure that true time has passed,
+
+958
+01:13:50,370 --> 01:13:53,850
+and so it save actually to commit transaction.
+
+959
+01:13:55,550 --> 01:14:03,170
+And so any transaction that now runs after t3 will have must run after true time 10.
+
+960
+01:14:05,660 --> 01:14:10,630
+So let's say you know transaction 3 start at some point
+
+961
+01:14:11,020 --> 01:14:14,560
+and transaction 3 starts after t2,
+
+962
+01:14:14,590 --> 01:14:19,720
+so we have to now make absolutely sure that we read you know x is 2 is going to read,
+
+963
+01:14:19,990 --> 01:14:22,240
+so it's gonna read x,
+
+964
+01:14:23,020 --> 01:14:30,470
+and and so we will ask for the current time,
+
+965
+01:14:30,710 --> 01:14:33,380
+it's gonna get maybe an interval back,
+
+966
+01:14:34,070 --> 01:14:39,050
+interval might overlap a little bit t2,
+
+967
+01:14:39,410 --> 01:14:45,230
+but you know the true time maybe from this clock is pretty precise
+
+968
+01:14:45,230 --> 01:14:47,780
+and true time be interval get back is from 10 to 12,
+
+969
+01:14:47,810 --> 01:14:49,970
+so true time is somewhere between 10 to 12.
+
+970
+01:14:50,980 --> 01:14:53,890
+We know which are basically has to be past you know 10,
+
+971
+01:14:53,890 --> 01:14:59,620
+because you know we're going t3 reads by definition after t2,
+
+972
+01:15:00,170 --> 01:15:02,570
+and that's gonna work out,
+
+973
+01:15:02,570 --> 01:15:09,950
+because basically t t3 is gonna pick us its timestamp the end of the interval by the latest rule,
+
+974
+01:15:10,430 --> 01:15:15,440
+so t3 is actually going to run timestamp you know true time 12, if you will,
+
+975
+01:15:15,650 --> 01:15:23,300
+and that will guarantee correct that you know this interval we know for sure pass the true time 10
+
+976
+01:15:23,780 --> 01:15:27,950
+and so when t3 reach you know is going to read x is 2,
+
+977
+01:15:30,140 --> 01:15:33,830
+because it will observe you know the value of transaction 2,
+
+978
+01:15:33,830 --> 01:15:38,540
+because you know the, it's reading well beyond true time,
+
+979
+01:15:39,260 --> 01:15:41,120
+and this must cost a little bit of delay,
+
+980
+01:15:41,180 --> 01:15:43,550
+but hopefully if the clocks are pretty precise,
+
+981
+01:15:43,640 --> 01:15:45,500
+as we talked a little bit earlier,
+
+982
+01:15:45,500 --> 01:15:47,030
+that delay is actually going to be small.
+
+983
+01:15:51,290 --> 01:15:52,130
+Does this make sense?
+
+984
+01:15:57,390 --> 01:15:59,040
+Sorry, I had a question,
+
+985
+01:15:59,160 --> 01:16:06,570
+so if t2 is saying that it's going to start a transaction at time 10,
+
+986
+01:16:06,720 --> 01:16:11,160
+then when we read something do,
+
+987
+01:16:11,190 --> 01:16:12,360
+like in the same transaction,
+
+988
+01:16:12,360 --> 01:16:16,170
+do we also need to make sure that 10 is outside,
+
+989
+01:16:16,170 --> 01:16:20,380
+like before the now interval.
+
+990
+01:16:21,040 --> 01:16:22,360
+The question is,
+
+991
+01:16:22,360 --> 01:16:24,340
+let's say t2 does more than writes
+
+992
+01:16:24,340 --> 01:16:25,960
+and does reads or writes,
+
+993
+01:16:26,260 --> 01:16:29,020
+you know t2 should observe its own write,
+
+994
+01:16:29,440 --> 01:16:30,730
+is that the question you're asking?
+
+995
+01:16:32,030 --> 01:16:39,200
+T2, like when when we reads, for example is going to read y.
+
+996
+01:16:39,260 --> 01:16:42,020
+Yep, so let's add this to it.
+
+997
+01:16:46,810 --> 01:16:49,030
+Yeah, or yeah after that.
+
+998
+01:16:49,030 --> 01:16:53,650
+Yeah, you're way I really care before to prepare actually reads y.
+
+999
+01:16:54,820 --> 01:17:00,150
+Okay, let me, yep.
+
+1000
+01:17:03,330 --> 01:17:07,050
+And then, oh,
+
+1001
+01:17:09,530 --> 01:17:11,780
+okay, this may be.
+
+1002
+01:17:11,780 --> 01:17:14,600
+The reason read write actually don't really matter that much,
+
+1003
+01:17:14,900 --> 01:17:17,870
+because if you go back at the very beginning,
+
+1004
+01:17:18,630 --> 01:17:22,040
+at this picture you know the,
+
+1005
+01:17:22,310 --> 01:17:24,920
+if a read-write transaction reads right,
+
+1006
+01:17:24,950 --> 01:17:31,580
+the reads will go to the shard masters or shard leaders,
+
+1007
+01:17:31,580 --> 01:17:33,350
+that will take if you take read locks out,
+
+1008
+01:17:33,820 --> 01:17:40,930
+and the reads are basically declined executes all the operations locally, right,
+
+1009
+01:17:40,990 --> 01:17:42,940
+and so it gets read values
+
+1010
+01:17:42,970 --> 01:17:47,650
+and we'll read the most recent read value that we got after it was,
+
+1011
+01:17:47,800 --> 01:17:51,920
+you know the the lock variable,
+
+1012
+01:17:52,250 --> 01:17:54,620
+so basically in read-write transactions,
+
+1013
+01:17:55,040 --> 01:17:57,410
+the locks really do all the global ordering,
+
+1014
+01:17:58,040 --> 01:18:00,230
+here's the two-phase locking ensures global ordering.
+
+1015
+01:18:02,280 --> 01:18:04,800
+And so really the interaction that is interesting is
+
+1016
+01:18:04,920 --> 01:18:09,360
+the interaction between you know the read-only transaction, which is t3,
+
+1017
+01:18:11,340 --> 01:18:12,720
+and the read-write transactions.
+
+1018
+01:18:14,170 --> 01:18:16,840
+One is t2 actually commit
+
+1019
+01:18:17,140 --> 01:18:19,970
+and we're reading it before it commits.
+
+1020
+01:18:20,760 --> 01:18:23,850
+Yeah, so the protocol in read-write transaction is,
+
+1021
+01:18:23,850 --> 01:18:26,790
+we're reading right early on refers to all the work,
+
+1022
+01:18:27,400 --> 01:18:29,170
+and then we go to the commit phase,
+
+1023
+01:18:29,200 --> 01:18:35,410
+so here's like, here's the commit point or here's where the clients like please commit transaction
+
+1024
+01:18:35,890 --> 01:18:37,660
+and sends it to the transaction coordinator
+
+1025
+01:18:37,660 --> 01:18:40,960
+and then the transaction coordinator runs the two-phase commit protocol.
+
+1026
+01:18:42,250 --> 01:18:44,740
+But you know the old shards,
+
+1027
+01:18:44,740 --> 01:18:46,150
+you know you need to have locks,
+
+1028
+01:18:46,210 --> 01:18:50,020
+the values that actually that transaction is actually using.
+
+1029
+01:19:02,340 --> 01:19:02,940
+Okay?
+
+1030
+01:19:10,860 --> 01:19:11,520
+Okay.
+
+1031
+01:19:12,280 --> 01:19:15,940
+Alright, so let's try to summarize a little bit.
+
+1032
+01:19:23,560 --> 01:19:31,040
+So read-write transactions you know are basically global ordered,
+
+1033
+01:19:31,040 --> 01:19:35,510
+or serializable external consistency serializability plus external consistency
+
+1034
+01:19:35,660 --> 01:19:40,340
+due to the fact that they basically do two-phase commit plus two-phase locking.
+
+1035
+01:19:42,760 --> 01:19:45,670
+The read-only transactions are the ones that are special,
+
+1036
+01:19:46,450 --> 01:19:49,900
+because they are only contact a local replica
+
+1037
+01:19:50,050 --> 01:19:53,620
+and the reason they actually see you know the correct value is,
+
+1038
+01:19:53,620 --> 01:19:55,090
+because of snapshot isolation,
+
+1039
+01:19:59,950 --> 01:20:04,210
+each data item is actually versioned
+
+1040
+01:20:04,390 --> 01:20:08,920
+and stamped with the timestamp which actually was modified
+
+1041
+01:20:09,340 --> 01:20:14,170
+and so, you know you can read in the past using snapshot isolation
+
+1042
+01:20:14,680 --> 01:20:16,450
+and then to ensure that,
+
+1043
+01:20:16,450 --> 01:20:20,590
+so this snapshot isolation really gives us extra serializability.
+
+1044
+01:20:25,090 --> 01:20:28,690
+But you know Spanner actually shoots for something stronger,
+
+1045
+01:20:28,720 --> 01:20:32,440
+namely it actually shoots for this external consistency property,
+
+1046
+01:20:32,440 --> 01:20:33,880
+which is like linearizability,
+
+1047
+01:20:33,880 --> 01:20:35,890
+so there's real-time component to it.
+
+1048
+01:20:38,990 --> 01:20:43,640
+And to actually ensure that we got actually external consistency,
+
+1049
+01:20:43,880 --> 01:20:47,600
+we execute the read-only operations in timestamp order,
+
+1050
+01:20:52,890 --> 01:20:55,530
+and you know because you know timestamp order,
+
+1051
+01:20:55,530 --> 01:20:58,740
+it requires on perfectly synchronized clocks,
+
+1052
+01:20:59,010 --> 01:21:02,730
+the Spanner relies the rules a little bit
+
+1053
+01:21:02,940 --> 01:21:08,100
+by actually using time intervals.
+
+1054
+01:21:14,520 --> 01:21:16,830
+And the whole goal correctly, the whole,
+
+1055
+01:21:16,920 --> 01:21:18,780
+by using the set of techniques,
+
+1056
+01:21:18,900 --> 01:21:22,500
+it turns out that read-only transactions are very fast,
+
+1057
+01:21:24,840 --> 01:21:28,350
+so read-write transactions are basically you know not actually particularly fast,
+
+1058
+01:21:28,350 --> 01:21:30,360
+if you look at the table 6,
+
+1059
+01:21:30,360 --> 01:21:33,900
+you know it's you know 100 milliseconds for read-write transaction,
+
+1060
+01:21:33,900 --> 01:21:36,630
+that means basically you can only do 10 transactions per second, right,
+
+1061
+01:21:36,810 --> 01:21:38,340
+this is really not much,
+
+1062
+01:21:38,640 --> 01:21:41,430
+but the read-only transactions are fast.
+
+1063
+01:21:42,450 --> 01:21:44,850
+Now, this is the case though like you know,
+
+1064
+01:21:45,090 --> 01:21:48,990
+you know the although the read-write transactions are maybe not that fast,
+
+1065
+01:21:49,080 --> 01:21:50,790
+they they are very powerful,
+
+1066
+01:21:50,850 --> 01:21:56,220
+you're basically doing transactional operations across multiple shards,
+
+1067
+01:21:56,220 --> 01:21:59,100
+that is sitting in different data centers in different parts of the world,
+
+1068
+01:21:59,700 --> 01:22:04,260
+and that just for programmers incredibly convenient and powerful tool,
+
+1069
+01:22:04,470 --> 01:22:11,790
+that you can ACID semantics across shards in replicated in all over the world.
+
+1070
+01:22:15,900 --> 01:22:18,870
+So, this is all I wanted to say actually about Spanner,
+
+1071
+01:22:18,870 --> 01:22:21,360
+I hope this actually was helpful
+
+1072
+01:22:21,360 --> 01:22:25,650
+and that you're not maybe less confused and more confused,
+
+1073
+01:22:25,650 --> 01:22:27,210
+because of this lecture,
+
+1074
+01:22:27,210 --> 01:22:30,300
+but, if you have questions, feel free to hang around
+
+1075
+01:22:30,300 --> 01:22:34,950
+and I'll be happy to discuss this or any other aspect of Spanner.
+
+1076
+01:22:37,240 --> 01:22:39,130
+And good luck finishing 3b,
+
+1077
+01:22:39,160 --> 01:22:42,910
+and I hope you get time to enjoy the long weekend.
+
+1078
+01:22:47,560 --> 01:22:48,580
+Thank you.
+
+1079
+01:22:51,000 --> 01:22:53,850
+So I have a question, maybe early in the slides,
+
+1080
+01:22:53,850 --> 01:22:58,260
+so when you have diagram for the two-phase commit,
+
+1081
+01:22:58,260 --> 01:23:00,360
+for the read-write transaction,
+
+1082
+01:23:00,600 --> 01:23:07,280
+so before we communicate with the, with the, with the TC,
+
+1083
+01:23:07,340 --> 01:23:09,170
+the TC stands for the coordinator?
+
+1084
+01:23:09,230 --> 01:23:11,240
+Yeah, stands for coordinator, yeah.
+
+1085
+01:23:11,390 --> 01:23:14,060
+Okay, so before we communicate with the transaction coordinator,
+
+1086
+01:23:14,060 --> 01:23:16,550
+when we read x and read y initially,
+
+1087
+01:23:16,790 --> 01:23:19,940
+we don't do any communication with TC,
+
+1088
+01:23:21,440 --> 01:23:24,260
+so my question is what is the nature of these reads,
+
+1089
+01:23:24,260 --> 01:23:26,180
+do we treat them as read-only,
+
+1090
+01:23:26,210 --> 01:23:28,220
+so we read from the replica that is closest to us
+
+1091
+01:23:28,220 --> 01:23:32,210
+or do we actually do like majority type of communication.
+
+1092
+01:23:32,870 --> 01:23:37,460
+You know we we go actually to go to the participants leader,
+
+1093
+01:23:37,760 --> 01:23:39,110
+goes to the paxos leader.
+
+1094
+01:23:40,610 --> 01:23:41,810
+I see, so it goes the,
+
+1095
+01:23:41,840 --> 01:23:43,790
+okay, so it goes like in lab 3.
+
+1096
+01:23:45,160 --> 01:23:45,640
+Sorry?
+
+1097
+01:23:45,910 --> 01:23:51,160
+So it's basically so the read x here basically was the same thing as in lab 3,
+
+1098
+01:23:51,160 --> 01:23:52,210
+so it goes through the leader
+
+1099
+01:23:52,210 --> 01:23:54,400
+and it gets replicated through the whole.
+
+1100
+01:23:54,430 --> 01:23:55,630
+No, it actually doesn't,
+
+1101
+01:23:55,630 --> 01:24:01,360
+there's no, I believe there's no actually reads go inside running through paxos,
+
+1102
+01:24:01,360 --> 01:24:03,490
+but you know and go through the transaction leader,
+
+1103
+01:24:03,730 --> 01:24:09,340
+oh sorry the paxos leader and the paxos leader of course knows what the last write was.
+
+1104
+01:24:09,840 --> 01:24:12,360
+But what if the, for example we have some failure
+
+1105
+01:24:12,360 --> 01:24:14,520
+and the leader thinks that it's the leader,
+
+1106
+01:24:14,520 --> 01:24:15,570
+but it's in some partition,
+
+1107
+01:24:15,570 --> 01:24:17,160
+and it actually has updated information.
+
+1108
+01:24:18,800 --> 01:24:20,390
+I don't know exactly,
+
+1109
+01:24:20,390 --> 01:24:21,950
+you know how they deal with this case.
+
+1110
+01:24:21,950 --> 01:24:24,680
+I I think their leases make that impossible.
+
+1111
+01:24:24,710 --> 01:24:29,420
+Yeah yeah, so they have the,
+
+1112
+01:24:29,810 --> 01:24:32,330
+so every leader is leader for a period of time,
+
+1113
+01:24:33,460 --> 01:24:36,520
+and you become during that period of time,
+
+1114
+01:24:36,520 --> 01:24:37,840
+no other leader can be leader.
+
+1115
+01:24:38,560 --> 01:24:40,720
+Okay, I see, awesome, thank you.
+
+1116
+01:24:42,360 --> 01:24:43,830
+Thank you remind you.
+
+1117
+01:24:44,860 --> 01:24:49,270
+Hey, I had a question with the last diagram with time interval,
+
+1118
+01:24:51,160 --> 01:24:55,900
+yeah, I was wondering if like if the read for t3
+
+1119
+01:24:56,050 --> 01:25:01,180
+or let's say the write at t2 time intervals from one to 12,
+
+1120
+01:25:01,180 --> 01:25:05,320
+also such that the write happens at 12 for t2,
+
+1121
+01:25:05,320 --> 01:25:07,300
+and t3 reads also happens at 12,
+
+1122
+01:25:07,300 --> 01:25:08,710
+what happens in that scenario.
+
+1123
+01:25:09,710 --> 01:25:13,520
+Okay, you gotta like what if you want more.
+
+1124
+01:25:13,520 --> 01:25:17,330
+Yeah, so for t2 in t2 the write right now,
+
+1125
+01:25:17,330 --> 01:25:18,650
+it's from one to 10 right.
+
+1126
+01:25:19,010 --> 01:25:21,920
+Then what happens at like 12,
+
+1127
+01:25:21,920 --> 01:25:24,680
+so that it's like the same as the transition 3.
+
+1128
+01:25:24,950 --> 01:25:26,660
+12 not 2.
+
+1129
+01:25:27,160 --> 01:25:30,400
+I think 12, sorry, meaning both, interested.
+
+1130
+01:25:31,800 --> 01:25:35,040
+So if the,
+
+1131
+01:25:35,070 --> 01:25:42,510
+so it's P correct transaction 2 would take 12 as start time,
+
+1132
+01:25:43,240 --> 01:25:47,530
+of the of the read-write transaction,
+
+1133
+01:25:48,010 --> 01:25:54,960
+it would wait correct until 12 shows up in the interval before it commits,
+
+1134
+01:25:55,740 --> 01:25:58,320
+so true time is somewhere between one and 12
+
+1135
+01:25:58,380 --> 01:26:01,590
+and wait until at least 13, right,
+
+1136
+01:26:01,590 --> 01:26:04,890
+and so true time is now beyond twelve for sure.
+
+1137
+01:26:05,250 --> 01:26:05,760
+Yeah.
+
+1138
+01:26:06,000 --> 01:26:10,470
+And now we know that t3 starts after t2 right,
+
+1139
+01:26:11,060 --> 01:26:13,970
+you know it could never got this interval back,
+
+1140
+01:26:13,970 --> 01:26:17,210
+because the true time is already definitely pass 13
+
+1141
+01:26:18,020 --> 01:26:20,000
+or you know you know past 12.
+
+1142
+01:26:21,420 --> 01:26:24,390
+So when this guy now reads its clock,
+
+1143
+01:26:24,630 --> 01:26:26,790
+we know there's going to be some interval,
+
+1144
+01:26:27,090 --> 01:26:28,920
+you know, maybe it still includes 10,
+
+1145
+01:26:29,190 --> 01:26:34,170
+but you know and will include 14 or 13,
+
+1146
+01:26:35,540 --> 01:26:37,820
+and we'll pick the latest value, right,
+
+1147
+01:26:37,970 --> 01:26:39,590
+so let's say pick 14,
+
+1148
+01:26:40,540 --> 01:26:43,600
+and so it will do timestamp actually at 14.
+
+1149
+01:26:46,230 --> 01:26:49,650
+Actually, so basically like that scenario wouldn't have happened,
+
+1150
+01:26:49,650 --> 01:26:53,970
+because the time interval thing would have guaranteed the earliest and latest.
+
+1151
+01:26:54,150 --> 01:26:57,450
+Yes, and that is the case that the t3 definitely started after t2,
+
+1152
+01:26:59,340 --> 01:27:01,980
+by definition, that's the way we set up the example.
+
+1153
+01:27:02,980 --> 01:27:05,080
+And then also then like if if,
+
+1154
+01:27:05,170 --> 01:27:10,360
+instead like the read was happening around the same time as committed not necessarily strictly after,
+
+1155
+01:27:10,360 --> 01:27:14,080
+as in this case like what is there any guaranteed on that,
+
+1156
+01:27:14,440 --> 01:27:16,810
+like does it have a.
+
+1157
+01:27:17,080 --> 01:27:18,070
+Great question,
+
+1158
+01:27:18,070 --> 01:27:20,380
+so remember what the definition of linearizability right,
+
+1159
+01:27:20,380 --> 01:27:25,570
+if t2 and t3 basically run roughly concurrently, like run truly concurrent,
+
+1160
+01:27:26,500 --> 01:27:27,850
+then it doesn't matter,
+
+1161
+01:27:27,850 --> 01:27:30,400
+you know t3 can go for t2 or after.
+
+1162
+01:27:32,200 --> 01:27:32,950
+Okay.
+
+1163
+01:27:33,850 --> 01:27:36,130
+But then what about serializability aspects,
+
+1164
+01:27:36,400 --> 01:27:38,020
+if they execute again,
+
+1165
+01:27:38,020 --> 01:27:40,480
+like it might not necessarily be in the same order,
+
+1166
+01:27:41,880 --> 01:27:44,460
+the [] executed some total order
+
+1167
+01:27:44,460 --> 01:27:48,840
+and t3 go to before t2 or after t2,
+
+1168
+01:27:49,320 --> 01:27:51,090
+but either order is fine,
+
+1169
+01:27:51,090 --> 01:27:54,210
+which both are allowed by serializability or linearizability,
+
+1170
+01:27:54,330 --> 01:27:56,280
+because the execution is truly concurrent,
+
+1171
+01:27:57,030 --> 01:28:01,470
+t3 starts before t2 committed.
+
+1172
+01:28:02,200 --> 01:28:06,610
+Gotcha, and then for the t3 like the if the commit and read happens at the same time,
+
+1173
+01:28:06,670 --> 01:28:09,010
+the t what t3 is actually gonna read,
+
+1174
+01:28:09,040 --> 01:28:12,970
+just gonna depend on if the replica is reading from has that commit.
+
+1175
+01:28:14,980 --> 01:28:15,070
+Yeah.
+
+1176
+01:28:15,070 --> 01:28:16,030
+Thank you so much.
+
+1177
+01:28:16,360 --> 01:28:17,770
+You're welcome good questions.
+
+1178
+01:28:19,240 --> 01:28:21,730
+I had a question about,
+
+1179
+01:28:22,360 --> 01:28:26,600
+like if, if I saw this in this picture
+
+1180
+01:28:26,660 --> 01:28:30,080
+and they when it tries to commit 12 is not there,
+
+1181
+01:28:30,080 --> 01:28:32,930
+it's just gonna retry and wait again.
+
+1182
+01:28:33,050 --> 01:28:34,430
+Okay.
+
+1183
+01:28:34,430 --> 01:28:38,240
+it's just good reading the clock until it gets interval back
+
+1184
+01:28:38,240 --> 01:28:43,280
+where the earliest it's past its timestamp.
+
+1185
+01:28:44,640 --> 01:28:52,020
+Okay, I also have just clear just to make sure the guarantee that it provides is that,
+
+1186
+01:28:52,350 --> 01:28:56,760
+if if designs in timestamp x,
+
+1187
+01:28:57,740 --> 01:29:03,320
+and by the time where x is like before the now interval,
+
+1188
+01:29:04,550 --> 01:29:11,130
+this machine orders or paxos group will have seen everything worked,
+
+1189
+01:29:11,130 --> 01:29:14,280
+I guess machine will have seen everything that has happened,
+
+1190
+01:29:15,740 --> 01:29:19,570
+at like before x, is that right.
+
+1191
+01:29:20,050 --> 01:29:21,640
+Yeah, I think more or less yes,
+
+1192
+01:29:21,640 --> 01:29:24,070
+I've not heard of since you're what you're asking,
+
+1193
+01:29:24,070 --> 01:29:26,410
+but you know we we get an interval back,
+
+1194
+01:29:26,410 --> 01:29:27,580
+what we know is that,
+
+1195
+01:29:27,580 --> 01:29:29,500
+the true time is somewhere in this interval,
+
+1196
+01:29:30,600 --> 01:29:31,770
+so here's true time,
+
+1197
+01:29:34,610 --> 01:29:36,470
+and so when we start this prepare,
+
+1198
+01:29:36,590 --> 01:29:40,070
+you know true time is not past 12,
+
+1199
+01:29:40,760 --> 01:29:43,160
+but it's somewhere between one and 12
+
+1200
+01:29:43,400 --> 01:29:44,720
+and so when we do commit,
+
+1201
+01:29:44,750 --> 01:29:48,530
+we gotta make sure that the commit actually happens really after true time,
+
+1202
+01:29:49,160 --> 01:29:50,840
+and so we're gonna wait a little bit,
+
+1203
+01:29:50,840 --> 01:29:53,570
+you know, so we know we got big 12
+
+1204
+01:29:53,720 --> 01:29:57,260
+and we're going to wait until actually our clock gives an interval
+
+1205
+01:29:57,410 --> 01:30:00,110
+where true time is definitely past 12.
+
+1206
+01:30:03,040 --> 01:30:05,530
+I think I think what I was asking was more like,
+
+1207
+01:30:05,620 --> 01:30:06,730
+if you pick 12
+
+1208
+01:30:06,760 --> 01:30:11,020
+and then your interval is returned to be 13 to 20,
+
+1209
+01:30:11,080 --> 01:30:13,960
+do you know that anything that,
+
+1210
+01:30:14,800 --> 01:30:18,820
+like with timestamp less than or equal to 12,
+
+1211
+01:30:19,060 --> 01:30:21,430
+that the changes for those transactions
+
+1212
+01:30:21,430 --> 01:30:23,740
+that you're gonna be able to see them.
+
+1213
+01:30:23,830 --> 01:30:24,430
+Yes.
+
+1214
+01:30:25,250 --> 01:30:25,760
+Okay.
+
+1215
+01:30:27,140 --> 01:30:28,130
+Okay, that makes sense.
+
+1216
+01:30:29,070 --> 01:30:30,060
+Thank you.
+
+1217
+01:30:32,710 --> 01:30:36,700
+So I don't totally understand what the point of commit wait actually is,
+
+1218
+01:30:37,090 --> 01:30:44,680
+because it seems like commit wait will happen after you've already selected the timestamp for the transaction that you're interested in
+
+1219
+01:30:45,010 --> 01:30:51,600
+and you simply delay the actual absolute time at which the thing will let you get committed just to make sure that extra.
+
+1220
+01:30:51,600 --> 01:30:55,200
+I know, no but the commit time, you really start updating the database.
+
+1221
+01:30:56,500 --> 01:30:57,220
+Aha.
+
+1222
+01:30:57,220 --> 01:30:59,650
+And so at commit time, you have to commit,
+
+1223
+01:30:59,650 --> 01:31:03,670
+you return like t3 didn't run until after of the C.
+
+1224
+01:31:04,680 --> 01:31:05,460
+Right.
+
+1225
+01:31:05,940 --> 01:31:09,690
+Because that was our definition like t3 started after t2 committed.
+
+1226
+01:31:10,250 --> 01:31:13,250
+Right, right right, but like what would happen if you didn't,
+
+1227
+01:31:13,250 --> 01:31:14,240
+like what do you lose,
+
+1228
+01:31:14,240 --> 01:31:15,950
+if you don't have.
+
+1229
+01:31:16,250 --> 01:31:18,050
+Then t3 would run concurrently with t2.
+
+1230
+01:31:20,980 --> 01:31:21,610
+Okay.
+
+1231
+01:31:21,640 --> 01:31:22,630
+I see.
+
+1232
+01:31:22,930 --> 01:31:25,300
+I I'm not sure which scenario you want to explore,
+
+1233
+01:31:25,300 --> 01:31:29,980
+but, if you know we allow t3 to start before C,
+
+1234
+01:31:30,470 --> 01:31:32,960
+then you know we have completely different story, correct,
+
+1235
+01:31:32,960 --> 01:31:34,340
+because there's nothing to discuss,
+
+1236
+01:31:34,370 --> 01:31:36,590
+because t3 runs concurrently t2
+
+1237
+01:31:36,590 --> 01:31:39,410
+and it could observe to t or not, then over.
+
+1238
+01:31:39,800 --> 01:31:42,740
+Okay, I see.
+
+1239
+01:31:43,620 --> 01:31:45,540
+And so the timestamp for C,
+
+1240
+01:31:45,540 --> 01:31:46,680
+we are waiting those,
+
+1241
+01:31:46,680 --> 01:31:54,100
+yeah we pass true time of you know the signing of the prepared number that we get back,
+
+1242
+01:31:54,190 --> 01:31:57,460
+so we know that the true time really has passed.
+
+1243
+01:31:58,270 --> 01:31:59,230
+And this is.
+
+1244
+01:31:59,230 --> 01:32:08,860
+T3 could never pick a time true time that actually would be would be before t2 committed on.
+
+1245
+01:32:11,610 --> 01:32:15,530
+I see, I see, okay.
+
+1246
+01:32:15,890 --> 01:32:19,190
+I guess it seemed like everything was already version,
+
+1247
+01:32:19,190 --> 01:32:21,770
+that if you modify the data,
+
+1248
+01:32:21,770 --> 01:32:24,830
+you physically modified this or like that would be okay,
+
+1249
+01:32:24,830 --> 01:32:27,560
+because everything has a timestamp attached to it,
+
+1250
+01:32:27,560 --> 01:32:28,310
+so no one would,
+
+1251
+01:32:28,640 --> 01:32:32,000
+you know from far away it seemed like no do the wrong thing,
+
+1252
+01:32:32,330 --> 01:32:37,040
+like looking more at what they actually define as external consistency,
+
+1253
+01:32:37,250 --> 01:32:40,250
+I don't really understand how it is similar to linearizability,
+
+1254
+01:32:40,250 --> 01:32:41,150
+because it just says that,
+
+1255
+01:32:41,550 --> 01:32:44,910
+if a transaction actually commits before another one starts,
+
+1256
+01:32:45,090 --> 01:32:48,630
+then they'll have the first will have a smaller timestamp the latter one,
+
+1257
+01:32:48,780 --> 01:32:54,930
+is also sort of implicit in that transactions execute in the order of their timestamps for sure.
+
+1258
+01:32:54,930 --> 01:32:58,590
+Yeah, maybe my short rotation was not so brilliant,
+
+1259
+01:32:58,950 --> 01:33:01,920
+but but yeah absolutely,
+
+1260
+01:33:01,920 --> 01:33:03,780
+the real requirement is that,
+
+1261
+01:33:03,990 --> 01:33:07,790
+if a transaction start after,
+
+1262
+01:33:07,790 --> 01:33:10,280
+if t2 starts after t1 committed,
+
+1263
+01:33:10,820 --> 01:33:14,330
+t2 must observe all the writes from t1.
+
+1264
+01:33:14,690 --> 01:33:16,580
+Aha, right, right, right.
+
+1265
+01:33:19,250 --> 01:33:20,810
+I see, I guess the,
+
+1266
+01:33:20,840 --> 01:33:25,610
+I guess the time knowing that the timestamp of t2 larger than t1 will tell you
+
+1267
+01:33:25,610 --> 01:33:28,070
+that you're going to have observed everything t1.
+
+1268
+01:33:28,250 --> 01:33:29,720
+Okay I see, makes sense.
+
+1269
+01:33:29,720 --> 01:33:30,440
+Yeah.
+
+1270
+01:33:30,940 --> 01:33:31,630
+Okay, thanks.
+
+1271
+01:33:31,960 --> 01:33:32,500
+You're welcome.
+
+1272
+01:33:40,240 --> 01:33:43,570
+Any other questions, if there's still anybody there.
+
+1273
+01:33:46,820 --> 01:33:52,010
+I had a question about part 4.2.3,
+
+1274
+01:33:52,430 --> 01:33:54,710
+section of schema-change transactions.
+
+1275
+01:33:54,710 --> 01:33:57,080
+Yeah, I didn't talk about it all.
+
+1276
+01:33:58,070 --> 01:33:59,660
+I was just curious about like,
+
+1277
+01:33:59,690 --> 01:34:03,140
+because essentially there they talk about like predicting the time of the commit.
+
+1278
+01:34:05,490 --> 01:34:06,720
+Well, you may be,
+
+1279
+01:34:06,720 --> 01:34:07,500
+let me see,
+
+1280
+01:34:07,500 --> 01:34:09,360
+I'll tell you whatever way I think about it
+
+1281
+01:34:09,540 --> 01:34:13,500
+and then you can say me, you can tell me where where where the confusion is,
+
+1282
+01:34:13,770 --> 01:34:21,090
+so schema change correct that means basically adding column to a table or delete a column of a table or something along those lines,
+
+1283
+01:34:21,120 --> 01:34:26,160
+so it really changes you know the layout of the database.
+
+1284
+01:34:26,750 --> 01:34:31,070
+And, and so schema changes are generally expensive
+
+1285
+01:34:31,070 --> 01:34:35,000
+and the way they make sure that their atomic they're running in far in the future,
+
+1286
+01:34:36,080 --> 01:34:38,210
+so they run over the timestamp,
+
+1287
+01:34:38,210 --> 01:34:39,800
+you know well beyond the current time.
+
+1288
+01:34:40,600 --> 01:34:43,900
+And so I guess that's actually usually do its stuff, correct,
+
+1289
+01:34:43,900 --> 01:34:47,800
+because every other is actually reading or writing using this version memory
+
+1290
+01:34:47,950 --> 01:34:51,550
+and you know they're creating version memory way farther in the future.
+
+1291
+01:34:52,240 --> 01:34:55,060
+And so it can't affect any of the current transaction is running.
+
+1292
+01:34:56,250 --> 01:35:00,150
+Now communicate you know you know this takes so long,
+
+1293
+01:35:00,270 --> 01:35:08,580
+by the time they actually want to commit the schema migration part,
+
+1294
+01:35:08,910 --> 01:35:11,220
+there, there are actually transactions,
+
+1295
+01:35:11,220 --> 01:35:17,280
+they're starting to [encroach] on the time that migration transaction started.
+
+1296
+01:35:18,540 --> 01:35:21,420
+So those you know, those transactions actually times marches on,
+
+1297
+01:35:21,420 --> 01:35:22,800
+you know we're doing transactions
+
+1298
+01:35:23,160 --> 01:35:25,950
+and then the rule is that basically any read-write transaction
+
+1299
+01:35:25,950 --> 01:35:29,520
+or any read-only or any transaction basically have to stop,
+
+1300
+01:35:31,620 --> 01:35:37,410
+until basically the transfer, the migration transaction was completed.
+
+1301
+01:35:39,220 --> 01:35:44,080
+Because the migration transaction is timestamping is a new values,
+
+1302
+01:35:44,080 --> 01:35:45,250
+you know with its timestamp.
+
+1303
+01:35:46,820 --> 01:35:50,660
+So when when there's a request essentially for this migration,
+
+1304
+01:35:52,020 --> 01:35:56,220
+it chooses a commit time far into the future, and.
+
+1305
+01:35:56,430 --> 01:36:01,780
+You know basically, you hope basically the that transaction also commits you know not.
+
+1306
+01:36:01,780 --> 01:36:03,220
+Yeah, by then.
+
+1307
+01:36:04,150 --> 01:36:11,200
+So any reads that come at a time up until then are served from the current.
+
+1308
+01:36:11,230 --> 01:36:13,210
+Local replicas from at all, correct,
+
+1309
+01:36:13,210 --> 01:36:15,280
+because they could have even seen that, right.
+
+1310
+01:36:16,940 --> 01:36:20,450
+Okay, and it's a cool trick,
+
+1311
+01:36:20,450 --> 01:36:21,560
+if you have version memory,
+
+1312
+01:36:21,560 --> 01:36:23,120
+you can you schedule things in the future.
+
+1313
+01:36:24,020 --> 01:36:24,890
+Yeah, it's a cool trick,
+
+1314
+01:36:24,890 --> 01:36:31,330
+I was just wondering how they actually like figure out that point in the future.
+
+1315
+01:36:32,790 --> 01:36:37,890
+Yeah, it's probably some some [] stick or something, okay.
+
+1316
+01:36:38,390 --> 01:36:45,580
+So, but essentially so if you don't choose a time, that's far enough in the future,
+
+1317
+01:36:46,360 --> 01:36:48,070
+then you run the risk of.
+
+1318
+01:36:48,190 --> 01:36:49,030
+Exactly.
+
+1319
+01:36:49,120 --> 01:36:51,430
+Okay, so then you have incorrect results.
+
+1320
+01:36:52,270 --> 01:36:56,110
+To avoid risk of incorrect results, which actually block.
+
+1321
+01:36:56,730 --> 01:37:00,500
+Yeah, I see, okay.
+
+1322
+01:37:01,060 --> 01:37:02,560
+Awesome, thanks so much.
+
+1323
+01:37:02,920 --> 01:37:03,490
+You're welcome.
+
+1324
+01:37:03,640 --> 01:37:04,000
+Bye.
+
