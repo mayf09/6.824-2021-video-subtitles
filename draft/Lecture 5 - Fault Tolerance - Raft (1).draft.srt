@@ -6,12 +6,12 @@ So the topic for today
 2
 00:00:02,510 --> 00:00:07,340
 0,510 510,1350 1380,2220
-is raft, um.
+is raft {}
 
 3
 00:00:07,340 --> 00:00:09,410
 0,420 420,690 690,1380 1500,1770 1770,2070
-Reputation photo protocol, um, we'll
+replication [] protocol,| {} we'll
 
 4
 00:00:09,410 --> 00:00:10,190
@@ -21,7 +21,7 @@ discuss it quite a bit
 5
 00:00:10,190 --> 00:00:11,780
 0,60 60,660 720,1110 1110,1230 1230,1590
-of detail, um, in fact
+of detail,| {} in fact
 
 6
 00:00:11,780 --> 00:00:12,980
@@ -31,7 +31,7 @@ we're going to spend multiple
 7
 00:00:12,980 --> 00:00:15,140
 0,330 330,510 510,720 1620,1860 1860,2160
-lectures on it and one
+lectures on it| and one
 
 8
 00:00:15,140 --> 00:00:16,010
@@ -41,17 +41,17 @@ because it's one of the
 9
 00:00:16,010 --> 00:00:18,980
 0,480 480,1110 1140,1440 1440,2130 2130,2970
-core elements of a examples
+core elements of {} examples
 
 10
 00:00:18,980 --> 00:00:22,430
 0,210 690,1830 1830,2400 2400,2940 2940,3450
-of a distributed replication protocol.
+of {} distributed replication protocol.|
 
 11
 00:00:22,900 --> 00:00:25,000
 0,570 600,960 960,1620 1650,1950 1950,2100
-So, um, today I've been
+So, {} today {} been
 
 12
 00:00:25,000 --> 00:00:27,850
@@ -66,17 +66,17 @@ the material that is necessary
 14
 00:00:29,410 --> 00:00:30,520
 0,120 120,510 510,780 780,990 990,1110
-for laps two a and
+for labs {2a -} and
 
 15
 00:00:30,520 --> 00:00:31,700
 0,180 180,600
-two b.
+{2b -},|
 
 16
 00:00:32,590 --> 00:00:34,030
 0,330 330,510 510,720 720,1260 1260,1440
-Um, so the election of
+{} so the election of
 
 17
 00:00:34,030 --> 00:00:35,200
@@ -91,77 +91,77 @@ you know pushing the logs
 19
 00:00:36,220 --> 00:00:38,530
 0,480 900,1080 1080,1440 1440,1800 1800,2310
-around and then next week,
+around| and then next week,
 
 20
 00:00:38,650 --> 00:00:40,300
 0,660
-um.
+{}
 
 21
 00:00:42,710 --> 00:00:44,390
 0,330 330,720 720,1140 1140,1440 1440,1680
-We're focusing more on to
+we're focusing more on {2c
 
 22
 00:00:44,390 --> 00:00:46,040
 0,390 390,570 570,690 690,1170 1170,1650
-c and to d mainly
+-} and {2d -}, mainly
 
 23
 00:00:46,040 --> 00:00:47,640
 0,180 180,1080
-the snapshots.
+the snapshots
 
 24
 00:00:47,790 --> 00:00:50,370
 0,570 570,810 810,1410 1410,2100 2100,2580
-Um, and walk compassion and
+{} and log compassion| and
 
 25
 00:00:50,370 --> 00:00:51,690
 0,180 180,300 300,960 960,1140 1140,1320
-give this opportunity to just
+give us opportunity to just
 
 26
 00:00:51,690 --> 00:00:53,280
 0,180 180,390 390,810 810,960 960,1590
-any other aspect of raft,
+any other aspect of raft.|
 
 27
 00:00:53,430 --> 00:00:54,660
 0,150 150,630 660,810 810,1020 1020,1230
-in fact we'll talk about
+In fact we'll talk about
 
 28
 00:00:54,660 --> 00:00:56,160
 0,210 210,420 420,630 630,1110 1290,1500
-rap one more time, um
+raft one more time {}
 
 29
 00:00:56,160 --> 00:00:58,160
 0,150 150,240 240,480 480,1110
-in the week after.
+in the week after,|
 
 30
 00:00:58,250 --> 00:00:59,930
 0,690 690,990 990,1380 1380,1590 1590,1680
-We'll have that too, in
+we'll have a {Q&A -}
 
 31
 00:00:59,930 --> 00:01:01,360
 0,120 120,660
-a lecture.
+{} lecture
 
 32
 00:01:03,150 --> 00:01:05,190
 0,690 690,1260 1440,1620 1620,1800 1800,2040
-On a you know two
+on {} you know {2a
 
 33
 00:01:05,190 --> 00:01:06,120
 0,180 180,270 270,390 390,780 780,930
-a and two b and
+-} and {2b -}| and
 
 34
 00:01:06,120 --> 00:01:07,830
@@ -171,17 +171,17 @@ so talk about the actual
 35
 00:01:07,830 --> 00:01:09,480
 0,480 480,600 600,720 720,1320 1500,1650
-solutions to the lapse to
+solutions to the labs 2a
 
 36
 00:01:09,480 --> 00:01:10,600
 0,540
-HIV.
+2b.|
 
 37
 00:01:10,600 --> 00:01:13,540
 0,630 990,1290 1290,1350 1350,1830 2220,2940
-Okay, that's the plan a
+Okay?| That's the plan {}|
 
 38
 00:01:13,540 --> 00:01:14,380
@@ -191,17 +191,17 @@ and so I'm going to
 39
 00:01:14,380 --> 00:01:16,750
 0,300 300,570 570,900 930,1890 1950,2370
-just dive in a with
+just dive in {} with
 
 40
 00:01:16,750 --> 00:01:18,250
 0,540 570,870 870,990 990,1320 1320,1500
-a with a starting point
+{} with a starting point
 
 41
 00:01:18,250 --> 00:01:19,280
 0,120 120,510
-for today.
+for today.|
 
 42
 00:01:19,530 --> 00:01:22,410
@@ -14622,4 +14622,3 @@ alright welcome it's great to
 01:39:21,590 --> 01:39:22,466
 0,120 120,210 210,360 360,810
 ask so many questions.
-
