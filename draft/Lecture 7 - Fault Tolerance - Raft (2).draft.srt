@@ -7728,52 +7728,52 @@ Okay, so how about service
 1549
 00:49:04,060 --> 00:49:05,920
 0,630 1110,1230 1230,1320 1320,1650 1650,1860
-recovery, so the service keeps
+recovery,| so the service keeps
 
 1550
 00:49:05,920 --> 00:49:07,450
 0,120 120,720 720,1380 1410,1530 1530,1530
-his own state, um I
+its own state,| {} like
 
 1551
 00:49:08,170 --> 00:49:09,880
 0,690 690,1020 1020,1200 1200,1620 1620,1710
-example opry you're implementing a
+{for,example} {in,lab,3}, you're implementing a
 
 1552
 00:49:09,880 --> 00:49:11,890
 0,120 120,510 510,1050 1440,1890 1890,2010
-key value store and so
+{key-value -} store| and so
 
 1553
 00:49:11,890 --> 00:49:13,390
 0,90 90,210 210,540 540,900 900,1500
-the key value store maintains,
+the {key-value -} store maintains
 
 1554
 00:49:13,390 --> 00:49:15,460
 0,240 270,990 990,1380 1380,1650 1650,2070
-um basically Ash map from
+{} basically hash map from
 
 1555
 00:49:15,670 --> 00:49:17,800
 0,210 210,780 780,1260 1260,1500 1500,2130
-a key to a value
+a key to a value|
 
 1556
 00:49:17,950 --> 00:49:19,630
 0,270 270,630 630,1140 1170,1590 1590,1680
-and you um need to
+and you {} need to
 
 1557
 00:49:19,630 --> 00:49:20,980
 0,360 360,570 570,960
-replay that state.
+replay that state.|
 
 1558
 00:49:21,160 --> 00:49:22,840
 0,240 240,660 870,1500 1500,1620 1620,1680
-And again a there are
+And again {} there are
 
 1559
 00:49:22,840 --> 00:49:24,880
@@ -7783,22 +7783,22 @@ two possible ways of going
 1560
 00:49:24,880 --> 00:49:27,340
 0,300 300,600 990,1290 1290,1920 2010,2460
-about it, um one strategy
+about it,| {} one strategy
 
 1561
 00:49:27,340 --> 00:49:29,320
 0,300 300,420 420,1290 1290,1380 1380,1980
-want to replay, the log
+{one,is} to replay the log
 
 1562
 00:49:29,350 --> 00:49:30,970
 0,150 150,420 420,1020 1020,1170 1170,1620
-to actually reconstruct that state.
+to actually reconstruct that state.|
 
 1563
 00:49:34,190 --> 00:49:37,550
 0,600 630,1380 1380,1560 1560,2070 2070,3360
-So basically if you're a
+So basically if you're {}
 
 1564
 00:49:37,700 --> 00:49:38,540
@@ -7813,32 +7813,32 @@ strategy one on the previous
 1566
 00:49:39,830 --> 00:49:41,420
 0,390 660,810 810,1260 1260,1470 1470,1590
-slide, you just take the
+slide,| you just take the
 
 1567
 00:49:41,420 --> 00:49:43,670
 0,540 570,1050 1050,1620 1620,2100 2100,2250
-log users, replay all the
+log use replay all the
 
 1568
 00:49:43,670 --> 00:49:44,960
 0,330 330,450 450,510 510,960 960,1290
-entries in the log and
+entries in the log| and
 
 1569
 00:49:45,020 --> 00:49:47,360
 0,720 750,1410 1410,1680 1680,2220 2220,2340
-shoot basically create exactly the
+should basically create exactly the
 
 1570
 00:49:47,360 --> 00:49:50,540
 0,240 240,780 1140,1980 2310,2700 2700,3180
-same state, um, as if
+same state,| {} as if
 
 1571
 00:49:50,750 --> 00:49:53,330
 0,870 870,1080 1080,1650 1680,2460 2460,2580
-um as before, because you
+{} as before,| because you
 
 1572
 00:49:53,330 --> 00:49:55,310
@@ -7853,7 +7853,7 @@ this replicated state machine approach
 1574
 00:49:56,870 --> 00:49:59,660
 0,210 210,570 960,1620 1620,2370 2580,2790
-is that, um, the all
+is that,| {} the all
 
 1575
 00:49:59,660 --> 00:50:00,830
@@ -7863,12 +7863,12 @@ the operations are executed in
 1576
 00:50:00,830 --> 00:50:02,360
 0,300 300,840 840,1290 1290,1410 1410,1530
-total order operations have no
+total order,| operations have no
 
 1577
 00:50:02,360 --> 00:50:03,530
 0,270 270,720 810,990 990,1080 1080,1170
-side effect, so if you
+side effect,| so if you
 
 1578
 00:50:03,530 --> 00:50:04,610
@@ -7878,12 +7878,12 @@ start in the same stage
 1579
 00:50:04,610 --> 00:50:06,740
 0,180 180,660 900,1470 1470,1620 1620,2130
-with nothing, and you replay
+with nothing,| and you replay
 
 1580
 00:50:06,740 --> 00:50:07,790
 0,150 150,240 240,780 780,900 900,1050
-all the operations, you should
+all the operations,| you should
 
 1581
 00:50:07,790 --> 00:50:08,960
@@ -7893,22 +7893,22 @@ end up exactly the same
 1582
 00:50:08,960 --> 00:50:10,490
 0,450 570,930 930,1140 1140,1350 1350,1530
-state, a is any other
+state,| {} is any other
 
 1583
 00:50:10,490 --> 00:50:11,160
 0,390
-note.
+node,|
 
 1584
 00:50:12,480 --> 00:50:13,890
 0,150 150,270 270,420 420,690 690,1410
-And so that's one possible,
+and so that's one possible,|
 
 1585
 00:50:14,100 --> 00:50:15,300
 0,450 450,750 750,870 870,1080 1080,1200
-um, and so that was
+{} and so that was
 
 1586
 00:50:15,300 --> 00:50:16,500
@@ -7918,7 +7918,7 @@ one way to recreate the
 1587
 00:50:16,500 --> 00:50:17,540
 0,480
-state.
+state.|
 
 1588
 00:50:24,400 --> 00:50:25,540
@@ -7928,17 +7928,17 @@ And you know obviously this
 1589
 00:50:25,540 --> 00:50:27,400
 0,120 120,720 780,990 990,1170 1170,1860
-is expensive, you know if
+is expensive,| you know if
 
 1590
 00:50:27,430 --> 00:50:28,390
 0,90 90,420 420,660 660,780 780,960
-the surgeon actually has been
+the service actually has been
 
 1591
 00:50:28,390 --> 00:50:30,100
 0,720 720,870 870,990 990,1200 1200,1710
-running for a couple years
+running for a couple years|
 
 1592
 00:50:30,460 --> 00:50:31,720
@@ -7948,12 +7948,12 @@ and then you have to
 1593
 00:50:31,720 --> 00:50:33,250
 0,480 480,780 780,1320 1320,1410 1410,1530
-replay the logs, you know
+replay the logs,| you know
 
 1594
 00:50:33,250 --> 00:50:34,540
 0,270 270,480 480,750 750,840 840,1290
-from the beginning of time
+from the beginning of time|
 
 1595
 00:50:34,540 --> 00:50:35,410
@@ -7963,32 +7963,32 @@ you know that is not
 1596
 00:50:35,410 --> 00:50:36,970
 0,180 180,300 300,810 810,990 990,1560
-you know so a desirable.
+you know so {} desirable.|
 
 1597
 00:50:37,570 --> 00:50:39,370
 0,180 180,420 420,810 1080,1410 1410,1800
-And so yeah people do
+And so {you,know} people do
 
 1598
 00:50:39,400 --> 00:50:41,200
 0,360 360,570 570,990 990,1080 1080,1800
-don't really follow a strategy
+don't really follow {} strategy
 
 1599
 00:50:41,200 --> 00:50:43,240
 0,480 480,990 1110,1560 1560,1710 1710,2040
-a one button call, another
+{} one,| gonna follow another
 
 1600
 00:50:43,240 --> 00:50:44,980
 0,600 600,870 870,1080 1080,1350 1350,1740
-strategy and we just basically
+strategy| and we just basically
 
 1601
 00:50:44,980 --> 00:50:46,920
 0,270 270,780 780,1470
-making periodic snapshots.
+making periodic snapshots.|
 
 1602
 00:50:47,350 --> 00:50:48,490
@@ -7998,7 +7998,7 @@ And there are two reasons
 1603
 00:50:48,490 --> 00:50:50,770
 0,120 120,300 300,750 1020,1800 1890,2280
-for doing that one database
+for doing that,| one basically
 
 1604
 00:50:50,770 --> 00:50:51,940
@@ -8013,12 +8013,12 @@ service date in the past
 1606
 00:50:53,020 --> 00:50:54,400
 0,510 630,780 780,840 840,1140 1140,1380
-manner and the second reason
+manner| and the second reason
 
 1607
 00:50:54,400 --> 00:50:55,720
 0,90 90,210 210,570 570,780 780,1320
-to do that is to
+to do that is| to
 
 1608
 00:50:55,840 --> 00:50:57,910
@@ -8028,17 +8028,17 @@ be able to compact the
 1609
 00:50:57,910 --> 00:50:59,740
 0,510 540,720 720,810 810,1230 1230,1830
-law, you know even the
+log,| you know even the
 
 1610
 00:50:59,770 --> 00:51:02,440
 0,390 390,660 660,1320 1530,2190 2190,2670
-raf state itself can be
+raft state itself can be
 
 1611
 00:51:03,610 --> 00:51:05,620
 0,630 630,900 900,1350 1440,1650 1650,2010
-a cut off from the
+{} cut off from the
 
 1612
 00:51:05,620 --> 00:51:06,670
@@ -8048,7 +8048,7 @@ front of the prefix can
 1613
 00:51:06,670 --> 00:51:07,620
 0,90 90,270 270,570
-be cut off.
+be cut off.|
 
 1614
 00:51:07,830 --> 00:51:09,060
@@ -8058,12 +8058,12 @@ And the basic observation is
 1615
 00:51:09,060 --> 00:51:11,670
 0,420 720,1530 1530,1590 1950,2190 2190,2610
-that um, if the application
+that,| {} if the application
 
 1616
 00:51:11,670 --> 00:51:12,570
 0,60 60,300 300,420 420,420 420,900
-is running for a while,
+is running for a while,|
 
 1617
 00:51:12,570 --> 00:51:13,860
@@ -8078,37 +8078,37 @@ first thousand operations or the
 1619
 00:51:15,210 --> 00:51:17,790
 0,240 240,570 570,1380 1620,2280 2310,2580
-first million operations a then
+first million operations,| {} then
 
 1620
 00:51:17,790 --> 00:51:19,680
 0,90 90,750 870,1200 1200,1650 1650,1890
-the state does constructive debt
+the state does construct that
 
 1621
 00:51:19,680 --> 00:51:20,700
 0,420
-coins.
+point,|
 
 1622
 00:51:21,420 --> 00:51:24,380
 0,630 960,1470 1470,1680 1680,2400
-The states will contain.
+the states will contain
 
 1623
 00:51:26,100 --> 00:51:27,560
 0,270 270,900
-I'll watch.
+all ops
 
 1624
 00:51:28,180 --> 00:51:30,080
 0,270 270,540 540,750 750,1260
-No change through AI.
+{you,know} c through [i],|
 
 1625
 00:51:30,900 --> 00:51:32,280
 0,240 240,240 240,810 810,870 870,1380
-Where I maybe a thousand
+where i maybe a thousand
 
 1626
 00:51:32,280 --> 00:51:33,780
@@ -8118,7 +8118,7 @@ or a million whatever you
 1627
 00:51:33,780 --> 00:51:36,630
 0,360 360,900 1290,1650 1980,2520 2640,2850
-whatever you so, um, so
+whatever you,| so, {} so
 
 1628
 00:51:36,630 --> 00:51:37,650
@@ -8128,7 +8128,7 @@ one way to think about
 1629
 00:51:37,650 --> 00:51:40,230
 0,420 420,840 1080,1710 1710,1920 1920,2580
-is that there's a duality
+is| that there's a duality
 
 1630
 00:51:40,230 --> 00:51:43,920
@@ -8138,7 +8138,7 @@ between state replication and log
 1631
 00:51:43,920 --> 00:51:47,100
 0,540 540,690 690,1320 1410,2100 2490,3180
-replication or replay, um the
+replication or replay,| {} the
 
 1632
 00:51:47,280 --> 00:51:48,390
@@ -8148,7 +8148,7 @@ you could save the state
 1633
 00:51:48,390 --> 00:51:49,860
 0,270 270,330 330,630 630,1320 1320,1470
-after a thousand operations and
+after a thousand operations| and
 
 1634
 00:51:49,860 --> 00:51:50,820
@@ -8163,22 +8163,22 @@ same thing as actually {re-applying
 1636
 00:51:52,530 --> 00:51:55,530
 0,540 540,1260 1260,1560 1560,2280 2700,3000
--} redoing, every operation from
+-} redoing every operation from
 
 1637
 00:51:55,530 --> 00:51:56,860
 0,360 360,450 450,570 570,1050
-zero to the fast.
+0 to the fast.|
 
 1638
 00:51:57,640 --> 00:51:59,770
 0,330 330,780 1050,1350 1350,1620 1620,2130
-And so this means that
+And so this means that,|
 
 1639
 00:51:59,770 --> 00:52:01,030
 0,270 270,510 510,660 660,720 720,1260
-once you have a snapshot
+once you have a snapshot,|
 
 1640
 00:52:01,030 --> 00:52:02,740
@@ -8188,27 +8188,27 @@ you stored snapshots tabling on
 1641
 00:52:02,740 --> 00:52:05,410
 0,510 900,1050 1050,1500 1500,2040 2370,2670
-disk in persistent state, you
+disk in persistent state,| you
 
 1642
 00:52:05,410 --> 00:52:07,080
 0,330 330,630 630,1110
-can cut off.
+can cut off,
 
 1643
 00:52:07,630 --> 00:52:08,620
 0,210 210,360 360,750 750,870 870,990
-You can log you can
+you can log, you can
 
 1644
 00:52:08,620 --> 00:52:10,140
 0,240 240,300 300,870
-cut the log.
+cut the log
 
 1645
 00:52:12,300 --> 00:52:13,660
 0,180 180,390 390,870
-Now through I.
+{you,know} through i.|
 
 1646
 00:52:16,790 --> 00:52:17,780
@@ -8223,37 +8223,37 @@ to control the size of
 1648
 00:52:19,160 --> 00:52:22,790
 0,120 120,540 600,1350 1350,1950 2250,3630
-the law basically by periodic
+the log,| basically by {periodicly
 
 1649
 00:52:22,790 --> 00:52:24,350
 0,300 300,900 900,990 990,1440 1440,1560
-Lee asking the servers to
+-} asking the servers to
 
 1650
 00:52:24,350 --> 00:52:26,090
 0,240 240,420 420,1110 1110,1230 1230,1740
-actually take snapshots and then
+actually take snapshots| and then
 
 1651
 00:52:26,120 --> 00:52:27,560
 0,390 390,690 690,780 780,1050 1050,1440
-deserves telling the rap library
+service telling the raft library
 
 1652
 00:52:27,560 --> 00:52:28,910
 0,300 300,480 480,750 750,810 810,1350
-yes I've taken a snapshot
+yes, I've taken a snapshot
 
 1653
 00:52:28,910 --> 00:52:30,380
 0,210 210,720 750,1080 1080,1350 1350,1470
-through I then raf can
+through i,| then raft can
 
 1654
 00:52:30,380 --> 00:52:31,640
 0,240 240,450 450,810 870,1080 1080,1260
-say okay good I just
+say okay good, I just
 
 1655
 00:52:31,640 --> 00:52:32,630
@@ -8263,17 +8263,17 @@ know we have to remember
 1656
 00:52:32,630 --> 00:52:34,430
 0,420 420,780 780,1110 1440,1650 1650,1800
-anything from I so, um
+anything from i or until
 
 1657
 00:52:34,430 --> 00:52:35,380
 0,510
-july.
+i,|
 
 1658
 00:52:35,580 --> 00:52:36,450
 0,210 210,390 390,570 570,630 630,870
-Um that means of course
+{} that means of course
 
 1659
 00:52:36,450 --> 00:52:37,440
@@ -8283,7 +8283,7 @@ that the snapshot has to
 1660
 00:52:37,440 --> 00:52:38,850
 0,90 90,420 420,510 510,810 810,1410
-be stored on stable storage.
+be stored on stable storage.|
 
 1661
 00:52:45,050 --> 00:52:45,740
@@ -8293,7 +8293,7 @@ And this is also good
 1662
 00:52:45,740 --> 00:52:47,030
 0,120 120,630 630,990 990,1170 1170,1290
-for recovery, correct and so
+for recovery, correct| and so
 
 1663
 00:52:47,030 --> 00:52:48,110
@@ -8303,7 +8303,7 @@ it makes our recovery scheme
 1664
 00:52:48,110 --> 00:52:49,310
 0,300 300,450 450,930 930,1050 1050,1200
-slightly more complicated than I
+slightly more complicated| than I
 
 1665
 00:52:49,310 --> 00:52:50,540
@@ -8313,12 +8313,12 @@ just described in the previous
 1666
 00:52:50,540 --> 00:52:51,500
 0,360 360,600 600,690 690,900 900,960
-like what it has to
+slide,| what it has to
 
 1667
 00:52:51,500 --> 00:52:53,780
 0,360 360,600 600,990 1380,1770 1770,2280
-happen is that a when
+happen is that| {} when
 
 1668
 00:52:53,810 --> 00:52:55,880
@@ -8328,12 +8328,12 @@ a follower comes back up
 1669
 00:52:55,910 --> 00:52:58,580
 0,420 420,540 540,930 1050,1740 2070,2670
-after a quick reboot a
+after a quick reboot, {}|
 
 1670
 00:52:58,580 --> 00:53:00,440
 0,390 420,930 930,1080 1080,1500 1500,1860
-it loads its persistent state,
+it loads its persistent state
 
 1671
 00:53:00,440 --> 00:53:01,340
@@ -8353,17 +8353,17 @@ we talked about on the
 1674
 00:53:03,290 --> 00:53:05,060
 0,300 300,660 660,840 840,1050 1050,1770
-previous life knows this information.
+previous slide,| {you,know} this information,|
 
 1675
 00:53:05,600 --> 00:53:08,210
 0,540 780,1050 1050,1530 1530,1950 1950,2610
-Um, but also its last
+{} but also its last
 
 1676
 00:53:08,210 --> 00:53:10,760
 0,120 120,630 630,1440 1830,2400 2400,2550
-you know snapshot installs, that
+you know snapshot installs that
 
 1677
 00:53:10,760 --> 00:53:12,830
@@ -8373,7 +8373,7 @@ last basically loads that snapshot
 1678
 00:53:12,830 --> 00:53:14,240
 0,240 240,540 540,630 630,990 990,1410
-into memory, the surface dust.
+into memory, the service does.|
 
 1679
 00:53:14,720 --> 00:53:16,550
@@ -8383,7 +8383,7 @@ And then we can replay
 1680
 00:53:16,550 --> 00:53:18,050
 0,300 300,630 630,1020 1020,1110 1110,1500
-any log entries to basically
+any log entries| to basically
 
 1681
 00:53:18,050 --> 00:53:19,100
@@ -8393,22 +8393,22 @@ bring the follower up to
 1682
 00:53:19,100 --> 00:53:20,020
 0,360
-date.
+date.|
 
 1683
 00:53:20,630 --> 00:53:21,940
 0,780
-Okay.
+Okay?|
 
 1684
 00:53:29,350 --> 00:53:30,960
 0,270 270,600 600,780 780,1110
-Any questions about this.
+Any questions about this?|
 
 1685
 00:53:31,560 --> 00:53:34,440
 0,420 420,960 1440,1860 1860,2340 2340,2880
-Um I have one question
+{} I have one question,|
 
 1686
 00:53:34,440 --> 00:53:35,370
@@ -8423,12 +8423,12 @@ gonna be able phrase super
 1688
 00:53:36,780 --> 00:53:39,740
 0,570 870,1710 1860,2070 2070,2460
-clearly, um I guess.
+clearly,| {} I guess,
 
 1689
 00:53:40,060 --> 00:53:41,560
 0,210 210,300 300,480 480,720 720,1500
-Like I was under impression,
+like I was under impression,|
 
 1690
 00:53:41,560 --> 00:53:42,880
@@ -8443,7 +8443,7 @@ this not break some layer
 1692
 00:53:44,860 --> 00:53:47,590
 0,60 60,1260 1740,1950 1950,2280 2280,2730
-of abstraction that previously existed
+of abstraction,| that previously existed
 
 1693
 00:53:47,590 --> 00:53:49,840
@@ -8453,7 +8453,7 @@ between the application on top
 1694
 00:53:49,840 --> 00:53:51,520
 0,120 120,720 780,990 990,1290 1290,1680
-of rafts and raft itself,
+of raft and raft itself,|
 
 1695
 00:53:51,520 --> 00:53:52,450
@@ -8463,7 +8463,7 @@ for it now needs to
 1696
 00:53:52,450 --> 00:53:54,730
 0,870 900,1080 1080,1170 1170,1530 1530,2280
-understand how the state machine
+understand how the state machine,|
 
 1697
 00:53:54,820 --> 00:53:56,050
@@ -8473,7 +8473,7 @@ like how to apply commands
 1698
 00:53:56,050 --> 00:53:57,040
 0,60 60,150 150,420 420,750 750,990
-to the state machine instead
+to the state machine| instead
 
 1699
 00:53:57,040 --> 00:53:58,870
@@ -8483,17 +8483,17 @@ of just like giving commands
 1700
 00:53:58,870 --> 00:54:01,390
 0,300 300,570 570,1320 1500,1980 1980,2520
-to some external state machine,
+to some external state machine.|
 
 1701
 00:54:01,570 --> 00:54:09,190
 0,1680 1710,2190 2190,2760 2790,6330 6570,7620
-yeah great occupation, Zheng a.
+Yeah, great observation, clearly, {}
 
 1702
 00:54:10,140 --> 00:54:10,710
 0,120 120,240 240,330 330,480 480,570
-We have to play to
+we have to play to
 
 1703
 00:54:10,710 --> 00:54:12,300
@@ -8503,12 +8503,12 @@ get the raft library in
 1704
 00:54:12,300 --> 00:54:13,460
 0,90 90,660
-the surface.
+the service,|
 
 1705
 00:54:13,520 --> 00:54:15,110
 0,720 750,990 990,1350 1350,1410 1410,1590
-A because first of all
+{} because first of all
 
 1706
 00:54:15,110 --> 00:54:16,580
@@ -8528,42 +8528,42 @@ how far it has to
 1709
 00:54:18,800 --> 00:54:21,050
 0,390 390,1140 1140,1470 1470,1830 1830,2250
-apply then we getting consistent
+apply,| then we getting inconsistent
 
 1710
 00:54:21,050 --> 00:54:22,190
 0,330 330,480 480,720 720,870 870,1140
-results, but anyway so we
+results,| but anyway so we
 
 1711
 00:54:22,400 --> 00:54:24,020
 0,330 330,690 690,1080 1080,1470 1470,1620
-don't assume wires anyway but
+don't assume liers anyway,| but
 
 1712
 00:54:24,020 --> 00:54:25,910
 0,180 180,630 630,690 690,1290 1410,1890
-it's clearly the case that
+it's clearly the case,| that
 
 1713
 00:54:25,910 --> 00:54:28,400
 0,510 660,1230 1230,2010 2040,2280 2280,2490
-the surface and red light,
+the service and raft library
 
 1714
 00:54:28,400 --> 00:54:29,940
 0,150 150,330 330,420 420,1140
-we have to cooperate.
+we have to cooperate.|
 
 1715
 00:54:30,240 --> 00:54:31,800
 0,750 750,1020 1020,1260 1260,1350 1350,1560
-And, um, you can go
+And, {} you can go
 
 1716
 00:54:31,800 --> 00:54:34,230
 0,450 540,840 840,1320 1320,2040 2280,2430
-with an abstraction violation, um
+with an abstraction violation, {}|
 
 1717
 00:54:34,230 --> 00:54:36,540
@@ -8573,27 +8573,27 @@ I think the reason they
 1718
 00:54:36,540 --> 00:54:38,700
 0,270 270,420 420,690 690,1200 1200,2160
-do it is to a
+do it is to {}
 
 1719
 00:54:38,730 --> 00:54:39,780
 0,390 390,450 450,630 630,720 720,1050
-limit, the amount of state
+limit the amount of state
 
 1720
 00:54:39,780 --> 00:54:40,530
 0,90 90,150 150,390 390,630 630,750
-of the raf flight, we
+of the raft library we
 
 1721
 00:54:40,530 --> 00:54:41,760
 0,150 150,240 240,720
-have to maintain.
+have to maintain,|
 
 1722
 00:54:41,790 --> 00:54:43,110
 0,480 480,570 570,780 780,990 990,1320
-Otherwise, the rap line wouldn't
+otherwise, the raft library wouldn't
 
 1723
 00:54:43,110 --> 00:54:44,250
@@ -8603,7 +8603,7 @@ know when it can cut
 1724
 00:54:44,250 --> 00:54:45,360
 0,90 90,570
-the lock.
+the log.|
 
 1725
 00:54:45,560 --> 00:54:46,910
@@ -8613,22 +8613,22 @@ And so there's basically no
 1726
 00:54:46,910 --> 00:54:48,200
 0,210 210,570 570,720 720,960 960,1290
-way around it that the
+way around it,| that the
 
 1727
 00:54:48,200 --> 00:54:49,580
 0,540 540,780 780,1110 1110,1200 1200,1380
-servers actually tells it like
+servers actually tells it,| like
 
 1728
 00:54:49,580 --> 00:54:50,930
 0,420 450,630 630,750 750,810 810,1350
-wow I got a Snapchat
+well I got a snapchat
 
 1729
 00:54:50,930 --> 00:54:52,100
 0,270 270,750 780,930 930,1050 1050,1170
-through AI and so it's
+through i| and so it's
 
 1730
 00:54:52,100 --> 00:54:54,260
@@ -8638,12 +8638,12 @@ okay for you to remove
 1731
 00:54:54,260 --> 00:54:55,790
 0,300 300,600 600,750 750,1110 1110,1530
-log entry from zero five.
+log entry from 0 {to,i}.|
 
 1732
 00:54:57,840 --> 00:54:59,100
 0,210 210,390 390,660 660,1080 1080,1260
-And you'll see that and
+And you'll see that| and
 
 1733
 00:54:59,100 --> 00:55:00,960
@@ -8653,17 +8653,17 @@ so this will mean a
 1734
 00:55:00,960 --> 00:55:02,520
 0,330 330,750 750,1290 1290,1440 1440,1560
-good {point's -} is going
+good {point,this -} is going
 
 1735
 00:55:02,520 --> 00:55:03,450
 0,60 60,180 180,330 330,600 600,930
-to come up into d
+to come up {in,2d -},
 
 1736
 00:55:03,480 --> 00:55:04,710
 0,270 270,750 750,900 900,1110 1110,1230
-great lap, two d is
+right,| lab {2d -} is
 
 1737
 00:55:04,710 --> 00:55:06,870
@@ -8673,17 +8673,17 @@ gonna is all about snapshots
 1738
 00:55:06,870 --> 00:55:10,350
 0,330 330,1890 2520,3210 3210,3360 3360,3480
-and laca compassion as it's
+and log compassion| as it's
 
 1739
 00:55:10,350 --> 00:55:11,940
 0,240 240,450 450,630 630,1110
-also called window paper.
+also called {in,the} paper.|
 
 1740
 00:55:11,940 --> 00:55:14,640
 0,390 630,1410 1830,2250 2280,2640 2640,2700
-Um, there there has to
+{} There there has to
 
 1741
 00:55:14,640 --> 00:55:16,620
@@ -8693,52 +8693,52 @@ be some API between the
 1742
 00:55:16,620 --> 00:55:18,360
 0,690 690,1110 1110,1530 1530,1650 1650,1740
-servers and wrath to be
+servers and raft to be
 
 1743
 00:55:18,360 --> 00:55:20,400
 0,180 180,240 240,840 870,1470 1530,2040
-able to collaborate and basically
+able to collaborate| and basically
 
 1744
 00:55:20,400 --> 00:55:21,720
 0,300 300,630 630,750 750,930 930,1320
-into a and two b
+{in,2a -} and {2b -}
 
 1745
 00:55:21,720 --> 00:55:23,520
 0,450 480,1200 1200,1290 1290,1500 1500,1800
-dot API, in fact even
+that API in fact even
 
 1746
 00:55:23,520 --> 00:55:24,420
 0,120 120,360 360,570 570,810 810,900
-to see that API is
+to see,| that API is
 
 1747
 00:55:24,420 --> 00:55:26,850
 0,600 600,1050 1350,1890 1890,2070 2070,2430
-extremely simple, um, the only
+extremely simple,| {} the only
 
 1748
 00:55:26,850 --> 00:55:28,470
 0,420 420,540 540,1080 1080,1230 1230,1620
-API that exists, is this
+API that exists is this
 
 1749
 00:55:28,470 --> 00:55:29,880
 0,570 570,870 870,1200 1200,1320 1320,1410
-delivering lock message on the
+delivering log message on the
 
 1750
 00:55:29,880 --> 00:55:30,940
 0,270 270,630
-apply channel.
+apply channel,
 
 1751
 00:55:31,250 --> 00:55:33,290
 0,270 270,540 810,1230 1230,1680 1680,2040
-Right, and almost nothing flows
+right,| and almost nothing flows
 
 1752
 00:55:33,290 --> 00:55:34,520
@@ -8748,37 +8748,37 @@ down from the service to
 1753
 00:55:34,520 --> 00:55:35,900
 0,390 390,600 600,840 840,1230 1230,1380
-graph it other than the
+raft,| like other than the
 
 1754
 00:55:35,900 --> 00:55:38,480
 0,360 360,540 540,1200 1470,2250 2250,2580
-service may start a and
+service may start| {} and
 
 1755
 00:55:38,510 --> 00:55:40,940
 0,600 630,1530 1620,2070 2070,2160 2160,2430
-draft a trying to append
+raft {} trying to append
 
 1756
 00:55:40,940 --> 00:55:41,750
 0,60 60,360 360,450 450,540 540,810
-an entry to the one
+an entry to the log
 
 1757
 00:55:41,750 --> 00:55:43,200
 0,210 210,420 420,480 480,990
-using where I start.
+using where i start.|
 
 1758
 00:55:43,440 --> 00:55:44,790
 0,240 240,510 510,660 660,1020 1020,1350
-Um, and you know and
+{} And you know and
 
 1759
 00:55:44,790 --> 00:55:46,830
 0,90 90,330 330,870 1020,1740 1770,2040
-so into d, um there
+so {in,2d -},| {} there
 
 1760
 00:55:46,830 --> 00:55:47,460
@@ -8793,12 +8793,12 @@ bit more of an API
 1762
 00:55:49,200 --> 00:55:52,410
 0,420 420,930 930,1890 2310,2730 2730,3210
-between surface and grass library.
+between service and raft library,|
 
 1763
 00:55:53,040 --> 00:55:54,510
 0,270 270,420 420,660 660,1050 1290,1470
-And after Jack plug, you
+and it turns out, you
 
 1764
 00:55:54,510 --> 00:55:55,890
@@ -8808,7 +8808,7 @@ can design that API in
 1765
 00:55:55,890 --> 00:55:57,210
 0,360 390,930 930,1140 1140,1290 1290,1320
-any possible way, there are
+any possible way,| there are
 
 1766
 00:55:57,210 --> 00:55:57,960
@@ -8818,12 +8818,12 @@ quite a number of ways
 1767
 00:55:57,960 --> 00:55:59,010
 0,90 90,330 330,540 570,720 720,1050
-of doing it now there's
+of doing it,| {} there's
 
 1768
 00:55:59,010 --> 00:56:00,120
 0,120 120,540 540,780 780,1020 1020,1110
-no particular one and the
+no particular one| and the
 
 1769
 00:56:00,120 --> 00:56:01,440
@@ -8833,7 +8833,7 @@ paper doesn't lay out what
 1770
 00:56:01,440 --> 00:56:03,600
 0,420 420,570 570,750 750,1260 1680,2160
-API you should use a
+API you should use, {}|
 
 1771
 00:56:03,600 --> 00:56:05,160
@@ -8843,7 +8843,7 @@ the papers actually just nothing
 1772
 00:56:05,160 --> 00:56:07,260
 0,270 270,630 1080,1890 1890,1980 1980,2100
-about this and so it's
+about this| and so it's
 
 1773
 00:56:07,260 --> 00:56:09,150
@@ -8853,22 +8853,22 @@ up to you to sometimes
 1774
 00:56:09,150 --> 00:56:09,870
 0,150 150,240 240,570 570,660 660,720
-up to us, you know
+up to us,| you know
 
 1775
 00:56:09,870 --> 00:56:10,830
 0,90 90,330 330,480 480,570 570,960
-to figure out the {API's
+to figure out the {APIs
 
 1776
 00:56:10,830 --> 00:56:12,300
 0,90 90,330 630,930 930,1050 1050,1470
--} and to be able
+-}| and to be able
 
 1777
 00:56:12,300 --> 00:56:14,220
 0,270 270,540 540,780 780,1350 1440,1920
-to do two d, um,
+to do {2d -}, {}|
 
 1778
 00:56:14,220 --> 00:56:14,820
@@ -8883,27 +8883,27 @@ declare an API between the
 1780
 00:56:16,650 --> 00:56:18,500
 0,570 570,930 930,1500
-servers and raft.
+servers and raft.|
 
 1781
 00:56:18,650 --> 00:56:19,970
 0,330 330,480 480,570 570,810 810,1320
-And you know you'll see,
+And you know you'll see,|
 
 1782
 00:56:19,970 --> 00:56:21,470
 0,270 270,480 480,600 600,780 780,1500
-um what you do today,
+{} what you do today,
 
 1783
 00:56:21,470 --> 00:56:23,300
 0,120 120,240 240,810 960,1650 1650,1830
-you know that, um, the
+you know that {} the
 
 1784
 00:56:23,300 --> 00:56:25,160
 0,660 660,750 750,930 930,1110 1110,1860
-API, you have some funny
+API,| you have some funny
 
 1785
 00:56:25,160 --> 00:56:27,170
@@ -8918,7 +8918,7 @@ bit more different than you
 1787
 00:56:28,430 --> 00:56:31,190
 0,180 180,780 1530,2010 2010,2640 2670,2760
-might expect, um and you
+might expect,| {} and you
 
 1788
 00:56:31,190 --> 00:56:31,760
@@ -8928,22 +8928,22 @@ know we had to pick
 1789
 00:56:31,760 --> 00:56:34,250
 0,180 180,570 570,1560 1560,1950 1950,2490
-one particular API in a
+one particular API in {
 
 1790
 00:56:34,640 --> 00:56:37,460
 0,450 450,1410 1410,1620 1620,2280 2310,2820
-um, in that {API's -}
+-} in that {APIs -}
 
 1791
 00:56:37,460 --> 00:56:38,630
 0,60 60,180 180,600 600,960 990,1170
-as an operation called a
+as an operation called {}
 
 1792
 00:56:38,630 --> 00:56:41,600
 0,600 600,1320 1560,2130 2160,2820 2850,2970
-conditional install that, um, you
+conditional install,| that {} you
 
 1793
 00:56:41,600 --> 00:56:43,700
@@ -8958,22 +8958,22 @@ know allows you to change
 1795
 00:56:45,890 --> 00:56:47,360
 0,210 210,540 540,1080 1080,1380 1380,1470
-the raf state and the
+the raft state| and the
 
 1796
 00:56:47,360 --> 00:56:48,770
 0,300 300,690 690,1110 1110,1290 1290,1410
-server state atomic lea in
+server state {atomically -} in
 
 1797
 00:56:48,770 --> 00:56:50,280
 0,270 270,660 660,1200
-one single operation.
+one single operation.|
 
 1798
 00:56:51,060 --> 00:56:53,310
 0,540 540,1140 1170,1560 1560,2100 2100,2250
-Um, and um, and that
+{} And {} and that
 
 1799
 00:56:53,310 --> 00:56:54,810
@@ -8983,22 +8983,22 @@ partly you know that operation
 1800
 00:56:54,810 --> 00:56:57,900
 0,570 810,1710 1710,2160 2160,2730 2760,3090
-exists, um, yeah you try
+exists,| {} yeah you try
 
 1801
 00:56:57,900 --> 00:56:59,980
 0,120 120,480 480,1230
-to limit the.
+to limit the
 
 1802
 00:56:59,980 --> 00:57:01,580
 0,450 450,1080
-Abstraction batteries.
+abstraction [batteries].|
 
 1803
 00:57:03,300 --> 00:57:04,340
 0,510
-Okay.
+Okay?|
 
 1804
 00:57:04,460 --> 00:57:05,150
@@ -9013,17 +9013,17 @@ can do it in different
 1806
 00:57:05,780 --> 00:57:06,860
 0,270 270,360 360,540 540,780 780,1080
-ways you don't really need
+ways,| you don't really need,|
 
 1807
 00:57:06,890 --> 00:57:08,270
 0,660 660,780 780,960 960,1080 1080,1380
-a you could have written
+{} you could have written
 
 1808
 00:57:08,270 --> 00:57:09,140
 0,120 120,210 210,450 450,720 720,870
-it in different ways, but
+it in different ways,| but
 
 1809
 00:57:09,140 --> 00:57:10,880
@@ -9043,7 +9043,7 @@ more simple ways of doing
 1812
 00:57:12,440 --> 00:57:13,140
 0,240
-it.
+it.|
 
 1813
 00:57:13,550 --> 00:57:14,540
@@ -9053,7 +9053,7 @@ But it will become more
 1814
 00:57:14,540 --> 00:57:15,470
 0,270 270,390 390,540 540,840 840,930
-clear in two d and
+clear in {2d -}| and
 
 1815
 00:57:15,470 --> 00:57:16,550
@@ -9068,7 +9068,7 @@ sort of an interaction between
 1817
 00:57:18,170 --> 00:57:20,810
 0,330 360,1080 1080,1530 1530,2070 2070,2640
-the surface and draft a
+the servers and raft, {}|
 
 1818
 00:57:20,810 --> 00:57:21,590
@@ -9078,7 +9078,7 @@ in a way that they
 1819
 00:57:21,590 --> 00:57:22,900
 0,120 120,210 210,390 390,810
-have to play along.
+have to play along.|
 
 1820
 00:57:28,700 --> 00:57:29,630
@@ -9088,12 +9088,12 @@ How could you repeat when
 1821
 00:57:29,630 --> 00:57:31,040
 0,300 300,810 810,930 930,990 990,1410
-raf communicates with the serbs
+raft communicates with the servers
 
 1822
 00:57:31,040 --> 00:57:32,810
 0,90 90,180 180,630 630,1200 1440,1770
-in the snapshot process, so
+in the snapshot process,| so
 
 1823
 00:57:32,810 --> 00:57:35,450
@@ -9103,7 +9103,7 @@ the snapshots are driven by
 1824
 00:57:35,450 --> 00:57:36,840
 0,270 270,930
-the surface.
+the servers.|
 
 1825
 00:57:37,020 --> 00:57:38,190
@@ -9118,12 +9118,12 @@ once in a while to
 1827
 00:57:39,120 --> 00:57:41,370
 0,540 930,1380 1380,1590 1590,1620 1620,2250
-raft, I've made a snapshot,
+raft,| I've made a snapshot,|
 
 1828
 00:57:41,370 --> 00:57:43,530
 0,270 270,390 390,1110 1470,1830 1830,2160
-here's my snapshot, um, and
+here's my snapshot,| {} and
 
 1829
 00:57:43,530 --> 00:57:44,610
@@ -9133,22 +9133,22 @@ this is a snapshot includes
 1830
 00:57:44,610 --> 00:57:46,050
 0,210 210,300 300,810 810,1020 1020,1440
-all the operations through I.
+all the operations through i,|
 
 1831
 00:57:46,800 --> 00:57:48,210
 0,210 210,390 390,840 840,1020 1020,1410
-And then raft you writes
+and then raft {you,know} writes
 
 1832
 00:57:48,210 --> 00:57:51,600
 0,180 180,1020 1020,2250 2280,2790 2790,3390
-the snapshots and truncates blog,
+the snapshots and truncates log
 
 1833
 00:57:51,630 --> 00:57:53,010
 0,120 120,270 270,480 480,1020 1170,1380
-you know to I and
+you know to i| and
 
 1834
 00:57:53,010 --> 00:57:54,390
@@ -9158,17 +9158,17 @@ writes all that information to
 1835
 00:57:54,390 --> 00:57:55,940
 0,450 510,1110
-the disk.
+the disk.|
 
 1836
 00:57:57,500 --> 00:57:58,850
 0,240 240,360 360,480 480,900 900,1350
-Um, and that's basically all
+{} And that's basically all
 
 1837
 00:57:58,850 --> 00:57:59,750
 0,150 150,510 510,690 690,780 780,900
-what happens sort of a
+what happens sort of, {}
 
 1838
 00:57:59,750 --> 00:58:01,790
@@ -9178,12 +9178,12 @@ sort of regular operation periodically
 1839
 00:58:01,790 --> 00:58:03,940
 0,480 480,720 720,1170 1170,1620
-snapshots happen snapshot habits.
+snapshots happen snapshot happens.|
 
 1840
 00:58:04,130 --> 00:58:06,020
 0,330 330,510 510,1140 1140,1350 1350,1890
-Then there's a other case,
+Then there's the other case,|
 
 1841
 00:58:06,020 --> 00:58:07,100
@@ -9193,7 +9193,7 @@ you have to consider is
 1842
 00:58:07,100 --> 00:58:09,140
 0,150 150,630 660,1110 1110,1440 1440,2040
-like when a reboot happens.
+like when {} reboot happens.|
 
 1843
 00:58:09,650 --> 00:58:10,790
@@ -9203,37 +9203,37 @@ And so when a follower
 1844
 00:58:10,790 --> 00:58:14,450
 0,570 570,870 870,1650 1680,2760 3150,3660
-reboots it actually reboots from
+reboots,| it actually reboots from
 
 1845
 00:58:14,450 --> 00:58:16,190
 0,300 300,750 750,1230 1230,1530 1530,1740
-its persistent state and so
+its persistent state| and so
 
 1846
 00:58:16,190 --> 00:58:17,900
 0,450 450,570 570,1170
-including its snapshot.
+including its snapshot,|
 
 1847
 00:58:18,080 --> 00:58:20,090
 0,420 420,600 600,840 840,930 930,2010
-And so when the follower
+and so when the follower
 
 1848
 00:58:20,090 --> 00:58:21,530
 0,390 390,570 570,930 930,1350 1350,1440
-reboots, go basically loads, you
+reboots,| {you,know} basically loads, you
 
 1849
 00:58:21,530 --> 00:58:23,750
 0,120 120,930 1290,1650 1650,1890 1890,2220
-know snapshot, um from um
+know snapshot {} from {}
 
 1850
 00:58:23,750 --> 00:58:25,130
 0,270 270,450 450,870 870,1200 1200,1380
-from a persistent disk and
+from a persistent disk| and
 
 1851
 00:58:25,130 --> 00:58:27,260
@@ -9243,7 +9243,7 @@ actually reconstructs the application state,
 1852
 00:58:27,260 --> 00:58:28,730
 0,90 90,240 240,600 600,1020 1230,1470
-the key value store and
+the {key-value -} store| and
 
 1853
 00:58:28,730 --> 00:58:29,600
@@ -9253,7 +9253,7 @@ you'll do this in lab
 1854
 00:58:29,600 --> 00:58:30,440
 0,360 360,510 510,570 570,720 720,840
-freezer, this is not going
+3,| this is not going
 
 1855
 00:58:30,440 --> 00:58:31,010
@@ -9263,7 +9263,7 @@ to be an issue of
 1856
 00:58:31,010 --> 00:58:32,020
 0,420
-laptop.
+{lab,2}.|
 
 1857
 00:58:32,140 --> 00:58:33,010
@@ -9278,27 +9278,27 @@ going to be an issue
 1859
 00:58:33,610 --> 00:58:35,320
 0,180 180,360 360,540 540,870 1140,1710
-like too is that um,
+lab 2 is that, {}|
 
 1860
 00:58:35,350 --> 00:58:38,950
 0,1020 1170,1320 1320,2070 2250,2760 2760,3600
-because the followers because the
+because the followers, because the,
 
 1861
 00:58:39,310 --> 00:58:40,720
 0,660
-um.
+{}
 
 1862
 00:58:42,290 --> 00:58:43,880
 0,390 390,690 720,1230 1230,1440 1440,1590
-Because the log has been
+because the log has been
 
 1863
 00:58:43,880 --> 00:58:45,320
 0,390 480,780 780,990 990,1080 1080,1440
-caught right like you know
+cut, right,| like you know
 
 1864
 00:58:45,380 --> 00:58:46,640
@@ -9308,47 +9308,47 @@ instead of like having all
 1865
 00:58:46,640 --> 00:58:47,780
 0,120 120,480 480,630 630,990 990,1140
-the entries from zero to
+the entries from 0 to
 
 1866
 00:58:47,780 --> 00:58:49,260
 0,270 270,390 390,480 480,930
-I in the log.
+i in the log,|
 
 1867
 00:58:49,260 --> 00:58:51,090
 0,510 510,780 780,1140 1140,1350 1350,1830
-Yeah, plus more so I
+{} plus more, so i
 
 1868
 00:58:51,090 --> 00:58:52,680
 0,150 150,390 390,930
-you know in.
+you know n
 
 1869
 00:58:52,680 --> 00:58:53,880
 0,360 360,690 690,960 960,1080 1080,1200
-A the log is me,
+{} the log is being
 
 1870
 00:58:53,880 --> 00:58:54,960
 0,360 360,480 480,630 630,870 870,1080
-caught, you know from I
+cut you know from i
 
 1871
 00:58:54,960 --> 00:58:56,660
 0,330 330,600 690,1170
-to n Rec.
+to n, right,|
 
 1872
 00:58:57,760 --> 00:58:59,620
 0,750 780,1200 1200,1470 1470,1650 1650,1860
-And um those are part
+and {} those are part
 
 1873
 00:58:59,620 --> 00:59:00,520
 0,60 60,210 210,480 480,540 540,900
-of the walk of action
+of the log {compation -},|
 
 1874
 00:59:01,030 --> 00:59:02,860
@@ -9358,22 +9358,22 @@ but that also means that
 1875
 00:59:02,890 --> 00:59:04,030
 0,360 360,510 510,600 600,990 990,1140
-a if a follower is
+{} if a follower is
 
 1876
 00:59:04,030 --> 00:59:05,530
 0,360 360,840 870,1080 1080,1140 1140,1500
-far behind like for example
+far behind,| like for example
 
 1877
 00:59:05,530 --> 00:59:07,180
 0,330 330,660 660,1020 1020,1110 1110,1650
-new node joins the system
+new node joins the system|
 
 1878
 00:59:07,360 --> 00:59:09,520
 0,180 180,480 480,750 750,1410 1620,2160
-and doesn't actually have a
+and doesn't actually have {}
 
 1879
 00:59:09,520 --> 00:59:11,200
@@ -9383,12 +9383,12 @@ the beginning of the log
 1880
 00:59:11,200 --> 00:59:13,200
 0,870 870,1560
-Nord snapshots.
+{nor,the} snapshots,|
 
 1881
 00:59:13,350 --> 00:59:16,110
 0,360 360,990 1050,1710 1740,2490 2520,2760
-Um, then the raft has
+{} then the raft has
 
 1882
 00:59:16,110 --> 00:59:17,820
@@ -9398,7 +9398,7 @@ to communicate the snapshot to
 1883
 00:59:17,820 --> 00:59:19,100
 0,180 180,780
-that follower.
+that follower.|
 
 1884
 00:59:19,460 --> 00:59:20,210
@@ -9408,42 +9408,42 @@ So in the case that
 1885
 00:59:20,210 --> 00:59:21,230
 0,90 90,480 480,780 780,900 900,1020
-the follower is you know
+the follower is| you know
 
 1886
 00:59:21,230 --> 00:59:23,480
 0,630 630,1050 1380,1650 1650,1800 1800,2250
-before I because we rejoined
+before i because we rejoined
 
 1887
 00:59:23,480 --> 00:59:27,080
 0,510 660,870 870,1380 1380,2610 2640,3600
-lab and rejoins a draft
+lab and rejoins the raft
 
 1888
 00:59:27,080 --> 00:59:29,200
 0,450 570,990 990,1560
-posture, um the.
+cluster,| {} the
 
 1889
 00:59:29,610 --> 00:59:30,780
 0,510 510,720 720,870 870,960 960,1170
-Leader actually has to set
+leader actually has to set
 
 1890
 00:59:30,780 --> 00:59:32,580
 0,60 60,810 840,930 930,1050 1050,1800
-the snapshot, you know to
+the snapshot you know to
 
 1891
 00:59:32,610 --> 00:59:33,840
 0,390 390,600 600,1050 1050,1170 1170,1230
-um the follower and the
+{} the follower| and the
 
 1892
 00:59:33,840 --> 00:59:35,310
 0,360 360,660 660,960 960,1080 1080,1470
-follower basically start from there.
+follower basically start from there.|
 
 1893
 00:59:36,280 --> 00:59:37,120
@@ -9453,107 +9453,107 @@ And that will show up
 1894
 00:59:37,120 --> 00:59:38,080
 0,90 90,270 270,660 660,840 840,960
-in two d and so
+in {2d -}| and so
 
 1895
 00:59:38,080 --> 00:59:40,510
 0,240 240,330 330,1140 1380,1740 1740,2430
-there's an additional r PC
+there's an additional {rpc -}
 
 1896
 00:59:40,540 --> 00:59:42,130
 0,270 270,330 330,870 870,1020 1020,1590
-called the snapshot our PC,
+called the snapshot {rpc -}
 
 1897
 00:59:42,490 --> 00:59:44,170
 0,300 300,480 480,900 900,1650 1650,1680
-um, or install snapshot a
+{} or install snapshot {}
 
 1898
 00:59:44,170 --> 00:59:45,970
 0,900 900,1110 1110,1320 1320,1740 1740,1800
-RBC and that's described in
+rpc| and that's described in
 
 1899
 00:59:45,970 --> 00:59:47,290
 0,60 60,720 750,1080 1080,1200 1200,1320
-the paper, and then you
+the paper,| and then you
 
 1900
 00:59:47,290 --> 00:59:48,370
 0,120 120,330 330,420 420,840 840,1080
-will have to implement into
+will have to implement {in,2d
 
 1901
 00:59:48,370 --> 00:59:51,190
 0,420 1440,1980 2310,2490 2490,2700 2700,2820
-deep fact, which brings me
+-}.| {In,fact}, which brings me
 
 1902
 00:59:51,190 --> 00:59:52,140
 0,480
-to.
+to
 
 1903
 00:59:52,370 --> 00:59:53,980
 0,420 420,570 570,1050
-A good point.
+a good point,|
 
 1904
 00:59:54,040 --> 00:59:55,360
 0,420 420,540 540,630 630,990 990,1320
-Actually, let me go to.
+actually, let me go to
 
 1905
 00:59:56,840 --> 00:59:58,010
 0,390 390,750 750,990 990,1080 1080,1170
-Consumer basically brings me to
+[consumer],| basically brings me to
 
 1906
 00:59:58,010 --> 01:00:00,080
 0,90 90,390 390,1050 1200,1620 1620,2070
-the homework question, which is.
+the homework question,| which is
 
 1907
 01:00:00,620 --> 01:00:01,700
 0,540
-AH.
+{}
 
 1908
 01:00:02,830 --> 01:00:04,480
 0,390 390,1050
-Years death.
+here's the
 
 1909
 01:00:04,780 --> 01:00:07,270
 0,630 690,1230 1230,1530 1530,2070 2070,2490
-Um, instill Snap sharpie seashore
+{} install {snapshot,rpc -} for
 
 1910
 01:00:07,270 --> 01:00:10,240
 0,660 660,1260 1260,1260 1950,2460 2640,2970
-equivalent figure, um to, um
+equivalent figure {} 2, {}|
 
 1911
 01:00:10,240 --> 01:00:12,040
 0,120 120,330 330,600 600,1170 1350,1800
-would then just a snapshot
+would then just {} snapshot
 
 1912
 01:00:12,040 --> 01:00:13,780
 0,450 450,930 930,1110 1110,1500 1500,1740
-autocracy and you actually have
+rpc| and you actually have
 
 1913
 01:00:13,780 --> 01:00:15,060
 0,120 120,510 510,780
-to implement that.
+to implement that
 
 1914
 01:00:15,460 --> 01:00:18,550
 0,510 750,1020 1020,1740 2100,2310 2310,3090
-I'm an interviewee and one
+{} in 2d| and one
 
 1915
 01:00:18,550 --> 01:00:19,930
@@ -9568,12 +9568,12 @@ the which was the homework
 1917
 01:00:21,550 --> 01:00:24,010
 0,330 330,450 450,990 1230,2070 2220,2460
-question for today is is
+question for today is,| is
 
 1918
 01:00:24,010 --> 01:00:26,530
 0,270 270,1080 1350,1710 1710,2160 2160,2520
-every possible um in raft,
+every possible {} in raft,
 
 1919
 01:00:26,530 --> 01:00:28,900
@@ -9583,22 +9583,22 @@ what avoids it it's not
 1920
 01:00:28,900 --> 01:00:31,060
 0,600 750,1410 1410,1560 1560,1830 1830,2160
-possible, then the state machine
+possible,| that the state machine
 
 1921
 01:00:31,060 --> 01:00:32,260
 0,270 270,750
-rolls back.
+rolls back.|
 
 1922
 01:00:32,290 --> 01:00:34,090
 0,150 150,360 360,1140 1140,1350 1350,1800
-Yeah, so example, a leader
+Yeah, so {for,example},| {} leader
 
 1923
 01:00:34,090 --> 01:00:35,650
 0,420 420,900 900,1020 1020,1290 1290,1560
-since maybe you know a
+since maybe you know {}
 
 1924
 01:00:35,650 --> 01:00:37,210
@@ -9613,7 +9613,7 @@ up you know at a
 1926
 01:00:38,080 --> 01:00:40,450
 0,540 930,1170 1170,1410 1410,1530 1530,2370
-follower, um, is it possible
+follower,| {} is it possible
 
 1927
 01:00:41,110 --> 01:00:43,240
@@ -9623,12 +9623,12 @@ that you know if it's
 1928
 01:00:43,240 --> 01:00:45,700
 0,570 570,840 840,2070 2070,2310 2310,2460
-possible if z follow would
+possible,| if that follower would
 
 1929
 01:00:45,700 --> 01:00:46,930
 0,360 360,450 450,990 990,1080 1080,1230
-install the snapshot and then
+install the snapshot| and then
 
 1930
 01:00:46,930 --> 01:00:49,000
@@ -9638,67 +9638,67 @@ implicitly basically roll back the
 1931
 01:00:49,000 --> 01:00:50,500
 0,240 240,690 750,1200 1200,1290 1290,1500
-state machine, maybe it already
+state machine,| maybe it already
 
 1932
 01:00:50,500 --> 01:00:52,180
 0,120 120,360 360,630 630,1290
-has seen more information.
+has seen more information,|
 
 1933
 01:00:52,390 --> 01:00:53,350
 0,390 390,450 450,540 540,810 810,960
-Um, you know clear that
+{} you know clear that
 
 1934
 01:00:53,350 --> 01:00:54,940
 0,240 240,540 630,1260 1260,1500 1500,1590
-seems not right and so
+seems not right| and so
 
 1935
 01:00:54,940 --> 01:00:57,100
 0,330 330,660 660,1050 1350,1500 1500,2160
-the question is you knowhow
+the question is you {know,how}
 
 1936
 01:00:57,100 --> 01:00:59,230
 0,180 180,660 660,990 990,1290 1620,2130
-does wrapping around it and
+does raft around it| and
 
 1937
 01:00:59,590 --> 01:01:00,700
 0,450 450,630 630,870 870,1020 1020,1110
-um, so maybe this is
+{} so maybe this is
 
 1938
 01:01:00,700 --> 01:01:01,630
 0,60 60,270 270,480 480,750 750,930
-a great place next to
+a great place actually do
 
 1939
 01:01:01,630 --> 01:01:03,940
 0,0 780,1170 1170,1380 1380,1830 1830,2310
-a quick break out, and
+a quick break out,| and
 
 1940
 01:01:03,940 --> 01:01:07,000
 0,120 120,240 240,720 720,2790 2790,3060
-you can debate zat homework
+you can debate that homework
 
 1941
 01:01:07,000 --> 01:01:08,170
 0,270 270,390 390,450 450,630 630,1170
-question for a couple minutes
+question for a couple minutes,
 
 1942
 01:01:08,410 --> 01:01:10,300
 0,450 450,960 1170,1380 1380,1770 1770,1890
-five minutes and then we'll
+five minutes| and then we'll
 
 1943
 01:01:10,300 --> 01:01:12,520
 0,150 150,630 810,1440 1440,1890 1890,2220
-come back and we'll talk
+come back| and we'll talk
 
 1944
 01:01:12,520 --> 01:01:13,870
@@ -9708,12 +9708,12 @@ about a little bit more
 1945
 01:01:13,870 --> 01:01:15,000
 0,180 180,750
-about snapshots.
+about snapshots.|
 
 1946
 01:01:16,790 --> 01:01:18,560
 0,390 390,630 630,990 990,1230 1230,1770
-Really will be a twenty.
+Lily, will be {} like?|
 
 1947
 01:01:19,470 --> 01:01:21,360
@@ -9723,7 +9723,7 @@ No lily, how about I
 1948
 01:01:21,360 --> 01:01:25,080
 0,480 570,1980 1980,2730 3000,3390 3390,3720
-try you on hold on
+try, you can.| Hold on,
 
 1949
 01:01:25,080 --> 01:01:25,890
@@ -9733,42 +9733,42 @@ I'll probably have to make
 1950
 01:01:25,890 --> 01:01:27,120
 0,690
-you.
+you
 
 1951
 01:01:27,610 --> 01:01:28,920
 0,750
-AH.
+{
 
 1952
 01:01:31,420 --> 01:01:33,160
 0,480 480,1200 1230,1440 1440,1620 1620,1740
-A host and then you
+-} host| and then you
 
 1953
 01:01:33,160 --> 01:01:34,160
 0,90 90,210 210,450
-can do it.
+can do it,|
 
 1954
 01:01:35,320 --> 01:01:36,670
 0,270 270,360 360,480 480,720 720,1350
-Okay, you should be hotel,
+okay, you should be {host,now}.|
 
 1955
 01:01:37,060 --> 01:01:38,740
 0,1260
-awesome.
+Awesome.|
 
 1956
 01:02:06,930 --> 01:02:09,300
 0,480 480,780 780,1380 1470,1710 1740,2370
-Alright should be sure nothing
+Alright, {it,should} be.| Okay, thank
 
 1957
 01:02:09,300 --> 01:02:10,560
 0,330 330,450 450,810 810,960 960,1260
-gets more expensive to do.
+you, [] {thank,you} to {do,it}.|
 
 1958
 01:08:06,790 --> 01:08:07,750
@@ -9783,112 +9783,109 @@ make you make you host
 1960
 01:08:09,430 --> 01:08:10,840
 0,360 390,660 660,750 750,1020 1140,1410
-again, that'd be great, thank
+again.| That'd be great, thank
 
 1961
 01:08:10,840 --> 01:08:11,660
 0,270
-you.
+you.|
 
 1962
 01:08:35,730 --> 01:08:37,320
 0,420 420,870 870,1140 1140,1260 1260,1590
-Should I share my screen
+{Let,me,see}, I share my screen.|
 
 1963
 01:08:37,320 --> 01:08:38,520
 0,720
-movie.
 
 1964
 01:08:41,350 --> 01:08:44,420
 0,900 930,2430 2430,2550
-Yeah she added.
 
 1965
 01:08:50,630 --> 01:08:52,180
 0,300
-HMM.
 
 1966
 01:08:54,160 --> 01:08:57,000
 0,1110 1110,1440 1440,1650 1650,2070
-Yeah everybody back online.
+Okay, everybody back online,|
 
 1967
 01:08:59,980 --> 01:09:00,880
 0,210 210,330 330,390 390,810 840,900
-We're good to go, I
+we're good to go,| {can
 
 1968
 01:09:00,880 --> 01:09:02,710
 0,510 750,1140 1140,1380 1380,1710 1710,1830
-mean somebody can respond would
+-} somebody can respond would
 
 1969
 01:09:02,710 --> 01:09:08,200
 0,60 60,390 2370,4500 4920,5160 5160,5490
-be great okay, okay great
+be great.| {Okay,I,can,hear}.| Okay, great,
 
 1970
 01:09:08,260 --> 01:09:09,280
 0,330 330,510 510,720 720,870 870,1020
-I hear it I go
+I hear it you know
 
 1971
 01:09:09,280 --> 01:09:11,350
 0,510 510,1050 1290,1770 1770,2010 2010,2070
-sometimes to people because of
+sometimes {} people,| because of
 
 1972
 01:09:11,350 --> 01:09:12,580
 0,90 90,450 450,720 720,930 930,1230
-the breakout rooms here just
+the breakout rooms here| just
 
 1973
 01:09:12,580 --> 01:09:15,910
 0,330 330,810 810,1020 1020,1470 2700,3330
-learning dropped out soon, unfortunately.
+learning dropped out soon, unfortunately,|
 
 1974
 01:09:18,330 --> 01:09:20,720
 0,570 600,1140 1170,1980
-Past a rouge.
+past {} rooms
 
 1975
 01:09:20,720 --> 01:09:22,040
 0,270 270,420 420,570 570,960 960,1320
-Break up but hopefully yeah.
+break up,| but hopefully {}
 
 1976
 01:09:23,080 --> 01:09:24,100
 0,390 390,480 480,600 600,930 930,1020
-And I know exactly what
+and I {don't,know} exactly what
 
 1977
 01:09:24,100 --> 01:09:26,020
 0,60 60,180 180,360 360,600 1350,1920
-to do about that alright
+to do about that,| I
 
 1978
 01:09:26,320 --> 01:09:28,180
 0,720 720,1050 1050,1260 1260,1650 1650,1860
-guesswork last fault tolerance is
+{guess,work} of fault tolerance is
 
 1979
 01:09:28,180 --> 01:09:29,350
 0,60 60,240 240,360 360,870 870,1170
-a little bit unfortunate that
+a little bit unfortunate,| that
 
 1980
 01:09:29,380 --> 01:09:31,040
 0,420 420,540 540,690 690,1140
-people could just drop.
+people could just drop.|
 
 1981
 01:09:32,590 --> 01:09:35,890
 0,450 450,810 840,1530 1980,2730 2730,3300
-Okay, so um, any I
+Okay, so {} any I
 
 1982
 01:09:35,920 --> 01:09:37,240
@@ -9903,7 +9900,7 @@ time around was reasonable sort
 1984
 01:09:38,890 --> 01:09:40,090
 0,60 60,630 630,690 690,1110 1110,1200
-of straightforward you know it
+of straightforward,| you know it
 
 1985
 01:09:40,090 --> 01:09:40,840
@@ -9913,12 +9910,12 @@ has to be the case
 1986
 01:09:40,840 --> 01:09:42,370
 0,330 330,450 450,690 690,930 930,1530
-that you know you cannot,
+that you know you cannot
 
 1987
 01:09:42,730 --> 01:09:44,620
 0,480 480,990 990,1080 1080,1230 1230,1890
-um install an old snapshot
+{} install an old snapshot,|
 
 1988
 01:09:44,650 --> 01:09:46,960
@@ -9933,42 +9930,42 @@ that might have had a
 1990
 01:09:47,950 --> 01:09:49,270
 0,240 240,510 510,990 990,1170 1170,1320
-more recent snapshot might have
+more recent snapshot,| might have
 
 1991
 01:09:49,270 --> 01:09:50,590
 0,450 450,510 510,600 600,1050 1050,1320
-responded to the client saying,
+responded to the client,| saying,
 
 1992
 01:09:50,590 --> 01:09:52,580
 0,360 360,450 450,900 900,1500
-yeah the operation succeeded.
+yeah the operation succeeded,|
 
 1993
 01:09:52,640 --> 01:09:53,630
 0,420 420,600 600,780 780,870 870,990
-Um, and then if you
+{} and then if you
 
 1994
 01:09:53,630 --> 01:09:55,310
 0,180 180,720 720,900 900,1110 1110,1680
-would restore an old snapshot,
+would restore an old snapshot,|
 
 1995
 01:09:55,310 --> 01:09:56,990
 0,510 540,900 900,1080 1080,1410 1410,1680
-then a you basically back
+then {} you basically back
 
 1996
 01:09:56,990 --> 01:09:57,680
 0,120 120,180 180,240 240,600 600,690
-out to the state and
+out to the state| and
 
 1997
 01:09:57,680 --> 01:09:58,820
 0,60 60,480 480,660 660,810 810,1140
-the climate c there's certainly
+the {client,would} see there's certainly
 
 1998
 01:09:58,820 --> 01:09:59,870
@@ -9978,22 +9975,22 @@ an old version of the
 1999
 01:09:59,870 --> 01:10:01,190
 0,300 300,420 420,600 600,930 930,1320
-surface, so that's certainly not
+server,| so that's certainly not
 
 2000
 01:10:01,220 --> 01:10:03,470
 0,150 180,840 1590,2010 2010,2130 2130,2250
-a legit, um, and so
+a legit,| {} and so
 
 2001
 01:10:03,470 --> 01:10:04,790
 0,150 150,180 180,330 330,1020 1080,1320
-there's a little bit, you
+there's a little bit,| you
 
 2002
 01:10:04,790 --> 01:10:06,260
 0,90 90,390 390,750 750,870 870,1470
-should definitely reject all snapshots,
+should definitely reject all snapshots,|
 
 2003
 01:10:06,260 --> 01:10:06,770
@@ -10003,7 +10000,7 @@ but you have to be
 2004
 01:10:06,770 --> 01:10:08,540
 0,60 60,210 210,330 330,930 1230,1770
-a little bit careful, um,
+a little bit careful, {}|
 
 2005
 01:10:08,540 --> 01:10:10,670
@@ -10018,27 +10015,27 @@ has a log that goes
 2007
 01:10:11,660 --> 01:10:13,490
 0,540 540,630 630,1290 1290,1620 1620,1830
-beyond the snapshot, you have
+beyond the snapshot,| you have
 
 2008
 01:10:13,490 --> 01:10:16,430
 0,360 390,930 960,1530 1920,2730 2730,2940
-to keep that remained a
+to keep that remained {}
 
 2009
 01:10:16,430 --> 01:10:17,720
 0,240 240,330 330,420 420,960
-part of the log.
+part of the log,|
 
 2010
 01:10:17,720 --> 01:10:18,890
 0,180 180,480 480,840 840,990 990,1170
-Um, because basically you have
+{} because basically you have
 
 2011
 01:10:18,890 --> 01:10:20,510
 0,330 330,450 450,510 510,1050 1260,1620
-promised to a leader a
+promised to a leader, {}|
 
 2012
 01:10:20,510 --> 01:10:21,860
@@ -10048,7 +10045,7 @@ that you have accepted a
 2013
 01:10:21,860 --> 01:10:23,060
 0,360 360,450 450,570 570,720 720,1200
-message and so you can't
+message| and so you can't
 
 2014
 01:10:23,060 --> 01:10:25,400
@@ -10058,22 +10055,22 @@ delete you know the rest
 2015
 01:10:25,400 --> 01:10:26,660
 0,90 90,180 180,570 570,1140 1140,1260
-of the law that was
+of the log, that was
 
 2016
 01:10:26,660 --> 01:10:28,820
 0,240 240,690 720,1200 1200,1620
-not covered by the.
+not covered by the
 
 2017
 01:10:28,910 --> 01:10:30,560
 0,510 510,1080
-A snapshot.
+{} snapshot.|
 
 2018
 01:10:30,710 --> 01:10:31,760
 0,510
-Okay.
+Okay?|
 
 2019
 01:10:35,210 --> 01:10:36,440
@@ -10083,32 +10080,32 @@ Okay, so then let me
 2020
 01:10:36,440 --> 01:10:38,780
 0,810 1050,1770
-return a.
+return {}.|
 
 2021
 01:10:41,220 --> 01:10:42,960
 0,420 420,570 570,630 630,1080 1080,1740
-We had a question actually
+We had a question, actually.|
 
 2022
 01:10:42,990 --> 01:10:44,860
 0,690 720,930 930,1290
-okay, go ahead.
+okay, go ahead.|
 
 2023
 01:10:44,890 --> 01:10:46,870
 0,780 810,1320 1320,1680 1680,1800 1800,1980
-So it says it says
+So it says, it says
 
 2024
 01:10:46,870 --> 01:10:48,160
 0,90 90,210 210,600 600,990 1020,1290
-in the paper right, if
+in the paper right,| if
 
 2025
 01:10:48,160 --> 01:10:50,290
 0,780 780,930 930,1260 1260,1320 1320,2130
-z one receives a snapshot,
+the follower receives a snapshot,|
 
 2026
 01:10:50,470 --> 01:10:51,790
@@ -10118,37 +10115,37 @@ that's a prefix of its
 2027
 01:10:51,790 --> 01:10:53,620
 0,570
-log.
+log,|
 
 2028
 01:10:53,620 --> 01:10:57,490
 0,570 1020,2310 2430,3210 3210,3570 3570,3870
-I'm the log entries covered
+{} the log entries covered
 
 2029
 01:10:57,490 --> 01:10:58,900
 0,120 120,210 210,840 840,900 900,1410
-by the snapshot are deleted,
+by the snapshot are deleted,|
 
 2030
 01:10:58,900 --> 01:10:59,950
 0,150 150,240 240,480 480,540 540,1050
-but the rest are kept
+but the rest are kept.|
 
 2031
 01:11:00,010 --> 01:11:03,250
 0,870 1140,1290 1290,1530 1530,2190 2340,3240
-yep in that case, um.
+Yep.| In that case, {}
 
 2032
 01:11:04,480 --> 01:11:07,420
 0,300 300,420 420,2520 2520,2820 2820,2940
-It is z wouldn't be
+it is {the,state,machine} wouldn't be
 
 2033
 01:11:07,420 --> 01:11:09,250
 0,660 660,1050 1050,1140 1140,1320 1320,1830
-overwritten right in this case.
+overwritten, right, in this case.|
 
 2034
 01:11:09,920 --> 01:11:11,360
@@ -10158,22 +10155,22 @@ Okay, so the interesting question
 2035
 01:11:11,360 --> 01:11:12,380
 0,120 120,270 270,510 510,690 690,1020
-is like how does a
+is,| like how does a
 
 2036
 01:11:12,380 --> 01:11:14,810
 0,810 840,1290 1290,1500 1500,2100 2100,2430
-um snaps get communicated to
+{} snapshot get communicated to
 
 2037
 01:11:14,810 --> 01:11:18,500
 0,1020 2160,2430 2430,2820 2820,3420 3450,3690
-the state machine and as
+the state machine| and as
 
 2038
 01:11:18,500 --> 01:11:19,640
 0,180 180,420 420,510 510,780 780,1140
-you'll see in lap three
+you'll see in lab 3|
 
 2039
 01:11:19,640 --> 01:11:20,240
@@ -10183,12 +10180,12 @@ and it goes over the
 2040
 01:11:20,240 --> 01:11:21,480
 0,360 360,750
-applied channel.
+applied channel,|
 
 2041
 01:11:22,080 --> 01:11:24,720
 0,390 390,660 660,1320 1950,2340 2340,2640
-And so the state machine
+and so the state machine
 
 2042
 01:11:24,720 --> 01:11:25,800
@@ -10198,7 +10195,7 @@ will get a snapshot over
 2043
 01:11:25,800 --> 01:11:28,020
 0,90 90,450 450,840 1290,1770 1770,2220
-the applied channel and then
+the applied channel| and then
 
 2044
 01:11:28,020 --> 01:11:29,190
@@ -10208,32 +10205,32 @@ it's up to it to
 2045
 01:11:29,190 --> 01:11:30,440
 0,120 120,270 270,450 450,660
-do the right thing.
+do the right thing.|
 
 2046
 01:11:32,030 --> 01:11:33,060
 0,540
-Oops.
+Okay.|
 
 2047
 01:11:33,060 --> 01:11:34,000
 0,360
-Okay.
+Okay?|
 
 2048
 01:11:34,350 --> 01:11:35,620
 0,660
-Oops.
+Oops.|
 
 2049
 01:11:36,370 --> 01:11:37,780
 0,450 450,780 870,1140 1140,1320 1320,1410
-Okay good, so just a
+Okay good.| So just a
 
 2050
 01:11:37,780 --> 01:11:39,970
 0,450 450,540 540,750 750,1230 1290,2190
-follow-up on that sorry, um,
+follow-up on that, sorry, {}|
 
 2051
 01:11:40,270 --> 01:11:41,560
@@ -10243,42 +10240,42 @@ though I was a little
 2052
 01:11:41,560 --> 01:11:42,640
 0,180 180,360 360,630 630,840 840,1080
-bit so that makes sense
+bit,| so that makes sense
 
 2053
 01:11:42,640 --> 01:11:43,540
 0,90 90,360 420,570 570,810 810,900
-to me the part that
+to me,| the part that
 
 2054
 01:11:43,540 --> 01:11:44,650
 0,60 60,210 210,630 630,780 780,1110
-I was confused by is
+I was confused by is,|
 
 2055
 01:11:44,650 --> 01:11:46,820
 0,390 390,840 990,1200 1200,1650
-in the in the.
+in the, in the
 
 2056
 01:11:46,990 --> 01:11:48,490
 0,300 300,840 840,990 990,1140 1140,1500
-Figure thirteen like the box
+figure 13 like the box
 
 2057
 01:11:48,490 --> 01:11:50,230
 0,150 150,690 690,1050 1050,1590 1590,1740
-that describes install snapshot, our
+that describes install snapshot {rpc
 
 2058
 01:11:50,230 --> 01:11:52,580
 0,510 1170,1740
-PC, um.
+-} {},|
 
 2059
 01:11:53,000 --> 01:11:55,130
 0,300 330,1050 1080,1350 1350,1860 1890,2130
-On six it's as if
+on 6, it's says if
 
 2060
 01:11:55,130 --> 01:11:56,450
@@ -10293,17 +10290,16 @@ same index as the term
 2062
 01:11:57,800 --> 01:12:00,040
 0,690 690,960 960,1230 1230,1680
-snapshot last include entry.
+snapshot last include entry,|
 
 2063
 01:12:01,000 --> 01:12:02,280
 0,720
-I'm.
 
 2064
 01:12:04,890 --> 01:12:06,140
 0,270 270,330 330,630
-Well I don't.
+well, hold on,
 
 2065
 01:12:06,610 --> 01:12:07,750
@@ -10313,22 +10309,22 @@ I may have just misread
 2066
 01:12:07,750 --> 01:12:09,040
 0,150 300,690 690,930 930,1020 1020,1290
-it okay, why do you
+it.| Okay, why do you
 
 2067
 01:12:09,070 --> 01:12:10,120
 0,210 210,450 450,630 630,840 840,1050
-keep thinking about it, look
+keep thinking about it,| look
 
 2068
 01:12:10,120 --> 01:12:12,040
 0,330 330,690 690,810 810,1350 1350,1920
-if I have a question,
+if.| I have a question,
 
 2069
 01:12:12,160 --> 01:12:13,660
 0,420 420,720 990,1200 1200,1380 1380,1500
-I'll ask you take it
+I'll ask you.| {I'll,take} it
 
 2070
 01:12:13,660 --> 01:12:14,650
@@ -10343,12 +10339,12 @@ right after lecture, if you
 2072
 01:12:15,400 --> 01:12:16,240
 0,150 150,270
-want to.
+want to.|
 
 2073
 01:12:16,900 --> 01:12:17,710
 0,480 510,570 570,690 690,750 750,810
-Okay I want to go
+Okay, I want to go
 
 2074
 01:12:17,710 --> 01:12:18,910
@@ -10358,7 +10354,7 @@ back actually for a couple
 2075
 01:12:18,910 --> 01:12:19,750
 0,450 450,540 540,630 630,750 750,840
-minutes you know that we
+minutes,| you know that we
 
 2076
 01:12:19,750 --> 01:12:21,220
@@ -10368,7 +10364,7 @@ have remaining and talk about
 2077
 01:12:21,220 --> 01:12:23,080
 0,360 360,660 660,1200 1560,1770 1770,1860
-actually using raft which is
+actually using raft,| which is
 
 2078
 01:12:23,080 --> 01:12:24,070
@@ -10378,12 +10374,12 @@ sort of a discussion that
 2079
 01:12:24,070 --> 01:12:25,690
 0,120 120,600 600,960 960,1260 1260,1620
-we're already basically having here.
+we're already basically having here
 
 2080
 01:12:27,500 --> 01:12:29,180
 0,330 330,690 690,750 750,1320 1440,1680
-Wow for a surface and
+{} for {} servers| and
 
 2081
 01:12:29,180 --> 01:12:30,020
@@ -10393,22 +10389,22 @@ so again I'm going to
 2082
 01:12:30,020 --> 01:12:31,190
 0,330 330,480 480,570 570,1020 1020,1170
-focus on the replicated key
+focus on the replicated {key-value
 
 2083
 01:12:31,190 --> 01:12:32,240
 0,300 300,660 660,870 870,990 990,1050
-value service that's going to
+-} service,| that's going to
 
 2084
 01:12:32,240 --> 01:12:33,170
 0,150 150,240 240,570 570,690 690,930
-be the topic of lap
+be the topic of lab
 
 2085
 01:12:33,170 --> 01:12:33,980
 0,270
-three.
+3.|
 
 2086
 01:12:34,130 --> 01:12:35,750
@@ -10423,7 +10419,7 @@ back to almost like one
 2088
 01:12:37,250 --> 01:12:38,720
 0,90 90,180 180,750 840,1320 1320,1470
-of the first watch that
+of the first board| that
 
 2089
 01:12:38,720 --> 01:12:40,160
@@ -10433,7 +10429,7 @@ I drew at the beginning
 2090
 01:12:40,160 --> 01:12:41,660
 0,60 60,150 150,420 420,810 1230,1500
-of the raf lectures, um,
+of the raft lectures, {}|
 
 2091
 01:12:41,660 --> 01:12:43,550
@@ -10448,62 +10444,61 @@ know that correspond to the
 2093
 01:12:45,830 --> 01:12:47,240
 0,270 270,930
-three replicas.
+three replicas,|
 
 2094
 01:12:48,680 --> 01:12:50,900
 0,570 750,1200 1200,1410 1410,1860 1860,2220
-A and each replica correct
+{} and each replica correct
 
 2095
 01:12:50,900 --> 01:12:51,830
 0,90 90,240 240,660 660,720 720,930
-you know house a sort
+you know has a sort
 
 2096
 01:12:51,830 --> 01:12:52,980
 0,60 60,570
-of split.
+of split
 
 2097
 01:12:53,520 --> 01:12:54,780
 0,360 360,810 810,1050 1050,1170 1170,1260
-Two pieces, one is the
+two pieces,| one is the
 
 2098
 01:12:54,780 --> 01:12:56,200
 0,420 420,870
-surface part.
+service part,|
 
 2099
 01:12:56,540 --> 01:12:57,940
 0,840
-Yeah.
 
 2100
 01:13:01,180 --> 01:13:02,050
 0,210 210,390 390,510 510,600 600,870
-When one is the raf
+and one is the raft
 
 2101
 01:13:02,050 --> 01:13:03,140
 0,510
-library.
+library,
 
 2102
 01:13:04,070 --> 01:13:04,970
 0,210 210,330 330,420 420,720 720,900
-Right, then we know that
+right,| then we know that
 
 2103
 01:13:04,970 --> 01:13:06,890
 0,360 360,630 630,1260 1260,1470 1470,1920
-basically days communicate these to
+basically they communicate these two
 
 2104
 01:13:06,890 --> 01:13:08,990
 0,450 450,540 540,900 900,1320 1770,2100
-approve the apply channel unless
+through the apply channel| unless
 
 2105
 01:13:08,990 --> 01:13:10,700
@@ -10513,42 +10508,42 @@ the way that information flows
 2106
 01:13:10,700 --> 01:13:12,360
 0,120 120,390 390,480 480,1080
-from rap to disturbance.
+from raft to service
 
 2107
 01:13:12,360 --> 01:13:13,460
 0,570
-Church.
+servers.|
 
 2108
 01:13:16,000 --> 01:13:17,800
 0,120 120,270 270,900 900,1050 1050,1800
-And so clients you interact.
+And so clients {you,know} interact
 
 2109
 01:13:19,530 --> 01:13:20,820
 0,210 210,480 480,570 570,1200 1200,1290
-Yeah, with the service you
+{you,know} with the servers, you
 
 2110
 01:13:20,820 --> 01:13:22,740
 0,270 270,630 630,720 720,1320 1620,1920
-not directly the draft so
+not directly the raft,| so
 
 2111
 01:13:22,740 --> 01:13:24,030
 0,120 120,270 270,330 330,690 690,1290
-we have a client here.
+we have a client here,|
 
 2112
 01:13:24,580 --> 01:13:25,630
 0,90 90,180 180,390 390,960 960,1050
-You know that sends you
+you know that sends you
 
 2113
 01:13:25,630 --> 01:13:26,980
 0,60 60,570 570,720 720,960 960,1350
-an operation like abboud operate
+an operation like {a,put} operate
 
 2114
 01:13:26,980 --> 01:13:27,880
@@ -10558,27 +10553,27 @@ or get operation for the
 2115
 01:13:27,880 --> 01:13:30,220
 0,690 840,990 990,1350 1350,2040 2040,2340
-service, the service receives this
+service,| the service receives this
 
 2116
 01:13:30,220 --> 01:13:32,080
 0,750 900,1080 1080,1200 1200,1590 1590,1860
-operation and it basically calls
+operation| and it basically calls
 
 2117
 01:13:32,080 --> 01:13:33,180
 0,600
-start.
+start
 
 2118
 01:13:35,520 --> 01:13:36,870
 0,180 180,300 300,450 450,1140 1140,1350
-Yeah, for that operation, quick
+{you,know} for that operation,| quick
 
 2119
 01:13:36,870 --> 01:13:38,850
 0,570 570,780 780,1500 1500,1860 1860,1980
-draft does it chat you
+raft does it {chit,chat} you
 
 2120
 01:13:38,850 --> 01:13:39,750
@@ -10588,12 +10583,12 @@ know with you know the
 2121
 01:13:39,750 --> 01:13:40,920
 0,600
-other.
+other
 
 2122
 01:13:40,920 --> 01:13:43,530
 0,420 420,1140 1680,1800 1800,2100 2130,2610
-Raft libraries, you know messages
+raft libraries,| you know messages
 
 2123
 01:13:43,530 --> 01:13:44,640
@@ -10608,12 +10603,12 @@ some point the operation is
 2125
 01:13:45,570 --> 01:13:46,890
 0,420 420,510 510,690 690,810 810,1320
-committed and then it actually
+committed| and then it actually
 
 2126
 01:13:46,890 --> 01:13:48,360
 0,270 270,660 660,1050 1050,1230 1230,1470
-is no raft will say
+is {you,know} raft will say,|
 
 2127
 01:13:48,360 --> 01:13:50,220
@@ -10623,12 +10618,12 @@ okay this operation is ready
 2128
 01:13:50,220 --> 01:13:51,570
 0,90 90,180 180,630 840,1200 1200,1350
-to be committed senses on
+to be committed,| {sends,it} on
 
 2129
 01:13:51,570 --> 01:13:53,220
 0,90 90,450 450,990 1110,1290 1290,1650
-the applied channel and service,
+the applied channel| and service
 
 2130
 01:13:53,220 --> 01:13:55,020
@@ -10638,62 +10633,62 @@ then basically execute the operation
 2131
 01:13:55,350 --> 01:13:56,880
 0,360 360,600 600,660 660,1080 1080,1530
-and send the response back
+and send the response back,|
 
 2132
 01:13:56,880 --> 01:13:58,590
 0,480 480,570 570,1050 1050,1140 1140,1710
-after he executed the operation
+after it executed the operation,
 
 2133
 01:13:58,590 --> 01:13:59,940
 0,360 360,570 570,660 660,1080 1080,1350
-response back to decline saying
+response back to {the,client},| saying
 
 2134
 01:13:59,940 --> 01:14:01,950
 0,630 690,990 990,1620 1620,1920 1920,2010
-well the value or to
+well the value or the
 
 2135
 01:14:01,950 --> 01:14:03,480
 0,390 390,480 480,630 630,900 900,1530
-get you know key twenty
+get you know key 20
 
 2136
 01:14:03,480 --> 01:14:04,620
 0,90 90,210 210,360 360,810
-you know, is this.
+you know is this,
 
 2137
 01:14:05,220 --> 01:14:05,940
 0,240 240,360 360,510 510,630 630,720
-Right, so this is a
+right,| so this is a
 
 2138
 01:14:05,940 --> 01:14:08,760
 0,210 210,900 1410,2340
-get operation booth.
+get operation {or,put},|
 
 2139
 01:14:09,500 --> 01:14:10,550
 0,300 300,450 450,540 540,960 960,1050
-And this is basically the
+and this is basically the
 
 2140
 01:14:10,550 --> 01:14:12,560
 0,540 540,1230 1260,1740 1770,1860 1860,2010
-value forget or you know
+value {for,the,get} or you know
 
 2141
 01:14:12,560 --> 01:14:14,660
 0,450 450,630 960,1530
-OK that succeeded.
+okay would succeeded.|
 
 2142
 01:14:14,660 --> 01:14:15,600
 0,390
-What.
+Okay?|
 
 2143
 01:14:15,750 --> 01:14:16,860
@@ -10703,42 +10698,42 @@ And we also discovered in
 2144
 01:14:16,860 --> 01:14:19,590
 0,60 60,360 360,960 1440,2190 2400,2730
-the last lecture a it
+the last lecture,| {} it
 
 2145
 01:14:19,590 --> 01:14:20,700
 0,210 210,300 300,360 360,690 690,1110
-might be the case that
+might be the case,| that
 
 2146
 01:14:20,700 --> 01:14:22,890
 0,570 600,1080 1170,1440 1440,1560 1560,2190
-the client sends an RBC
+the client sends an rpc
 
 2147
 01:14:22,890 --> 01:14:25,260
 0,540 540,690 690,1170 1170,1980 1980,2370
-to a deserves a RBC
+to {} {the,service} {} {and,the,rpc}
 
 2148
 01:14:25,260 --> 01:14:26,880
 0,660 780,930 930,1020 1020,1290 1290,1620
-disappears, so the client muscle
+disappears,| so the client must
 
 2149
 01:14:26,880 --> 01:14:28,420
 0,240 240,450 450,1050
-yeah which resent.
+yeah must resend,|
 
 2150
 01:14:28,420 --> 01:14:29,470
 0,450 450,660 660,780 780,870 870,1050
-Um, and by the time
+{} and by the time
 
 2151
 01:14:29,470 --> 01:14:30,640
 0,60 60,480 480,900 900,990 990,1170
-the grecians actually you know
+the resends actually,| you know
 
 2152
 01:14:30,640 --> 01:14:31,540
@@ -10748,12 +10743,12 @@ the leader might not be
 2153
 01:14:31,540 --> 01:14:32,900
 0,120 120,390 390,810
-the leader anymore.
+the leader anymore.|
 
 2154
 01:14:33,080 --> 01:14:34,160
 0,360 360,540 540,600 600,750 750,1080
-And so in that case
+And so in that case,|
 
 2155
 01:14:34,160 --> 01:14:34,940
@@ -10763,7 +10758,7 @@ it has to sort of
 2156
 01:14:34,940 --> 01:14:36,560
 0,510 510,900 900,960 960,1260 1260,1620
-redirect itself to another year
+redirect itself to another leader,|
 
 2157
 01:14:37,070 --> 01:14:37,940
@@ -10773,7 +10768,7 @@ so basically when there is
 2158
 01:14:37,940 --> 01:14:38,930
 0,60 60,240 240,360 360,450 450,990
-a little bit of code
+a little bit of code|
 
 2159
 01:14:38,930 --> 01:14:39,500
@@ -10783,7 +10778,7 @@ with a way to think
 2160
 01:14:39,500 --> 01:14:40,620
 0,240 240,630
-about this.
+about this.|
 
 2161
 01:14:40,620 --> 01:14:41,280
@@ -10793,7 +10788,7 @@ There's a little bit of
 2162
 01:14:41,280 --> 01:14:42,570
 0,300 300,390 390,450 450,870 870,1290
-code at the client site
+code at the client side,|
 
 2163
 01:14:42,690 --> 01:14:44,790
@@ -10803,12 +10798,12 @@ sort of understands replicated state
 2164
 01:14:44,790 --> 01:14:46,410
 0,270 270,330 330,540 540,870 1260,1620
-machines a little bit, um,
+machines a little bit, {}|
 
 2165
 01:14:46,410 --> 01:14:48,060
 0,360 360,540 540,930 930,1050 1050,1650
-and it maintains some information
+and it maintains some information,|
 
 2166
 01:14:48,060 --> 01:14:49,170
@@ -10818,27 +10813,27 @@ it maintains like who's the
 2167
 01:14:49,170 --> 01:14:50,970
 0,510 810,1350 1350,1500 1500,1710 1710,1800
-leader and who are the
+leader| and who are the
 
 2168
 01:14:50,970 --> 01:14:52,540
 0,330 330,1050
-other followers.
+other followers,|
 
 2169
 01:14:52,540 --> 01:14:53,650
 0,240 240,360 360,570 570,690 690,1110
-And so that can switch
+and so that can switch
 
 2170
 01:14:53,650 --> 01:14:56,020
 0,570 570,960 1110,1380 1380,1770 1770,2370
-between them, um, if necessary.
+between them, {} if necessary.|
 
 2171
 01:14:57,690 --> 01:14:59,220
 0,210 210,630 630,1140 1170,1440 1440,1530
-We also, um last time
+We also, {} last time
 
 2172
 01:14:59,220 --> 01:14:59,880
@@ -10848,32 +10843,32 @@ we talked a little bit
 2173
 01:14:59,880 --> 01:15:01,410
 0,270 270,510 510,1110 1110,1350 1350,1530
-about its possible that you
+about its possible,| that you
 
 2174
 01:15:01,410 --> 01:15:02,970
 0,270 270,720 720,840 840,960 960,1560
-know operation can be duplicated
+know operation can be duplicated,
 
 2175
 01:15:03,000 --> 01:15:04,740
 0,270 270,750 1050,1170 1170,1260 1260,1740
-right, because you know the.
+right,| because you know the,
 
 2176
 01:15:05,420 --> 01:15:07,160
 0,930 960,1410 1410,1470 1470,1680 1680,1740
-The client may send an
+the client may send an
 
 2177
 01:15:07,160 --> 01:15:08,360
 0,450 450,690 690,1050 1050,1140 1140,1200
-operation input operation to the
+operation put operation to the
 
 2178
 01:15:08,360 --> 01:15:12,050
 0,690 990,2220 2220,2910 2940,3330 3360,3690
-service, um, in the you
+service,| {} in the you
 
 2179
 01:15:12,050 --> 01:15:13,430
@@ -10883,12 +10878,12 @@ know the client doesn't get
 2180
 01:15:13,430 --> 01:15:15,380
 0,60 60,780 1020,1620 1620,1680 1680,1950
-a response, but the surge
+a response,| but the servers
 
 2181
 01:15:15,380 --> 01:15:16,580
 0,180 180,720 720,870 870,960 960,1200
-actually received so it went
+actually received,| so it went
 
 2182
 01:15:16,580 --> 01:15:17,720
@@ -10898,7 +10893,7 @@ through, you know went through
 2183
 01:15:17,720 --> 01:15:20,750
 0,600 600,900 900,1650 1650,2340 2580,3030
-the whole operation sequence, um,
+the whole operation sequence, {}|
 
 2184
 01:15:20,750 --> 01:15:24,050
@@ -10908,12 +10903,12 @@ you know starting the raft
 2185
 01:15:24,050 --> 01:15:25,310
 0,30 30,480 480,660 660,1020 1020,1260
-a pants can go through
+{appends -} can go through
 
 2186
 01:15:25,310 --> 01:15:26,780
 0,510 540,870 870,1290 1290,1380 1380,1470
-the draft motion and then
+the raft motion| and then
 
 2187
 01:15:26,780 --> 01:15:27,710
@@ -10923,27 +10918,27 @@ basically sending it out to
 2188
 01:15:27,710 --> 01:15:28,860
 0,240 240,600
-apply channel.
+apply channel.|
 
 2189
 01:15:28,890 --> 01:15:30,270
 0,120 120,360 360,780 780,1080 1080,1380
-And so basically decline naturally
+And so basically {the,client} actually
 
 2190
 01:15:30,270 --> 01:15:31,620
 0,420 420,600 600,660 660,930 930,1350
-might send a second one.
+might send a second one,|
 
 2191
 01:15:33,240 --> 01:15:35,520
 0,630 630,780 780,990 990,1620 1710,2280
-And you know the basically
+and you know the basically
 
 2192
 01:15:35,520 --> 01:15:37,380
 0,120 120,270 270,1020 1020,1620 1650,1860
-for the repetition, um, you
+for the repetition,| {} you
 
 2193
 01:15:37,380 --> 01:15:38,370
@@ -10953,32 +10948,32 @@ know that might actually go
 2194
 01:15:38,370 --> 01:15:40,320
 0,570 600,690 690,810 810,1200 1500,1950
-through, you know the raft
+through you know the raft
 
 2195
 01:15:40,320 --> 01:15:41,280
 0,270 270,540 540,750 750,900 900,960
-library two comes out in
+library too,| comes out in
 
 2196
 01:15:41,280 --> 01:15:42,420
 0,90 90,360 360,750 750,870 870,1140
-the apply channel and so
+the apply channel| and so
 
 2197
 01:15:42,420 --> 01:15:43,500
 0,390 390,540 540,630 630,810 810,1080
-you have to do some
+{you,know} have to do some
 
 2198
 01:15:43,500 --> 01:15:45,150
 0,360 360,750 750,870 870,1350 1350,1650
-duplicate detection and detection and
+duplicate detection and detection| and
 
 2199
 01:15:45,150 --> 01:15:46,140
 0,450 450,630 630,690 690,930 930,990
-multiple ways of doing it,
+multiple ways of doing it,|
 
 2200
 01:15:46,140 --> 01:15:46,860
@@ -10988,7 +10983,7 @@ but either way you have
 2201
 01:15:46,860 --> 01:15:48,340
 0,60 60,540 540,990
-to duplicate detection.
+to duplicate detection.|
 
 2202
 01:15:48,520 --> 01:15:50,590
@@ -11003,32 +10998,32 @@ sort of maintain state about
 2204
 01:15:52,300 --> 01:15:54,370
 0,210 210,600 630,1350 1380,1920 1920,2070
-like what the leader and
+like what the leader| and
 
 2205
 01:15:54,370 --> 01:15:56,350
 0,60 60,420 420,810 960,1530 1710,1980
-the followers are a prudent
+the followers are {} {put,and}
 
 2206
 01:15:56,350 --> 01:15:57,370
 0,180 180,420 420,750 750,930 930,1020
-debt also actually have an
+get also actually have an
 
 2207
 01:15:57,370 --> 01:15:58,340
 0,480
-idea.
+idea,|
 
 2208
 01:15:58,340 --> 01:15:59,780
 0,360 360,450 450,720 720,1260 1260,1440
-Yeah an ID associated with
+{you,know} an id associated with
 
 2209
 01:15:59,780 --> 01:16:00,980
 0,210 210,570 660,750 750,1080 1080,1200
-it and we're going to
+it| and we're going to
 
 2210
 01:16:00,980 --> 01:16:02,240
@@ -11038,12 +11033,12 @@ maintain what is the last
 2211
 01:16:02,270 --> 01:16:03,590
 0,570 570,780 780,930 930,1230 1230,1320
-ID that it actually is
+id,| that it actually is
 
 2212
 01:16:03,590 --> 01:16:05,150
 0,270 270,330 330,480 480,990 1140,1560
-trying to get through and
+trying to get through| and
 
 2213
 01:16:05,150 --> 01:16:06,170
@@ -11053,7 +11048,7 @@ that is used to actually
 2214
 01:16:06,170 --> 01:16:07,660
 0,510 510,990
-duplicate detection.
+duplicate detection.|
 
 2215
 01:16:08,560 --> 01:16:09,280
@@ -11068,17 +11063,17 @@ code is often called a
 2217
 01:16:10,510 --> 01:16:11,660
 0,600
-clerk.
+clerk,|
 
 2218
 01:16:11,880 --> 01:16:13,230
 0,120 120,300 300,540 750,1230 1230,1350
-You know the clerk that
+you know the clerk that
 
 2219
 01:16:13,230 --> 01:16:14,880
 0,660 720,990 990,1080 1080,1530 1530,1650
-interacts with the surface and
+interacts with the service| and
 
 2220
 01:16:14,880 --> 01:16:15,480
@@ -11098,47 +11093,47 @@ the service you actually get
 2223
 01:16:17,760 --> 01:16:18,960
 0,60 60,450 450,750 750,1020 1020,1200
-the writing done and so
+the writing done| and so
 
 2224
 01:16:18,960 --> 01:16:20,720
 0,90 90,210 210,570 570,1260
-we have multiple clients.
+we have multiple clients,|
 
 2225
 01:16:20,870 --> 01:16:23,780
 0,300 300,870 870,1680 2220,2820 2820,2910
-All half a floor of
+all half a clerk of
 
 2226
 01:16:23,780 --> 01:16:27,320
 0,630 660,1320 1350,2160 2160,2730 2760,3540
-library material user go package,
+library {if,you,will}, {which,is} Go package,|
 
 2227
 01:16:27,560 --> 01:16:29,390
 0,540 540,630 630,780 780,1350 1350,1830
-and you know declines basically
+and you know {the,clients} basically
 
 2228
 01:16:29,390 --> 01:16:31,140
 0,390 390,690 690,1230
-talk Putin gets.
+talk {puts,and} gets
 
 2229
 01:16:31,170 --> 01:16:33,120
 0,90 90,210 210,810 1050,1380 1380,1950
-You know over that interface
+you know over that interface|
 
 2230
 01:16:33,120 --> 01:16:34,200
 0,180 180,510 510,600 600,660 660,1080
-and inside of the cleric
+and inside of the clerk
 
 2231
 01:16:34,200 --> 01:16:36,360
 0,240 240,720 720,930 930,1650 1950,2160
-actually maintains these IDs or
+actually maintains these ids| or
 
 2232
 01:16:36,360 --> 01:16:37,620
@@ -11148,7 +11143,7 @@ maintains one idea for the
 2233
 01:16:37,620 --> 01:16:39,030
 0,750 750,870 870,990 990,1230 1230,1410
-outstanding you know put get
+outstanding| you know put get
 
 2234
 01:16:39,030 --> 01:16:40,470
@@ -11158,22 +11153,22 @@ operation as well as some
 2235
 01:16:40,470 --> 01:16:41,940
 0,480 480,720 720,1140 1140,1380 1380,1470
-information about who's part of
+information| about who's part of
 
 2236
 01:16:41,940 --> 01:16:43,060
 0,210 210,570
-the cluster.
+the cluster.|
 
 2237
 01:16:43,060 --> 01:16:44,080
 0,480
-Okay.
+Okay?|
 
 2238
 01:16:44,560 --> 01:16:45,900
 0,150 150,330 330,450 450,780
-Does that make sense.
+Does that make sense?|
 
 2239
 01:16:46,090 --> 01:16:46,780
@@ -11183,7 +11178,7 @@ So that's sort of the
 2240
 01:16:46,780 --> 01:16:48,220
 0,270 270,690 690,930 930,1230 1230,1440
-basic structure, correct, unlike how
+basic structure, correct,| like how
 
 2241
 01:16:48,220 --> 01:16:49,780
@@ -11193,7 +11188,7 @@ raft fits into a larger
 2242
 01:16:49,810 --> 01:16:50,880
 0,450
-picture.
+picture.|
 
 2243
 01:16:51,520 --> 01:16:53,080
@@ -11203,7 +11198,7 @@ The one question that comes
 2244
 01:16:53,080 --> 01:16:55,390
 0,390 390,750 840,1290 1290,1740 1740,2310
-always up a is what
+always up {} is| what
 
 2245
 01:16:55,390 --> 01:16:55,990
@@ -11218,17 +11213,17 @@ guarantees you know that the
 2247
 01:16:57,820 --> 01:16:59,410
 0,660 660,840 840,930 930,1290 1290,1590
-supervisor and the clerk together
+servers and the clerk together
 
 2248
 01:16:59,410 --> 01:17:01,930
 0,540 840,1290 1290,1680 1680,2250 2250,2520
-make a two declines about
+make| {} to {the,clients} about
 
 2249
 01:17:01,930 --> 01:17:03,220
 0,120 120,270 270,360 360,540 540,1290
-these food and get operations.
+these put and get operations.|
 
 2250
 01:17:05,040 --> 01:17:06,450
