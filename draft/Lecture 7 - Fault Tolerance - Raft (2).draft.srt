@@ -5875,27 +5875,27 @@ how you implement it.|
 1178
 00:36:37,480 --> 00:36:40,780
 0,510 540,1380 1710,2460
-Okay, I'm persistence.
+Okay, {} persistence,|
 
 1179
 00:36:45,970 --> 00:36:47,170
 0,270 270,510 510,810 810,870 870,1200
-We talked about the system's
+we talked about the persistence
 
 1180
 00:36:47,170 --> 00:36:49,340
 0,60 60,240 240,570 630,1620
-a little bit, um.
+a little bit, {}|
 
 1181
 00:36:49,370 --> 00:36:51,050
 0,270 270,810 840,1230 1230,1470 1470,1680
-Um, in last year after
+{} in last raft of,
 
 1182
 00:36:51,050 --> 00:36:52,430
 0,60 60,300 300,570 570,900 900,1380
-the first half lecture, we're
+the first raft lecture,| where
 
 1183
 00:36:52,430 --> 00:36:54,560
@@ -5905,7 +5905,7 @@ you know we noted that
 1184
 00:36:54,560 --> 00:36:56,150
 0,60 60,240 240,780 810,1230 1230,1590
-you know the and follower
+you know the| and follower
 
 1185
 00:36:56,150 --> 00:36:57,890
@@ -5915,17 +5915,17 @@ can only vote for one
 1186
 00:36:57,890 --> 00:37:00,020
 0,630 900,990 990,1440 1440,1590 1590,2130
-candidate per term and therefore
+candidate per term| and therefore
 
 1187
 00:37:00,020 --> 00:37:01,370
 0,120 120,270 270,360 360,1050 1140,1350
-it needs to remember, um,
+it needs to remember {}
 
 1188
 00:37:01,370 --> 00:37:03,410
 0,540 930,1200 1200,1500 1500,1800 1800,2040
-it's um, who'd voted for
+it's {} who'd voted for|
 
 1189
 00:37:03,410 --> 00:37:04,250
@@ -5935,17 +5935,17 @@ and what actually the current
 1190
 00:37:04,250 --> 00:37:05,220
 0,270 270,600
-term is.
+term is,|
 
 1191
 00:37:05,590 --> 00:37:07,540
 0,450 510,840 840,1320 1320,1530 1530,1950
-Um, but there's a larger
+{} but there's a larger
 
 1192
 00:37:07,540 --> 00:37:12,520
 0,720 840,2910 3030,3990 4200,4890 4890,4980
-issue around persistence and that
+issue around persistence| and that
 
 1193
 00:37:12,520 --> 00:37:13,240
@@ -5955,12 +5955,12 @@ came up in one of
 1194
 00:37:13,240 --> 00:37:14,710
 0,480 510,1020 1020,1230 1230,1320 1320,1470
-the questions one of you
+the questions,| one of you
 
 1195
 00:37:14,710 --> 00:37:16,720
 0,180 180,510 510,690 690,990 1350,2010
-just asked which is a
+just asked,| which is, {}
 
 1196
 00:37:16,720 --> 00:37:17,470
@@ -5970,7 +5970,7 @@ you know what happens on
 1197
 00:37:17,470 --> 00:37:18,520
 0,540
-reboot.
+reboot.|
 
 1198
 00:37:21,640 --> 00:37:23,200
@@ -5980,47 +5980,47 @@ And there's sort of two
 1199
 00:37:23,230 --> 00:37:24,460
 0,450 450,840 840,930 930,1020 1020,1230
-possible strategy, you can think
+possible strategy you can think
 
 1200
 00:37:24,460 --> 00:37:26,710
 0,180 210,630 630,1050 1050,1860 1860,2250
-of like one strategy is.
+of,| like one strategy is,|
 
 1201
 00:37:30,470 --> 00:37:32,120
 0,270 270,600 600,750 750,1110 1110,1650
-What strength you want is.
+what strategy {1 -} is,|
 
 1202
 00:37:32,790 --> 00:37:34,380
 0,270 270,360 360,900 900,1020 1020,1590
-You know basically the note
+you know basically the node
 
 1203
 00:37:34,620 --> 00:37:36,930
 0,780 780,1410 1440,1650 1650,1710 1710,2310
-a joins sort of freshly.
+{} joins sort of freshly,|
 
 1204
 00:37:37,830 --> 00:37:39,580
 0,450 450,1020
-Oh, George.
+so joins
 
 1205
 00:37:39,900 --> 00:37:42,900
 0,540 540,780 780,900 900,1620 1890,3000
-Basically when a note crashes
+basically when a node crashes
 
 1206
 00:37:43,200 --> 00:37:44,640
 0,240 240,450 450,690 690,1110 1260,1440
-and comes back up, um,
+and comes back up, {}|
 
 1207
 00:37:44,640 --> 00:37:46,080
 0,180 180,330 330,540 540,1170 1170,1440
-it just doesn't participate anymore,
+it just doesn't participate anymore,|
 
 1208
 00:37:46,080 --> 00:37:47,430
@@ -6030,32 +6030,32 @@ it has to rejoin you
 1209
 00:37:47,430 --> 00:37:48,880
 0,150 150,900
-know the.
+know the,|
 
 1210
 00:37:49,880 --> 00:37:52,220
 0,540 540,630 630,1170 1200,1770
-Rejoin the raft cluster.
+rejoin the raft cluster,|
 
 1211
 00:37:52,410 --> 00:37:54,480
 0,630 870,1230 1230,1620 1620,1710 1710,2070
-And that means you know
+and that means you know
 
 1212
 00:37:54,570 --> 00:37:56,220
 0,600 600,1080 1080,1320 1320,1500 1500,1650
-when rejoins you reach you
+when rejoins you should you
 
 1213
 00:37:56,220 --> 00:37:58,220
 0,270 270,630 630,1440
-have to replay.
+have to replay
 
 1214
 00:37:58,250 --> 00:37:59,930
 0,420 420,570 570,990 1020,1320 1320,1680
-A the log where basically
+{} the log,| where basically
 
 1215
 00:37:59,930 --> 00:38:01,430
@@ -6065,12 +6065,12 @@ has to receive every entry
 1216
 00:38:01,430 --> 00:38:03,080
 0,90 90,150 150,750 870,1110 1110,1650
-in the log and then.
+in the log| and then
 
 1217
 00:38:04,000 --> 00:38:05,460
 0,120 120,570 570,900
-I replay that.
+{} replay that.|
 
 1218
 00:38:05,680 --> 00:38:06,490
@@ -6080,12 +6080,12 @@ And of course you know
 1219
 00:38:06,490 --> 00:38:09,310
 0,210 210,750 1110,1290 1290,1920 1950,2820
-like if a note has
+like if a node has
 
 1220
 00:38:09,310 --> 00:38:11,200
 0,450 450,840 840,990 990,1260 1470,1890
-been down for a node
+been down,| for a node
 
 1221
 00:38:11,200 --> 00:38:12,550
@@ -6095,7 +6095,7 @@ crashes down for a day
 1222
 00:38:12,550 --> 00:38:14,110
 0,120 120,240 240,720 720,1200 1230,1560
-or two days or even
+or two days| or even
 
 1223
 00:38:14,110 --> 00:38:14,980
@@ -6105,12 +6105,12 @@ if it just goes down
 1224
 00:38:14,980 --> 00:38:16,300
 0,150 150,210 210,750
-for a second.
+for a second,|
 
 1225
 00:38:16,300 --> 00:38:17,410
 0,210 210,570 570,660 660,780 780,1110
-Um, but you know the
+{} but you know the
 
 1226
 00:38:17,410 --> 00:38:18,400
@@ -6120,7 +6120,7 @@ system has been up for
 1227
 00:38:18,400 --> 00:38:19,960
 0,60 60,510 600,870 870,1110 1110,1560
-a year that number means
+a year,| that number means
 
 1228
 00:38:19,960 --> 00:38:20,980
@@ -6130,47 +6130,47 @@ you have to replay a
 1229
 00:38:20,980 --> 00:38:22,540
 0,240 240,330 330,600 600,1170 1380,1560
-lot of log entries, so
+lot of log entries,| so
 
 1230
 00:38:22,540 --> 00:38:23,650
 0,180 180,240 240,390 390,510 510,1110
-there's a little bit annoying
+there's a little bit annoying.|
 
 1231
 00:38:23,650 --> 00:38:25,540
 0,360 360,630 630,900 900,1470 1470,1890
-and so people prefer that
+And so people prefer that
 
 1232
 00:38:25,810 --> 00:38:28,380
 0,570 570,1140 1230,1590 1590,2070
-strategy too which is.
+strategy 2 which is,|
 
 1233
 00:38:28,960 --> 00:38:29,680
 0,90 90,180 180,360 360,450 450,720
-You know you can back
+you know you can back
 
 1234
 00:38:29,680 --> 00:38:30,800
 0,540
-up.
+up,|
 
 1235
 00:38:31,820 --> 00:38:33,620
 0,540 540,720 720,900 900,1320 1320,1800
-And you just basically participate
+and you just basically participate
 
 1236
 00:38:33,620 --> 00:38:34,560
 0,390
-together.
+again,|
 
 1237
 00:38:35,070 --> 00:38:36,390
 0,330 330,600 600,780 780,1080 1080,1320
-Um, so you catch up
+{} so you catch up
 
 1238
 00:38:36,390 --> 00:38:38,490
@@ -6180,12 +6180,12 @@ from basically you start from
 1239
 00:38:38,490 --> 00:38:40,520
 0,390 450,930 930,1350
-your persistent state.
+your persistent state,|
 
 1240
 00:38:49,460 --> 00:38:51,500
 0,570 900,1170 1170,1350 1350,1710 1710,2040
-Um, yeah the idea being
+{ -} the idea being
 
 1241
 00:38:51,500 --> 00:38:52,400
@@ -6195,7 +6195,7 @@ that you know it's just
 1242
 00:38:52,400 --> 00:38:53,960
 0,60 60,330 330,900 930,1230 1230,1560
-a quick reboot you crash
+a quick reboot| you crash
 
 1243
 00:38:53,960 --> 00:38:55,310
@@ -6205,7 +6205,7 @@ you can back up whatever
 1244
 00:38:55,340 --> 00:38:57,350
 0,330 330,660 660,1260 1500,1800 1800,2010
-quick network failure, um, and
+quick network failure,| {} and
 
 1245
 00:38:57,350 --> 00:38:58,400
@@ -6220,17 +6220,17 @@ rest can move one term
 1247
 00:38:59,900 --> 00:39:02,180
 0,630 810,1350 1350,1770 1770,2010 2010,2280
-along you basically have all
+along,| you basically have all
 
 1248
 00:39:02,180 --> 00:39:03,980
 0,90 90,660 810,1440 1440,1620 1620,1800
-the state and you should
+the state| and you should
 
 1249
 00:39:03,980 --> 00:39:05,570
 0,60 60,270 270,360 360,720 720,1590
-be used for quick catchup.
+be used for quick {catch,up}.|
 
 1250
 00:39:06,070 --> 00:39:07,000
@@ -6240,7 +6240,7 @@ So then, the real question
 1251
 00:39:07,000 --> 00:39:08,380
 0,120 120,510 510,810 810,900 900,1380
-is what needs to be
+is,| what needs to be
 
 1252
 00:39:08,530 --> 00:39:09,460
@@ -6250,52 +6250,52 @@ at what state needs to
 1253
 00:39:09,460 --> 00:39:12,480
 0,240 240,960 1110,1920 1920,2520
-be persisted across reboots.
+be persisted across reboots.|
 
 1254
 00:39:12,870 --> 00:39:14,340
 0,510 540,840 840,1110 1110,1200 1200,1470
-Um, now where he talked
+{} {You,know} where he talked
 
 1255
 00:39:14,340 --> 00:39:16,170
 0,210 210,480 480,990 1350,1620 1620,1830
-about voting for that needs
+about voting for,| that needs
 
 1256
 00:39:16,170 --> 00:39:17,800
 0,60 60,360 360,1110
-to be persistent.
+to be persistent,|
 
 1257
 00:39:19,510 --> 00:39:21,010
 0,450 450,630 630,720 720,960 960,1500
-Because you are not allowed
+because you are not allowed
 
 1258
 00:39:21,220 --> 00:39:23,440
 0,120 120,450 450,750 750,1290 1680,2220
-to vote for another a
+to vote for another {}
 
 1259
 00:39:23,440 --> 00:39:25,510
 0,720 720,1110 1110,1170 1170,1560 1560,2070
-candidate in the same term.
+candidate in the same term,|
 
 1260
 00:39:26,260 --> 00:39:28,450
 0,540 720,1320 1320,1530 1530,1710 1710,2190
-Um and but the rafting
+{} and but the raft
 
 1261
 00:39:28,450 --> 00:39:29,380
 0,300 300,360 360,570 570,720 720,930
-maintains a little bit more
+contains a little bit more
 
 1262
 00:39:29,380 --> 00:39:31,960
 0,690 810,960 960,1230 1230,2040 2340,2580
-information and also maintains the
+information| and also maintains the
 
 1263
 00:39:31,960 --> 00:39:34,090
@@ -6305,12 +6305,12 @@ log on disk or in
 1264
 00:39:34,090 --> 00:39:35,560
 0,450 450,930
-persistent state.
+persistent state,|
 
 1265
 00:39:35,560 --> 00:39:37,630
 0,840 870,1110 1110,1230 1230,1470 1470,2070
-And um the current terms.
+and {} the current term.|
 
 1266
 00:39:42,820 --> 00:39:43,690
@@ -6320,17 +6320,16 @@ And for each one we
 1267
 00:39:43,690 --> 00:39:45,460
 0,360 360,660 660,1050 1050,1110 1110,1770
-should ask ourselves a question,
+should ask ourselves the question,|
 
 1268
 00:39:45,670 --> 00:39:47,180
 0,930
-um.
 
 1269
 00:39:47,210 --> 00:39:49,730
 0,960 960,1560 1590,1800 1800,2160 2160,2520
-Why maintain a persistent state
+why maintain a persistent state,|
 
 1270
 00:39:49,730 --> 00:39:51,770
@@ -6340,7 +6339,7 @@ because it means that whenever
 1271
 00:39:51,770 --> 00:39:53,960
 0,180 180,660 660,870 870,1320 1320,2190
-we update that state whenever
+we update that state,| whenever
 
 1272
 00:39:53,960 --> 00:39:55,220
@@ -6350,42 +6349,42 @@ we append an entry to
 1273
 00:39:55,220 --> 00:39:57,380
 0,90 90,630 720,1350 1350,1710 1710,2160
-the blog whenever we increment
+the log,| whenever we increment
 
 1274
 00:39:57,380 --> 00:39:59,990
 0,60 60,690 900,1500 1500,2190 2190,2610
-the term or whenever we
+the term| or whenever we
 
 1275
 00:39:59,990 --> 00:40:01,280
 0,240 240,690 690,810 810,1170 1170,1290
-change forward we actually have
+change forward,| we actually have
 
 1276
 00:40:01,280 --> 00:40:02,870
 0,90 90,300 300,360 360,870 1290,1590
-to write to disk, or
+to write to disk or
 
 1277
 00:40:02,870 --> 00:40:04,160
 0,120 120,480 480,900 900,1020 1020,1290
-to stable storage and stable
+to stable storage| and stable
 
 1278
 00:40:04,160 --> 00:40:06,230
 0,360 360,480 480,1260 1440,1590 1590,2070
-storage is expensive and so,
+storage is expensive| and so,
 
 1279
 00:40:06,410 --> 00:40:07,760
 0,240 240,420 420,660 660,1170 1170,1350
-um, it's very likely the
+{} it's very likely the
 
 1280
 00:40:07,760 --> 00:40:11,180
 0,870 870,1500 1650,2250 2490,3150 3150,3420
-example the the writing or
+example, the the writing or
 
 1281
 00:40:11,180 --> 00:40:12,260
@@ -6395,7 +6394,7 @@ to stable storage could be
 1282
 00:40:12,260 --> 00:40:14,120
 0,390 720,1080 1080,1290 1290,1380 1380,1860
-the could become a bottleneck.
+the could become a bottleneck.|
 
 1283
 00:40:15,800 --> 00:40:16,730
@@ -6405,7 +6404,7 @@ So we're only talking about
 1284
 00:40:16,730 --> 00:40:18,200
 0,450 450,540 540,600 600,990 990,1470
-34, so I'm going program
+votedFor,| so I'm going [],|
 
 1285
 00:40:18,200 --> 00:40:19,370
@@ -6415,7 +6414,7 @@ but let's talk about the
 1286
 00:40:19,370 --> 00:40:20,810
 0,450 450,900 900,1080 1080,1170 1170,1440
-walk, why does the log
+log,| why does the log
 
 1287
 00:40:20,810 --> 00:40:21,620
@@ -6425,12 +6424,12 @@ have to be written to
 1288
 00:40:21,620 --> 00:40:23,180
 0,420 420,1080
-persistent storage.
+persistent storage,|
 
 1289
 00:40:24,580 --> 00:40:26,320
 0,240 240,390 390,1200
-Can we reintegrate.
+can we reintegrate.|
 
 1290
 00:40:38,760 --> 00:40:39,480
@@ -6440,27 +6439,27 @@ Another way, you've got a
 1291
 00:40:39,480 --> 00:40:40,650
 0,330 330,510 510,690 690,930 930,1170
-question let's say we don't
+question,| let's say we don't
 
 1292
 00:40:40,650 --> 00:40:41,610
 0,180 180,300 300,420 420,660 660,960
-try to use table storage,
+try to use stable storage,|
 
 1293
 00:40:41,610 --> 00:40:42,960
 0,180 180,300 300,810
-what we break.
+what would break.|
 
 1294
 00:40:55,300 --> 00:40:57,820
 0,990 990,1140 1140,1350 1350,1530 1530,2520
-Yeah, if someone needed to
+Yeah, there's someone in the
 
 1295
 00:40:57,940 --> 00:40:58,960
 0,60 60,300 300,570 570,690 690,1020
-do to answer this question
+chat to answer this question,|
 
 1296
 00:40:58,960 --> 00:40:59,800
@@ -6470,72 +6469,72 @@ which you could lose the
 1297
 00:40:59,800 --> 00:41:00,850
 0,360 360,450 450,510 510,810 810,1050
-majority on the committee write
+majority on the commit write
 
 1298
 00:41:00,850 --> 00:41:02,300
 0,480 510,900
-entries, right.
+entries, right.|
 
 1299
 00:41:02,420 --> 00:41:05,030
 0,510 540,960 960,1020 1020,1740 1980,2610
-So here's the scenario a
+So here's the scenario, {}|
 
 1300
 00:41:05,060 --> 00:41:06,820
 0,570 570,1170
-we're the.
+we're, the
 
 1301
 00:41:06,820 --> 00:41:09,140
 0,480 480,1050 1050,1740
-Raft replicated the.
+raft replicated, the
 
 1302
 00:41:09,230 --> 00:41:11,600
 0,960 960,1620 1650,1830 1830,2310 2310,2370
-Operation on a majority of
+operation on a majority of
 
 1303
 00:41:11,600 --> 00:41:12,720
 0,90 90,630
-the notes.
+the nodes,|
 
 1304
 00:41:12,780 --> 00:41:14,520
 0,420 420,690 690,1440 1440,1560 1560,1740
-Um, so somebody you know
+{} so somebody you know
 
 1305
 00:41:14,550 --> 00:41:16,350
 0,420 420,600 600,720 720,1140 1170,1800
-majority, no it's actually a
+majority nodes it's actually {}
 
 1306
 00:41:16,380 --> 00:41:19,020
 0,600 630,810 810,1350 1350,1890 1920,2640
-committed to actually um delivering
+committed| to actually {} delivering
 
 1307
 00:41:19,770 --> 00:41:22,050
 0,330 330,750 750,1050 1050,1530 1530,2280
-have delivered having accepted a
+have delivered having accepted that
 
 1308
 00:41:22,080 --> 00:41:23,540
 0,420 420,840
-log entry.
+log entry,|
 
 1309
 00:41:23,570 --> 00:41:25,820
 0,300 300,660 660,1200 1230,1890 1920,2250
-So the leader, um sees
+so the leader {} sees
 
 1310
 00:41:25,820 --> 00:41:28,010
 0,120 120,810 1020,1470 1470,1740 1740,2190
-the commitments it um delivers
+the commits,| it {} delivers
 
 1311
 00:41:28,010 --> 00:41:29,180
@@ -6550,47 +6549,47 @@ on the applied channel to
 1313
 00:41:30,170 --> 00:41:32,600
 0,90 90,660 840,1560 1560,2340 2340,2430
-the surface serves executes the
+the servers,| servers executes the
 
 1314
 00:41:32,600 --> 00:41:34,340
 0,720 870,1110 1110,1320 1320,1410 1410,1740
-operation and lets the client
+operation| and lets the client
 
 1315
 00:41:34,340 --> 00:41:36,020
 0,330 330,450 450,870 870,1020 1020,1680
-know the operation has succeeded.
+know the operation has succeeded.|
 
 1316
 00:41:37,550 --> 00:41:39,860
 0,450 480,960 960,1170 1170,1620 1620,2310
-So now go basically exposed
+So now {you,know} basically exposed
 
 1317
 00:41:39,860 --> 00:41:40,700
 0,60 60,390 390,510 510,570 570,840
-the fact that the sexual
+the fact,| that the actually
 
 1318
 00:41:40,700 --> 00:41:43,250
 0,810 810,1110 1110,1620 1620,2040 2070,2550
-operation was actually a replicated
+operation was actually {} replicated
 
 1319
 00:41:43,250 --> 00:41:44,120
 0,60 60,390 390,450 450,780 780,870
-the majority of notice to
+the majority of nodes to
 
 1320
 00:41:44,120 --> 00:41:45,240
 0,90 90,600
-the client.
+the client.|
 
 1321
 00:41:45,390 --> 00:41:47,220
 0,270 270,810 870,1140 1140,1320 1320,1830
-And so if we're not
+And so if we're not,|
 
 1322
 00:41:47,220 --> 00:41:48,780
@@ -6600,7 +6599,7 @@ if the followers that actually
 1323
 00:41:48,780 --> 00:41:50,310
 0,570 570,780 780,1110 1110,1320 1320,1530
-received that entry did not
+received that entry,| did not
 
 1324
 00:41:50,310 --> 00:41:51,270
@@ -6610,7 +6609,7 @@ put it on put on
 1325
 00:41:51,270 --> 00:41:53,880
 0,540 780,1410 1410,1950 1950,2400 2400,2610
-desk a and a so
+disk| {} and {} so
 
 1326
 00:41:53,880 --> 00:41:55,290
@@ -6620,12 +6619,12 @@ that when the reboot they
 1327
 00:41:55,290 --> 00:41:56,760
 0,270 270,570 570,780 1170,1380 1380,1470
-still have it, um, we
+still have it,| {} we
 
 1328
 00:41:56,760 --> 00:41:57,930
 0,120 120,390 390,690 690,780 780,1170
-could run into the case,
+could run into the case,|
 
 1329
 00:41:57,930 --> 00:41:59,400
@@ -6635,7 +6634,7 @@ the exactly that's the answer
 1330
 00:41:59,400 --> 00:42:00,840
 0,60 60,150 150,510 510,1080 1080,1440
-in the chat that we
+in the chat,| that we
 
 1331
 00:42:00,840 --> 00:42:02,430
@@ -6645,7 +6644,7 @@ lose the majority on committed
 1332
 00:42:02,430 --> 00:42:03,720
 0,360 360,630 630,810 810,1110 1110,1290
-entry and that entry will
+entry| and that entry will
 
 1333
 00:42:03,720 --> 00:42:04,890
@@ -6655,17 +6654,17 @@ not be delivered on the
 1334
 00:42:04,980 --> 00:42:07,620
 0,720 720,1170 1170,1380 1650,1980 1980,2640
-remaining replica 's, um to
+remaining {replicas -} {} to
 
 1335
 00:42:07,620 --> 00:42:08,940
 0,210 210,780 780,1110 1110,1230 1230,1320
-the surface and so the
+the servers| and so the
 
 1336
 00:42:08,940 --> 00:42:10,350
 0,450 450,540 540,720 720,990 990,1410
-client will see something strange
+client will see something strange,|
 
 1337
 00:42:10,350 --> 00:42:11,460
@@ -6680,7 +6679,7 @@ operation that it did actually
 1339
 00:42:12,660 --> 00:42:14,310
 0,360 720,810 810,1020 1020,1140 1140,1650
-happen a little bit later
+happen a little bit later,|
 
 1340
 00:42:14,400 --> 00:42:16,110
@@ -6690,7 +6689,7 @@ actually goes into the operation
 1341
 00:42:16,110 --> 00:42:17,180
 0,330 330,720
-hasn't happened.
+hasn't happened.|
 
 1342
 00:42:17,700 --> 00:42:18,450
@@ -6700,37 +6699,37 @@ And so it actually is
 1343
 00:42:18,450 --> 00:42:19,740
 0,450 450,600 600,750 750,1080 1080,1290
-important that this actually isn't
+important,| that this actually isn't
 
 1344
 00:42:19,740 --> 00:42:21,900
 0,330 330,780 780,1080 1080,1410 1410,2160
-stable storage, we basically promised
+stable storage,| we basically promised
 
 1345
 00:42:21,900 --> 00:42:23,980
 0,120 120,660 690,930 930,1410
-the leader to commit.
+the leader to commit,|
 
 1346
 00:42:28,490 --> 00:42:29,540
 0,180 180,240 240,630 630,870 870,1050
-And we cannot back out
+and we cannot back out
 
 1347
 00:42:29,540 --> 00:42:30,820
 0,90 90,240 240,780
-of that promise.
+of that promise.|
 
 1348
 00:42:33,420 --> 00:42:34,440
 0,540
-Good.
+Okay?|
 
 1349
 00:42:34,930 --> 00:42:36,600
 0,270 270,630 630,810 810,1170
-Any questions about this.
+Any questions about this?|
 
 1350
 00:42:43,660 --> 00:42:45,370
@@ -6745,7 +6744,7 @@ remember the current term for
 1352
 00:42:46,900 --> 00:42:48,100
 0,180 180,480 480,720 720,990 990,1200
-on disk one it does
+on disk,| does it does
 
 1353
 00:42:48,100 --> 00:42:48,880
@@ -6755,27 +6754,27 @@ not need to be stored
 1354
 00:42:48,880 --> 00:42:49,900
 0,480
-stably.
+stably?|
 
 1355
 00:42:53,020 --> 00:42:55,340
 0,300 300,810 810,990 990,1770
-A well the term.
+{} Well, the term,
 
 1356
 00:42:55,370 --> 00:42:56,580
 0,630
-I'm.
+{}
 
 1357
 00:42:57,320 --> 00:42:58,310
 0,240 240,480 480,600 600,660 660,990
-You vote for a different
+you vote for a different
 
 1358
 00:42:58,310 --> 00:42:59,450
 0,300 300,450 450,660 660,990 990,1140
-person in every term, so
+person in every term,| so
 
 1359
 00:42:59,450 --> 00:43:00,410
@@ -6785,12 +6784,12 @@ if you don't keep track
 1360
 00:43:00,410 --> 00:43:01,160
 0,60 60,210 210,420 420,510 510,750
-of what term it is
+of what term it is,|
 
 1361
 00:43:01,160 --> 00:43:02,720
 0,240 240,360 360,630 630,1140 1410,1560
-then you don't really you
+then you don't really, you
 
 1362
 00:43:02,720 --> 00:43:03,830
@@ -6800,12 +6799,12 @@ don't actually know who you
 1363
 00:43:03,830 --> 00:43:05,660
 0,360 360,600 600,930 960,1350 1380,1830
-voted for right yeah exactly
+voted for, right.| Yeah, exactly,
 
 1364
 00:43:05,660 --> 00:43:06,860
 0,120 120,690 690,780 780,1020 1020,1200
-you know you voted for
+you know you voted for,|
 
 1365
 00:43:06,860 --> 00:43:08,330
@@ -6820,12 +6819,12 @@ terms always have to go
 1367
 00:43:09,380 --> 00:43:11,210
 0,300 690,930 930,1320 1320,1470 1470,1830
-up, you cannot go down
+up,| you cannot go down
 
 1368
 00:43:11,210 --> 00:43:12,830
 0,120 120,600 870,1380 1380,1500 1500,1620
-in term because you're going
+in term,| because you're going
 
 1369
 00:43:12,830 --> 00:43:14,270
@@ -6835,32 +6834,32 @@ to use that to detect
 1370
 00:43:14,270 --> 00:43:16,640
 0,210 210,570 570,1050 1380,1860 1860,2370
-our PCs from state leaders
+{rpcs -} from stale leaders
 
 1371
 00:43:16,640 --> 00:43:18,740
 0,180 180,1080 1080,1740
-and stale candidates.
+and stale candidates,|
 
 1372
 00:43:19,790 --> 00:43:20,540
 0,180 180,300 300,510 510,660 660,750
-But it always has to
+but it always has to
 
 1373
 00:43:20,540 --> 00:43:21,600
 0,150 150,480
-go up.
+go up.|
 
 1374
 00:43:30,690 --> 00:43:31,840
 0,630
-Okay.
+Okay?|
 
 1375
 00:43:34,550 --> 00:43:36,600
 0,240 240,570 570,810 810,1560
-Any questions about persistence.
+Any questions about persistence?|
 
 1376
 00:43:45,360 --> 00:43:51,630
@@ -6875,27 +6874,27 @@ the way you laid out
 1378
 00:43:52,470 --> 00:43:54,090
 0,480 480,1020 1050,1230 1230,1410 1410,1620
-stuff but you say there's
+stuff,| but you say there's
 
 1379
 00:43:54,090 --> 00:43:56,670
 0,180 180,780 780,1230 1470,1530 1800,2580
-two strategies right they need
+two strategies, right,| they need
 
 1380
 00:43:56,670 --> 00:43:57,860
 0,90 90,750
-a log.
+a log,
 
 1381
 00:43:57,990 --> 00:43:59,820
 0,570 570,810 810,1290 1290,1590 1590,1830
-And a starting from a
+and {} starting from a
 
 1382
 00:43:59,820 --> 00:44:04,080
 0,660 660,1440 1890,2850 3360,3570 3570,4260
-persistent state, yeah and so
+persistent state.| Yeah, and so
 
 1383
 00:44:04,200 --> 00:44:05,850
@@ -6910,37 +6909,36 @@ describe starting from a persistent
 1385
 00:44:07,560 --> 00:44:08,740
 0,690
-state.
+state,|
 
 1386
 00:44:08,770 --> 00:44:10,040
 0,750
-OH.
 
 1387
 00:44:11,030 --> 00:44:12,700
 0,150 150,480 510,1050
-Do you like.
+do you like,
 
 1388
 00:44:13,440 --> 00:44:15,120
 0,150 150,540 540,1230
-Do you are.
+do you are
 
 1389
 00:44:15,730 --> 00:44:17,920
 0,960 990,1590
-Replay like.
+replay like,|
 
 1390
 00:44:18,600 --> 00:44:20,400
 0,810 840,1050 1050,1350 1350,1500 1500,1800
-Like I guess it doesn't
+like I guess it doesn't
 
 1391
 00:44:20,400 --> 00:44:21,540
 0,180 180,270 270,420 420,870 870,1140
-say in this slide like
+say in this slide,| like
 
 1392
 00:44:21,540 --> 00:44:23,130
@@ -6955,17 +6953,17 @@ assume you also have like
 1394
 00:44:25,020 --> 00:44:28,100
 0,420 720,1740 1800,2070 2070,2550
-a snapshot of a.
+a snapshot of {}
 
 1395
 00:44:28,100 --> 00:44:30,050
 0,600 1080,1200 1200,1350 1350,1770 1770,1950
-Obviously I have not talked
+obviously.| I have not talked
 
 1396
 00:44:30,050 --> 00:44:31,280
 0,210 210,630 630,750 750,930 930,1230
-about snapshots at all yet
+about snapshots at all yet,|
 
 1397
 00:44:31,310 --> 00:44:32,180
@@ -6975,32 +6973,32 @@ which we'll talk about in
 1398
 00:44:32,180 --> 00:44:33,470
 0,30 30,480 510,720 720,1230 1230,1290
-a second it's actually the
+a second,| it's actually the
 
 1399
 00:44:33,470 --> 00:44:35,080
 0,420 450,1080
-next topic.
+next topic.|
 
 1400
 00:44:35,080 --> 00:44:36,700
 0,270 270,750 750,960 960,1260 1260,1620
-Okay, but the point is
+Okay, but.| The point is,
 
 1401
 00:44:36,820 --> 00:44:38,680
 0,360 390,510 510,720 720,1260 1260,1860
-OK, the shoe strategy after
+okay, the two strategys after
 
 1402
 00:44:38,680 --> 00:44:40,390
 0,150 150,540 540,1140 1170,1500 1500,1710
-a note crashes there's two
+a node crashes,| there's two
 
 1403
 00:44:40,390 --> 00:44:41,830
 0,360 360,570 570,900 900,1080 1080,1440
-ways to treat that note
+ways to treat that node,|
 
 1404
 00:44:41,920 --> 00:44:42,940
@@ -7010,62 +7008,62 @@ one has a complete new
 1405
 00:44:42,940 --> 00:44:44,380
 0,480 510,690 690,930 930,1350 1350,1440
-note that never existed in
+node, that never existed in
 
 1406
 00:44:44,380 --> 00:44:46,330
 0,60 60,600 750,1320 1710,1860 1860,1950
-the system ever and so
+the system ever| and so
 
 1407
 00:44:46,330 --> 00:44:48,040
 0,120 120,180 180,390 390,720 720,1710
-when it comes up you
+when it comes up {you,know}
 
 1408
 00:44:48,040 --> 00:44:49,450
 0,420 420,780 780,870 870,930 930,1410
-you added to the cluster
+you added to the cluster|
 
 1409
 00:44:49,450 --> 00:44:50,290
 0,330 330,480 480,600 600,720 720,840
-as if it's in your
+as if it's a new
 
 1410
 00:44:50,290 --> 00:44:51,520
 0,300 300,450 450,780 780,870 870,1230
-news, so basically the cluster
+node,| so basically the cluster
 
 1411
 00:44:51,520 --> 00:44:52,640
 0,270 270,690
-goes from.
+goes from,|
 
 1412
 00:44:52,830 --> 00:44:54,210
 0,150 150,480 810,1170 1170,1320 1320,1380
-You know, let's say you
+you know, let's say you
 
 1413
 00:44:54,210 --> 00:44:55,590
 0,240 240,330 330,600 600,1110 1140,1380
-started with seven nodes, one
+started with seven nodes,| one
 
 1414
 00:44:55,590 --> 00:44:56,790
 0,180 180,690 690,780 780,1080 1080,1200
-guy crashes the cluster has
+guy crashes, the cluster has
 
 1415
 00:44:56,790 --> 00:44:58,530
 0,270 270,900 1050,1200 1200,1380 1380,1740
-six notes, it just happily
+six nodes,| it just happily
 
 1416
 00:44:58,530 --> 00:44:59,730
 0,570 570,660 660,780 780,1140 1140,1200
-pursuits, you know, whatever the
+proceed,| you know, whatever the
 
 1417
 00:44:59,730 --> 00:45:01,380
@@ -7080,12 +7078,12 @@ and all that kind of
 1419
 00:45:02,010 --> 00:45:04,260
 0,420 570,780 780,1290 1410,1920 1920,2250
-stuff and then the second
+stuff| and then the second
 
 1420
 00:45:04,260 --> 00:45:05,850
 0,330 330,840 840,1050 1050,1290 1290,1590
-node actually comes back up.
+node actually comes back up.|
 
 1421
 00:45:06,360 --> 00:45:07,710
@@ -7095,7 +7093,7 @@ And so there's two ways
 1422
 00:45:07,710 --> 00:45:09,570
 0,180 180,630 660,1050 1050,1560 1560,1860
-you know then joint one
+you know then join,| one
 
 1423
 00:45:09,570 --> 00:45:10,380
@@ -7110,22 +7108,22 @@ well I just forget everything
 1425
 00:45:11,610 --> 00:45:14,250
 0,90 90,360 360,810 990,2400 2400,2640
-I did ever I'll join
+I did ever,| I'll join
 
 1426
 00:45:14,250 --> 00:45:15,390
 0,90 90,420 420,780 780,1050 1050,1140
-the cluster again and the
+the cluster again| and the
 
 1427
 00:45:15,390 --> 00:45:16,350
 0,180 180,420 420,630 630,750 750,960
-other six notes will bring
+other six nodes will bring
 
 1428
 00:45:16,350 --> 00:45:17,220
 0,90 90,210 210,270 270,600 720,870
-me up to date and
+me up to date| and
 
 1429
 00:45:17,220 --> 00:45:18,210
@@ -7135,17 +7133,17 @@ they'll send the log to
 1430
 00:45:18,210 --> 00:45:20,280
 0,360 360,540 540,930 930,1350 1350,2070
-me and I'll redo operations.
+me and I'll redo operations,|
 
 1431
 00:45:21,700 --> 00:45:23,170
 0,510 510,720 720,810 810,900 900,1470
-And that can be costly,
+and that can be costly,
 
 1432
 00:45:23,230 --> 00:45:24,840
 0,300 300,420 420,1080
-even with snapshots.
+even with snapshots.|
 
 1433
 00:45:25,080 --> 00:45:26,730
@@ -7155,17 +7153,17 @@ So the second strategy is
 1434
 00:45:26,730 --> 00:45:28,020
 0,120 120,330 330,690 1050,1200 1200,1290
-to say well you know
+to say,| well you know
 
 1435
 00:45:28,020 --> 00:45:29,340
 0,330 330,450 450,780 780,1050 1050,1320
-if the same note seven
+if the same node seven
 
 1436
 00:45:29,340 --> 00:45:30,720
 0,180 180,420 420,570 570,990 1200,1380
-comes back up again, it
+comes back up again,| it
 
 1437
 00:45:30,720 --> 00:45:32,610
@@ -7180,12 +7178,12 @@ with its persistent state that
 1439
 00:45:34,230 --> 00:45:35,300
 0,120 120,630
-it has.
+it has,|
 
 1440
 00:45:35,960 --> 00:45:37,790
 0,480 690,1140 1140,1350 1350,1740 1740,1830
-Um, you know basically the
+{} you know basically the
 
 1441
 00:45:37,790 --> 00:45:39,230
@@ -7200,12 +7198,12 @@ you went down for a
 1443
 00:45:40,490 --> 00:45:42,080
 0,240 240,870 870,930 930,1170 1170,1590
-couple nanoseconds or micro seconds
+couple nanoseconds or {microseconds -}
 
 1444
 00:45:42,080 --> 00:45:43,730
 0,30 30,630 870,1170 1170,1500 1500,1650
-or milliseconds, there's basically not
+or milliseconds,| there's basically not
 
 1445
 00:45:43,730 --> 00:45:44,570
@@ -7215,97 +7213,97 @@ much catching up to do
 1446
 00:45:44,570 --> 00:45:45,770
 0,90 90,300 300,630 630,1020 1020,1200
-at all, because our he
+at all,| because it already
 
 1447
 00:45:45,770 --> 00:45:47,180
 0,300 300,450 450,540 540,930
-has on the state.
+has on the state.|
 
 1448
 00:45:48,700 --> 00:45:50,760
 0,570 720,990 990,1500
-Um, but it.
+{} But it
 
 1449
 00:45:50,760 --> 00:45:52,160
 0,210 210,780
-Would like.
+would like,|
 
 1450
 00:45:52,160 --> 00:45:54,140
 0,630 660,1110 1260,1740 1740,1860 1860,1980
-Um the aside from the
+{} the aside from the
 
 1451
 00:45:54,140 --> 00:45:55,520
 0,390 390,600 600,900 900,1080 1080,1380
-log, there's also a state
+log,| there's also a state
 
 1452
 00:45:55,520 --> 00:45:56,600
 0,390 390,600 600,720 720,900 900,1080
-machine right that you've been
+machine, right,| that you've been
 
 1453
 00:45:56,600 --> 00:45:58,490
 0,300 480,720 720,1080 1080,1560 1560,1890
-like a blind changes too,
+like {apply -} changes too.|
 
 1454
 00:45:58,520 --> 00:46:00,590
 0,510 510,1050 1050,1350 1350,1770 1770,2070
-yeah yeah, so yeah let's
+Yeah yeah, so yeah let's
 
 1455
 00:46:00,590 --> 00:46:01,640
 0,240 240,450 450,690 690,870 870,1050
-talk about that so there's
+talk about that,| so there's
 
 1456
 00:46:01,640 --> 00:46:02,810
 0,210 210,390 390,480 480,720 720,1170
-nothing that's the next topic.
+nothing, that's the next topic.|
 
 1457
 00:46:05,610 --> 00:46:07,830
 0,210 210,390 390,1110 1110,1530 1770,2220
-I think yeah so now
+I think, yeah,| so now
 
 1458
 00:46:07,830 --> 00:46:09,840
 0,360 360,540 540,840 840,1440
-what about service recovery.
+what about service recovery.|
 
 1459
 00:46:16,120 --> 00:46:17,440
 0,480 480,630 630,930 930,1050 1050,1320
-Sorry I actually have another
+Sorry, I actually have another
 
 1460
 00:46:17,440 --> 00:46:20,440
 0,390 390,510 510,1410 1770,2190 2490,3000
-question on persistence, yep, um,
+question on persistence.| Yep. {}|
 
 1461
 00:46:20,500 --> 00:46:22,630
 0,780 870,1260 1260,1380 1380,1710 1710,2130
-when does the server decide
+When does the server decide
 
 1462
 00:46:22,630 --> 00:46:23,900
 0,90 90,780
-to persist.
+to persist?|
 
 1463
 00:46:24,170 --> 00:46:26,630
 0,510 510,900 900,1110 1110,1560 1800,2460
-A good great question, um,
+{} Good, great question, {}|
 
 1464
 00:46:26,630 --> 00:46:27,470
 0,120 120,180 180,300 300,390 390,840
-you know what you think.
+you know what you think,|
 
 1465
 00:46:28,790 --> 00:46:29,630
@@ -7315,12 +7313,12 @@ I'm sure you've thought about
 1466
 00:46:29,630 --> 00:46:30,560
 0,270
-this.
+this.|
 
 1467
 00:46:33,190 --> 00:46:35,260
 0,120 120,600 630,720 720,1080 1080,2070
-I mean I think a
+I mean, I think a
 
 1468
 00:46:35,260 --> 00:46:37,000
@@ -7335,7 +7333,7 @@ time one of these variables
 1470
 00:46:38,980 --> 00:46:41,500
 0,600 600,810 810,1140 1470,2010 2010,2520
-changes but that seems like
+changes,| but that seems like
 
 1471
 00:46:41,770 --> 00:46:43,330
@@ -7345,47 +7343,47 @@ a very costly thing to
 1472
 00:46:43,330 --> 00:46:45,070
 0,390 750,960 960,1320 1320,1590 1590,1740
-do I I think that
+do.| I I think that
 
 1473
 00:46:45,070 --> 00:46:46,380
 0,150 150,210 210,480 480,840
-is the correct answer.
+is the correct answer,|
 
 1474
 00:46:46,770 --> 00:46:47,850
 0,270 270,690 690,870 870,960 960,1080
-A whenever one of these
+{} whenever one of these
 
 1475
 00:46:47,850 --> 00:46:49,560
 0,330 330,720 720,900 900,1410 1410,1710
-variable changes you actually a
+variable changes,| you actually {}
 
 1476
 00:46:49,560 --> 00:46:51,090
 0,300 300,690 690,870 870,1230 1260,1530
-flush to a desk or
+flush to {} disk or
 
 1477
 00:46:51,090 --> 00:46:52,380
 0,330 330,450 450,870 870,1020 1020,1290
-write to in our case
+write to,| in our case
 
 1478
 00:46:52,380 --> 00:46:54,150
 0,270 270,720 720,1200 1200,1500 1500,1770
-correct in labs you right
+correct in labs you write
 
 1479
 00:46:54,150 --> 00:46:56,780
 0,480 540,690 690,1290 1470,2130
-to the persistent module.
+to the persistent module.|
 
 1480
 00:46:57,960 --> 00:46:59,490
 0,270 270,720 990,1170 1170,1230 1230,1530
-Okay, and so for example
+Okay, and.| So for example
 
 1481
 00:46:59,490 --> 00:47:00,870
@@ -7395,27 +7393,27 @@ when the leader you know
 1482
 00:47:00,870 --> 00:47:02,370
 0,780 780,870 870,1290 1290,1380 1380,1500
-accepts an entry, you know
+accepts an entry,| you know
 
 1483
 00:47:02,370 --> 00:47:04,470
 0,210 210,750 1110,1530 1530,1890 1890,2100
-through start and offensive to
+through start| and appends to
 
 1484
 00:47:04,470 --> 00:47:06,540
 0,330 330,1050 1050,1350 1350,1860 1890,2070
-its local its log it
+its local its log,| it
 
 1485
 00:47:06,540 --> 00:47:08,310
 0,210 210,390 390,480 480,780 780,1770
-actually has to persist zat
+actually has to persist that
 
 1486
 00:47:08,310 --> 00:47:09,220
 0,390
-entry.
+entry.|
 
 1487
 00:47:13,480 --> 00:47:14,680
@@ -7425,7 +7423,7 @@ Right, and so does the
 1488
 00:47:14,680 --> 00:47:17,800
 0,1050 1080,1380 1380,2310 2340,2880 2880,3120
-persisting work incrementally so it
+persisting work incrementally,| so it
 
 1489
 00:47:17,800 --> 00:47:18,580
@@ -7435,47 +7433,47 @@ like once you get a
 1490
 00:47:18,580 --> 00:47:20,860
 0,180 180,450 450,1020 1260,1680 1680,2280
-new log entry, you append.
+new log entry,| you append
 
 1491
 00:47:21,440 --> 00:47:22,850
 0,210 210,540 810,990 990,1050 1050,1410
-Or to take the entire
+or to take the entire
 
 1492
 00:47:22,850 --> 00:47:23,930
 0,240 240,450 450,690 690,870 870,1080
-state and like we buy
+state| and like {rewrite,it -}
 
 1493
 00:47:23,930 --> 00:47:25,430
 0,330 330,450 450,900 900,1200 1200,1500
-into the fight but OK
+into the file.| But, okay,
 
 1494
 00:47:25,430 --> 00:47:27,290
 0,420 420,660 660,1020 1020,1260 1260,1860
-in real life you repent
+in real life, you append,
 
 1495
 00:47:27,320 --> 00:47:28,280
 0,270 270,450 450,570 570,720 720,960
-right then you would not
+right,| then you would not
 
 1496
 00:47:28,280 --> 00:47:29,390
 0,360 360,420 420,600 600,990 990,1110
-rewrite the whole log, you
+rewrite the whole log,| you
 
 1497
 00:47:29,390 --> 00:47:30,620
 0,120 120,270 270,660 660,930 930,1230
-would just repent one entry
+would just append one entry
 
 1498
 00:47:30,620 --> 00:47:31,340
 0,120 120,210 210,480 480,570 570,720
-to the log and that's
+to the log| and that's
 
 1499
 00:47:31,340 --> 00:47:32,240
@@ -7485,7 +7483,7 @@ actually one of the reasons
 1500
 00:47:32,240 --> 00:47:34,430
 0,120 120,480 480,1020 1260,1800 1800,2190
-that launcher cool, um, because
+that {logs,are} cool,| {} because
 
 1501
 00:47:34,430 --> 00:47:35,420
@@ -7500,27 +7498,27 @@ append at the end and
 1503
 00:47:37,250 --> 00:47:38,480
 0,780
-incrementally.
+incrementally,|
 
 1504
 00:47:38,480 --> 00:47:41,300
 0,510 750,1050 1050,1230 1230,2730 2730,2820
-Um, in a rockin, the
+{} in our lab,| the
 
 1505
 00:47:41,300 --> 00:47:42,980
 0,180 180,390 390,510 510,960 990,1680
-whole thing is fake, the
+whole thing is fake,| the
 
 1506
 00:47:43,010 --> 00:47:44,780
 0,420 420,660 660,900 900,1170 1170,1770
-persistent actually doesn't really persist
+persistent actually doesn't really persist,|
 
 1507
 00:47:45,080 --> 00:47:47,510
 0,1080 1080,1530 1560,2160 2160,2310 2310,2430
-a, um, you know it
+{ -} you know it
 
 1508
 00:47:47,510 --> 00:47:48,830
@@ -7530,62 +7528,62 @@ keeps the object around in
 1509
 00:47:48,830 --> 00:47:51,680
 0,930 1050,2010 2010,2280 2280,2670 2670,2850
-between crashes because crashes are
+between crashes,| because crashes are
 
 1510
 00:47:51,680 --> 00:47:52,760
 0,330 330,510 510,600 600,960 960,1080
-also sort of fake you
+also sort of fake,| you
 
 1511
 00:47:52,760 --> 00:47:54,650
 0,120 120,360 360,690 690,1320 1410,1890
-know that Esther basically stops
+know the tester basically stops
 
 1512
 00:47:54,650 --> 00:47:56,450
 0,480 480,1080 1080,1410 1410,1530 1530,1800
-notes restart them and basically
+nodes, restart them| and basically
 
 1513
 00:47:56,450 --> 00:47:57,620
 0,240 240,480 480,600 600,750 750,1170
-gives them the new state.
+gives them the new state,|
 
 1514
 00:47:59,840 --> 00:48:00,920
 0,210 210,330 330,390 390,600 600,1080
-But in the real system
+but in the real system,
 
 1515
 00:48:00,950 --> 00:48:02,780
 0,450 450,660 660,780 780,1260
-a you would depend.
+{} you would append,|
 
 1516
 00:48:02,970 --> 00:48:03,660
 0,150 150,270 270,480 480,600 600,690
-So the log would be
+so the log would be
 
 1517
 00:48:03,660 --> 00:48:04,950
 0,120 120,780 810,990 990,1080 1080,1290
-your file, and you would
+a file,| and you would
 
 1518
 00:48:04,950 --> 00:48:05,640
 0,150 150,240 240,480 480,600 600,690
-end an entry to the
+append an entry to the
 
 1519
 00:48:05,640 --> 00:48:06,580
 0,390
-file.
+file.|
 
 1520
 00:48:07,500 --> 00:48:08,740
 0,210 210,510
-Thank you.
+Thank you.|
 
 1521
 00:48:14,260 --> 00:48:15,460
@@ -7595,7 +7593,7 @@ And yes, you know we
 1522
 00:48:15,460 --> 00:48:16,660
 0,420 420,510 510,690 690,900 900,1200
-actually you will have to
+actually you will have to,|
 
 1523
 00:48:16,660 --> 00:48:18,400
@@ -7605,17 +7603,17 @@ a real system, if you
 1524
 00:48:18,400 --> 00:48:19,660
 0,240 240,330 330,600 600,990 990,1260
-append the log entry, your
+append the log entry,| your
 
 1525
 00:48:19,660 --> 00:48:20,980
 0,270 270,510 510,750 750,1080 1080,1320
-first penta log entering then
+first append log entry, then
 
 1526
 00:48:20,980 --> 00:48:23,170
 0,120 120,690 900,1050 1050,1710 1710,2190
-your response so independent trees,
+you response,| so {in,the,append,entries -},|
 
 1527
 00:48:23,350 --> 00:48:24,550
@@ -7625,57 +7623,57 @@ if you update the log
 1528
 00:48:24,760 --> 00:48:27,130
 0,780 1080,1230 1230,1410 1410,2160 2160,2370
-independent, so if entries on
+append,| so if {append,entries} on
 
 1529
 00:48:27,130 --> 00:48:27,980
 0,360
-the.
+the
 
 1530
 00:48:27,980 --> 00:48:29,750
 0,810 840,1350 1350,1410 1410,1560 1560,1770
-Follower receives a new set
+follower,| receives a new set
 
 1531
 00:48:29,750 --> 00:48:31,130
 0,90 90,360 360,840 840,1020 1020,1380
-of log entries, it upends
+of log entries,| it appends
 
 1532
 00:48:31,130 --> 00:48:33,170
 0,150 150,570 570,1020 1050,1680 1680,2040
-them to its local assistant
+them to its local persistent
 
 1533
 00:48:33,170 --> 00:48:34,490
 0,510 570,780 780,1080 1080,1200 1200,1320
-log and then it can
+log| and then it can
 
 1534
 00:48:34,490 --> 00:48:36,320
 0,480 480,780 780,1290 1440,1710 1710,1830
-respond because you would be
+respond,| because you would be
 
 1535
 00:48:36,320 --> 00:48:38,540
 0,450 450,600 600,1080 1080,1770 1770,2220
-bad to respond before appending
+bad to respond before appending,|
 
 1536
 00:48:38,540 --> 00:48:40,970
 0,390 540,1290 1320,1680 1680,2010 2010,2430
-because then you might loose,
+because then you might lose
 
 1537
 00:48:40,970 --> 00:48:42,170
 0,90 90,210 210,690 960,1110 1110,1200
-you know the if you
+you know the,| if you
 
 1538
 00:48:42,170 --> 00:48:43,550
 0,420 420,660 660,1020 1020,1200 1200,1380
-responded before appending you might
+responded before appending, you might
 
 1539
 00:48:43,550 --> 00:48:44,960
@@ -7685,12 +7683,12 @@ be running a situation where
 1540
 00:48:45,170 --> 00:48:46,610
 0,360 390,810 810,1170 1170,1350 1350,1440
-a just before actually the
+{} just before actually the
 
 1541
 00:48:46,610 --> 00:48:48,080
 0,270 270,450 450,810 810,930 930,1470
-actual pen happens your crashes
+actual append happens,| you crashes,|
 
 1542
 00:48:48,290 --> 00:48:49,520
@@ -7700,7 +7698,7 @@ and so you actually did
 1543
 00:48:49,520 --> 00:48:51,710
 0,360 360,750 750,990 990,1500 1680,2190
-not persist, walk entries and
+not persist log entries| and
 
 1544
 00:48:51,710 --> 00:48:52,820
@@ -7710,17 +7708,17 @@ so you would you know,
 1545
 00:48:52,940 --> 00:48:54,830
 0,330 330,1080 1080,1200 1200,1530 1530,1890
-um, you could lose committed
+{} you could lose committed
 
 1546
 00:48:54,830 --> 00:48:55,640
 0,510
-entries.
+entries.|
 
 1547
 00:49:00,250 --> 00:49:01,300
 0,540
-Okay.
+Okay?|
 
 1548
 00:49:02,620 --> 00:49:04,060
