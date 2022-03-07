@@ -11233,32 +11233,32 @@ So this really means what
 2251
 01:17:06,450 --> 01:17:08,440
 0,90 90,180 180,750 750,1350
-is the correctness criteria.
+is the correctness criteria.|
 
 2252
 01:17:11,940 --> 01:17:14,550
 0,450 450,1770 1770,2100 2100,2310 2310,2610
-And z way, we always
+And the way, we always
 
 2253
 01:17:14,550 --> 01:17:15,720
 0,120 120,570 570,780 780,1020 1020,1170
-have described so far we've
+have described so far,| we've
 
 2254
 01:17:15,720 --> 01:17:17,010
 0,180 180,450 450,930 930,1200 1200,1290
-been reasonable sloppy about it,
+been reasonable [sloppy] about it,|
 
 2255
 01:17:17,190 --> 01:17:18,690
 0,540 540,780 780,900 900,1260 1260,1500
-um, I've been sloppy about
+{} I've been sloppy about
 
 2256
 01:17:18,690 --> 01:17:20,280
 0,150 510,810 810,1020 1020,1320 1320,1590
-it, um, and maybe I've
+it,| {} and maybe I've
 
 2257
 01:17:20,280 --> 01:17:21,330
@@ -11268,17 +11268,17 @@ said is like well should
 2258
 01:17:21,330 --> 01:17:22,420
 0,660
-behave.
+behave
 
 2259
 01:17:22,480 --> 01:17:24,360
 0,480 480,510 510,780 780,1290
-Like a single machine.
+like a single machine.|
 
 2260
 01:17:32,820 --> 01:17:33,690
 0,120 120,270 270,480 480,630 630,870
-But even now there's a
+But even that there's a
 
 2261
 01:17:33,690 --> 01:17:34,800
@@ -11288,7 +11288,7 @@ little bit of an imprecise
 2262
 01:17:34,800 --> 01:17:36,300
 0,570 570,810 810,1020 1020,1380 1380,1500
-definition because what happens if
+definition,| because what happens if
 
 2263
 01:17:36,300 --> 01:17:37,380
@@ -11298,17 +11298,17 @@ two clients basically at the
 2264
 01:17:37,380 --> 01:17:39,150
 0,420 420,1080 1080,1230 1230,1680 1680,1770
-same time you execute a
+same time {you,know} execute a
 
 2265
 01:17:39,150 --> 01:17:40,290
 0,210 210,300 300,360 360,570 570,1140
-prude or a get operation
+put or a get operation|
 
 2266
 01:17:40,290 --> 01:17:41,610
 0,420 480,750 750,930 930,1230 1230,1320
-and what one actually is
+and what {} actually is
 
 2267
 01:17:41,610 --> 01:17:43,290
@@ -11318,7 +11318,7 @@ the correct outcome of these
 2268
 01:17:43,290 --> 01:17:44,490
 0,450 450,570 570,810 810,1050 1050,1200
-operations, so we really need
+operations,| so we really need
 
 2269
 01:17:44,490 --> 01:17:45,090
@@ -11328,7 +11328,7 @@ to sort a little bit
 2270
 01:17:45,090 --> 01:17:46,200
 0,180 180,630 630,870 900,990 990,1110
-more precise or you know
+more {preciser -},| you know
 
 2271
 01:17:46,200 --> 01:17:47,700
@@ -11338,7 +11338,7 @@ I think like maybe like
 2272
 01:17:47,700 --> 01:17:48,780
 0,30 30,240 240,690 690,870 870,1080
-a single machines the right
+a single machine,| the right
 
 2273
 01:17:48,780 --> 01:17:49,770
@@ -11348,7 +11348,7 @@ intuition, but we need a
 2274
 01:17:49,770 --> 01:17:52,050
 0,180 180,330 330,810 810,1620 1650,2280
-little bit precise a definition.
+little bit {preciser -} definition.|
 
 2275
 01:17:52,500 --> 01:17:54,330
@@ -11363,52 +11363,52 @@ the term used in the
 2277
 01:17:55,830 --> 01:17:58,260
 0,540 630,990 990,1500 1500,2130 2130,2430
-paper, this definition is called
+paper,| this definition is called
 
 2278
 01:17:58,260 --> 01:18:00,080
 0,840
-vulnerability.
+linearizability,|
 
 2279
 01:18:04,410 --> 01:18:07,290
 0,480 480,870 870,1230 1230,1890 1950,2880
-Literary abilities, basically spec specification
+{linearizability -} basically spec specification
 
 2280
 01:18:07,290 --> 01:18:09,870
 0,90 90,810 810,1920 2010,2250 2250,2580
-of what values a put
+of what values {} put
 
 2281
 01:18:09,870 --> 01:18:11,340
 0,180 180,420 420,840 840,990 990,1470
-and get operations can return.
+and get operations can return,|
 
 2282
 01:18:11,870 --> 01:18:15,050
 0,510 510,660 660,1050 1080,2640 2640,3180
-Particularly those in zen operations
+particularly those in put operations
 
 2283
 01:18:15,050 --> 01:18:16,160
 0,210 210,420 420,660 660,780 780,1110
-really what death can actually
+really what get can actually
 
 2284
 01:18:16,160 --> 01:18:17,160
 0,390
-return.
+return.|
 
 2285
 01:18:17,250 --> 01:18:19,110
 0,360 360,600 600,1200 1200,1620 1620,1860
-And they successfully, what are
+And {it,basically} successfully,| what are
 
 2286
 01:18:19,110 --> 01:18:20,730
 0,600 660,1050 1050,1140 1140,1260 1260,1620
-allowed things to be returned,
+allowed things to be returned,|
 
 2287
 01:18:20,730 --> 01:18:21,360
@@ -11418,37 +11418,37 @@ what are things that are
 2288
 01:18:21,360 --> 01:18:22,680
 0,300 300,720 720,840 840,960 960,1320
-not allowed to be returned
+not allowed to be returned,|
 
 2289
 01:18:22,710 --> 01:18:24,030
 0,630 630,810 810,1050 1050,1230 1230,1320
-independent or actually how you
+independent by actually how you
 
 2290
 01:18:24,030 --> 01:18:25,410
 0,360 360,540 810,1050 1050,1230 1230,1380
-implement it, it's just like
+implement it,| it's just like
 
 2291
 01:18:25,410 --> 01:18:27,060
 0,420 420,1140
-purely specification.
+purely specification.|
 
 2292
 01:18:27,660 --> 01:18:28,980
 0,420 420,630 630,960 960,1110 1110,1320
-And it basically has free
+And it basically has three
 
 2293
 01:18:28,980 --> 01:18:31,120
 0,480 480,690 690,1110 1110,1560
-components to theorize ability.
+components to {linearizability -},|
 
 2294
 01:18:31,530 --> 01:18:33,600
 0,510 870,1350 1350,1620 1620,1860 1860,2070
-Ah minimize ability says, if
+{} {linearizability -} says, if
 
 2295
 01:18:33,600 --> 01:18:34,380
@@ -11458,22 +11458,22 @@ you have look at some
 2296
 01:18:34,380 --> 01:18:36,120
 0,360 360,450 450,1290 1320,1560 1560,1740
-sequence of operations and some
+sequence of operations| and some
 
 2297
 01:18:36,120 --> 01:18:38,040
 0,90 90,240 240,720 720,1470 1770,1920
-of them executed currently it
+of them executed currently,| it
 
 2298
 01:18:38,040 --> 01:18:38,820
 0,240 240,300 300,390 390,480 480,780
-has to be the case
+has to be the case,|
 
 2299
 01:18:38,820 --> 01:18:39,930
 0,120 120,300 300,330 330,600 600,1110
-that there's a total order
+that there's a total order,|
 
 2300
 01:18:40,080 --> 01:18:41,220
@@ -11483,37 +11483,37 @@ so you can arrange all
 2301
 01:18:41,220 --> 01:18:42,510
 0,120 120,690 690,780 780,1020 1020,1290
-the operation in sum total
+the operation in some total
 
 2302
 01:18:42,510 --> 01:18:43,520
 0,480
-order.
+order,|
 
 2303
 01:18:52,350 --> 01:18:54,220
 0,480 480,1320
-Recycling operations.
+{put,or,set} operations.|
 
 2304
 01:18:55,730 --> 01:18:56,920
 0,630
-Two.
+Two,
 
 2305
 01:18:56,920 --> 01:18:58,140
 0,690
-I'm.
+{}
 
 2306
 01:18:58,220 --> 01:18:59,240
 0,270 270,450 450,540 540,810 810,1020
-It has to match real
+it has to match {real-time
 
 2307
 01:18:59,240 --> 01:19:00,300
 0,480
-time.
+-}.|
 
 2308
 01:19:06,260 --> 01:19:07,580
@@ -11528,17 +11528,17 @@ if an operation completed before
 2310
 01:19:10,100 --> 01:19:12,220
 0,60 60,390 390,870 870,1590
-the second operation started.
+the second operation started,|
 
 2311
 01:19:12,520 --> 01:19:14,050
 0,720 750,1050 1050,1140 1140,1380 1380,1530
-Um, even if those men
+{} even if those {}
 
 2312
 01:19:14,050 --> 01:19:15,550
 0,510 510,570 570,840 840,1350 1350,1500
-operators are different machines, it
+operations are different machines,| it
 
 2313
 01:19:15,550 --> 01:19:16,390
@@ -11548,7 +11548,7 @@ has to be the case
 2314
 01:19:16,390 --> 01:19:17,740
 0,180 180,300 300,480 480,780 780,1350
-that in this total order,
+that in this total order,|
 
 2315
 01:19:17,950 --> 01:19:19,840
@@ -11558,7 +11558,7 @@ the first operation shows up
 2316
 01:19:19,840 --> 01:19:21,700
 0,330 330,390 390,690 690,1320
-before the second operation.
+before the second operation.|
 
 2317
 01:19:24,280 --> 01:19:24,910
@@ -11568,12 +11568,12 @@ And that sort of makes
 2318
 01:19:24,910 --> 01:19:25,840
 0,240 240,510 510,660 660,810 810,930
-sense, great like if it
+sense, right,| like if it
 
 2319
 01:19:25,840 --> 01:19:26,950
 0,300 300,420 420,480 480,720 720,1110
-behaves like a single machine,
+behaves like a single machine,|
 
 2320
 01:19:26,950 --> 01:19:27,880
@@ -11583,7 +11583,7 @@ and you start an operation
 2321
 01:19:27,880 --> 01:19:30,220
 0,480 480,810 810,1110 1110,1710 1980,2340
-laugh after another operation, then
+{} after another operation,| then
 
 2322
 01:19:30,220 --> 01:19:31,540
@@ -11598,52 +11598,52 @@ return the results of the
 2324
 01:19:32,980 --> 01:19:35,350
 0,360 360,990 990,1320 1650,1950 1950,2370
-first operation so and finally
+first operation so| and finally
 
 2325
 01:19:35,350 --> 01:19:37,390
 0,120 120,330 330,1020 1740,1890 1890,2040
-a read operation, so this
+a read operation,| so this
 
 2326
 01:19:37,390 --> 01:19:38,560
 0,90 90,300 300,480 480,930 930,1170
-is like an arcane key
+is like in {out,case}, {key-value
 
 2327
 01:19:38,560 --> 01:19:39,790
 0,300 300,660 660,870 870,960 960,1230
-value server only has one
+-} server only has one
 
 2328
 01:19:39,790 --> 01:19:41,140
 0,210 210,660 660,810 810,960 960,1350
-read operation, then we get.
+read operation,| then we get,|
 
 2329
 01:19:41,560 --> 01:19:43,060
 0,150 150,270 270,720 720,1050 1050,1500
-Um, but the read operation
+{} but the read operation
 
 2330
 01:19:43,060 --> 01:19:44,860
 0,180 180,510 510,1110
-should always return.
+should always return
 
 2331
 01:19:45,930 --> 01:19:47,340
 0,210 210,900
-The result.
+the results
 
 2332
 01:19:49,110 --> 01:19:51,020
 0,210 210,300 300,630 630,1080
-What's the last right.
+of the last write.|
 
 2333
 01:19:56,040 --> 01:19:57,360
 0,420 420,660 660,750 750,870 870,1320
-Um, so in our case,
+{} So in our case,
 
 2334
 01:19:57,360 --> 01:19:58,560
@@ -11653,17 +11653,17 @@ you know we do get
 2335
 01:19:58,560 --> 01:20:01,410
 0,720 720,1350 1620,2130 2130,2640 2670,2850
-operation and um the food
+operation and {} the put
 
 2336
 01:20:01,410 --> 01:20:04,170
 0,780 1020,1710 1740,2130 2130,2370 2370,2760
-operation, a happened well before
+operation,| {} happened well before
 
 2337
 01:20:04,170 --> 01:20:06,210
 0,360 360,1080 1080,1470 1470,1650 1650,2040
-it and completed well before
+it| and completed well before
 
 2338
 01:20:06,210 --> 01:20:07,920
@@ -11673,27 +11673,27 @@ then that get operation should
 2339
 01:20:07,920 --> 01:20:10,710
 0,570 570,660 660,1260 1410,2280 2490,2790
-observe the last, um should
+observe the last, {} should
 
 2340
 01:20:10,710 --> 01:20:12,940
 0,330 330,420 420,750 750,1830
-observe the last boot.
+observe the last put.|
 
 2341
 01:20:12,940 --> 01:20:14,020
 0,540
-Okay.
+Okay?|
 
 2342
 01:20:14,020 --> 01:20:15,010
 0,120 120,240 240,420 420,510 510,990
-So this sort of um,
+So this sort of, {}
 
 2343
 01:20:15,010 --> 01:20:17,560
 0,720 1050,1290 1290,1440 1440,1710 1710,2550
-um, these are free conditions
+{} these are three conditions,|
 
 2344
 01:20:17,560 --> 01:20:18,370
@@ -11703,12 +11703,12 @@ you know that whether to
 2345
 01:20:18,370 --> 01:20:20,410
 0,810 840,1020 1020,1410 1410,1710 1710,2040
-determine a whether system actually
+determine {} whether system actually
 
 2346
 01:20:20,410 --> 01:20:21,900
 0,450 450,930
-summarize ability.
+{linearizability -}.|
 
 2347
 01:20:21,990 --> 01:20:23,130
@@ -11718,12 +11718,12 @@ And you can think about
 2348
 01:20:23,130 --> 01:20:24,720
 0,120 120,720 720,900 900,1380 1380,1590
-the reliability as well, just
+the linearizability as well, just
 
 2349
 01:20:24,720 --> 01:20:25,860
 0,300 300,450 450,510 510,840 840,1140
-behave like a single sheet.
+behave like a single machine.|
 
 2350
 01:20:26,530 --> 01:20:27,730
@@ -11733,12 +11733,12 @@ So let me make a
 2351
 01:20:27,730 --> 01:20:28,750
 0,150 150,240 240,390 390,780 780,1020
-little bit more concrete because
+little bit more concrete,| because
 
 2352
 01:20:28,750 --> 01:20:29,830
 0,120 120,210 210,360 360,480 480,1080
-there's a little bit abstract.
+there's a little bit abstract.|
 
 2353
 01:20:30,610 --> 01:20:33,190
@@ -11748,12 +11748,12 @@ And the way basically people
 2354
 01:20:33,460 --> 01:20:36,160
 0,570 570,870 870,1800 1800,2160 2340,2700
-think about reliability or argue
+think about linearizability| or argue
 
 2355
 01:20:36,160 --> 01:20:37,420
 0,150 150,210 210,480 480,630 630,1260
-that the system has reliable
+that the system has linearizability
 
 2356
 01:20:37,420 --> 01:20:39,310
@@ -11763,22 +11763,22 @@ is looking at particular histories
 2357
 01:20:39,310 --> 01:20:42,000
 0,240 240,1050 1320,1470 1470,2220
-or executions and nc.
+or executions| and then
 
 2358
 01:20:44,850 --> 01:20:45,600
 0,270 270,390 390,480 480,570 570,750
-See if you can use
+see if you can use
 
 2359
 01:20:45,600 --> 01:20:47,010
 0,630 630,750 750,840 840,1080 1110,1410
-histories if you can turn
+histories,| if you can turn
 
 2360
 01:20:47,010 --> 01:20:48,150
 0,180 180,390 390,450 450,720 720,1140
-that into a total order,
+that into {} total order,|
 
 2361
 01:20:48,180 --> 01:20:49,560
@@ -11788,7 +11788,7 @@ even though the operations actually
 2362
 01:20:49,560 --> 01:20:52,110
 0,210 210,330 330,840 1110,1950 1950,2550
-might have actually executed currently.
+might have actually executed concurrently.|
 
 2363
 01:20:52,790 --> 01:20:53,780
@@ -11798,7 +11798,7 @@ So let me give you
 2364
 01:20:53,780 --> 01:20:55,970
 0,180 180,870 1020,1050 1050,1560 1560,2190
-one example a trivial example,
+one example, a trivial example,|
 
 2365
 01:20:56,690 --> 01:20:58,040
@@ -11808,27 +11808,27 @@ so let's say we have
 2366
 01:20:58,070 --> 01:21:00,110
 0,210 210,660 660,840 840,1350 1350,2040
-three clients c one c2
+three clients {C1 -} C2
 
 2367
 01:21:00,110 --> 01:21:01,790
 0,810 1140,1350 1350,1470 1470,1620 1620,1680
-c3 and they do a
+C3| and they do a
 
 2368
 01:21:01,790 --> 01:21:03,200
 0,210 210,300 300,480 480,990
-bunch of boots against.
+bunch of puts {and,gets},|
 
 2369
 01:21:03,390 --> 01:21:05,010
 0,300 300,870 960,1080 1080,1260 1260,1620
-Um, so you know typically
+{} so you know typically
 
 2370
 01:21:05,010 --> 01:21:06,030
 0,90 90,450 450,570 570,720 720,1020
-the way you know, basically
+the way you know,| basically
 
 2371
 01:21:06,030 --> 01:21:06,960
@@ -11843,17 +11843,17 @@ start point where the operation
 2373
 01:21:08,580 --> 01:21:09,660
 0,570
-started.
+started,|
 
 2374
 01:21:09,900 --> 01:21:10,920
 0,270 270,450 450,510 510,720 720,1020
-And there's a main point
+and there's {} {some,endpoint -}
 
 2375
 01:21:10,920 --> 01:21:12,840
 0,210 210,360 360,840 840,1440
-where the operation ends.
+where the operation ends.|
 
 2376
 01:21:12,960 --> 01:21:14,130
@@ -11868,32 +11868,32 @@ the client actually gets the
 2378
 01:21:16,050 --> 01:21:18,560
 0,630 630,1140 1140,1440 1440,2010
-return from the surface.
+return from the servers,|
 
 2379
 01:21:18,840 --> 01:21:19,860
 0,360 360,480 480,630 630,780 780,1020
-And so let's say this
+and so let's say this
 
 2380
 01:21:19,860 --> 01:21:21,330
 0,360 360,1110 1110,1170 1170,1290 1290,1470
-write operation, you know to
+write operation you know to
 
 2381
 01:21:21,330 --> 01:21:23,070
 0,510 510,660 660,780 780,1200 1200,1740
-value to the variable x..
+value to the variable x,|
 
 2382
 01:21:23,560 --> 01:21:24,430
 0,180 180,300 300,480 480,720 720,870
-And we write one to
+and we write one to
 
 2383
 01:21:24,430 --> 01:21:25,220
 0,240
-it.
+it.|
 
 2384
 01:21:25,830 --> 01:21:27,090
@@ -11913,47 +11913,47 @@ write operation to the variable
 2387
 01:21:29,100 --> 01:21:30,810
 0,240 240,360 360,540 540,960 1290,1710
-X the right one and
+x the write 1| and
 
 2388
 01:21:30,810 --> 01:21:32,580
 0,420 420,630 630,750 750,1110 1320,1770
-ends at some point here.
+ends at some point here.|
 
 2389
 01:21:33,330 --> 01:21:35,420
 0,540 540,720 720,990 990,1410
-Maybe the second one.
+Maybe the second one
 
 2390
 01:21:38,400 --> 01:21:39,720
 0,480 480,690 690,960 960,1140 1140,1320
-A and right to do
+{} and write to {}
 
 2391
 01:21:39,720 --> 01:21:40,600
 0,360
-it.
+it,|
 
 2392
 01:21:40,600 --> 01:21:41,620
 0,120 120,270 270,600 600,720 720,1020
-And then maybe we have
+and then maybe we have
 
 2393
 01:21:41,650 --> 01:21:42,910
 0,210 210,330 330,960 960,1080 1080,1260
-all the action and we've
+all the action and with
 
 2394
 01:21:42,910 --> 01:21:44,260
 0,240 240,390 390,960 960,1110 1110,1350
-linear ized ability is when
+{linearizability - -} is when
 
 2395
 01:21:44,260 --> 01:21:45,940
 0,420 420,720 720,1230 1230,1560 1560,1680
-operation happens currently so all
+operation happens concurrently,| so all
 
 2396
 01:21:45,940 --> 01:21:48,430
@@ -11963,7 +11963,7 @@ operations starts before another one
 2397
 01:21:48,430 --> 01:21:49,930
 0,270 270,690 690,840 840,900 900,1500
-actually finishes so for example
+actually finishes,| so for example
 
 2398
 01:21:49,960 --> 01:21:51,370
@@ -11973,22 +11973,22 @@ we might have the following
 2399
 01:21:51,370 --> 01:21:52,930
 0,720 720,1020 1020,1140 1140,1350 1350,1560
-operation climbed to Dollar, read
+operation client 2 {does,a} read
 
 2400
 01:21:52,930 --> 01:21:54,070
 0,510 510,660 660,780 780,990 990,1140
-operation in our case would
+operation,| in our case would
 
 2401
 01:21:54,070 --> 01:21:55,600
 0,240 240,480 480,840
-be a guess.
+be a get,|
 
 2402
 01:21:55,600 --> 01:21:57,790
 0,120 120,240 240,810 1320,1770 1770,2190
-And as Reid of acts
+and there's {a,read} of x|
 
 2403
 01:21:57,790 --> 01:21:58,870
@@ -11998,7 +11998,7 @@ and the value returned by
 2404
 01:21:58,870 --> 01:22:00,540
 0,150 150,600 600,750 750,1110
-this operation is to.
+this operation is 2.|
 
 2405
 01:22:00,940 --> 01:22:01,960
@@ -12008,62 +12008,62 @@ And then we have a
 2406
 01:22:01,960 --> 01:22:03,850
 0,630 930,1140 1140,1200 1200,1710 1710,1890
-similar sort of situation where
+similar sort of situation| where
 
 2407
 01:22:03,850 --> 01:22:04,990
 0,270 270,510 510,600 600,810 810,1140
-coin free it actually starts
+clieng 3 it actually starts
 
 2408
 01:22:04,990 --> 01:22:06,640
 0,60 60,630 630,690 690,870 870,1650
-an operation a read operation.
+an operation a read operation,|
 
 2409
 01:22:07,290 --> 01:22:09,090
 0,690 690,900 900,1170 1170,1590 1590,1800
-And um, which acts and
+and {} reads x and
 
 2410
 01:22:09,090 --> 01:22:10,560
 0,120 120,510 510,870
-it returns one.
+it returns 1.|
 
 2411
 01:22:11,370 --> 01:22:12,720
 0,510 510,900 900,960 960,1170 1170,1350
-A when you make this
+{} Let me make this
 
 2412
 01:22:12,720 --> 01:22:14,520
 0,240 240,450 480,720 720,1260
-little bit more clean.
+{a,little} bit more clean,|
 
 2413
 01:22:15,660 --> 01:22:17,920
 0,150 150,300 300,990 1080,1680
-The read operation a.
+the read operation {}
 
 2414
 01:22:17,920 --> 01:22:19,330
 0,180 180,540 540,1170 1170,1260 1260,1410
-Actually returns before you know
+actually returns before you know
 
 2415
 01:22:19,330 --> 01:22:21,160
 0,270 270,600 600,780 780,1260 1260,1830
-the right to operation starts
+the write 2 operation starts
 
 2416
 01:22:21,220 --> 01:22:23,410
 0,300 300,690 960,1440 1440,1740 1740,2190
-or ends a and sensing
+or ends,| {} and same
 
 2417
 01:22:23,410 --> 01:22:24,340
 0,120 120,420 420,690 690,810 810,930
-from march one and then
+from [] one| and then
 
 2418
 01:22:24,340 --> 01:22:25,450
@@ -12073,17 +12073,17 @@ the question that always comes
 2419
 01:22:25,450 --> 01:22:27,910
 0,330 570,750 750,930 930,1710 1770,2460
-up, is this alliterative eyes,
+up is this {linearizability -},|
 
 2420
 01:22:27,910 --> 01:22:29,960
 0,150 150,810 900,1500
-this alliterative execution.
+this linearizability execution.|
 
 2421
 01:22:30,800 --> 01:22:32,480
 0,450 600,780 780,870 870,990 990,1680
-Um, and if it's irrational
+{} And if {linearizability -},
 
 2422
 01:22:32,480 --> 01:22:33,680
@@ -12098,7 +12098,7 @@ this could happen on a
 2424
 01:22:34,850 --> 01:22:36,300
 0,270 270,600 600,870
-single machine, too.
+single machine, too.|
 
 2425
 01:22:37,000 --> 01:22:38,170
@@ -12108,7 +12108,7 @@ So could this happen on
 2426
 01:22:38,170 --> 01:22:39,540
 0,60 60,300 300,750
-a single machine.
+a single machine.|
 
 2427
 01:22:39,940 --> 01:22:41,110
@@ -12123,17 +12123,17 @@ and think about it without
 2429
 01:22:42,100 --> 01:22:43,480
 0,300 300,570 570,810
-actually having one.
+actually having, {}|
 
 2430
 01:22:45,220 --> 01:22:46,600
 0,150 150,330 330,750 750,1140 1140,1380
-Is this legit outcome from
+is this legit outcome from
 
 2431
 01:22:46,600 --> 01:22:47,380
 0,180 180,360 360,570 570,720 720,780
-this book, we need to
+basically {} we need to
 
 2432
 01:22:47,380 --> 01:22:48,400
@@ -12143,22 +12143,22 @@ look at is the outcomes
 2433
 01:22:48,400 --> 01:22:49,600
 0,150 150,450 450,750 750,1080 1080,1200
-of our two and four
+of {r2 -} and for
 
 2434
 01:22:49,600 --> 01:22:51,460
 0,390 390,540 540,690 690,1380 1620,1860
-c2 and a c3, no
+c2 and {} c3,| {you,know}
 
 2435
 01:22:51,460 --> 01:22:53,710
 0,150 150,360 360,1050 1050,1560 1590,2250
-is this a legit execution.
+is this a legit execution.|
 
 2436
 01:22:54,520 --> 01:22:56,800
 0,750 750,1080 1080,1980 1980,2010 2010,2280
-I'm not sure I don't
+I'm not sure, I don't
 
 2437
 01:22:56,800 --> 01:22:57,580
@@ -12168,22 +12168,22 @@ really know what it means
 2438
 01:22:57,580 --> 01:22:59,140
 0,270 270,690 690,960
-for right to.
+for right to
 
 2439
 01:22:59,140 --> 01:23:01,420
 0,600 720,1470 1470,1560 1560,1800 1800,2280
-Take like a long time.
+take like a long time.|
 
 2440
 01:23:03,030 --> 01:23:04,710
 0,360 360,540 540,1230 1230,1440 1440,1680
-Well take a long time
+Well. Take a long time
 
 2441
 01:23:04,710 --> 01:23:06,040
 0,90 90,240 240,690
-for that matter.
+for that matter.|
 
 2442
 01:23:06,070 --> 01:23:06,910
@@ -12193,27 +12193,27 @@ If you think about the
 2443
 01:23:06,910 --> 01:23:09,820
 0,0 1920,2100 2100,2160 2160,2430 2430,2910
-um from the client perspective
+{} from the client perspective,|
 
 2444
 01:23:09,820 --> 01:23:11,800
 0,210 210,300 300,750 750,1380 1380,1980
-but it sends a request
+{} it sends a request
 
 2445
 01:23:11,800 --> 01:23:12,910
 0,120 120,180 180,690 690,900 900,1110
-to the service, so that's
+to the service,| so that's
 
 2446
 01:23:12,910 --> 01:23:13,960
 0,90 90,450 450,540 540,630 630,1050
-the starting of the right.
+the starting of the write,|
 
 2447
 01:23:14,550 --> 01:23:16,170
 0,840 840,1020 1020,1170 1170,1230 1230,1620
-And I've got a return
+and I've got a return
 
 2448
 01:23:16,170 --> 01:23:18,030
@@ -12223,12 +12223,12 @@ value at some point from
 2449
 01:23:18,030 --> 01:23:18,840
 0,60 60,420 420,510 510,690 690,810
-the service and that's the
+the service| and that's the
 
 2450
 01:23:18,840 --> 01:23:20,180
 0,210 210,300 300,420 420,810
-end of the right.
+end of the write.|
 
 2451
 01:23:20,960 --> 01:23:21,860
@@ -12238,32 +12238,32 @@ And so in between all
 2452
 01:23:21,860 --> 01:23:22,910
 0,150 150,210 210,420 420,780 780,1050
-kinds of stuff happens great
+kinds of stuff happens, right,|
 
 2453
 01:23:22,910 --> 01:23:24,290
 0,210 210,630 630,750 750,840 840,1380
-wind actually to the servers,
+it actually to the servers,|
 
 2454
 01:23:24,290 --> 01:23:25,940
 0,60 60,630 630,930 930,1140 1140,1650
-the servers put into draft
+the servers put into raft,|
 
 2455
 01:23:25,940 --> 01:23:27,290
 0,360 360,750 750,930 930,1050 1050,1350
-rap Ren went to apply
+raft {} went to apply
 
 2456
 01:23:27,290 --> 01:23:28,670
 0,480 480,630 630,780 780,1080 1110,1380
-channel blah blah blah lots
+channel blah blah blah,| lots
 
 2457
 01:23:28,670 --> 01:23:29,780
 0,60 60,300 300,600 630,930 930,1110
-of stuff happened, we really
+of stuff happened,| we really
 
 2458
 01:23:29,780 --> 01:23:30,650
@@ -12278,7 +12278,7 @@ implementation does at some point
 2460
 01:23:32,090 --> 01:23:33,140
 0,30 30,630
-a response.
+a response.|
 
 2461
 01:23:34,120 --> 01:23:34,870
@@ -12288,22 +12288,22 @@ And so you can think
 2462
 01:23:34,870 --> 01:23:35,770
 0,240 240,420 420,480 480,630 630,900
-about this, you know there's
+about this,| you know there's
 
 2463
 01:23:35,770 --> 01:23:37,540
 0,420 510,900 900,1110 1110,1680 1680,1770
-basically frequent current clients, you
+basically {three,concurrent -} clients,| you
 
 2464
 01:23:37,540 --> 01:23:39,160
 0,180 180,570 570,1050 1080,1290 1290,1620
-know they issued a concurrent
+know they issued {} concurrent
 
 2465
 01:23:39,160 --> 01:23:40,570
 0,690 690,810 810,930 930,1050 1050,1410
-operations and we are wondering
+operations| and we are wondering
 
 2466
 01:23:40,570 --> 01:23:41,590
@@ -12313,12 +12313,12 @@ if this is actually legit
 2467
 01:23:41,590 --> 01:23:42,440
 0,390
-outcome.
+outcome.|
 
 2468
 01:23:44,900 --> 01:23:46,100
 0,360 390,510 510,750 750,990 990,1200
-Um I don't think this
+{} I don't think this
 
 2469
 01:23:46,100 --> 01:23:47,900
@@ -12328,17 +12328,17 @@ could happen on a single
 2470
 01:23:47,900 --> 01:23:51,500
 0,540 540,1290 1860,2130 2130,2790 2970,3600
-machine because the right for
+machine,| because the write for
 
 2471
 01:23:51,710 --> 01:23:54,200
 0,360 360,720 720,1170 1170,2010
-for two it finishes.
+for 2 it finishes,
 
 2472
 01:23:54,500 --> 01:23:57,520
 0,780 780,1260 1260,2490
-After the restart.
+after the restart.|
 
 2473
 01:23:57,750 --> 01:23:59,490
@@ -12348,47 +12348,46 @@ Oh, sorry, yeah yeah that's
 2474
 01:23:59,490 --> 01:24:01,260
 0,360 450,840 840,1320 1350,1560 1560,1770
-right, um, but it seems
+right,| {} but it seems
 
 2475
 01:24:01,260 --> 01:24:02,550
 0,150 150,300 300,630 630,780 780,1290
-like the right should happen
+like the write should happen
 
 2476
 01:24:02,550 --> 01:24:04,320
 0,630 630,780 780,1230
-before the read.
+before the read.|
 
 2477
 01:24:04,350 --> 01:24:07,480
 0,600 1350,1500 1500,1680 1680,2610
-And in this situation.
+And in this situation,|
 
 2478
 01:24:07,480 --> 01:24:08,360
 0,270
-Yeah.
 
 2479
 01:24:09,130 --> 01:24:10,360
 0,180 180,390 390,690 690,1050 1050,1230
-It couldn't happen if the
+it couldn't happen if the
 
 2480
 01:24:10,360 --> 01:24:12,580
 0,480 480,990 990,1650
-ride started after.
+write started after,|
 
 2481
 01:24:12,580 --> 01:24:14,920
 0,90 90,1020 1020,1260 1260,1800 1830,2340
-If z right finished after
+if the write finished after
 
 2482
 01:24:14,920 --> 01:24:17,320
 0,90 90,570 600,1140 1140,1620 2010,2400
-they write restart yeah yeah,
+the write restart,| yeah.| Yeah,
 
 2483
 01:24:17,320 --> 01:24:19,300
@@ -12403,7 +12402,7 @@ way to think about is
 2485
 01:24:20,650 --> 01:24:22,240
 0,300 510,750 750,870 870,1470 1500,1590
-that we can move you
+that,| we can move you
 
 2486
 01:24:22,240 --> 01:24:23,680
@@ -12413,7 +12412,7 @@ know we have to construct
 2487
 01:24:23,680 --> 01:24:25,210
 0,60 60,300 300,690 1020,1230 1230,1530
-a total order and we
+a total order| and we
 
 2488
 01:24:25,210 --> 01:24:26,230
@@ -12428,12 +12427,12 @@ where all the operations line
 2490
 01:24:28,000 --> 01:24:29,380
 0,240 480,990 990,1080 1080,1200 1200,1380
-up, then you know it's
+up,| then you know it's
 
 2491
 01:24:29,380 --> 01:24:31,260
 0,30 30,330 330,960 960,1440
-a valid hon history.
+a valid linearizable history.|
 
 2492
 01:24:31,290 --> 01:24:33,090
@@ -12443,17 +12442,17 @@ And so, so let's construct
 2493
 01:24:33,090 --> 01:24:34,470
 0,30 30,300 300,780 900,1050 1050,1380
-a total order and then
+a total order| and then
 
 2494
 01:24:34,470 --> 01:24:35,340
 0,150 150,390 390,450 450,570 570,870
-go back to this question,
+go back to this question
 
 2495
 01:24:35,340 --> 01:24:37,410
 0,210 210,420 420,810 1500,1950 1980,2070
-you just asked so a
+you just asked,| so a
 
 2496
 01:24:37,410 --> 01:24:38,550
@@ -12463,42 +12462,42 @@ total order, here's a total
 2497
 01:24:38,550 --> 01:24:40,470
 0,270 270,450 450,840 870,1590 1590,1920
-order that I am coming.
+order that I {} gonna,|
 
 2498
 01:24:41,240 --> 01:24:41,840
 0,210 210,300 300,420 420,480 480,600
-So I'm going to do
+so I'm going to do
 
 2499
 01:24:41,840 --> 01:24:43,880
 0,420 420,540 540,780 780,1470 1680,2040
-first the write operation, then
+first the write operation,| then
 
 2500
 01:24:43,880 --> 01:24:46,250
 0,300 300,480 480,960 1560,2190 2190,2370
-read X one then the
+read {x1 -}, then the
 
 2501
 01:24:46,250 --> 01:24:48,060
 0,360 360,1080
-right x2.
+write x2,|
 
 2502
 01:24:48,060 --> 01:24:49,520
 0,300 300,930
-And then.
+and then
 
 2503
 01:24:49,700 --> 01:24:52,160
 0,360 360,900 930,1440 1440,1980 2040,2460
-Our X zero x2, right.
+{rx -} read x2, right.|
 
 2504
 01:24:52,720 --> 01:24:53,740
 0,120 120,180 180,450 450,900 900,1020
-It's a total order all
+It's a total order,| all
 
 2505
 01:24:53,740 --> 01:24:55,270
@@ -12508,7 +12507,7 @@ the operations are now happening
 2506
 01:24:55,270 --> 01:24:56,600
 0,750
-sequentially.
+sequentially.|
 
 2507
 01:24:56,660 --> 01:24:57,860
@@ -12523,12 +12522,12 @@ to check whether a total
 2509
 01:24:59,870 --> 01:25:01,760
 0,210 210,330 330,750 1110,1800 1800,1890
-order is correct corresponding to
+order is correct,| corresponding to
 
 2510
 01:25:01,760 --> 01:25:03,800
 0,90 90,450 450,810 810,1530 1740,2040
-the literacy ability definitions, well,
+the {linearizability -} definitions,| well,
 
 2511
 01:25:03,800 --> 01:25:04,280
@@ -12538,17 +12537,17 @@ it has to be the
 2512
 01:25:04,280 --> 01:25:06,080
 0,300 300,480 480,1050 1050,1230 1230,1800
-case that operations that start.
+case that operations that start,|
 
 2513
 01:25:06,700 --> 01:25:09,250
 0,450 660,930 930,1290 1290,1860 1950,2550
-A UN operation starts after
+{} {if,an} operation starts after
 
 2514
 01:25:09,250 --> 01:25:10,480
 0,180 180,390 390,810 810,1080 1080,1230
-some under operation ends it
+some other operation,| ends it
 
 2515
 01:25:10,480 --> 01:25:11,560
@@ -12558,12 +12557,12 @@ needs to be after in
 2516
 01:25:11,560 --> 01:25:12,670
 0,60 60,330 330,720 720,930 930,1110
-the total order, and so
+the total order,| and so
 
 2517
 01:25:12,670 --> 01:25:14,280
 0,360 360,630 630,720 720,1170
-we look at this.
+we look at this.|
 
 2518
 01:25:14,370 --> 01:25:15,240
@@ -12573,77 +12572,77 @@ Let's look at the issue,
 2519
 01:25:15,240 --> 01:25:16,740
 0,420 420,900
-this one.
+this one,|
 
 2520
 01:25:16,740 --> 01:25:18,630
 0,180 180,660 660,1320 1350,1710 1710,1890
-Must start after W X
+must start after {wx1 -
 
 2521
 01:25:18,630 --> 01:25:20,340
 0,420 420,720 720,900 900,1230 1350,1710
-one and that is true
+-}| and that is true
 
 2522
 01:25:20,340 --> 01:25:22,160
 0,390 390,540 540,840 840,1290
-correcting, this totally order.
+correct, this totally order,|
 
 2523
 01:25:23,210 --> 01:25:25,020
 0,420 420,690 690,1260
-A orange one.
+{} {Rx1 -}
 
 2524
 01:25:25,020 --> 01:25:28,140
 0,900 900,1080 1080,1530 1530,2190
-Must you start after.
+must you start after
 
 2525
 01:25:28,270 --> 01:25:30,460
 0,900 900,1200 1200,1290 1290,1470 1470,2190
-Why, because it actually returns
+Wx1,| because it actually returns
 
 2526
 01:25:30,460 --> 01:25:31,690
 0,150 150,270 270,360 360,960 990,1230
-you know the value right,
+you know the value, right,|
 
 2527
 01:25:31,690 --> 01:25:32,980
 0,150 150,390 390,660 660,930 930,1290
-then next act in October
+then {exactly -} in total
 
 2528
 01:25:32,980 --> 01:25:33,820
 0,180 180,420 420,510 510,750 750,840
-war that is also the
+order, that is also the
 
 2529
 01:25:33,820 --> 01:25:34,760
 0,480
-case.
+case,|
 
 2530
 01:25:35,360 --> 01:25:37,190
 0,210 210,960 990,1140 1140,1470 1470,1830
-Our x2, you must start
+{Rx2 -} {you,know} must start
 
 2531
 01:25:37,220 --> 01:25:39,140
 0,600 600,990 990,1230 1230,1440 1440,1920
-w x2 because it observes
+{Wx2 -},| because it observes
 
 2532
 01:25:39,140 --> 01:25:40,360
 0,90 90,720
-the result.
+the result
 
 2533
 01:25:40,800 --> 01:25:42,330
 0,270 270,480 480,960 990,1380 1380,1530
-Of this right and you
+of this write| and you
 
 2534
 01:25:42,330 --> 01:25:43,470
@@ -12653,12 +12652,12 @@ know that's perfectly fine too,
 2535
 01:25:43,500 --> 01:25:44,480
 0,420
-right.
+right,|
 
 2536
 01:25:44,750 --> 01:25:45,890
 0,240 240,330 330,420 420,810 810,1140
-Now we can basically one
+{} we can basically, one
 
 2537
 01:25:45,890 --> 01:25:46,670
@@ -12668,12 +12667,12 @@ way to think about it
 2538
 01:25:46,670 --> 01:25:48,080
 0,180 180,450 450,570 570,990 1170,1410
-is that you know even
+is that| you know even
 
 2539
 01:25:48,080 --> 01:25:49,190
 0,120 120,240 240,660 660,780 780,1110
-though they executed this way
+though they executed this way,|
 
 2540
 01:25:49,190 --> 01:25:50,600
@@ -12683,22 +12682,22 @@ we've got to rearrange things
 2541
 01:25:50,600 --> 01:25:51,680
 0,210 210,450 450,630 630,690 690,1080
-now to sort of fit
+{} to sort of fit
 
 2542
 01:25:52,010 --> 01:25:53,940
 0,510 510,960 960,1410
-a the order.
+{} the {total,order}.|
 
 2543
 01:25:54,140 --> 01:25:55,580
 0,360 360,840 900,1230 1230,1350 1350,1440
-And so, um, if we
+And so, {} if we
 
 2544
 01:25:55,580 --> 01:25:57,200
 0,120 120,360 360,810 930,1410 1410,1620
-think about this, then this
+think about this,| then this
 
 2545
 01:25:57,200 --> 01:25:58,850
@@ -12708,17 +12707,17 @@ is a totally legit and
 2546
 01:25:58,850 --> 01:26:00,080
 0,690
-execution.
+execution,|
 
 2547
 01:26:00,140 --> 01:26:02,120
 0,750 840,1170 1170,1620 1620,1800 1800,1980
-Where the operation for much
+where {you,know,the} operation for much
 
 2548
 01:26:02,120 --> 01:26:03,290
 0,120 120,180 180,720 810,1020 1020,1170
-of the order and so
+of the order| and so
 
 2549
 01:26:03,290 --> 01:26:04,430
@@ -12728,7 +12727,7 @@ this is like what a
 2550
 01:26:04,430 --> 01:26:05,540
 0,330 330,600 600,720 720,930 930,1110
-single machine would do so
+single machine would do,| so
 
 2551
 01:26:05,540 --> 01:26:06,320
@@ -12738,12 +12737,12 @@ a single machine could be
 2552
 01:26:06,320 --> 01:26:08,270
 0,540 540,720 720,930 930,1530 1650,1950
-executed right double exon read
+executed write {Rx1 -} read
 
 2553
 01:26:08,270 --> 01:26:09,590
 0,150 150,540 570,780 780,990 990,1320
-X one right next to
+x 1,| write {x2 -},
 
 2554
 01:26:09,590 --> 01:26:11,390
@@ -12753,12 +12752,12 @@ read x2 and real perfectly
 2555
 01:26:11,390 --> 01:26:12,200
 0,270
-fine.
+fine.|
 
 2556
 01:26:14,390 --> 01:26:15,480
 0,600
-Okay.
+Okay?|
 
 2557
 01:26:15,710 --> 01:26:16,880
@@ -12768,12 +12767,12 @@ So let me make it
 2558
 01:26:16,880 --> 01:26:17,960
 0,420 420,720 720,870 870,1050 1050,1080
-helpful to think about a
+helpful to think about {}
 
 2559
 01:26:17,960 --> 01:26:19,850
 0,300 300,450 450,540 540,1050 1080,1890
-history that is not generalizable.
+history that is not linearizable.|
 
 2560
 01:26:20,720 --> 01:26:21,560
@@ -12783,12 +12782,12 @@ So let me look at
 2561
 01:26:21,560 --> 01:26:22,940
 0,60 60,390 390,780
-the second one.
+the second one.|
 
 2562
 01:26:29,360 --> 01:26:31,280
 0,510 510,1260 1260,1590 1590,1800 1800,1920
-Um, and I'm gonna come
+{} And I'm gonna come
 
 2563
 01:26:31,280 --> 01:26:32,030
@@ -12798,7 +12797,7 @@ back on this on the
 2564
 01:26:32,060 --> 01:26:33,620
 0,240 240,360 360,690 690,1230 1260,1560
-first day anyway, so don't
+first day anyway,| so don't
 
 2565
 01:26:33,620 --> 01:26:35,030
@@ -12808,102 +12807,102 @@ worry if this a lot
 2566
 01:26:35,030 --> 01:26:36,530
 0,180 180,390 390,690 930,1290 1290,1500
-makes sense yet but here's
+makes sense yet,| but here's
 
 2567
 01:26:36,530 --> 01:26:38,300
 0,210 210,630 990,1440 1440,1530 1530,1770
-another one, um I got
+another one,| {} I got
 
 2568
 01:26:38,330 --> 01:26:39,780
 0,840
-c.
+C1,|
 
 2569
 01:26:40,060 --> 01:26:42,760
 0,570 600,900 900,1380 1440,2250 2310,2700
-Um, same thing right X
+{} same thing write {x1
 
 2570
 01:26:42,760 --> 01:26:43,840
 0,480
-one.
+-},|
 
 2571
 01:26:43,840 --> 01:26:45,280
 0,390 390,480 480,630 630,690 690,1440
-A I got a sheet
+{} I got a c
 
 2572
 01:26:45,310 --> 01:26:47,200
 0,480 480,810 810,1350
-and here right.
+and here write
 
 2573
 01:26:48,010 --> 01:26:49,580
 0,450 450,660 660,1020
-Next to you.
+{x2 -}| and
 
 2574
 01:26:49,610 --> 01:26:51,560
 0,870 1140,1470 1470,1650 1650,1800 1800,1950
-And there's gonna be a
+and there's gonna be a
 
 2575
 01:26:51,560 --> 01:26:52,620
 0,450
-rid.
+read
 
 2576
 01:26:52,650 --> 01:26:55,500
 0,720 870,1500 1620,2190
-Direction goose in.
+{that,actually} goes in
 
 2577
 01:26:55,820 --> 01:26:57,340
 0,420 420,930
-Next one.
+{x1 -},|
 
 2578
 01:26:57,730 --> 01:26:59,980
 0,750 870,1080 1080,1230 1230,1560 1560,2250
-And what's our tree x2.
+and I'm sorry read x2,|
 
 2579
 01:27:00,950 --> 01:27:02,600
 0,270 270,450 450,570 570,990 1170,1650
-And then I got she
+and then I got {C2
 
 2580
 01:27:02,600 --> 01:27:04,640
 0,510 510,870 870,1500
-two she three.
+-} {C3 -}|
 
 2581
 01:27:04,670 --> 01:27:06,720
 0,420 420,510 510,780 780,1470
-On the sea free.
+and the {C3 -}
 
 2582
 01:27:07,110 --> 01:27:09,720
 0,600 630,1320 1380,1950 1950,2190 2190,2610
-Start after the other reach.
+start after the other read
 
 2583
 01:27:11,260 --> 01:27:12,920
 0,330 330,690 690,1080
-And returns one.
+and returns 1.|
 
 2584
 01:27:14,610 --> 01:27:16,410
 0,570 870,990 990,1260 1260,1530 1530,1800
-And the claim here is
+And the client here is
 
 2585
 01:27:16,410 --> 01:27:18,930
 0,450 900,1290 1290,1800 1830,2400 2400,2520
-that it's not possible to
+that,| it's not possible to
 
 2586
 01:27:18,930 --> 01:27:20,430
@@ -12913,12 +12912,12 @@ construct a total order you
 2587
 01:27:20,430 --> 01:27:23,420
 0,510 660,1350 1380,1860 1860,2490
-know mesh minerals ability.
+know matches {linearizability -},|
 
 2588
 01:27:23,480 --> 01:27:26,120
 0,840 1140,1740 1740,1920 1920,2250 2250,2640
-And, um, in one way
+and, {} in one way
 
 2589
 01:27:26,120 --> 01:27:27,590
@@ -12928,7 +12927,7 @@ one indication of this is
 2590
 01:27:27,590 --> 01:27:29,930
 0,210 210,420 420,900 930,1620 1620,2340
-that this read returned actual
+that this read returned x1,|
 
 2591
 01:27:30,050 --> 01:27:32,360
@@ -12938,12 +12937,12 @@ started after the read that
 2592
 01:27:32,360 --> 01:27:33,640
 0,360 360,750
-returned to.
+returned 2,|
 
 2593
 01:27:33,790 --> 01:27:34,960
 0,630 630,840 840,960 960,1080 1080,1170
-And I will make this
+and I will make this
 
 2594
 01:27:34,960 --> 01:27:35,650
@@ -12953,12 +12952,12 @@ a little bit more precise
 2595
 01:27:35,650 --> 01:27:37,240
 0,240 240,420 420,570 570,870 930,1590
-later, but in a real
+later,| but in a real
 
 2596
 01:27:37,300 --> 01:27:39,130
 0,150 150,330 330,630 630,1200 1230,1830
-you know single machine system
+you know single machine system,|
 
 2597
 01:27:39,160 --> 01:27:40,210
@@ -12968,7 +12967,7 @@ that could have never happened
 2598
 01:27:40,420 --> 01:27:42,160
 0,330 330,810 1110,1380 1380,1530 1530,1740
-right because a that would
+right,| because {} that would
 
 2599
 01:27:42,160 --> 01:27:43,510
@@ -12978,62 +12977,62 @@ have meant that the value
 2600
 01:27:43,510 --> 01:27:45,370
 0,570 570,900 900,1230 1380,1710 1710,1860
-changed between r two and
+changed between {Rx2 -} and
 
 2601
 01:27:45,370 --> 01:27:47,500
 0,210 210,780 1080,1320 1320,1980 1980,2130
-r one and and you
+{Rx1 -}| and and you
 
 2602
 01:27:47,500 --> 01:27:49,000
 0,390 420,1080
-know fifties.
+know {with,these}
 
 2603
 01:27:49,000 --> 01:27:50,200
 0,210 210,660 660,750 750,900 900,1200
-Few operations that we have
+few operations that we have
 
 2604
 01:27:50,200 --> 01:27:51,310
 0,90 90,150 150,630 720,870 870,1110
-on the board that has
+on the board,| that has
 
 2605
 01:27:51,310 --> 01:27:52,270
 0,60 60,180 180,270 270,630 630,960
-to be the case that.
+to be the case that,|
 
 2606
 01:27:53,090 --> 01:27:54,260
 0,630
-This.
+this
 
 2607
 01:27:54,260 --> 01:27:55,700
 0,240 240,510 510,870 870,1170 1170,1440
-Aren't what happened after that
+Rx1 what happened after that
 
 2608
 01:27:55,700 --> 01:27:56,740
 0,450
-right.
+write,|
 
 2609
 01:27:57,260 --> 01:27:59,660
 0,660 660,1290 1290,1770 1770,2220 2220,2400
-Um, and this right must
+{} and this write must
 
 2610
 01:27:59,660 --> 01:28:01,820
 0,120 120,690 1020,1380 1380,1680 1680,2160
-have happened after that right,
+have happened after that write,|
 
 2611
 01:28:02,090 --> 01:28:03,830
 0,420 420,600 600,660 660,1110 1110,1740
-because they're in total there,
+because they're in total, there,
 
 2612
 01:28:03,860 --> 01:28:04,880
@@ -13048,7 +13047,7 @@ know the ordering of the
 2614
 01:28:06,050 --> 01:28:08,020
 0,630 630,840 840,1440
-single of c.
+single of C1.|
 
 2615
 01:28:08,360 --> 01:28:09,470
@@ -13058,67 +13057,67 @@ And so there's no way
 2616
 01:28:09,470 --> 01:28:10,730
 0,120 120,450 450,1050 1080,1170 1170,1260
-to basically slot, you know
+to basically slot you know
 
 2617
 01:28:10,730 --> 01:28:12,470
 0,630 630,1110 1110,1350 1350,1440 1440,1740
-average one in the total
+{Rx1 -} in the total
 
 2618
 01:28:12,470 --> 01:28:14,810
 0,480 540,1170 1380,2040 2040,2130 2130,2340
-order you according to this
+order| {you,know} according to this
 
 2619
 01:28:14,810 --> 01:28:16,820
 0,600 780,1080 1080,1320 1320,1500 1500,2010
-picture, um, it should go
+picture,| {} it should go
 
 2620
 01:28:16,850 --> 01:28:19,360
 0,810 1170,1350 1350,2010
-after our H1.
+after {Rx1 -},|
 
 2621
 01:28:19,420 --> 01:28:21,850
 0,720 1170,2040 2040,2220 2220,2370 2370,2430
-Um, and um, but I
+{} and {} but that
 
 2622
 01:28:21,850 --> 01:28:23,230
 0,210 210,420 420,630 630,750 750,1380
-can really not be true,
+can really not be true,|
 
 2623
 01:28:23,560 --> 01:28:25,180
 0,600 600,720 720,1110 1110,1350 1350,1620
-because if it got our
+because if it got Rx
 
 2624
 01:28:25,300 --> 01:28:26,710
 0,360 360,510 510,960 960,1080 1080,1410
-after our one that names
+after {Rx1 -}| that names
 
 2625
 01:28:26,710 --> 01:28:28,060
 0,300 300,720 720,810 810,1140 1140,1350
-also after A W X
+also after {} {Wx2 -
 
 2626
 01:28:28,060 --> 01:28:29,290
 0,420 450,600 600,780 780,1080 1080,1230
-two so that must have
+-},| so that must have
 
 2627
 01:28:29,290 --> 01:28:32,080
 0,360 480,1170 1170,1980 2370,2700 2700,2790
-written a um two and
+write { -} 2 and
 
 2628
 01:28:32,080 --> 01:28:33,100
 0,180 180,510
-not one.
+not 1.|
 
 2629
 01:28:33,740 --> 01:28:34,850
@@ -13128,17 +13127,17 @@ So this is not a
 2630
 01:28:34,850 --> 01:28:36,110
 0,270 270,450 450,840 870,1200 1200,1260
-linear ized ability, not a
+{linearizability - -}, not a
 
 2631
 01:28:36,110 --> 01:28:37,780
 0,300 300,540 540,870
-linear ized ble.
+{linearizable - -}
 
 2632
 01:28:37,870 --> 01:28:40,240
 0,750 870,1710
-Distribute execution.
+{history,in} execution.|
 
 2633
 01:28:45,820 --> 01:28:46,930
@@ -13148,42 +13147,41 @@ Another way of saying that
 2634
 01:28:46,930 --> 01:28:48,520
 0,210 210,480 660,900 900,960 960,1590
-is that this is what,
+is that,| this is what,
 
 2635
 01:28:48,520 --> 01:28:49,690
 0,180 180,270 270,540 540,720 720,1170
-what is art in returning
+what is Rxn in returning
 
 2636
 01:28:49,690 --> 01:28:51,940
 0,390 420,840 840,1350 1350,1740 1740,2250
-here really returning stale value.
+here, really returning stale value,
 
 2637
 01:28:53,100 --> 01:28:54,150
 0,330 330,420 420,540 540,660 660,1050
-Right, and that is not
+right,| and that is not
 
 2638
 01:28:54,150 --> 01:28:55,220
 0,540
-allowed.
+allowed,|
 
 2639
 01:28:56,010 --> 01:28:57,380
 0,240 240,570
-I'm gonna.
 
 2640
 01:28:57,940 --> 01:28:59,050
 0,180 180,240 240,540 540,960 960,1110
-If the machine behaves like
+if the machine behaves like
 
 2641
 01:28:59,050 --> 01:29:00,130
 0,60 60,300 300,570 570,690 690,1080
-a single machine or replicated
+a single machine| or replicated
 
 2642
 01:29:00,130 --> 01:29:01,210
@@ -13193,7 +13191,7 @@ server behaves like a single
 2643
 01:29:01,210 --> 01:29:02,160
 0,390
-machine.
+machine.|
 
 2644
 01:29:02,520 --> 01:29:03,300
@@ -13203,7 +13201,7 @@ And so I'm gonna go
 2645
 01:29:03,300 --> 01:29:04,530
 0,390 390,480 480,570 570,840 840,1230
-back, you know this too
+back you know this,| to
 
 2646
 01:29:04,530 --> 01:29:06,420
@@ -13213,22 +13211,22 @@ on the lecture when next
 2647
 01:29:06,420 --> 01:29:07,230
 0,240 240,390 390,450 450,630 630,810
-week when we talk about
+week,| when we talk about
 
 2648
 01:29:07,230 --> 01:29:09,000
 0,150 150,660 930,1500 1500,1680 1680,1770
-zoo keeper because this is
+{zookeeper -},| because this is
 
 2649
 01:29:09,000 --> 01:29:10,260
 0,120 120,180 180,390 390,630 630,1260
-going to be very important,
+going to be very important,|
 
 2650
 01:29:10,260 --> 01:29:11,730
 0,90 90,510 510,570 570,960 960,1470
-this notion of literacy ability
+this notion of {linearizability -},|
 
 2651
 01:29:11,730 --> 01:29:12,810
@@ -13238,17 +13236,17 @@ sort of thing that shows
 2652
 01:29:12,810 --> 01:29:14,400
 0,390 390,870 870,960 960,1050 1050,1590
-up probably in the paper,
+up probably in the paper,|
 
 2653
 01:29:14,550 --> 01:29:15,630
 0,270 270,420 420,720 720,780 780,1080
-and this notion of stave
+and this notion of stale
 
 2654
 01:29:15,630 --> 01:29:17,640
 0,540 540,720 720,1020 1020,1200 1200,2010
-values also shows up probably.
+values also shows up probably.|
 
 2655
 01:29:19,800 --> 01:29:20,670
@@ -13258,27 +13256,26 @@ And since I'm running out
 2656
 01:29:20,670 --> 01:29:21,600
 0,60 60,270 270,360 360,480 480,930
-of time and you're gonna
+of time| and you're gonna
 
 2657
 01:29:21,600 --> 01:29:23,370
 0,360 360,720 720,1020 1020,1470 1470,1770
-I'll resume that next week.
+I'll resume that next week.|
 
 2658
 01:29:24,540 --> 01:29:25,760
 0,690
-Okay.
+Okay?|
 
 2659
 01:29:26,170 --> 01:29:28,780
 0,870 870,1110 1230,1770 1770,2220
-S H S H.
 
 2660
 01:29:29,260 --> 01:29:31,000
 0,630 660,870 870,1260 1260,1440 1440,1740
-Any further questions and people
+Any further questions| and people
 
 2661
 01:29:31,000 --> 01:29:32,290
@@ -13288,57 +13285,57 @@ need to leave, please feel
 2662
 01:29:32,290 --> 01:29:33,970
 0,180 180,270 270,630 750,1500 1500,1680
-free to leave a in
+free to leave,| {} in
 
 2663
 01:29:33,970 --> 01:29:34,900
 0,240 240,300 300,540 540,630 630,930
-fact I hope we did
+fact I hope you did,|
 
 2664
 01:29:35,320 --> 01:29:37,630
 0,510 750,1200 1200,1260 1260,1500 1500,2310
-you want to make responsible
+I want to make responsible
 
 2665
 01:29:37,630 --> 01:29:39,100
 0,180 180,300 300,570 570,870 870,1470
-that we Miss other classes.
+that you miss other classes.|
 
 2666
 01:29:40,230 --> 01:29:41,960
 0,210 210,510 510,1230
-Is this a.
+Is this a
 
 2667
 01:29:41,960 --> 01:29:43,620
 0,600 600,1080
-Considered like.
+consider, like
 
 2668
 01:29:43,620 --> 01:29:44,940
 0,120 120,240 240,300 300,1050 1050,1320
-What type of consistency is
+what type of consistency is
 
 2669
 01:29:44,940 --> 01:29:46,200
 0,480 480,570 570,690 690,870 900,1260
-considered to be a strong
+considered to be {} strong
 
 2670
 01:29:46,200 --> 01:29:50,250
 0,1230 1440,3540 3540,3870 3870,3930 3930,4050
-consistency eyes considered to be
+consistency.| This considered to be
 
 2671
 01:29:50,250 --> 01:29:52,240
 0,60 60,450 450,750 750,1380
-a basically strong consistency.
+{} basically strong consistency,|
 
 2672
 01:29:52,360 --> 01:29:53,890
 0,300 300,480 480,1020 1020,1110 1110,1530
-Um, and what it really
+{} and what it really
 
 2673
 01:29:53,890 --> 01:29:55,000
@@ -13353,22 +13350,22 @@ definition of what strong consistency
 2675
 01:29:56,830 --> 01:29:57,780
 0,450
-is.
+is,|
 
 2676
 01:29:58,360 --> 01:29:59,920
 0,300 300,510 510,780 780,990 990,1560
-Um, so like our intuition
+{} so like our intuition
 
 2677
 01:29:59,920 --> 01:30:01,480
 0,210 210,360 360,600 600,1230 1230,1560
-about what strong consistency isn't
+about what strong consistency {is,namely}
 
 2678
 01:30:01,480 --> 01:30:03,040
 0,480 480,660 660,720 720,990 990,1560
-behaving like a single machine
+behaving like a single machine,|
 
 2679
 01:30:03,040 --> 01:30:04,330
@@ -13383,17 +13380,17 @@ people use in the technical
 2681
 01:30:05,740 --> 01:30:07,840
 0,600 630,780 780,1050 1050,1560
-literature is leaner ability.
+literature is {linearizability -}.|
 
 2682
 01:30:12,420 --> 01:30:14,460
 0,330 330,660 660,870 870,1110 1110,2040
-Um, how did they decide
+{} How did they decide
 
 2683
 01:30:14,490 --> 01:30:17,220
 0,600 900,1620 1650,1980 1980,2520 2520,2730
-to have that property like
+to have that property,| like
 
 2684
 01:30:17,220 --> 01:30:18,540
@@ -13403,22 +13400,22 @@ why did they decide to
 2685
 01:30:18,540 --> 01:30:20,370
 0,210 210,420 420,1050 1290,1590 1590,1830
-have that property, um, there's
+have that property.| {} There's
 
 2686
 01:30:20,370 --> 01:30:22,140
 0,90 90,450 450,900 900,1380 1380,1770
-a couple things, one reason
+a couple things,| one reason,
 
 2687
 01:30:22,140 --> 01:30:24,750
 0,780 1050,1800 1800,2100 2220,2430 2430,2610
-to reason okay so it
+the reason,| okay, so it
 
 2688
 01:30:24,750 --> 01:30:25,710
 0,240 240,390 390,480 480,840 840,960
-makes sort of sense, you
+makes sort of sense,| you
 
 2689
 01:30:25,710 --> 01:30:26,760
@@ -13428,12 +13425,12 @@ know if you think from
 2690
 01:30:26,760 --> 01:30:28,220
 0,240 240,510 510,570 570,1020
-this point of view.
+this point of view,|
 
 2691
 01:30:28,730 --> 01:30:29,780
 0,210 210,300 300,480 480,540 540,1050
-Like you want to behave
+like you want to behave,
 
 2692
 01:30:29,780 --> 01:30:30,620
@@ -13443,17 +13440,17 @@ you want to make a
 2693
 01:30:30,680 --> 01:30:31,940
 0,540 540,810 810,1050 1050,1200 1200,1260
-replicated system, behave like a
+replicated system behave like a
 
 2694
 01:30:31,940 --> 01:30:33,520
 0,360 360,960
-single machine.
+single machine
 
 2695
 01:30:33,700 --> 01:30:35,290
 0,240 240,480 480,1020 1020,1290 1320,1590
-We're really replicated a machine
+or {} replicated {} machine|
 
 2696
 01:30:35,290 --> 01:30:36,040
@@ -13473,17 +13470,17 @@ to executions that the single
 2699
 01:30:39,100 --> 01:30:40,450
 0,330 330,450 450,540 540,870 1110,1350
-machine could have done the
+machine could have done,| the
 
 2700
 01:30:40,450 --> 01:30:41,800
 0,270 270,540 540,1050 1050,1080 1080,1350
-natural inner abilities are very
+next {linearizability -} are very
 
 2701
 01:30:41,800 --> 01:30:44,780
 0,660 1050,1980 1980,2160 2160,2460
-intuitive definition for that.
+intuitive definition for that.|
 
 2702
 01:30:45,020 --> 01:30:46,520
@@ -13493,12 +13490,12 @@ The database world has also
 2703
 01:30:46,520 --> 01:30:48,830
 0,180 180,720 750,1770 1770,1920 1920,2310
-some other terminology like sterilize
+some other terminology like {serializability
 
 2704
 01:30:48,830 --> 01:30:49,850
 0,450 450,600 600,750 750,960 960,1020
-ability, this is also a
+-},| this is also a
 
 2705
 01:30:49,850 --> 01:30:51,110
@@ -13508,7 +13505,7 @@ term that will show up
 2706
 01:30:51,110 --> 01:30:53,330
 0,90 90,690 720,990 990,1440 1800,2220
-in the term later and
+in the term later| and
 
 2707
 01:30:53,510 --> 01:30:54,980
@@ -13518,22 +13515,22 @@ basically the only difference between
 2708
 01:30:54,980 --> 01:30:56,180
 0,180 180,300 300,510 510,1020 1020,1200
-sort of linear accessibility and
+sort of {linearizability -} and
 
 2709
 01:30:56,180 --> 01:30:57,860
 0,510 510,690 690,1260 1260,1380 1380,1680
-a civil liability is that
+{} {serializability -}| is that
 
 2710
 01:30:58,040 --> 01:30:59,870
 0,300 300,420 420,900 900,1200 1200,1830
-its a liability doesn't require
+{serializability - -} doesn't require
 
 2711
 01:30:59,870 --> 01:31:01,480
 0,180 180,630 630,1140
-that matters real-time.
+that matches real-time.|
 
 2712
 01:31:02,980 --> 01:31:04,540
@@ -13543,7 +13540,7 @@ And so people have different
 2713
 01:31:04,540 --> 01:31:06,310
 0,510 510,780 780,930 930,1200 1200,1770
-definitions of a strong consistency,
+definitions of {} strong consistency,|
 
 2714
 01:31:06,310 --> 01:31:07,750
@@ -13553,12 +13550,12 @@ if you will and the
 2715
 01:31:07,750 --> 01:31:09,070
 0,210 210,360 360,510 510,900 900,1320
-one that will see most
+one that we'll see most
 
 2716
 01:31:09,070 --> 01:31:10,720
 0,570 570,720 720,1110 1110,1470 1470,1650
-probably is literate ability, which
+probably is {linearizability -},| which
 
 2717
 01:31:10,720 --> 01:31:12,220
@@ -13573,12 +13570,12 @@ machine behaves that replicates or
 2719
 01:31:14,080 --> 01:31:15,160
 0,240 240,390 390,420 420,690 690,1080
-behaves like a single machine.
+behaves like a single machine.|
 
 2720
 01:31:20,750 --> 01:31:22,980
 0,300 300,840 1020,1290 1290,1680
-Thank you, you're welcome.
+Thank you.| You're welcome.|
 
 2721
 01:31:24,760 --> 01:31:25,900
@@ -13588,17 +13585,17 @@ I have a question about
 2722
 01:31:25,930 --> 01:31:27,100
 0,570
-um.
+{}
 
 2723
 01:31:27,530 --> 01:31:30,170
 0,360 360,1380 1530,2010 2010,2220 2220,2640
-What happens during a network
+what happens during a network
 
 2724
 01:31:30,170 --> 01:31:32,720
 0,690 1710,2010 2010,2100 2100,2340 2340,2550
-partition, so I know like
+partition,| so I know like
 
 2725
 01:31:32,720 --> 01:31:34,130
@@ -13608,12 +13605,12 @@ so if a leader gets
 2726
 01:31:34,130 --> 01:31:35,780
 0,570 570,990 990,1110 1110,1290 1290,1650
-partitioned completely on their own
+partitioned completely on their own,|
 
 2727
 01:31:36,020 --> 01:31:37,940
 0,390 390,780 780,1020 1020,1320 1320,1920
-they'll eventually climb out, but
+they'll eventually climb out,| but
 
 2728
 01:31:37,940 --> 01:31:38,960
@@ -13623,57 +13620,57 @@ if they have sort of
 2729
 01:31:38,960 --> 01:31:39,820
 0,390
-like.
+like
 
 2730
 01:31:40,280 --> 01:31:42,350
 0,150 150,390 390,1230 1410,1680 1680,2070
-A few followers with them,
+a few followers with them,|
 
 2731
 01:31:42,380 --> 01:31:44,480
 0,540 570,960 960,1080 1080,1530
-they'll say the leader.
+they'll stay the leader,|
 
 2732
 01:31:44,480 --> 01:31:45,260
 0,360 360,450 450,600 600,660 660,780
-And they won't be able
+and they won't be able
 
 2733
 01:31:45,260 --> 01:31:46,130
 0,60 60,240 240,570 570,720 720,870
-to commit anything because they'll
+to commit anything,| because they'll
 
 2734
 01:31:46,130 --> 01:31:47,660
 0,90 90,180 180,240 240,900 1320,1530
-be in a minority and
+be in a minority| and
 
 2735
 01:31:47,660 --> 01:31:48,410
 0,150 150,270 270,300 300,540 540,750
-they'll be a new leader
+they'll be a new leader|
 
 2736
 01:31:48,410 --> 01:31:50,690
 0,90 90,210 210,480 570,990 1200,2280
-and they'll be so will
+and they'll be,| so will
 
 2737
 01:31:50,690 --> 01:31:52,360
 0,210 210,540 540,1140
-that leader ever.
+that leader ever
 
 2738
 01:31:52,420 --> 01:31:54,370
 0,360 360,600 630,1350 1350,1500 1500,1950
-Sort of recognize that maybe
+sort of recognize that maybe
 
 2739
 01:31:54,370 --> 01:31:55,960
 0,240 240,300 300,630 630,1050 1260,1590
-it's a sale leader or
+it's a stale leader| or
 
 2740
 01:31:55,960 --> 01:31:57,100
@@ -13688,17 +13685,16 @@ eventually if the partition goes
 2742
 01:31:59,110 --> 01:32:00,160
 0,510
-away.
+away,|
 
 2743
 01:32:00,160 --> 01:32:01,420
 0,690
-I'm.
 
 2744
 01:32:01,820 --> 01:32:03,200
 0,540 540,870 870,990 990,1170 1170,1380
-It'll figure out because I'm
+it'll figure out,| because I'm
 
 2745
 01:32:03,200 --> 01:32:04,250
@@ -13708,22 +13704,22 @@ worried if there's a client
 2746
 01:32:04,250 --> 01:32:05,210
 0,180 180,480 480,570 570,660 660,960
-that's talking to the sale
+that's talking to the stale
 
 2747
 01:32:05,210 --> 01:32:06,200
 0,390
-leader.
+leader,|
 
 2748
 01:32:06,320 --> 01:32:07,550
 0,270 270,360 360,510 510,900 900,1230
-What does that client do.
+what does that client do.|
 
 2749
 01:32:09,450 --> 01:32:12,450
 0,1410 1440,1980 1980,2130 2130,2580 2760,3000
-The no okay so this
+The no,| okay so this
 
 2750
 01:32:12,450 --> 01:32:13,230
@@ -13733,17 +13729,17 @@ is a great question with
 2751
 01:32:13,230 --> 01:32:14,400
 0,180 180,570 570,810 810,1110 1110,1170
-this picture here, hopefully it
+this picture here,| hopefully it
 
 2752
 01:32:14,400 --> 01:32:15,440
 0,90 90,540
-will help.
+will help,|
 
 2753
 01:32:15,560 --> 01:32:17,690
 0,570 1170,1350 1350,1440 1440,1740 1740,2130
-Um, so the client talks
+{} so the client talks
 
 2754
 01:32:17,690 --> 01:32:18,710
@@ -13753,12 +13749,12 @@ to talk to this guy,
 2755
 01:32:18,710 --> 01:32:19,970
 0,300 300,450 450,690 690,780 780,1260
-correct like who's the leader.
+correct,| like who's the leader,|
 
 2756
 01:32:20,640 --> 01:32:21,540
 0,210 210,330 330,390 390,840 870,900
-You see the picture I
+you see the picture,| I
 
 2757
 01:32:21,540 --> 01:32:22,740
@@ -13768,12 +13764,12 @@ just double check, you can
 2758
 01:32:22,740 --> 01:32:24,270
 0,270 270,390 390,510 510,750 1290,1530
-see I can see it
+see.| I can see it.|
 
 2759
 01:32:24,360 --> 01:32:25,290
 0,210 210,390 390,690 690,780 780,930
-so let's say you know
+So let's say you know
 
 2760
 01:32:25,290 --> 01:32:26,190
@@ -13783,42 +13779,42 @@ this first box is the
 2761
 01:32:26,190 --> 01:32:27,600
 0,480 600,960 960,1170 1170,1230 1230,1410
-leader coin touch a dead
+leader,| client talks to that
 
 2762
 01:32:27,600 --> 01:32:29,610
 0,510 720,990 990,1260 1260,1620 1620,2010
-leader, the leader can't commit
+leader,| the leader can't commit
 
 2763
 01:32:29,610 --> 01:32:31,340
 0,180 180,840 840,1230
-any operations, right.
+any operations, right,|
 
 2764
 01:32:31,690 --> 01:32:33,160
 0,630 630,810 810,1080 1080,1200 1200,1470
-Um, and so it will
+{} and so it will
 
 2765
 01:32:33,160 --> 01:32:34,330
 0,450 450,720 720,810 810,870 870,1170
-communicate anything on the apply
+commit anything on the apply
 
 2766
 01:32:34,330 --> 01:32:35,260
 0,480 480,600 600,720 720,780 780,930
-channel and so it will
+channel| and so it will
 
 2767
 01:32:35,260 --> 01:32:36,610
 0,240 240,720 720,810 810,870 870,1350
-never respond to the client
+never respond to the client,
 
 2768
 01:32:36,820 --> 01:32:38,770
 0,390 720,930 930,1260 1260,1470 1470,1950
-right because there's no operation
+right,| because there's no operation
 
 2769
 01:32:38,770 --> 01:32:40,150
@@ -13828,42 +13824,42 @@ actually its operations are not
 2770
 01:32:40,150 --> 01:32:41,460
 0,210 210,810
-being executed.
+being executed,|
 
 2771
 01:32:41,660 --> 01:32:42,680
 0,180 180,270 270,600 600,840 840,1020
-So the client will just
+so the client will just
 
 2772
 01:32:42,680 --> 01:32:44,780
 0,570 600,870 870,1170 1170,1620 1620,2100
-retry just keep retrying forever.
+retry, just keep retrying forever,|
 
 2773
 01:32:46,230 --> 01:32:48,210
 0,180 180,930 1110,1290 1290,1470 1680,1980
-Wait until you know until
+{} until you know until
 
 2774
 01:32:48,210 --> 01:32:50,460
 0,570 570,1200 1200,1470 1470,1770 1770,2250
-declined actually maybe tries another,
+{the,client} actually maybe tries another,
 
 2775
 01:32:50,460 --> 01:32:53,380
 0,0 1740,1920 1920,2370
-um, you know.
+{} you know,
 
 2776
 01:32:53,380 --> 01:32:54,370
 0,150 150,210 210,300 300,480 480,990
-One of the other followers
+one of the other followers,
 
 2777
 01:32:54,370 --> 01:32:55,810
 0,330 330,450 450,1200 1200,1320 1320,1440
-correct that maintains you know
+correct,| that maintains you know
 
 2778
 01:32:55,810 --> 01:32:56,980
@@ -13873,27 +13869,27 @@ who else is actually in
 2779
 01:32:56,980 --> 01:32:58,880
 0,570 810,1560
-the group.
+the group,|
 
 2780
 01:32:58,880 --> 01:33:02,690
 0,1590 1620,2040 2040,2130 2130,2760 2760,3810
-Ora until the network a
+or until the network {}
 
 2781
 01:33:02,720 --> 01:33:03,800
 0,600
-heels.
+heals,|
 
 2782
 01:33:04,660 --> 01:33:06,250
 0,450 450,720 720,990 990,1260 1260,1590
-And the leader actually commit
+and the leader actually commit
 
 2783
 01:33:06,250 --> 01:33:07,960
 0,60 60,540 720,1260 1290,1590 1590,1710
-an operation asha wait so
+an operation.| Gotcha, wait, so
 
 2784
 01:33:07,960 --> 01:33:09,880
@@ -13903,37 +13899,37 @@ doesn't doesn't the leader immediately
 2785
 01:33:09,880 --> 01:33:11,200
 0,450 450,660 660,870 870,1080 1080,1320
-reply those saying I got
+reply those,| saying I got
 
 2786
 01:33:11,200 --> 01:33:12,460
 0,150 150,840
-your request.
+your request
 
 2787
 01:33:12,680 --> 01:33:14,240
 0,270 270,420 420,600 870,1320 1320,1560
-Or does it wait until
+or does it wait {until,committed}.|
 
 2788
 01:33:14,870 --> 01:33:16,610
 0,600 600,870 870,990 990,1200 1200,1740
-you're free, it doesn't know
+{No,in,lab} 3, it doesn't know
 
 2789
 01:33:16,610 --> 01:33:18,560
 0,600 600,900 900,1170 1170,1530 1530,1950
-communicate with a client who
+commit with a client {until,who}
 
 2790
 01:33:18,560 --> 01:33:20,030
 0,270 270,450 450,840 840,900 900,1470
-actually has processed the request.
+actually has processed the request,|
 
 2791
 01:33:20,640 --> 01:33:21,990
 0,210 210,390 390,720 720,930 930,1350
-And which means that the
+and which means that the
 
 2792
 01:33:22,020 --> 01:33:23,460
@@ -13943,27 +13939,27 @@ operation actually has run through
 2793
 01:33:23,460 --> 01:33:24,510
 0,390 390,510 510,720 720,900 900,1050
-graft and come out of
+raft| and come out of
 
 2794
 01:33:24,510 --> 01:33:25,590
 0,90 90,450 450,750 750,870 870,1080
-the applied channel and ask
+the applied channel| and ask
 
 2795
 01:33:25,590 --> 01:33:26,940
 0,150 150,600 600,720 720,810 810,1350
-me executed by the surface.
+{} executed by the servers.|
 
 2796
 01:33:27,630 --> 01:33:28,860
 0,660
-Okay.
+Okay.|
 
 2797
 01:33:33,330 --> 01:33:34,500
 0,90 90,240 240,420 420,1020 1020,1170
-That makes sense, yeah, so
+{Does,that} makes sense.| Yeah, so
 
 2798
 01:33:34,500 --> 01:33:35,850
@@ -13973,7 +13969,7 @@ the client could just implement
 2799
 01:33:35,850 --> 01:33:37,020
 0,120 120,600 600,840 840,990 990,1170
-a timeout where like if
+a timeout,| where like if
 
 2800
 01:33:37,020 --> 01:33:38,340
@@ -13988,12 +13984,12 @@ and they haven't received the
 2802
 01:33:39,540 --> 01:33:41,160
 0,390 480,1110 1110,1320 1320,1530 1530,1620
-committee assume that maybe I
+commit,| assume that maybe I
 
 2803
 01:33:41,160 --> 01:33:42,420
 0,150 150,420 420,480 480,870 870,1260
-should try a different node,
+should try a different node,|
 
 2804
 01:33:42,600 --> 01:33:43,620
@@ -14003,57 +13999,57 @@ and then if it gets
 2805
 01:33:43,620 --> 01:33:45,060
 0,180 210,450 450,810 810,1290 1320,1440
-the new leader or a
+the new leader or {}
 
 2806
 01:33:45,060 --> 01:33:46,020
 0,300 300,360 360,450 450,570 570,960
-follower of the new leader
+follower of the new leader,|
 
 2807
 01:33:46,200 --> 01:33:48,570
 0,570 810,1200 1200,1500 1500,1860 1890,2370
-it'll be back to normal,
+it'll be back to normal.|
 
 2808
 01:33:48,570 --> 01:33:50,610
 0,90 90,660 660,1200 1200,1800 1830,2040
-for example, this clerk that's
+For example, this clerk that's
 
 2809
 01:33:50,610 --> 01:33:52,260
 0,390 390,510 510,690 690,1140 1140,1650
-exactly what this culture does.
+exactly what this clerk does,|
 
 2810
 01:33:52,780 --> 01:33:53,890
 0,180 180,390 390,480 480,720 720,1110
-You know the place along
+you know the place along
 
 2811
 01:33:53,890 --> 01:33:55,030
 0,150 150,240 240,570 570,690 690,1140
-with the servers to actually,
+with the servers to actually
 
 2812
 01:33:55,030 --> 01:33:56,230
 0,390 390,600 600,750 750,990 990,1200
-um, do what youre just
+{} do what you just
 
 2813
 01:33:56,230 --> 01:33:58,160
 0,240 720,1350
-as god.
+said.| {Got,it},
 
 2814
 01:33:59,500 --> 01:34:01,040
 0,450 450,720 720,960
-Okay, thank you.
+okay, thank you.|
 
 2815
 01:34:01,070 --> 01:34:02,160
 0,180 180,300 300,510
-You woke up.
+You're {welcome -}.|
 
 2816
 01:34:02,410 --> 01:34:03,370
@@ -14063,7 +14059,7 @@ Sorry, can you repeat again,
 2817
 01:34:03,370 --> 01:34:04,980
 0,150 150,240 240,540 540,1110
-what the clerk does.
+what the clerk does.|
 
 2818
 01:34:05,640 --> 01:34:06,750
@@ -14073,32 +14069,32 @@ The clerk is a little
 2819
 01:34:06,750 --> 01:34:08,370
 0,210 210,330 330,810 810,1320 1320,1620
-bit of a stop where
+bit of a stub,| where
 
 2820
 01:34:08,370 --> 01:34:10,260
 0,150 150,810 840,1260 1260,1680 1680,1890
-like a little library that
+like a little library,| that
 
 2821
 01:34:10,260 --> 01:34:11,820
 0,420 420,690 690,870 1140,1230 1230,1560
-decline links me to decline
+{the,client} links with,| and {the,client}
 
 2822
 01:34:11,820 --> 01:34:13,560
 0,210 210,420 420,540 540,1020 1350,1740
-calls puts and gets and
+calls puts and gets| and
 
 2823
 01:34:13,560 --> 01:34:15,270
 0,90 90,480 480,1020 1020,1440 1440,1710
-the cleric actually eyes the
+the clerk actually is the
 
 2824
 01:34:15,270 --> 01:34:16,410
 0,360 360,480 480,600 600,870 870,1140
-interface that it talks to
+interface that it talks to|
 
 2825
 01:34:16,410 --> 01:34:17,310
@@ -14108,17 +14104,17 @@ and the clerk can keep
 2826
 01:34:17,310 --> 01:34:18,600
 0,150 150,780
-some information.
+some information,|
 
 2827
 01:34:18,630 --> 01:34:20,580
 0,450 450,780 780,1050 1050,1170 1170,1950
-Like who's part of the
+like who's part of the
 
 2828
 01:34:21,480 --> 01:34:23,130
 0,360 360,930 1080,1260 1260,1410 1410,1650
-raf cluster and so we're
+raft cluster| and so we're
 
 2829
 01:34:23,130 --> 01:34:24,360
@@ -14128,7 +14124,7 @@ only who's the leader and
 2830
 01:34:24,360 --> 01:34:25,260
 0,120 120,240 240,330 330,810 810,900
-who are the followers at
+who are the followers,| at
 
 2831
 01:34:25,260 --> 01:34:26,310
@@ -14138,17 +14134,17 @@ least what it thinks is
 2832
 01:34:26,310 --> 01:34:27,360
 0,120 120,360 360,450 450,510 510,1050
-the leader and the followers.
+the leader and the followers,|
 
 2833
 01:34:28,210 --> 01:34:29,800
 0,750 750,960 960,1200 1200,1320 1320,1590
-And um, when it sends
+and {} when it sends
 
 2834
 01:34:29,800 --> 01:34:31,660
 0,420 420,570 570,1620 1620,1710 1710,1860
-in a RBC, you know
+in {} rpc you know
 
 2835
 01:34:31,660 --> 01:34:32,590
@@ -14158,7 +14154,7 @@ to the service is not
 2836
 01:34:32,590 --> 01:34:33,550
 0,300 300,450 450,570 570,810 810,960
-sensitive to the leader what
+sensitive to the leader,| what
 
 2837
 01:34:33,550 --> 01:34:34,390
@@ -14168,17 +14164,17 @@ it thinks is the current
 2838
 01:34:34,390 --> 01:34:35,240
 0,330
-leader.
+leader,|
 
 2839
 01:34:35,580 --> 01:34:37,470
 0,450 450,540 540,1080 1170,1230 1230,1890
-And this serves as a
+and the servers in the,
 
 2840
 01:34:37,500 --> 01:34:38,790
 0,450 450,720 720,780 780,1020 1020,1290
-whatever thinks the current leader,
+whatever thinks the current leader,|
 
 2841
 01:34:38,790 --> 01:34:39,900
@@ -14188,47 +14184,47 @@ the leader might actually respond
 2842
 01:34:39,900 --> 01:34:40,710
 0,180 180,330 330,510 510,630 630,810
-saying like hey I'm not
+saying,| like hey I'm not
 
 2843
 01:34:40,710 --> 01:34:41,850
 0,120 120,480 480,630 630,870 870,1140
-the leader should send somewhere
+the leader, should send somewhere
 
 2844
 01:34:41,850 --> 01:34:42,760
 0,450
-else.
+else,|
 
 2845
 01:34:42,910 --> 01:34:43,750
 0,180 180,360 360,450 450,600 600,840
-And then it will try
+and then it will try
 
 2846
 01:34:43,750 --> 01:34:45,340
 0,210 210,300 300,390 390,780 900,1590
-one of the other updates
+one of the {others,and} updates
 
 2847
 01:34:45,340 --> 01:34:46,640
 0,720
-information.
+{its,information}.|
 
 2848
 01:34:46,640 --> 01:34:48,470
 0,270 270,480 480,930 930,1230 1230,1830
-Um, and also we'll tag
+{} And also we'll tag
 
 2849
 01:34:48,470 --> 01:34:51,230
 0,690 1080,1590 1590,1800 1800,2490 2610,2760
-every Putin get operation, um
+every {put,and} get operation, {}|
 
 2850
 01:34:51,230 --> 01:34:52,850
 0,210 210,810 810,1320 1320,1470 1470,1620
-that negotiation client and that
+that {it,receives,from,the} client| and that
 
 2851
 01:34:52,850 --> 01:34:53,810
@@ -14238,17 +14234,17 @@ sends to the server with
 2852
 01:34:53,810 --> 01:34:55,640
 0,60 60,390 390,900 1320,1650 1650,1830
-a unique ID, um, so
+a unique id,| {} so
 
 2853
 01:34:55,640 --> 01:34:57,920
 0,420 420,1050 1170,1620 1620,1740 1740,2280
-that the service can duplicate
+that the service can {do,duplicate}
 
 2854
 01:34:57,920 --> 01:34:58,940
 0,510
-detection.
+detection.x|
 
 2855
 01:34:59,460 --> 01:35:00,240
@@ -14258,27 +14254,27 @@ And this all comes up
 2856
 01:35:00,240 --> 01:35:01,950
 0,150 150,420 420,660 660,1050 1080,1710
-in lap three so yeah.
+in lab 3,| so {you,know}
 
 2857
 01:35:02,550 --> 01:35:04,260
 0,510 510,690 690,1140
-You'll see there.
+you'll see there,|
 
 2858
 01:35:04,690 --> 01:35:05,920
 0,180 180,570 570,750 750,990 990,1230
-In lecture, there's no real
+in {lab,2}, there's no real
 
 2859
 01:35:05,920 --> 01:35:07,040
 0,600
-clerk.
+clerk,|
 
 2860
 01:35:07,070 --> 01:35:08,480
 0,270 270,360 360,780 780,1230 1230,1410
-Because the tester basically sort
+because the tester basically sort
 
 2861
 01:35:08,480 --> 01:35:09,230
@@ -14288,27 +14284,27 @@ of sits on top of
 2862
 01:35:09,230 --> 01:35:10,340
 0,270 270,630 630,750 750,810 810,1110
-the directing of the raft
+the directly of the raft
 
 2863
 01:35:10,340 --> 01:35:12,080
 0,480 480,600 600,840 840,1140 1140,1740
-interface and doesn't really interact
+interface| and doesn't really interact
 
 2864
 01:35:12,380 --> 01:35:13,340
 0,330 330,390 390,750 750,870 870,960
-through the clerk, but in
+through the clerk,| but in
 
 2865
 01:35:13,340 --> 01:35:14,750
 0,510 510,870 870,1230 1230,1350 1350,1410
-watry will interact through the
+{lab,3} will interact through the
 
 2866
 01:35:14,750 --> 01:35:15,720
 0,450
-clerk.
+clerk.|
 
 2867
 01:35:16,320 --> 01:35:17,610
@@ -14318,17 +14314,17 @@ So how do the clients
 2868
 01:35:17,610 --> 01:35:19,980
 0,720 720,1020 1020,1860
-generate unique IDs.
+generate unique ids,|
 
 2869
 01:35:20,100 --> 01:35:21,930
 0,750 780,1020 1020,1170 1170,1350 1350,1830
-They looked at each other
+{I,think,they} conflict with each other.|
 
 2870
 01:35:22,050 --> 01:35:24,660
 0,1140 1140,1350 1350,1590 1590,1950
-random big random numbers.
+Random, big random numbers.|
 
 2871
 01:35:25,660 --> 01:35:26,920
@@ -14338,7 +14334,7 @@ Alright, so we're just guessing
 2872
 01:35:26,920 --> 01:35:28,600
 0,120 120,600 630,960 960,1170 1170,1680
-and hoping rather than actually
+and hoping,| rather than actually
 
 2873
 01:35:28,600 --> 01:35:29,890
@@ -14348,27 +14344,26 @@ guaranteeing some sort of like
 2874
 01:35:29,890 --> 01:35:32,200
 0,1200 1410,1770 1770,2010 2010,2130 2130,2310
-incremental one way to make
+incremental.| One way to make
 
 2875
 01:35:32,200 --> 01:35:33,550
 0,60 60,300 300,930 930,1020 1020,1350
-it more guaranteed for example,
+it more guaranteed,| for example,
 
 2876
 01:35:33,550 --> 01:35:35,560
 0,210 210,330 330,660 660,1260 1620,2010
-take your IP address a
+take your IP address {}
 
 2877
 01:35:35,560 --> 01:35:37,030
 0,270 270,630 630,810 810,1050 1050,1470
-and append a random number.
+and append a random number.|
 
 2878
 01:35:37,850 --> 01:35:38,780
 0,390
-Baby.
 
 2879
 01:35:41,070 --> 01:35:42,690
@@ -14378,7 +14373,7 @@ A question about the homework
 2880
 01:35:42,690 --> 01:35:44,910
 0,750 870,1290 1560,1800 1800,1920 1920,2220
-question, yeah, so I thought
+question.| Yeah.| So I thought
 
 2881
 01:35:44,910 --> 01:35:46,140
@@ -14388,17 +14383,17 @@ that it could go backwards
 2882
 01:35:46,140 --> 01:35:47,130
 0,120 120,390 390,600 600,720 720,990
-in time like I read
+in time,| like I read
 
 2883
 01:35:47,130 --> 01:35:48,840
 0,120 120,570 570,690 690,840 840,1710
-the paper and it says
+the paper| and it says
 
 2884
 01:35:48,840 --> 01:35:51,420
 0,360 360,900 900,1380 1380,1920 2250,2580
-on page twelve point a
+on page 12 [] {},|
 
 2885
 01:35:51,420 --> 01:35:52,890
@@ -14408,7 +14403,7 @@ it said that if there's
 2886
 01:35:52,890 --> 01:35:54,630
 0,90 90,930 960,1410 1410,1650 1650,1740
-a conflict right then the
+a conflict, right,| then the
 
 2887
 01:35:54,630 --> 01:35:56,460
@@ -14418,22 +14413,22 @@ follower just discards its entire
 2888
 01:35:56,460 --> 01:35:57,930
 0,420 420,540 540,690 690,990 990,1470
-log and it's also preceded
+log| and it's also preceded
 
 2889
 01:35:57,930 --> 01:35:59,400
 0,150 150,270 270,990
-by the snapshot.
+by the snapshot,|
 
 2890
 01:36:00,110 --> 01:36:03,080
 0,240 240,270 270,960 1110,2100 2220,2970
-So I wonder why again
+so I wonder why.| Again,
 
 2891
 01:36:03,080 --> 01:36:06,290
 0,180 180,630 1860,2700 2700,2790 2790,3210
-let me let me guess
+let me, let me guess,|
 
 2892
 01:36:06,290 --> 01:36:07,520
@@ -14443,22 +14438,22 @@ I I don't really know
 2893
 01:36:07,520 --> 01:36:08,690
 0,570 570,720 720,930 930,1080 1080,1170
-exactly this is what you're
+exactly this is,| what you're
 
 2894
 01:36:08,690 --> 01:36:09,530
 0,300 300,480 480,600 600,750 750,840
-referring to I have to
+referring to,| I have to
 
 2895
 01:36:09,530 --> 01:36:11,000
 0,150 150,210 210,300 300,630 930,1470
-look it up again, oh,
+look it up again.| Oh,
 
 2896
 01:36:11,000 --> 01:36:12,470
 0,300 300,630 630,930 930,1320 1320,1470
-it's on page twelve it's
+it's on page 12,| it's
 
 2897
 01:36:12,470 --> 01:36:13,850
@@ -14468,82 +14463,82 @@ at the it's towards the
 2898
 01:36:13,850 --> 01:36:14,870
 0,180 180,300 300,600 600,930 930,1020
-end of page twelve the
+end of page 12 the
 
 2899
 01:36:14,870 --> 01:36:16,370
 0,420 420,900 900,1170 1170,1350 1350,1500
-second column here, so the
+second column here,| so the
 
 2900
 01:36:16,370 --> 01:36:18,410
 0,330 330,390 390,750 750,1380 1860,2040
-second to last paragraph, so
+second to last paragraph.| So
 
 2901
 01:36:18,410 --> 01:36:19,790
 0,360 360,630 630,900 900,1050 1050,1380
-the law can go back
+the log can go back,
 
 2902
 01:36:19,790 --> 01:36:20,750
 0,180 180,330 330,540 540,630 630,960
-right but not the state
+right, but not the state
 
 2903
 01:36:20,750 --> 01:36:22,430
 0,540 750,1050 1050,1290 1290,1410 1410,1680
-machine not oh, the law
+machine.| Not, oh, the log
 
 2904
 01:36:22,430 --> 01:36:23,750
 0,570 570,690 690,900 900,1170 1170,1320
-can't the law can go
+can't, the log can go
 
 2905
 01:36:23,750 --> 01:36:24,740
 0,270 270,360 360,570 570,660 660,990
-back but not the state
+back, but not the state
 
 2906
 01:36:24,740 --> 01:36:26,210
 0,600 720,990 990,1110 1110,1200 1200,1470
-machine, what was the state
+machine,| what was the state
 
 2907
 01:36:26,210 --> 01:36:27,650
 0,330 330,540 540,750 750,990 1170,1440
-machine like what you the
+machine, like what you the
 
 2908
 01:36:27,650 --> 01:36:29,260
 0,480 480,900 900,1260
-committed entries, right.
+committed entries, right.|
 
 2909
 01:36:30,320 --> 01:36:32,120
 0,390 390,810 810,1230 1230,1530 1530,1800
-Yeah the yes the law
+Yeah, the yes, the log
 
 2910
 01:36:32,120 --> 01:36:32,990
 0,180 180,300 300,570 570,780 780,870
-can't go back because of
+can't go back,| because of
 
 2911
 01:36:32,990 --> 01:36:35,330
 0,900 1230,1590 1590,1920 1920,2280 2280,2340
-z who committed entries we
+the {uncommitted -} entries we
 
 2912
 01:36:35,330 --> 01:36:36,380
 0,150 150,390 390,810 810,960 960,1050
-can go back, this is
+can go back,| this is
 
 2913
 01:36:36,380 --> 01:36:37,280
 0,180 180,300 300,570 570,840 840,900
-like this whole race or
+like this whole {erase -}
 
 2914
 01:36:37,280 --> 01:36:38,150
@@ -14553,27 +14548,27 @@ stuff that we talked about
 2915
 01:36:38,150 --> 01:36:39,140
 0,480
-earlier.
+earlier.|
 
 2916
 01:36:40,560 --> 01:36:42,360
 0,660 690,870 870,1230 1230,1380 1380,1800
-OK, so actually the log
+Okay, so actually the log
 
 2917
 01:36:42,360 --> 01:36:44,520
 0,480 480,690 690,1110 1560,2070 2070,2160
-can go back not the
+can go back, not the
 
 2918
 01:36:44,520 --> 01:36:46,260
 0,330 330,660 660,930 930,1140 1140,1740
-state machine, which is basically
+state machine,| which is basically
 
 2919
 01:36:46,260 --> 01:36:48,660
 0,330 330,750 870,1320 1320,1890 2130,2400
-what you committed already, yeah
+what you committed already.| Yeah
 
 2920
 01:36:48,660 --> 01:36:49,830
@@ -14583,32 +14578,32 @@ and the log can never
 2921
 01:36:49,830 --> 01:36:51,390
 0,450 450,630 630,900 900,1020 1020,1560
-go will never go back
+go,| will never go back,
 
 2922
 01:36:51,420 --> 01:36:53,430
 0,510 510,900 900,960 960,1470 1470,2010
-never bailout of committed operations
+never bailout of committed operations,
 
 2923
 01:36:53,430 --> 01:36:55,080
 0,270 270,390 390,510 510,1050 1050,1650
-correct, it can only bailout
+correct,| it can only bailout
 
 2924
 01:36:55,080 --> 01:36:57,480
 0,540 540,1020 1020,1680 1710,2070 2070,2400
-erased uncommitted operations, yes that's
+erased uncommitted operations.| Yes, that's
 
 2925
 01:36:57,480 --> 01:37:00,390
 0,300 1410,2010 2100,2250 2250,2430 2430,2910
-right OK, so that's what
+right, okay.| So that's what
 
 2926
 01:37:00,420 --> 01:37:01,440
 0,270 270,510
-we're sure.
+{you,ask} question.|
 
 2927
 01:37:01,620 --> 01:37:02,400
@@ -14618,27 +14613,27 @@ Can I ask a question
 2928
 01:37:02,400 --> 01:37:04,860
 0,270 270,720 750,1200 1200,1800 1980,2460
-about the third slide, yes
+about the third slide.| Yeah.|
 
 2929
 01:37:04,860 --> 01:37:05,790
 0,90 90,270 270,480 480,780 780,930
-the one right before this
+The one right before this
 
 2930
 01:37:05,790 --> 01:37:07,260
 0,300 330,870
-one, um.
+one, {}|
 
 2931
 01:37:08,050 --> 01:37:09,490
 0,480 540,900 900,990 990,1440 1440,1440
-So, could you just, um,
+so could you just {}
 
 2932
 01:37:10,870 --> 01:37:12,100
 0,360 360,480 480,690 690,870 870,1230
-walk me through real quick,
+walk me through real quick,|
 
 2933
 01:37:12,100 --> 01:37:14,110
@@ -14648,132 +14643,132 @@ what match index is doing
 2934
 01:37:14,110 --> 01:37:15,310
 0,210 210,360 360,720 750,960 960,1200
-on the right, like when
+on the write,| like when
 
 2935
 01:37:15,310 --> 01:37:16,600
 0,210 210,390 390,540 540,1110 1110,1290
-s two is communicating with
+{S2 -} is communicating with
 
 2936
 01:37:16,600 --> 01:37:17,820
 0,270 270,720
-us three.
+{S3 -}.|
 
 2937
 01:37:17,960 --> 01:37:19,340
 0,360 390,570 570,660 660,1110 1110,1380
-Okay, so it starts out
+Okay.| So it starts out
 
 2938
 01:37:19,340 --> 01:37:22,760
 0,480 510,960 960,1650 1890,2430 2760,3420
-as a zero yep soloman,
+as {} 0.| Yep, so
 
 2939
 01:37:22,760 --> 01:37:23,930
 0,210 210,450 450,540 540,1080 1080,1170
-this too is communicating with
+{S2 -} is communicating with
 
 2940
 01:37:23,930 --> 01:37:24,800
 0,360
-who.
+who.|
 
 2941
 01:37:24,970 --> 01:37:26,890
 0,360 360,750 960,1170 1170,1380 1380,1920
-S three yeah, so basically
+{S3 -}.| Yeah, so basically
 
 2942
 01:37:26,890 --> 01:37:28,930
 0,150 150,330 330,1050 1500,1770 1770,2040
-okay, so here a match
+okay,| so here {} match
 
 2943
 01:37:28,930 --> 01:37:30,310
 0,390 390,510 510,990 990,1230 1230,1380
-index is zero right, like
+index is 0 right,| like
 
 2944
 01:37:30,310 --> 01:37:31,540
 0,300 300,660 720,960 960,1080 1080,1230
-so and when you read
+so and when you write
 
 2945
 01:37:31,540 --> 01:37:33,120
 0,90 90,360 360,450 450,930
-the down is zero.
+it down is 0.|
 
 2946
 01:37:33,350 --> 01:37:35,510
 0,630 1110,1440 1440,1860 1890,2010 2010,2160
-Yeah, okay, then you get
+Yeah.| Okay, then you get
 
 2947
 01:37:35,510 --> 01:37:36,530
 0,60 60,240 240,510 510,660 660,1020
-to know back so matching
+to know back,| so match
 
 2948
 01:37:36,530 --> 01:37:38,260
 0,300 300,390 390,840 840,1170
-next a zero right.
+index stays 0, right.|
 
 2949
 01:37:38,940 --> 01:37:40,020
 0,570
-Okay.
+Okay.|
 
 2950
 01:37:40,280 --> 01:37:41,570
 0,390 420,690 690,990 990,1140 1140,1290
-Um, nothing there, but now
+{} Nothing there, but now
 
 2951
 01:37:41,570 --> 01:37:42,590
 0,270 270,360 360,630 630,900 900,1020
-it's an okay back, so
+it's an okay back,| so
 
 2952
 01:37:42,590 --> 01:37:44,080
 0,150 150,270 270,420 420,930
-what does that imply.
+what does that imply,|
 
 2953
 01:37:45,800 --> 01:37:48,080
 0,270 270,1020 1110,1560 1560,2130 2130,2280
-That implies that what did
+that implies {that,you,know} what did
 
 2954
 01:37:48,080 --> 01:37:49,310
 0,120 120,300 300,450 450,870 900,1230
-it say that sending a
+it send that send {}
 
 2955
 01:37:49,310 --> 01:37:51,920
 0,480 480,930 930,1530 1710,2250 2250,2610
-heartbeat correct with four index
+heartbeat correct with for index
 
 2956
 01:37:51,920 --> 01:37:53,200
 0,780
-thirteen.
+13,|
 
 2957
 01:37:53,290 --> 01:37:57,400
 0,660 660,1590 1620,2400 2400,3510 3900,4110
-Um, and um, including um,
+{} and {} including {}
 
 2958
 01:37:57,400 --> 01:37:59,480
 0,540 690,960 960,1470
-and um the.
+and {} the
 
 2959
 01:37:59,600 --> 01:38:02,390
 0,630 930,1260 1260,1740 1740,2220 2220,2790
-A S three responded okay
+{} {S3 -} responded okay|
 
 2960
 01:38:02,780 --> 01:38:03,710
@@ -14783,17 +14778,17 @@ and so it means that
 2961
 01:38:03,710 --> 01:38:05,090
 0,420 420,570 570,1020 1020,1200 1200,1380
-visually as free is up
+basically {S3 -} is up
 
 2962
 01:38:05,090 --> 01:38:06,950
 0,90 90,360 360,810 840,1320 1320,1860
-to date through until thirteen
+to date through until 13,
 
 2963
 01:38:07,040 --> 01:38:08,510
 0,300 300,570 570,930 930,1320 1320,1470
-correct as next index that
+correct,| {that,is} next index that
 
 2964
 01:38:08,510 --> 01:38:10,190
@@ -14803,42 +14798,42 @@ it actually has and expects
 2965
 01:38:10,190 --> 01:38:11,160
 0,480
-routine.
+14.|
 
 2966
 01:38:11,500 --> 01:38:13,420
 0,150 150,630 750,1350 1440,1680 1680,1920
-And so the s two
+And so the {S2 -}
 
 2967
 01:38:13,420 --> 01:38:15,220
 0,390 390,600 600,870 870,1080 1080,1800
-knows now that it's loc
+knows now that it's log
 
 2968
 01:38:15,310 --> 01:38:17,860
 0,570 630,990 990,1620 1770,2130 2130,2550
-metric until thirteenth after this
+matches until 13 after this
 
 2969
 01:38:17,920 --> 01:38:19,000
 0,600
-message.
+message.|
 
 2970
 01:38:19,880 --> 01:38:21,020
 0,120 120,270 270,540 540,1080 1080,1140
-Is it until thirteen or
+Is it until 13 or
 
 2971
 01:38:21,020 --> 01:38:23,900
 0,300 300,900 1350,1650 1650,2370 2400,2880
-until twelve it mattress till
+until 12.| It matches till
 
 2972
 01:38:23,900 --> 01:38:25,460
 0,510 510,690 690,840 840,1290 1290,1560
-thirteen so the next thing
+13,| so the next thing
 
 2973
 01:38:25,460 --> 01:38:26,480
@@ -14848,17 +14843,17 @@ that will be sent will
 2974
 01:38:26,480 --> 01:38:28,560
 0,90 90,480 480,1050 1050,1560
-be going index routine.
+be going index 13.|
 
 2975
 01:38:28,940 --> 01:38:29,960
 0,510
-SO.
+So,
 
 2976
 01:38:30,020 --> 01:38:31,340
 0,210 210,270 270,540 540,960 960,1320
-So the next index and
+so the next index and
 
 2977
 01:38:31,340 --> 01:38:32,300
@@ -14868,22 +14863,22 @@ match index are going to
 2978
 01:38:32,300 --> 01:38:33,770
 0,150 150,810 900,1140 1140,1260 1260,1470
-be thirteen yeah the next
+be 13.| Yeah, the next
 
 2979
 01:38:33,770 --> 01:38:34,820
 0,330 330,420 420,600 600,840 840,1050
-index is not used, yet
+index is not used yet,
 
 2980
 01:38:34,820 --> 01:38:36,320
 0,300 300,540 540,960
-correct means empty.
+right,| means empty.|
 
 2981
 01:38:37,290 --> 01:38:38,560
 0,690
-Picture.
+Okay.|
 
 2982
 01:38:38,560 --> 01:38:39,910
@@ -14893,7 +14888,7 @@ Yeah, so basically the the
 2983
 01:38:39,910 --> 01:38:41,380
 0,300 300,420 420,540 540,930 1110,1470
-way you know they they
+way you know| they they
 
 2984
 01:38:41,740 --> 01:38:43,030
@@ -14903,7 +14898,7 @@ you can do either way
 2985
 01:38:43,030 --> 01:38:43,870
 0,300 300,390 390,510 510,690 690,840
-correct you can either save
+correct,| you can either save
 
 2986
 01:38:43,870 --> 01:38:45,070
@@ -14913,17 +14908,17 @@ the last one or you
 2987
 01:38:45,070 --> 01:38:46,450
 0,150 150,660 660,840 840,1020 1020,1380
-know first, that's gonna be
+know first that's gonna be,|
 
 2988
 01:38:46,630 --> 01:38:48,400
 0,210 210,930 930,1170 1170,1650 1710,1770
-four z first next to
+for the first next to
 
 2989
 01:38:48,400 --> 01:38:50,170
 0,300 300,630 630,1290 1290,1500 1500,1770
-no one in this case
+{you,know} one,| in this case
 
 2990
 01:38:50,170 --> 01:38:51,040
@@ -14933,7 +14928,7 @@ they go by the first
 2991
 01:38:51,040 --> 01:38:51,940
 0,180 180,390
-next one.
+next one.|
 
 2992
 01:38:53,410 --> 01:38:54,460
@@ -14943,12 +14938,12 @@ So in this case, both
 2993
 01:38:54,460 --> 01:38:56,530
 0,120 120,360 360,780 780,1440 1440,2070
-of them are thirteen for
+of them are 13 for
 
 2994
 01:38:56,740 --> 01:38:58,630
 0,120 120,360 360,660 870,1650 1650,1890
-the next one yeah, so
+the next one.| Yeah, so
 
 2995
 01:38:58,630 --> 01:38:59,860
@@ -14958,7 +14953,7 @@ basically you can think about
 2996
 01:38:59,860 --> 01:39:01,780
 0,240 240,630 630,1110 1110,1740 1740,1920
-this, this stage before, like
+this,| this stage before, like
 
 2997
 01:39:01,780 --> 01:39:02,560
@@ -14968,42 +14963,42 @@ all the green stuff has
 2998
 01:39:02,560 --> 01:39:07,460
 0,540 930,1500 2280,3210 3570,4350
-happened, the mesh index.
+happened,| the match index
 
 2999
 01:39:09,660 --> 01:39:12,920
 0,840 1950,2730
-Four three.
+for 3
 
 3000
 01:39:13,360 --> 01:39:15,300
 0,210 210,600 630,1380
-It is thirteen.
+{} is 13,|
 
 3001
 01:39:15,300 --> 01:39:16,830
 0,330 330,420 420,690 690,1200 1200,1530
-And the match index for
+and the match index for
 
 3002
 01:39:16,830 --> 01:39:18,640
 0,720
-itself.
+itself
 
 3003
 01:39:20,770 --> 01:39:22,760
 0,360 360,510 510,750 750,1260
-Two is also thirteen.
+2 is also 13.|
 
 3004
 01:39:24,280 --> 01:39:25,600
 0,510 510,810
-Got it.
+Got it,
 
 3005
 01:39:27,090 --> 01:39:29,490
 0,600 870,1290 1290,1770 1860,2040 2040,2400
-Awesome, thank you you're welcome.
+awesome, thank you.| You're welcome.|
 
 3006
 01:39:31,840 --> 01:39:33,940
@@ -15013,42 +15008,42 @@ Actually, can I ask a
 3007
 01:39:33,940 --> 01:39:35,620
 0,210 210,330 330,480 480,840 1020,1680
-full out from there, so
+{follow-up -} from that,| so
 
 3008
 01:39:36,220 --> 01:39:39,610
 0,780 810,1290 1590,2100 2100,2520 2520,3390
-when it sees something matches
+when it sees something matches,|
 
 3009
 01:39:39,820 --> 01:39:42,130
 0,300 300,720 870,1470 1470,1620 1620,2310
-for them here on position,
+for example here on position
 
 3010
 01:39:42,400 --> 01:39:44,320
 0,390 390,1110 1260,1470 1470,1650 1650,1920
-a eleven it saw that
+{} 11,| it saw that
 
 3011
 01:39:44,320 --> 01:39:46,440
 0,840 900,1770
-mattress then.
+matches,| then
 
 3012
 01:39:47,570 --> 01:39:49,250
 0,720 720,840 840,900 900,1410 1410,1680
-It is a guarantee that
+it is {} guarantee that
 
 3013
 01:39:49,250 --> 01:39:51,290
 0,390 390,810 810,1050 1050,1560 1560,2040
-everything before that matches too,
+everything before that matches too.|
 
 3014
 01:39:51,680 --> 01:39:53,270
 0,420 420,720 720,1020 1020,1500 1500,1590
-yes great because hold on
+Yes, right, because, hold on
 
 3015
 01:39:53,270 --> 01:39:54,380
@@ -15058,22 +15053,22 @@ let me double check you're
 3016
 01:39:54,380 --> 01:39:55,800
 0,210 210,330 330,480 480,960
-talking about this message.
+talking about this message.|
 
 3017
 01:39:56,920 --> 01:39:58,240
 0,540 540,750 750,960 960,1200 1200,1320
-Yeah about like when it
+Yeah, about like when it
 
 3018
 01:39:58,240 --> 01:39:59,920
 0,330 330,840 840,1050 1050,1170 1170,1680
-says okay if you check,
+says okay if you check.|
 
 3019
 01:40:00,160 --> 01:40:03,430
 0,540 690,1650 1860,2550 2550,2850 2850,3270
-um, yeah yeah, because that
+{} Yeah, yeah, because that
 
 3020
 01:40:03,430 --> 01:40:04,330
@@ -15093,7 +15088,7 @@ index or communicated correct to
 3023
 01:40:07,180 --> 01:40:09,400
 0,480 510,1110 1470,1830 1830,2040 2040,2220
-the follower, um to make
+the follower,| {} to make
 
 3024
 01:40:09,400 --> 01:40:10,450
@@ -15103,7 +15098,7 @@ double check that it can
 3025
 01:40:10,450 --> 01:40:12,280
 0,240 240,630 630,780 780,1410 1590,1830
-only respond to okay if
+only respond to okay,| if
 
 3026
 01:40:12,280 --> 01:40:13,480
@@ -15113,42 +15108,42 @@ indeed is the case that
 3027
 01:40:13,480 --> 01:40:15,490
 0,1050 1050,1260 1260,1350 1350,1620 1620,2010
-a in the previous index
+{} in the previous index
 
 3028
 01:40:15,490 --> 01:40:17,320
 0,510 510,810 810,1080 1080,1410
-eleven actually turn free.
+11 actually turn free,|
 
 3029
 01:40:18,200 --> 01:40:19,220
 0,270 270,330 330,630 630,840 840,1020
-And if that's true, that
+and if that's true,| that
 
 3030
 01:40:19,220 --> 01:40:20,630
 0,300 300,420 420,810 810,1140 1140,1410
-means that visually everything before
+means that basically everything before
 
 3031
 01:40:20,630 --> 01:40:21,950
 0,180 180,360 360,810 930,1170 1170,1320
-that must match and this
+that must match| and this
 
 3032
 01:40:21,950 --> 01:40:23,930
 0,150 150,300 300,450 450,840 840,1980
-is like this, whatever their
+is like this,| whatever their
 
 3033
 01:40:24,590 --> 01:40:26,540
 0,630 630,840 840,1320 1320,1410 1410,1950
-whatever their statement they called
+whatever their statement they call,|
 
 3034
 01:40:28,100 --> 01:40:30,200
 0,330 330,930 930,1470 1470,1950 1950,2100
-this invariant initially maintained that
+this invariant initially maintained that,|
 
 3035
 01:40:30,200 --> 01:40:31,460
@@ -15158,12 +15153,12 @@ like if something matches at
 3036
 01:40:31,460 --> 01:40:33,080
 0,210 210,450 450,870 870,1350 1350,1620
-like one index, then everything
+like one index,| then everything
 
 3037
 01:40:33,080 --> 01:40:36,260
 0,300 300,630 630,1230 1230,1470
-before that match too.
+before that match too.|
 
 3038
 01:40:36,320 --> 01:40:37,340
@@ -15173,7 +15168,7 @@ Oh, okay, okay, this is
 3039
 01:40:37,340 --> 01:40:39,180
 0,210 210,930 930,990
-new to you.
+[] to me.|
 
 3040
 01:40:40,530 --> 01:40:42,180
@@ -15188,7 +15183,7 @@ follow-up question was related to
 3042
 01:40:44,310 --> 01:40:46,620
 0,60 60,420 420,930 1080,1710 2130,2310
-the question a um on
+the question,| { -} on
 
 3043
 01:40:46,620 --> 01:40:47,730
@@ -15198,17 +15193,17 @@ the lecture question that I
 3044
 01:40:47,730 --> 01:40:49,920
 0,450 720,1260 1290,1680 1680,1920 1920,2190
-wrote I asked about the
+wrote,| I asked about the
 
 3045
 01:40:49,920 --> 01:40:52,530
 0,420 420,600 600,1170 1350,2220 2220,2610
-copy on write more ASAP
+{copy-on-write - -} for {snapshots
 
 3046
 01:40:52,530 --> 01:40:54,720
 0,630 720,1290 1590,1920 1920,2160 2160,2190
-shots, no I think I
+-},| {} I think I
 
 3047
 01:40:54,720 --> 01:40:55,860
@@ -15218,7 +15213,7 @@ don't really understand what is
 3048
 01:40:55,860 --> 01:40:58,050
 0,450 540,1140 1140,1350 1350,1590 1830,2190
-being copied, is it is
+being copied,| is it, is
 
 3049
 01:40:58,050 --> 01:40:59,880
@@ -15228,127 +15223,127 @@ it the page tables or
 3050
 01:40:59,880 --> 01:41:01,590
 0,120 120,270 270,600 600,1290 1410,1710
-is it something I think
+is it something.| I think
 
 3051
 01:41:01,590 --> 01:41:05,310
 0,30 30,540 570,2310 2520,3600 3600,3720
-I responded I yeah I
+I responded {to,your,email}.| Yeah, {I,got}
 
 3052
 01:41:05,310 --> 01:41:06,600
 0,480 480,900
-email, but.
+email, but.|
 
 3053
 01:41:06,750 --> 01:41:10,920
 0,1200 1230,2130 2160,3630 3750,4080 4080,4170
-OK, OK, OK hold on
+Okay, okay, okay, hold on
 
 3054
 01:41:10,920 --> 01:41:12,300
 0,30 30,450 930,1110 1110,1170 1170,1380
-a SEC, let me catch
+a second,| {[] - -
 
 3055
 01:41:12,300 --> 01:41:15,520
 0,120 120,810 840,1410 1920,2670
-my breath I'm the.
+- -}, {} the,|
 
 3056
 01:41:15,670 --> 01:41:17,100
 0,330 330,960
-So okay.
+so okay,
 
 3057
 01:41:17,320 --> 01:41:19,120
 0,180 180,720 720,1260
-The scenario is.
+the scenario is
 
 3058
 01:41:19,180 --> 01:41:21,820
 0,870 1260,1890 1890,2010 2010,2100 2100,2640
-A snapshot can be expensive
+{} snapshot can be expensive,|
 
 3059
 01:41:21,850 --> 01:41:23,860
 0,840 840,1290 1290,1440 1440,1500 1500,2010
-because Snapchat might be large
+because snapchat might be large
 
 3060
 01:41:24,280 --> 01:41:26,470
 0,810 810,900 900,1260 1530,1980 1980,2190
-gigabytes, you know a key
+gigabytes,| you know {} {key-value
 
 3061
 01:41:26,470 --> 01:41:28,600
 0,570 570,900 900,1380 1380,1980 2070,2130
-values a page table, a
+-} {} page table, {}
 
 3062
 01:41:28,600 --> 01:41:30,940
 0,480 1290,1530 1530,1680 1680,1950 1950,2340
-short speech, it was a
+sorry, [] it was a
 
 3063
 01:41:30,940 --> 01:41:32,740
 0,600 600,780 780,930 930,1260 1260,1800
-gigabyte a key value store.
+gigabyte {} {key-value -} store,|
 
 3064
 01:41:33,290 --> 01:41:34,310
 0,450 450,540 540,690 690,870 870,1020
-Then you know you need
+then you know you need
 
 3065
 01:41:34,310 --> 01:41:36,440
 0,90 90,360 360,690 720,1410 1590,2130
-to write that gigabyte disk,
+to write that gigabyte {to,disk},
 
 3066
 01:41:36,470 --> 01:41:37,440
 0,390
-right.
+right,|
 
 3067
 01:41:37,710 --> 01:41:38,940
 0,240 240,630 630,780 780,1020 1020,1230
-And while you're running into
+and while you're writing into
 
 3068
 01:41:38,940 --> 01:41:40,140
 0,390 600,780 780,930 930,1020 1020,1200
-this, um, if you don't
+disk,| {} if you don't
 
 3069
 01:41:40,140 --> 01:41:42,060
 0,90 90,390 390,990 1170,1410 1410,1920
-do anything clever, you cannot
+do anything clever,| you cannot
 
 3070
 01:41:42,060 --> 01:41:43,320
 0,390 390,630 630,840 840,1050 1050,1260
-process any other put get
+process any other put {and,get}
 
 3071
 01:41:43,320 --> 01:41:45,450
 0,720 1050,1380 1380,1560 1560,1830 1830,2130
-operations that come in through
+operations,| that come in through
 
 3072
 01:41:45,450 --> 01:41:48,480
 0,720 1140,2070 2100,2820 2820,2940 2940,3030
-the um channels, let me
+the {} channels,| let me
 
 3073
 01:41:48,480 --> 01:41:51,420
 0,600 660,1020 1020,1260 1260,1260 2460,2940
-actually popup this a picture.
+actually popup this {} picture.|
 
 3074
 01:41:52,010 --> 01:41:53,870
 0,360 360,720 900,1260 1260,1560 1560,1860
-Great, so basically serves decides
+Great, so basically servers decides
 
 3075
 01:41:53,870 --> 01:41:54,470
@@ -15358,7 +15353,7 @@ at some point to take
 3076
 01:41:54,470 --> 01:41:55,940
 0,90 90,600 600,960 960,1410 1410,1470
-a checkpoint to gigabyte you
+a checkpoint to gigabyte,| you
 
 3077
 01:41:55,940 --> 01:41:56,750
@@ -15368,7 +15363,7 @@ have to write a gigabyte
 3078
 01:41:56,750 --> 01:41:58,480
 0,510 510,690 690,1170
-disk, that's expensive.
+{to,disk},| that's expensive.|
 
 3079
 01:41:58,510 --> 01:42:00,670
@@ -15383,27 +15378,27 @@ I think the plan that
 3081
 01:42:01,540 --> 01:42:03,340
 0,240 240,570 570,900 900,1230
-the papers hinting at.
+the papers hinting at,|
 
 3082
 01:42:03,340 --> 01:42:05,050
 0,630 630,930 930,1260 1260,1350 1350,1710
-Is that what the service
+is that what the service
 
 3083
 01:42:05,050 --> 01:42:06,140
 0,570
-does.
+does,|
 
 3084
 01:42:06,320 --> 01:42:07,940
 0,540 540,690 690,780 780,1050 1050,1620
-It's you know calls fork.
+it you know calls fork,|
 
 3085
 01:42:10,880 --> 01:42:11,930
 0,210 210,390 390,810 810,990 990,1050
-So when it wants to
+so when it wants to
 
 3086
 01:42:11,930 --> 01:42:13,490
@@ -15413,112 +15408,112 @@ make a checkpoint, it calls
 3087
 01:42:13,490 --> 01:42:14,580
 0,570
-fork.
+fork,|
 
 3088
 01:42:15,080 --> 01:42:16,520
 0,420 420,660 660,840 840,900 900,1440
-And fourth place a copy
+and fork case a copy
 
 3089
 01:42:16,520 --> 01:42:17,810
 0,90 90,240 240,690 690,1050 1050,1290
-of that process right now
+of that process, right,| now
 
 3090
 01:42:17,810 --> 01:42:18,590
 0,120 120,330 330,420 420,540 540,780
-we have the eye brain
+we have the {operating -}
 
 3091
 01:42:18,590 --> 01:42:20,760
 0,540 900,1620
-system running.
+system running,|
 
 3092
 01:42:21,070 --> 01:42:22,330
 0,390 390,540 540,750 750,900 900,1260
-And we have now basically
+and we have now basically
 
 3093
 01:42:22,330 --> 01:42:25,300
 0,480 480,1440 1770,2190 2190,2490 2490,2970
-two processes, um that correspond
+two processes,| {} that correspond
 
 3094
 01:42:25,300 --> 01:42:28,690
 0,1200 1230,1380 1380,1950 2280,2850 2850,3390
-to this application service raft
+to this application servers raft,
 
 3095
 01:42:28,690 --> 01:42:30,540
 0,420 420,990
-surface raft.
+service raft,|
 
 3096
 01:42:30,930 --> 01:42:32,250
 0,390 390,600 600,690 690,810 810,1320
-And this is the copy
+and this is the copy,
 
 3097
 01:42:32,400 --> 01:42:34,140
 0,60 150,450 450,1020
-of the child.
+{} the child,|
 
 3098
 01:42:34,520 --> 01:42:36,050
 0,120 120,480 480,750 750,1200 1200,1530
-The operating system uses copy
+the operating system uses {copy-on-write
 
 3099
 01:42:36,050 --> 01:42:37,300
 0,120 120,540
-on write.
+- -},|
 
 3100
 01:42:38,040 --> 01:42:38,760
 0,210 210,420 420,510 510,690 690,720
-So when it made a
+so when it made a
 
 3101
 01:42:38,760 --> 01:42:40,230
 0,420 420,510 510,660 660,900 900,1470
-copy of that second process,
+copy of that second process,|
 
 3102
 01:42:40,680 --> 01:42:41,940
 0,570 570,750 750,900 900,1200 1200,1260
-um and just copy the
+{} and just copy the
 
 3103
 01:42:41,940 --> 01:42:43,230
 0,240 240,600 600,930 930,990 990,1290
-page table within a copy
+page table, didn't {} copy
 
 3104
 01:42:43,230 --> 01:42:44,460
 0,300 300,660
-physical memory.
+physical memory,|
 
 3105
 01:42:45,220 --> 01:42:47,140
 0,120 120,510 510,900 900,1080 1080,1920
-So basically these two processes
+so basically these two processes
 
 3106
 01:42:47,170 --> 01:42:48,730
 0,510 510,570 570,840 840,1170 1170,1560
-share the same physical memory.
+share the same physical memory,|
 
 3107
 01:42:52,420 --> 01:42:53,860
 0,180 180,720 720,810 810,960 960,1440
-Which holds you know the
+which holds you know the
 
 3108
 01:42:53,890 --> 01:42:55,820
 0,240 240,600 600,960 990,1380
-art value store, right.
+{our,key-value -} store, right.|
 
 3109
 01:42:56,540 --> 01:42:58,340
@@ -15528,42 +15523,42 @@ And so now the idea
 3110
 01:42:58,340 --> 01:42:59,540
 0,90 90,420 420,570 570,1050 1050,1200
-is that the child when
+is that,| the child when
 
 3111
 01:42:59,540 --> 01:43:00,770
 0,60 60,300 300,720 810,930 930,1230
-it starts running, it starts
+it starts running,| it starts
 
 3112
 01:43:00,770 --> 01:43:02,500
 0,300 300,630 630,1200
-making a checkpoint.
+making a checkpoint
 
 3113
 01:43:02,990 --> 01:43:04,430
 0,150 150,780 990,1140 1140,1290 1290,1440
-Or snapshot I can just
+or snapshot,| I can just
 
 3114
 01:43:04,430 --> 01:43:05,480
 0,300 300,720 750,870 870,990 990,1050
-write out, you know the
+write out you know the
 
 3115
 01:43:05,480 --> 01:43:07,360
 0,180 180,540 540,840 840,1290
-key value sort of.
+{key-value -} sort of,|
 
 3116
 01:43:07,880 --> 01:43:09,470
 0,270 270,450 450,750 750,1170 1170,1590
-The key value store to
+the {key-value -} store to
 
 3117
 01:43:09,470 --> 01:43:10,580
 0,600
-disk.
+disk.|
 
 3118
 01:43:11,430 --> 01:43:13,260
@@ -15573,67 +15568,67 @@ And in parallel, you know
 3119
 01:43:13,260 --> 01:43:15,090
 0,330 360,930 1110,1320 1320,1470 1470,1830
-the parents, can you start
+the parent can you start
 
 3120
 01:43:15,090 --> 01:43:17,040
 0,600 600,1410
-processing new.
+processing new
 
 3121
 01:43:17,290 --> 01:43:18,880
 0,150 150,360 360,660 660,870 870,1590
-You know getting food operations.
+you know {get,and} put operations,|
 
 3122
 01:43:21,860 --> 01:43:22,880
 0,360 360,510 510,570 570,810 810,1020
-Because if it doesn't boot
+because if it does put
 
 3123
 01:43:22,880 --> 01:43:24,160
 0,750
-operation.
+operation,|
 
 3124
 01:43:24,220 --> 01:43:25,180
 0,210 210,300 300,510 510,570 570,960
-And it wants to modify
+and it wants to modify,|
 
 3125
 01:43:25,180 --> 01:43:27,250
 0,600 600,870 870,1320 1320,1500 1500,2070
-it will write you two
+it will write {you,know} to
 
 3126
 01:43:27,250 --> 01:43:29,500
 0,840 870,1440 1440,1590 1590,2100 2100,2250
-a pages that correspond to
+{} pages that correspond to
 
 3127
 01:43:29,500 --> 01:43:30,720
 0,570
-the.
+the
 
 3128
 01:43:30,720 --> 01:43:31,950
 0,90 90,390 390,900 930,1080 1080,1230
-Key value store that will
+{key-value -} store,| that will
 
 3129
 01:43:31,950 --> 01:43:32,970
 0,300 300,390 390,450 450,690 690,1020
-result in a page fault
+result in a page fault,
 
 3130
 01:43:33,000 --> 01:43:33,990
 0,270 270,390 390,510 510,600 600,990
-right, and so the o's
+right,| and so the OS
 
 3131
 01:43:33,990 --> 01:43:34,950
 0,120 120,240 240,300 300,540 540,960
-will get a page fault
+will get a page fault|
 
 3132
 01:43:34,950 --> 01:43:35,850
@@ -15643,27 +15638,27 @@ and so the OS will
 3133
 01:43:35,850 --> 01:43:38,100
 0,330 330,480 480,1080 1530,2070 2070,2250
-copy that page, um, at
+copy that page {} at
 
 3134
 01:43:38,100 --> 01:43:39,930
 0,180 180,720 960,1380 1380,1740 1740,1830
-that point and then you
+that point| and then you
 
 3135
 01:43:39,930 --> 01:43:41,790
 0,150 150,450 450,780 810,1260 1260,1860
-know the first repair prosecutors
+know the first pair {process,can}
 
 3136
 01:43:41,790 --> 01:43:44,040
 0,540 1170,1440 1440,1530 1530,1710 1710,2250
-updated, this is all transparent
+updated,| this is all transparent
 
 3137
 01:43:44,040 --> 01:43:45,330
 0,90 90,180 180,750 780,1170 1170,1290
-to the child which the
+to the child,| which the
 
 3138
 01:43:45,330 --> 01:43:47,430
@@ -15673,7 +15668,7 @@ child had a consistent snapshot
 3139
 01:43:47,640 --> 01:43:48,660
 0,150 150,210 210,420 420,720 720,1020
-of the whole address space
+of the whole address space|
 
 3140
 01:43:48,660 --> 01:43:49,200
@@ -15683,7 +15678,7 @@ at the point of the
 3141
 01:43:49,200 --> 01:43:50,000
 0,420
-fork.
+fork.|
 
 3142
 01:43:50,790 --> 01:43:52,470
@@ -15693,12 +15688,12 @@ So, this allows basically the
 3143
 01:43:52,500 --> 01:43:54,060
 0,300 300,420 420,690 690,900 900,1560
-parent and child, he currently
+parent and child run concurrently|
 
 3144
 01:43:54,060 --> 01:43:56,310
 0,270 270,420 420,510 510,1530 1530,2250
-still make a consistent snapshot
+still make a consistent snapshot|
 
 3145
 01:43:56,580 --> 01:43:58,500
@@ -15708,22 +15703,22 @@ and the parents actually make
 3146
 01:43:58,530 --> 01:44:00,620
 0,450 450,840 840,990 990,1620
-process Newton get operations.
+process {new,put,and} get operations.|
 
 3147
 01:44:02,340 --> 01:44:03,870
 0,180 180,330 330,480 480,900 1140,1530
-There's not more clear, okay,
+Is that more clear, okay?|
 
 3148
 01:44:03,870 --> 01:44:05,040
 0,120 120,540 540,780 780,900 900,1170
-oh yeah okay I see
+Oh, yeah, okay I see,|
 
 3149
 01:44:05,040 --> 01:44:07,080
 0,360 480,960 1020,1530 1530,1650 1650,2040
-so they copy on write
+so the {copy-on-write - -}
 
 3150
 01:44:07,140 --> 01:44:09,240
@@ -15733,32 +15728,32 @@ the memory that holds the
 3151
 01:44:09,270 --> 01:44:12,870
 0,180 180,870 900,1620 2460,3150 3240,3600
-key value store, okay, okay,
+{key-value -} store,| okay, okay,
 
 3152
 01:44:12,870 --> 01:44:13,860
 0,270 270,420 420,570 570,840 840,990
-okay I see, yeah, this
+okay I see,| yeah, this
 
 3153
 01:44:13,860 --> 01:44:15,090
 0,240 240,420 420,660 660,1050 1050,1230
-makes it very clear, thank
+makes it very clear,| thank
 
 3154
 01:44:15,090 --> 01:44:17,240
 0,90 90,240 240,780 1080,1710
-you so much, robo.
+you so much.| {You're,welcome}.|
 
 3155
 01:44:20,920 --> 01:44:22,320
 0,210 210,360 360,870
-Any more questions.
+Any more questions?|
 
 3156
 01:44:23,750 --> 01:44:26,240
 0,660 660,1230 1230,1350 1350,2100 2130,2490
-Yeah I have A I
+Yeah, I have a,| I
 
 3157
 01:44:26,240 --> 01:44:27,170
@@ -15768,17 +15763,17 @@ guess this is sort of
 3158
 01:44:27,440 --> 01:44:29,300
 0,210 210,960 960,1560 1560,1680 1680,1860
-a weird scenario, I'm not
+a weird scenario,| I'm not
 
 3159
 01:44:29,300 --> 01:44:30,230
 0,150 150,240 240,420 420,570 570,930
-sure if this could actually.
+sure if this could actually,|
 
 3160
 01:44:31,390 --> 01:44:33,550
 0,480 660,960 960,1290 1350,1560 1560,2160
-But what if so imagine
+but what if,| so imagine
 
 3161
 01:44:33,580 --> 01:44:34,510
@@ -15788,27 +15783,27 @@ that we're always in the
 3162
 01:44:34,510 --> 01:44:35,720
 0,270 270,630
-same term.
+same term,|
 
 3163
 01:44:35,720 --> 01:44:38,090
 0,180 180,750 1710,2070 2070,2280 2280,2370
-And then you get to
+and then you get to
 
 3164
 01:44:38,090 --> 01:44:40,550
 0,120 120,510 540,1230 1560,2130 2160,2460
-a point where I'm some
+a point where {} some
 
 3165
 01:44:40,550 --> 01:44:41,660
 0,210 210,300 300,870 870,990 990,1110
-nodes have disconnected but they're
+nodes have disconnected,| but they're
 
 3166
 01:44:41,660 --> 01:44:43,010
 0,210 210,300 300,600 600,1110 1200,1350
-still the same term the
+still the same term,| the
 
 3167
 01:44:43,010 --> 01:44:43,610
@@ -15818,17 +15813,17 @@ leader is still in the
 3168
 01:44:43,610 --> 01:44:45,710
 0,300 300,750 900,1080 1080,1650 1650,2100
-same term and then at
+same term| and then at
 
 3169
 01:44:45,710 --> 01:44:47,390
 0,150 150,390 390,570 570,1140 1140,1680
-some point they will um.
+some point they will, {}
 
 3170
 01:44:48,610 --> 01:44:49,870
 0,270 270,420 420,540 540,600 600,1260
-They will do a snapshot
+they will do a snapshot|
 
 3171
 01:44:50,230 --> 01:44:51,340
@@ -15838,117 +15833,116 @@ and then all the logs
 3172
 01:44:51,340 --> 01:44:53,060
 0,240 240,450 450,1200
-will be compressed.
+will be compressed,|
 
 3173
 01:44:53,120 --> 01:44:54,230
 0,180 180,360 360,540 540,810 810,1110
-And then they keep going
+and then they keep going
 
 3174
 01:44:54,230 --> 01:44:56,300
 0,390 390,480 480,1080 1140,1380 1380,2070
-forward and now the logs
+forward| and now the logs
 
 3175
 01:44:56,330 --> 01:44:57,500
 0,180 180,330 330,750 750,1020 1020,1170
-are being populated again and
+are being populated again| and
 
 3176
 01:44:57,500 --> 01:45:00,060
 0,390 570,1170 1170,1410 1410,1980
-then let's just say.
+then, let's just say
 
 3177
 01:45:00,060 --> 01:45:01,980
 0,690 690,1170 1170,1320 1320,1470 1470,1920
-Fifteen logs have been added,
+15 logs have been added,|
 
 3178
 01:45:02,280 --> 01:45:04,200
 0,150 150,270 270,630 630,1170 1200,1920
-and then after ten they
+and then after 10, they
 
 3179
 01:45:04,560 --> 01:45:06,420
 0,840 840,1200 1470,1620 1620,1740 1740,1860
-compress them and then they
+compress them| and then they
 
 3180
 01:45:06,420 --> 01:45:08,340
 0,300 300,450 450,1080 1290,1680 1680,1920
-are at index next five
+are at index index 5
 
 3181
 01:45:08,340 --> 01:45:09,630
 0,330 330,450 450,600 600,720 720,1290
-again and then the other
+again| and then the other
 
 3182
 01:45:09,660 --> 01:45:11,190
 0,300 300,540 540,780 780,1170 1350,1530
-nodes joined back in and
+nodes joined back in| and
 
 3183
 01:45:11,190 --> 01:45:12,240
 0,150 150,450 450,540 540,870 870,1050
-they're also at index, five
+they're also at index 5
 
 3184
 01:45:12,240 --> 01:45:13,600
 0,90 90,180 180,450 450,930
-of the same term.
+of the same term.|
 
 3185
 01:45:13,630 --> 01:45:14,780
 0,570
-Dope.
 
 3186
 01:45:14,870 --> 01:45:16,520
 0,180 180,600 780,930 930,1410 1410,1650
-Is that a problem like
+Is that a problem,| like
 
 3187
 01:45:16,520 --> 01:45:18,980
 0,210 210,450 450,990 1980,2190 2190,2460
-how, how does it's almost
+how, how does,| it's almost
 
 3188
 01:45:18,980 --> 01:45:20,570
 0,120 120,240 240,390 390,840 840,1590
-like they're on a snapshot.
+like they're on a snapshot
 
 3189
 01:45:21,170 --> 01:45:23,200
 0,630 630,840 840,1050 1050,1500
-Epoch of some sort.
+epoch of some sort.|
 
 3190
 01:45:23,350 --> 01:45:25,330
 0,330 330,600 600,1050 1050,1560 1560,1980
-Okay so old snapshots correspond
+Okay, so old snapshots correspond
 
 3191
 01:45:25,330 --> 01:45:26,770
 0,90 90,180 180,750 780,1020 1020,1440
-to an index right, so
+to an index, right, so.|
 
 3192
 01:45:26,860 --> 01:45:28,990
 0,390 600,900 900,1110 1110,1320 1320,2130
-yeah so okay, let's rather
+Yeah.| So okay, let's {}
 
 3193
 01:45:28,990 --> 01:45:30,340
 0,240 240,450 450,600 600,1020 1050,1350
-dry out like maybe draw
+draw out like maybe draw
 
 3194
 01:45:30,340 --> 01:45:31,420
 0,210 210,630 630,780 780,900 900,1080
-your scenario, so we got
+your scenario,| so we got
 
 3195
 01:45:31,420 --> 01:45:33,430
@@ -15958,12 +15952,12 @@ a server gonna have some
 3196
 01:45:33,580 --> 01:45:34,700
 0,600
-water.
+log,|
 
 3197
 01:45:35,780 --> 01:45:37,040
 0,540 540,600 600,720 720,1170 1170,1260
-And you know maybe I
+and you know maybe I
 
 3198
 01:45:37,040 --> 01:45:37,820
@@ -15973,97 +15967,96 @@ think you know you talk
 3199
 01:45:37,820 --> 01:45:39,350
 0,180 180,660 960,1320 1320,1410 1410,1530
-about ten and it took
+about 10| and it took
 
 3200
 01:45:39,350 --> 01:45:40,960
 0,60 60,570 570,690 690,1020
-a snapshot at ten.
+a snapshot at 10.|
 
 3201
 01:45:41,380 --> 01:45:42,700
 0,780
-Yeah.
+Yeah.|
 
 3202
 01:45:43,080 --> 01:45:43,980
 0,150 150,300 300,510 510,600 600,900
-Yeah, so let's say let's
+Yeah, so let's say, let's
 
 3203
 01:45:43,980 --> 01:45:45,810
 0,180 180,450 450,840 840,1110 1710,1830
-say that basically yeah so
+say that basically,| yeah so
 
 3204
 01:45:45,810 --> 01:45:47,280
 0,300 300,360 360,630 630,900 900,1470
-basically the first nine operations
+basically the first 9 operations
 
 3205
 01:45:47,280 --> 01:45:49,200
 0,270 270,870 900,1350 1350,1650 1650,1920
-are maybe including ten are
+are maybe including 10 are
 
 3206
 01:45:49,200 --> 01:45:50,440
 0,90 90,150 150,660
-in the snapshot.
+in the snapshot.|
 
 3207
 01:45:51,160 --> 01:45:52,180
 0,480
-Yeah.
 
 3208
 01:45:52,490 --> 01:45:53,420
 0,240 240,420 420,660 660,810 810,930
-Um, and then okay, so
+{} And then okay, so
 
 3209
 01:45:53,420 --> 01:45:56,780
 0,180 180,450 450,1170 1920,2490 2490,3360
-there's another note a is.
+there's another node {} is
 
 3210
 01:45:57,730 --> 01:45:59,160
 0,300 300,420 420,870
-Same to him.
+same {term -},|
 
 3211
 01:45:59,220 --> 01:46:00,300
 0,210 210,450 450,630 630,930 930,1080
-So all these entries have
+so all these entries have
 
 3212
 01:46:00,300 --> 01:46:01,890
 0,60 60,300 300,690 690,1020 1020,1590
-the same term right, whatever.
+the same term, right,| whatever,
 
 3213
 01:46:02,930 --> 01:46:04,100
 0,150 150,240 240,570 570,870 870,1170
-You know one one one
+you know 1 1 1
 
 3214
 01:46:04,100 --> 01:46:05,990
 0,360 360,840 960,1320 1320,1620 1620,1890
-one one one one one
+1 1 1 1 1
 
 3215
 01:46:05,990 --> 01:46:07,720
 0,360 390,1350
-one yep.
+1.| Yep.|
 
 3216
 01:46:07,840 --> 01:46:09,940
 0,660 690,1410
-And, um.
+And, {}
 
 3217
 01:46:09,940 --> 01:46:11,350
 0,150 150,420 420,720 720,1020 1020,1410
-So this node actually, but
+so this node actually,| but
 
 3218
 01:46:11,350 --> 01:46:12,250
@@ -16073,17 +16066,17 @@ this node has only through
 3219
 01:46:12,250 --> 01:46:13,540
 0,360 360,660 660,780 780,1140 1140,1290
-ten broken this guys through
+10, then this guy through
 
 3220
 01:46:13,540 --> 01:46:14,680
 0,540
-fifteen.
+15,|
 
 3221
 01:46:14,770 --> 01:46:16,180
 0,360 360,720
-Let's say.
+let's see,|
 
 3222
 01:46:16,380 --> 01:46:17,040
@@ -16093,22 +16086,22 @@ I think that's what you're
 3223
 01:46:17,040 --> 01:46:18,600
 0,300 300,660 660,840 840,1380 1380,1560
-saying great show year, no
+saying,| { -} here's {}
 
 3224
 01:46:18,600 --> 01:46:20,540
 0,300 300,420 420,690 690,1050
-wants to hear, why.
+1, {} here's 1.|
 
 3225
 01:46:24,430 --> 01:46:26,590
 0,330 330,480 480,750 750,1170 1590,2160
-Well I think my um,
+Well, I think my {}
 
 3226
 01:46:26,980 --> 01:46:28,810
 0,240 240,600 600,960 1020,1500 1500,1830
-my thought is well here's
+my thought is,| well here's
 
 3227
 01:46:28,810 --> 01:46:29,470
@@ -16118,7 +16111,7 @@ here's a question I can
 3228
 01:46:29,470 --> 01:46:30,580
 0,330 480,720 720,840 840,1050 1050,1110
-answer when you take a
+answer,| when you take a
 
 3229
 01:46:30,580 --> 01:46:31,870
@@ -16128,17 +16121,17 @@ snapshot do you reset your
 3230
 01:46:31,870 --> 01:46:32,980
 0,480 480,630 630,720 720,810 810,1110
-index or do you keep
+index or do you {keep,counting}?
 
 3231
 01:46:32,980 --> 01:46:35,280
 0,660
-counting.
+{You,keep,counting}.|
 
 3232
 01:46:35,280 --> 01:46:36,900
 0,450 450,1050
-Oh, okay.
+Oh, okay,|
 
 3233
 01:46:37,050 --> 01:46:38,010
@@ -16148,17 +16141,17 @@ I was imagining it was
 3234
 01:46:38,010 --> 01:46:40,020
 0,150 150,210 210,690 1020,1740 1800,2010
-like an array, and you
+like an array,| and you
 
 3235
 01:46:40,020 --> 01:46:41,670
 0,150 150,330 330,690 690,900 900,1650
-saw your index goes backwards.
+saw your index goes backwards,|
 
 3236
 01:46:42,180 --> 01:46:43,380
 0,210 210,420 420,600 750,1080 1080,1200
-So that it would be
+so that it would be
 
 3237
 01:46:43,380 --> 01:46:44,970
@@ -16178,27 +16171,27 @@ same term with the same
 3240
 01:46:48,090 --> 01:46:51,060
 0,600 600,1560 1770,2490 2490,2580 2580,2970
-index, yeah got two right
+index.| Yeah, {that's,not,allowed}.| {} Right
 
 3241
 01:46:51,060 --> 01:46:52,920
 0,420 420,810 1050,1320 1320,1500 1500,1860
-yeah okay I I see.
+yeah, okay, I I see.|
 
 3242
 01:46:53,540 --> 01:46:56,300
 0,780 1140,1830 1830,2130 2160,2550 2550,2760
-So okay okay that makes
+So, okay, okay, that makes
 
 3243
 01:46:56,300 --> 01:46:58,040
 0,510 510,750 750,840 840,1380 1380,1740
-sense when you remember reset
+sense.| When you remember reset
 
 3244
 01:46:58,040 --> 01:46:59,630
 0,120 120,750 780,1050 1050,1200 1200,1590
-the index when you cut
+the index.| When you cut
 
 3245
 01:46:59,690 --> 01:47:00,680
@@ -16208,17 +16201,17 @@ like this part of the
 3246
 01:47:00,680 --> 01:47:02,510
 0,510 900,1200 1200,1260 1260,1590 1590,1830
-log in the index stays
+log,| in the index stays
 
 3247
 01:47:02,510 --> 01:47:03,540
 0,90 90,510
-at ten.
+at 10.|
 
 3248
 01:47:03,700 --> 01:47:05,170
 0,360 360,540 540,780 780,960 1260,1470
-Got it, got it and
+Got it, got it.| And
 
 3249
 01:47:05,170 --> 01:47:06,310
@@ -16228,7 +16221,7 @@ so in fact when you
 3250
 01:47:06,310 --> 01:47:07,120
 0,120 120,300 300,390 390,540 540,810
-do this in two d,
+do this in {2d -},|
 
 3251
 01:47:07,120 --> 01:47:08,080
@@ -16238,12 +16231,12 @@ this is gonna be slightly
 3252
 01:47:08,080 --> 01:47:10,150
 0,540 1020,1380 1380,1470 1470,1890 1890,2070
-knowing because you presumably take
+annoying,| because you presumably take
 
 3253
 01:47:10,150 --> 01:47:13,360
 0,420 420,510 510,990 990,2460 2520,3210
-advantage, in fact z zero
+advantage in fact {the,start,of,log,is} 0|
 
 3254
 01:47:13,690 --> 01:47:14,830
@@ -16253,37 +16246,37 @@ and what you're now going
 3255
 01:47:14,830 --> 01:47:15,430
 0,60 60,270 270,390 390,510 510,600
-to get is that the
+to get is that| the
 
 3256
 01:47:15,430 --> 01:47:16,900
 0,210 210,300 300,390 390,1290 1290,1470
-start of the Iraq might
+start of the {layer,of,0} might
 
 3257
 01:47:16,900 --> 01:47:18,080
 0,60 60,720
-be tenth.
+be 10,|
 
 3258
 01:47:18,430 --> 01:47:21,520
 0,420 1410,1770 1770,1920 1920,2940 2940,3090
-Mhm people have to have
+{} people have to.| {You,have}
 
 3259
 01:47:21,520 --> 01:47:22,690
 0,60 60,510 510,630 630,810 810,1170
-an offset of some sort,
+an offset of some sort.|
 
 3260
 01:47:22,780 --> 01:47:24,760
 0,1140 1140,1590 1590,1710 1710,1800 1800,1980
-yeah you have to add
+Yeah, you have to add
 
 3261
 01:47:24,760 --> 01:47:26,400
 0,150 150,570 570,1110
-that offset everywhere.
+that offset everywhere.|
 
 3262
 01:47:26,550 --> 01:47:27,780
@@ -16293,7 +16286,7 @@ Yeah, and then and then
 3263
 01:47:27,780 --> 01:47:29,250
 0,330 330,510 510,750 750,1230 1230,1470
-last thing really quickly I
+last thing really quickly,| I
 
 3264
 01:47:29,250 --> 01:47:29,850
@@ -16308,37 +16301,37 @@ confused earlier was in the
 3266
 01:47:32,100 --> 01:47:35,190
 0,210 210,480 930,1800 1800,2490 2520,3090
-in the code for lab,
+in the code for lab
 
 3267
 01:47:35,190 --> 01:47:37,050
 0,600 750,1050 1050,1320 1320,1380 1380,1860
-two yeah there's a comment
+2.| Yeah.| There's a comment
 
 3268
 01:47:37,050 --> 01:47:38,160
 0,180 180,540 540,720 720,1050 1050,1110
-that says we're supposed to
+that says,| we're supposed to
 
 3269
 01:47:38,160 --> 01:47:39,840
 0,450 450,1200
-return immediately.
+return immediately
 
 3270
 01:47:40,690 --> 01:47:42,610
 0,330 330,810 1140,1410 1410,1590 1590,1920
-From start yeah yeah, well
+from start.| Yeah yeah, well
 
 3271
 01:47:42,610 --> 01:47:44,700
 0,270 270,270 930,1560
-you, oh yes.
+you, oh yes.|
 
 3272
 01:47:45,240 --> 01:47:47,040
 0,30 60,1170 1260,1500 1500,1680 1680,1800
-I mean, OK, so let
+I mean, okay, so let
 
 3273
 01:47:47,040 --> 01:47:47,880
@@ -16348,22 +16341,22 @@ me go back to this
 3274
 01:47:47,880 --> 01:47:49,160
 0,330 330,720
-picture here.
+picture here.|
 
 3275
 01:47:49,310 --> 01:47:51,110
 0,330 330,750 750,1320 1320,1530 1530,1800
-Yeah, hopefully it's getting really
+Yeah, hopefully, it's getting really
 
 3276
 01:47:51,110 --> 01:47:54,890
 0,600 2400,2730 2730,2850 2850,3600 3600,3780
-crowded, um, so we get
+crowded,| {} so we get
 
 3277
 01:47:54,890 --> 01:47:55,820
 0,60 60,510 510,720 720,810 810,930
-an operation correct and we
+an operation correct| and we
 
 3278
 01:47:55,820 --> 01:47:57,500
@@ -16373,7 +16366,7 @@ do the start operation, we
 3279
 01:47:57,500 --> 01:47:58,700
 0,210 210,750
-call start.
+call start.|
 
 3280
 01:47:59,480 --> 01:48:01,580
@@ -16383,7 +16376,7 @@ Oh, return immediately doesn't necessarily
 3281
 01:48:01,580 --> 01:48:05,270
 0,210 210,930 1170,1350 1350,3150 3150,3690
-mean reply is yeah exactly
+mean reply, {is,that}.| Yeah, exactly,|
 
 3282
 01:48:05,270 --> 01:48:06,470
@@ -16393,47 +16386,47 @@ it just means reply back
 3283
 01:48:06,470 --> 01:48:07,880
 0,90 90,630 630,690 690,780 780,1410
-to return to the service
+to return to the servers,|
 
 3284
 01:48:07,910 --> 01:48:09,560
 0,180 180,330 330,420 420,900
-you have to decline.
+{not -} to {the,client}.|
 
 3285
 01:48:10,450 --> 01:48:12,400
 0,240 240,750 930,1110 1110,1560 1560,1950
-I see I see okay.
+I see, I see, okay,
 
 3286
 01:48:13,780 --> 01:48:15,670
 0,870 900,1080 1080,1230 1230,1410 1410,1890
-Gotcha, yeah I guess operating
+totcha,| yeah, I guess operating
 
 3287
 01:48:15,670 --> 01:48:16,900
 0,180 180,240 240,750 750,1050 1080,1230
-under the assumption that a
+under the assumption that {}
 
 3288
 01:48:16,900 --> 01:48:19,630
 0,690 810,1650 1680,1950 1950,2610 2610,2730
-return always is necessarily a
+return always is necessarily {}
 
 3289
 01:48:19,630 --> 01:48:21,070
 0,450 480,570 570,750 750,1080 1200,1440
-reply but that's not that's
+reply,| but that's not that's
 
 3290
 01:48:21,070 --> 01:48:22,030
 0,240 240,450 450,510 510,780 780,960
-not always the case, so
+not always the case.| No,
 
 3291
 01:48:22,030 --> 01:48:22,840
 0,240 240,420 420,480 480,810 810,810
-that's not the case I
+that's not the case,| I
 
 3292
 01:48:22,840 --> 01:48:23,770
@@ -16443,49 +16436,49 @@ think this will become more
 3293
 01:48:23,770 --> 01:48:25,390
 0,390 390,600 600,960 960,1260 1260,1620
-clear in lap three than
+clear in lap 3 than
 
 3294
 01:48:25,390 --> 01:48:26,470
 0,210 210,300 300,510 510,780 780,1080
-they you know lap to
+they you know lab 2,|
 
 3295
 01:48:26,800 --> 01:48:29,560
 0,270 270,450 450,720 720,1110 1140,2760
-lap there's living weirs xero
+lab 2 living wired, no
 
 3296
 01:48:29,560 --> 01:48:30,840
 0,570
-advocation.
+application.|
 
 3297
 01:48:31,100 --> 01:48:32,500
 0,1230
-Yeah.
+Yeah,
 
 3298
 01:48:32,870 --> 01:48:34,670
 0,420 420,570 570,810 810,1140 1320,1800
-Okay, well, thank you, um,
+okay, well, thank you, {}|
 
 3299
 01:48:34,700 --> 01:48:35,990
 0,180 180,300 300,480 480,900 1110,1290
-this was really helpful, um
+this was really helpful. {}|
 
 3300
 01:48:35,990 --> 01:48:37,940
 0,120 120,540 810,1320 1320,1710 1710,1950
-you ever happy, appreciate it.
+{You,re -} welcome.| Appreciate it.|
 
 3301
 01:48:40,120 --> 01:48:42,370
 0,540 900,1020 1020,1140 1140,1440 1920,2250
-Yeah yeah you do right,
+{Have,a,rest}.| You too.| Bye.|
 
 3302
 01:48:42,550 --> 01:48:43,420
 0,180 180,300 300,360 360,450 450,870
-good luck for the latch.
+Good luck for the lab.
