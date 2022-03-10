@@ -4024,22 +4024,22 @@ Makes sense, thank you.|
 807
 00:26:35,280 --> 00:26:37,440
 0,1050 1080,1740
-Okay, um.
+Okay, {}
 
 808
 00:26:39,100 --> 00:26:40,660
 0,450 450,1230
-So, um.
+so, {}|
 
 809
 00:26:41,130 --> 00:26:42,120
 0,240 240,330 330,480 480,840 840,990
-And so let me so
+and so let me,| so
 
 810
 00:26:42,120 --> 00:26:44,160
 0,420 420,570 570,1050 1050,1530 1590,2040
-that's the execution model, a
+that's the execution model, {}|
 
 811
 00:26:44,160 --> 00:26:44,850
@@ -4054,7 +4054,7 @@ a little bit about fault
 813
 00:26:45,660 --> 00:26:47,680
 0,570 900,1740
-tolerance, um.
+tolerance {}.|
 
 814
 00:26:47,980 --> 00:26:49,360
@@ -4064,12 +4064,12 @@ And so let's go back
 815
 00:26:49,360 --> 00:26:50,710
 0,330 330,600 630,840 840,1080 1080,1350
-to um this, this sort
+to {} this, this sort
 
 816
 00:26:50,710 --> 00:26:51,610
 0,90 90,300 300,570 570,690 690,900
-of fault tolerance and the
+of fault tolerance| and the
 
 817
 00:26:51,610 --> 00:26:52,720
@@ -4079,37 +4079,37 @@ thing that we worry about
 818
 00:26:52,720 --> 00:26:54,010
 0,180 180,510 510,630 630,930 990,1290
-fault tolerance is that maybe
+fault tolerance is that,| maybe
 
 819
 00:26:54,010 --> 00:26:56,230
 0,180 180,270 270,420 420,1110 1470,2220
-one of these workers, um,
+one of these workers {}
 
 820
 00:26:56,560 --> 00:26:58,160
 0,390 420,600 600,1350
-no my crash.
+{you,know} might crash,
 
 821
 00:26:58,500 --> 00:27:00,660
 0,240 240,1020 1020,1170 1170,1800 1800,2160
-Right, then the worker had
+right,| then the worker had
 
 822
 00:27:00,660 --> 00:27:02,640
 0,120 120,570 570,750 750,1410 1650,1980
-is puting some petition and
+is computing some partition| and
 
 823
 00:27:02,640 --> 00:27:03,570
 0,150 150,270 270,450 450,750 750,930
-so we need to {re-execute
+so we need to {re-execute,that
 
 824
 00:27:03,570 --> 00:27:07,230
 0,600 1110,1860 2040,2580 2580,3060 3090,3660
--} a and as basically
+-}| {} and as basically
 
 825
 00:27:07,230 --> 00:27:08,460
@@ -4119,32 +4119,32 @@ this plans are the same
 826
 00:27:08,460 --> 00:27:10,200
 0,120 120,360 360,840 870,1200 1200,1740
-as map, reduce right, um,
+as {mapreduce -}, right, {}|
 
 827
 00:27:10,440 --> 00:27:12,600
 0,510 510,1110 1110,1530 1530,1770 1770,2160
-um were if a worker
+{} were if a worker
 
 828
 00:27:12,600 --> 00:27:14,880
 0,870 1020,1170 1170,1440 1440,1680 1680,2280
-crashes, um, we need to
+crashes,| {} we need to,
 
 829
 00:27:15,000 --> 00:27:16,470
 0,540 540,750 750,960 960,1200 1200,1470
-produce and the map tasks
+{in,mapreduce} and the map tasks
 
 830
 00:27:16,470 --> 00:27:17,730
 0,150 150,240 240,450 450,600 600,1260
-need {to -} be re-executed
+need {to -} be re-executed|
 
 831
 00:27:17,730 --> 00:27:18,870
 0,120 120,450 450,720 720,810 810,1140
-and perhaps maybe a reduce
+and perhaps maybe {} reduce
 
 832
 00:27:18,870 --> 00:27:19,740
@@ -4154,12 +4154,12 @@ and perhaps maybe a reduce
 833
 00:27:19,740 --> 00:27:21,600
 0,630 1110,1410 1410,1650 1650,1770 1770,1860
-re-executed now in you, the
+re-executed,| now in here, the
 
 834
 00:27:21,600 --> 00:27:23,100
 0,270 270,360 360,630 630,780 780,1500
-task is slightly more complicated
+task is slightly more complicated,|
 
 835
 00:27:23,130 --> 00:27:24,510
@@ -4169,7 +4169,7 @@ because they're basically like these
 836
 00:27:24,510 --> 00:27:26,550
 0,660 930,1260 1260,1620 1620,1770 1770,2040
-stages and so it means
+stages| and so it means
 
 837
 00:27:26,550 --> 00:27:28,590
@@ -4179,17 +4179,17 @@ that if one {worker -}
 838
 00:27:28,620 --> 00:27:29,280
 0,120 120,270 270,420 420,510 510,660
-fails we may have to
+fails,| we may have to
 
 839
 00:27:29,280 --> 00:27:30,300
 0,330 330,420 420,960
-re-compute the stage.
+re-compute the stage.|
 
 840
 00:27:31,230 --> 00:27:32,700
 0,240 240,600 840,1140 1140,1320 1320,1470
-Yeah, so, um, let's talk
+{} So, {} let's talk
 
 841
 00:27:32,700 --> 00:27:33,540
@@ -4199,17 +4199,17 @@ a little bit more about
 842
 00:27:33,540 --> 00:27:35,370
 0,420 660,930 930,1110 1110,1200 1200,1830
-that that sort of perspective
+that,| that sort of perspective
 
 843
 00:27:35,370 --> 00:27:36,810
 0,330 330,750 750,990 990,1230 1230,1440
-football toms right, that's what
+{from,fault,tolerance -}, right,| that's what
 
 844
 00:27:36,810 --> 00:27:38,260
 0,240 240,510 510,570 570,1170
-we're trying to achieve.
+we're trying to achieve.|
 
 845
 00:27:39,600 --> 00:27:40,740
@@ -4219,17 +4219,17 @@ This is really different than
 846
 00:27:40,740 --> 00:27:42,300
 0,210 210,390 390,960 960,1140 1140,1560
-like the photons that were
+like the {fail,tolerance} that were
 
 847
 00:27:42,300 --> 00:27:44,130
 0,330 330,840 840,900 900,1380 1380,1830
-you implemented a lap to
+you implemented in lab {2,or}
 
 848
 00:27:44,130 --> 00:27:46,530
 0,330 330,540 540,1230 1230,1590 1830,2400
-free or taxes and stable
+3 or paxos| and stable
 
 849
 00:27:46,530 --> 00:27:47,520
@@ -4239,7 +4239,7 @@ storage and all that kind
 850
 00:27:47,520 --> 00:27:49,350
 0,60 60,480 780,1260 1260,1500 1500,1830
-of stuff, um, and we're
+of stuff,| {} and here
 
 851
 00:27:49,350 --> 00:27:51,450
@@ -4249,32 +4249,32 @@ really what we're we're worried
 852
 00:27:51,450 --> 00:27:52,500
 0,450 450,540 540,600 600,930 930,1050
-about is a crash with
+about is {} crash of
 
 853
 00:27:52,500 --> 00:27:53,740
 0,30 30,690
-a worker.
+a worker,|
 
 854
 00:27:56,270 --> 00:27:57,890
 0,150 150,420 420,810 810,960 960,1620
-The worker loses its memory.
+the worker loses its memory,
 
 855
 00:28:01,240 --> 00:28:02,680
 0,390 390,1110
-Marsh memory.
+lost memory,|
 
 856
 00:28:04,040 --> 00:28:05,630
 0,150 150,240 240,510 510,870 870,1590
-And that means losses petition.
+and that means losses partition.
 
 857
 00:28:10,720 --> 00:28:12,910
 0,690 720,1320 1320,1410 1410,1830 1860,2190
-And a you know later
+And {} you know later
 
 858
 00:28:12,910 --> 00:28:14,350
@@ -4284,27 +4284,27 @@ part of the competition are
 859
 00:28:14,350 --> 00:28:16,270
 0,270 270,810 810,960 960,1620 1800,1920
-probably dependent on repetition and
+probably dependent on {that,partition}| and
 
 860
 00:28:16,270 --> 00:28:19,840
 0,150 150,240 240,990 1020,1740 2100,3570
-so we need a reread
+so we need to reread
 
 861
 00:28:19,840 --> 00:28:21,400
 0,240 240,600 660,990 990,1140 1140,1560
-or {re-compute, -} this petition
+or {re-compute -} this partition.|
 
 862
 00:28:21,400 --> 00:28:22,300
 0,120 120,240 240,360 360,750 750,900
-and so the solution is
+And so the solution is
 
 863
 00:28:22,300 --> 00:28:24,130
 0,630 630,840 840,960 960,1230 1230,1830
-exactly like in map reduce
+exactly like in {mapreduce -},|
 
 864
 00:28:24,310 --> 00:28:25,780
@@ -4319,17 +4319,17 @@ notice at some point that
 866
 00:28:27,400 --> 00:28:28,600
 0,210 210,360 360,420 420,1020
-doesn't get an answer.
+doesn't get an answer,|
 
 867
 00:28:29,360 --> 00:28:30,920
 0,210 210,420 420,1290
-And then reruns.
+and then reruns
 
 868
 00:28:31,420 --> 00:28:33,340
 0,180 180,780 1050,1260 1260,1410 1410,1920
-The stage for that petition.
+the stage for that partition.|
 
 869
 00:28:44,200 --> 00:28:45,460
@@ -4339,12 +4339,12 @@ And you know and what
 870
 00:28:45,460 --> 00:28:47,140
 0,90 90,180 180,390 390,780 810,1680
-is the cool part exactly
+is the cool part,| {like,exactly}
 
 871
 00:28:47,140 --> 00:28:48,820
 0,150 150,270 270,420 420,1080 1320,1680
-as it may produce all
+as it {in,mapreduce -} all
 
 872
 00:28:48,820 --> 00:28:49,360
@@ -4359,12 +4359,12 @@ these transformations that are sitting
 874
 00:28:50,680 --> 00:28:52,210
 0,270 270,330 330,450 450,1200 1320,1530
-here in the API all
+here in the API,| all
 
 875
 00:28:52,210 --> 00:28:54,660
 0,150 150,990 1140,1350 1350,1890
-these transformations are functional.
+these transformations are functional.|
 
 876
 00:28:57,400 --> 00:28:58,660
@@ -4374,37 +4374,37 @@ So they basically take one
 877
 00:28:58,660 --> 00:28:59,920
 0,630 720,870 870,1050 1050,1230 1230,1260
-input, um, they take, um
+input,| {} they take an
 
 878
 00:28:59,920 --> 00:29:01,180
 0,390 390,480 480,570 570,990 990,1260
-nardi is an input they
+RDD as an input,| they
 
 879
 00:29:01,180 --> 00:29:02,770
 0,300 300,630 630,1020 1020,1110 1110,1590
-produce another {rda's -} output,
+produce another {RDD,as -} output,|
 
 880
 00:29:03,040 --> 00:29:05,350
 0,600 600,1050 1050,1230 1230,1530 1530,2310
-um, and just completely deterministic.
+{} and just completely deterministic.|
 
 881
 00:29:05,840 --> 00:29:07,610
 0,210 210,690 720,1260 1260,1560 1560,1770
-And so like yeah we've
+And so like {you,know} in
 
 882
 00:29:07,610 --> 00:29:10,040
 0,210 210,840 840,1620 1950,2310 2310,2430
-map produced zis maps and
+{mapreduce -} {you,know,these} maps and
 
 883
 00:29:10,040 --> 00:29:12,380
 0,300 300,480 480,900 900,1680 1920,2340
-reduce for functional operations, um,
+reduce for functional operations, {}|
 
 884
 00:29:12,380 --> 00:29:14,450
@@ -4419,12 +4419,12 @@ where a sequence of transformations
 886
 00:29:16,460 --> 00:29:18,740
 0,390 390,480 480,1080 1080,1680 1770,2280
-from the same input, then
+from the same input,| then
 
 887
 00:29:18,740 --> 00:29:20,000
 0,210 210,600 600,660 660,870 870,1260
-you'll produce the same output
+you'll produce the same output|
 
 888
 00:29:20,210 --> 00:29:22,430
@@ -4434,77 +4434,77 @@ and so you recreate the
 889
 00:29:22,580 --> 00:29:23,780
 0,780
-same.
+same
 
 890
 00:29:23,980 --> 00:29:25,480
 0,570
-Petition.
+partition,|
 
 891
 00:29:28,520 --> 00:29:30,020
 0,360 360,660 660,1110 1110,1230 1230,1500
-We create petitions are faced
+{recreate -} partitions {[] -
 
 892
 00:29:30,020 --> 00:29:31,520
 0,300
-with.
+-}.|
 
 893
 00:29:34,020 --> 00:29:34,860
 0,570
-Okay.
+Okay?|
 
 894
 00:29:37,600 --> 00:29:38,980
 0,270 270,690 690,840 840,1110 1110,1380
-Um, sorry, is this why
+{} Sorry, is this why
 
 895
 00:29:38,980 --> 00:29:40,870
 0,120 120,210 210,990 1320,1710 1710,1890
-they are immutable, there's also
+they are immutable?| There's also
 
 896
 00:29:40,870 --> 00:29:41,530
 0,90 90,330 330,390 390,540 540,660
-the reason I think they're
+the reason, I think they're
 
 897
 00:29:41,530 --> 00:29:42,920
 0,330 330,750 750,1170
-arguably immutable yes.
+[] immutable, yes.|
 
 898
 00:29:48,240 --> 00:29:49,770
 0,210 210,360 360,900 930,1260 1260,1530
-Okay, there's one tricky cage,
+Okay, there's one tricky case
 
 899
 00:29:49,770 --> 00:29:51,420
 0,480 660,1200 1200,1440 1440,1530 1530,1650
-though, um which I want
+though, {} which I want
 
 900
 00:29:51,420 --> 00:29:53,040
 0,60 60,210 210,630 1080,1320 1320,1620
-to talk about so this
+to talk about,| so this
 
 901
 00:29:53,040 --> 00:29:55,740
 0,1830 1830,2220 2220,2280 2280,2580 2580,2700
-z photo is basically for
+the {fault,tolerance} is basically for
 
 902
 00:29:55,740 --> 00:29:57,040
 0,60 60,390 390,990
-the narrow case.
+the narrow case,|
 
 903
 00:29:57,890 --> 00:29:59,000
 0,240 240,330 330,840 840,960 960,1110
-It's the same as sort
+it's the same as sort
 
 904
 00:29:59,000 --> 00:30:00,200
@@ -4514,17 +4514,17 @@ of as we saw before
 905
 00:30:00,200 --> 00:30:01,580
 0,390 420,630 630,960 960,1290 1290,1380
-in map reduce but you
+in {mapreduce -},| but you
 
 906
 00:30:01,580 --> 00:30:03,170
 0,180 180,450 450,780 780,1200 1200,1590
-know the tricky cases, actually
+know the tricky {case,is} actually
 
 907
 00:30:03,170 --> 00:30:06,100
 0,480 810,1230 1230,2100
-the white dependencies.
+the wide dependencies.|
 
 908
 00:30:12,670 --> 00:30:14,470
