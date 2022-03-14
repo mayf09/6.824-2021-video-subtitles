@@ -4804,27 +4804,27 @@ going to result in the
 963
 00:32:06,130 --> 00:32:07,480
 0,1230
-partitions.|
+partitions,|
 
 964
 00:32:08,960 --> 00:32:11,060
 0,150 150,420 420,930 930,1500 1530,2100
-And also slightly yeah, um,
+and {that,sort,of} slightly, { -}
 
 965
 00:32:11,060 --> 00:32:13,580
 0,1230 1230,1410 1410,1530 1530,1860 1860,2520
-it could be slightly costly.
+it could be slightly costly,|
 
 966
 00:32:14,060 --> 00:32:16,040
 0,330 330,780 870,1050 1050,1530 1530,1980
-And so the solution is
+and so the solution is
 
 967
 00:32:16,100 --> 00:32:17,930
 0,270 270,810 810,960 960,1020 1020,1830
-a that as a programmer,
+{} that as a programmer,|
 
 968
 00:32:18,140 --> 00:32:19,370
@@ -4834,17 +4834,17 @@ you can say you can
 969
 00:32:19,370 --> 00:32:22,100
 0,420 450,990 990,1470 1530,1890 1890,2730
-actually check point or persist
+actually {checkpoint -} or persist
 
 970
 00:32:23,210 --> 00:32:26,690
 0,750 750,1530 1920,2520 2520,2820 2820,3480
-a dvds on stable storage.
+{} RDDs on stable storage.|
 
 971
 00:32:27,520 --> 00:32:29,020
 0,300 300,690 750,900 900,1080 1080,1500
-And so you might decide
+And so you might decide,|
 
 972
 00:32:29,020 --> 00:32:30,070
@@ -4854,42 +4854,42 @@ for example, this is an
 973
 00:32:30,070 --> 00:32:33,020
 0,570 570,900 1740,2640
-ID dot, um.
+RDD that, {}|
 
 974
 00:32:33,460 --> 00:32:34,120
 0,180 180,270 270,450 450,600 600,660
-Then you don't want to
+then you don't want to
 
 975
 00:32:34,120 --> 00:32:35,410
 0,120 120,750 780,960 960,1020 1020,1290
-{re-compute -} in the case
+{recompute -} in the case
 
 976
 00:32:35,410 --> 00:32:36,820
 0,120 120,420 420,990 990,1260 1260,1410
-of a failure because it
+of a failure,| because it
 
 977
 00:32:36,820 --> 00:32:38,320
 0,480 480,660 660,780 780,1290 1290,1500
-{requires -} no re-computing all
+{requires -} {you,know} recomputing all
 
 978
 00:32:38,320 --> 00:32:40,030
 0,120 120,390 390,990 1200,1530 1530,1710
-the different partitions, you may
+the different partitions,| you may
 
 979
 00:32:40,030 --> 00:32:41,440
 0,150 150,240 240,480 480,990 1110,1410
-want to check point this
+want to {checkpoint -} this
 
 980
 00:32:41,440 --> 00:32:42,340
 0,150 150,630
-r D.
+{RDD -}.|
 
 981
 00:32:48,960 --> 00:32:50,130
@@ -4899,7 +4899,7 @@ And then we know this
 982
 00:32:50,160 --> 00:32:51,720
 0,450 450,780 780,1020 1020,1200 1200,1560
-stage when actually when this
+stage,| when actually when this
 
 983
 00:32:51,720 --> 00:32:53,310
@@ -4909,102 +4909,102 @@ you know computation needs to
 984
 00:32:53,310 --> 00:32:54,930
 0,180 180,390 390,1080 1290,1500 1500,1620
-be {re-executed, -} I'm gonna
+be {reexecuted -},| {} gonna
 
 985
 00:32:54,930 --> 00:32:56,370
 0,270 270,690 720,810 810,960 960,1440
-actually read, you know the
+actually read you know the
 
 986
 00:32:56,400 --> 00:32:58,170
 0,690 690,900 900,1020 1020,1470 1470,1770
-results of the petitions from
+results of the partitions from
 
 987
 00:32:58,170 --> 00:33:00,660
 0,360 840,1470 1590,2070 2070,2220 2220,2490
-the checkpoint instead of actually
+the checkpoint| instead of actually
 
 988
 00:33:00,660 --> 00:33:01,950
 0,300 300,630 630,750 750,1080 1080,1290
-{having -} to re-compute them
+{having -} to recompute them
 
 989
 00:33:01,950 --> 00:33:04,320
 0,480 480,1140 1500,1710 1710,2130 2160,2370
-from scratch, and so this
+from scratch.| And so this
 
 990
 00:33:04,320 --> 00:33:06,060
 0,90 90,540 570,930 930,1320 1320,1740
-is why a spark supports
+is why {} spark supports
 
 991
 00:33:06,060 --> 00:33:07,680
 0,750 750,1020 1020,1380 1380,1530 1530,1620
-checkpoints and that's sort of
+checkpoints| and that's sort of
 
 992
 00:33:07,680 --> 00:33:09,400
 0,450 750,1560
-their um.
+their {}
 
 993
 00:33:10,090 --> 00:33:11,890
 0,660 900,1170 1170,1290 1290,1350 1350,1800
-A thought on the story
+{} fault {tolerance -} story
 
 994
 00:33:11,890 --> 00:33:13,940
 0,450 450,960 960,1830
-for white dependencies.
+for wide dependencies.|
 
 995
 00:33:17,800 --> 00:33:19,120
 0,210 210,510 510,660 660,1050
-Any questions about this.
+Any questions about this?|
 
 996
 00:33:21,000 --> 00:33:22,200
 0,480 510,750 750,930 930,1080 1080,1200
-Um, I I had one
+{} I I had one
 
 997
 00:33:22,200 --> 00:33:27,570
 0,540 3090,3660 3660,3870 3870,4530 4770,5370
-question, so there was a.
+question.| So there was {},
 
 998
 00:33:28,670 --> 00:33:30,500
 0,150 150,330 330,1110 1140,1620 1620,1830
-So you persist right just
+so you persist right just
 
 999
 00:33:30,500 --> 00:33:32,780
 0,480 480,1020 1020,1410 1410,2100 2100,2280
-in general but they, they
+in general,| but they, they
 
 1000
 00:33:32,780 --> 00:33:34,580
 0,240 240,570 570,690 690,1200 1200,1800
-also mentioned a reliable flag,
+also mentioned a reliable flag.|
 
 1001
 00:33:34,700 --> 00:33:36,200
 0,480 810,1200 1200,1320 1320,1380 1380,1500
-hmm, um, so I was
+Hmm.| {} So I was
 
 1002
 00:33:36,200 --> 00:33:36,980
 0,480
-wondering.
+wondering,|
 
 1003
 00:33:37,320 --> 00:33:38,820
 0,300 300,540 540,660 660,1140 1140,1500
-Like what's the difference between
+like what's the difference between
 
 1004
 00:33:38,820 --> 00:33:40,140
@@ -5014,17 +5014,17 @@ just persisting and using a
 1005
 00:33:40,140 --> 00:33:41,340
 0,390 390,900
-reliable flag.
+reliable flag.|
 
 1006
 00:33:41,770 --> 00:33:43,060
 0,450 450,690 690,990 990,1140 1140,1290
-Purchase just means you're gonna
+Persist just means you're gonna
 
 1007
 00:33:43,060 --> 00:33:44,500
 0,240 240,420 420,900 900,960 960,1440
-keep that adi in memory
+keep that RDD in memory|
 
 1008
 00:33:44,710 --> 00:33:45,370
@@ -5034,12 +5034,12 @@ and you're not going to
 1009
 00:33:45,370 --> 00:33:46,400
 0,210 210,300 300,720
-throw it away.
+throw it away,|
 
 1010
 00:33:47,200 --> 00:33:48,430
 0,360 360,570 570,720 720,870 870,1230
-Um, so you can reuse
+{} so you can reuse
 
 1011
 00:33:48,430 --> 00:33:50,290
@@ -5049,37 +5049,37 @@ it in later competitions in
 1012
 00:33:50,290 --> 00:33:52,810
 0,300 300,600 600,1050 1440,1800 1800,2520
-and usually memory the checkpoint
+and {use,in} memory,| the checkpoint
 
 1013
 00:33:52,810 --> 00:33:55,090
 0,270 270,930 930,1350 1350,1680 1680,2280
-or reliability flag basically means.
+or reliability flag basically means,|
 
 1014
 00:33:56,210 --> 00:33:58,010
 0,270 270,540 540,990 990,1110 1110,1800
-You actually write a copy
+you actually write a copy
 
 1015
 00:33:58,070 --> 00:33:59,930
 0,150 150,240 240,570 570,1260 1380,1860
-of the whole DVD to
+of the whole RDD to
 
 1016
 00:33:59,930 --> 00:34:01,180
 0,420 420,990
-HD 's.
+{hdfs -}.|
 
 1017
 00:34:05,560 --> 00:34:06,880
 0,180 180,690 690,780 780,840 840,1320
-An ACS is a persistent
+And hdfs is a persistent
 
 1018
 00:34:06,880 --> 00:34:08,410
 0,210 210,630 630,930 930,1170 1170,1530
-or unstable storage file system.
+or {a,stable} storage file system.|
 
 1019
 00:34:12,170 --> 00:34:13,130
@@ -5089,12 +5089,12 @@ Is there a way to
 1020
 00:34:13,130 --> 00:34:15,290
 0,240 240,870 870,1230 1260,1620 1620,2160
-tell spark to an persist
+tell spark to {unpersist -}
 
 1021
 00:34:15,290 --> 00:34:17,420
 0,570 840,1050 1050,1800 1800,2040 2040,2130
-something because otherwise like for
+something,| because otherwise like for
 
 1022
 00:34:17,420 --> 00:34:18,770
@@ -5104,12 +5104,12 @@ example if you persist in
 1023
 00:34:18,770 --> 00:34:20,420
 0,150 150,720 990,1410 1410,1530 1530,1650
-R D and you do
+{RDD -}| and you do
 
 1024
 00:34:20,420 --> 00:34:22,550
 0,90 90,390 390,450 450,1500 1980,2130
-a lot of computations, but
+a lot of computations,| but
 
 1025
 00:34:22,550 --> 00:34:24,050
@@ -5119,22 +5119,22 @@ like those later computations number
 1026
 00:34:24,050 --> 00:34:25,220
 0,210 210,300 300,480 480,960
-used to r D.
+use the {RDD -},|
 
 1027
 00:34:26,080 --> 00:34:26,890
 0,270 270,480 480,600 600,750 750,810
-You might just have it
+you might just have it
 
 1028
 00:34:26,890 --> 00:34:29,050
 0,360 360,660 660,930 930,1530 1560,2160
-sticking around in memory forever.
+sticking around in memory forever.|
 
 1029
 00:34:29,780 --> 00:34:31,070
 0,570 570,600 600,810 810,1080 1080,1290
-Yeah, oh yeah, so we
+Yeah, oh yeah, so we,|
 
 1030
 00:34:31,070 --> 00:34:33,020
@@ -5144,12 +5144,12 @@ I I presume you can
 1031
 00:34:33,140 --> 00:34:35,270
 0,840 840,1200 1200,1710 1710,1800 1800,2130
-um or there's a general
+{} or there's a general
 
 1032
 00:34:35,270 --> 00:34:37,370
 0,540 540,1200 1200,1560 1560,1920 1920,2100
-strategy that spark uses they
+strategy that spark uses,| they
 
 1033
 00:34:37,370 --> 00:34:38,210
@@ -5159,47 +5159,47 @@ talk a little bit about
 1034
 00:34:38,210 --> 00:34:40,220
 0,420 690,1110 1110,1380 1380,1770 1770,2010
-this is that they have
+this| is that they have
 
 1035
 00:34:40,220 --> 00:34:41,810
 0,180 180,390 390,540 540,930 930,1590
-there's really no space anymore,
+there's really no space anymore,|
 
 1036
 00:34:42,020 --> 00:34:44,840
 0,180 180,450 450,990 1020,1800 2040,2820
-um, they might a spill
+{} they might {} spill
 
 1037
 00:34:44,840 --> 00:34:46,400
 0,180 180,690 690,810 810,1170 1170,1560
-some dvds to {HD's -}
+some RDDs to {hdfs -}
 
 1038
 00:34:46,400 --> 00:34:48,200
 0,270 270,570 570,900 1050,1140 1140,1800
-where remove them, um I
+or remove them, { -}|
 
 1039
 00:34:48,230 --> 00:34:49,130
 0,240 240,330 330,660 660,780 780,900
-the the biggest lie you've
+the the {paper,slightly -} vague
 
 1040
 00:34:49,130 --> 00:34:50,780
 0,300 300,870 870,960 960,1110 1110,1650
-begun exactly you know what
+on exactly you know what
 
 1041
 00:34:50,780 --> 00:34:51,860
 0,150 150,390 390,480 480,870
-their plan for that.
+their plan for {that,is}.|
 
 1042
 00:34:54,010 --> 00:34:55,570
 0,210 210,510 990,1140 1140,1380 1380,1560
-Thank you, of course when
+Thank you.| Of course, when
 
 1043
 00:34:55,570 --> 00:34:58,120
@@ -5209,12 +5209,12 @@ the competition ends and a
 1044
 00:34:58,120 --> 00:35:01,420
 0,1050 1050,1200 1200,1950 2220,3060 3060,3300
-user you logout, um, or
+user you logout, {} or
 
 1045
 00:35:01,420 --> 00:35:02,860
 0,120 120,390 390,510 510,930 930,1440
-you stop your driver, then
+you stop your driver,| then
 
 1046
 00:35:02,890 --> 00:35:04,420
@@ -5224,12 +5224,12 @@ I think you know those
 1047
 00:35:04,420 --> 00:35:05,770
 0,420 420,720 720,900 900,1020 1020,1350
-are definitely gone from memory.
+RDDs definitely gone from memory.|
 
 1048
 00:35:11,060 --> 00:35:11,940
 0,600
-Okay.
+Okay?|
 
 1049
 00:35:13,940 --> 00:35:16,460
