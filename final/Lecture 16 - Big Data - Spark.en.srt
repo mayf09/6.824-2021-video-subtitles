@@ -1,0 +1,4736 @@
+1
+00:00:00,000 --> 00:00:03,450
+We'll talking about is spark
+
+2
+00:00:03,840 --> 00:00:07,200
+and so this goes back to almost the beginning of the semester,
+
+3
+00:00:07,620 --> 00:00:11,130
+where you know we talked quite a bit about mapreduce,
+
+4
+00:00:11,130 --> 00:00:14,130
+in fact you know lab 1 that you implemented mapreduce.
+
+5
+00:00:14,940 --> 00:00:26,800
+So, and really what's you know sort of informally you know the spark is basically the successor you know to hadoop,
+
+6
+00:00:28,830 --> 00:00:35,930
+and hadoop is the open source version of mapreduce.
+
+7
+00:00:38,610 --> 00:00:45,960
+So I think today, you know people typically will use spark instead of hadoop,
+
+8
+00:00:46,640 --> 00:00:48,620
+and so it's really widely used.
+
+9
+00:00:52,860 --> 00:00:55,950
+And it's widely used for data science computation,
+
+10
+00:00:55,950 --> 00:01:00,660
+so people that you know have lots of data that need to run some computation over it,
+
+11
+00:01:00,840 --> 00:01:02,370
+require a ton of machines,
+
+12
+00:01:02,550 --> 00:01:06,870
+you know spark is designed for that particular case,
+
+13
+00:01:07,230 --> 00:01:10,320
+it is commercialized by a company called databricks,
+
+14
+00:01:12,250 --> 00:01:19,060
+you know Matei Zaharia who is the author, of the main author of this paper, his PhD thesis,
+
+15
+00:01:19,180 --> 00:01:20,980
+started with a number of other people,
+
+16
+00:01:20,980 --> 00:01:25,510
+this company databricks which commercializes spark,
+
+17
+00:01:25,540 --> 00:01:30,760
+but it also supports the Apache open source spark version,
+
+18
+00:01:33,010 --> 00:01:39,220
+it's been a pretty popular open source project or very popular open source project.
+
+19
+00:01:39,400 --> 00:01:44,230
+It is one reason I sort of replaced you know the use of hadoop is,
+
+20
+00:01:44,230 --> 00:01:50,370
+because it actually supports wider range, wider range of applications than mapreduce can,
+
+21
+00:01:52,410 --> 00:01:55,590
+in particular, was very good at these iterative.
+
+22
+00:01:57,070 --> 00:01:57,910
+Oops what happened there,
+
+23
+00:02:00,800 --> 00:02:05,180
+let me see something maybe external crash, hold on a second.
+
+24
+00:02:36,270 --> 00:02:41,220
+Okay, fortunately, we're in good shape,
+
+25
+00:02:42,340 --> 00:02:45,580
+okay, so it supports a wide range of applications,
+
+26
+00:02:45,700 --> 00:02:48,010
+in particular is good at these iterative applications,
+
+27
+00:02:48,010 --> 00:02:51,610
+so applications where multiple rounds of mapreduce operations,
+
+28
+00:02:51,610 --> 00:02:58,480
+so if you have an application that requires one set of mapreduce followed by another set of mapreduce followed by another mapreduce computation,
+
+29
+00:02:58,900 --> 00:03:00,130
+spark is really good at it
+
+30
+00:03:00,400 --> 00:03:01,600
+and the reason is so good at it is,
+
+31
+00:03:01,600 --> 00:03:04,510
+because basically it keeps the intermediate results in memory
+
+32
+00:03:04,510 --> 00:03:08,200
+and that's really good support, programming support for doing so.
+
+33
+00:03:09,140 --> 00:03:17,180
+In some ways, you know, so if there's any connection at all between the previous paper and this paper,
+
+34
+00:03:17,180 --> 00:03:23,420
+which basically is not but you know they're all both targeted to sort in memory computations,
+
+35
+00:03:28,000 --> 00:03:30,280
+you know for datasets that basically fit in memory,
+
+36
+00:03:30,850 --> 00:03:35,260
+in the previous paper and FaRM paper is all about you know the database filling in memory,
+
+37
+00:03:35,290 --> 00:03:38,410
+here's the data set the data science computation,
+
+38
+00:03:38,410 --> 00:03:40,150
+for data science computation that you want to do.
+
+39
+00:03:42,860 --> 00:03:45,800
+Of course, you know since 2012 when this paper was published,
+
+40
+00:03:45,800 --> 00:03:48,200
+a lot of things have happened,
+
+41
+00:03:48,230 --> 00:03:54,780
+the, spark is not really tied to scala, sort of described in the paper,
+
+42
+00:03:54,780 --> 00:03:56,160
+but there are other language front ends,
+
+43
+00:03:56,160 --> 00:04:03,390
+for example but probably more importantly you know the rdd has defined in this paper,
+
+44
+00:04:03,390 --> 00:04:05,280
+slightly deprecated,
+
+45
+00:04:05,280 --> 00:04:10,320
+and replace by dataframes,
+
+46
+00:04:10,440 --> 00:04:12,600
+but dataframes the way to think about it,
+
+47
+00:04:12,600 --> 00:04:13,830
+the way I think about it,
+
+48
+00:04:13,830 --> 00:04:18,180
+this is basically column is rdd with [explicit] columns
+
+49
+00:04:18,540 --> 00:04:23,700
+and all the good ideas of rdds are also true for dataframes.
+
+50
+00:04:24,480 --> 00:04:26,310
+And so from the rest of the lecture,
+
+51
+00:04:26,310 --> 00:04:28,380
+I'm just gonna talk about rdds
+
+52
+00:04:28,380 --> 00:04:34,410
+and think about them as equivalently as to dataframes.
+
+53
+00:04:36,540 --> 00:04:38,460
+Any questions before I proceed?
+
+54
+00:04:46,200 --> 00:04:48,060
+And then quick other point,
+
+55
+00:04:48,060 --> 00:04:53,340
+maybe this research is really quite successful, widely used,
+
+56
+00:04:53,580 --> 00:04:59,550
+also [] you know received the ACM doctoral thesis award,
+
+57
+00:04:59,550 --> 00:05:03,060
+for this for this thesis that basically is all about spark.
+
+58
+00:05:04,300 --> 00:05:07,660
+So it's quite unusual actually for a doctoral thesis,
+
+59
+00:05:07,660 --> 00:05:09,040
+that to have that kind of impact.
+
+60
+00:05:16,470 --> 00:05:17,040
+Okay?
+
+61
+00:05:18,580 --> 00:05:24,910
+So the way I want to talk about spark by just looking at the so many examples,
+
+62
+00:05:24,940 --> 00:05:27,370
+because I think you get the best,
+
+63
+00:05:27,370 --> 00:05:30,700
+you, you understand the programming model,
+
+64
+00:05:31,960 --> 00:05:33,760
+but that is based on rdds
+
+65
+00:05:34,240 --> 00:05:36,910
+best by this I think looking at examples,
+
+66
+00:05:40,330 --> 00:05:43,600
+and you get the best idea of what actually in RDD is.
+
+67
+00:05:44,050 --> 00:05:47,200
+And so let me pull up some of the examples, that were in the paper,
+
+68
+00:05:48,070 --> 00:05:49,870
+then we'll walk through those.
+
+69
+00:05:51,260 --> 00:05:58,090
+Look this one, so let's start here, a very simple example.
+
+70
+00:05:58,600 --> 00:06:02,110
+And so you know the idea is that,
+
+71
+00:06:02,720 --> 00:06:04,670
+in this example is that,
+
+72
+00:06:04,670 --> 00:06:09,140
+you know first of all, you can sort of, use spark interactively,
+
+73
+00:06:09,170 --> 00:06:12,980
+so you can see that startup spark at the workstation or laptop
+
+74
+00:06:13,280 --> 00:06:20,990
+and start interacting with spark you know the way you you type in commands like this.
+
+75
+00:06:21,480 --> 00:06:23,550
+And so now what does this command do,
+
+76
+00:06:23,580 --> 00:06:26,610
+you know this basically creates an RDD,
+
+77
+00:06:26,610 --> 00:06:30,690
+you know called this RDDs, lines is an RDD
+
+78
+00:06:30,990 --> 00:06:35,700
+and I just represents the RDD that actually stored in hdfs
+
+79
+00:06:35,940 --> 00:06:42,850
+and you know the hdfs you know might be have many partitions you know for this particular file,
+
+80
+00:06:42,880 --> 00:06:47,560
+so for example the first thousand or a million records list on like partition one,
+
+81
+00:06:47,560 --> 00:06:50,170
+there's next million live in partition two,
+
+82
+00:06:50,170 --> 00:06:52,090
+and the next million live to partition three,
+
+83
+00:06:52,630 --> 00:06:58,630
+then this RDD lines basically represents you know that that set of partitions.
+
+84
+00:07:00,070 --> 00:07:04,360
+When you run this line or you type in this line in return,
+
+85
+00:07:04,360 --> 00:07:06,460
+return basically nothing really happens,
+
+86
+00:07:06,580 --> 00:07:11,500
+and so this is what the paper refers to as lazy computations,
+
+87
+00:07:12,010 --> 00:07:13,960
+in fact computations executed somewhat later
+
+88
+00:07:13,960 --> 00:07:15,550
+and we'll see in a second line,
+
+89
+00:07:15,880 --> 00:07:17,650
+but at this particular point to line,
+
+90
+00:07:17,740 --> 00:07:19,660
+the only thing that's actually happened is that
+
+91
+00:07:19,660 --> 00:07:23,650
+there is a line lines object that happens to be in RDD.
+
+92
+00:07:24,640 --> 00:07:29,860
+And, RDD you know supports a wide range of operations,
+
+93
+00:07:30,070 --> 00:07:33,460
+we can actually look a little bit with some operations that it supports.
+
+94
+00:07:37,440 --> 00:07:41,610
+Yeah, so it's used as an RDD has an API
+
+95
+00:07:41,610 --> 00:07:44,070
+and it turns out that the methods of the API
+
+96
+00:07:44,100 --> 00:07:46,980
+or the methods on RDD fail in two classes,
+
+97
+00:07:47,340 --> 00:07:50,340
+one are the, are Actions,
+
+98
+00:07:50,770 --> 00:07:55,540
+and actions are really the operations that will actually cause computation to happen,
+
+99
+00:07:56,380 --> 00:08:01,060
+so all the lazily sort of build up computation really happens at the point, that you're run an action
+
+100
+00:08:01,210 --> 00:08:03,640
+and as an example, you run count or collect,
+
+101
+00:08:03,850 --> 00:08:08,590
+then, the spark computation actually is executed.
+
+102
+00:08:09,780 --> 00:08:14,250
+All the other API or methods are Transformations,
+
+103
+00:08:14,580 --> 00:08:18,630
+and they basically take one RDD and turn it into another RDD,
+
+104
+00:08:18,780 --> 00:08:22,980
+it turns out that every RDD is actually read-only or immutable,
+
+105
+00:08:23,470 --> 00:08:26,480
+so you can't modify an RDD,
+
+106
+00:08:26,600 --> 00:08:31,520
+can only basically generate new RDDs form an existing one.
+
+107
+00:08:31,910 --> 00:08:33,440
+And so if we look at the second line,
+
+108
+00:08:33,530 --> 00:08:37,070
+this basically creates a second RDD RDD errors,
+
+109
+00:08:37,550 --> 00:08:43,430
+and that one is created by running a filter on the lines RDD,
+
+110
+00:08:44,240 --> 00:08:51,080
+so the lines RDD read only, read only you can run this method to filter on it,
+
+111
+00:08:51,080 --> 00:08:58,490
+which in this case, basically filters out all the record [] start with all the lines that start with the message error or string error,
+
+112
+00:08:58,730 --> 00:09:00,560
+and that represents a new RDD
+
+113
+00:09:00,800 --> 00:09:04,490
+and again at this point nothing actually really being computed
+
+114
+00:09:04,490 --> 00:09:08,300
+is usually a recipe or a built over almost a data flow
+
+115
+00:09:08,390 --> 00:09:12,470
+or what the paper calls iterative graph of the computation.
+
+116
+00:09:22,040 --> 00:09:25,460
+Also, when the computation actually starts running,
+
+117
+00:09:25,550 --> 00:09:26,420
+it hasn't run yet,
+
+118
+00:09:26,420 --> 00:09:27,980
+but when it will start running,
+
+119
+00:09:28,160 --> 00:09:33,260
+these operations are pipelined with that they mean,
+
+120
+00:09:33,260 --> 00:09:37,730
+so for example in stage one you know the this computation of the lines,
+
+121
+00:09:37,880 --> 00:09:41,150
+the stage one will read some set of records,
+
+122
+00:09:41,150 --> 00:09:43,940
+you know from for example this first partition,
+
+123
+00:09:44,410 --> 00:09:47,920
+and then, do its processing on it,
+
+124
+00:09:47,920 --> 00:09:50,410
+if there's anything and then handed off to stage two,
+
+125
+00:09:50,530 --> 00:09:53,350
+you know which stage two basically you know doing this filter,
+
+126
+00:09:53,890 --> 00:10:00,550
+and so in stage two you know the, the, this filter will run
+
+127
+00:10:00,670 --> 00:10:05,440
+and sort of grab the lines that actually are match.
+
+128
+00:10:05,770 --> 00:10:09,520
+And you know basically produce with that new RDD,
+
+129
+00:10:09,610 --> 00:10:12,100
+that just contains you know the lines,
+
+130
+00:10:12,100 --> 00:10:13,960
+you know strings, that start with lines,
+
+131
+00:10:13,960 --> 00:10:15,160
+that start with the string error.
+
+132
+00:10:16,670 --> 00:10:19,820
+And while this sort of secondary RDD,
+
+133
+00:10:19,820 --> 00:10:24,620
+second stage runs you know the first stage you know grab the next set of records from the file system,
+
+134
+00:10:24,950 --> 00:10:27,140
+and then you know fetch them again to stage two
+
+135
+00:10:27,170 --> 00:10:31,970
+and so as you go further, you have more and more stages in your pipeline,
+
+136
+00:10:31,970 --> 00:10:38,480
+where your iterative graph and all those stages are going to be running sort of parallel,
+
+137
+00:10:38,850 --> 00:10:43,030
+and that's what I mean with lecture pipelining the transformations.
+
+138
+00:10:45,990 --> 00:10:51,830
+Okay, so,x so here this this you know this line basically describes
+
+139
+00:10:51,830 --> 00:10:54,350
+how to create RDD error,
+
+140
+00:10:54,500 --> 00:10:59,540
+RDD errors RDD and then this lines basically like,
+
+141
+00:10:59,570 --> 00:11:04,010
+tells spark to basically keep a copy of this RDD in memory.
+
+142
+00:11:04,500 --> 00:11:11,190
+So if subsequent computation run that you do more stuff with errors,
+
+143
+00:11:11,430 --> 00:11:17,070
+spark will actually keep the original RDD actually in memory,
+
+144
+00:11:17,070 --> 00:11:19,830
+so that, it can be shared with later computation,
+
+145
+00:11:19,830 --> 00:11:22,230
+so for example if you wanted to reuse the error file,
+
+146
+00:11:22,530 --> 00:11:25,230
+then that error file will be in memory,
+
+147
+00:11:25,230 --> 00:11:27,600
+doesn't have to be reconstructed from the files,
+
+148
+00:11:27,600 --> 00:11:33,690
+directly represent the hdfs and allows you to run the second computation.
+
+149
+00:11:34,920 --> 00:11:38,100
+And here for example one already know even in this simple example,
+
+150
+00:11:38,100 --> 00:11:41,130
+you'll see there's a big difference between this and mapreduce,
+
+151
+00:11:41,400 --> 00:11:44,940
+where can the mapreduce job and you run the computation, it ends,
+
+152
+00:11:45,150 --> 00:11:48,630
+and then, if you want to redo something with the data,
+
+153
+00:11:48,720 --> 00:11:54,540
+you have to reread it in from the file system in using this sort of persistent method,
+
+154
+00:11:54,750 --> 00:12:00,090
+spark can avoid, you know having to reread that data from the disk,
+
+155
+00:12:00,090 --> 00:12:01,230
+and you know save a lot of time.
+
+156
+00:12:06,110 --> 00:12:07,190
+Any questions so far?
+
+157
+00:12:08,480 --> 00:12:12,410
+And so when the error file gets extracted from P1 let's say
+
+158
+00:12:12,410 --> 00:12:16,310
+and then there's another error file that gets extracted from P2,
+
+159
+00:12:16,400 --> 00:12:18,890
+so my understanding is that, this happened in parallel?
+
+160
+00:12:18,920 --> 00:12:20,600
+Yes, so you can think about it,
+
+161
+00:12:20,600 --> 00:12:24,290
+like you know they're going to be many worker, like in mapreduce
+
+162
+00:12:24,620 --> 00:12:26,750
+and the workers work on each partition,
+
+163
+00:12:27,940 --> 00:12:32,770
+basically, you know the scheduler will sent a job you know to each of the workers,
+
+164
+00:12:32,860 --> 00:12:38,050
+and a job is a task you know pertains to a particular partition,
+
+165
+00:12:38,230 --> 00:12:44,290
+and workers start working on get one of these tasks
+
+166
+00:12:44,290 --> 00:12:45,100
+and basically start running.
+
+167
+00:12:45,710 --> 00:12:48,110
+So you get parallelism between the partitions
+
+168
+00:12:48,320 --> 00:12:50,750
+and you get parallelism between the stages in the pipeline.
+
+169
+00:12:52,580 --> 00:12:53,540
+I see, thank you.
+
+170
+00:12:55,550 --> 00:12:56,660
+That's awesome.
+
+171
+00:12:57,220 --> 00:12:57,580
+What's the.
+
+172
+00:12:57,640 --> 00:12:58,030
+Sorry.
+
+173
+00:12:58,030 --> 00:12:58,750
+Can you hear me.
+
+174
+00:12:58,900 --> 00:13:05,350
+What's the difference between lineage and the like just the log of transactions, that we've seen before,
+
+175
+00:13:05,350 --> 00:13:08,260
+like is it just the granularity of the operations.
+
+176
+00:13:09,000 --> 00:13:12,930
+As we'll see lineage log is strictly linear, right
+
+177
+00:13:12,930 --> 00:13:14,670
+and the examples that we've seen so far,
+
+178
+00:13:14,670 --> 00:13:17,820
+the lineage is also linear,
+
+179
+00:13:17,820 --> 00:13:20,610
+but we'll see later examples where we have forks,
+
+180
+00:13:21,200 --> 00:13:26,870
+where one stage depends on multiple different RDDs
+
+181
+00:13:26,870 --> 00:13:29,180
+and you know that's not representative in the log.
+
+182
+00:13:31,350 --> 00:13:33,810
+You know there share some similarities in the sense,
+
+183
+00:13:33,810 --> 00:13:36,270
+that like you're starting the beginning state,
+
+184
+00:13:36,270 --> 00:13:38,040
+all the operations are deterministic
+
+185
+00:13:38,040 --> 00:13:41,100
+and then you'll end up in some if you apply all those operations,
+
+186
+00:13:41,100 --> 00:13:44,040
+will end in some deterministic end state,
+
+187
+00:13:44,370 --> 00:13:46,800
+so in that sense, there's some similarity,
+
+188
+00:13:46,800 --> 00:13:49,230
+but you know I think they're quite different.
+
+189
+00:13:51,870 --> 00:13:55,860
+I also have a question, in this case filter,
+
+190
+00:13:56,910 --> 00:14:00,030
+so it works by just applying filter on each partition,
+
+191
+00:14:00,030 --> 00:14:04,170
+but sometimes like I see the transformation also contained join or sort.
+
+192
+00:14:04,170 --> 00:14:05,940
+Yeah,let's talk about a little bit,I will talk about sort and join in a second,
+
+193
+00:14:09,700 --> 00:14:12,520
+they're clearly much more complicated.
+
+194
+00:14:13,620 --> 00:14:19,290
+So is do we, but like this persist is when we start computing.
+
+195
+00:14:19,530 --> 00:14:22,830
+No, nothing has been computed yet, still all [descriptions],
+
+196
+00:14:22,830 --> 00:14:24,000
+so let's talk a little bit further.
+
+197
+00:14:24,880 --> 00:14:29,170
+Let's look at actually something that actually generates the computation.
+
+198
+00:14:32,730 --> 00:14:38,730
+So, here are two commands that actually result in computation,
+
+199
+00:14:38,730 --> 00:14:41,100
+so this command will result in computation,
+
+200
+00:14:41,100 --> 00:14:43,920
+because it contains count, which is an action
+
+201
+00:14:44,070 --> 00:14:48,240
+and this command will result in a computation collect is an action.
+
+202
+00:14:50,210 --> 00:14:54,140
+And so yeah and so you can,
+
+203
+00:14:54,560 --> 00:14:56,120
+so we look like,
+
+204
+00:14:56,120 --> 00:14:57,920
+so the reason that they show two commands,
+
+205
+00:14:57,920 --> 00:15:00,500
+because they demonstrate that basically you can reuse errors,
+
+206
+00:15:00,800 --> 00:15:05,390
+and so if you look at you know this computation,
+
+207
+00:15:05,720 --> 00:15:08,540
+yeah, then you can draw the lineage graph,
+
+208
+00:15:08,600 --> 00:15:10,940
+right, so start with lines,
+
+209
+00:15:12,510 --> 00:15:15,870
+there was a filter that we ran,
+
+210
+00:15:18,450 --> 00:15:20,010
+oops, sorry,
+
+211
+00:15:20,040 --> 00:15:22,050
+let me just read slightly differently,
+
+212
+00:15:22,050 --> 00:15:26,030
+there was a filter on lines, that we just saw that produces errors,
+
+213
+00:15:28,630 --> 00:15:30,400
+or that's a description, how to get errors,
+
+214
+00:15:30,700 --> 00:15:33,670
+then there's in this case, there's another filter,
+
+215
+00:15:34,580 --> 00:15:36,380
+it's the filter of hdfs,
+
+216
+00:15:37,400 --> 00:15:39,440
+and that basically produces another RDD,
+
+217
+00:15:39,470 --> 00:15:41,810
+you know that RDD is not explicitly named here,
+
+218
+00:15:42,020 --> 00:15:44,630
+but it does produce another RDD,
+
+219
+00:15:44,630 --> 00:15:47,000
+so I was going to call it hdfs,
+
+220
+00:15:47,750 --> 00:15:49,640
+because the filter on hdfs.
+
+221
+00:15:50,210 --> 00:15:53,180
+And then, we see there's a map,
+
+222
+00:15:53,820 --> 00:15:55,950
+and that produces yet another RDD,
+
+223
+00:15:55,980 --> 00:16:02,040
+again this RDD doesn't really have a name here, but so it's anonymous,
+
+224
+00:16:02,070 --> 00:16:04,260
+I'm just gonna give it a name, that's time,
+
+225
+00:16:05,760 --> 00:16:11,520
+because basically splits the one your line into three pieces
+
+226
+00:16:11,520 --> 00:16:13,470
+and grabs the [third] piece out of that line
+
+227
+00:16:13,470 --> 00:16:15,150
+and that happens to be the time,
+
+228
+00:16:15,740 --> 00:16:21,920
+and then, there's a final you know operation and that's collect,
+
+229
+00:16:22,190 --> 00:16:26,630
+which actually comes up all the number of times, that time actually appears
+
+230
+00:16:26,660 --> 00:16:32,600
+or the number of entries basically result of the in the RDD produced, in the time RDD.
+
+231
+00:16:33,470 --> 00:16:34,070
+Okay?
+
+232
+00:16:34,400 --> 00:16:37,550
+So this, so this is actually this point,
+
+233
+00:16:37,550 --> 00:16:40,550
+when you know the return you hit return here
+
+234
+00:16:40,550 --> 00:16:45,980
+in the user interface or in the interactive user interface it is
+
+235
+00:16:45,980 --> 00:16:53,570
+and at that point basically spark you know will collect you know a lot of a set of workers,
+
+236
+00:16:53,870 --> 00:16:56,840
+split you know send them the jobs
+
+237
+00:16:56,840 --> 00:17:01,160
+or basically inform the scheduler that job needs to be executed
+
+238
+00:17:01,430 --> 00:17:06,200
+and the description of the task that needs to be executed this lineage graph.
+
+239
+00:17:13,400 --> 00:17:16,550
+And so we can sort of think a little bit about exactly how the execution happens,
+
+240
+00:17:16,550 --> 00:17:17,720
+so let me draw a picture,
+
+241
+00:17:22,190 --> 00:17:25,820
+so the pictures follows we got there's what's called the driver, that's the usual thing,
+
+242
+00:17:26,790 --> 00:17:29,610
+you know what is the program that the user typed into,
+
+243
+00:17:30,000 --> 00:17:35,070
+it start of collecting a bunch of workers,
+
+244
+00:17:35,760 --> 00:17:37,080
+you know in a bunch of machines,
+
+245
+00:17:37,800 --> 00:17:41,160
+all over the same way like as in mapreduce.
+
+246
+00:17:42,460 --> 00:17:45,340
+And you know there's gonna be a hdfs,
+
+247
+00:17:45,490 --> 00:17:55,760
+there's lines file, that actually has partitions are P1, P2 whatever, blah blah blah.
+
+248
+00:17:55,790 --> 00:17:59,660
+And typically the number of partitions is larger than the number of workers,
+
+249
+00:17:59,660 --> 00:18:03,230
+sorry, number of, yes number of partitions is larger than the number of workers,
+
+250
+00:18:03,230 --> 00:18:08,600
+you know you get load balance is, like one partition is small and the other one is big
+
+251
+00:18:08,630 --> 00:18:11,330
+and you don't want to have workers are relying sitting around idle.
+
+252
+00:18:11,940 --> 00:18:20,910
+And basically the scheduler, you know there's a scheduler runs you know basically the computation
+
+253
+00:18:20,910 --> 00:18:24,210
+and it has you know the information that has the lineage graphs
+
+254
+00:18:25,820 --> 00:18:32,370
+And so worker is basically check in you know the driver exercising the code, spark program
+
+255
+00:18:32,550 --> 00:18:34,260
+and we just constructed
+
+256
+00:18:34,500 --> 00:18:36,450
+and the worker should go basically to the scheduler,
+
+257
+00:18:36,450 --> 00:18:38,610
+say please you know which partition should I work.
+
+258
+00:18:39,240 --> 00:18:45,860
+And, then they run basically part of the pipeline,
+
+259
+00:18:46,780 --> 00:18:47,890
+and so we look at this,
+
+260
+00:18:47,890 --> 00:18:49,360
+let me actually draw this slightly different,
+
+261
+00:18:49,360 --> 00:18:50,830
+so I have a little bit more space here.
+
+262
+00:18:52,600 --> 00:18:54,580
+So we saw there was a whole bunch of stages
+
+263
+00:18:54,970 --> 00:19:00,310
+and then the last stage was the last operate was to collect stage.
+
+264
+00:19:02,560 --> 00:19:08,350
+So in this, in this scenario that we just looked at,
+
+265
+00:19:08,440 --> 00:19:14,410
+the collect stage, of course needs to collect data from older partitions, right,
+
+266
+00:19:14,410 --> 00:19:18,310
+so in principle, now let's draw a green line,
+
+267
+00:19:18,520 --> 00:19:23,510
+basically everything of this, it was executed on an independent partition,
+
+268
+00:19:24,100 --> 00:19:28,150
+so every worker gets one of these tasks from the scheduler,
+
+269
+00:19:28,180 --> 00:19:36,400
+runs you know the thing and produces in the end on time RDD,
+
+270
+00:19:37,270 --> 00:19:43,420
+and when the scheduler you know determines that basically all the time,
+
+271
+00:19:43,660 --> 00:19:46,270
+you know, like all these stages, this is called the stage,
+
+272
+00:19:48,080 --> 00:19:49,880
+if all the stages have completed
+
+273
+00:19:49,910 --> 00:19:52,850
+and so all the time partitions have been produced,
+
+274
+00:19:52,970 --> 00:19:58,700
+then it actually will run you know the collect action to basically do the addition
+
+275
+00:19:58,940 --> 00:20:02,480
+and retrieve information from every partition,
+
+276
+00:20:02,690 --> 00:20:05,330
+to actually compute the collect
+
+277
+00:20:05,330 --> 00:20:11,520
+or actually this is not collect, it was a count, sorry about that.
+
+278
+00:20:15,500 --> 00:20:18,440
+And so one sort of way to think about this is
+
+279
+00:20:18,440 --> 00:20:21,680
+that this is sort of like almost like a mapreduce
+
+280
+00:20:21,680 --> 00:20:22,970
+where you have the map phase,
+
+281
+00:20:22,970 --> 00:20:25,070
+and then you have a shuffle
+
+282
+00:20:25,220 --> 00:20:26,960
+and then you run the reduce phase
+
+283
+00:20:26,960 --> 00:20:32,060
+and the count is almost similar in that fashion,
+
+284
+00:20:32,180 --> 00:20:34,670
+and in the paper, the way they refer to this is,
+
+285
+00:20:34,790 --> 00:20:38,330
+this dependency if although there's a wide dependency,
+
+286
+00:20:39,230 --> 00:20:44,090
+because the action or the transformation is dependent on a number of partitions
+
+287
+00:20:44,540 --> 00:20:48,470
+and these are called narrow, narrow dependencies,
+
+288
+00:20:48,740 --> 00:20:53,990
+because, this RDD,
+
+289
+00:20:53,990 --> 00:20:57,020
+to make that RDD is only dependent on one another,
+
+290
+00:20:57,320 --> 00:21:01,580
+only at the, only dependent on the parent partition,
+
+291
+00:21:01,670 --> 00:21:04,730
+only one parent partition to actually be able to compute it.
+
+292
+00:21:05,970 --> 00:21:10,020
+So generally you you would prefer computation have narrow dependencies,
+
+293
+00:21:10,020 --> 00:21:14,520
+because they can just run locally without any communication, before wide dependency,
+
+294
+00:21:14,550 --> 00:21:20,670
+you might have to collect, you might have to collect partitions from the parent
+
+295
+00:21:20,670 --> 00:21:25,350
+or you may have to collect partitions from the parent RDD from all the machines.
+
+296
+00:21:25,840 --> 00:21:27,370
+Professor.
+
+297
+00:21:27,400 --> 00:21:28,210
+Yeah.
+
+298
+00:21:28,240 --> 00:21:29,620
+I had a question,
+
+299
+00:21:29,620 --> 00:21:34,900
+so in the paper, it says narrow dependencies,
+
+300
+00:21:35,470 --> 00:21:43,450
+where each partition of the parent RDD is used by at most one partition of the child RDD,
+
+301
+00:21:43,870 --> 00:21:48,730
+but it doesn't say anything about the the control,
+
+302
+00:21:49,300 --> 00:22:00,280
+the [] is like, it doesn't say like a child partition needs to use at most one, one parent.
+
+303
+00:22:00,550 --> 00:22:02,290
+Yeah, that's correct, because then.
+
+304
+00:22:02,290 --> 00:22:05,680
+Yeah, if a child uses multiple parent partition,
+
+305
+00:22:05,680 --> 00:22:07,060
+then it's a wide dependency.
+
+306
+00:22:08,310 --> 00:22:09,720
+If a parent, sorry.
+
+307
+00:22:10,200 --> 00:22:14,790
+If, if the child meets the partition,
+
+308
+00:22:14,790 --> 00:22:17,820
+if the partition for multiple parent partitions,
+
+309
+00:22:18,030 --> 00:22:19,980
+then it's a wide dependency.
+
+310
+00:22:20,750 --> 00:22:23,480
+So, for example in the count case, correct,
+
+311
+00:22:23,510 --> 00:22:28,310
+you know you have time, time partitions.
+
+312
+00:22:29,100 --> 00:22:29,580
+Right.
+
+313
+00:22:30,770 --> 00:22:35,030
+And the count operation is going to collect data from all of them.
+
+314
+00:22:35,720 --> 00:22:36,380
+Right.
+
+315
+00:22:36,800 --> 00:22:38,570
+So if count where at RDD,
+
+316
+00:22:39,110 --> 00:22:40,940
+it isn't like, it's just an action,
+
+317
+00:22:41,090 --> 00:22:42,170
+but even we're in RDD,
+
+318
+00:22:42,170 --> 00:22:46,220
+then basically you know that would require interaction with all the parents.
+
+319
+00:22:46,780 --> 00:22:48,220
+What I'm saying is,
+
+320
+00:22:48,220 --> 00:22:51,520
+I think I think it's just the opposite, right.
+
+321
+00:22:52,020 --> 00:22:54,600
+I I think this might like,
+
+322
+00:22:55,600 --> 00:22:59,560
+I mean I I I I was actually confused,
+
+323
+00:23:00,700 --> 00:23:02,200
+like with the paper.
+
+324
+00:23:02,230 --> 00:23:03,880
+On this specific issue.
+
+325
+00:23:03,880 --> 00:23:05,620
+But as it says,
+
+326
+00:23:05,680 --> 00:23:11,470
+like each partition of the parent RDD is used by at most one partition of the child,
+
+327
+00:23:12,760 --> 00:23:16,570
+but it doesn't say one partition of the child uses it most.
+
+328
+00:23:17,920 --> 00:23:21,790
+I'm not actually sure you know exactly why you're confused with this,
+
+329
+00:23:21,790 --> 00:23:25,090
+so let me know when we can postpone this and come back to it.
+
+330
+00:23:25,740 --> 00:23:26,430
+Sure.
+
+331
+00:23:26,430 --> 00:23:29,670
+I think the key thing observers basically two types of dependency,
+
+332
+00:23:29,670 --> 00:23:31,140
+wide ones and narrow ones
+
+333
+00:23:31,410 --> 00:23:34,770
+and wide ones basically you know basically involve communication,
+
+334
+00:23:34,770 --> 00:23:40,620
+because they have to talk to the,
+
+335
+00:23:41,010 --> 00:23:44,310
+collecting the information from the from the parent partitions.
+
+336
+00:23:45,990 --> 00:23:47,040
+Okay?
+
+337
+00:23:47,430 --> 00:23:47,910
+Thanks.
+
+338
+00:23:50,100 --> 00:23:52,020
+I actually have a question on interface,
+
+339
+00:23:53,280 --> 00:23:55,260
+like the previous one or two slides,
+
+340
+00:23:55,260 --> 00:23:58,200
+what happens if we don't call errors.persist.
+
+341
+00:23:59,610 --> 00:24:02,100
+If you do not, then,
+
+342
+00:24:02,100 --> 00:24:05,880
+the you were the second computation,
+
+343
+00:24:06,090 --> 00:24:11,900
+like this computation would re-compute errors from the beginning.
+
+344
+00:24:12,530 --> 00:24:15,020
+So if you run this workload,
+
+345
+00:24:15,850 --> 00:24:19,690
+the spark you know computation would re-compute errors,
+
+346
+00:24:19,690 --> 00:24:21,970
+you know from a the starting file.
+
+347
+00:24:23,030 --> 00:24:23,990
+Got it, thank you.
+
+348
+00:24:25,360 --> 00:24:28,510
+So I actually have a question about this point,
+
+349
+00:24:28,570 --> 00:24:32,290
+so for the partitions that we don't call persist on,
+
+350
+00:24:32,590 --> 00:24:34,450
+in the mapreduce case,
+
+351
+00:24:34,450 --> 00:24:37,210
+we basically stored them in intermediate files,
+
+352
+00:24:37,240 --> 00:24:42,610
+but we nonetheless stored them in a local file system,
+
+353
+00:24:42,640 --> 00:24:44,170
+let's say in the case of mapreduce,
+
+354
+00:24:44,350 --> 00:24:47,650
+do we actually store intermediate files here,
+
+355
+00:24:47,650 --> 00:24:50,050
+that we don't persist in some persistent storage
+
+356
+00:24:50,050 --> 00:24:54,070
+or we just keep the whole flow in memory, rather.
+
+357
+00:24:54,220 --> 00:24:56,770
+By default, the whole flow is in memory,
+
+358
+00:24:56,770 --> 00:24:59,920
+except you can provide to,
+
+359
+00:24:59,920 --> 00:25:04,870
+there's one exception that we'll talk about a little bit more in detail in a second, hopefully,
+
+360
+00:25:05,260 --> 00:25:10,640
+which is you see this persist here,
+
+361
+00:25:11,090 --> 00:25:14,480
+this persist here take another flag, I think it's called reliable,
+
+362
+00:25:15,570 --> 00:25:21,390
+and then, that a set is actually stored in hdfs, basically called this a checkpoint.
+
+363
+00:25:22,760 --> 00:25:23,570
+I see, thank you.
+
+364
+00:25:26,930 --> 00:25:28,940
+I have a quick question about the partitioning,
+
+365
+00:25:29,090 --> 00:25:34,670
+that with partitioning, the RDDs initially,
+
+366
+00:25:34,670 --> 00:25:43,460
+is it initially hdfs who partitions them for each worker to operate on is spark handling.
+
+367
+00:25:43,460 --> 00:25:47,780
+This lines are in hdfs,
+
+368
+00:25:47,780 --> 00:25:53,150
+you know the partition is defined basically by the files directly in hdfs,
+
+369
+00:25:53,750 --> 00:25:55,340
+you can repetition,
+
+370
+00:25:55,400 --> 00:25:59,390
+and you'll see in a second that actually it might be the stages to do so,
+
+371
+00:25:59,540 --> 00:26:01,640
+for example using this hash partition trick,
+
+372
+00:26:02,090 --> 00:26:06,530
+and you can define also your own partitioner,
+
+373
+00:26:06,530 --> 00:26:10,400
+there's a partitioner object or abstraction that you can supply.
+
+374
+00:26:12,880 --> 00:26:15,250
+So, it's already handled by hdfs,
+
+375
+00:26:15,250 --> 00:26:16,960
+but if you want to do it again to spark,
+
+376
+00:26:16,960 --> 00:26:17,740
+then you can.
+
+377
+00:26:19,180 --> 00:26:22,090
+Of course files are also created by this files,
+
+378
+00:26:22,090 --> 00:26:26,500
+presumably, you're created by logging system that sits on the side
+
+379
+00:26:26,500 --> 00:26:28,180
+and just produce different partitions
+
+380
+00:26:28,330 --> 00:26:30,340
+or you know you can reshuffle if you want to.
+
+381
+00:26:31,060 --> 00:26:31,960
+Makes sense, thank you.
+
+382
+00:26:35,280 --> 00:26:40,330
+Okay, so,
+
+383
+00:26:41,130 --> 00:26:41,970
+and so let me,
+
+384
+00:26:41,970 --> 00:26:44,160
+so that's the execution model,
+
+385
+00:26:44,160 --> 00:26:47,400
+and I want to talk a little bit about fault tolerance.
+
+386
+00:26:47,980 --> 00:26:51,280
+And so let's go back to this, this sort of fault tolerance
+
+387
+00:26:51,280 --> 00:26:53,650
+and the thing that we worry about fault tolerance is that,
+
+388
+00:26:53,710 --> 00:26:58,740
+maybe one of these workers you know might crash, right,
+
+389
+00:26:58,740 --> 00:27:02,070
+then the worker had is computing some partition
+
+390
+00:27:02,310 --> 00:27:04,170
+and so we need to re-execute that
+
+391
+00:27:04,680 --> 00:27:10,200
+and as basically this plans are the same as mapreduce, right,
+
+392
+00:27:10,440 --> 00:27:13,470
+were if a worker crashes,
+
+393
+00:27:13,620 --> 00:27:17,730
+we need to, in mapreduce and the map tasks need to be re-executed
+
+394
+00:27:17,730 --> 00:27:20,370
+and perhaps maybe reduce task has to be re-executed,
+
+395
+00:27:20,850 --> 00:27:23,100
+now in here, the task is slightly more complicated,
+
+396
+00:27:23,130 --> 00:27:25,170
+because they're basically like these stages
+
+397
+00:27:25,440 --> 00:27:28,740
+and so it means that if one worker fails,
+
+398
+00:27:28,740 --> 00:27:30,240
+we may have to re-compute the stage.
+
+399
+00:27:31,230 --> 00:27:33,960
+So, let's talk a little bit more about that,
+
+400
+00:27:34,200 --> 00:27:36,360
+that sort of perspective from fault tolerance, right,
+
+401
+00:27:36,360 --> 00:27:37,980
+that's what we're trying to achieve.
+
+402
+00:27:39,600 --> 00:27:45,360
+This is really different than like the fail tolerance that were you implemented in lab 2 or 3 or paxos
+
+403
+00:27:45,360 --> 00:27:48,000
+and stable storage and all that kind of stuff,
+
+404
+00:27:48,300 --> 00:27:53,190
+and here really what we're we're worried about is crash of a worker,
+
+405
+00:27:56,270 --> 00:28:02,350
+the worker loses its memory, lost memory,
+
+406
+00:28:04,040 --> 00:28:15,970
+and that means losses partition. And you know later part of the competition are probably dependent on that partition
+
+407
+00:28:16,150 --> 00:28:21,400
+and so we need to reread or re-compute this partition.
+
+408
+00:28:21,400 --> 00:28:24,130
+And so the solution is exactly like in mapreduce,
+
+409
+00:28:24,310 --> 00:28:28,420
+you know basically the scheduler notice at some point that doesn't get an answer,
+
+410
+00:28:29,360 --> 00:28:33,340
+and then reruns the stage for that partition.
+
+411
+00:28:44,200 --> 00:28:46,240
+And you know and what is the cool part,
+
+412
+00:28:46,270 --> 00:28:51,880
+like exactly as it in mapreduce all if we look at all these transformations that are sitting here in the API,
+
+413
+00:28:52,000 --> 00:28:54,100
+all these transformations are functional.
+
+414
+00:28:57,400 --> 00:28:59,290
+So they basically take one input,
+
+415
+00:28:59,380 --> 00:29:00,910
+they take an RDD as an input,
+
+416
+00:29:00,910 --> 00:29:02,770
+they produce another RDD as output,
+
+417
+00:29:03,040 --> 00:29:05,350
+and just completely deterministic.
+
+418
+00:29:05,840 --> 00:29:12,380
+And so like you know in mapreduce you know these maps and reduce for functional operations,
+
+419
+00:29:12,380 --> 00:29:18,140
+if you restart a stage where a sequence of transformations from the same input,
+
+420
+00:29:18,230 --> 00:29:20,000
+then you'll produce the same output
+
+421
+00:29:20,210 --> 00:29:24,550
+and so you recreate the same partition,
+
+422
+00:29:28,520 --> 00:29:30,320
+recreate partitions [].
+
+423
+00:29:34,020 --> 00:29:34,590
+Okay?
+
+424
+00:29:37,600 --> 00:29:39,970
+Sorry, is this why they are immutable?
+
+425
+00:29:40,300 --> 00:29:42,700
+There's also the reason, I think they're [] immutable, yes.
+
+426
+00:29:48,240 --> 00:29:52,050
+Okay, there's one tricky case though, which I want to talk about,
+
+427
+00:29:52,500 --> 00:29:56,730
+so this the fault tolerance is basically for the narrow case,
+
+428
+00:29:57,890 --> 00:30:01,160
+it's the same as sort of as we saw before in mapreduce,
+
+429
+00:30:01,160 --> 00:30:05,270
+but you know the tricky case is actually the wide dependencies.
+
+430
+00:30:12,670 --> 00:30:17,020
+So let's say you know we have you know some transformations,
+
+431
+00:30:19,850 --> 00:30:24,590
+and, one of these transformations is dependent on
+
+432
+00:30:24,590 --> 00:30:28,130
+a you know this is like sort of here is one worker, here is another worker,
+
+433
+00:30:28,130 --> 00:30:29,090
+and another worker.
+
+434
+00:30:31,240 --> 00:30:42,380
+And one of these stages is actually dependent on a number of parent partitions,
+
+435
+00:30:42,890 --> 00:30:45,530
+so let's say whatever maybe this is a join
+
+436
+00:30:45,530 --> 00:30:47,480
+or we'll see later other operations,
+
+437
+00:30:48,170 --> 00:30:51,920
+where you know we're actually collecting information for lots of partitions,
+
+438
+00:30:52,130 --> 00:30:56,330
+and you know create a RDD from that,
+
+439
+00:30:56,540 --> 00:31:00,620
+from that RDD that might be used again by a map or whatever keep going
+
+440
+00:31:01,250 --> 00:31:06,080
+and so now let's say you know we're we're worker and we crash here,
+
+441
+00:31:07,590 --> 00:31:10,530
+then we need to reconstruct this RDD,
+
+442
+00:31:15,640 --> 00:31:17,500
+and you know we sort of followed,
+
+443
+00:31:17,500 --> 00:31:21,160
+that means that we have to, we could also recompute this RDD,
+
+444
+00:31:21,520 --> 00:31:23,830
+to recompute this RDD on this worker,
+
+445
+00:31:23,890 --> 00:31:27,130
+that means we also need the partitions on the other workers.
+
+446
+00:31:27,820 --> 00:31:39,970
+And, so, the and reconstruction the execution of a competition on a particular worker, a particular partition
+
+447
+00:31:40,000 --> 00:31:45,610
+may actually result that actually these ones also need to be recomputed.
+
+448
+00:31:47,290 --> 00:31:49,780
+Of course, you can do this partially in parallel,
+
+449
+00:31:49,780 --> 00:31:52,600
+you can just ask you know please, you know start to repeat this guy,
+
+450
+00:31:52,600 --> 00:31:53,590
+we can see that guy,
+
+451
+00:31:53,890 --> 00:31:58,270
+and you know produce then the final RDD again,
+
+452
+00:31:58,270 --> 00:32:07,360
+but you know certainly you know failure, one worker going to result in the recomputation of many many partitions,
+
+453
+00:32:08,960 --> 00:32:13,580
+and that sort of slightly, it could be slightly costly,
+
+454
+00:32:14,060 --> 00:32:17,930
+and so the solution is that as a programmer,
+
+455
+00:32:18,140 --> 00:32:26,690
+you can say you can actually checkpoint or persist RDDs on stable storage.
+
+456
+00:32:27,520 --> 00:32:29,020
+And so you might decide,
+
+457
+00:32:29,020 --> 00:32:32,710
+for example, this is an RDD that,
+
+458
+00:32:33,460 --> 00:32:36,400
+then you don't want to recompute in the case of a failure,
+
+459
+00:32:36,400 --> 00:32:39,310
+because it requires you know recomputing all the different partitions,
+
+460
+00:32:39,520 --> 00:32:42,070
+you may want to checkpoint this RDD.
+
+461
+00:32:48,960 --> 00:32:50,610
+And then we know this stage,
+
+462
+00:32:50,610 --> 00:32:54,390
+when actually when this you know computation needs to be reexecuted,
+
+463
+00:32:54,600 --> 00:32:59,640
+gonna actually read you know the results of the partitions from the checkpoint
+
+464
+00:32:59,760 --> 00:33:03,090
+instead of actually having to recompute them from scratch.
+
+465
+00:33:03,450 --> 00:33:06,810
+And so this is why spark supports checkpoints
+
+466
+00:33:06,810 --> 00:33:13,720
+and that's sort of their fault tolerance story for wide dependencies.
+
+467
+00:33:17,800 --> 00:33:18,850
+Any questions about this?
+
+468
+00:33:21,000 --> 00:33:22,740
+I I had one question.
+
+469
+00:33:25,290 --> 00:33:31,520
+So there was, so you persist right just in general,
+
+470
+00:33:31,520 --> 00:33:34,580
+but they, they also mentioned a reliable flag.
+
+471
+00:33:34,700 --> 00:33:35,180
+Hmm.
+
+472
+00:33:35,510 --> 00:33:36,680
+So I was wondering,
+
+473
+00:33:37,320 --> 00:33:41,040
+like what's the difference between just persisting and using a reliable flag.
+
+474
+00:33:41,770 --> 00:33:44,500
+Persist just means you're gonna keep that RDD in memory
+
+475
+00:33:44,710 --> 00:33:46,090
+and you're not going to throw it away,
+
+476
+00:33:47,200 --> 00:33:51,340
+so you can reuse it in later competitions in and use in memory,
+
+477
+00:33:51,730 --> 00:33:55,090
+the checkpoint or reliability flag basically means,
+
+478
+00:33:56,210 --> 00:34:00,920
+you actually write a copy of the whole RDD to hdfs.
+
+479
+00:34:05,560 --> 00:34:08,410
+And hdfs is a persistent or a stable storage file system.
+
+480
+00:34:12,170 --> 00:34:15,860
+Is there a way to tell spark to unpersist something,
+
+481
+00:34:16,130 --> 00:34:19,490
+because otherwise like for example if you persist in RDD
+
+482
+00:34:19,760 --> 00:34:21,920
+and you do a lot of computations,
+
+483
+00:34:22,400 --> 00:34:25,010
+but like those later computations number use the RDD,
+
+484
+00:34:26,080 --> 00:34:29,050
+you might just have it sticking around in memory forever.
+
+485
+00:34:29,780 --> 00:34:31,070
+Yeah, oh yeah, so we,
+
+486
+00:34:31,070 --> 00:34:37,190
+I I presume you can or there's a general strategy that spark uses,
+
+487
+00:34:37,190 --> 00:34:38,630
+they talk a little bit about this
+
+488
+00:34:38,900 --> 00:34:41,810
+is that they have there's really no space anymore,
+
+489
+00:34:42,020 --> 00:34:48,200
+they might spill some RDDs to hdfs or remove them,
+
+490
+00:34:48,230 --> 00:34:51,650
+the the paper slightly vague on exactly you know what their plan for that is.
+
+491
+00:34:54,010 --> 00:34:54,520
+Thank you.
+
+492
+00:34:55,000 --> 00:35:02,350
+Of course, when the competition ends and a user you logout, or you stop your driver,
+
+493
+00:35:02,350 --> 00:35:05,770
+then I think you know those RDDs definitely gone from memory.
+
+494
+00:35:11,060 --> 00:35:11,660
+Okay?
+
+495
+00:35:13,940 --> 00:35:17,990
+Okay, so that is almost you know the story of spark,
+
+496
+00:35:18,020 --> 00:35:22,970
+the you know we've seen what a RDD is,
+
+497
+00:35:23,000 --> 00:35:26,120
+we've seen how the execution works
+
+498
+00:35:26,360 --> 00:35:28,910
+and we've seen how the fault tolerance plan works,
+
+499
+00:35:29,210 --> 00:35:32,900
+the thing that I want to talk about is another example
+
+500
+00:35:32,960 --> 00:35:36,680
+to really show off where spark shines
+
+501
+00:35:36,890 --> 00:35:38,780
+and that is an iterative example.
+
+502
+00:35:40,240 --> 00:35:42,310
+So in competition that has an iterative structure,
+
+503
+00:35:46,060 --> 00:35:48,400
+and the particular one I want to talk about the PageRank.
+
+504
+00:35:52,900 --> 00:35:57,820
+I assume most of you are familiar with page rank in some form,
+
+505
+00:35:58,060 --> 00:36:05,230
+basically it's a plan to algorithm to give weight or important to web pages,
+
+506
+00:36:05,620 --> 00:36:10,210
+and this dependent on the number of links that point to a particular web page,
+
+507
+00:36:10,210 --> 00:36:15,660
+so for example if you have a web page U1, main points to itself,
+
+508
+00:36:16,110 --> 00:36:18,780
+you have maybe a web page U3,
+
+509
+00:36:18,990 --> 00:36:21,690
+so I'll use an example and web page U2,
+
+510
+00:36:22,050 --> 00:36:26,580
+U2 has a link to itself and to U3
+
+511
+00:36:26,820 --> 00:36:29,460
+and maybe you know U3 has a link to U1.
+
+512
+00:36:30,310 --> 00:36:35,050
+And basically page rank is an algorithm based on these connectivities,
+
+513
+00:36:35,230 --> 00:36:38,170
+computers you know the importance of a web page
+
+514
+00:36:38,380 --> 00:36:43,510
+and page rank for sort of the early one of the algorithms,
+
+515
+00:36:43,510 --> 00:36:46,270
+that really drove the Google search machine,
+
+516
+00:36:46,330 --> 00:36:49,870
+in the sense that if you had a search result,
+
+517
+00:36:49,870 --> 00:36:51,520
+the way you rank search result is that,
+
+518
+00:36:51,520 --> 00:36:55,150
+if search result appears on a more important web page,
+
+519
+00:36:55,150 --> 00:36:58,150
+you know that results gets promoted to higher in the list,
+
+520
+00:36:58,570 --> 00:37:01,810
+and that was one of the reasons early days,
+
+521
+00:37:01,810 --> 00:37:05,560
+Google search machine actually produce better search results,
+
+522
+00:37:05,560 --> 00:37:09,130
+were the more important information actually order more important webpages were on top.
+
+523
+00:37:11,150 --> 00:37:22,730
+And so the paper talks about shows off the implementation of page rank in spark.
+
+524
+00:37:26,780 --> 00:37:34,340
+So here's the implementation of the spark implementation of the page rank
+
+525
+00:37:34,430 --> 00:37:38,390
+and as before you know this is just a description,
+
+526
+00:37:38,390 --> 00:37:41,120
+so we look at the individual lines,
+
+527
+00:37:42,200 --> 00:37:47,600
+you know, these are just the recipe to actually how do compute page rank
+
+528
+00:37:47,810 --> 00:37:50,270
+and only when like you know in this particular case,
+
+529
+00:37:50,270 --> 00:37:53,250
+if you do say ranks collect at the very end,
+
+530
+00:37:53,730 --> 00:37:59,040
+and then actually competition would run on you know the cluster of machines
+
+531
+00:37:59,310 --> 00:38:03,480
+and using sort of execution pattern that we've seen so far.
+
+532
+00:38:04,320 --> 00:38:08,880
+And so I want to walk through this example a little bit more detail,
+
+533
+00:38:09,090 --> 00:38:12,240
+to get a sense you know what, to get a better sense,
+
+534
+00:38:12,240 --> 00:38:14,700
+why spark are shines in the iterative case.
+
+535
+00:38:15,530 --> 00:38:20,150
+So, there are two RDDs here,
+
+536
+00:38:20,150 --> 00:38:23,360
+I'm also going to talk about some optimizations that are cool in spark,
+
+537
+00:38:23,390 --> 00:38:25,730
+one of these links RDDs
+
+538
+00:38:25,730 --> 00:38:30,500
+and links is basically represents the connection of the graphs
+
+539
+00:38:30,500 --> 00:38:33,830
+and so precisely it probably has a line,
+
+540
+00:38:33,860 --> 00:38:38,300
+I'm going to write it like that, as a line per url,
+
+541
+00:38:38,300 --> 00:38:42,080
+so here U1, it has two outgoing links,
+
+542
+00:38:42,080 --> 00:38:44,540
+U1 U3,
+
+543
+00:38:51,620 --> 00:38:53,210
+actually, I missed one link here.
+
+544
+00:38:54,240 --> 00:39:01,930
+And then, you know the U2, entry for U2 which has now going to U2 and U3,
+
+545
+00:39:04,660 --> 00:39:10,040
+and there is an entry, you know U3 going to U1.
+
+546
+00:39:13,030 --> 00:39:16,630
+So this is basically a description of, you will the world wide web,
+
+547
+00:39:17,080 --> 00:39:20,920
+and of course you know my tiny little example, I have three web pages,
+
+548
+00:39:21,130 --> 00:39:24,370
+but if you know were running this at the scale of Google,
+
+549
+00:39:24,370 --> 00:39:25,990
+you would have a billion web pages, right,
+
+550
+00:39:26,410 --> 00:39:31,900
+and so this file is gigantic and it's partitioned in partitions.
+
+551
+00:39:33,340 --> 00:39:34,720
+So that's links,
+
+552
+00:39:35,240 --> 00:39:39,950
+and then ranks is a similar file
+
+553
+00:39:39,950 --> 00:39:42,620
+that contains the current ranks for these web pages
+
+554
+00:39:42,920 --> 00:39:47,910
+and so you can think about these as a U1, you know comma you know it's rank,
+
+555
+00:39:48,150 --> 00:39:51,990
+and let's assume the ranks initialized 1.0
+
+556
+00:39:52,320 --> 00:39:54,840
+and then you know here's 1.0,
+
+557
+00:39:55,510 --> 00:39:59,800
+then U2 you know 1.0,
+
+558
+00:40:00,420 --> 00:40:03,510
+U3 1.0.
+
+559
+00:40:04,970 --> 00:40:07,730
+And we see actually that the links,
+
+560
+00:40:08,060 --> 00:40:11,240
+the links are these is actually persisted in memory,
+
+561
+00:40:11,300 --> 00:40:16,100
+that presumably in the same way as the error file that we saw before, the error RDD.
+
+562
+00:40:17,840 --> 00:40:22,550
+And then ranks, it's initialized to something
+
+563
+00:40:22,550 --> 00:40:32,600
+and then basically there's sort of description of number of iterations to produce new ranks RDD.
+
+564
+00:40:33,490 --> 00:40:36,700
+You can see a little bit how this actually plays out,
+
+565
+00:40:37,240 --> 00:40:39,190
+and one of the things we notice is
+
+566
+00:40:39,190 --> 00:40:42,070
+that links gets reused in every iteration,
+
+567
+00:40:43,190 --> 00:40:46,940
+and length actually gets joined with ranks,
+
+568
+00:40:47,030 --> 00:40:48,740
+what means what does it mean,
+
+569
+00:40:48,740 --> 00:40:50,630
+to actually do this join up this this,
+
+570
+00:40:50,810 --> 00:40:54,590
+this operation, this operation basically creates an RDD
+
+571
+00:40:55,010 --> 00:40:56,960
+and we wonder how does the RDD look like,
+
+572
+00:40:56,960 --> 00:40:59,360
+well that RDD is going to look like U1,
+
+573
+00:40:59,660 --> 00:41:05,260
+you know, and then the joining of the ranks in the, and the link file,
+
+574
+00:41:05,260 --> 00:41:08,740
+so it's gonna be U1 U1 U2,
+
+575
+00:41:08,740 --> 00:41:13,700
+because those are U3 outgoing links plus the rank for U1,
+
+576
+00:41:13,730 --> 00:41:17,150
+which I'm going to go write as R1.
+
+577
+00:41:17,880 --> 00:41:20,010
+And that's sort of the RDD that's being produced here
+
+578
+00:41:20,070 --> 00:41:22,410
+and so same thing for you know whatever U2,
+
+579
+00:41:22,410 --> 00:41:31,530
+and the one for U3 is whatever U1 and you know R3 rank for 3,
+
+580
+00:41:32,540 --> 00:41:37,130
+basically merges these two, as literally joins the two files based on key.
+
+581
+00:41:38,120 --> 00:41:38,750
+Okay?
+
+582
+00:41:39,860 --> 00:41:43,460
+And then you know it runs a computation of flatMap on this
+
+583
+00:41:43,460 --> 00:41:47,540
+and that flatMap itself internally has a map over links,
+
+584
+00:41:47,750 --> 00:41:50,030
+so basically it's going to run over,
+
+585
+00:41:50,060 --> 00:41:52,490
+like the screen is going to run over these lists
+
+586
+00:41:52,820 --> 00:41:59,180
+and basically partition or divide up the rank you know to the outgoing urls.
+
+587
+00:41:59,960 --> 00:42:04,820
+And so it will you know create triples of the form,
+
+588
+00:42:05,090 --> 00:42:07,550
+let me write this in green then,
+
+589
+00:42:07,580 --> 00:42:12,980
+U1 R1 divided by 2,
+
+590
+00:42:15,120 --> 00:42:20,080
+and U1 or U3 over the outgoing links,
+
+591
+00:42:20,080 --> 00:42:22,360
+so give 1 to U1, 1 to U3,
+
+592
+00:42:22,360 --> 00:42:27,310
+here's U3, R1, divided over 2, etc,
+
+593
+00:42:27,310 --> 00:42:28,990
+it creates triples of this kind of form,
+
+594
+00:42:28,990 --> 00:42:33,880
+so basically it computers the way divides that rank across the outgoing edges
+
+595
+00:42:34,030 --> 00:42:39,850
+and gives you know the values of these ranks you know to the outgoing edges,
+
+596
+00:42:39,850 --> 00:42:44,770
+so the outgoing edges, so we got a big RDD that has you know this form,
+
+597
+00:42:46,600 --> 00:42:50,890
+that's produced basically, that is the contributions RDD.
+
+598
+00:42:53,130 --> 00:42:55,890
+Then there's a final step in the,
+
+599
+00:42:55,920 --> 00:42:57,960
+I think it first has to be reduced by key,
+
+600
+00:42:58,200 --> 00:43:02,190
+so basically grabs all the U1's you know together and then sums them,
+
+601
+00:43:02,190 --> 00:43:03,990
+so basically this will result is that,
+
+602
+00:43:03,990 --> 00:43:08,820
+you know all the weights or the fractional weights,
+
+603
+00:43:08,820 --> 00:43:11,610
+you know that U1 is going to receive are being added up.
+
+604
+00:43:12,030 --> 00:43:16,800
+So, U1 of course is going to receive weight from itself,
+
+605
+00:43:16,920 --> 00:43:19,650
+this one is going to relate from U3,
+
+606
+00:43:20,380 --> 00:43:22,000
+and so you will sum up,
+
+607
+00:43:22,000 --> 00:43:25,610
+there's going to be R1 divided by 2
+
+608
+00:43:25,790 --> 00:43:28,160
+and R3 divided by 1,
+
+609
+00:43:29,480 --> 00:43:32,720
+and that was basically the sum, that's been created.
+
+610
+00:43:33,510 --> 00:43:35,670
+And so that gives us a list of sums
+
+611
+00:43:35,670 --> 00:43:37,050
+and then that's when they are added up
+
+612
+00:43:37,560 --> 00:43:39,240
+and computed into a final value.
+
+613
+00:43:43,000 --> 00:43:45,340
+It produces the new ranks RDD,
+
+614
+00:43:45,340 --> 00:43:50,500
+which has the same shape as the one that we saw before, namely this shape,
+
+615
+00:43:51,130 --> 00:43:54,070
+for every web page, there is a number.
+
+616
+00:43:57,670 --> 00:43:58,390
+Does this makes sense?
+
+617
+00:44:00,840 --> 00:44:05,070
+And so, it's interesting to know that sort of description,
+
+618
+00:44:05,070 --> 00:44:07,170
+so first of all, you can see that,
+
+619
+00:44:07,170 --> 00:44:10,020
+actually the description of page rank quite precise
+
+620
+00:44:10,440 --> 00:44:11,940
+and there's one examples,
+
+621
+00:44:11,940 --> 00:44:15,450
+this is like if you had to run this in a mapreduce style,
+
+622
+00:44:15,450 --> 00:44:19,320
+then that would mean that every iteration of this loop,
+
+623
+00:44:19,320 --> 00:44:20,310
+at the end of the iteration,
+
+624
+00:44:20,310 --> 00:44:22,680
+you would store the results in the file system,
+
+625
+00:44:23,010 --> 00:44:28,770
+and then you reread you know the iteration from the result for the next iteration
+
+626
+00:44:28,830 --> 00:44:37,410
+and in in this spark system, uses every iteration runs straight out of memory, leaves results in memory,
+
+627
+00:44:37,410 --> 00:44:39,390
+so that the next iteration could pick it up right there,
+
+628
+00:44:40,050 --> 00:44:45,060
+and furthermore you know these links file is shared among all the iterations.
+
+629
+00:44:46,380 --> 00:44:48,240
+Okay, so to get a little bit more sense,
+
+630
+00:44:48,240 --> 00:44:51,480
+like you know why, there's also a cool,
+
+631
+00:44:52,120 --> 00:44:57,750
+the way to look at is to actually look at the lineage graph for this particular competition.
+
+632
+00:44:59,770 --> 00:45:02,620
+So let's look at the lineage graph for,
+
+633
+00:45:06,440 --> 00:45:14,840
+so here's the lineage graph for the for page rank.
+
+634
+00:45:16,380 --> 00:45:19,080
+And so a couple things I want to point out,
+
+635
+00:45:19,380 --> 00:45:21,570
+first of all, so the lineage graphs like dynamic,
+
+636
+00:45:21,570 --> 00:45:23,010
+almost it looks,
+
+637
+00:45:27,010 --> 00:45:30,500
+you know just keep growing you know with the number of iterations,
+
+638
+00:45:30,950 --> 00:45:36,140
+and so as the schedule you know basically computes does new stages,
+
+639
+00:45:36,140 --> 00:45:38,510
+then, it keeps going,
+
+640
+00:45:38,510 --> 00:45:41,030
+and you know we can see what the stages are gonna be, correct,
+
+641
+00:45:41,030 --> 00:45:48,930
+because, you know sort of, you know every iteration of a loop is one stage
+
+642
+00:45:48,930 --> 00:45:55,890
+and will basically append you know parts of transformations to the lineage graph.
+
+643
+00:45:56,500 --> 00:45:59,890
+So we see here's the input file, here's links
+
+644
+00:46:00,220 --> 00:46:02,860
+and as we saw the links actually created ones,
+
+645
+00:46:02,920 --> 00:46:04,450
+then persisted in memory,
+
+646
+00:46:04,480 --> 00:46:06,430
+we're not on this, persist in memory
+
+647
+00:46:06,610 --> 00:46:08,500
+and is being reused many many times,
+
+648
+00:46:08,500 --> 00:46:12,250
+like every loop iteration basically the ranks being reused
+
+649
+00:46:12,550 --> 00:46:14,650
+and so again, we're compared to mapreduce,
+
+650
+00:46:14,650 --> 00:46:16,720
+if you have to write this to mapreduce style,
+
+651
+00:46:16,750 --> 00:46:17,920
+you don't get that we use
+
+652
+00:46:17,950 --> 00:46:20,950
+and so that's of course going to tremendously performance,
+
+653
+00:46:20,950 --> 00:46:23,470
+because links you know as we said before,
+
+654
+00:46:23,560 --> 00:46:25,510
+it's like just gigantic file,
+
+655
+00:46:25,510 --> 00:46:30,250
+that basically corresponds to one line for every web page in the in the universe.
+
+656
+00:46:32,100 --> 00:46:35,700
+Another interesting thing to observe here is that
+
+657
+00:46:35,850 --> 00:46:37,590
+we see a wide dependencies here, right,
+
+658
+00:46:37,590 --> 00:46:38,910
+this is a wide dependency,
+
+659
+00:46:41,470 --> 00:46:43,180
+could be the wide dependency,
+
+660
+00:46:43,270 --> 00:46:45,610
+will be a little bit more sophisticated about this in a second,
+
+661
+00:46:46,260 --> 00:46:52,560
+because basically these contributions you know when we contribute to the intermediate result,
+
+662
+00:46:52,560 --> 00:46:55,260
+it is a join across ranks and links,
+
+663
+00:46:55,800 --> 00:47:01,050
+and so it needs the partitions from links,
+
+664
+00:47:01,110 --> 00:47:10,920
+and it needs partitions from ranks to basically to compute partition for contribute, contrib RDD, sorry.
+
+665
+00:47:11,760 --> 00:47:15,390
+So that might require you know from from a network communication.
+
+666
+00:47:15,990 --> 00:47:20,940
+But it turns out they have sort of a clever optimization,
+
+667
+00:47:23,840 --> 00:47:28,010
+and this is in response to an earlier question about partitioning
+
+668
+00:47:28,220 --> 00:47:36,290
+the you can specify you want to partition and RDD, using a hash partition.
+
+669
+00:47:38,960 --> 00:47:41,780
+And what does that mean is that,
+
+670
+00:47:41,780 --> 00:47:48,290
+the links and ranks file, these two RDDs are going to be partitioned in the same way
+
+671
+00:47:48,290 --> 00:47:51,440
+and they're actually partition by key or by the hash key.
+
+672
+00:47:51,470 --> 00:47:54,680
+So we look back at our previous picture,
+
+673
+00:47:55,210 --> 00:48:01,300
+the keys for ranks, you know, are U1 U2 U3,
+
+674
+00:48:01,570 --> 00:48:06,750
+the keys for links.
+
+675
+00:48:06,750 --> 00:48:09,300
+Okay, so the key for ranks U1 U2 U3,
+
+676
+00:48:09,450 --> 00:48:13,530
+keys for links are also U1 U2 U3.
+
+677
+00:48:14,140 --> 00:48:16,960
+And basically, the client for optimization,
+
+678
+00:48:16,960 --> 00:48:20,140
+this is a standard optimization from the database literature,
+
+679
+00:48:20,320 --> 00:48:23,560
+is that if you partition links and ranks by key,
+
+680
+00:48:23,650 --> 00:48:26,860
+then you know this one is going to have U1 on one machine,
+
+681
+00:48:28,310 --> 00:48:30,260
+now, maybe this is U2 on one machine,
+
+682
+00:48:32,680 --> 00:48:34,870
+and ranks just going to have the same thing,
+
+683
+00:48:34,870 --> 00:48:36,730
+just gonna have U1 on one machine
+
+684
+00:48:36,730 --> 00:48:39,340
+and in fact you know it's going to have U1 on the same machine,
+
+685
+00:48:39,700 --> 00:48:43,750
+as links one saying for U2 and U3.
+
+686
+00:48:45,710 --> 00:48:51,050
+So even though this join is [perceptually] wide dependency,
+
+687
+00:48:51,110 --> 00:48:53,750
+it can be executed like a narrow dependency,
+
+688
+00:48:53,750 --> 00:48:57,140
+because basically to compute you know the join of these two,
+
+689
+00:48:57,290 --> 00:49:02,450
+for the U1 for the first partition, for P1,
+
+690
+00:49:02,600 --> 00:49:05,060
+you only have to look at the partition P1 of links
+
+691
+00:49:05,060 --> 00:49:07,280
+and P1 P1 of ranks,
+
+692
+00:49:07,490 --> 00:49:12,000
+because you know the keys are hashed in the same way to the same machine.
+
+693
+00:49:12,640 --> 00:49:18,070
+And so the scheduler or the programmer can actually specify these hash partitions,
+
+694
+00:49:18,370 --> 00:49:22,960
+scheduler sees, ha, you know the join actually uses hash partitions,
+
+695
+00:49:22,960 --> 00:49:25,150
+the hash partitions that are the same,
+
+696
+00:49:25,300 --> 00:49:28,720
+and therefore actually don't have to do this wide dependency,
+
+697
+00:49:28,720 --> 00:49:31,720
+I don't have to do a complete barrier as mapreduce,
+
+698
+00:49:31,840 --> 00:49:34,150
+but I can just treat this as an narrow dependency.
+
+699
+00:49:35,120 --> 00:49:37,760
+So, that's pretty cool,
+
+700
+00:49:38,540 --> 00:49:41,000
+then you know again,
+
+701
+00:49:41,000 --> 00:49:43,040
+if a machine fails, right,
+
+702
+00:49:43,040 --> 00:49:45,080
+we talked a little bit about it earlier,
+
+703
+00:49:45,110 --> 00:49:47,540
+that might be a painful,
+
+704
+00:49:47,540 --> 00:49:51,590
+because you may have to reexecute many loops or one iterations
+
+705
+00:49:51,920 --> 00:49:55,100
+and so, you know if you would probably write this for real,
+
+706
+00:49:55,100 --> 00:49:57,560
+then, the programmer would probably say,
+
+707
+00:49:57,560 --> 00:50:03,630
+like maybe every you know 10 iterations you know basically checkpoint,
+
+708
+00:50:11,260 --> 00:50:15,880
+so that you don't have to recompute computation all the way from from the beginning.
+
+709
+00:50:16,540 --> 00:50:20,290
+Oh, so we don't actually recompute links or anything each time, right,
+
+710
+00:50:20,500 --> 00:50:21,940
+like we don't persist, sorry.
+
+711
+00:50:22,870 --> 00:50:24,340
+We don't persist, no, not at all,
+
+712
+00:50:25,030 --> 00:50:27,700
+the only thing that was persist with only one was links, right,
+
+713
+00:50:27,700 --> 00:50:30,310
+this is the only thing that was kind of persist call.
+
+714
+00:50:31,100 --> 00:50:32,210
+Oh, we do persistent.
+
+715
+00:50:32,600 --> 00:50:33,470
+Links, we do.
+
+716
+00:50:33,800 --> 00:50:34,280
+Okay.
+
+717
+00:50:35,760 --> 00:50:37,470
+But not the intermediate RDDs,
+
+718
+00:50:38,470 --> 00:50:40,270
+because they're basically new RDD every time,
+
+719
+00:50:40,270 --> 00:50:42,100
+like ranks one is a new RDD,
+
+720
+00:50:42,100 --> 00:50:44,050
+ranks 2 is a new RDD.
+
+721
+00:50:45,990 --> 00:50:51,210
+But you may want to persist them, you know occasionally and stored in hdfs,
+
+722
+00:50:51,210 --> 00:50:57,510
+so that if you have to a failure, you don't have to go back to iteration loop, iteration zero to compute everything.
+
+723
+00:51:01,370 --> 00:51:02,420
+Okay, does this make sense?
+
+724
+00:51:03,350 --> 00:51:07,790
+Oh, sorry, the different contribs, can they be computed in parallel?
+
+725
+00:51:08,490 --> 00:51:10,170
+On different partitions, yes.
+
+726
+00:51:11,500 --> 00:51:15,610
+Because there's like this line that goes vertically down.
+
+727
+00:51:15,700 --> 00:51:20,130
+That vertically down, it's pipelines, right,
+
+728
+00:51:20,130 --> 00:51:22,170
+there's just two types of parallelism,
+
+729
+00:51:22,170 --> 00:51:23,490
+there stage parallelism,
+
+730
+00:51:23,550 --> 00:51:26,070
+and there is sort of parallelism between different partitions,
+
+731
+00:51:26,340 --> 00:51:29,400
+and we could think about this thing, you know this whole thing,
+
+732
+00:51:29,640 --> 00:51:32,850
+like running many many times on different partitions.
+
+733
+00:51:45,300 --> 00:51:50,310
+So in this case, the collect at the very end will be the only place where we have a wide.
+
+734
+00:51:50,520 --> 00:51:52,380
+Yeah, exactly exactly,
+
+735
+00:51:52,500 --> 00:51:54,180
+the collect is the only one that's gonna,
+
+736
+00:51:55,080 --> 00:51:57,450
+yeah whatever we're we have more partitions correct,
+
+737
+00:51:58,420 --> 00:51:59,920
+I making a mess of this picture,
+
+738
+00:51:59,920 --> 00:52:03,010
+but that is gonna have to get it from everyone.
+
+739
+00:52:09,120 --> 00:52:12,600
+Okay, I hope that everyone sees this is actually pretty cool, right.
+
+740
+00:52:13,300 --> 00:52:16,030
+You know just by expressing these computations
+
+741
+00:52:16,030 --> 00:52:18,940
+and sort of lineage graph or data flow computation,
+
+742
+00:52:19,120 --> 00:52:23,260
+the scheduler has a bit of room for organizations like this,
+
+743
+00:52:23,260 --> 00:52:26,200
+it's exploding hash partitions,
+
+744
+00:52:26,500 --> 00:52:28,660
+the you know we get a lot of parallelism,
+
+745
+00:52:28,690 --> 00:52:33,610
+we can also reuse, you know we can keep the results of one RDD in memory,
+
+746
+00:52:33,610 --> 00:52:35,530
+so that we can reuse it for the next iteration
+
+747
+00:52:35,920 --> 00:52:37,480
+and you can sort of see,
+
+748
+00:52:37,480 --> 00:52:39,010
+that you know these techniques combined
+
+749
+00:52:39,010 --> 00:52:42,040
+you know going to give you significant performance optimization,
+
+750
+00:52:44,640 --> 00:52:49,800
+and allows you to express more powerful or more interesting computations.
+
+751
+00:52:52,420 --> 00:52:54,790
+So maybe with that I was like summarize this lecture.
+
+752
+00:53:02,100 --> 00:53:05,820
+So a couple things,
+
+753
+00:53:06,760 --> 00:53:13,230
+you know so RDDs are made by functional transformations,
+
+754
+00:53:19,110 --> 00:53:22,650
+they're group together in sort of lineage graph,
+
+755
+00:53:23,510 --> 00:53:25,580
+you can think about as a data flow graph,
+
+756
+00:53:26,140 --> 00:53:30,910
+and this gives the, this allows reuse,
+
+757
+00:53:32,890 --> 00:53:36,250
+it also allows some clever organizations by the scheduler.
+
+758
+00:53:41,600 --> 00:53:44,840
+And basically it was also more extra,
+
+759
+00:53:44,840 --> 00:53:55,130
+it's more expressiveness than you know mapreduce by itself,
+
+760
+00:53:58,290 --> 00:54:02,010
+and which results basically in good performance,
+
+761
+00:54:02,010 --> 00:54:03,990
+because a lot of the data stays in memory.
+
+762
+00:54:14,790 --> 00:54:17,250
+So if you actually if you're excited about this,
+
+763
+00:54:17,250 --> 00:54:18,030
+you can try it out,
+
+764
+00:54:18,120 --> 00:54:22,380
+you can download you know spark play around and write some programs,
+
+765
+00:54:22,380 --> 00:54:24,750
+or you know go to databricks.com
+
+766
+00:54:24,750 --> 00:54:25,890
+and you're creating accounts
+
+767
+00:54:25,890 --> 00:54:30,000
+and then you can run spark computations on their on their clusters.
+
+768
+00:54:31,030 --> 00:54:33,490
+So we're excited about this and want to try it out,
+
+769
+00:54:33,490 --> 00:54:35,050
+you know it's pretty easy to do so,
+
+770
+00:54:35,470 --> 00:54:37,870
+unlike FaRM, you can just like not play with,
+
+771
+00:54:38,200 --> 00:54:41,170
+but this actually you can actually go out and try out.
+
+772
+00:54:41,650 --> 00:54:44,530
+Okay, with that, I want to stop for today
+
+773
+00:54:44,530 --> 00:54:49,420
+and and the people that want to hang around and ask more questions,
+
+774
+00:54:49,420 --> 00:54:50,890
+please feel free to do so,
+
+775
+00:54:51,190 --> 00:54:53,830
+the only thing I want to remind people of is that
+
+776
+00:54:53,860 --> 00:54:59,050
+you know the deadline of for 4b is a little bit away,
+
+777
+00:54:59,050 --> 00:55:02,140
+but I just want to remind people the 4b is pretty tricky,
+
+778
+00:55:02,170 --> 00:55:04,240
+requires a bit of design,
+
+779
+00:55:04,240 --> 00:55:06,040
+so, don't don't start too late.
+
+780
+00:55:06,660 --> 00:55:08,940
+And with that I'll see you on Tuesday.
+
+781
+00:55:14,450 --> 00:55:17,150
+And again questions, I'm happy to answer them.
+
+782
+00:55:18,560 --> 00:55:19,160
+Thank you.
+
+783
+00:55:21,010 --> 00:55:24,070
+I had a question about the checkpoints,
+
+784
+00:55:24,220 --> 00:55:27,940
+I think if they mention automatic checkpoints,
+
+785
+00:55:28,300 --> 00:55:32,230
+using data about how long each computation took.
+
+786
+00:55:34,320 --> 00:55:36,750
+I wasn't really sure what they mean by this,
+
+787
+00:55:36,750 --> 00:55:40,620
+but what, what are they going to be optimizing for.
+
+788
+00:55:41,300 --> 00:55:43,280
+I'm gonna build a whole checkpoints is correct,
+
+789
+00:55:43,280 --> 00:55:44,840
+there's an optimization between,
+
+790
+00:55:45,020 --> 00:55:47,600
+you know taking checkpoint is expensive,
+
+791
+00:55:48,220 --> 00:55:50,680
+and so you know takes time,
+
+792
+00:55:51,100 --> 00:55:54,670
+in but in reexecution, if there's a machine failure,
+
+793
+00:55:54,700 --> 00:55:55,780
+also takes a lot of time.
+
+794
+00:55:56,520 --> 00:55:59,160
+And so for example if you take never checkpoint,
+
+795
+00:55:59,160 --> 00:56:01,920
+then you basically have to reexecute the competition from the beginning, right,
+
+796
+00:56:02,540 --> 00:56:04,520
+but if you take periodically checkpoints,
+
+797
+00:56:04,520 --> 00:56:08,840
+you know you don't have to repeat you know the computation that you did before the checkpoint,
+
+798
+00:56:08,840 --> 00:56:10,550
+but checking the checkpoint takes time.
+
+799
+00:56:11,640 --> 00:56:13,680
+So if you take very frequent checkpoints,
+
+800
+00:56:13,680 --> 00:56:15,030
+you don't have to recompute a lot,
+
+801
+00:56:15,030 --> 00:56:16,740
+but you spend all your time taking checkpoints.
+
+802
+00:56:18,060 --> 00:56:22,300
+And so there's sort of you know an optimization problem here,
+
+803
+00:56:22,600 --> 00:56:24,160
+you know you want to take the checkpoints
+
+804
+00:56:24,160 --> 00:56:29,710
+and some regular interval you're willing to take to recompute.
+
+805
+00:56:32,060 --> 00:56:36,770
+Okay, so maybe like compute checkpoints only for very large computations.
+
+806
+00:56:36,800 --> 00:56:38,840
+Yeah, or like for example in the case of page rank,
+
+807
+00:56:38,840 --> 00:56:41,570
+you know maybe you know do it ever 10 iterations.
+
+808
+00:56:44,800 --> 00:56:45,580
+Thank you.
+
+809
+00:56:46,030 --> 00:56:47,830
+It depends, of course, if decides to checkpoint,
+
+810
+00:56:47,830 --> 00:56:51,340
+but decides to check which follow you can check out more frequently.
+
+811
+00:56:52,260 --> 00:56:54,090
+But in the case of this page rank,
+
+812
+00:56:54,090 --> 00:56:55,710
+you know that checkpoint is going to be pretty big,
+
+813
+00:56:56,600 --> 00:57:01,250
+there is going to be a line or record you know per a web page.
+
+814
+00:57:03,310 --> 00:57:04,900
+That makes sense, thank you.
+
+815
+00:57:05,110 --> 00:57:05,590
+You're welcome.
+
+816
+00:57:07,300 --> 00:57:09,670
+I have a question about the driver,
+
+817
+00:57:10,150 --> 00:57:15,550
+does the application, is like does the driver, is the driver on the client side,
+
+818
+00:57:15,580 --> 00:57:16,240
+or is it.
+
+819
+00:57:16,720 --> 00:57:17,440
+Okay.
+
+820
+00:57:17,530 --> 00:57:18,910
+Yeah.
+
+821
+00:57:19,150 --> 00:57:22,420
+If it crashes, we lose like the the whole graph and that's fine,
+
+822
+00:57:22,420 --> 00:57:24,400
+because that's the application.
+
+823
+00:57:25,140 --> 00:57:26,670
+Yeah, I don't actually know what happens,
+
+824
+00:57:26,670 --> 00:57:30,030
+because the scheduler has a [],
+
+825
+00:57:31,140 --> 00:57:34,830
+and the scheduler fault tolerance,
+
+826
+00:57:35,160 --> 00:57:37,080
+so I don't know exactly when you know what happens,
+
+827
+00:57:37,080 --> 00:57:39,360
+maybe you could reconnect I I don't know.
+
+828
+00:57:43,940 --> 00:57:47,780
+I had a question about the why dependency optimization,
+
+829
+00:57:47,780 --> 00:57:50,570
+you mentioned that they do the hash partitioning,
+
+830
+00:57:50,570 --> 00:57:51,680
+how does that work.
+
+831
+00:57:52,490 --> 00:57:53,840
+Okay, I say a little bit more,
+
+832
+00:57:53,840 --> 00:57:54,530
+so this is not,
+
+833
+00:57:54,530 --> 00:57:56,300
+hasing is not something today,
+
+834
+00:57:56,300 --> 00:58:03,380
+then there is actually something that's is a standard database, partitioning scheme,
+
+835
+00:58:04,120 --> 00:58:05,320
+and it is cool,
+
+836
+00:58:05,320 --> 00:58:06,910
+because if you need computer join,
+
+837
+00:58:07,440 --> 00:58:09,900
+you don't have to do a lot of communication,
+
+838
+00:58:09,900 --> 00:58:12,030
+so let me just start a new slide,
+
+839
+00:58:12,030 --> 00:58:14,850
+it's because it's a little hard to read.
+
+840
+00:58:14,850 --> 00:58:15,960
+So hash partition,
+
+841
+00:58:20,210 --> 00:58:21,590
+so if you have two datasets,
+
+842
+00:58:22,460 --> 00:58:24,980
+here's dataset one, here's dataset two,
+
+843
+00:58:25,220 --> 00:58:28,280
+they have keys, right, key one, key two,
+
+844
+00:58:29,620 --> 00:58:31,540
+so they have the same set of keys,
+
+845
+00:58:32,250 --> 00:58:37,470
+then what you do by hash partitioning your partition the dataset and number of partitions,
+
+846
+00:58:37,500 --> 00:58:42,570
+so boom boom boom and you have to keep,
+
+847
+00:58:44,830 --> 00:58:49,270
+so you have K1, you has K2 and that actually determines the partition ends up.
+
+848
+00:58:50,000 --> 00:58:55,070
+And so all the keys that actually have the same hash went up in the same place,
+
+849
+00:58:55,070 --> 00:58:59,600
+so like this machine 1, machine 2, machine 3,
+
+850
+00:58:59,810 --> 00:59:03,560
+so you take whatever you hash K1, that goes in here,
+
+851
+00:59:03,920 --> 00:59:08,450
+you know you hash whatever K2, may be somewhere else in the file, who knows where it is
+
+852
+00:59:08,660 --> 00:59:09,890
+and you hash to partition.
+
+853
+00:59:10,130 --> 00:59:13,780
+You do the same thing here, for the other datasets,
+
+854
+00:59:13,780 --> 00:59:15,010
+so here's dataset one,
+
+855
+00:59:17,620 --> 00:59:18,730
+here's dataset two,
+
+856
+00:59:21,060 --> 00:59:22,260
+like links and ranks
+
+857
+00:59:22,590 --> 00:59:24,780
+and what will happen is that,
+
+858
+00:59:24,930 --> 00:59:26,970
+all the records in this dataset,
+
+859
+00:59:26,970 --> 00:59:31,740
+that have the same keys as records in the other dataset,
+
+860
+00:59:31,860 --> 00:59:35,340
+those keys or those records will end up in the same machine, right,
+
+861
+00:59:35,340 --> 00:59:36,690
+so you're gonna partition,
+
+862
+00:59:37,060 --> 00:59:41,290
+this guy and basically K1 will end up here too, on the same machine,
+
+863
+00:59:44,130 --> 00:59:46,380
+correct and same for the other keys,
+
+864
+00:59:46,380 --> 00:59:48,450
+because you basically use the same hash function,
+
+865
+00:59:48,450 --> 00:59:49,770
+and you have the same set of keys
+
+866
+00:59:50,040 --> 00:59:53,730
+and so this allows you to take a dataset you know partition that both in the same way
+
+867
+00:59:53,760 --> 00:59:55,440
+using this hashing trick.
+
+868
+00:59:56,100 --> 00:59:56,940
+And this is cool,
+
+869
+00:59:56,940 --> 01:00:00,600
+because now if you need to do a join over these two datasets,
+
+870
+01:00:00,600 --> 01:00:02,790
+like if you need to join these two datasets,
+
+871
+01:00:02,940 --> 01:00:04,800
+that basically you can just join the partitions,
+
+872
+01:00:06,420 --> 01:00:08,100
+and you don't have to communicate,
+
+873
+01:00:08,800 --> 01:00:12,670
+you know each of these machines doesn't have to communicate with any other machine,
+
+874
+01:00:12,700 --> 01:00:17,320
+because it knows it has all the keys you know the other dataset has
+
+875
+01:00:17,320 --> 01:00:18,580
+and they're all on the same machine.
+
+876
+01:00:20,260 --> 01:00:24,370
+Gotcha, so basically it's just trying sort, not sort,
+
+877
+01:00:24,370 --> 01:00:27,430
+but like bucket the different objects in the same machine,
+
+878
+01:00:27,430 --> 01:00:29,170
+so that it doesn't communicate.
+
+879
+01:00:32,070 --> 01:00:33,510
+Okay great, thank you so much.
+
+880
+01:00:35,010 --> 01:00:37,890
+So this means the hash function has to make sure that,
+
+881
+01:00:38,310 --> 01:00:44,010
+there are no links that would have to be like using the computation on another machine.
+
+882
+01:00:44,910 --> 01:00:47,490
+Yeah, well, they're good since they use the same hash function
+
+883
+01:00:47,640 --> 01:00:49,500
+and they have the same keys, you know that will happen.
+
+884
+01:00:54,100 --> 01:00:54,910
+yeah.
+
+885
+01:00:56,340 --> 01:00:58,050
+I had a question,
+
+886
+01:00:58,050 --> 01:01:00,900
+I actually wanted to come back to the question I asked before.
+
+887
+01:01:01,020 --> 01:01:05,550
+Yeah, good.
+
+888
+01:01:06,000 --> 01:01:09,570
+So let me open up. Yeah, let me also open the paper, I guess.
+
+889
+01:01:09,780 --> 01:01:12,570
+Any other people that have questions,
+
+890
+01:01:12,600 --> 01:01:14,520
+because maybe this will take a little bit of time.
+
+891
+01:01:15,530 --> 01:01:20,300
+Yeah, actually, I had a quick question on the fault tolerance, fault tolerance of FaRM,
+
+892
+01:01:20,480 --> 01:01:24,740
+so so just to clarify what happens,
+
+893
+01:01:24,740 --> 01:01:29,420
+so if a failure occurs before the decision point,
+
+894
+01:01:29,840 --> 01:01:32,660
+then the entire thing is aborted,
+
+895
+01:01:32,690 --> 01:01:34,580
+but it occurs after the decision point,
+
+896
+01:01:34,580 --> 01:01:37,820
+then after the failed computers come back up,
+
+897
+01:01:37,820 --> 01:01:41,570
+they have to reask the coordinator for whether or not they should commit.
+
+898
+01:01:42,340 --> 01:01:44,530
+They don't really reask right,
+
+899
+01:01:44,530 --> 01:01:49,000
+like what happens is there after failure there's a recovery process runs,
+
+900
+01:01:49,500 --> 01:01:53,790
+and the recovery process looks basically all the logs are drained
+
+901
+01:01:53,790 --> 01:01:57,360
+and then the recovery process looks at the state of the system,
+
+902
+01:01:57,690 --> 01:01:59,400
+and based on the state of system
+
+903
+01:01:59,400 --> 01:02:00,990
+and decides what to do with transaction,
+
+904
+01:02:01,260 --> 01:02:02,760
+either aborted or commits it,
+
+905
+01:02:03,600 --> 01:02:07,590
+and the key aspect here in this protocol is
+
+906
+01:02:07,590 --> 01:02:15,020
+to ensure that at the point when the transaction coordinator actually have reported to the application
+
+907
+01:02:15,020 --> 01:02:17,510
+that the transaction succeeded committed,
+
+908
+01:02:17,810 --> 01:02:18,950
+it has to be the case,
+
+909
+01:02:18,950 --> 01:02:22,550
+that there are enough pieces of evidence left around in the system,
+
+910
+01:02:22,550 --> 01:02:24,050
+so that during the recovery process,
+
+911
+01:02:24,050 --> 01:02:25,640
+that transaction is definitely committed,
+
+912
+01:02:26,780 --> 01:02:30,000
+and, that's, that's sort of the plan.
+
+913
+01:02:30,700 --> 01:02:32,680
+And the reason that there's enough evidence is,
+
+914
+01:02:32,680 --> 01:02:35,170
+because there's these large records lying around,
+
+915
+01:02:35,560 --> 01:02:38,560
+there's commands background records right lying around
+
+916
+01:02:38,680 --> 01:02:40,690
+and there's this one commit record.
+
+917
+01:02:43,140 --> 01:02:44,880
+I see, so if something,
+
+918
+01:02:44,880 --> 01:02:50,790
+for example if a failure occurs on a primary, before against commit primary.
+
+919
+01:02:51,000 --> 01:02:51,540
+Yep.
+
+920
+01:02:52,070 --> 01:02:53,150
+What happens there?
+
+921
+01:02:53,300 --> 01:02:54,200
+So that's interesting,
+
+922
+01:02:54,200 --> 01:02:56,090
+so there's enough backup record, correct,
+
+923
+01:02:56,620 --> 01:03:00,520
+to basically decide you know that every backup that every shard actually has committed,
+
+924
+01:03:01,360 --> 01:03:05,200
+and, and so that's enough information for the recovery process to say
+
+925
+01:03:05,200 --> 01:03:07,390
+I am going to run for that transaction,
+
+926
+01:03:07,630 --> 01:03:08,800
+because it could have committed.
+
+927
+01:03:10,630 --> 01:03:12,910
+Got it, so it doesn't need the primary in that case,
+
+928
+01:03:12,910 --> 01:03:15,580
+can use the backups because the backups have.
+
+929
+01:03:17,140 --> 01:03:17,860
+Yeah exactly.
+
+930
+01:03:20,030 --> 01:03:20,990
+Got it, thank you,
+
+931
+01:03:21,350 --> 01:03:23,840
+and what happens if the backup fails.
+
+932
+01:03:24,620 --> 01:03:26,660
+Well then one of the backup fails
+
+933
+01:03:26,660 --> 01:03:29,510
+and presumably that means that the commit record to still there,
+
+934
+01:03:30,100 --> 01:03:32,290
+and then again there's enough information to decide
+
+935
+01:03:32,290 --> 01:03:33,910
+that actual transaction needs to commit,
+
+936
+01:03:34,400 --> 01:03:37,640
+and there's enough backups around to actually know what the new values
+
+937
+01:03:37,640 --> 01:03:40,880
+or there's also the log entries which actually contains,
+
+938
+01:03:40,880 --> 01:03:42,290
+so if a primary is up,
+
+939
+01:03:42,620 --> 01:03:43,880
+it will have a log entry,
+
+940
+01:03:43,940 --> 01:03:48,230
+there will be a committed entry plus there are not backups actually finish the transaction.
+
+941
+01:03:50,650 --> 01:03:51,220
+Thank you.
+
+942
+01:03:52,380 --> 01:03:53,970
+Oh, sorry to follow up on that,
+
+943
+01:03:53,970 --> 01:03:57,630
+if you said that if the primary failed,
+
+944
+01:03:57,630 --> 01:04:01,110
+then you could use the backups to complete the action,
+
+945
+01:04:01,110 --> 01:04:02,160
+if there's enough of them,
+
+946
+01:04:02,550 --> 01:04:05,400
+so we need to elect a new primary?
+
+947
+01:04:06,540 --> 01:04:09,870
+I I think this is all happened during the,
+
+948
+01:04:09,930 --> 01:04:12,960
+basically you can think of the recovery process as a primary
+
+949
+01:04:13,350 --> 01:04:15,090
+and that just finishes everything off.
+
+950
+01:04:16,520 --> 01:04:19,490
+Oh, so whoever does the recovery is the primary.
+
+951
+01:04:19,900 --> 01:04:21,550
+Yeah.
+
+952
+01:04:22,280 --> 01:04:24,470
+Okay, make sense, thank you.
+
+953
+01:04:24,560 --> 01:04:27,230
+I think explicitly they you know promote primary,
+
+954
+01:04:27,230 --> 01:04:28,640
+just like go ahead and do it.
+
+955
+01:04:30,060 --> 01:04:32,130
+And what is like enough backups.
+
+956
+01:04:32,490 --> 01:04:36,310
+Well, we have f+1, right,
+
+957
+01:04:36,430 --> 01:04:40,120
+and so it means that, you know so long as one is left,
+
+958
+01:04:40,920 --> 01:04:42,330
+you know we were good,
+
+959
+01:04:42,360 --> 01:04:44,670
+so we can have more than f one failures,
+
+960
+01:04:45,060 --> 01:04:48,570
+we can only have f failures in this particular drawing f is 1.
+
+961
+01:04:51,100 --> 01:04:53,980
+So there has to be per shard, you know one machine left.
+
+962
+01:04:56,090 --> 01:04:58,100
+Okay, that makes sense, thank you.
+
+963
+01:04:58,640 --> 01:04:59,240
+You're welcome.
+
+964
+01:05:02,440 --> 01:05:04,240
+Okay, Felipe, it just me and you.
+
+965
+01:05:06,750 --> 01:05:10,200
+Well, unless anyone else ask questions I think.
+
+966
+01:05:14,710 --> 01:05:16,420
+Yeah, I and you.
+
+967
+01:05:16,420 --> 01:05:20,500
+So it's page, page they explain on page 6.
+
+968
+01:05:20,920 --> 01:05:22,420
+Yeah yeah.
+
+969
+01:05:23,590 --> 01:05:25,450
+That below table 3.
+
+970
+01:05:25,630 --> 01:05:26,200
+Yep.
+
+971
+01:05:27,660 --> 01:05:31,770
+Some [bare] ground starts the most interesting question right,
+
+972
+01:05:31,770 --> 01:05:34,140
+it goes on to define.
+
+973
+01:05:34,890 --> 01:05:37,650
+Both sufficient usual to classify dependencies in two types,
+
+974
+01:05:37,650 --> 01:05:43,170
+narrow where parent partition, the parent RDD is used by most one partition of the child RDD right,
+
+975
+01:05:43,170 --> 01:05:43,860
+so this is.
+
+976
+01:05:44,070 --> 01:05:44,580
+Right.
+
+977
+01:05:44,820 --> 01:05:46,680
+So let me, so let's draw this correct,
+
+978
+01:05:46,680 --> 01:05:51,840
+so here we have a parent partition.
+
+979
+01:05:52,980 --> 01:05:53,400
+Right.
+
+980
+01:05:54,960 --> 01:05:56,580
+And let's say there's a map,
+
+981
+01:05:57,820 --> 01:05:59,620
+and here we have the child partition.
+
+982
+01:06:04,640 --> 01:06:05,090
+Okay?
+
+983
+01:06:05,840 --> 01:06:06,410
+Right.
+
+984
+01:06:07,550 --> 01:06:09,890
+Good, so that's the narrow, this is the narrow case.
+
+985
+01:06:12,600 --> 01:06:31,420
+Right, but I think like the the example of I was thinking of is you know each parent is used by at most one partition of the child,
+
+986
+01:06:31,950 --> 01:06:33,870
+but the child right,
+
+987
+01:06:33,900 --> 01:06:35,220
+that doesn't say anything about,
+
+988
+01:06:35,220 --> 01:06:41,610
+like it says right like it doesn't necessarily mean it's a one-to-one relationship, right.
+
+989
+01:06:41,640 --> 01:06:44,220
+Well, because more or less have to correct,
+
+990
+01:06:44,220 --> 01:06:47,550
+let's say, let's say we have a wide one, correct,
+
+991
+01:06:47,550 --> 01:06:53,250
+so then here we have parent partition one.
+
+992
+01:06:56,350 --> 01:06:59,140
+Here we have maybe it has any of them correct,
+
+993
+01:06:59,140 --> 01:07:07,710
+here, here's n in the wide one, the child is.
+
+994
+01:07:09,920 --> 01:07:13,370
+Right, what what what I what I was saying is
+
+995
+01:07:13,520 --> 01:07:17,030
+I I think you know based on the definition given in the paper,
+
+996
+01:07:17,720 --> 01:07:20,480
+this could be a narrow partition,
+
+997
+01:07:24,010 --> 01:07:26,800
+and in fact, I mean like if you look at,
+
+998
+01:07:28,580 --> 01:07:32,690
+like a join with input co-partition, like you have.
+
+999
+01:07:32,930 --> 01:07:35,930
+The hash partition that actually the wide one turns into a narrow one.
+
+1000
+01:07:36,530 --> 01:07:42,230
+Right, but you still have like a partition, a child partition
+
+1001
+01:07:42,230 --> 01:07:49,360
+getting like like being computed from several parent partitions, right.
+
+1002
+01:07:49,360 --> 01:07:52,570
+Explicitly mention that right,
+
+1003
+01:07:52,630 --> 01:07:54,160
+I think that's the only example.
+
+1004
+01:07:54,910 --> 01:07:59,080
+Yeah, but like I think there's a typo in that sentence, right.
+
+1005
+01:08:02,250 --> 01:08:04,080
+I I mean I'm not sure it's,
+
+1006
+01:08:04,080 --> 01:08:06,150
+yeah I I'm not sure if it's,
+
+1007
+01:08:06,450 --> 01:08:08,610
+what they meant to like writer.
+
+1008
+01:08:09,240 --> 01:08:14,470
+Alright, well, we know we conclude this is the two cases, like I got.
+
+1009
+01:08:14,470 --> 01:08:14,950
+Yeah.
+
+1010
+01:08:14,980 --> 01:08:16,720
+I guess and there are no other cases,
+
+1011
+01:08:17,350 --> 01:08:21,310
+oh, and so then we can go for every operation correct
+
+1012
+01:08:21,310 --> 01:08:23,380
+and then we can see when it's narrow wide one.
+
+1013
+01:08:23,910 --> 01:08:24,690
+Right right.
+
+1014
+01:08:25,200 --> 01:08:30,270
+So once the job of the programmer that defines these operations
+
+1015
+01:08:30,270 --> 01:08:35,610
+to actually indicate whether it's a wide partition or a narrow, wide dependency or a narrow dependency,
+
+1016
+01:08:36,360 --> 01:08:39,300
+that's what, for figure table 3 about.
+
+1017
+01:08:39,750 --> 01:08:43,230
+Yeah, like what I'm saying is like,
+
+1018
+01:08:43,230 --> 01:08:46,200
+usually like like the way I saw it through paper,
+
+1019
+01:08:46,230 --> 01:08:49,590
+like like, your example on the wide would be,
+
+1020
+01:08:49,590 --> 01:08:52,500
+could would be a narrow dependency,
+
+1021
+01:08:52,500 --> 01:08:55,200
+unless right like you have several child
+
+1022
+01:08:55,410 --> 01:08:57,390
+and the parent partitions are like.
+
+1023
+01:08:57,660 --> 01:08:59,430
+Okay, so in general,
+
+1024
+01:08:59,430 --> 01:09:00,780
+okay, it is the case of course,
+
+1025
+01:09:00,930 --> 01:09:02,520
+if there's another child partition here,
+
+1026
+01:09:02,550 --> 01:09:04,230
+okay so maybe that's why we're trying to get,
+
+1027
+01:09:04,650 --> 01:09:07,860
+so let's separate, the real picture actually draws this,
+
+1028
+01:09:08,330 --> 01:09:09,920
+so it has another child partition
+
+1029
+01:09:10,070 --> 01:09:14,750
+and basically operations, the transformations are.
+
+1030
+01:09:17,210 --> 01:09:21,560
+Exactly, yeah and that's narrow for sure, like.
+
+1031
+01:09:21,920 --> 01:09:23,960
+This on the right side, this is wide.
+
+1032
+01:09:23,960 --> 01:09:25,280
+Sorry, that's wide, yeah.
+
+1033
+01:09:25,280 --> 01:09:29,480
+That's what I meant, that for sure is wide.
+
+1034
+01:09:29,480 --> 01:09:31,040
+Another I drew is also wide I believe.
+
+1035
+01:09:31,850 --> 01:09:33,380
+Look if you do join,
+
+1036
+01:09:33,380 --> 01:09:38,570
+if you do an action like collect the very end, you know wide dependency.
+
+1037
+01:09:38,570 --> 01:09:40,120
+Yeah, okay.
+
+1038
+01:09:40,120 --> 01:09:42,970
+It doesn't say, it doesn't say, it has to come from different RDDs,
+
+1039
+01:09:42,970 --> 01:09:45,280
+it just says like it has to come from different partitions.
+
+1040
+01:09:45,580 --> 01:09:49,900
+And so this is narrow, so I think narrow is only the case where is one-to-one.
+
+1041
+01:09:50,610 --> 01:09:51,420
+Okay.
+
+1042
+01:09:51,450 --> 01:09:54,210
+Narrow is like, narrow means no communication.
+
+1043
+01:09:55,870 --> 01:10:03,680
+Right, okay, yep.
+
+1044
+01:10:07,660 --> 01:10:11,110
+Yeah, I think I think the case where I was confused
+
+1045
+01:10:11,110 --> 01:10:15,280
+was like like many-to-one,
+
+1046
+01:10:15,310 --> 01:10:18,130
+like I think based on the definition of the,
+
+1047
+01:10:18,130 --> 01:10:19,750
+like of the of the paper,
+
+1048
+01:10:19,750 --> 01:10:23,980
+like the many-to-one relation is still, still narrow.
+
+1049
+01:10:24,340 --> 01:10:26,920
+No, I think they mean it to be.
+
+1050
+01:10:26,920 --> 01:10:30,760
+Yeah yeah, but like strictly like if you really,
+
+1051
+01:10:30,760 --> 01:10:34,660
+like yeah I I think maybe like an implementation you'll see like,
+
+1052
+01:10:35,020 --> 01:10:37,330
+yeah what are you saying right like it's wide.
+
+1053
+01:10:37,710 --> 01:10:38,280
+I was just like,
+
+1054
+01:10:38,280 --> 01:10:39,300
+I think if you read like.
+
+1055
+01:10:39,300 --> 01:10:41,040
+[] confusing.
+
+1056
+01:10:41,040 --> 01:10:45,330
+Paper actually yeah you can get confused like many-to-one relationship,
+
+1057
+01:10:45,420 --> 01:10:48,300
+now the one-to-many is clearly wide, yeah,
+
+1058
+01:10:49,000 --> 01:10:50,890
+but, yeah okay, sounds good.
+
+1059
+01:10:51,430 --> 01:10:51,970
+Okay.
+
+1060
+01:10:52,000 --> 01:10:57,570
+Yeah, I think the paper easier to understand in general.
+
+1061
+01:10:57,810 --> 01:10:58,470
+Okay.
+
+1062
+01:10:59,390 --> 01:11:00,260
+Good okay.
+
+1063
+01:11:00,500 --> 01:11:03,590
+There's that easier than the paper for FaRM.
+
+1064
+01:11:03,590 --> 01:11:07,490
+Oh yeah, sure.
+
+1065
+01:11:07,550 --> 01:11:11,840
+Yeah, I think so I think those were probably the most two heavy-duty paper,
+
+1066
+01:11:11,840 --> 01:11:13,490
+so a lot will see in this term.
+
+1067
+01:11:14,940 --> 01:11:15,780
+Okay, nice.
+
+1068
+01:11:15,780 --> 01:11:17,400
+The part it's hard to stay there,
+
+1069
+01:11:17,430 --> 01:11:21,900
+I think the remaining was a little bit more you know more,
+
+1070
+01:11:21,900 --> 01:11:23,640
+I'm going to say straightforward,
+
+1071
+01:11:24,060 --> 01:11:26,880
+perhaps fewer moving pieces.
+
+1072
+01:11:27,710 --> 01:11:28,310
+Nice.
+
+1073
+01:11:29,980 --> 01:11:32,650
+Okay, awesome, thanks professor.
+
+1074
+01:11:32,770 --> 01:11:34,570
+Can I ask one last question,
+
+1075
+01:11:34,600 --> 01:11:36,970
+I just realized that I have,
+
+1076
+01:11:37,450 --> 01:11:40,540
+it was about the conversation, you can paralyze it,
+
+1077
+01:11:40,540 --> 01:11:42,690
+if if it's a different partitions,
+
+1078
+01:11:42,690 --> 01:11:46,520
+but if it's also you said if it's in.
+
+1079
+01:11:46,520 --> 01:11:48,680
+The stage stages right,
+
+1080
+01:11:48,680 --> 01:11:53,840
+you know there's sort of what is it like streaming parallelism, if you will or pipeline parallelism.
+
+1081
+01:11:54,530 --> 01:11:58,950
+Let me see if I can find a picture, there's one of them.
+
+1082
+01:12:04,840 --> 01:12:10,510
+I gotta find lineage graph, no, no,
+
+1083
+01:12:11,260 --> 01:12:12,730
+right here whenever this graph,
+
+1084
+01:12:12,760 --> 01:12:15,910
+great now maybe here's one picture that we can modify.
+
+1085
+01:12:16,800 --> 01:12:17,640
+Do you see?
+
+1086
+01:12:18,900 --> 01:12:19,590
+Yes.
+
+1087
+01:12:19,770 --> 01:12:24,210
+Okay, so basically this is the lineage graph here to collect
+
+1088
+01:12:24,510 --> 01:12:27,900
+and so this is like one stage right,
+
+1089
+01:12:30,820 --> 01:12:35,440
+the scheduler runs one of the stages of each worker, for each partition, right,
+
+1090
+01:12:35,890 --> 01:12:43,670
+so each worker runs a stage on the partition,
+
+1091
+01:12:48,770 --> 01:12:54,140
+so basically all these partitions, are all these stages running parallel on different workers,
+
+1092
+01:12:55,200 --> 01:12:58,290
+then within a stage, there's also parallelism,
+
+1093
+01:12:59,100 --> 01:13:03,480
+because you know every filter is pipelined,
+
+1094
+01:13:04,010 --> 01:13:06,680
+without you know they mean like you read,
+
+1095
+01:13:06,710 --> 01:13:08,660
+maybe like the first and records,
+
+1096
+01:13:09,450 --> 01:13:11,430
+and then you apply the filter operation,
+
+1097
+01:13:12,780 --> 01:13:19,320
+and then a it produces you know whatever fewer n records,
+
+1098
+01:13:20,030 --> 01:13:24,860
+and you know then the next you know filter you know process those n records,
+
+1099
+01:13:24,890 --> 01:13:26,960
+the [] crossing those records,
+
+1100
+01:13:27,200 --> 01:13:29,060
+the first filter reads the next n,
+
+1101
+01:13:30,560 --> 01:13:33,560
+and you know produces them and then pass them on
+
+1102
+01:13:33,560 --> 01:13:35,960
+and then you know making results in some number records,
+
+1103
+01:13:35,960 --> 01:13:37,820
+again, and it goes on and on,
+
+1104
+01:13:38,270 --> 01:13:45,380
+so basically all these all these, oops, like these all these transformations are pipelined,
+
+1105
+01:13:48,200 --> 01:13:50,030
+and so they're always running concurrently
+
+1106
+01:13:50,030 --> 01:13:53,240
+or running not truly concurrently, they're running in a pipeline fashion.
+
+1107
+01:13:54,440 --> 01:13:58,220
+Oh, I just said this is a batch thing, they were talking about.
+
+1108
+01:13:58,250 --> 01:14:01,130
+Yeah, so things are past and batches,
+
+1109
+01:14:01,130 --> 01:14:04,280
+and basically every stage the pipeline processes batch.
+
+1110
+01:14:05,500 --> 01:14:07,450
+Okay, okay, yeah makes for clear,
+
+1111
+01:14:07,450 --> 01:14:08,500
+yeah, thank you so much,
+
+1112
+01:14:08,500 --> 01:14:11,320
+that was it was an interesting lecture, thank you.
+
+1113
+01:14:11,350 --> 01:14:13,940
+Okay, you're welcome, glad you enjoy it,
+
+1114
+01:14:14,650 --> 01:14:15,460
+it's a cool system.
+
+1115
+01:14:23,780 --> 01:14:25,430
+Sorry, sorry, can you hear me now.
+
+1116
+01:14:25,670 --> 01:14:30,710
+Yeah yeah, wondering what did yeah.
+
+1117
+01:14:30,890 --> 01:14:32,540
+No problem, I'm sorry about that,
+
+1118
+01:14:32,540 --> 01:14:34,070
+I yeah sorry I was listening,
+
+1119
+01:14:34,070 --> 01:14:37,940
+I I I realized we'd be going late,
+
+1120
+01:14:37,940 --> 01:14:39,740
+I'm going to try to make this question very quick,
+
+1121
+01:14:39,830 --> 01:14:42,290
+I've gotten to use spark before.
+
+1122
+01:14:43,310 --> 01:14:46,580
+Thank you, thank you so much.
+
+1123
+01:14:47,360 --> 01:14:50,930
+So yeah yeah I really, really appreciate this lecture,
+
+1124
+01:14:50,930 --> 01:14:54,080
+spark is actually something that I'm gonna use in my future job,
+
+1125
+01:14:54,080 --> 01:14:55,730
+so I appreciate you teaching this me,
+
+1126
+01:14:55,790 --> 01:14:57,470
+just one.
+
+1127
+01:14:57,470 --> 01:15:01,550
+Probably, probably I'm not sure this will really help your writing spark programs.
+
+1128
+01:15:01,700 --> 01:15:06,830
+No, I mean I did it as an intern really not knowing what I was doing,
+
+1129
+01:15:06,830 --> 01:15:10,670
+but like this has helped me give give more context with it.
+
+1130
+01:15:12,100 --> 01:15:15,550
+So I guess the the quick question with a spark programs that,
+
+1131
+01:15:15,550 --> 01:15:19,390
+the way that I've understood spark jobs is
+
+1132
+01:15:19,420 --> 01:15:27,160
+how spark constructs a directed a directed acyclic graph of all the tasks, and.
+
+1133
+01:15:27,760 --> 01:15:31,810
+Yep, and this is what you talked about with the wide partitions and narrow partitions.
+
+1134
+01:15:31,810 --> 01:15:35,800
+I think they're called dependencies, not partitions.
+
+1135
+01:15:35,800 --> 01:15:41,190
+Oh yep, okay, okay. okay, sorry,
+
+1136
+01:15:41,190 --> 01:15:44,460
+that with our RDDs and I guess like,
+
+1137
+01:15:45,010 --> 01:15:47,650
+okay, this is different terminology between,
+
+1138
+01:15:48,660 --> 01:15:53,580
+the dependencies are like these tasks in the directed acyclic graph of all the tasks,
+
+1139
+01:15:53,580 --> 01:16:00,650
+but the RDDs that's like each task in this graph is not represented by this RDD.
+
+1140
+01:16:01,370 --> 01:16:02,570
+Let me actually go back,
+
+1141
+01:16:02,990 --> 01:16:04,520
+maybe these pictures are right.
+
+1142
+01:16:04,550 --> 01:16:07,820
+And oh gosh I appreciate you staying here,
+
+1143
+01:16:07,820 --> 01:16:13,160
+please let me know if you have to go to.
+
+1144
+01:16:13,370 --> 01:16:14,600
+No no no no no that's right I have more time.
+
+1145
+01:16:14,750 --> 01:16:18,620
+So, okay, so this is sort of a RDD correct,
+
+1146
+01:16:19,010 --> 01:16:22,730
+let me draw another color, so we can [agree],
+
+1147
+01:16:22,910 --> 01:16:27,390
+this is an RDD, RDD has a bunch of partitions,
+
+1148
+01:16:28,420 --> 01:16:30,220
+and here's another RDD.
+
+1149
+01:16:33,230 --> 01:16:39,860
+Okay, yep and the arrows are basically as sort of like the same story,
+
+1150
+01:16:39,950 --> 01:16:42,170
+when we actually finish this picture too,
+
+1151
+01:16:42,170 --> 01:16:44,360
+on the side here more partitions,
+
+1152
+01:16:45,050 --> 01:16:51,230
+here's the RDDs, boom RDD, boom RDD,
+
+1153
+01:16:51,230 --> 01:16:54,080
+those transformations basically between RDDs, right,
+
+1154
+01:16:54,860 --> 01:16:56,060
+so the arrows,
+
+1155
+01:16:56,880 --> 01:16:58,950
+let me pick another color,
+
+1156
+01:16:58,980 --> 01:17:02,370
+you know these errors, those are transformations.
+
+1157
+01:17:04,010 --> 01:17:09,980
+Got you, and this is this is like part of the directed cyclical graph of the smart job,
+
+1158
+01:17:10,070 --> 01:17:13,730
+every single transformation leads to creating another RDD,
+
+1159
+01:17:14,090 --> 01:17:16,160
+that makes sense, that makes sense.
+
+1160
+01:17:16,220 --> 01:17:21,520
+Okay and then the only thing is like some of these arrows are wide and some of them are narrow,
+
+1161
+01:17:22,040 --> 01:17:28,760
+and the graph, from the graph, you can't really tell whether which ones are narrow or which ones are,
+
+1162
+01:17:28,760 --> 01:17:33,530
+which transformations are narrow transformations or wide transformations.
+
+1163
+01:17:33,740 --> 01:17:37,970
+You're talking about the graph that's the spark program actually shows you in there.
+
+1164
+01:17:38,520 --> 01:17:40,500
+Yeah, this linear graph, you can't.
+
+1165
+01:17:40,500 --> 01:17:41,910
+Gotcha, okay, okay.
+
+1166
+01:17:42,150 --> 01:17:46,860
+Yeah, that's here, so here look at this lineage graph a bit,
+
+1167
+01:17:46,860 --> 01:17:51,090
+like this transformation transformation transformation, all that transformation narrow, would like narrow,
+
+1168
+01:17:51,090 --> 01:17:52,230
+because it's a single arrow,
+
+1169
+01:17:52,440 --> 01:17:53,790
+but it's not really true right,
+
+1170
+01:17:53,790 --> 01:17:56,640
+like the last one, for example, must be a wide one,
+
+1171
+01:17:58,450 --> 01:18:00,040
+because it will collect information from all.
+
+1172
+01:18:00,040 --> 01:18:00,490
+Gotcha.
+
+1173
+01:18:03,110 --> 01:18:05,720
+Okay, then I I guess I was wondering
+
+1174
+01:18:05,720 --> 01:18:11,030
+like do you have recommendations on resources for things,
+
+1175
+01:18:11,030 --> 01:18:19,220
+that can show me how spark figures out how to construct the directed acyclic graph to do all these tasks.
+
+1176
+01:18:19,220 --> 01:18:23,960
+Yeah, look at scheduler that's all.
+
+1177
+01:18:23,960 --> 01:18:26,930
+Right and yeah I read in the paper,
+
+1178
+01:18:26,930 --> 01:18:30,950
+like I I you know I was trying to comprehend the paper as best as I could,
+
+1179
+01:18:30,950 --> 01:18:33,290
+but it's you know it's difficult, but.
+
+1180
+01:18:33,680 --> 01:18:34,880
+It will always be difficult to read,
+
+1181
+01:18:35,180 --> 01:18:40,610
+so the scheduler I think I would go back first to thesis [] thesis,
+
+1182
+01:18:40,610 --> 01:18:42,410
+I'm sure it has a [] on the scheduler.
+
+1183
+01:18:43,440 --> 01:18:45,120
+Gotcha gotcha, oh okay
+
+1184
+01:18:45,120 --> 01:18:48,240
+and that'll show me just how spark figures out how to make this graph.
+
