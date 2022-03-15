@@ -756,7 +756,7 @@ name FaRM comes from,| {you,know,the}
 152
 00:05:29,440 --> 00:05:31,600
 0,510 510,1170 1200,1440 1440,1620 1620,2160
-{R,stands,for} remote and {N,for} memory
+{R,stands,for} remote and {M,for} memory
 
 153
 00:05:31,840 --> 00:05:33,480
@@ -766,7 +766,7 @@ and Fa for fast.|
 154
 00:05:34,810 --> 00:05:36,820
 0,600 1140,1290 1290,1500 1500,1740 1740,2010
-Um, so, those are the
+{} So, those are the,
 
 155
 00:05:37,030 --> 00:05:38,860
@@ -776,7 +776,7 @@ those are the technologies they
 156
 00:05:38,860 --> 00:05:40,960
 0,510 570,1080 1080,1290 1290,1830 1980,2100
-use, um, and then you
+use,| {} and then you
 
 157
 00:05:40,960 --> 00:05:41,620
@@ -791,27 +791,27 @@ really exploit these technologies drives
 159
 00:05:43,870 --> 00:05:45,160
 0,210 210,660 660,750 750,1170 1170,1290
-them to a design that
+them to a design| that
 
 160
 00:05:45,160 --> 00:05:46,810
 0,240 240,810 810,900 900,1230 1230,1650
-uses optimistic con currency control.
+uses optimistic {concurrency -} control
 
 161
 00:05:47,220 --> 00:05:49,680
 0,420 420,1200 1230,1530 1530,1860 1890,2460
-Or occ, um, the short
+or OCC,| {} the short
 
 162
 00:05:49,680 --> 00:05:51,510
 0,360 360,450 450,630 630,900 900,1830
-version of this so optimistic.
+version of this so optimistic,|
 
 163
 00:05:56,230 --> 00:05:57,940
 0,540 540,900 900,1410 1410,1500 1500,1710
-And in contrast with many
+and in contrast with many
 
 164
 00:05:57,940 --> 00:05:58,780
@@ -821,7 +821,7 @@ of the designs that we've
 165
 00:05:58,780 --> 00:06:00,880
 0,150 150,360 360,600 600,1200 1290,2100
-seen so far where zay
+seen so far,| where they
 
 166
 00:06:00,880 --> 00:06:02,290
@@ -831,17 +831,17 @@ use what was typically called
 167
 00:06:02,290 --> 00:06:04,150
 0,690 690,1020 1020,1380 1380,1740 1740,1860
-pessimistic version control schemes and
+pessimistic concurrency control scheme| and
 
 168
 00:06:04,150 --> 00:06:06,940
 0,570 570,1230 1230,1710 1860,2280 2280,2790
-pessimistic controls schemes basically acquire
+pessimistic control scheme basically acquire
 
 169
 00:06:06,940 --> 00:06:09,580
 0,690 780,1680 1680,2430 2430,2490 2490,2640
-walks a on you know
+locks {} on you know
 
 170
 00:06:09,580 --> 00:06:12,070
@@ -851,17 +851,17 @@ the objects are being touched
 171
 00:06:12,070 --> 00:06:14,680
 0,120 120,240 240,960 1200,1860 1860,2610
-by the transaction, um and
+by the transaction,| {} and
 
 172
 00:06:14,680 --> 00:06:15,670
 0,240 240,390 390,630 630,810 810,990
-um, so when they get
+{} so when they get
 
 173
 00:06:15,670 --> 00:06:17,230
 0,120 120,390 390,900 1050,1350 1350,1560
-to commit time, um, they
+to commit time,| {} they
 
 174
 00:06:17,230 --> 00:06:18,340
@@ -871,52 +871,52 @@ own all the locks for
 175
 00:06:18,340 --> 00:06:19,720
 0,180 180,390 390,750 750,1170 1170,1380
-all the relevant objects and
+all the relevant objects| and
 
 176
 00:06:19,720 --> 00:06:21,430
 0,210 210,360 360,660 660,780 780,1710
-just go ahead and commit
+just go ahead and commit,|
 
 177
 00:06:21,580 --> 00:06:23,740
 0,990 1110,1350 1350,1530 1530,2070 2070,2160
-while um with optimistic con
+while {} with optimistic {concurrency
 
 178
 00:06:23,740 --> 00:06:25,120
 0,300 300,780 780,870 870,1080 1080,1380
-currency control, you don't actually
+-} control,| you don't actually
 
 179
 00:06:25,120 --> 00:06:27,370
 0,720 750,1140 1140,1440 1440,1530 1530,2250
-require a lock c particularly
+acquire {} {locks -} particularly,|
 
 180
 00:06:27,610 --> 00:06:29,140
 0,420 420,480 480,690 720,1200 1200,1530
-farm, you don't require walks
+{in,FaRM}, you don't require locks
 
 181
 00:06:29,140 --> 00:06:31,840
 0,300 300,570 870,1470 1500,2160 2190,2700
-on the breed a transaction.
+on the read {} transaction.|
 
 182
 00:06:32,720 --> 00:06:34,760
 0,600 780,1200 1200,1500 1500,1710 1710,2040
-And um, when you do
+And {} when you do
 
 183
 00:06:34,760 --> 00:06:35,720
 0,180 180,540 540,660 660,870 870,960
-go commit you actually have
+go commit,| you actually have
 
 184
 00:06:35,720 --> 00:06:37,940
 0,60 60,690 690,1020 1020,1410 1410,2220
-to validate that you read
+to validate that you read,|
 
 185
 00:06:37,940 --> 00:06:39,770
@@ -926,27 +926,27 @@ you read the most recent
 186
 00:06:39,770 --> 00:06:41,630
 0,570 780,1200 1200,1440 1440,1560 1560,1860
-objects a and if so
+objects| {} and if so,
 
 187
 00:06:41,630 --> 00:06:42,680
 0,150 150,270 270,600 600,930 930,1050
-you can go commit and
+you can go commit| and
 
 188
 00:06:42,680 --> 00:06:43,550
 0,120 120,270 270,690 690,780 780,870
-if you're not you know
+if you're not, you know
 
 189
 00:06:43,550 --> 00:06:44,900
 0,150 150,300 300,390 390,900 900,1350
-you have to board and
+you have to abort and
 
 190
 00:06:44,900 --> 00:06:45,960
 0,210 210,450 450,780
-maybe try again.
+maybe try again.|
 
 191
 00:06:46,530 --> 00:06:48,360
@@ -956,12 +956,12 @@ And the reason they use
 192
 00:06:48,360 --> 00:06:49,770
 0,510 510,780 780,1140 1140,1260 1260,1410
-optimization courage control as we'll
+optimization concurrence control as we'll
 
 193
 00:06:49,770 --> 00:06:50,490
 0,180 180,240 240,300 300,630 630,720
-see in a second is
+see in a second| is
 
 194
 00:06:50,490 --> 00:06:51,780
@@ -976,12 +976,11 @@ that they want to use
 196
 00:06:52,890 --> 00:06:53,840
 0,150 150,690
-our DNA.
+{RDMA -}.|
 
 197
 00:06:54,400 --> 00:06:55,400
 0,690
-AH.
 
 198
 00:06:56,820 --> 00:06:57,630
@@ -991,52 +990,52 @@ Okay, so then the final
 199
 00:06:57,630 --> 00:06:58,890
 0,390 390,690 690,870 870,1140 1140,1260
-component to this is a
+component to this is {}
 
 200
 00:06:58,890 --> 00:07:00,090
 0,270 270,720 720,900 900,990 990,1200
-certain overview, this is really
+certain overview,| this is really
 
 201
 00:07:00,090 --> 00:07:01,400
 0,60 60,390 390,1050
-a research prototype.
+a research prototype,|
 
 202
 00:07:05,250 --> 00:07:06,750
 0,210 210,300 300,420 420,870 930,1500
-So I would like a
+so {unlike - -} {}
 
 203
 00:07:06,780 --> 00:07:07,980
 0,600 600,720 720,810 810,1020 1020,1200
-spinner, you know which is
+Spanner, you know which is
 
 204
 00:07:07,980 --> 00:07:11,160
 0,210 240,1020 1230,2130 2190,2640 2640,3180
-a deployed system, you know
+a deployed system,| you know
 
 205
 00:07:11,550 --> 00:07:14,010
 0,180 180,750 750,1080 1080,1590 1800,2460
-it's been active use a
+it's been active use, {}|
 
 206
 00:07:14,040 --> 00:07:15,750
 0,450 450,570 570,1050 1050,1350 1350,1710
-farm is really a product
+FaRM is really a product
 
 207
 00:07:15,750 --> 00:07:17,190
 0,420 480,690 690,1050 1050,1290 1290,1440
-of the research arm of
+of the research [arm] of
 
 208
 00:07:17,190 --> 00:07:19,860
 0,660 930,1680 1680,2280 2310,2580 2580,2670
-Microsoft Microsoft research trying to
+Microsoft,| Microsoft research trying to
 
 209
 00:07:19,860 --> 00:07:22,590
@@ -1046,12 +1045,12 @@ explore new ideas to see
 210
 00:07:22,590 --> 00:07:23,910
 0,240 240,420 420,840 870,1020 1020,1320
-how this button to see
+how| { -} to see
 
 211
 00:07:23,910 --> 00:07:25,620
 0,210 210,240 240,510 510,1080 1080,1710
-what I can achieve higher
+what {} can achieve higher
 
 212
 00:07:25,740 --> 00:07:27,300
@@ -1061,12 +1060,12 @@ or really high performance transaction
 213
 00:07:27,300 --> 00:07:28,170
 0,360 360,450 450,600 600,690 690,870
-systems, and this is just
+systems,| and this is just
 
 214
 00:07:28,170 --> 00:07:30,360
 0,30 30,300 300,810 810,1500 1530,2190
-a very active research people
+a very active research,| people
 
 215
 00:07:30,360 --> 00:07:31,620
@@ -1076,22 +1075,21 @@ would just love to have
 216
 00:07:31,890 --> 00:07:34,050
 0,570 570,1050 1050,1380 1380,1440 1440,2160
-a the power of transactions,
+{} the power of transactions,|
 
 217
 00:07:34,230 --> 00:07:35,940
 0,600 600,780 780,930 930,1290 1290,1710
-um and but also the
+{} and but also the
 
 218
 00:07:36,030 --> 00:07:36,800
 0,690
-performance.
+performance.|
 
 219
 00:07:37,780 --> 00:07:38,900
 0,690
-Wow.
 
 220
 00:07:40,430 --> 00:07:41,690
@@ -1101,12 +1099,12 @@ Okay, so that's sort of
 221
 00:07:41,690 --> 00:07:43,100
 0,300 300,750 750,930 930,1290 1290,1410
-short introduction, any questions so
+short introduction,| any questions so
 
 222
 00:07:43,100 --> 00:07:43,880
 0,480
-far.
+far?|
 
 223
 00:07:49,860 --> 00:07:52,200
