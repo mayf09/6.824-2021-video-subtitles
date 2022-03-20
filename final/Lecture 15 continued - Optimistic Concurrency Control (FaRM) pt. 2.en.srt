@@ -1,0 +1,1712 @@
+1
+00:00:04,350 --> 00:00:09,780
+Okay, good afternoon, good evening or good night, good morning,
+
+2
+00:00:10,450 --> 00:00:14,050
+whatever timezone you're in watching this lecture.
+
+3
+00:00:14,230 --> 00:00:19,450
+Double checking on sound, people can hear me?
+
+4
+00:00:25,070 --> 00:00:26,420
+Yes yes.
+
+5
+00:00:26,720 --> 00:00:30,770
+Sure, okay, I'm gonna talk about two things today,
+
+6
+00:00:30,770 --> 00:00:33,380
+I want to finish off our discussion to FaRM
+
+7
+00:00:33,650 --> 00:00:35,360
+and then I'll talk about spark.
+
+8
+00:00:36,380 --> 00:00:38,390
+And just to remind everybody else,
+
+9
+00:00:38,390 --> 00:00:41,030
+so everybody we were more FaRM,
+
+10
+00:00:41,030 --> 00:00:45,470
+we're talked about executing transaction and without any failures
+
+11
+00:00:45,800 --> 00:00:48,140
+and we looked at one example
+
+12
+00:00:48,140 --> 00:00:54,230
+of whether actually the transaction provided external consistency or strict serializability.
+
+13
+00:00:54,990 --> 00:00:58,170
+And, so I want to talk about one more example,
+
+14
+00:00:58,200 --> 00:01:01,200
+to look about to talk about serializability,
+
+15
+00:01:01,200 --> 00:01:04,230
+and then talk a little bit about fault tolerance,
+
+16
+00:01:04,470 --> 00:01:05,970
+but before doing so,
+
+17
+00:01:05,970 --> 00:01:07,380
+it's probably helpful to remind,
+
+18
+00:01:07,500 --> 00:01:09,450
+my remind ourselves exactly,
+
+19
+00:01:09,450 --> 00:01:12,210
+you know how transaction works,
+
+20
+00:01:12,300 --> 00:01:14,730
+if there are no failures,
+
+21
+00:01:14,730 --> 00:01:17,640
+and so in FaRM and application goes for two phases,
+
+22
+00:01:17,640 --> 00:01:23,220
+the execution phase, where it fetches objects you know from different shards
+
+23
+00:01:23,610 --> 00:01:25,350
+and then the commit phase.
+
+24
+00:01:25,350 --> 00:01:27,930
+And so we look back at this picture here,
+
+25
+00:01:28,140 --> 00:01:34,310
+you know there's an execution phase three objects being, three objects being read,
+
+26
+00:01:36,520 --> 00:01:39,310
+you know one from each different shard,
+
+27
+00:01:39,340 --> 00:01:42,220
+you know we have shard one, shard two and shard three,
+
+28
+00:01:42,490 --> 00:01:44,440
+and every shard has one backup,
+
+29
+00:01:44,440 --> 00:01:46,780
+so this system could tolerate one failure.
+
+30
+00:01:47,890 --> 00:01:52,210
+So object to read the the two objects are being modified,
+
+31
+00:01:52,330 --> 00:01:54,340
+as we see in the second
+
+32
+00:01:54,760 --> 00:01:59,230
+and then once you know the three objects read and two modified,
+
+33
+00:01:59,320 --> 00:02:01,330
+the application might decide to commit
+
+34
+00:02:01,540 --> 00:02:03,910
+and then so the whole commit phase goes into action,
+
+35
+00:02:04,180 --> 00:02:08,180
+this whole story from steps one through five,
+
+36
+00:02:09,030 --> 00:02:12,750
+and in step one, the transaction takes out of locks
+
+37
+00:02:12,750 --> 00:02:15,360
+on the objects that have been written written,
+
+38
+00:02:15,600 --> 00:02:21,840
+so we see here there have been two objects that have been written to by the transaction
+
+39
+00:02:21,840 --> 00:02:27,270
+and so we're propagating what's called locked records you know to every primary.
+
+40
+00:02:28,030 --> 00:02:33,220
+So every primary is going to have a lock record for this transaction,
+
+41
+00:02:33,950 --> 00:02:37,190
+and for the objects involved in the transaction,
+
+42
+00:02:37,640 --> 00:02:41,600
+so and lockg records contains an object id,
+
+43
+00:02:41,750 --> 00:02:44,990
+which identifies the object uniquely a version number,
+
+44
+00:02:45,720 --> 00:02:49,800
+so at the time that transaction reads an object,
+
+45
+00:02:50,100 --> 00:02:51,900
+it gets back a version number,
+
+46
+00:02:52,110 --> 00:02:54,780
+in fact gets back this 64 bit number,
+
+47
+00:02:55,710 --> 00:02:58,620
+which is top is a log bit and the rest is version number,
+
+48
+00:03:01,460 --> 00:03:04,130
+and then a new value.
+
+49
+00:03:08,610 --> 00:03:12,810
+So, you know primary one and primary two is going to have,
+
+50
+00:03:12,870 --> 00:03:14,940
+primary one is going to have to lock record for object one,
+
+51
+00:03:14,940 --> 00:03:18,780
+primary two is going to have to lock object for primary for object two,
+
+52
+00:03:19,200 --> 00:03:25,770
+then there's a separate phase for the validation of the read-only operations or operations,
+
+53
+00:03:25,800 --> 00:03:29,460
+were objects that have only read, but not modified,
+
+54
+00:03:29,460 --> 00:03:32,310
+as we can see in those validation step,
+
+55
+00:03:32,520 --> 00:03:36,000
+the dotted lines represent one-sided RDMAs.
+
+56
+00:03:40,640 --> 00:03:43,070
+And as we talked about on Tuesday,
+
+57
+00:03:43,220 --> 00:03:45,620
+those basically involve no server involvement,
+
+58
+00:03:45,650 --> 00:03:51,230
+you know sender can just read a an object out of the memory of the server,
+
+59
+00:03:51,410 --> 00:03:56,120
+which actually have without actually having to interrupt the computation, that's actually running on the server.
+
+60
+00:03:56,990 --> 00:03:58,460
+So they tend to be very fast,
+
+61
+00:03:58,880 --> 00:04:01,400
+unlike you know these operations that we saw here,
+
+62
+00:04:01,430 --> 00:04:03,470
+which are actually write RDMAs.
+
+63
+00:04:07,720 --> 00:04:08,380
+They are cool too,
+
+64
+00:04:08,380 --> 00:04:13,330
+in the sense that you get to write you know to the appends you know to this log record
+
+65
+00:04:13,330 --> 00:04:14,980
+without actually interrupting the server,
+
+66
+00:04:15,130 --> 00:04:17,710
+but the server actually has to process these log records
+
+67
+00:04:17,830 --> 00:04:20,230
+and and the server in this case,
+
+68
+00:04:20,230 --> 00:04:22,330
+once it actually process one of these log records,
+
+69
+00:04:22,600 --> 00:04:24,430
+you know tries to take out the lock,
+
+70
+00:04:24,430 --> 00:04:26,500
+if it succeeds trying to take the lock,
+
+71
+00:04:26,500 --> 00:04:28,360
+because the version number hasn't changed
+
+72
+00:04:28,360 --> 00:04:31,870
+or to the lock bit or no other transactions taking the lock,
+
+73
+00:04:32,020 --> 00:04:33,640
+then it will reply back,
+
+74
+00:04:33,670 --> 00:04:37,720
+you know using another one of write RDMA saying okay.
+
+75
+00:04:38,930 --> 00:04:42,020
+And so yeah we see that on the acquiring lock,
+
+76
+00:04:42,020 --> 00:04:43,670
+requires action on the server,
+
+77
+00:04:43,850 --> 00:04:47,390
+but the one-sided RDMA for reads validation,
+
+78
+00:04:47,390 --> 00:04:49,220
+doesn't require any action on the server.
+
+79
+00:04:50,760 --> 00:04:52,740
+Then, there's there,
+
+80
+00:04:53,850 --> 00:04:56,220
+if everything turns out to be okay,
+
+81
+00:04:56,220 --> 00:05:00,600
+so, transactions basically able to obtain those write locks
+
+82
+00:05:00,600 --> 00:05:03,660
+and validate you know the read operations,
+
+83
+00:05:03,810 --> 00:05:06,690
+it actually makes a decision to commit
+
+84
+00:05:06,810 --> 00:05:17,480
+and to commit it a first communicates to every backup, the object the change,
+
+85
+00:05:18,350 --> 00:05:20,270
+so write to commit backup record.
+
+86
+00:05:26,080 --> 00:05:32,020
+It depends that to every, to the backups of the objects that have been modified,
+
+87
+00:05:32,020 --> 00:05:35,620
+again you know it's basically a copy of the log record,
+
+88
+00:05:35,620 --> 00:05:39,220
+you know oid goes in there the version number goes in there and the new value.
+
+89
+00:05:42,130 --> 00:05:47,830
+Once you know all the backups you know have have reported,
+
+90
+00:05:47,830 --> 00:05:50,020
+that they actually have a copy of the object,
+
+91
+00:05:50,020 --> 00:05:51,880
+now we're basically in pretty good shape,
+
+92
+00:05:51,880 --> 00:05:55,180
+because the primary has copy, the backup has to copy,
+
+93
+00:05:55,300 --> 00:05:59,140
+[] the primary doesn't really know if the transaction has been committed yet or not,
+
+94
+00:05:59,560 --> 00:06:08,890
+and so the final step is not actually the coordinator or detection coordinator write out and commit a record,
+
+95
+00:06:09,440 --> 00:06:10,880
+and commit primary record,
+
+96
+00:06:18,160 --> 00:06:22,600
+informing the primaries that actually do transaction actually has committed.
+
+97
+00:06:23,450 --> 00:06:26,690
+And as soon as it gets an acknowledgement from one of the NICs,
+
+98
+00:06:26,690 --> 00:06:28,550
+you know indicated by the dotted lines,
+
+99
+00:06:28,820 --> 00:06:32,030
+it actually reports back to the application,
+
+100
+00:06:32,030 --> 00:06:33,860
+saying that the transaction committed.
+
+101
+00:06:37,900 --> 00:06:40,960
+So what we wanna do now is look at two cases,
+
+102
+00:06:41,080 --> 00:06:44,320
+one we wanted to talk a little bit more about serializability,
+
+103
+00:06:44,320 --> 00:06:46,150
+just to see if the concurrency control work out
+
+104
+00:06:46,150 --> 00:06:48,010
+and then we'll talk a little bit about fault tolerance
+
+105
+00:06:48,010 --> 00:06:49,660
+and see if the fault tolerance story works out.
+
+106
+00:06:50,840 --> 00:06:55,490
+Aha, so let me first start with serializability,
+
+107
+00:06:56,480 --> 00:06:57,830
+alright, so maybe before doing that,
+
+108
+00:06:57,830 --> 00:07:01,400
+let me just ask if any questions so far,
+
+109
+00:07:01,400 --> 00:07:08,630
+or whether everybody should have swapped, successfully swapped FaRM back into into your memories.
+
+110
+00:07:12,280 --> 00:07:15,130
+What does the rectangle mean in this?
+
+111
+00:07:15,680 --> 00:07:16,400
+Picture?
+
+112
+00:07:16,790 --> 00:07:18,680
+So what's the rectangle,
+
+113
+00:07:19,010 --> 00:07:20,360
+what does it signify along.
+
+114
+00:07:20,360 --> 00:07:21,320
+The object.
+
+115
+00:07:22,080 --> 00:07:23,490
+Oh, it's an object, okay.
+
+116
+00:07:26,080 --> 00:07:28,540
+Okay, any other questions?
+
+117
+00:07:31,320 --> 00:07:39,360
+Okay, good, let's, so let's let's look at the correctness from the concurrency perspective,
+
+118
+00:07:39,810 --> 00:07:43,650
+so the correct correctness strict serializability.
+
+119
+00:07:49,230 --> 00:07:56,490
+And on Tuesday, we looked at transaction that didn't really evolve write validation,
+
+120
+00:07:56,490 --> 00:08:00,360
+because there was no object was read, but not written,
+
+121
+00:08:00,720 --> 00:08:02,910
+and so I'm going to look at another transaction this time around,
+
+122
+00:08:02,910 --> 00:08:05,190
+where actually the validation phase and plays a role.
+
+123
+00:08:05,720 --> 00:08:07,370
+And so we look at two transactions,
+
+124
+00:08:08,350 --> 00:08:10,240
+and this is sort of this example,
+
+125
+00:08:10,240 --> 00:08:16,240
+is a classic example to test whether a protocol provides serializability or not,
+
+126
+00:08:16,300 --> 00:08:17,950
+of course, it's not going to be approved,
+
+127
+00:08:17,950 --> 00:08:20,020
+but if you're one of these key examples,
+
+128
+00:08:20,020 --> 00:08:24,250
+but generally it's very helpful to see, to understand how the protocol works,
+
+129
+00:08:24,880 --> 00:08:27,970
+the protocol, the transactions are if x is 0,
+
+130
+00:08:27,970 --> 00:08:29,830
+then we're going to say y to 1,
+
+131
+00:08:30,490 --> 00:08:33,700
+so if object x 0, we'll see object y 1,
+
+132
+00:08:34,000 --> 00:08:36,310
+which is transaction 2 sort of the opposite,
+
+133
+00:08:36,580 --> 00:08:41,890
+it looks if y is 0, and is y 0, set x to 1.
+
+134
+00:08:44,080 --> 00:08:45,430
+And the reason of this sort of,
+
+135
+00:08:45,730 --> 00:08:48,700
+this is a good test for serializability,
+
+136
+00:08:48,700 --> 00:08:51,790
+is that either transaction 1 should go after T2, correct,
+
+137
+00:08:51,790 --> 00:08:53,620
+or T2 should go after T1
+
+138
+00:08:53,980 --> 00:08:56,410
+and depending on which order you run,
+
+139
+00:08:56,410 --> 00:08:58,720
+you know either y is 1, or x is 1,
+
+140
+00:08:58,930 --> 00:09:09,670
+but you never should have, you never should have the outcome said x is 1, oops, the x is 1, and y is 1.
+
+141
+00:09:11,560 --> 00:09:13,090
+And that should not be a lot,
+
+142
+00:09:13,090 --> 00:09:15,730
+because definitely violates serializability.
+
+143
+00:09:16,210 --> 00:09:17,140
+Does that make sense?
+
+144
+00:09:22,370 --> 00:09:24,440
+Okay, so what do we want to do is to test,
+
+145
+00:09:24,470 --> 00:09:28,070
+where FaRM is actually successful,
+
+146
+00:09:28,810 --> 00:09:31,480
+in a, we want to understand requirements,
+
+147
+00:09:31,480 --> 00:09:36,820
+and indeed a it is not possible that x is 1 and y is 1 get produced.
+
+148
+00:09:37,200 --> 00:09:39,120
+So let's look at the timeline,
+
+149
+00:09:39,300 --> 00:09:44,880
+let's say we're we have T1, here we have T2 timeline.
+
+150
+00:09:46,400 --> 00:09:50,600
+So they both you know in their sort of the preparation or execution phase,
+
+151
+00:09:50,600 --> 00:09:51,770
+both reads these objects,
+
+152
+00:09:51,770 --> 00:09:54,650
+so let's say they run through the concurrently,
+
+153
+00:09:54,650 --> 00:09:57,230
+we do a read of x and version number 0,
+
+154
+00:09:57,320 --> 00:09:59,750
+we do a read of y, the version number 0,
+
+155
+00:09:59,930 --> 00:10:00,830
+same here.
+
+156
+00:10:03,760 --> 00:10:09,310
+And of course T1 will update y, T2 will update x
+
+157
+00:10:09,490 --> 00:10:14,080
+and the base at some point you know those start to commit phase.
+
+158
+00:10:19,320 --> 00:10:20,970
+And you know let's,
+
+159
+00:10:22,580 --> 00:10:24,650
+so let's say the T1 that starts first
+
+160
+00:10:24,650 --> 00:10:29,540
+and basically grabs the, it needs to lock on y,
+
+161
+00:10:29,630 --> 00:10:31,850
+since it's going to be writing y,
+
+162
+00:10:32,270 --> 00:10:35,750
+so, let's say x successfully grab the lock and y
+
+163
+00:10:36,260 --> 00:10:42,920
+and so that actually will set the log bit you in the version number of the y object.
+
+164
+00:10:43,840 --> 00:10:46,900
+And then let's say you know actually,
+
+165
+00:10:47,140 --> 00:10:48,280
+since it's going to read,
+
+166
+00:10:48,370 --> 00:10:49,540
+it has read x,
+
+167
+00:10:49,540 --> 00:10:52,480
+but it's not as read x,
+
+168
+00:10:52,480 --> 00:10:55,510
+but it's not modifying x, but the validation of x,
+
+169
+00:10:56,780 --> 00:11:00,890
+you know x was read version number 0,
+
+170
+00:11:01,430 --> 00:11:04,730
+the you know at validation five,
+
+171
+00:11:04,730 --> 00:11:06,830
+so nothing actually has changed with x,
+
+172
+00:11:06,830 --> 00:11:09,110
+that version number still 0 there,
+
+173
+00:11:09,110 --> 00:11:11,210
+you know we're an executed in this order
+
+174
+00:11:11,510 --> 00:11:14,420
+and so things are sort of are fine,
+
+175
+00:11:14,690 --> 00:11:18,680
+and you know at some point, you know this transaction might commit.
+
+176
+00:11:19,970 --> 00:11:21,650
+So let's look at T2,
+
+177
+00:11:21,680 --> 00:11:27,740
+let's say you know T2 runs after the validation of x,
+
+178
+00:11:27,740 --> 00:11:29,090
+so it grabs the lock,
+
+179
+00:11:30,260 --> 00:11:36,470
+and and then you know the, it has read y,
+
+180
+00:11:36,470 --> 00:11:38,300
+so it needs to do a validation of y.
+
+181
+00:11:38,950 --> 00:11:41,590
+That's going to do a validation of y
+
+182
+00:11:42,040 --> 00:11:47,200
+and the question is, is that validation could succeed or not.
+
+183
+00:11:51,800 --> 00:11:56,420
+No, because the previous the other operation has allowed modified value,
+
+184
+00:11:56,420 --> 00:11:57,410
+so it's not the same,
+
+185
+00:11:57,410 --> 00:11:58,820
+that was originally read.
+
+186
+00:11:59,780 --> 00:12:01,910
+Yeah so the version numbers might be still the same,
+
+187
+00:12:01,910 --> 00:12:07,040
+but y, if you T1 [] has set the lock bit, right, for the object y
+
+188
+00:12:07,250 --> 00:12:09,470
+and so at this point, this validation will fail,
+
+189
+00:12:10,860 --> 00:12:12,210
+because it's not the same,
+
+190
+00:12:12,300 --> 00:12:14,940
+a lot of it has been set,
+
+191
+00:12:15,180 --> 00:12:18,090
+so to T2 transaction, the T2 transaction will abort.
+
+192
+00:12:19,810 --> 00:12:21,400
+Okay, does that makes sense?
+
+193
+00:12:22,990 --> 00:12:24,820
+So we see you at least in this particular example,
+
+194
+00:12:24,880 --> 00:12:27,340
+that you know it is the case,
+
+195
+00:12:27,340 --> 00:12:29,440
+that T1 and T2 both don't commit,
+
+196
+00:12:29,470 --> 00:12:31,900
+which would result in this incorrect outcome.
+
+197
+00:12:34,920 --> 00:12:36,090
+Any questions about this?
+
+198
+00:12:39,540 --> 00:12:40,740
+I I had a question.
+
+199
+00:12:41,560 --> 00:12:42,250
+Yeah.
+
+200
+00:12:42,760 --> 00:12:46,480
+Yeah, so, like for for the transactions,
+
+201
+00:12:46,810 --> 00:12:51,100
+so these are like these have to be like update transaction,
+
+202
+00:12:51,130 --> 00:12:54,760
+like rewrite correct read,
+
+203
+00:12:55,310 --> 00:12:56,570
+it couldn't do it.
+
+204
+00:12:57,580 --> 00:12:58,180
+Yeah, go ahead.
+
+205
+00:12:58,620 --> 00:13:04,530
+I I just wonder if they were like read operations, you could do that, like log free, right,
+
+206
+00:13:04,920 --> 00:13:06,000
+and as long as the.
+
+207
+00:13:06,180 --> 00:13:09,510
+Yeah, so this is actually, let's go back to this picture here, right,
+
+208
+00:13:09,510 --> 00:13:14,400
+then let's look at the, let's say, there were no writes involved in this transaction at all, right,
+
+209
+00:13:14,400 --> 00:13:16,650
+so for example the two obvious have been read correct
+
+210
+00:13:16,650 --> 00:13:18,780
+or store at you know P1 and P2.
+
+211
+00:13:19,830 --> 00:13:22,440
+So let's assume that these guys are actually not involved,
+
+212
+00:13:22,470 --> 00:13:24,090
+so those objects were not written,
+
+213
+00:13:24,090 --> 00:13:27,660
+so the only operation that's happening is read with that object.
+
+214
+00:13:28,010 --> 00:13:32,180
+And you see in and so the protocols carefully designed,
+
+215
+00:13:32,570 --> 00:13:34,460
+so that if you only do reads,
+
+216
+00:13:34,670 --> 00:13:37,250
+you only do one-sided at RDMAs, correct,
+
+217
+00:13:37,900 --> 00:13:39,940
+here in the execution phase
+
+218
+00:13:39,940 --> 00:13:42,100
+and one RDMA to do the validation,
+
+219
+00:13:43,720 --> 00:13:46,060
+and no locks are taken out,
+
+220
+00:13:46,090 --> 00:13:47,410
+no writes are being done,
+
+221
+00:13:47,440 --> 00:13:49,000
+no records are being appended,
+
+222
+00:13:49,060 --> 00:13:50,590
+that's the only thing that happens.
+
+223
+00:13:51,880 --> 00:13:55,450
+And so this is one of the cool features about FaRM,
+
+224
+00:13:55,630 --> 00:13:59,320
+is that these transactions that only do reads,
+
+225
+00:13:59,320 --> 00:14:04,720
+can be executed without, with only one-sided RDMAs
+
+226
+00:14:04,870 --> 00:14:11,710
+and only with no writes to any locks or grabbing locks
+
+227
+00:14:11,710 --> 00:14:14,920
+and so that's why one reason that they get extremely high performance.
+
+228
+00:14:16,150 --> 00:14:17,650
+And this is also the reason why,
+
+229
+00:14:17,650 --> 00:14:23,560
+for example the lock phase, the lock step and validation steps are two separate things,
+
+230
+00:14:23,560 --> 00:14:27,940
+because in for read-only transactions, there's no lock step.
+
+231
+00:14:31,030 --> 00:14:31,660
+Okay?
+
+232
+00:14:32,680 --> 00:14:34,720
+Actually, a question on that,
+
+233
+00:14:35,200 --> 00:14:38,050
+for read-only transactions,
+
+234
+00:14:38,050 --> 00:14:40,180
+why do we need the second valve,
+
+235
+00:14:40,240 --> 00:14:42,040
+why do we need the validation phase,
+
+236
+00:14:42,280 --> 00:14:43,990
+because aren't you like reading a value,
+
+237
+00:14:44,020 --> 00:14:47,140
+and then you're immediately validating right after it, like the version,
+
+238
+00:14:47,170 --> 00:14:47,890
+it seems like.
+
+239
+00:14:48,660 --> 00:14:50,100
+It could be another transaction,
+
+240
+00:14:50,100 --> 00:14:52,530
+that has been has modified the object yet,
+
+241
+00:14:52,860 --> 00:14:57,270
+so if transaction ran or started and committed before,
+
+242
+00:14:57,600 --> 00:15:02,180
+okay, the concurrent transaction actual writes might modify the object,
+
+243
+00:15:04,660 --> 00:15:06,190
+and now, we'll be back right,
+
+244
+00:15:06,190 --> 00:15:12,340
+so the the the transaction writes,
+
+245
+00:15:12,460 --> 00:15:17,230
+then the transaction that actually follows you know should you know see observed at last write.
+
+246
+00:15:19,280 --> 00:15:20,870
+But if they occur at the same time,
+
+247
+00:15:20,870 --> 00:15:22,970
+then we can reorder them either way.
+
+248
+00:15:23,060 --> 00:15:27,650
+Exactly at the same time, we order reorder them, yeah.
+
+249
+00:15:32,300 --> 00:15:35,720
+So it still seems to me, like the second validation,
+
+250
+00:15:35,750 --> 00:15:37,100
+because the first time you read it,
+
+251
+00:15:37,370 --> 00:15:41,090
+the second time you just immediately [] and see the version is the same machine,
+
+252
+00:15:41,210 --> 00:15:46,030
+it still seems to me like the second validation is like almost unnecessary.
+
+253
+00:15:46,420 --> 00:15:48,370
+I I, you might be right,
+
+254
+00:15:48,370 --> 00:15:49,780
+I haven't thought very hard about this,
+
+255
+00:15:49,780 --> 00:15:55,840
+that if there, if there are transactions are only read-only transactions,
+
+256
+00:15:55,840 --> 00:15:58,180
+you know then the validation is definitely not necessary,
+
+257
+00:15:58,360 --> 00:16:00,280
+I have very carefully thought about,
+
+258
+00:16:00,280 --> 00:16:01,840
+when there's a mix of transactions,
+
+259
+00:16:02,020 --> 00:16:04,000
+where there is a case where you need the validation.
+
+260
+00:16:04,740 --> 00:16:06,420
+Yeah, what would that be the case,
+
+261
+00:16:06,420 --> 00:16:09,450
+where like you have like, if you read a value,
+
+262
+00:16:10,020 --> 00:16:12,840
+like you expect to read, like two values automatically,
+
+263
+00:16:12,840 --> 00:16:15,480
+read value after you read a value,
+
+264
+00:16:15,510 --> 00:16:18,450
+like some transaction modifies the other value.
+
+265
+00:16:19,900 --> 00:16:21,790
+Yeah, it would be only one possible.
+
+266
+00:16:21,790 --> 00:16:22,360
+When it doesn't.
+
+267
+00:16:27,900 --> 00:16:29,970
+Yeah, sure, I'm not, I'm not quite sure,
+
+268
+00:16:30,060 --> 00:16:32,430
+actually in that case, if that's the problem.
+
+269
+00:16:33,210 --> 00:16:34,500
+Like, for example in this case,
+
+270
+00:16:34,500 --> 00:16:36,240
+you know this T1 and T2 cases,
+
+271
+00:16:36,240 --> 00:16:39,390
+really crucial that y actually does the validation, correct,
+
+272
+00:16:41,110 --> 00:16:50,220
+even though actually that transaction you know T1 only reads y, right.
+
+273
+00:16:52,020 --> 00:16:56,950
+But what if, transaction 2 was just x equals 1,
+
+274
+00:16:57,040 --> 00:16:59,080
+instead of like without that statement.
+
+275
+00:16:59,200 --> 00:17:00,340
+[Blind write].
+
+276
+00:17:02,110 --> 00:17:02,620
+Hmm?
+
+277
+00:17:02,920 --> 00:17:04,360
+If it is a blind write.
+
+278
+00:17:04,630 --> 00:17:10,210
+Yeah, it's just x equals one and then it executes after the validation of T1.
+
+279
+00:17:11,140 --> 00:17:12,430
+Yeah that's fine correct.
+
+280
+00:17:19,600 --> 00:17:20,650
+But whould.
+
+281
+00:17:20,650 --> 00:17:21,910
+I'm not sure what the question is.
+
+282
+00:17:22,150 --> 00:17:25,420
+Oh, so if T2 is is just,
+
+283
+00:17:25,420 --> 00:17:28,240
+like like you know write x equals 1,
+
+284
+00:17:28,540 --> 00:17:34,810
+within the validation step, after an excuse, after the validation step of T1,
+
+285
+00:17:35,050 --> 00:17:39,520
+wouldn't then T1 think that x equals 0,
+
+286
+00:17:39,740 --> 00:17:44,210
+but then x becomes 1 before the commit.
+
+287
+00:17:46,740 --> 00:17:50,400
+Okay, so okay, let me maybe we can make a hold up,
+
+288
+00:17:50,400 --> 00:17:53,190
+because I gotta redraw the whole picture
+
+289
+00:17:53,190 --> 00:17:55,440
+and figure out exactly what the scenario you're talking about.
+
+290
+00:17:56,210 --> 00:17:58,610
+Okay, so maybe we can go back to this at the end.
+
+291
+00:18:02,390 --> 00:18:03,320
+Sorry, I had a question,
+
+292
+00:18:03,320 --> 00:18:05,960
+what is the use case for normal transaction.
+
+293
+00:18:07,330 --> 00:18:13,510
+If think back Spanner and this paper,
+
+294
+00:18:13,510 --> 00:18:20,350
+like there's often the case in these workloads, the TPC-C workload and the TATP workload,
+
+295
+00:18:20,350 --> 00:18:23,860
+where you know there's a transaction that only does reads for example,
+
+296
+00:18:24,010 --> 00:18:26,200
+I've computed the balances of a set of accounts,
+
+297
+00:18:26,710 --> 00:18:28,420
+nothing is being written,
+
+298
+00:18:28,420 --> 00:18:30,700
+but you know a lot of things, a lot of accounts being read.
+
+299
+00:18:33,610 --> 00:18:34,630
+Thank you.
+
+300
+00:18:38,240 --> 00:18:41,600
+Okay, so we see here there's actually a validation phase is crucial, correct,
+
+301
+00:18:41,600 --> 00:18:48,350
+T1 and T2 transaction in in furthermore that actually figures out work out, correct,
+
+302
+00:18:48,350 --> 00:18:49,670
+we get strict serializability,
+
+303
+00:18:49,670 --> 00:18:50,810
+of course this is not a proof,
+
+304
+00:18:50,810 --> 00:18:56,540
+but it gives you you know this example to try to get at the tricky case,
+
+305
+00:18:56,540 --> 00:18:59,180
+you know actually FaRM seems to work out correctly.
+
+306
+00:19:00,820 --> 00:19:04,500
+Okay so, so that's on the concurrency control,
+
+307
+00:19:04,680 --> 00:19:06,630
+then the second part,
+
+308
+00:19:06,690 --> 00:19:09,480
+we want to talk a little bit about is fault tolerance.
+
+309
+00:19:11,220 --> 00:19:16,320
+And you really want to get the, not gonna go great amount of depth here,
+
+310
+00:19:16,380 --> 00:19:20,640
+just want to talk about the you know key challenge
+
+311
+00:19:20,850 --> 00:19:24,210
+and see you know and build some intuition,
+
+312
+00:19:24,210 --> 00:19:31,050
+why we might actually be hopeful that FaRM actually addresses the key challenge.
+
+313
+00:19:31,520 --> 00:19:33,530
+And so the key challenge,
+
+314
+00:19:33,950 --> 00:19:46,700
+and so we actually have the key challenge is that there's actually crashes after telling the application,
+
+315
+00:19:53,880 --> 00:19:55,890
+and then it has to be the case, right,
+
+316
+00:19:55,890 --> 00:19:58,170
+that the transaction persists.
+
+317
+00:20:00,410 --> 00:20:03,140
+Because we have informed the application that the transaction is committed,
+
+318
+00:20:03,140 --> 00:20:08,000
+so we can actually lose any writes that the transaction has done.
+
+319
+00:20:08,780 --> 00:20:10,940
+And so we can look at this picture again,
+
+320
+00:20:12,120 --> 00:20:15,630
+and see if we're, going to be hopeful that this is the case.
+
+321
+00:20:22,230 --> 00:20:25,320
+So you know there are a couple things you observe,
+
+322
+00:20:25,350 --> 00:20:28,260
+after you know the lock phase,
+
+323
+00:20:29,170 --> 00:20:30,940
+it is the case that,
+
+324
+00:20:33,200 --> 00:20:34,250
+after the lock phase,
+
+325
+00:20:34,250 --> 00:20:40,110
+it's the case that the two primaries P1 and P2 have a lock record,
+
+326
+00:20:42,840 --> 00:20:44,070
+which describes the update,
+
+327
+00:20:44,460 --> 00:20:49,980
+we don't really know the transaction, that record doesn't say whether the record actually,
+
+328
+00:20:49,980 --> 00:20:52,290
+whether the transaction is committed,
+
+329
+00:20:52,380 --> 00:20:54,690
+but we have information about the transaction.
+
+330
+00:20:55,950 --> 00:20:58,830
+Then, after this step, to commit backup step,
+
+331
+00:20:59,170 --> 00:21:06,370
+we know that you know backup you want B1 and B2 have the commit record.
+
+332
+00:21:12,690 --> 00:21:16,110
+And then before you know the transaction,
+
+333
+00:21:16,440 --> 00:21:19,830
+the transaction coordinator reports to the application,
+
+334
+00:21:19,830 --> 00:21:22,290
+that it has to be successful,
+
+335
+00:21:22,320 --> 00:21:24,600
+we know that one of the primaries,
+
+336
+00:21:24,810 --> 00:21:27,450
+let's say P1 also has commit record.
+
+337
+00:21:34,130 --> 00:21:37,190
+So you know let's assume there's a crash you know like right here,
+
+338
+00:21:37,220 --> 00:21:41,750
+so at that particular just after that commit point, you know and the system crashes
+
+339
+00:21:41,750 --> 00:21:44,420
+and what we want to convince ourselves off is that,
+
+340
+00:21:44,750 --> 00:21:46,190
+if there's one failure,
+
+341
+00:21:46,430 --> 00:21:50,240
+we look for each shard, things actually work out correct.
+
+342
+00:21:51,040 --> 00:21:56,230
+And so the worst case basically correct is the B2 fails,
+
+343
+00:21:58,560 --> 00:22:02,910
+so here, where is B2, you know B2 B2 fails.
+
+344
+00:22:03,460 --> 00:22:06,340
+And so we lose you know that commit record,
+
+345
+00:22:06,370 --> 00:22:07,600
+that is actually there,
+
+346
+00:22:07,930 --> 00:22:11,560
+the primary might actually have not a commit record yet.
+
+347
+00:22:11,930 --> 00:22:16,580
+Because you know it crashed after we see if the acknowledgement of one primary,
+
+348
+00:22:16,580 --> 00:22:19,460
+so let's say that P1 must actually have to commit record.
+
+349
+00:22:20,330 --> 00:22:22,730
+So in this case, P1 have to permit record,
+
+350
+00:22:25,260 --> 00:22:29,550
+and you know and of course you know the backup has committed record for B1.
+
+351
+00:22:30,410 --> 00:22:35,750
+So this is enough information correct for convince during recovery,
+
+352
+00:22:35,840 --> 00:22:37,850
+that actually the transaction has committed,
+
+353
+00:22:37,850 --> 00:22:40,220
+because you know we have a commit record,
+
+354
+00:22:40,250 --> 00:22:42,620
+which is just what the tid that's committed
+
+355
+00:22:43,100 --> 00:22:46,010
+and we actually have all the information at the backups,
+
+356
+00:22:46,040 --> 00:22:53,240
+namely the lock, the commit records which describe the write transactions, on the backups
+
+357
+00:22:53,240 --> 00:22:58,730
+and so during recovery, we actually have enough information to decide you know that the transaction actually has committed.
+
+358
+00:23:00,650 --> 00:23:02,930
+And so that's sufficient,
+
+359
+00:23:02,990 --> 00:23:04,550
+yeah, of course there's a complex protocol,
+
+360
+00:23:04,550 --> 00:23:05,960
+that actually needs to go into action
+
+361
+00:23:05,960 --> 00:23:09,410
+and sort of look at all the pieces that are left behind by the transaction
+
+362
+00:23:09,560 --> 00:23:11,720
+with enough pieces left behind transaction for the coordinator,
+
+363
+00:23:11,720 --> 00:23:20,120
+for the new coordinator the recovery process to decide that actually this transaction indeed has committed and should be persistent.
+
+364
+00:23:22,360 --> 00:23:22,960
+Okay?
+
+365
+00:23:30,080 --> 00:23:31,340
+Good.
+
+366
+00:23:31,960 --> 00:23:33,700
+So let me summarize FaRM
+
+367
+00:23:33,790 --> 00:23:37,810
+and before we jump into the discussion of spark.
+
+368
+00:23:41,270 --> 00:23:42,920
+So you know top level,
+
+369
+00:23:42,920 --> 00:23:46,430
+you know what's so cool about FaRM is fast,
+
+370
+00:23:46,850 --> 00:23:49,520
+it can execute many many, many transactions per second.
+
+371
+00:23:50,160 --> 00:23:54,240
+You know there are some restrictions of course you know on FaRM,
+
+372
+00:23:54,270 --> 00:24:00,690
+you can't do it all all the time.
+
+373
+00:24:02,060 --> 00:24:04,120
+So, first of all,
+
+374
+00:24:04,120 --> 00:24:06,430
+it seems few conflicts,
+
+375
+00:24:08,160 --> 00:24:12,150
+so use this optimistic concurrency control scheme
+
+376
+00:24:12,870 --> 00:24:15,390
+and the reason that uses this optimistic concurrency control scheme,
+
+377
+00:24:15,390 --> 00:24:16,830
+because want to take out locks,
+
+378
+00:24:16,830 --> 00:24:19,200
+because it wants to do this one-sided RDMA,
+
+379
+00:24:19,260 --> 00:24:21,240
+without actually any server involvement.
+
+380
+00:24:21,830 --> 00:24:24,770
+So using optimistic concurrency control scheme,
+
+381
+00:24:24,920 --> 00:24:28,580
+that means that, if you want a good performance
+
+382
+00:24:28,580 --> 00:24:31,670
+and avoid transaction boards that workload better,
+
+383
+00:24:31,670 --> 00:24:33,590
+actually, have few conflicts,
+
+384
+00:24:33,830 --> 00:24:35,090
+we're seeing new innovation,
+
+385
+00:24:35,090 --> 00:24:40,490
+there are two common benchmarks that are being used in the transaction literature to measure systems,
+
+386
+00:24:40,820 --> 00:24:42,440
+for those two benchmarks,
+
+387
+00:24:42,590 --> 00:24:45,380
+you know clearly as doing extremely well,
+
+388
+00:24:45,410 --> 00:24:48,350
+doesn't mean they're not that many conflicts.
+
+389
+00:24:49,770 --> 00:24:51,270
+The second assumption, it makes is that,
+
+390
+00:24:51,270 --> 00:24:52,920
+the data must fit in memory,
+
+391
+00:24:58,560 --> 00:25:01,710
+so it means that if you have a really really big database,
+
+392
+00:25:01,710 --> 00:25:03,000
+you have to buy more machines,
+
+393
+00:25:03,480 --> 00:25:06,870
+or if you're really the data too big
+
+394
+00:25:06,870 --> 00:25:08,160
+and you don't want to buy more machines,
+
+395
+00:25:08,160 --> 00:25:09,750
+then basically you can't use FaRM
+
+396
+00:25:09,990 --> 00:25:12,540
+and you have to go back to more traditional database,
+
+397
+00:25:12,540 --> 00:25:14,460
+that actually has you know persistent storage
+
+398
+00:25:14,460 --> 00:25:22,260
+and so you can read or write record to a much larger storage device.
+
+399
+00:25:24,420 --> 00:25:31,410
+Replication is only, it's only within the data center.
+
+400
+00:25:36,520 --> 00:25:39,130
+So in that way, in that way, respect,
+
+401
+00:25:39,130 --> 00:25:41,770
+it's quite different from Spanner,
+
+402
+00:25:41,770 --> 00:25:47,680
+the whole goal, there was to do synchronous transactions across the synchronous replication across data centers,
+
+403
+00:25:48,040 --> 00:25:53,530
+you know to support applications, that need to be able to survive
+
+404
+00:25:53,530 --> 00:25:56,020
+or continue while some data centers are down,
+
+405
+00:25:56,200 --> 00:25:59,110
+indicates you know FaRM that is just not the case,
+
+406
+00:25:59,200 --> 00:26:01,690
+it's not targeted to those kinds of applications.
+
+407
+00:26:03,860 --> 00:26:05,990
+And then the final point is,
+
+408
+00:26:06,170 --> 00:26:14,550
+it requires you know pretty fancy or exotic hardware,
+
+409
+00:26:15,120 --> 00:26:16,920
+in particular has two things,
+
+410
+00:26:16,920 --> 00:26:23,160
+this a UPS, [] UPS to survive complete data center outages
+
+411
+00:26:23,370 --> 00:26:28,080
+and more importantly you know use this RDMA NICs,
+
+412
+00:26:28,570 --> 00:26:30,520
+you know get actually really high performance.
+
+413
+00:26:35,120 --> 00:26:40,830
+Okay, that's all I wanted to say about FaRM,
+
+414
+00:26:40,860 --> 00:26:42,810
+unless there are any further questions.
+
+415
+00:26:55,240 --> 00:27:06,690
+Okay, so that basically ends set of paper or ends transaction side of this 6.824,
+
+416
+00:27:06,960 --> 00:27:10,470
+so we're sort of done three lectures on transactions
+
+417
+00:27:10,470 --> 00:27:14,700
+and that was basically this is the end of talking about transactions,
+
+418
+00:27:14,700 --> 00:27:16,380
+so will show up in other papers,
+
+419
+00:27:16,380 --> 00:27:18,630
+but we're not going to talk about any more detail,
+
+420
+00:27:18,870 --> 00:27:25,410
+in fact we're basically sort of done with talking about you know sort of the most challenging part in the distributed systems,
+
+421
+00:27:25,410 --> 00:27:28,320
+namely building fault tolerant storage systems,
+
+422
+00:27:28,590 --> 00:27:32,940
+and you know we're now seeing a broad spectrum of different designs,
+
+423
+00:27:32,940 --> 00:27:39,240
+including designs that they are actually supports very powerful programming abstraction of transactions.
+
+424
+00:27:39,870 --> 00:27:42,240
+So in the next, this lecture,
+
+425
+00:27:42,240 --> 00:27:44,790
+the remaining of this lecture and subsequent lectures,
+
+426
+00:27:45,090 --> 00:27:47,010
+we're going to sort of look at different topics,
+
+427
+00:27:47,040 --> 00:27:50,010
+that were related to storage systems.
+
+428
+00:27:51,410 --> 00:27:56,840
+And so the first topic, that we're gonna be talking about is spark.
+
