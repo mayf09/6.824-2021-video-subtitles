@@ -30,7 +30,7 @@
 | 12   | &check; | &check; |         |
 | 13   | &check; | &check; |         |
 | 14   | &check; | &check; |         |
-| 15   | &check; |         |         |
+| 15   | &check; | &check; |         |
 | 16   | &check; |         |         |
 | 17   | &check; | &check; |         |
 | 18   | &check; |         |         |
