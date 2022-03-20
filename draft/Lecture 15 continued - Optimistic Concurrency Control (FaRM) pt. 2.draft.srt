@@ -2903,22 +2903,22 @@ seems to work out correctly.|
 582
 00:19:00,820 --> 00:19:01,840
 0,270 270,720
-Okay so.
+Okay so,
 
 583
 00:19:02,670 --> 00:19:03,600
 0,150 150,420 420,600 600,810 810,930
-So that's on the con
+so that's on the {concurrency
 
 584
 00:19:03,600 --> 00:19:05,850
 0,300 300,900 1080,1830 1890,2190 2190,2250
-currency control, a then the
+-} control,| {} then the
 
 585
 00:19:05,850 --> 00:19:07,320
 0,300 300,780 840,1170 1170,1350 1350,1470
-second part, a we want
+second part,| {} we want
 
 586
 00:19:07,320 --> 00:19:07,950
@@ -2928,17 +2928,17 @@ to talk a little bit
 587
 00:19:07,950 --> 00:19:09,900
 0,360 360,630 630,810 810,1530
-about is full tolerance.
+about is fault tolerance.|
 
 588
 00:19:11,220 --> 00:19:12,630
 0,330 330,690 870,1080 1080,1260 1260,1410
-Um, and you really want
+{} And you really want
 
 589
 00:19:12,630 --> 00:19:14,790
 0,210 210,480 480,1110 1680,1950 1950,2160
-to get the not gonna
+to get the, not gonna
 
 590
 00:19:14,790 --> 00:19:15,870
@@ -2948,7 +2948,7 @@ go great amount of depth
 591
 00:19:15,870 --> 00:19:17,520
 0,450 510,840 840,960 960,1230 1260,1650
-here, just want to talk
+here,| just want to talk
 
 592
 00:19:17,520 --> 00:19:19,890
@@ -2958,12 +2958,12 @@ about the you know key
 593
 00:19:19,890 --> 00:19:22,800
 0,750 960,1530 1530,2310 2310,2460 2460,2910
-challenge and she you know
+challenge| and see you know
 
 594
 00:19:22,800 --> 00:19:24,600
 0,420 420,630 630,780 780,1410 1410,1800
-and build some intuition, why
+and build some intuition,| why
 
 595
 00:19:24,600 --> 00:19:26,190
@@ -2973,57 +2973,57 @@ we might actually be hopeful
 596
 00:19:26,190 --> 00:19:29,130
 0,390 390,990 1350,2010 2010,2490 2490,2940
-that a farm actually, um
+that {} FaRM actually {}
 
 597
 00:19:29,490 --> 00:19:31,120
 0,690 690,780 780,960 960,1560
-addresses the key challenge.
+addresses the key challenge.|
 
 598
 00:19:31,520 --> 00:19:33,530
 0,180 180,540 810,1080 1080,1290 1290,2010
-And so the key challenge,
+And so the key challenge,|
 
 599
 00:19:33,950 --> 00:19:35,930
 0,750 750,870 990,1260 1260,1710 1710,1980
-um, and so we actually
+{} and so we actually
 
 600
 00:19:35,930 --> 00:19:37,310
 0,120 390,540 540,900 900,1230 1230,1380
-have the key tells us
+have the key challenge is
 
 601
 00:19:37,310 --> 00:19:41,040
 0,450 510,720 720,1350 1380,2580
-that there's actually crashes.
+that there's actually crashes
 
 602
 00:19:42,960 --> 00:19:45,140
 0,1440
-After.
+after
 
 603
 00:19:45,410 --> 00:19:47,340
 0,360 360,480 480,1290
-Telling the application.
+telling the application,|
 
 604
 00:19:53,880 --> 00:19:54,780
 0,330 330,480 480,570 570,810 810,900
-And then it has to
+and then it has to
 
 605
 00:19:54,780 --> 00:19:56,010
 0,90 90,180 180,810 840,1110 1110,1230
-be the case works out
+be the case, right,| that
 
 606
 00:19:56,010 --> 00:19:59,560
 0,210 210,1020 1350,2160
-the transaction persists.
+the transaction persists.|
 
 607
 00:20:00,410 --> 00:20:01,430
@@ -3033,22 +3033,22 @@ Because we have informed the
 608
 00:20:01,430 --> 00:20:02,780
 0,570 570,750 750,840 840,1260 1260,1350
-application that the destruction is
+application that the transaction is
 
 609
 00:20:02,780 --> 00:20:04,010
 0,360 360,480 480,600 600,810 810,1230
-permitted, so we can actually
+committed,| so we can actually
 
 610
 00:20:04,010 --> 00:20:06,620
 0,690 930,1800 1830,2370 2370,2520 2520,2610
-lose any rights that the
+lose any writes that the
 
 611
 00:20:06,620 --> 00:20:09,080
 0,480 480,1080 1080,1380 2160,2340 2340,2460
-transaction has done and so
+transaction has done.| And so
 
 612
 00:20:09,080 --> 00:20:10,130
@@ -3058,12 +3058,12 @@ we can look at this
 613
 00:20:10,130 --> 00:20:11,200
 0,300 300,810
-picture again.
+picture again,|
 
 614
 00:20:12,120 --> 00:20:13,800
 0,330 330,690 690,870 870,1530 1560,1680
-And see if we're going
+and see if we're, going
 
 615
 00:20:13,800 --> 00:20:14,820
@@ -3073,7 +3073,7 @@ to be hopeful that this
 616
 00:20:14,820 --> 00:20:15,820
 0,120 120,240 240,810
-is the case.
+is the case.|
 
 617
 00:20:22,230 --> 00:20:23,730
@@ -3083,32 +3083,32 @@ So you know there are
 618
 00:20:23,730 --> 00:20:25,320
 0,30 30,240 240,510 510,870 870,1590
-a couple things you observe
+a couple things you observe,|
 
 619
 00:20:25,350 --> 00:20:27,480
 0,750 780,1710 1740,1890 1890,1980 1980,2130
-a after you know the
+{} after you know the
 
 620
 00:20:27,480 --> 00:20:28,600
 0,270 270,780
-lock face.
+lock phase,|
 
 621
 00:20:29,170 --> 00:20:30,400
 0,360 360,510 510,690 690,780 780,1230
-A it is the case
+{} it is the case
 
 622
 00:20:30,400 --> 00:20:31,260
 0,540
-that.
+that,|
 
 623
 00:20:33,200 --> 00:20:34,490
 0,330 330,390 390,600 600,1050 1050,1290
-After the walk face it's
+after the lock phase,| it's
 
 624
 00:20:34,490 --> 00:20:35,390
@@ -3118,22 +3118,22 @@ the case that the two
 625
 00:20:35,390 --> 00:20:37,080
 0,630 630,810 810,1320
-primaries p one.
+primaries {P1 -}
 
 626
 00:20:37,410 --> 00:20:40,110
 0,480 480,1140 1560,1800 1800,2190 2190,2700
-Mp two f walk record.
+{and,P2 -} have {a,lock} record,|
 
 627
 00:20:42,840 --> 00:20:44,670
 0,240 240,690 690,810 810,1230 1620,1830
-Which describes the update, we
+which describes the update,| we
 
 628
 00:20:44,670 --> 00:20:46,110
 0,150 150,330 330,570 570,660 660,1440
-don't really know the transaction
+don't really know the transaction,
 
 629
 00:20:46,650 --> 00:20:48,420
@@ -3143,47 +3143,47 @@ that record doesn't say whether
 630
 00:20:48,420 --> 00:20:51,090
 0,420 570,990 990,1560 1560,2310 2310,2670
-the record actually whether the
+the record actually,| whether the
 
 631
 00:20:51,180 --> 00:20:53,010
 0,510 510,630 630,1110 1200,1710 1710,1830
-transaction is committed, but we
+transaction is committed,| but we
 
 632
 00:20:53,010 --> 00:20:54,690
 0,330 330,870 870,1050 1050,1140 1140,1680
-have information about the transaction.
+have information about the transaction.|
 
 633
 00:20:55,950 --> 00:20:57,510
 0,570 570,930 930,1170 1170,1470 1470,1560
-Then, after this step to
+Then, after this step, to
 
 634
 00:20:57,510 --> 00:20:58,980
 0,300 300,720 720,1320
-commit backup step.
+commit backup step,|
 
 635
 00:20:59,170 --> 00:21:00,250
 0,240 240,360 360,600 600,960 960,1080
-Now we know that you
+{} we know that you
 
 636
 00:21:00,250 --> 00:21:01,840
 0,120 120,570 840,1170 1170,1440 1440,1590
-know backwards you want b
+know backup you want {B1
 
 637
 00:21:01,840 --> 00:21:04,990
 0,570 600,900 900,1080 1080,1650 2670,3150
-one and b two of
+-} and {B2 -} have
 
 638
 00:21:04,990 --> 00:21:07,060
 0,510 570,930 930,1380
-the committee record.
+the commit record.|
 
 639
 00:21:12,690 --> 00:21:14,490
@@ -3193,37 +3193,37 @@ And then before you know
 640
 00:21:14,490 --> 00:21:18,450
 0,450 780,1620 1950,2340 2340,2760 2760,3960
-the transaction, the transaction coordinator
+the transaction,| the transaction coordinator
 
 641
 00:21:18,450 --> 00:21:20,250
 0,480 480,600 600,720 720,1380 1380,1800
-reports to the application that
+reports to the application,| that
 
 642
 00:21:20,580 --> 00:21:21,510
 0,450 450,660 660,780 780,840 840,930
-a it has to be
+{} it has to be
 
 643
 00:21:21,510 --> 00:21:23,490
 0,780 810,960 960,1110 1110,1260 1260,1980
-successful, we know that one
+successful,| we know that one
 
 644
 00:21:23,520 --> 00:21:25,380
 0,120 120,240 240,1080 1290,1680 1680,1860
-of the primaries, let's say
+of the primaries,| let's say
 
 645
 00:21:25,380 --> 00:21:26,820
 0,180 180,690 780,1170 1170,1350 1350,1440
-p one also has to
+{P1 -} also has {}
 
 646
 00:21:26,820 --> 00:21:28,140
 0,240 240,630
-commit record.
+commit record.|
 
 647
 00:21:34,130 --> 00:21:35,300
@@ -3238,12 +3238,12 @@ there's a crash you know
 649
 00:21:36,200 --> 00:21:37,580
 0,270 270,510 510,990 1020,1260 1260,1380
-like right here, so at
+like right here,| so at
 
 650
 00:21:37,580 --> 00:21:38,870
 0,180 180,630 630,840 840,1110 1110,1290
-that particular just after dot
+that particular just after that
 
 651
 00:21:38,870 --> 00:21:40,790
@@ -3253,7 +3253,7 @@ commit point, you know and
 652
 00:21:40,790 --> 00:21:42,560
 0,90 90,360 360,960 960,1500 1560,1770
-the system crashes and what
+the system crashes| and what
 
 653
 00:21:42,560 --> 00:21:43,520
@@ -3263,22 +3263,22 @@ we want to convince ourselves
 654
 00:21:43,520 --> 00:21:45,170
 0,300 300,510 510,900 1230,1440 1440,1650
-off is that um, if
+off is that,| {} if
 
 655
 00:21:45,170 --> 00:21:47,000
 0,120 120,300 300,1020 1260,1590 1590,1830
-there's one failure, um, we
+there's one failure,| {} we
 
 656
 00:21:47,000 --> 00:21:49,070
 0,330 330,810 810,990 990,1500 1680,2070
-look for each chart things
+look for each shard, things
 
 657
 00:21:49,070 --> 00:21:50,440
 0,300 300,570 570,720 720,1170
-actually work out correct.
+actually work out correct.|
 
 658
 00:21:51,040 --> 00:21:52,570
@@ -3288,42 +3288,42 @@ And so the worst case
 659
 00:21:52,570 --> 00:21:55,120
 0,480 480,750 750,1230 1470,2310 2340,2550
-basically wreck is the v
+basically correct is the {B2
 
 660
 00:21:55,120 --> 00:21:56,440
 0,390 390,1110
-two fails.
+-} fails,|
 
 661
 00:21:58,560 --> 00:21:59,520
 0,180 180,420 420,660 660,780 780,960
-So here, where is v
+so here, where is {B2
 
 662
 00:21:59,520 --> 00:22:02,010
 0,540 570,1320 1410,1800 1800,2250 2280,2490
-two A V two t
+-}, {you,know} {B2 -} {B2
 
 663
 00:22:02,010 --> 00:22:03,180
 0,180 180,900
-two fails.
+-} fails.|
 
 664
 00:22:03,460 --> 00:22:05,170
 0,660 660,930 930,1050 1050,1200 1200,1710
-Um, and so we lose
+{} And so we lose
 
 665
 00:22:05,170 --> 00:22:06,340
 0,120 120,210 210,420 420,720 720,1170
-you know that commit record
+you know that commit record,|
 
 666
 00:22:06,370 --> 00:22:08,440
 0,270 270,390 390,720 720,1230 1560,2070
-that is actually there, the
+that is actually there,| the
 
 667
 00:22:08,470 --> 00:22:10,450
@@ -3333,52 +3333,52 @@ primary might actually have not
 668
 00:22:10,480 --> 00:22:11,840
 0,120 120,450 450,720 720,1080
-a committee record yet.
+a commit record yet.|
 
 669
 00:22:11,930 --> 00:22:13,070
 0,420 420,750 750,870 870,960 960,1140
-Um, because you know it
+{} Because you know it
 
 670
 00:22:13,070 --> 00:22:14,360
 0,450 450,870 870,930 930,1170 1170,1290
-craps afterwards to see if
+crashed after we see if
 
 671
 00:22:14,360 --> 00:22:16,580
 0,90 90,570 570,630 630,1290 1560,2220
-the acknowledgement of one primary
+the acknowledgement of one primary,|
 
 672
 00:22:16,580 --> 00:22:17,510
 0,150 150,330 330,600 600,750 750,930
-so let's say that p
+so let's say that {P1
 
 673
 00:22:17,510 --> 00:22:18,800
 0,390 390,690 690,990 990,1200 1200,1290
-one must actually have to
+-} must actually have to
 
 674
 00:22:18,800 --> 00:22:19,780
 0,270 270,660
-commit record.
+commit record.|
 
 675
 00:22:20,330 --> 00:22:21,380
 0,300 300,360 360,540 540,930 930,1050
-So in this case, you
+So in this case, {P1
 
 676
 00:22:21,380 --> 00:22:22,730
 0,360 360,570 570,630 630,900 900,1350
-will have to permit record.
+-} have to permit record,|
 
 677
 00:22:25,260 --> 00:22:26,400
 0,420 420,570 570,750 750,1050 1050,1140
-And you know and of
+and you know and of
 
 678
 00:22:26,400 --> 00:22:27,570
@@ -3388,12 +3388,12 @@ course you know the backup
 679
 00:22:27,570 --> 00:22:29,130
 0,360 360,660 660,1080 1110,1440 1440,1560
-has committed record for b
+has committed record for {B1
 
 680
 00:22:29,130 --> 00:22:30,080
 0,420
-one.
+-}.|
 
 681
 00:22:30,410 --> 00:22:31,940
@@ -3403,32 +3403,32 @@ So this is enough information
 682
 00:22:31,940 --> 00:22:35,090
 0,570 570,1110 1230,1680 1680,2700 2730,3150
-correct for convince a during
+correct for convince {} during
 
 683
 00:22:35,090 --> 00:22:36,920
 0,660 750,960 960,1260 1260,1350 1350,1830
-recovery that actually the rejection
+recovery,| that actually the transaction
 
 684
 00:22:36,920 --> 00:22:38,990
 0,360 360,930 930,1560 1650,1890 1890,2070
-as commitments because now we
+has committed,| because {you,know} we
 
 685
 00:22:38,990 --> 00:22:40,670
 0,390 390,480 480,750 750,1230 1260,1680
-have a committee record which
+have a commit record,| which
 
 686
 00:22:40,670 --> 00:22:41,930
 0,150 150,330 330,480 480,570 570,1260
-is just what the geese
+is just what the tid
 
 687
 00:22:41,930 --> 00:22:44,060
 0,180 180,690 1170,1740 1740,1890 1890,2130
-that's committed and we actually
+that's committed| and we actually
 
 688
 00:22:44,060 --> 00:22:45,260
@@ -3438,22 +3438,22 @@ have all the information at
 689
 00:22:45,260 --> 00:22:47,900
 0,90 90,750 780,1260 1260,1620 2160,2640
-the backups, namely the walk,
+the backups,| namely the lock,
 
 690
 00:22:47,900 --> 00:22:49,610
 0,270 300,600 600,900 900,1110 1110,1710
-the committee records which describe
+the commit records which describe
 
 691
 00:22:49,610 --> 00:22:52,790
 0,450 450,840 840,1830 1950,2730 2730,3180
-the right transformations, um on
+the write transactions, {} on
 
 692
 00:22:52,790 --> 00:22:54,020
 0,60 60,450 450,600 600,930 930,1230
-the backups and so during
+the backups| and so during
 
 693
 00:22:54,020 --> 00:22:55,520
@@ -3473,12 +3473,12 @@ that the transaction actually has
 696
 00:22:58,340 --> 00:22:58,920
 0,390
-committed.
+committed.|
 
 697
 00:23:00,650 --> 00:23:03,200
 0,630 900,1320 1320,1560 1560,2280 2340,2550
-And so that's sufficient yeah,
+And so that's sufficient,| yeah,
 
 698
 00:23:03,200 --> 00:23:04,100
@@ -3488,12 +3488,12 @@ of course there's a complex
 699
 00:23:04,100 --> 00:23:05,180
 0,450 450,600 600,870 870,1020 1020,1080
-vertical that actually needs to
+protocol,| that actually needs to
 
 700
 00:23:05,180 --> 00:23:06,200
 0,180 180,420 420,780 780,870 870,1020
-go into action and sort
+go into action| and sort
 
 701
 00:23:06,200 --> 00:23:07,010
@@ -3508,17 +3508,17 @@ pieces that are left behind
 703
 00:23:08,540 --> 00:23:10,130
 0,120 120,210 210,870 1020,1200 1200,1590
-by the transaction with enough
+by the transaction| with enough
 
 704
 00:23:10,130 --> 00:23:11,360
 0,390 390,570 570,930 930,1110 1110,1230
-pieces left behind through it
+pieces left behind transaction for
 
 705
 00:23:11,360 --> 00:23:13,700
 0,90 90,360 360,480 480,1830 1830,2340
-is actually four z new
+the coordinator,| for the new
 
 706
 00:23:13,850 --> 00:23:16,040
@@ -3538,37 +3538,37 @@ indeed has committed and should
 709
 00:23:19,430 --> 00:23:20,260
 0,90 90,690
-be persistent.
+be persistent.|
 
 710
 00:23:22,360 --> 00:23:23,240
 0,600
-Okay.
+Okay?|
 
 711
 00:23:30,080 --> 00:23:31,720
 0,480 510,1260
-Good, um.
+Good. {}|
 
 712
 00:23:31,960 --> 00:23:33,700
 0,120 120,240 240,660 660,1170 1170,1740
-So let me summarize farm
+So let me summarize FaRM|
 
 713
 00:23:33,790 --> 00:23:35,860
 0,540 780,1440 1440,1740 1740,1830 1830,2070
-a and before we jump
+{} and before we jump
 
 714
 00:23:35,860 --> 00:23:37,810
 0,390 390,630 630,1080 1080,1170 1170,1950
-into the discussion of spark.
+into the discussion of spark.|
 
 715
 00:23:41,270 --> 00:23:43,010
 0,540 690,870 870,1140 1140,1650 1650,1740
-So a top level you
+So {you,know} top level,| you
 
 716
 00:23:43,010 --> 00:23:44,360
@@ -3578,7 +3578,7 @@ know what's so cool about
 717
 00:23:44,360 --> 00:23:47,030
 0,510 540,990 990,1380 1380,2070 2490,2670
-SOA farm is fast, it
+{} FaRM is fast,| it
 
 718
 00:23:47,030 --> 00:23:48,440
@@ -3588,12 +3588,12 @@ can execute many many, many
 719
 00:23:48,440 --> 00:23:49,860
 0,510 510,600 600,1080
-transactions per second.
+transactions per second.|
 
 720
 00:23:50,160 --> 00:23:51,480
 0,420 420,510 510,600 600,750 750,1320
-Um, you know there are
+{} You know there are
 
 721
 00:23:51,750 --> 00:23:53,250
@@ -3603,47 +3603,47 @@ some restrictions of course you
 722
 00:23:53,250 --> 00:23:54,930
 0,210 210,390 390,420 420,990 1020,1680
-know on a farm, you
+know on {} FaRM,| you
 
 723
 00:23:54,930 --> 00:23:56,880
 0,240 240,330 330,570 570,1110 1320,1950
-can't do it all a
+can't do it all {
 
 724
 00:23:57,450 --> 00:23:58,660
 0,930
-um.
+-}
 
 725
 00:23:58,860 --> 00:24:01,000
 0,360 360,450 450,960 1110,1830
-All the time, um.
+all the time. {}|
 
 726
 00:24:02,060 --> 00:24:03,120
 0,270 270,750
-Yeah so.
+{} So,
 
 727
 00:24:03,550 --> 00:24:04,510
 0,300 300,390 390,570 570,630 630,960
-First of all, it seems
+first of all,| it seems
 
 728
 00:24:04,510 --> 00:24:07,320
 0,570 810,1920
-few conflicts.
+few conflicts,|
 
 729
 00:24:08,160 --> 00:24:10,710
 0,210 210,540 540,720 720,1530 1560,2550
-So use this optimistic a
+so use this optimistic {}
 
 730
 00:24:10,800 --> 00:24:13,110
 0,450 450,780 780,1350 2070,2250 2250,2310
-currency control scheme and the
+concurrency control scheme| and the
 
 731
 00:24:13,110 --> 00:24:14,550
@@ -3653,47 +3653,47 @@ reason that uses this optimistic
 732
 00:24:14,550 --> 00:24:16,020
 0,330 330,540 540,840 840,1080 1080,1470
-occurrence roll screen because want
+concurrency control scheme,| because want
 
 733
 00:24:16,020 --> 00:24:17,040
 0,60 60,270 270,420 420,810 810,1020
-to take out blocks because
+to take out locks,| because
 
 734
 00:24:17,040 --> 00:24:17,670
 0,90 90,270 270,360 360,480 480,630
-he wants to do this
+it wants to do this
 
 735
 00:24:17,670 --> 00:24:20,190
 0,570 570,1530 1590,2040 2040,2340 2340,2520
-one-sided RNA without actually any
+one-sided RDMA,| without actually any
 
 736
 00:24:20,190 --> 00:24:21,460
 0,330 330,1050
-server involvement.
+server involvement.|
 
 737
 00:24:21,830 --> 00:24:23,090
 0,270 270,450 450,750 750,1170 1170,1260
-Um, so using optimistic con
+{} So using optimistic {concurrency
 
 738
 00:24:23,090 --> 00:24:25,490
 0,390 390,1200 1200,1680 1830,2190 2190,2400
-currency control scheme, a that
+-} control scheme,| {} that
 
 739
 00:24:25,490 --> 00:24:27,470
 0,330 330,690 690,1440 1560,1830 1830,1980
-means that, um, um, if
+means that, { -} if
 
 740
 00:24:27,470 --> 00:24:28,580
 0,120 120,270 270,330 330,600 600,1110
-you want a good performance
+you want a good performance|
 
 741
 00:24:28,580 --> 00:24:30,740
@@ -3703,17 +3703,17 @@ and avoid transaction boards that
 742
 00:24:30,740 --> 00:24:32,000
 0,90 90,360 360,480 480,930 930,1260
-we work on better actually,
+{} {workload -} better,| actually,
 
 743
 00:24:32,000 --> 00:24:34,280
 0,60 60,930 960,1590 1830,2040 2040,2280
-um phua conflicts, we're seeing
+{} {have,few} conflicts,| we're seeing
 
 744
 00:24:34,280 --> 00:24:36,050
 0,180 180,810 810,1020 1020,1260 1530,1770
-new innovation, there are two
+new innovation,| there are two
 
 745
 00:24:36,050 --> 00:24:37,460
@@ -3728,47 +3728,47 @@ used in the transaction literature
 747
 00:24:39,110 --> 00:24:41,330
 0,330 330,510 540,840 840,1380 1710,2220
-to a natural systems for
+to {} measure systems,| for
 
 748
 00:24:41,330 --> 00:24:43,190
 0,240 240,330 330,1110 1260,1770 1770,1860
-those two benchmarks, um, you
+those two benchmarks,| {} you
 
 749
 00:24:43,190 --> 00:24:44,870
 0,180 180,690 690,1050 1050,1230 1230,1680
-know clearly as doing exceedingly
+know clearly as doing extremely
 
 750
 00:24:44,870 --> 00:24:46,610
 0,510 540,1110 1110,1320 1320,1500 1500,1740
-well doesn't mean they're not
+well,| doesn't mean they're not
 
 751
 00:24:46,610 --> 00:24:48,420
 0,150 150,540 630,1140 1140,1740
-that many a conflicts.
+that many {} conflicts.|
 
 752
 00:24:49,770 --> 00:24:50,760
 0,240 240,390 390,600 600,930 930,990
-Um the second assumption, it
+{} The second assumption, it
 
 753
 00:24:50,760 --> 00:24:51,600
 0,270 270,390 390,510 510,570 570,840
-makes is that the data
+makes is that,| the data
 
 754
 00:24:51,600 --> 00:24:53,540
 0,240 240,420 420,690 720,1320
-must fit in memory.
+must fit in memory,|
 
 755
 00:24:58,560 --> 00:24:59,580
 0,150 150,480 480,720 720,870 870,1020
-So it means that if
+so it means that if
 
 756
 00:24:59,580 --> 00:25:00,840
@@ -3778,17 +3778,17 @@ you have a really really
 757
 00:25:00,840 --> 00:25:01,950
 0,180 180,870 870,960 960,1050 1050,1110
-big database, you have to
+big database,| you have to
 
 758
 00:25:01,950 --> 00:25:05,010
 0,180 180,390 390,1050 1530,2910 2910,3060
-buy more machines award if
+buy more machines,| or if
 
 759
 00:25:05,010 --> 00:25:06,870
 0,210 210,540 540,1080 1110,1410 1410,1860
-you're really the data stupid
+you're really the data {too,big}|
 
 760
 00:25:06,870 --> 00:25:07,350
@@ -3798,12 +3798,12 @@ and you don't want to
 761
 00:25:07,350 --> 00:25:08,760
 0,150 150,390 390,810 810,1020 1020,1410
-buy more machines, then basically
+buy more machines,| then basically
 
 762
 00:25:08,760 --> 00:25:10,170
 0,90 90,360 360,510 510,990 1230,1410
-you can't use farm and
+you can't use FaRM| and
 
 763
 00:25:10,170 --> 00:25:11,100
@@ -3813,22 +3813,22 @@ you have to go back
 764
 00:25:11,100 --> 00:25:12,540
 0,150 150,300 300,480 480,900 900,1440
-to a more traditional database
+to {} more traditional database,|
 
 765
 00:25:12,540 --> 00:25:13,890
 0,150 150,450 450,810 810,960 960,1350
-that actually has no persistent
+that actually has {you,know} persistent
 
 766
 00:25:13,890 --> 00:25:16,650
 0,570 570,1350 1500,1710 1710,1860 1860,2760
-storage and so you can
+storage| and so you can
 
 767
 00:25:16,890 --> 00:25:19,620
 0,360 360,510 510,1020 1260,2160 2190,2730
-read or write a record
+read or write {} record
 
 768
 00:25:19,620 --> 00:25:21,630
@@ -3838,37 +3838,37 @@ to a much larger storage
 769
 00:25:21,630 --> 00:25:22,320
 0,630
-device.
+device.|
 
 770
 00:25:24,420 --> 00:25:27,480
 0,810 810,900 900,1500
-Replication is only.
+Replication is only,
 
 771
 00:25:29,760 --> 00:25:30,900
 0,120 120,480 480,810 810,900 900,1140
-It's only within the data
+it's only within the data
 
 772
 00:25:30,900 --> 00:25:31,820
 0,510
-center.
+center.|
 
 773
 00:25:36,520 --> 00:25:38,020
 0,180 180,240 240,420 420,990 1140,1500
-So in that way, um,
+So in that way, {}
 
 774
 00:25:38,020 --> 00:25:39,280
 0,60 60,210 210,480 570,1110 1110,1260
-in that way, respect, it's
+in that way, respect,| it's
 
 775
 00:25:39,280 --> 00:25:41,770
 0,330 330,720 720,1260 1290,1710 1710,2490
-quite different from a spanner,
+quite different from {} Spanner,|
 
 776
 00:25:41,770 --> 00:25:42,880
@@ -3888,17 +3888,17 @@ the synchronous replication across data
 779
 00:25:47,110 --> 00:25:48,730
 0,570 930,1320 1320,1380 1380,1500 1500,1620
-centers a you know to
+centers,| {} you know to
 
 780
 00:25:48,730 --> 00:25:50,470
 0,360 360,1020 1020,1320 1320,1680 1680,1740
-support applications that need to
+support applications, that need to
 
 781
 00:25:50,470 --> 00:25:53,530
 0,120 120,420 420,1050 1110,1920 2280,3060
-be able to survive a
+be able to survive {}|
 
 782
 00:25:53,530 --> 00:25:55,150
@@ -3908,17 +3908,17 @@ or continue while some data
 783
 00:25:55,150 --> 00:25:56,950
 0,300 300,360 360,870 1050,1290 1290,1800
-centers are down a indicates
+centers are down,| {} indicates
 
 784
 00:25:56,950 --> 00:25:58,360
 0,450 480,960 960,1110 1110,1230 1230,1410
-a farm that is just
+{you,know} FaRM that is just
 
 785
 00:25:58,360 --> 00:26:00,010
 0,180 180,270 270,750 840,1440 1440,1650
-not the case it's not
+not the case,| it's not
 
 786
 00:26:00,010 --> 00:26:00,970
@@ -3928,7 +3928,7 @@ targeted to those kinds of
 787
 00:26:00,970 --> 00:26:01,760
 0,720
-applications.
+applications.|
 
 788
 00:26:03,860 --> 00:26:05,510
@@ -3938,57 +3938,57 @@ And then the final point
 789
 00:26:05,510 --> 00:26:08,220
 0,480 660,1050 1050,1920
-is it requires.
+is,| it requires
 
 790
 00:26:08,770 --> 00:26:11,590
 0,450 450,570 570,1260 1710,2550 2550,2820
-You know pretty fancy or
+you know pretty fancy or
 
 791
 00:26:11,590 --> 00:26:13,520
 0,840
-exotic.
+exotic
 
 792
 00:26:13,560 --> 00:26:16,620
 0,990 1560,1800 1800,2400 2400,2820 2850,3060
-Hardware in particular has two
+hardware,| in particular has two
 
 793
 00:26:16,620 --> 00:26:18,960
 0,300 300,690 690,1110 1140,1890 1890,2340
-things, this a GPS stupid,
+things,| this a UPS, []
 
 794
 00:26:18,960 --> 00:26:21,630
 0,90 90,630 900,1500 1500,1500 2100,2670
-you PS two a survive
+{UPS -} to {} survive
 
 795
 00:26:21,630 --> 00:26:24,240
 0,360 360,570 570,810 810,1530 1740,2610
-complete data center outages and
+complete data center outages| and
 
 796
 00:26:24,240 --> 00:26:26,040
 0,540 540,1170 1170,1290 1290,1440 1440,1800
-more importantly, you know use
+more importantly you know use
 
 797
 00:26:26,040 --> 00:26:28,300
 0,210 210,1050 1320,2040
-this rdma nics.
+this RDMA NICs,|
 
 798
 00:26:28,570 --> 00:26:29,740
 0,330 330,510 510,750 750,990 990,1170
-You get actually really high
+{you,know} get actually really high
 
 799
 00:26:29,740 --> 00:26:30,780
 0,780
-performance.
+performance.|
 
 800
 00:26:35,120 --> 00:26:36,380
@@ -3998,52 +3998,52 @@ Okay, that's all I wanted
 801
 00:26:36,380 --> 00:26:38,620
 0,60 60,270 270,930 960,1920
-to say about um.
+to say about {
 
 802
 00:26:39,090 --> 00:26:41,580
 0,840 1140,1740 1770,2310 2310,2460 2460,2490
-A farm unless there are
+-} FaRM,| unless there are
 
 803
 00:26:41,580 --> 00:26:43,040
 0,330 330,570 570,1230
-any further questions.
+any further questions.|
 
 804
 00:26:55,240 --> 00:26:57,370
 0,630 780,1320 1410,1530 1530,1650 1650,2130
-Okay, um, so that basically
+Okay, {} so that basically
 
 805
 00:26:57,370 --> 00:27:00,340
 0,540 570,1740 1740,2640
-is a um.
+ends { -}
 
 806
 00:27:00,540 --> 00:27:03,270
 0,270 270,330 330,1740 1740,2010 2010,2730
-Set of paper or zero
+set of paper or ends
 
 807
 00:27:03,270 --> 00:27:06,210
 0,480 480,750 750,840 840,2370 2760,2940
-transaction side of zero eight
+transaction side of this {6.824
 
 808
 00:27:06,210 --> 00:27:07,650
 0,90 90,480 750,930 930,1260 1260,1440
-two four so we're sort
+- -},| so we're sort
 
 809
 00:27:07,650 --> 00:27:09,090
 0,90 90,390 390,600 600,990 990,1440
-of dumb free lectures on
+of done three lectures on
 
 810
 00:27:09,480 --> 00:27:12,240
 0,990 990,1710 1710,1950 1950,2100 2100,2760
-transactions and that was basically
+transactions| and that was basically
 
 811
 00:27:12,240 --> 00:27:13,500
@@ -4053,12 +4053,12 @@ this is the end of
 812
 00:27:13,500 --> 00:27:15,360
 0,390 390,690 780,1200 1200,1560 1560,1860
-talking about exactly so will
+talking about transactions,| so will
 
 813
 00:27:15,360 --> 00:27:16,380
 0,210 210,360 360,480 480,660 660,1020
-show up in other papers
+show up in other papers,|
 
 814
 00:27:16,380 --> 00:27:17,250
@@ -4068,7 +4068,7 @@ but we're not going to
 815
 00:27:17,250 --> 00:27:18,630
 0,210 210,480 480,810 810,930 930,1380
-talk about any more detail,
+talk about any more detail,|
 
 816
 00:27:18,870 --> 00:27:20,460
@@ -4093,12 +4093,12 @@ most challenging part in the
 820
 00:27:24,720 --> 00:27:27,060
 0,300 300,690 690,1320 1440,2040 2040,2340
-student systems namely building fault
+distributed systems,| namely building fault
 
 821
 00:27:27,060 --> 00:27:29,790
 0,270 270,600 600,1260 1530,2130 2130,2730
-tolerant storage systems, um, and
+tolerant storage systems,| {} and
 
 822
 00:27:29,790 --> 00:27:31,080
@@ -4113,7 +4113,7 @@ a broad spectrum of different
 824
 00:27:32,370 --> 00:27:34,200
 0,570 570,1110 1110,1560 1560,1710 1710,1830
-designs, including designs that they
+designs,| including designs that they
 
 825
 00:27:34,200 --> 00:27:36,480
@@ -4123,22 +4123,22 @@ are actually supports very powerful
 826
 00:27:36,750 --> 00:27:39,300
 0,720 720,1320 1320,1710 1740,2490
-programming abstraction of transactions.
+programming abstraction of transactions.|
 
 827
 00:27:39,870 --> 00:27:41,760
 0,450 450,600 600,660 660,1170 1470,1890
-So in the next this
+So in the next, this
 
 828
 00:27:41,760 --> 00:27:42,870
 0,480 480,540 540,840 840,960 960,1110
-lecturer, the remaining of this
+lecture,| the remaining of this
 
 829
 00:27:42,870 --> 00:27:45,420
 0,390 390,1050 1080,1560 1560,1920 2220,2550
-lecture and subsequent lectures, we're
+lecture and subsequent lectures,| we're
 
 830
 00:27:45,420 --> 00:27:46,050
@@ -4148,12 +4148,12 @@ going to sort of look
 831
 00:27:46,050 --> 00:27:47,790
 0,90 90,360 360,960 990,1350 1350,1740
-at different topics, um that
+at different topics,| {} that
 
 832
 00:27:47,790 --> 00:27:50,010
 0,180 180,870 870,1260 1260,1620 1620,2220
-were related to storage systems.
+were related to storage systems.|
 
 833
 00:27:51,410 --> 00:27:52,670
@@ -4163,12 +4163,12 @@ And so the first topic,
 834
 00:27:53,030 --> 00:27:53,750
 0,240 240,390 390,450 450,630 630,720
-um that we're gonna be
+{} that we're gonna be
 
 835
 00:27:53,750 --> 00:27:56,510
 0,360 360,840 1200,1890 1890,2640 2640,2760
-talking about, um is a
+talking about {} is {}
 
 836
 00:27:56,510 --> 00:27:56,898
