@@ -1,0 +1,5028 @@
+1
+00:00:00,120 --> 00:00:00,840
+Okay, thank you.
+
+2
+00:00:01,820 --> 00:00:06,410
+Okay, so that's, good afternoon, good morning, good evening, good night, wherever you are,
+
+3
+00:00:06,530 --> 00:00:10,580
+and I guess welcome to the last week of the semester,
+
+4
+00:00:10,880 --> 00:00:13,460
+so there's two more class meetings today,
+
+5
+00:00:13,460 --> 00:00:15,440
+which we're gonna be talking about Blockstack
+
+6
+00:00:15,980 --> 00:00:21,800
+and on Thursday we we get a report from a different projects,
+
+7
+00:00:21,800 --> 00:00:24,800
+from the number of the project groups in 6.824.
+
+8
+00:00:25,590 --> 00:00:29,670
+And so, today is basically the last paper discussion.
+
+9
+00:00:30,950 --> 00:00:34,880
+So the topic is, you know the system,
+
+10
+00:00:34,880 --> 00:00:39,020
+that we're assigned for, assigned for reading, which is blockstack,
+
+11
+00:00:39,940 --> 00:00:43,180
+and really blockstack that represents is
+
+12
+00:00:43,180 --> 00:00:50,210
+an approach to building decentralized applications,
+
+13
+00:00:53,570 --> 00:00:56,840
+and with decentralized, what we mean here is that,
+
+14
+00:00:57,110 --> 00:01:00,680
+unlike conceptualized websites, this website owns the data
+
+15
+00:01:00,680 --> 00:01:05,300
+and decentralized application, application, the system is set up in a way,
+
+16
+00:01:05,300 --> 00:01:09,200
+that the users actually keep control over the data and not the website.
+
+17
+00:01:09,750 --> 00:01:17,790
+So this form sort of a trend in the last is the final lecture series of three lectures on decentralized distributed systems,
+
+18
+00:01:17,790 --> 00:01:25,590
+we talk about logs and signing or sign log is a way of constructing this decentralized log storage systems,
+
+19
+00:01:25,650 --> 00:01:29,010
+we saw Bitcoin to see as an example of,
+
+20
+00:01:29,010 --> 00:01:36,420
+how you can achieve consensus in decentralized systems with entrusted to participants or byzantine participants,
+
+21
+00:01:36,750 --> 00:01:39,360
+and so today we're taking one more step up
+
+22
+00:01:39,360 --> 00:01:42,810
+and actually look at how you can actually build complete applications
+
+23
+00:01:42,870 --> 00:01:45,930
+other than just crypto currency applications.
+
+24
+00:01:47,010 --> 00:01:48,960
+The decentralized application has a long history,
+
+25
+00:01:49,260 --> 00:01:53,250
+in the 2000,late 90s,
+
+26
+00:01:53,250 --> 00:01:56,550
+there was a lot to do around peer-to-peer applications,
+
+27
+00:01:57,090 --> 00:02:01,650
+which had a decentralized architecture, Napster,
+
+28
+00:02:01,650 --> 00:02:05,400
+you know, more recently, you're probably familiar with keybase,
+
+29
+00:02:05,790 --> 00:02:12,840
+which has a decentralized design or solid you know and of course Blockstack,
+
+30
+00:02:13,110 --> 00:02:18,300
+so there's you know quite a bit of activity in this space of decentralized applications.
+
+31
+00:02:19,200 --> 00:02:24,930
+The blockstack is interesting from from the perspective of decentralized applications,
+
+32
+00:02:25,230 --> 00:02:36,510
+but also is an example of sort of a non-currency use non-money use of Bitcoin of the,blockchain, the Bitcoin blockchain.
+
+33
+00:02:44,990 --> 00:02:54,650
+And we'll see, you know there are a number of aspects that are interesting to [], but the key thing that the paper focuses on is actually naming,
+
+34
+00:02:54,830 --> 00:02:59,630
+how to sort of build a distributed decentralized naming system.
+
+35
+00:03:00,080 --> 00:03:02,810
+And of course the naming systems are widely used,
+
+36
+00:03:02,810 --> 00:03:04,280
+you know think of DNS,
+
+37
+00:03:04,280 --> 00:03:07,880
+think about where you know Kerberos,
+
+38
+00:03:07,880 --> 00:03:12,350
+you know there's tons and tons of different naming systems out there you know widely used,
+
+39
+00:03:12,560 --> 00:03:15,410
+and this is just a different design where the most interesting part of it,
+
+40
+00:03:15,410 --> 00:03:17,090
+again is it's decentralized.
+
+41
+00:03:22,180 --> 00:03:27,700
+Now, this lecture is a little bit different than the preceding lectures or many of the preceding lectures,
+
+42
+00:03:27,700 --> 00:03:29,770
+many preceding lecture sort of have to flavor,
+
+43
+00:03:29,770 --> 00:03:33,520
+here's a hard technical problem, here's the solution to solve that particular problem
+
+44
+00:03:34,000 --> 00:03:37,210
+and here we are in a slightly sort of different position,
+
+45
+00:03:37,390 --> 00:03:41,320
+there's a hard technical problem, that we have to build decentralized applications,
+
+46
+00:03:41,560 --> 00:03:47,260
+but it's not, you know a hundred percent clear, there's exactly the right thing to do to build decentralized applications
+
+47
+00:03:47,260 --> 00:03:48,700
+and is extremely [intriguing],
+
+48
+00:03:49,210 --> 00:03:53,620
+and it's not clear like Blockstack is just the right solution to do so,
+
+49
+00:03:54,310 --> 00:03:56,680
+and so it's much more experimental,
+
+50
+00:03:56,740 --> 00:03:59,800
+Blockstack does actually have a user community
+
+51
+00:03:59,800 --> 00:04:03,520
+and but it's not yet an overwhelming success
+
+52
+00:04:03,520 --> 00:04:06,520
+and a demonstration that this is a right way to go.
+
+53
+00:04:06,550 --> 00:04:13,420
+So in that sense, this is a paper in some sense more thought provoking,
+
+54
+00:04:13,690 --> 00:04:18,010
+than giving actually a definite answer to a particular technical problem,
+
+55
+00:04:18,130 --> 00:04:23,380
+and so, some ways you know this is more of topic,
+
+56
+00:04:23,380 --> 00:04:30,010
+is sort of lends self to a larger debate about you know different views on this kind of, kind of design.
+
+57
+00:04:30,490 --> 00:04:32,560
+So when during lecture,
+
+58
+00:04:32,560 --> 00:04:39,460
+if we get to be, preferred to find actually, to have quite a bit of discussion different aspects,
+
+59
+00:04:39,460 --> 00:04:41,530
+and I don't think there's going to be one right answer.
+
+60
+00:04:43,120 --> 00:04:46,660
+And so anytime you have a question about
+
+61
+00:04:46,660 --> 00:04:50,560
+or what are you about a particular aspect of these decentralized app designs,
+
+62
+00:04:50,560 --> 00:04:51,880
+you know speak up.
+
+63
+00:04:54,460 --> 00:05:00,190
+Okay, so maybe before a you know talking about decentralized apps,
+
+64
+00:05:00,190 --> 00:05:03,670
+you know just quickly revisit you know actually what sort of an common paradigm
+
+65
+00:05:03,670 --> 00:05:06,100
+to actually build websites or build web applications, right,
+
+66
+00:05:06,100 --> 00:05:09,620
+that is really using centralized websites,
+
+67
+00:05:13,170 --> 00:05:16,890
+sites may itself might be distributed across multiple data centers across the world,
+
+68
+00:05:17,070 --> 00:05:20,160
+but the architecture of the design the site is centralized,
+
+69
+00:05:20,160 --> 00:05:24,240
+where we have, you know here's your typical website,
+
+70
+00:05:24,750 --> 00:05:27,090
+it has some applications in the code,
+
+71
+00:05:27,090 --> 00:05:31,470
+whatever you know Gmail, whatever Twitter Facebook,
+
+72
+00:05:31,770 --> 00:05:35,880
+and that operates on a database,
+
+73
+00:05:36,600 --> 00:05:39,180
+that contains you know user data.
+
+74
+00:05:42,890 --> 00:05:51,710
+Then we might actually get users interacting with sitting by a web browser and U1, U2,
+
+75
+00:05:52,040 --> 00:05:55,400
+they interact through the application with the website,
+
+76
+00:05:55,400 --> 00:05:58,820
+you know they create data, they stored in the database,
+
+77
+00:05:59,060 --> 00:06:01,340
+other users may view the data
+
+78
+00:06:01,400 --> 00:06:06,290
+and the application displays basically that data to inside of the web browser.
+
+79
+00:06:06,940 --> 00:06:18,900
+And you know the data might be a blog posts, tweets, Piazza posts, photos,
+
+80
+00:06:20,700 --> 00:06:27,620
+perhaps even more sort of sensitive medical records, medical records, etc.
+
+81
+00:06:29,910 --> 00:06:32,280
+And basically you know the application we're running on the site
+
+82
+00:06:32,280 --> 00:06:35,280
+to transform that data from all the different users,
+
+83
+00:06:35,400 --> 00:06:37,740
+into something that interesting to look at,
+
+84
+00:06:37,740 --> 00:06:41,910
+where basically integrating for example the timeline of many users
+
+85
+00:06:41,910 --> 00:06:45,090
+into a single timeline present to the user,
+
+86
+00:06:45,090 --> 00:06:46,440
+you know we're going to tweets
+
+87
+00:06:46,440 --> 00:06:49,200
+you know do ups and downloads, etc, etc.
+
+88
+00:06:50,070 --> 00:06:56,250
+And you know one sort of distinguishing feature of this design is that,
+
+89
+00:06:56,430 --> 00:06:58,410
+the application of the data are bundled,
+
+90
+00:06:58,410 --> 00:07:01,440
+they are only the control of the application site,
+
+91
+00:07:01,440 --> 00:07:04,620
+whether it's Facebook Twitter or Google or any website
+
+92
+00:07:04,620 --> 00:07:11,210
+and really the interface between the user or the dividing line between the user and the website
+
+93
+00:07:11,210 --> 00:07:13,700
+is basically you know html or the UI.
+
+94
+00:07:17,580 --> 00:07:21,210
+And the application basically computes you know whatever a user going to see
+
+95
+00:07:21,210 --> 00:07:23,130
+and that's going to be displayed inside the browser,
+
+96
+00:07:23,520 --> 00:07:27,900
+of course, the application might actually run inside of the browser, you know javascript,
+
+97
+00:07:27,900 --> 00:07:30,960
+but actually not really pertinent to this particular discussion,
+
+98
+00:07:31,230 --> 00:07:35,040
+you know it's still the application is under control of the website,
+
+99
+00:07:35,040 --> 00:07:37,560
+you know the programmers of the website write the application
+
+100
+00:07:37,830 --> 00:07:42,540
+and the application basically manipulates the dom fields from inside of the web browser.
+
+101
+00:07:43,270 --> 00:07:44,800
+And so from the user point of view,
+
+102
+00:07:45,040 --> 00:07:54,940
+interaction, interface, you know between the defining interface between website and and the browser still sort of html.
+
+103
+00:07:57,720 --> 00:08:01,560
+And so this kind of just design clearly is overwhelmingly successful,
+
+104
+00:08:01,800 --> 00:08:04,830
+you know most websites probably,
+
+105
+00:08:04,830 --> 00:08:09,780
+that's probably all of the websites you probably use are sort of following this particular design.
+
+106
+00:08:10,570 --> 00:08:14,560
+And one reason for you know this very successful design is,
+
+107
+00:08:14,560 --> 00:08:15,790
+we'll talk a little bit more later is,
+
+108
+00:08:15,910 --> 00:08:20,290
+because of the tight integration between the application and the data and the data from the user,
+
+109
+00:08:20,290 --> 00:08:24,610
+so the application is easy access to all the user data from different users
+
+110
+00:08:24,610 --> 00:08:26,860
+and integrated to make creative and interesting ways.
+
+111
+00:08:27,490 --> 00:08:31,270
+But there are you know it's not completely perfect,
+
+112
+00:08:31,300 --> 00:08:36,850
+you know this designing sort of things that you might you might wish you could be slightly better.
+
+113
+00:08:37,650 --> 00:08:42,480
+And in some sense, decentralized applications is a is a response to those sort of things,
+
+114
+00:08:42,480 --> 00:08:45,060
+that are it might be 100% desirable.
+
+115
+00:08:45,860 --> 00:08:49,250
+And so for one, there's a very simple observation,
+
+116
+00:08:49,250 --> 00:08:51,620
+you can really not create another application,
+
+117
+00:08:51,950 --> 00:08:55,340
+so the site decides actually how the app looks like,
+
+118
+00:08:55,340 --> 00:08:57,140
+you know that's the UI you're gonna get,
+
+119
+00:08:57,560 --> 00:09:01,610
+and which is sort of very different than,
+
+120
+00:09:01,700 --> 00:09:05,930
+let's see, on your running application to your laptop, for example,
+
+121
+00:09:05,930 --> 00:09:08,450
+you want to modify, edit a text file,
+
+122
+00:09:08,600 --> 00:09:11,270
+but you get to choose which browser or editor you're gonna use,
+
+123
+00:09:11,270 --> 00:09:13,700
+you know what are you gonna name emacs, you know vim,
+
+124
+00:09:13,700 --> 00:09:16,790
+you know all kinds of culture wars about which one is better than the other,
+
+125
+00:09:16,970 --> 00:09:20,120
+but you get an option to choose which one you want to use.
+
+126
+00:09:20,450 --> 00:09:22,250
+And in this case, you know that's just not the case,
+
+127
+00:09:22,250 --> 00:09:24,110
+you're using Gmail,
+
+128
+00:09:25,730 --> 00:09:26,990
+Gmail is not the best example,
+
+129
+00:09:26,990 --> 00:09:30,110
+but Twitter, you know Twitter is going to decide actually how the application is going to look like.
+
+130
+00:09:31,420 --> 00:09:33,220
+The reason why Gmail might not be the best example is,
+
+131
+00:09:33,220 --> 00:09:36,220
+because you can actually download your email maybe you know through IMAP
+
+132
+00:09:36,220 --> 00:09:39,040
+and then run your own email program,
+
+133
+00:09:39,340 --> 00:09:43,000
+but for many websites you know the user application data very control,
+
+134
+00:09:43,000 --> 00:09:44,410
+that you have no control over it.
+
+135
+00:09:47,040 --> 00:09:52,290
+The website you know may change the rules on who can see what data,
+
+136
+00:09:52,470 --> 00:09:54,870
+and it might actually do without really telling you,
+
+137
+00:09:54,960 --> 00:09:59,250
+and so you have full control over actually who, who sees your data,
+
+138
+00:09:59,460 --> 00:10:01,530
+furthermore, the website actually might use it,
+
+139
+00:10:01,530 --> 00:10:04,500
+you know your data to generate revenue,
+
+140
+00:10:04,500 --> 00:10:07,620
+whatever decide which ads actually display,
+
+141
+00:10:07,620 --> 00:10:11,220
+and, you know basically snooping over your data, right,
+
+142
+00:10:11,760 --> 00:10:14,430
+or in the worse case, maybe a bad employee,
+
+143
+00:10:14,430 --> 00:10:16,620
+it actually it just snoop over your data.
+
+144
+00:10:17,300 --> 00:10:19,130
+And that's really sort of outside of your control,
+
+145
+00:10:19,130 --> 00:10:20,750
+there's nothing really you can do about it,
+
+146
+00:10:20,750 --> 00:10:23,090
+you gave the website the data, it's theirs now.
+
+147
+00:10:24,230 --> 00:10:29,840
+And so this is sort of sort of pain points,
+
+148
+00:10:29,840 --> 00:10:31,280
+you know it makes people wonder,
+
+149
+00:10:31,280 --> 00:10:37,970
+you know is a way of designing systems that are really not, don't follow this paradigm,
+
+150
+00:10:37,970 --> 00:10:40,640
+but follow this paradigm of decentralized applications.
+
+151
+00:10:55,970 --> 00:10:59,420
+And so in in this world view,
+
+152
+00:10:59,630 --> 00:11:02,060
+we're still in our Internet the cloud,
+
+153
+00:11:02,090 --> 00:11:04,520
+but we have storage providers,
+
+154
+00:11:05,850 --> 00:11:12,540
+and storage providers are basically nothing really sophisticated word,
+
+155
+00:11:12,840 --> 00:11:16,710
+they don't really rung app code, they just purely provide storage,
+
+156
+00:11:16,800 --> 00:11:22,740
+ways of maybe it's like Google drive or whatever or Amazon S3,
+
+157
+00:11:22,860 --> 00:11:26,760
+but basically they're sort of dumb you know big holders,
+
+158
+00:11:27,730 --> 00:11:31,000
+the data maybe you know users probably want to encrypt data,
+
+159
+00:11:31,120 --> 00:11:33,430
+but this is what the real goal here is that,
+
+160
+00:11:33,430 --> 00:11:36,820
+the user decides you know which store for where the data lives
+
+161
+00:11:37,120 --> 00:11:38,770
+and it keeps them under control of the user,
+
+162
+00:11:39,360 --> 00:11:41,070
+so whatever you know storage provider,
+
+163
+00:11:41,310 --> 00:11:43,590
+S3 might have you know user one data,
+
+164
+00:11:46,970 --> 00:11:49,460
+another store provider might actually have U2's data,
+
+165
+00:11:49,460 --> 00:11:52,820
+or stores you know date on behalf of U2,
+
+166
+00:11:53,090 --> 00:11:55,700
+U2 and S3 may actually encrypt it,
+
+167
+00:11:55,700 --> 00:11:57,860
+so that the storage provider can actually not read it,
+
+168
+00:12:00,170 --> 00:12:02,660
+and control like who can actually decrypt,
+
+169
+00:12:02,660 --> 00:12:10,250
+the data and then you know the applications really are in control of the user themselves.
+
+170
+00:12:10,520 --> 00:12:15,440
+So you know might user here, U1 workstation or laptop,
+
+171
+00:12:15,620 --> 00:12:17,300
+it runs in an application,
+
+172
+00:12:18,600 --> 00:12:21,630
+and you know here's U2,
+
+173
+00:12:22,640 --> 00:12:25,880
+there's also another application may actually looking at maybe the same data,
+
+174
+00:12:25,880 --> 00:12:28,070
+but like a slightly different version of the application,
+
+175
+00:12:28,070 --> 00:12:31,160
+whatever one photo viewer and another photo viewer,
+
+176
+00:12:32,080 --> 00:12:36,940
+and basically to construct you knows what is actually shown to the user,
+
+177
+00:12:37,090 --> 00:12:41,470
+that the application will fetches data you know from different users,
+
+178
+00:12:41,470 --> 00:12:45,910
+for example if U2 share the photos with U1,
+
+179
+00:12:46,120 --> 00:12:50,860
+then the applications to integrate the photos U1 to U2,
+
+180
+00:12:50,980 --> 00:12:58,030
+by extracting or retrieving the, the photos from the different storage providers.
+
+181
+00:12:58,660 --> 00:13:02,290
+And here really what the sort of dividing line is between users
+
+182
+00:13:02,620 --> 00:13:08,170
+and the dividing line is is really this,
+
+183
+00:13:09,830 --> 00:13:12,410
+there's sort of a dividing line between the application and storage
+
+184
+00:13:12,410 --> 00:13:14,630
+and so there's a storage API,
+
+185
+00:13:15,770 --> 00:13:17,660
+you have sort of the uniform,
+
+186
+00:13:17,660 --> 00:13:21,140
+because there are many different applications are going to use the same storage [],
+
+187
+00:13:21,140 --> 00:13:23,630
+you know maybe this application it creates todo list,
+
+188
+00:13:24,020 --> 00:13:25,760
+maybe it's a photo list,
+
+189
+00:13:25,760 --> 00:13:28,280
+maybe it's a Twitter clone,
+
+190
+00:13:28,280 --> 00:13:33,020
+this retrives tweets from different users and integrates them and present them to the user.
+
+191
+00:13:33,580 --> 00:13:38,830
+And it's really that sort of single storage API
+
+192
+00:13:38,830 --> 00:13:45,820
+and that actually provides you know the dividing line between the applications and the data,
+
+193
+00:13:46,550 --> 00:13:50,180
+of course, that storage API has to be quite general purpose can support multiple applications,
+
+194
+00:13:50,210 --> 00:13:55,490
+but also has to allow sharing between different, between different users and different applications,
+
+195
+00:13:55,610 --> 00:13:57,260
+the modulo or the permissions.
+
+196
+00:13:59,210 --> 00:14:06,380
+And so let's say you wanted to build sort of you know todo list,
+
+197
+00:14:12,560 --> 00:14:15,260
+then you know between U1 and U2,
+
+198
+00:14:15,260 --> 00:14:19,010
+then let's look at this from the perspective of U1,
+
+199
+00:14:19,250 --> 00:14:23,240
+you know probably there would be some operation or some sharing operations
+
+200
+00:14:23,240 --> 00:14:28,340
+and U2, U1, saying like yeah you're the names of the my todo list,
+
+201
+00:14:28,640 --> 00:14:34,730
+and you know user 1 can then download you know the U2's todo list,
+
+202
+00:14:35,030 --> 00:14:41,810
+maybe check you know the signature on the file to verify the data was indeed written by U2
+
+203
+00:14:42,230 --> 00:14:47,060
+and then you know integrate you know that we have it's own todo list
+
+204
+00:14:47,060 --> 00:14:53,630
+and present the U1 or share todo list that contains both U1's and U2's todo items.
+
+205
+00:14:56,420 --> 00:15:04,970
+Sort of sort of the general view of actually buildings decentralized architecture for applications.
+
+206
+00:15:07,010 --> 00:15:08,120
+Any questions so far?
+
+207
+00:15:21,330 --> 00:15:30,540
+Okay, so so far, we've hopefully received you know this addresses one of the major you know pain point for the centralized approach,
+
+208
+00:15:30,570 --> 00:15:33,750
+that basically the users you know still in control of the data,
+
+209
+00:15:33,750 --> 00:15:36,060
+it's not owned by a particular site anymore
+
+210
+00:15:36,060 --> 00:15:41,370
+and users decide who, which applications and who actually get access to data.
+
+211
+00:15:42,120 --> 00:15:45,720
+I know those are desirable property,
+
+212
+00:15:46,330 --> 00:15:50,860
+but you know the this whole design is also with its unique set of challenges
+
+213
+00:15:50,980 --> 00:15:52,930
+and so let me lay out some of them
+
+214
+00:15:53,170 --> 00:15:56,260
+and we'll focus on a few of them in the context of blockstack.
+
+215
+00:16:01,010 --> 00:16:04,520
+And so there's sort of two [] broad categories of challenges,
+
+216
+00:16:04,730 --> 00:16:08,510
+one sort of on the business site, what is the revenue model,
+
+217
+00:16:10,700 --> 00:16:15,260
+you know one will get these applications actually being adopted
+
+218
+00:16:15,260 --> 00:16:18,440
+and you know pay people money to actually develop the applications,
+
+219
+00:16:18,710 --> 00:16:22,400
+and so they actually become really good
+
+220
+00:16:22,400 --> 00:16:26,720
+and people are excited by using them,
+
+221
+00:16:27,320 --> 00:16:30,590
+I'm not really gonna talk about that at all,
+
+222
+00:16:31,280 --> 00:16:34,400
+but instead you know what I most focus on the technical challenges.
+
+223
+00:16:43,460 --> 00:16:45,590
+And there's several of them,
+
+224
+00:16:46,160 --> 00:16:50,690
+one is going to go back to this picture here before,
+
+225
+00:16:50,840 --> 00:16:55,160
+you know the storage API sort of the key interface
+
+226
+00:16:55,160 --> 00:16:57,830
+and you know interfaces to be minimal
+
+227
+00:16:57,830 --> 00:17:00,290
+and it has to be general purpose enough,
+
+228
+00:17:00,560 --> 00:17:06,380
+but in typically it's actually, you know it's not the same thing as the API that sits here,
+
+229
+00:17:08,310 --> 00:17:10,560
+between the application and the database.
+
+230
+00:17:11,000 --> 00:17:13,520
+So let's do that, hold on a second.
+
+231
+00:17:41,280 --> 00:17:44,850
+Okay, hopefully every can seen screen of board again, good.
+
+232
+00:17:48,000 --> 00:17:50,730
+The, so there's a couple of challenges,
+
+233
+00:17:50,730 --> 00:17:52,260
+you know what I was going to point out is,
+
+234
+00:17:52,260 --> 00:17:55,710
+that storage API is typically not as powerful,
+
+235
+00:17:55,890 --> 00:18:00,180
+where that file system API is not as powerful as SQL,
+
+236
+00:18:01,740 --> 00:18:09,330
+and futhermore, you know, not all the data sort of all uses like handy in a single place,
+
+237
+00:18:09,330 --> 00:18:11,790
+you can run arbitrary queries on,
+
+238
+00:18:11,910 --> 00:18:15,090
+to integrate it in whatever application specific manners.
+
+239
+00:18:15,840 --> 00:18:18,030
+Yeah, so that's sort of a challenge,
+
+240
+00:18:18,030 --> 00:18:24,480
+that applications rely on the power of being able to run arbitrary queries over all the user data,
+
+241
+00:18:24,480 --> 00:18:26,790
+that is in decentralized application will be harder to achieve,
+
+242
+00:18:26,790 --> 00:18:30,780
+because the data is spread out over maybe maybe different storage servers.
+
+243
+00:18:31,780 --> 00:18:34,270
+There's also features that might be harder to implement,
+
+244
+00:18:34,600 --> 00:18:39,160
+like for example if you want implement like ebay,
+
+245
+00:18:39,190 --> 00:18:45,190
+then usually have to submit sort of bids,
+
+246
+00:18:45,190 --> 00:18:47,680
+but you know we want to download those bids immediately,
+
+247
+00:18:47,950 --> 00:18:48,700
+so there has to be,
+
+248
+00:18:48,700 --> 00:18:52,540
+so so trusted aspect to that actually integrates these bids
+
+249
+00:18:52,540 --> 00:18:54,520
+and then decides you know actually who's the winner,
+
+250
+00:18:55,160 --> 00:18:58,880
+without disclosing those beforehand.
+
+251
+00:18:59,030 --> 00:19:03,740
+Similarly, there's a challenges around management,
+
+252
+00:19:03,890 --> 00:19:09,290
+typically these decentralized applications, you know involve crypto keys.
+
+253
+00:19:11,230 --> 00:19:15,850
+And so, there has to be sort of you know that's often a [] scenario,
+
+254
+00:19:16,120 --> 00:19:17,800
+some user loses their private key
+
+255
+00:19:17,800 --> 00:19:21,550
+and then You know you can't use your, can't get your data anymore,
+
+256
+00:19:21,970 --> 00:19:24,970
+and or somebody actually steals your private key
+
+257
+00:19:24,970 --> 00:19:27,040
+and then they can get your data.
+
+258
+00:19:27,940 --> 00:19:31,480
+So there's a series of technical challenge,
+
+259
+00:19:31,480 --> 00:19:33,670
+you know to make this actually work,
+
+260
+00:19:33,910 --> 00:19:39,010
+and one of them, the one remaining one which is mostly the topic of this lecture is naming.
+
+261
+00:19:42,740 --> 00:19:50,240
+So sort of broader challenges are basically I think you know challenge for any sort of decentralized application infrastructure
+
+262
+00:19:50,450 --> 00:19:53,900
+and certainly also in the context of blockstack,
+
+263
+00:19:54,200 --> 00:19:55,700
+but in the case of blockstack,
+
+264
+00:19:55,730 --> 00:19:59,120
+we're gone mostly you know we'll see actually the importance of names
+
+265
+00:19:59,270 --> 00:20:02,330
+and why naming actually is are a challenge.
+
+266
+00:20:03,380 --> 00:20:06,770
+Okay, so before continue, I just want to stop here for a second,
+
+267
+00:20:06,770 --> 00:20:09,050
+just sort of give people trying to ask any questions
+
+268
+00:20:09,050 --> 00:20:14,300
+to contrast sort of these two different ways of building applications,
+
+269
+00:20:14,300 --> 00:20:17,120
+whether it's centralized as in sort of traditional model,
+
+270
+00:20:17,120 --> 00:20:18,530
+that we're probably all familiar with,
+
+271
+00:20:18,950 --> 00:20:21,860
+you know or this decentralized model.
+
+272
+00:20:22,890 --> 00:20:25,380
+So what's the challenge exactly with bids?
+
+273
+00:20:26,600 --> 00:20:27,620
+So which is the challenge?
+
+274
+00:20:28,230 --> 00:20:29,100
+With bids.
+
+275
+00:20:30,200 --> 00:20:33,920
+Oh, you know you need an,
+
+276
+00:20:33,920 --> 00:20:36,290
+application needs to have access to the user bids,
+
+277
+00:20:36,530 --> 00:20:39,470
+but shouldn't disclose them, right, to other applications
+
+278
+00:20:39,500 --> 00:20:41,150
+and so that means that,
+
+279
+00:20:41,540 --> 00:20:45,320
+the application that looks like a new one,
+
+280
+00:20:45,530 --> 00:20:46,730
+I'm submitting a bit,
+
+281
+00:20:47,000 --> 00:20:48,830
+I get U2's bit,
+
+282
+00:20:48,920 --> 00:20:51,920
+but my application isn't really to close U2's bit immediately to me,
+
+283
+00:20:51,920 --> 00:20:53,240
+because it wouldn't be fair,
+
+284
+00:20:53,790 --> 00:20:55,530
+and so how would you do that,
+
+285
+00:20:55,530 --> 00:20:59,310
+so you just perform with a trusted party or whatever some protocol,
+
+286
+00:20:59,310 --> 00:21:00,300
+that actually makes that happen.
+
+287
+00:21:03,700 --> 00:21:04,210
+Thank you.
+
+288
+00:21:06,840 --> 00:21:08,940
+If the application runs your models on your workstation,
+
+289
+00:21:08,940 --> 00:21:10,920
+you can modify the work, the application, right.
+
+290
+00:21:14,080 --> 00:21:17,830
+Sorry, in the previous slide, I think you mentioned also,
+
+291
+00:21:18,490 --> 00:21:20,290
+app one being different from,
+
+292
+00:21:20,320 --> 00:21:23,680
+like the two apps being different,
+
+293
+00:21:24,150 --> 00:21:25,770
+what do you mean exactly.
+
+294
+00:21:25,920 --> 00:21:28,590
+Well, example, you just made the analogy is very [crisp],
+
+295
+00:21:28,590 --> 00:21:31,510
+because this could be vim, this could be emacs
+
+296
+00:21:31,900 --> 00:21:37,570
+and U1 U2 get to decide which applications are going to use to actually modify their data, right,
+
+297
+00:21:38,350 --> 00:21:41,380
+and you know today is a centralized model
+
+298
+00:21:41,440 --> 00:21:42,880
+and others not really possible,
+
+299
+00:21:42,910 --> 00:21:45,520
+you know you can't have basically two Twitter apps,
+
+300
+00:21:45,520 --> 00:21:47,800
+where U1 one way of interacting with the Twitter app
+
+301
+00:21:47,800 --> 00:21:49,570
+and somebody else likes them, do it in a different way,
+
+302
+00:21:50,970 --> 00:21:52,290
+that's just do Twitter app.
+
+303
+00:21:53,230 --> 00:21:54,310
+I see, thank you.
+
+304
+00:21:54,960 --> 00:22:00,810
+I I had a question just about the design of the decentralized like model,
+
+305
+00:22:00,900 --> 00:22:03,600
+is it necessary for the app to be like,
+
+306
+00:22:03,690 --> 00:22:05,580
+a client side or could you know,
+
+307
+00:22:05,640 --> 00:22:11,220
+could you have like these like the centralized apps on the Internet sign.
+
+308
+00:22:11,340 --> 00:22:14,610
+You can have principle, the Internet like a key issue,
+
+309
+00:22:14,610 --> 00:22:18,480
+it doesn't really have to run on the user's workstation, to run anywhere,
+
+310
+00:22:18,540 --> 00:22:20,100
+but it is only the users control.
+
+311
+00:22:21,170 --> 00:22:22,400
+Of course, if somebody writes it,
+
+312
+00:22:22,550 --> 00:22:25,940
+but the user gets to decide which app to run over what data.
+
+313
+00:22:26,830 --> 00:22:30,130
+Right, so the so so the important thing here is,
+
+314
+00:22:30,130 --> 00:22:34,150
+is that you know app choose you, you should choose the app
+
+315
+00:22:34,150 --> 00:22:37,780
+and importantly the app has access to any storage provider.
+
+316
+00:22:40,100 --> 00:22:40,610
+Thanks.
+
+317
+00:22:46,130 --> 00:22:47,450
+Okay, any other questions?
+
+318
+00:22:52,240 --> 00:22:54,280
+Okay, so names,
+
+319
+00:22:54,810 --> 00:22:57,540
+so this is getting a little bit more into blockstack.
+
+320
+00:23:08,070 --> 00:23:12,630
+And then let me sort of layout like the role the names play,
+
+321
+00:23:12,900 --> 00:23:14,760
+first of all, you have todo list
+
+322
+00:23:14,760 --> 00:23:16,290
+and you want to share it with somebody else,
+
+323
+00:23:16,290 --> 00:23:18,780
+you know have to be able to name that user for whom you're sharing
+
+324
+00:23:19,650 --> 00:23:22,170
+and so there's a sort of mapping from name to user,
+
+325
+00:23:24,040 --> 00:23:25,210
+that's an important role,
+
+326
+00:23:25,900 --> 00:23:29,710
+there's a mapping for name to location of data.
+
+327
+00:23:35,990 --> 00:23:38,390
+So if my todo list app I I share,
+
+328
+00:23:38,420 --> 00:23:42,350
+you know todo list of user one with user two,
+
+329
+00:23:42,350 --> 00:23:48,110
+and then, you know what actually retrieve user one want user two's data,
+
+330
+00:23:48,320 --> 00:23:52,730
+there needs to be a way of actually naming users to todo list
+
+331
+00:23:52,970 --> 00:23:54,110
+and actually retrieving it.
+
+332
+00:23:55,000 --> 00:23:56,530
+And then you know there's a certain way,
+
+333
+00:23:56,530 --> 00:24:01,570
+there's a name to public key mapping,
+
+334
+00:24:01,990 --> 00:24:06,820
+you know when I do you know successfully retrieve user two's data,
+
+335
+00:24:07,000 --> 00:24:10,690
+you know probably want to verify it, actually was written by user two,
+
+336
+00:24:10,930 --> 00:24:16,390
+and so probably user two's public key to verify the integrity of the data retrieved,
+
+337
+00:24:16,420 --> 00:24:20,170
+because the storage providers might be, can then be untrusted
+
+338
+00:24:20,620 --> 00:24:27,820
+and that requires that I can establish what actually use two's public key is in a reliable manner.
+
+339
+00:24:29,380 --> 00:24:36,430
+And so, you should think about in every step of these decentralized applications,
+
+340
+00:24:36,550 --> 00:24:38,860
+you know the name plays a crucial role.
+
+341
+00:24:39,710 --> 00:24:46,460
+And, and the common name given the particular for you know the mapping from names to keys,
+
+342
+00:24:46,460 --> 00:24:51,080
+which is a crucial keys is to be called public key infrastructure.
+
+343
+00:25:02,250 --> 00:25:07,910
+And that is you know building actually any public key infrastructure is quite challenging,
+
+344
+00:25:08,090 --> 00:25:11,060
+you know you might be familiar like DNSSec,
+
+345
+00:25:11,090 --> 00:25:14,660
+there's are a particular way of course on the world wide web has,
+
+346
+00:25:14,870 --> 00:25:17,630
+certificate has a whole public key infrastructure,
+
+347
+00:25:17,750 --> 00:25:22,400
+Kerberos you know an example of public key infrastructure
+
+348
+00:25:22,760 --> 00:25:25,220
+and in some ways with you know this papers,
+
+349
+00:25:25,220 --> 00:25:28,400
+[] is you will get another public infrastructure,
+
+350
+00:25:28,430 --> 00:25:30,500
+that is completely decentralized.
+
+351
+00:25:36,490 --> 00:25:47,020
+And that's sort of a key aspect you know what interesting about this naming scheme in a in blockstack,
+
+352
+00:25:47,050 --> 00:25:49,780
+that's actually provides decentralized public key infrastructure.
+
+353
+00:25:51,060 --> 00:25:54,300
+Let me try to explain a little bit why this is challenging,
+
+354
+00:25:55,690 --> 00:26:01,760
+so, the paper refers to this in a couple places
+
+355
+00:26:02,000 --> 00:26:04,700
+and says like you know there's, there's three aspects that you want,
+
+356
+00:26:04,760 --> 00:26:08,300
+if you want a general purpose for naming infrastructure,
+
+357
+00:26:08,570 --> 00:26:10,610
+you want to be able to have unique names,
+
+358
+00:26:11,470 --> 00:26:14,800
+you know have a unique name for every user,
+
+359
+00:26:17,700 --> 00:26:21,870
+so that you can identify you know the particular [John] or particular Joe,
+
+360
+00:26:21,870 --> 00:26:29,520
+you're talking about about human or human readable names,
+
+361
+00:26:32,970 --> 00:26:34,350
+so it's easy to remember.
+
+362
+00:26:34,620 --> 00:26:42,060
+And then in this case, what blockstack also wants is decentralized.
+
+363
+00:26:46,840 --> 00:26:49,630
+And you know the paper sort of makes the point that,
+
+364
+00:26:49,630 --> 00:26:52,390
+it's easy to can get two of the three,
+
+365
+00:26:52,390 --> 00:26:55,120
+it's very difficult to get to all three of them
+
+366
+00:26:55,120 --> 00:26:56,110
+and you know maybe,
+
+367
+00:26:56,140 --> 00:26:57,760
+let's look at a couple naming systems,
+
+368
+00:26:57,760 --> 00:27:00,070
+to see which two they do get,
+
+369
+00:27:00,310 --> 00:27:02,200
+so let's think about like email addresses.
+
+370
+00:27:13,120 --> 00:27:17,240
+Okay, email addresses, are they unique names?
+
+371
+00:27:22,140 --> 00:27:22,770
+Yes.
+
+372
+00:27:23,130 --> 00:27:24,540
+Are they human readable?
+
+373
+00:27:25,350 --> 00:27:25,680
+Yeah.
+
+374
+00:27:25,680 --> 00:27:27,720
+Are they decentralized?
+
+375
+00:27:28,140 --> 00:27:28,770
+No.
+
+376
+00:27:28,980 --> 00:27:31,470
+No, so users get two of these guys, correct,
+
+377
+00:27:31,470 --> 00:27:32,400
+but not the third one.
+
+378
+00:27:33,260 --> 00:27:36,350
+How about random public keys,
+
+379
+00:27:36,560 --> 00:27:43,190
+or maybe like if the paper uses hash of the file contents to actually get a name, correct, for the [working],
+
+380
+00:27:43,190 --> 00:27:46,640
+so basically okay so random public keys,
+
+381
+00:27:48,060 --> 00:27:50,130
+which means public keys get random,
+
+382
+00:27:55,180 --> 00:27:57,160
+so public keys, are they unique?
+
+383
+00:27:59,290 --> 00:27:59,950
+Yep.
+
+384
+00:28:00,010 --> 00:28:00,760
+Yeah.
+
+385
+00:28:00,790 --> 00:28:02,980
+Yep, are they human readable?
+
+386
+00:28:03,280 --> 00:28:03,910
+No.
+
+387
+00:28:03,940 --> 00:28:05,620
+No, are they decentralized?
+
+388
+00:28:05,980 --> 00:28:06,610
+Yes.
+
+389
+00:28:06,640 --> 00:28:12,040
+Yeah yeah, you can generate them high probability in a unique manner completely decentralized.
+
+390
+00:28:13,860 --> 00:28:18,390
+So in fact, you should have done that more in lab 3 with these clerk ids,
+
+391
+00:28:18,420 --> 00:28:21,390
+so here we got to, get two of the three,
+
+392
+00:28:21,420 --> 00:28:22,710
+but not the human readable one.
+
+393
+00:28:23,010 --> 00:28:26,370
+Let's see, can we actually get human readable and decentralized?
+
+394
+00:28:27,920 --> 00:28:29,180
+Can you think of an example?
+
+395
+00:28:34,800 --> 00:28:37,740
+Is it like a peer to peer file sharing?
+
+396
+00:28:39,360 --> 00:28:40,890
+Yeah.
+
+397
+00:28:40,890 --> 00:28:44,670
+It was unique, the files, but they're human readable and decentralized.
+
+398
+00:28:44,880 --> 00:28:48,750
+Yeah, think simpler, you know, think about your phone,
+
+399
+00:28:54,170 --> 00:28:55,940
+the exam for me always is a good one,
+
+400
+00:28:55,940 --> 00:28:57,260
+it looks like your contact list,
+
+401
+00:29:02,370 --> 00:29:06,030
+the names of your contact human readable you know implies,
+
+402
+00:29:06,030 --> 00:29:08,970
+you know you could have John,
+
+403
+00:29:09,000 --> 00:29:11,760
+you know the entry for John one phone number
+
+404
+00:29:11,760 --> 00:29:15,240
+and I can have another phone number or my John entry,
+
+405
+00:29:15,540 --> 00:29:16,920
+they're probably different people,
+
+406
+00:29:17,100 --> 00:29:21,060
+but you know I can pick the names in decentralized manner,
+
+407
+00:29:21,640 --> 00:29:23,200
+and they're certainly readable,
+
+408
+00:29:23,200 --> 00:29:23,920
+are they unique?
+
+409
+00:29:27,340 --> 00:29:28,270
+No, correct,
+
+410
+00:29:28,600 --> 00:29:31,480
+this is like you have your list of names,
+
+411
+00:29:31,480 --> 00:29:32,500
+I have my list of names
+
+412
+00:29:32,500 --> 00:29:33,790
+and they may actually overlap
+
+413
+00:29:33,790 --> 00:29:35,230
+and still talk about different people.
+
+414
+00:29:36,600 --> 00:29:41,010
+So here's sort of what the papers trying to get at actually getting two out of three,
+
+415
+00:29:41,220 --> 00:29:44,760
+you know it's quite common or actually easy,
+
+416
+00:29:44,820 --> 00:29:47,430
+but after getting all three of them is hard.
+
+417
+00:29:49,010 --> 00:29:53,810
+And in the paper, so it's like,
+
+418
+00:29:53,810 --> 00:29:56,420
+well, we actually, we achieve all three of them,
+
+419
+00:29:56,750 --> 00:30:00,020
+then we get the unique names, user readable and decentralized.
+
+420
+00:30:01,670 --> 00:30:09,350
+And in the way, in some ways they they get this is basically exploited blockchain.
+
+421
+00:30:15,100 --> 00:30:16,510
+So blockstack approach,
+
+422
+00:30:27,450 --> 00:30:30,450
+and really [] they be fair,
+
+423
+00:30:30,480 --> 00:30:37,350
+it's really not block, block blockstack approaches, really namecoins approach,
+
+424
+00:30:37,350 --> 00:30:38,850
+that they sort of adopted.
+
+425
+00:30:39,730 --> 00:30:41,800
+The basic idea is very simple,
+
+426
+00:30:41,830 --> 00:30:49,450
+we're going to take advantage of the existence of the Bitcoin blockstack, with Bitcoin blockchain
+
+427
+00:30:49,450 --> 00:30:51,490
+and of course you can use any other blockchain,
+
+428
+00:30:51,490 --> 00:30:52,990
+but like just for concreteness,
+
+429
+00:30:53,260 --> 00:30:55,600
+we're going to think about the Bitcoin one.
+
+430
+00:30:56,080 --> 00:30:58,120
+And so here we got our chain,
+
+431
+00:30:59,710 --> 00:31:02,770
+you know transactions that in Bitcoin,
+
+432
+00:31:03,890 --> 00:31:06,800
+and you know grows over time,
+
+433
+00:31:06,860 --> 00:31:08,930
+you know miners add new transactions
+
+434
+00:31:09,260 --> 00:31:12,530
+and the way we're gonna basically create naming system,
+
+435
+00:31:12,530 --> 00:31:17,150
+is we're going to just post transactions that sort of different type,
+
+436
+00:31:17,150 --> 00:31:18,830
+they basically claim a name.
+
+437
+00:31:19,350 --> 00:31:24,240
+And so, for example you know we might actually have special transactions,
+
+438
+00:31:24,760 --> 00:31:29,740
+because every transaction actually turns out in Bitcoin has a metadata field,
+
+439
+00:31:29,740 --> 00:31:32,380
+that you can basically stick anything in the metadata fields you want
+
+440
+00:31:32,680 --> 00:31:36,130
+and so what we're going to stick in there is a name record.
+
+441
+00:31:36,650 --> 00:31:37,910
+So we're gonna have some transaction
+
+442
+00:31:37,910 --> 00:31:39,770
+and then we're going to take a name record in there,
+
+443
+00:31:41,510 --> 00:31:42,950
+you'll see a little in the second,
+
+444
+00:31:42,950 --> 00:31:44,960
+but exactly the details of this main record is,
+
+445
+00:31:45,230 --> 00:31:46,790
+but in the case of blockstack,
+
+446
+00:31:46,790 --> 00:31:50,780
+you know it's basically a name like 6.824,
+
+447
+00:31:51,900 --> 00:31:55,380
+and then maybe as we see later, a hash of the zone file.
+
+448
+00:31:56,190 --> 00:32:00,870
+And you know the basic rule in the in this scheme is going to be that,
+
+449
+00:32:01,260 --> 00:32:14,550
+the first one, the first user, first name record basically wins, right.
+
+450
+00:32:14,550 --> 00:32:18,660
+So there might be a second you know somebody else creates in the name 6.824 later,
+
+451
+00:32:18,810 --> 00:32:28,940
+but because you know the 6.824 shows up later in log in the Bitcoin blockchain,
+
+452
+00:32:29,000 --> 00:32:31,010
+we're gonna basically ignore that one,
+
+453
+00:32:31,520 --> 00:32:38,200
+and you only you know consider that valid name record for 6.824,
+
+454
+00:32:39,220 --> 00:32:41,920
+and this completely you know plays off on the fact,
+
+455
+00:32:41,920 --> 00:32:49,330
+that there's basically a blockchain is a log of all the operations ever happened,
+
+456
+00:32:49,330 --> 00:32:52,660
+they're in order, they're consensus in what order they happened
+
+457
+00:32:53,050 --> 00:32:58,450
+and so from that, we've been basically construct, if you will, like a database,
+
+458
+00:32:58,480 --> 00:33:00,370
+a database with all the names in the order,
+
+459
+00:33:00,400 --> 00:33:02,830
+you know just go through the blockchain from beginning of time,
+
+460
+00:33:03,070 --> 00:33:07,240
+find the valid transactions, name transactions
+
+461
+00:33:07,540 --> 00:33:13,690
+and use that to construct database with all the, with all the valid names.
+
+462
+00:33:14,220 --> 00:33:17,940
+In some ways, a number number of people sort of pointed this out,
+
+463
+00:33:17,940 --> 00:33:20,910
+like isn't this exactly what we've been doing lab 3,
+
+464
+00:33:20,940 --> 00:33:24,690
+where you know we have log like raft, provides to log,
+
+465
+00:33:24,690 --> 00:33:26,250
+we stick up operations in the log,
+
+466
+00:33:26,250 --> 00:33:29,850
+you know we run you know the operations
+
+467
+00:33:30,120 --> 00:33:32,940
+and that constructs you know the state,
+
+468
+00:33:32,970 --> 00:33:35,670
+where the state in this case would be a naming database
+
+469
+00:33:35,850 --> 00:33:38,910
+and there's you know, I think it's exactly that kind of style,
+
+470
+00:33:39,090 --> 00:33:42,840
+in the same idea except the small differences here,
+
+471
+00:33:42,840 --> 00:33:44,550
+not using graph to get the consensus,
+
+472
+00:33:44,550 --> 00:33:53,880
+we're again using Bitcoin or Nakamoto or to get to Nakamoto consensus to actually achieve one single blockchain.
+
+473
+00:33:54,560 --> 00:33:58,760
+But in spirit, you know, yes you know it's very similar.
+
+474
+00:34:01,660 --> 00:34:04,900
+Okay, so let's think a little bit about it,
+
+475
+00:34:04,900 --> 00:34:07,510
+in our free properties,
+
+476
+00:34:07,510 --> 00:34:11,620
+you know first of all, you know, do we do get unique names.
+
+477
+00:34:18,010 --> 00:34:18,640
+Yes.
+
+478
+00:34:18,880 --> 00:34:20,350
+Yeah, we got to unique names, correct,
+
+479
+00:34:20,350 --> 00:34:21,730
+because the first one wins.
+
+480
+00:34:24,730 --> 00:34:27,070
+Is it decentralized?
+
+481
+00:34:28,860 --> 00:34:29,280
+Yes.
+
+482
+00:34:29,790 --> 00:34:33,180
+Yeah, decentralized by sort of Bitcoin right,
+
+483
+00:34:36,580 --> 00:34:39,700
+and the consensus and the log basically makes sure that,
+
+484
+00:34:39,700 --> 00:34:42,310
+we can actually identify what the first name is,
+
+485
+00:34:42,310 --> 00:34:43,810
+so that we can actually pick a unique name.
+
+486
+00:34:45,080 --> 00:34:46,130
+Is it human readable?
+
+487
+00:34:47,720 --> 00:34:48,410
+Can be.
+
+488
+00:34:49,370 --> 00:34:50,840
+Yeah, exactly, yeah,
+
+489
+00:34:53,160 --> 00:34:57,330
+certainly my stream 6.824 hopefully user readable.
+
+490
+00:35:02,170 --> 00:35:06,730
+Okay, so it seems like it's sort of first brought you know [suite],
+
+491
+00:35:06,730 --> 00:35:10,660
+where it looks like indeed you know we got the three properties, right,
+
+492
+00:35:11,310 --> 00:35:14,070
+user readable, we've got the uniqueness, we gotta decentralized.
+
+493
+00:35:14,950 --> 00:35:19,660
+And I think that really named coin was sort of the first naming system
+
+494
+00:35:19,690 --> 00:35:22,780
+demonstrated that could be that could be achieved in this way.
+
+495
+00:35:23,460 --> 00:35:26,250
+Now, it's not completely perfect, right,
+
+496
+00:35:26,730 --> 00:35:31,500
+like for example even though we got sort of unique names and user readable,
+
+497
+00:35:31,590 --> 00:35:34,920
+we don't really know like what 6.824 really means, correct,
+
+498
+00:35:35,370 --> 00:35:38,790
+see 6.824 and what does 6.824 refer to,
+
+499
+00:35:38,790 --> 00:35:40,950
+is like a a part number,
+
+500
+00:35:40,950 --> 00:35:43,800
+or is it a class number or anything,
+
+501
+00:35:43,800 --> 00:35:45,750
+we don't really know other interpret names,
+
+502
+00:35:45,750 --> 00:35:47,520
+but you know they still human readable,
+
+503
+00:35:47,520 --> 00:35:48,660
+its not completely perfect,
+
+504
+00:35:48,660 --> 00:35:52,380
+it's not identifying uniquely some user in the world, right,
+
+505
+00:35:53,100 --> 00:35:59,970
+and even like whatever you were done [] that doesn't really uniquely identify one person, right,
+
+506
+00:35:59,970 --> 00:36:01,380
+so whenever you see a name,
+
+507
+00:36:01,380 --> 00:36:05,250
+there's still the issue of like who it actually really is.
+
+508
+00:36:07,540 --> 00:36:12,130
+And also, there's sort of a similar you know related issue,
+
+509
+00:36:12,130 --> 00:36:13,630
+why it's not completely perfect,
+
+510
+00:36:13,630 --> 00:36:14,920
+which is like,
+
+511
+00:36:15,280 --> 00:36:17,710
+how, how do you find somebody's name,
+
+512
+00:36:17,950 --> 00:36:22,090
+and you know how do you find actually you know what [] name,
+
+513
+00:36:22,120 --> 00:36:26,080
+how do and how do you find that,
+
+514
+00:36:26,080 --> 00:36:29,200
+how do you know which record actually goes with, which particular user,
+
+515
+00:36:29,230 --> 00:36:34,450
+so although although the system is quite cool,
+
+516
+00:36:34,450 --> 00:36:38,440
+because it has these decentralized unique and human readable aspects to it,
+
+517
+00:36:38,740 --> 00:36:39,970
+you know it's not completely perfect,
+
+518
+00:36:39,970 --> 00:36:43,150
+and these are generally issues with general naming systems,
+
+519
+00:36:43,270 --> 00:36:44,920
+but certainly true here too,
+
+520
+00:36:45,220 --> 00:36:46,150
+so it's not the case that,
+
+521
+00:36:46,150 --> 00:36:49,240
+you know we know we should have solved all naming problems,
+
+522
+00:36:49,360 --> 00:36:51,430
+in one single swoop,
+
+523
+00:36:51,430 --> 00:36:55,840
+we do have a good good standing position to work with,
+
+524
+00:36:55,840 --> 00:36:58,900
+but it's not completely hundred percent hit.
+
+525
+00:37:01,900 --> 00:37:11,890
+So question, so namecoin, all they did was add essentially this record to the the like transaction
+
+526
+00:37:12,160 --> 00:37:15,730
+Well, I think we did a little bit more, correct,
+
+527
+00:37:15,730 --> 00:37:16,810
+they run their own blockchain,
+
+528
+00:37:17,390 --> 00:37:19,280
+independent of Bitcoin
+
+529
+00:37:19,640 --> 00:37:24,620
+and used blockchain there purely for many,
+
+530
+00:37:25,360 --> 00:37:27,550
+and they had also a bunch of rules about,
+
+531
+00:37:27,550 --> 00:37:32,680
+like how much money how many namecoins you have to pay you to get a particular name
+
+532
+00:37:32,680 --> 00:37:35,170
+and there's all kinds of other extensions,
+
+533
+00:37:35,530 --> 00:37:39,340
+that I really discussed yet were mentioned,
+
+534
+00:37:39,340 --> 00:37:41,710
+but they sort of followed this particular approach,
+
+535
+00:37:42,140 --> 00:37:43,580
+and were the first to do so,
+
+536
+00:37:46,630 --> 00:37:49,780
+in many pragmatic issues paper touches on,
+
+537
+00:37:49,930 --> 00:37:51,550
+when I haven't mentioned at all yet.
+
+538
+00:37:56,060 --> 00:37:56,990
+Any other questions?
+
+539
+00:38:04,300 --> 00:38:09,430
+Okay, so let's actually dive in a little bit on the sort of the practical issues,
+
+540
+00:38:09,730 --> 00:38:11,650
+although there's a slightly different nature,
+
+541
+00:38:11,650 --> 00:38:14,140
+we want to we just talked about it really is by the,
+
+542
+00:38:15,940 --> 00:38:24,760
+how to actually implement decentralized apps and naming system, by leveraging Bitcoin.
+
+543
+00:38:42,020 --> 00:38:47,780
+And there's a bunch of, a bunch of very short just pragmatic issues,
+
+544
+00:38:47,990 --> 00:38:50,960
+there are limits on the amount of data, you can put in,
+
+545
+00:38:53,840 --> 00:38:56,990
+on data size in a transaction.
+
+546
+00:38:59,120 --> 00:39:02,270
+So, although maybe it's perfectly fine to have a name,
+
+547
+00:39:02,300 --> 00:39:08,660
+value binding into the, into the, into the bitcoin transaction
+
+548
+00:39:08,900 --> 00:39:11,930
+and we can't put our todo list inside of that transaction
+
+549
+00:39:11,930 --> 00:39:13,850
+and so you know we've got to have some plan,
+
+550
+00:39:14,150 --> 00:39:17,780
+if we're actually how that part is going to work out.
+
+551
+00:39:18,590 --> 00:39:19,940
+It has slow writes,
+
+552
+00:39:21,570 --> 00:39:23,220
+we know from the last lecture,
+
+553
+00:39:23,400 --> 00:39:27,810
+it takes a while for right actually or transactions to propagate
+
+554
+00:39:28,140 --> 00:39:31,620
+and before they decided to be really stable,
+
+555
+00:39:31,620 --> 00:39:34,080
+it cannot be forked off anymore,
+
+556
+00:39:34,200 --> 00:39:39,150
+you know we might be talking about like you know four five six blocks later in the chain,
+
+557
+00:39:39,150 --> 00:39:40,650
+you know and your blocks ten minutes,
+
+558
+00:39:40,650 --> 00:39:42,270
+so you know an hour later, right,
+
+559
+00:39:42,810 --> 00:39:44,430
+and so it's really not so cool,
+
+560
+00:39:44,430 --> 00:39:48,810
+if we're stick our todo list inside of the blockchain too,
+
+561
+00:39:48,810 --> 00:39:52,800
+because you know I modify my block, my chain, I modify my todo list,
+
+562
+00:39:52,800 --> 00:39:54,780
+you know like an hour later, maybe actually observe it,
+
+563
+00:39:54,780 --> 00:39:56,190
+so that seems not so good,
+
+564
+00:39:56,190 --> 00:39:58,950
+and you want to go to more aggressive applications,
+
+565
+00:39:58,950 --> 00:40:01,470
+where there's much more data that's manipulated,
+
+566
+00:40:01,710 --> 00:40:04,560
+you know certainly a problem,
+
+567
+00:40:04,800 --> 00:40:07,470
+in a similar, in addition are slow, right,
+
+568
+00:40:07,470 --> 00:40:09,870
+so there's also low throughput, low bandwidth,
+
+569
+00:40:15,650 --> 00:40:20,520
+in the [], there's only a few transactions per second, correct,
+
+570
+00:40:20,520 --> 00:40:23,550
+so we're gonna do a lot of writes you know to file,
+
+571
+00:40:23,550 --> 00:40:24,900
+and many times we're also,
+
+572
+00:40:24,900 --> 00:40:29,220
+we're going running to the file operations through blockchain,
+
+573
+00:40:29,220 --> 00:40:32,610
+so, so clearly you know we've got to be a little bit,
+
+574
+00:40:32,610 --> 00:40:39,360
+if we want to really build a general purpose infrastructure for decentralized applications
+
+575
+00:40:39,360 --> 00:40:41,760
+going to be a more complete story,
+
+576
+00:40:41,760 --> 00:40:45,150
+that actually allows us to get like fast writes,
+
+577
+00:40:45,150 --> 00:40:46,380
+you know high bandwidth rates,
+
+578
+00:40:46,380 --> 00:40:50,850
+and gets around and basically not running everything in the blockchain.
+
+579
+00:40:51,660 --> 00:40:55,830
+The paper also talks about one other final problem, the ledger, ever growing ledger,
+
+580
+00:40:56,600 --> 00:41:01,160
+I'm not actually spend much time about talking about that at all,
+
+581
+00:41:01,370 --> 00:41:05,660
+but it's going to also issue if you want to do as [report] in the paper,
+
+582
+00:41:05,660 --> 00:41:08,720
+you are going to boot up a blockstack node,
+
+583
+00:41:08,720 --> 00:41:11,630
+if you do sort of a traditional Bitcoin style,
+
+584
+00:41:11,630 --> 00:41:14,750
+where you're gonna run through all the traffic transactions one by one,
+
+585
+00:41:14,810 --> 00:41:18,230
+that will take a while, before you actually build up a complete naming record.
+
+586
+00:41:18,910 --> 00:41:20,980
+In particular, in the case of blockstack is a little bit annoying,
+
+587
+00:41:20,980 --> 00:41:25,930
+because one of the transactions that are in the blockchain are completely irrelevant to blockstacks, right,
+
+588
+00:41:25,930 --> 00:41:29,320
+there there whatever is actually a completely different purpose,
+
+589
+00:41:29,500 --> 00:41:33,520
+and have nothing to do with blockstack approach,
+
+590
+00:41:33,520 --> 00:41:39,010
+you know blockstack, if you re-literally we're using the Bitcoin blockchain as your fundamental thing,
+
+591
+00:41:39,010 --> 00:41:40,660
+you would have to go through an interpreter,
+
+592
+00:41:40,660 --> 00:41:42,730
+entered and see which ones actually going to apply.
+
+593
+00:41:45,100 --> 00:41:49,690
+Okay, so we're going to focus more on some of these first couple of challenges,
+
+594
+00:41:49,690 --> 00:41:55,990
+which is like you know basically what we wanna do is minimized the use of blockchain,
+
+595
+00:41:56,320 --> 00:42:02,050
+you know so we get how you performance writes or [decent] bandwidth.
+
+596
+00:42:05,160 --> 00:42:05,850
+Does that make sense?
+
+597
+00:42:11,370 --> 00:42:14,910
+Good, that's what gets you the core of the paper,
+
+598
+00:42:15,090 --> 00:42:19,540
+which is like, we'll pull up the diagram,
+
+599
+00:42:19,540 --> 00:42:20,680
+so we can look at it,
+
+600
+00:42:23,320 --> 00:42:24,640
+that's basically this diagram.
+
+601
+00:42:25,380 --> 00:42:29,160
+And that sort of description of the general approach,
+
+602
+00:42:29,610 --> 00:42:32,460
+the paper takes to address the challenges,
+
+603
+00:42:32,460 --> 00:42:34,800
+that I just laid out on the previous board.
+
+604
+00:42:39,050 --> 00:42:40,760
+Okay, so this is a complicated picture
+
+605
+00:42:40,820 --> 00:42:43,370
+and so let's go for layer by layer
+
+606
+00:42:43,370 --> 00:42:45,710
+and try to understand actually how things work.
+
+607
+00:42:50,440 --> 00:42:56,870
+So at the bottom, here is the, you know is the Bitcoin chain.
+
+608
+00:43:02,040 --> 00:43:06,660
+And in in the Bitcoin chain, there's a lot of transactions
+
+609
+00:43:06,720 --> 00:43:13,080
+and many of these transactions have absolutely nothing to do with blockstack, right,
+
+610
+00:43:13,080 --> 00:43:14,280
+write down blockstack here.
+
+611
+00:43:18,680 --> 00:43:24,380
+And the blockstck transactions are sort of sitting in you know a particular blocks in the blockchain,
+
+612
+00:43:25,700 --> 00:43:30,170
+and, then there's a second layer, which really is the blockstack nodes,
+
+613
+00:43:30,320 --> 00:43:33,650
+that basically read all these transactions,
+
+614
+00:43:33,770 --> 00:43:37,490
+fish out the ones that are actually related to blockstack,
+
+615
+00:43:37,700 --> 00:43:44,300
+interpret those operations and you build up a blockstack database with names
+
+616
+00:43:44,330 --> 00:43:47,150
+to what turns out to be zone file hashes.
+
+617
+00:43:47,720 --> 00:43:49,550
+So we look at these operations,
+
+618
+00:43:49,550 --> 00:43:50,660
+when the ones in there,
+
+619
+00:43:50,660 --> 00:43:54,020
+so in every Bitcoin transactions as I mentioned early,
+
+620
+00:43:54,020 --> 00:43:55,160
+you can have some metadata,
+
+621
+00:43:55,190 --> 00:43:58,220
+that's in the what's called the OP underscore return field
+
+622
+00:43:58,520 --> 00:44:00,860
+and in the underscore return field,
+
+623
+00:44:01,130 --> 00:44:10,260
+there's basically a name, say x plus you know the hash of zone file,
+
+624
+00:44:15,980 --> 00:44:20,360
+and that's sort of the binding, that's it's a in a Bitcoin
+
+625
+00:44:20,360 --> 00:44:30,890
+and basically blockstack that uses Bitcoin to basically make that binding from hand from name to zone file unique,
+
+626
+00:44:30,890 --> 00:44:33,800
+and in a decentralized manner.
+
+627
+00:44:34,550 --> 00:44:39,950
+So as, you know, like in lab 3 or in any other sort of logging system,
+
+628
+00:44:40,160 --> 00:44:48,380
+the blockstack nodes interpret these particular name transactions,
+
+629
+00:44:48,410 --> 00:44:52,100
+look at OP field, see that this op field,
+
+630
+00:44:52,100 --> 00:44:54,080
+is for example to create a particular name
+
+631
+00:44:54,170 --> 00:44:56,360
+and basically store in the database,
+
+632
+00:44:56,360 --> 00:45:02,450
+the binding from name x you know to the hash of the zone file.
+
+633
+00:45:03,480 --> 00:45:06,090
+And once a while as we've seen in the second,
+
+634
+00:45:06,120 --> 00:45:07,950
+usually want to update zone file,
+
+635
+00:45:08,070 --> 00:45:11,070
+so you might see multiple transactions for the same,
+
+636
+00:45:11,280 --> 00:45:14,340
+user updating basically hash of his own file.
+
+637
+00:45:15,240 --> 00:45:18,840
+Of course, we want to minimize you know these changes,
+
+638
+00:45:18,840 --> 00:45:26,610
+because every change to the, would require, would require modification, we're posting a Bitcoin transaction,
+
+639
+00:45:26,790 --> 00:45:30,150
+and you know for many reasons on the previous slide, that's slow,
+
+640
+00:45:30,150 --> 00:45:31,440
+which would like to try to avoid it,
+
+641
+00:45:31,530 --> 00:45:33,300
+futhermore, it will cost a little bit of [money],
+
+642
+00:45:33,710 --> 00:45:36,860
+I mean there's these transactions need to be a process.
+
+643
+00:45:38,400 --> 00:45:43,960
+And so, so the basic plan,
+
+644
+00:45:43,960 --> 00:45:47,590
+so this this node layer virtual chain layer,
+
+645
+00:45:47,590 --> 00:45:53,380
+basically built this database of mapping from name to hash zone file,
+
+646
+00:45:53,380 --> 00:45:57,310
+you know of course also filters out all the transactions that are invalid
+
+647
+00:45:57,340 --> 00:46:00,940
+or like you know new x are being created after the first one.
+
+648
+00:46:01,540 --> 00:46:06,160
+And then, using the hash at the zone file,
+
+649
+00:46:06,160 --> 00:46:07,540
+you know which we got,
+
+650
+00:46:07,870 --> 00:46:13,540
+it locates, an application could locate the zone file
+
+651
+00:46:13,540 --> 00:46:15,460
+and the zone file can come from anywhere
+
+652
+00:46:15,640 --> 00:46:18,190
+and because we have to hash with the zone file,
+
+653
+00:46:18,280 --> 00:46:20,890
+when we retrieve a file that claims to be the zone file,
+
+654
+00:46:20,890 --> 00:46:22,270
+we can re-compute the hash,
+
+655
+00:46:22,330 --> 00:46:27,010
+if the hash is identical to the one that we got through interactive through Bitcoin,
+
+656
+00:46:27,130 --> 00:46:31,390
+then we know for sure, that is the zone file that goes with x.
+
+657
+00:46:33,370 --> 00:46:36,460
+So okay, what is that in a zone files,
+
+658
+00:46:36,760 --> 00:46:41,020
+well in zone file is for yet another table,
+
+659
+00:46:41,050 --> 00:46:44,800
+if you will involve mapping names to URIs,
+
+660
+00:46:44,830 --> 00:46:47,140
+so for example you might have a zone file,
+
+661
+00:46:47,140 --> 00:46:50,080
+which has like maybe for a todo app,
+
+662
+00:46:50,470 --> 00:46:51,790
+that's an entry todo,
+
+663
+00:46:52,640 --> 00:46:55,370
+and thit points to a URI,
+
+664
+00:46:56,500 --> 00:47:00,130
+we're actually the data is located for a todo list.
+
+665
+00:47:00,930 --> 00:47:04,950
+And there's sort of two types of zone files
+
+666
+00:47:04,950 --> 00:47:07,560
+and one is what's called is mutable and one is immutable,
+
+667
+00:47:08,130 --> 00:47:11,650
+the mutable ones have URI plus a public key,
+
+668
+00:47:15,280 --> 00:47:19,780
+so, and this is public key is the key to actually validate
+
+669
+00:47:20,050 --> 00:47:24,130
+whether whether the file was written by the user x,
+
+670
+00:47:24,130 --> 00:47:29,410
+so basically the user x you know publishes through this zone file, public key for him or herself,
+
+671
+00:47:29,830 --> 00:47:34,270
+and later on, when user two want to look up user x,
+
+672
+00:47:34,270 --> 00:47:36,160
+you know gets the hash at the zone file,
+
+673
+00:47:36,370 --> 00:47:39,940
+the hash finds the zone file, double checks that the zone file,
+
+674
+00:47:39,940 --> 00:47:42,430
+you know hash is to the right value,
+
+675
+00:47:42,460 --> 00:47:45,790
+looks inside the zone file,
+
+676
+00:47:45,820 --> 00:47:48,730
+finds the you know the public key of x
+
+677
+00:47:48,790 --> 00:47:52,600
+and the URI you know for the todo file,
+
+678
+00:47:52,780 --> 00:47:57,040
+usually the URI to fetch the actual todo file,
+
+679
+00:47:57,190 --> 00:48:01,060
+check you know the signature on the retreat file with the public key,
+
+680
+00:48:01,240 --> 00:48:02,440
+and it all checks out,
+
+681
+00:48:02,440 --> 00:48:04,780
+then basically user what to knows,
+
+682
+00:48:04,780 --> 00:48:09,640
+you know I got you know user x zone file.
+
+683
+00:48:10,390 --> 00:48:13,750
+And then it might be also like other names in this zone file,
+
+684
+00:48:13,750 --> 00:48:18,610
+like whatever users to access tweets, etc,
+
+685
+00:48:18,610 --> 00:48:22,120
+timeline what you know for every application is probably an entry
+
+686
+00:48:22,120 --> 00:48:27,040
+and you know probably the applications sort agree on like one name to use for a particular application.
+
+687
+00:48:29,240 --> 00:48:33,440
+So don't we lose the like data immutability guarantees,
+
+688
+00:48:33,440 --> 00:48:35,300
+where it's possible this data could be deleted,
+
+689
+00:48:35,300 --> 00:48:38,320
+and then you wouldn't have the hash of data, could be lost.
+
+690
+00:48:38,860 --> 00:48:41,710
+So what do you mean like the zone file get lost?
+
+691
+00:48:42,580 --> 00:48:45,310
+Right, like like with the chain, you can't lose data,
+
+692
+00:48:45,340 --> 00:48:46,660
+because it'll be replicated enough places,
+
+693
+00:48:46,660 --> 00:48:48,280
+but here that's not how to guarantee.
+
+694
+00:48:48,280 --> 00:48:51,610
+So, turns out zone files also replicated widely,
+
+695
+00:48:51,640 --> 00:48:56,620
+on basically there's a course in a blockstack take [] all replicated a zone files of everybody.
+
+696
+00:48:57,010 --> 00:49:00,190
+And in zone file system,
+
+697
+00:49:00,190 --> 00:49:03,700
+reasonable small like for kilobyte or something in that order,
+
+698
+00:49:03,910 --> 00:49:06,130
+and so they can be replicated everywhere, okay,
+
+699
+00:49:06,460 --> 00:49:10,870
+then for the todo list, todo file URI,
+
+700
+00:49:11,080 --> 00:49:17,140
+the basic idea is that you might store the same data at multiple providers,
+
+701
+00:49:17,140 --> 00:49:20,380
+for example you might want to have replicated it S3,
+
+702
+00:49:20,710 --> 00:49:23,110
+and maybe you also stick it in Google drive,
+
+703
+00:49:25,060 --> 00:49:31,210
+and one reason that actually blockstack that has storage servers is,
+
+704
+00:49:31,300 --> 00:49:33,160
+not because actually they store data,
+
+705
+00:49:33,190 --> 00:49:37,060
+but basically providing uniform API to all these different storage providers.
+
+706
+00:49:43,890 --> 00:49:44,490
+Okay so there.
+
+707
+00:49:46,010 --> 00:49:46,730
+Does that make sense?
+
+708
+00:49:50,330 --> 00:49:54,380
+Okay so there's a zone files in two ways,
+
+709
+00:49:54,380 --> 00:49:57,110
+there's another which are called immutable storage
+
+710
+00:49:57,110 --> 00:50:14,600
+and that actually contains the URI, name, URI, public key, and the hash of the data of the file.
+
+711
+00:50:16,680 --> 00:50:18,390
+So you can basically verify,
+
+712
+00:50:18,420 --> 00:50:21,930
+you know, is this indeed the latest version of the file,
+
+713
+00:50:22,290 --> 00:50:25,230
+because in this scheme, you get to update,
+
+714
+00:50:25,230 --> 00:50:26,760
+you know x can update the file,
+
+715
+00:50:26,760 --> 00:50:27,990
+but it's hard to tell,
+
+716
+00:50:28,110 --> 00:50:31,170
+for user two whether that is actually the latest version,
+
+717
+00:50:31,500 --> 00:50:34,860
+the paper mentions that there you probably want to version numbers in it,
+
+718
+00:50:35,130 --> 00:50:38,820
+but if you really want to guarantee to be sort of latest version for a particular name,
+
+719
+00:50:39,030 --> 00:50:41,280
+if you're using immutable storage,
+
+720
+00:50:41,280 --> 00:50:44,490
+you know then, the immutable storage contains the hash of the file
+
+721
+00:50:44,790 --> 00:50:48,990
+and that uniquely identifies a particular version of that particular file.
+
+722
+00:50:49,640 --> 00:50:53,120
+That does mean, like if you update this record,
+
+723
+00:50:54,010 --> 00:50:57,100
+then, that really means you update the zone file,
+
+724
+00:50:57,370 --> 00:51:02,980
+so that means you have to republish or re-create a log entry in the Bitcoin chain,
+
+725
+00:51:03,070 --> 00:51:07,510
+mapping you know x to a new a hash hash zone file.
+
+726
+00:51:11,420 --> 00:51:16,580
+Okay, so this is the overall picture for for the system,
+
+727
+00:51:16,850 --> 00:51:22,220
+and as you can see you know particular like you used todo list site,
+
+728
+00:51:23,070 --> 00:51:29,880
+you know the user x can actually update it's is todo list
+
+729
+00:51:30,150 --> 00:51:35,580
+without actually having to publish a new record in the in the Bitcoin chain,
+
+730
+00:51:36,060 --> 00:51:41,340
+in fact the only thing that really has to be created in the Bitcoin chain is just you know x's name,
+
+731
+00:51:41,610 --> 00:51:43,980
+and x of course might have many other names,
+
+732
+00:51:43,980 --> 00:51:45,450
+that are sitting in the zone files,
+
+733
+00:51:45,630 --> 00:51:56,920
+in, and but you know the the, this system doesn't rely on for every operation on the, on the blockchain,
+
+734
+00:51:57,750 --> 00:52:03,510
+which gets around gets around a lot of these problems of slow rates, low bandwidth,
+
+735
+00:52:03,810 --> 00:52:10,310
+and the limits of that, and limits on the on the data that actually appear in a transaction record,
+
+736
+00:52:10,310 --> 00:52:11,930
+because the only data really has to appear,
+
+737
+00:52:11,990 --> 00:52:15,770
+this instruction record is this name blocks the hash of the zone file.
+
+738
+00:52:19,990 --> 00:52:23,830
+Sorry, how can we find there's no file, if you only have the hash.
+
+739
+00:52:24,310 --> 00:52:25,810
+It's a very good question,
+
+740
+00:52:25,840 --> 00:52:28,600
+we don't really care, where it comes from,
+
+741
+00:52:28,600 --> 00:52:31,060
+and so you know they call this the routing layer,
+
+742
+00:52:31,690 --> 00:52:33,460
+basically you tell the layer writer,
+
+743
+00:52:33,490 --> 00:52:36,670
+hey I'm looking for a file that has the following hash,
+
+744
+00:52:38,000 --> 00:52:41,990
+and then the writing layer has to produce that file
+
+745
+00:52:41,990 --> 00:52:45,380
+and you can check whether you got the right file by re-computing the hash
+
+746
+00:52:45,380 --> 00:52:47,600
+and see you match the one that you're asking for.
+
+747
+00:52:58,400 --> 00:52:59,690
+Any other questions about this?
+
+748
+00:53:05,210 --> 00:53:11,390
+So sorry, just to clarify operations within this file storage or the zone files
+
+749
+00:53:11,390 --> 00:53:14,330
+is still limited by the underlying blockchain though, right?
+
+750
+00:53:14,970 --> 00:53:18,840
+Yes or no, what are you thinking?
+
+751
+00:53:21,860 --> 00:53:27,650
+Or just like because modifications or changes to like the file will need a new hash
+
+752
+00:53:27,650 --> 00:53:30,590
+and therefore a new log entry within the blockchain,
+
+753
+00:53:30,710 --> 00:53:34,880
+so you still have to wait for that to be quote unquote accepted,
+
+754
+00:53:34,910 --> 00:53:36,230
+which is like an hour, right.
+
+755
+00:53:36,760 --> 00:53:38,740
+Yeah, although, absolutely true,
+
+756
+00:53:38,740 --> 00:53:40,840
+so when you make a change to the zone file,
+
+757
+00:53:40,870 --> 00:53:43,990
+that has to run through the txn,
+
+758
+00:53:44,260 --> 00:53:46,180
+for example updating todo list,
+
+759
+00:53:46,450 --> 00:53:49,930
+wouldn't have to require a Bitcoin transaction,
+
+760
+00:53:53,550 --> 00:53:55,770
+you don't really update the zone file at all,
+
+761
+00:53:55,800 --> 00:53:58,470
+you know you're just updating todo list file
+
+762
+00:53:58,470 --> 00:54:01,170
+and the zone file only contains the name to do
+
+763
+00:54:01,410 --> 00:54:03,270
+and URI plus the public key,
+
+764
+00:54:03,270 --> 00:54:04,770
+but you're not updating any of those.
+
+765
+00:54:08,290 --> 00:54:12,220
+I see, but doesn't don't we store also the hash of the file,
+
+766
+00:54:12,250 --> 00:54:13,870
+so if we change the content.
+
+767
+00:54:13,990 --> 00:54:15,730
+That's only there are two cases,
+
+768
+00:54:15,730 --> 00:54:19,120
+for there's a mutable storage and immutable storage.
+
+769
+00:54:19,900 --> 00:54:25,810
+And, what they propose is that were immutable storage like storage, you don't update,
+
+770
+00:54:25,810 --> 00:54:27,670
+you can actually stick the hash of the file in there,
+
+771
+00:54:27,670 --> 00:54:31,450
+but for mutable storage, you know that's going to see a lot of writes,
+
+772
+00:54:31,540 --> 00:54:34,070
+you shouldn't do that, you should use this key.
+
+773
+00:54:36,860 --> 00:54:41,990
+I see, and then how is it possible to validate with mutable storage that you're getting the right data, then.
+
+774
+00:54:42,200 --> 00:54:44,540
+Yeah, so there's actually a very good question,
+
+775
+00:54:44,540 --> 00:54:49,310
+well, you can validate whether you actually obtain and actually was produced by x,
+
+776
+00:54:49,340 --> 00:54:50,840
+because you have to pull the key for x
+
+777
+00:54:50,840 --> 00:54:54,320
+and you can verify whether actually the signature on the todo file,
+
+778
+00:54:54,440 --> 00:54:57,380
+indeed checks out with the public key of x,
+
+779
+00:54:57,710 --> 00:55:00,370
+so you at least know that x has written it, right,
+
+780
+00:55:00,400 --> 00:55:02,410
+you may not know this most recent version
+
+781
+00:55:02,410 --> 00:55:06,790
+and so the papers are going to talk about these are you know in detail,
+
+782
+00:55:06,790 --> 00:55:09,520
+the basic system, we probably have to stick version numbers in it
+
+783
+00:55:09,520 --> 00:55:14,140
+and so at least you can detect rollback a little [break],
+
+784
+00:55:14,140 --> 00:55:16,690
+actually I don't know how to how to actually,
+
+785
+00:55:18,880 --> 00:55:20,860
+you can't really be sure that you actually got the latest version.
+
+786
+00:55:21,990 --> 00:55:25,710
+But to where the modifications to a mutable storage coming into.
+
+787
+00:55:26,700 --> 00:55:30,570
+Your todo file is here, like in here, like todo file,
+
+788
+00:55:32,020 --> 00:55:36,340
+and, if an application write todo list application, want to update todo file,
+
+789
+00:55:36,340 --> 00:55:37,360
+just goes ahead and does it.
+
+790
+00:55:38,020 --> 00:55:42,010
+And, and then signs it using the public key
+
+791
+00:55:42,010 --> 00:55:49,250
+and sticks it in the, and sticks in for the given URI.
+
+792
+00:55:50,400 --> 00:55:53,850
+And would that be done through the routing layer as well,
+
+793
+00:55:53,850 --> 00:55:56,880
+because you want to find where in the storage.
+
+794
+00:55:57,120 --> 00:56:01,110
+Yeah, so user two will retrieve access zone file right,
+
+795
+00:56:01,680 --> 00:56:04,260
+and once it has access zone file in node,
+
+796
+00:56:04,260 --> 00:56:07,440
+where the file, the todo file is,
+
+797
+00:56:07,440 --> 00:56:09,900
+because there's the URI sits in his own file.
+
+798
+00:56:12,610 --> 00:56:17,170
+So again, they could retrieve it and a check the signature.
+
+799
+00:56:18,220 --> 00:56:26,110
+About the URI are there, it is it only when URI per name in the zone file, or.
+
+800
+00:56:26,800 --> 00:56:30,490
+I don't know, unclear exactly how it works,
+
+801
+00:56:30,550 --> 00:56:34,210
+I'm sorry I'm not you know, I need to check out the source code
+
+802
+00:56:34,210 --> 00:56:37,480
+and look at the specific format zone files.
+
+803
+00:56:42,440 --> 00:56:49,310
+Since we're publishing the public key together with all the rest of the data in the zone file,
+
+804
+00:56:49,310 --> 00:56:53,840
+doesn't mean I could just make up a private key,
+
+805
+00:56:54,290 --> 00:57:00,320
+make like matching public key and just stick something in there and say I'm user,
+
+806
+00:57:01,240 --> 00:57:05,430
+because, because they do provide public key,
+
+807
+00:57:05,430 --> 00:57:07,770
+so can I not just lie.
+
+808
+00:57:08,520 --> 00:57:10,860
+Well, you can't falsify the zone file, correct,
+
+809
+00:57:11,410 --> 00:57:16,600
+because the zone file, the hash of the zone file must match the hash that sits in the blockchain,
+
+810
+00:57:23,890 --> 00:57:32,900
+so only the version that actually entered the blockchain record mapping x you know to that hash zone file,
+
+811
+00:57:32,960 --> 00:57:35,930
+only that person could have produce that zone files.
+
+812
+00:57:37,690 --> 00:57:39,670
+I see, thank you.
+
+813
+00:57:45,060 --> 00:57:45,690
+Okay?
+
+814
+00:57:46,620 --> 00:57:48,660
+Well, so this is basically the big picture
+
+815
+00:57:48,690 --> 00:57:51,690
+and if you got this, if you got this part,
+
+816
+00:57:51,690 --> 00:57:56,520
+then as the rest of sort of details and important,
+
+817
+00:57:56,520 --> 00:57:59,580
+but maybe less important this key thing to understand.
+
+818
+00:58:01,740 --> 00:58:05,410
+Okay, there's a couple things I want to go over,
+
+819
+00:58:05,410 --> 00:58:08,290
+I particularly want to talk a little bit more about name creation,
+
+820
+00:58:08,290 --> 00:58:10,720
+because there's a couple little details, that are actually interesting.
+
+821
+00:58:19,260 --> 00:58:25,320
+So turns out name creation actually has two part to it,
+
+822
+00:58:25,410 --> 00:58:28,890
+the first of all the user needs to have of course some Bitcoins, because you gotta pay,
+
+823
+00:58:37,450 --> 00:58:38,920
+the reason you have to have some Bitcoins,
+
+824
+00:58:38,920 --> 00:58:46,030
+because you gotta convince one of the miners to actually include your transaction in the Bitcoin ledger.
+
+825
+00:58:46,600 --> 00:58:51,130
+And so it turns out there are two transactions for every name that you create,
+
+826
+00:58:55,130 --> 00:58:59,540
+and one is a basically a preorder transaction,
+
+827
+00:59:02,300 --> 00:59:03,800
+and in the preorder transaction,
+
+828
+00:59:03,890 --> 00:59:05,420
+you don't really list the name,
+
+829
+00:59:05,420 --> 00:59:07,130
+but actually the hash of the name,
+
+830
+00:59:11,730 --> 00:59:15,030
+so, anybody who receives the preorder transaction, doesn't know what the name is,
+
+831
+00:59:15,030 --> 00:59:17,760
+but you know doesn't know what the hash with the name is.
+
+832
+00:59:18,080 --> 00:59:21,860
+And then there's the second transaction really registers the name,
+
+833
+00:59:24,280 --> 00:59:27,730
+and that basically contains the actual name,
+
+834
+00:59:28,890 --> 00:59:33,210
+which we first published the hash, the hash of the zone file.
+
+835
+00:59:41,380 --> 00:59:45,460
+And so why, why, why is this done,
+
+836
+00:59:45,460 --> 00:59:47,680
+this is actually something that a namecoin did,
+
+837
+00:59:47,680 --> 00:59:50,110
+and they adopted from namecoin here,
+
+838
+00:59:50,110 --> 00:59:51,340
+why do it in this way.
+
+839
+00:59:54,240 --> 00:59:56,340
+Because if you directly announce the name,
+
+840
+00:59:56,340 --> 01:00:02,010
+then someone else can raise you and try to register that name before you.
+
+841
+01:00:02,310 --> 01:00:06,960
+Yeah, this is a common problems go from front problem.
+
+842
+01:00:09,310 --> 01:00:11,050
+Oops, there we go again, sorry.
+
+843
+01:00:33,790 --> 01:00:37,570
+So front runner problem exactly describe,
+
+844
+01:00:37,570 --> 01:00:40,570
+let's say you're trying to register google.com
+
+845
+01:00:40,900 --> 01:00:43,750
+and somebody sees you doing that,
+
+846
+01:00:43,750 --> 01:00:45,340
+of course you submit a transaction, correct,
+
+847
+01:00:45,340 --> 01:00:46,510
+not in the blockchain yet,
+
+848
+01:00:46,750 --> 01:00:48,730
+for example a minor might actually either
+
+849
+01:00:48,730 --> 01:00:52,390
+or somebody else that actually sits in the Bitcoin network
+
+850
+01:00:52,720 --> 01:00:55,480
+and decide how you're going to run ahead and trying to get my transaction
+
+851
+01:00:55,480 --> 01:01:00,550
+to claiming you know google.com into the Bitcoin before you
+
+852
+01:01:00,790 --> 01:01:03,130
+and now then I own google.com
+
+853
+01:01:03,370 --> 01:01:05,380
+and so to avoid that problem,
+
+854
+01:01:05,560 --> 01:01:09,370
+you first actually have to enter the hash into the Bitcoin chain,
+
+855
+01:01:09,640 --> 01:01:13,150
+then you wait a while to make sure that the,
+
+856
+01:01:13,650 --> 01:01:17,610
+that that record sits in the Bitcoin blockchain,
+
+857
+01:01:17,760 --> 01:01:20,310
+now you have six whatever ten blocks
+
+858
+01:01:20,490 --> 01:01:27,390
+and then after that you sure like you [burn] the name in the, as they call in the blockchain,
+
+859
+01:01:27,630 --> 01:01:30,210
+at that point you actually do the actual registration of the name.
+
+860
+01:01:31,770 --> 01:01:33,240
+I've got a question regarding that.
+
+861
+01:01:35,070 --> 01:01:36,090
+So what, what,
+
+862
+01:01:36,270 --> 01:01:41,850
+why is it not possible for an attacker to sake pre compute internal with the hash of google.com
+
+863
+01:01:41,880 --> 01:01:43,920
+and then look through the blockchain
+
+864
+01:01:43,920 --> 01:01:45,870
+and see if someone posted a hash of google.
+
+865
+01:01:46,080 --> 01:01:47,580
+Yeah, yeah absolutely,
+
+866
+01:01:47,580 --> 01:01:50,910
+yeah, so absolutely, you know there's slightly more sophisticated than this,
+
+867
+01:01:50,910 --> 01:01:52,320
+you know just purely hash,
+
+868
+01:01:52,320 --> 01:01:54,150
+there's only a bunch of other arguments that go into,
+
+869
+01:01:54,150 --> 01:01:55,410
+it including a nonce or something,
+
+870
+01:01:58,330 --> 01:02:00,070
+otherwise, you could make a dictionary, right.
+
+871
+01:02:06,870 --> 01:02:09,000
+In some ways, this is really not their invention,
+
+872
+01:02:09,000 --> 01:02:16,370
+but as I said before, it came out of came out of a name point.
+
+873
+01:02:22,880 --> 01:02:28,880
+Okay, so let's you know go back to the sort of collaborative apps,
+
+874
+01:02:28,880 --> 01:02:38,090
+for collaborative, collaborative decentralized applications.
+
+875
+01:02:47,430 --> 01:02:50,070
+So just go back to our todo list as an example,
+
+876
+01:02:50,400 --> 01:02:53,220
+and just to see you know how it really would work,
+
+877
+01:02:53,250 --> 01:02:56,160
+you know so sketch out again, how it would work,
+
+878
+01:02:56,550 --> 01:03:01,470
+so basically with two users, correct, running, you know the todo list app,
+
+879
+01:03:06,030 --> 01:03:08,400
+here U1 here U2,
+
+880
+01:03:14,110 --> 01:03:17,290
+and they basically exchanged some information with each other,
+
+881
+01:03:17,410 --> 01:03:21,490
+basically saying are in some way, U1 has learned about U2's name
+
+882
+01:03:21,490 --> 01:03:23,410
+and U2 has learned about U1's name.
+
+883
+01:03:25,120 --> 01:03:27,790
+And then sort of that step, of course has to happen,
+
+884
+01:03:27,790 --> 01:03:29,350
+it has to happen securely,
+
+885
+01:03:29,350 --> 01:03:32,890
+in the sense that U1 really need to know that actually is U2's name,
+
+886
+01:03:33,190 --> 01:03:39,570
+then they can, U1, U1 can look up U2's name,
+
+887
+01:03:42,900 --> 01:03:44,730
+you know get his own file for that,
+
+888
+01:03:47,470 --> 01:03:51,100
+find the entry for say the todo list in the zone file,
+
+889
+01:03:54,220 --> 01:03:57,400
+you know zone file also contains you know the public key,
+
+890
+01:04:00,550 --> 01:04:05,410
+and this might be not like you know U2 might have many public keys, private keys,
+
+891
+01:04:05,440 --> 01:04:08,530
+because you probably don't want to have one master private key,
+
+892
+01:04:08,530 --> 01:04:09,520
+that you use for everything,
+
+893
+01:04:09,520 --> 01:04:11,980
+because if you use that one master private key
+
+894
+01:04:11,980 --> 01:04:14,080
+or somebody still you're in bad shape,
+
+895
+01:04:14,380 --> 01:04:16,570
+so typically I think in a block in blockchain,
+
+896
+01:04:16,570 --> 01:04:19,780
+there should have a private key per application.
+
+897
+01:04:20,560 --> 01:04:25,870
+So you know U1 basically kept us name looks up in zone file,
+
+898
+01:04:25,870 --> 01:04:34,540
+but todo list public key and URI you know through the blockstack file system,
+
+899
+01:04:34,690 --> 01:04:37,480
+which tracks away the different storage providers
+
+900
+01:04:37,480 --> 01:04:42,070
+and actually retrieve you know the actual name, the actual file,
+
+901
+01:04:43,990 --> 01:04:45,640
+you know check the signature on the file,
+
+902
+01:04:45,640 --> 01:04:46,870
+maybe version numbers
+
+903
+01:04:46,930 --> 01:04:54,220
+and and then basically use that to construct you know the todo list from U2
+
+904
+01:04:54,220 --> 01:04:55,720
+and worked out with U1's
+
+905
+01:04:55,720 --> 01:05:00,430
+and similarly you know you basically U2 is exactly the same way thing you know as U1's name,
+
+906
+01:05:02,120 --> 01:05:07,940
+and [boom] goes off and here which do U1 todo list
+
+907
+01:05:07,940 --> 01:05:13,040
+and you know that way they can have a collaborative application
+
+908
+01:05:13,280 --> 01:05:17,270
+and so for example when U2 updates its file,
+
+909
+01:05:17,270 --> 01:05:25,310
+then, you know periodically U1's app you know goes and retrieves the new, retrieves a todo list
+
+910
+01:05:25,310 --> 01:05:26,900
+and just see if there are any updates.
+
+911
+01:05:30,870 --> 01:05:31,890
+Does this sort of makes sense?
+
+912
+01:05:34,670 --> 01:05:39,260
+You see here, I think there's like one of these central points of decentralized applications,
+
+913
+01:05:39,560 --> 01:05:44,090
+is this applications or building you're quite a different way,
+
+914
+01:05:44,090 --> 01:05:46,970
+than the ones that we're talking about very early on, correct,
+
+915
+01:05:46,970 --> 01:05:50,990
+if we go back to this picture of the centralized site,
+
+916
+01:05:51,140 --> 01:05:55,880
+that we're building a todo list application, correct, in the database
+
+917
+01:05:56,090 --> 01:06:03,940
+or the U1's todo list, and U2's todo list.
+
+918
+01:06:08,440 --> 01:06:10,870
+And yeah you know like the todo list app,
+
+919
+01:06:11,170 --> 01:06:16,690
+you know basically you know retrieve these other the content todo list with a simple SQL query
+
+920
+01:06:16,960 --> 01:06:19,570
+and you put them together, actually presented to the user,
+
+921
+01:06:19,990 --> 01:06:23,050
+when we see that in this decentralized scheme
+
+922
+01:06:23,200 --> 01:06:25,420
+and it was quite a bit more mechanism involved
+
+923
+01:06:25,420 --> 01:06:26,560
+to actually make this happen
+
+924
+01:06:26,800 --> 01:06:28,390
+and in the program,
+
+925
+01:06:28,390 --> 01:06:35,980
+it doesn't really have the same [] SQL interface as the centralized case.
+
+926
+01:06:36,840 --> 01:06:42,600
+So I think this is one of sort of maybe the sticking points with these decentralized applications,
+
+927
+01:06:42,630 --> 01:06:46,440
+how can you make them as easy to write as decentralized versions.
+
+928
+01:06:52,490 --> 01:06:54,590
+Okay, so I want to leave some time this time around,
+
+929
+01:06:54,590 --> 01:06:55,850
+instead of new breakout rooms,
+
+930
+01:06:55,880 --> 01:07:00,230
+usually sometime around time for questions or discussion,
+
+931
+01:07:00,440 --> 01:07:05,780
+but since this is a little bit more of thought provoking type exercise,
+
+932
+01:07:05,780 --> 01:07:10,100
+then an exercise in, well here's a hard technical problem,
+
+933
+01:07:10,100 --> 01:07:11,240
+here's the right solution,
+
+934
+01:07:11,240 --> 01:07:12,560
+here's learn the right solution,
+
+935
+01:07:12,560 --> 01:07:13,220
+and then use it.
+
+936
+01:07:13,980 --> 01:07:19,320
+So, you know, just want to hear people's opinion or questions
+
+937
+01:07:19,320 --> 01:07:23,730
+about any aspect of these decentralized applications versus centralized,
+
+938
+01:07:23,730 --> 01:07:27,700
+then or the particular design for blockstack or any other issue
+
+939
+01:07:27,700 --> 01:07:29,260
+and we can debate it together.
+
+940
+01:07:32,280 --> 01:07:35,670
+Wait, so what's the main difficulty in,
+
+941
+01:07:35,670 --> 01:07:41,940
+instead of using like a file system API to use like a relational database.
+
+942
+01:07:42,740 --> 01:07:47,990
+Well, how do you write, how do you present the worldwide relational database.
+
+943
+01:07:48,920 --> 01:07:53,000
+All these user files, all these files will be different users
+
+944
+01:07:53,000 --> 01:07:56,990
+live in all kinds of different storage providers,
+
+945
+01:07:56,990 --> 01:08:01,160
+and, you know you can't like do whatever,
+
+946
+01:08:01,160 --> 01:08:05,870
+you can't do select across all the storage providers, that be crazy,
+
+947
+01:08:07,850 --> 01:08:10,910
+you couldn't also download all the user data to your computer,
+
+948
+01:08:10,910 --> 01:08:12,230
+because that would be too expensive.
+
+949
+01:08:12,960 --> 01:08:19,700
+What about like, like a linked data database.
+
+950
+01:08:20,120 --> 01:08:27,650
+I think this is intresting researcher, actually to pursue, right,
+
+951
+01:08:27,650 --> 01:08:33,750
+but you could actually built sort of scalable database infrastructure,
+
+952
+01:08:33,750 --> 01:08:36,840
+where users still control their own data having different locations again
+
+953
+01:08:36,840 --> 01:08:39,660
+and provide a sort of relational data type interface,
+
+954
+01:08:41,250 --> 01:08:43,590
+certainly blocks blockstack doesn't offer to you.
+
+955
+01:08:48,190 --> 01:08:49,660
+Yes, another question is,
+
+956
+01:08:49,750 --> 01:08:55,750
+like what are the benefits of this decentralized PKI versus like a web of trust PKI,
+
+957
+01:08:55,750 --> 01:08:57,460
+which I guess is also decentralized.
+
+958
+01:08:57,520 --> 01:09:02,920
+Yeah, so other, maybe some points here, correct,
+
+959
+01:09:03,190 --> 01:09:12,710
+you know there's other web of trust PKI, web of trust PKIs,
+
+960
+01:09:13,100 --> 01:09:21,350
+you know, I mean the one I'm most familiar with is is keybase,
+
+961
+01:09:24,970 --> 01:09:26,770
+I think we should mention a couple of hours before,
+
+962
+01:09:26,860 --> 01:09:32,410
+and, you know keybase actually we haven't talked to this in great detail,
+
+963
+01:09:32,410 --> 01:09:35,800
+but, one of the things that's also challenging these kind of systems,
+
+964
+01:09:35,800 --> 01:09:37,960
+is like how do you represent groups of users,
+
+965
+01:09:38,350 --> 01:09:40,420
+like we [shot] a little bit in the Sunday paper,
+
+966
+01:09:40,600 --> 01:09:42,760
+we're gonna have group names,
+
+967
+01:09:42,760 --> 01:09:44,050
+all the keys for the group names
+
+968
+01:09:44,050 --> 01:09:47,020
+and how to create them and manage them and actually stick them in,
+
+969
+01:09:47,020 --> 01:09:52,990
+how do you incorporate those in a in the chain of records, name records
+
+970
+01:09:53,170 --> 01:09:56,350
+and keybase is really really fought out story for that.
+
+971
+01:09:56,860 --> 01:10:01,750
+And you know actually a very impressive probably you know the truth,
+
+972
+01:10:02,220 --> 01:10:08,130
+I probably I probably considered the best sort of decentralized you know PKI out there.
+
+973
+01:10:09,150 --> 01:10:10,170
+And the most thought out,
+
+974
+01:10:10,170 --> 01:10:11,640
+they're probably most widely used.
+
+975
+01:10:18,440 --> 01:10:21,830
+So are there any benefits of doing it of like blockstack method,
+
+976
+01:10:21,830 --> 01:10:23,930
+or is it just more extensible.
+
+977
+01:10:23,930 --> 01:10:26,900
+Well, one of the things that actually blocks that [gap] correct is,
+
+978
+01:10:26,900 --> 01:10:29,420
+is this uniqueness properties,
+
+979
+01:10:29,420 --> 01:10:32,720
+because the web of trust, there's basically not a global naming system,
+
+980
+01:10:32,720 --> 01:10:36,500
+you know like you know it is like my todo list or my contact list,
+
+981
+01:10:36,950 --> 01:10:40,100
+and you know whatever who I name,
+
+982
+01:10:40,790 --> 01:10:44,270
+if I have a name John for some particular public key, that is my John
+
+983
+01:10:44,570 --> 01:10:49,010
+and if I sent John to you is like string John
+
+984
+01:10:49,010 --> 01:10:53,960
+and it probably resolve different differently in your contact list than mine.
+
+985
+01:10:55,280 --> 01:10:59,390
+So, in fact, so keybase much more is decentralized,
+
+986
+01:10:59,390 --> 01:11:03,020
+but it doesn't really go for these global unique names,
+
+987
+01:11:03,930 --> 01:11:06,300
+it is the case that you know keybase once in a while,
+
+988
+01:11:06,300 --> 01:11:15,300
+publishers, the hash of all the names, of the complete [] tree of all names in in blockchain too,
+
+989
+01:11:15,300 --> 01:11:18,810
+so you can verify what your keybase actually is not playing games,
+
+990
+01:11:19,230 --> 01:11:22,950
+but you know, it's much more,
+
+991
+01:11:22,950 --> 01:11:24,600
+it doesn't really have globally unique names.
+
+992
+01:11:30,000 --> 01:11:31,890
+Sorry, just a clarification question,
+
+993
+01:11:31,920 --> 01:11:33,600
+earlier on in the lecture,
+
+994
+01:11:33,600 --> 01:11:36,090
+you mentioned how users have the,
+
+995
+01:11:36,300 --> 01:11:39,150
+basically they can choose who to show their data to
+
+996
+01:11:39,390 --> 01:11:43,470
+or who they give access to their data too,
+
+997
+01:11:43,740 --> 01:11:48,600
+but I'm not quite sure, I see how that's implemented within that system.
+
+998
+01:11:50,750 --> 01:11:52,790
+Yeah, there are the way,
+
+999
+01:11:52,790 --> 01:11:53,780
+one way to do it
+
+1000
+01:11:53,780 --> 01:11:57,590
+and I don't know exactly what to blockstack that does is,
+
+1001
+01:11:57,590 --> 01:12:01,280
+that you encrypt the same data for different users,
+
+1002
+01:12:01,310 --> 01:12:06,620
+so if you wanna share your data only with user one or user two,
+
+1003
+01:12:07,050 --> 01:12:12,720
+then, you encrypt, you know with the public keys of user one user two
+
+1004
+01:12:13,080 --> 01:12:15,240
+and then those are the only two that can decrypt it,
+
+1005
+01:12:18,960 --> 01:12:20,850
+and so that gives you access control lists.
+
+1006
+01:12:25,850 --> 01:12:30,050
+I see, so you'd have to for each person you wanted to give the data to,
+
+1007
+01:12:30,050 --> 01:12:32,780
+you have to encrypt it with their public key.
+
+1008
+01:12:34,240 --> 01:12:36,280
+And you can get more sophisticated about this,
+
+1009
+01:12:36,280 --> 01:12:37,960
+you know you can actually have group keys
+
+1010
+01:12:38,350 --> 01:12:40,750
+and you know give a group of users,
+
+1011
+01:12:40,750 --> 01:12:42,940
+you know access to you have a log box,
+
+1012
+01:12:43,330 --> 01:12:45,700
+that has a group key in it
+
+1013
+01:12:45,700 --> 01:12:50,470
+and you increase the log box with the different users you know public keys
+
+1014
+01:12:50,470 --> 01:12:52,570
+and then they get access to that log box,
+
+1015
+01:12:52,570 --> 01:12:53,650
+they get the key out of it
+
+1016
+01:12:53,650 --> 01:12:54,970
+and then they can decorate the key,
+
+1017
+01:12:54,970 --> 01:12:59,410
+so you only have to encrypt the data only once instead of multiple times.
+
+1018
+01:13:00,320 --> 01:13:03,470
+And you have to decrypt the encrypted [log] box multiple types.
+
+1019
+01:13:04,540 --> 01:13:05,200
+Thank you.
+
+1020
+01:13:08,040 --> 01:13:12,990
+That would be down at the level of the content of the zone file, right.
+
+1021
+01:13:13,770 --> 01:13:20,280
+Yeah, presumably or may be the key that zone files build a key for the block box, if you will.
+
+1022
+01:13:22,200 --> 01:13:34,600
+And again I'm not actually a hundred percent sure exactly how blockstack block file system does actually control,
+
+1023
+01:13:34,600 --> 01:13:35,440
+what it does it all,
+
+1024
+01:13:37,340 --> 01:13:39,860
+but other people have done these kinds of designs.
+
+1025
+01:13:41,930 --> 01:13:46,280
+Do you think system like this be able to compete with like the centralized model
+
+1026
+01:13:46,310 --> 01:13:48,950
+in terms of performance or scalability,
+
+1027
+01:13:49,160 --> 01:13:50,030
+and what would it take.
+
+1028
+01:13:50,750 --> 01:13:55,140
+I, I don't know, good question,
+
+1029
+01:13:55,200 --> 01:13:57,240
+I don't really know the answer,
+
+1030
+01:13:57,240 --> 01:13:58,020
+it's the case correct,
+
+1031
+01:13:58,020 --> 01:14:00,840
+like even the simplest size is not that easy to scale,
+
+1032
+01:14:00,870 --> 01:14:03,420
+you know we've read quite a number of papers, right
+
+1033
+01:14:03,420 --> 01:14:08,790
+to see how a how to make them scale between millions of users
+
+1034
+01:14:09,150 --> 01:14:17,060
+and so you know, oh, it's getting anything to a large large number of users is not easy.
+
+1035
+01:14:17,630 --> 01:14:22,970
+And certainly, in the case with decentralized apps,
+
+1036
+01:14:22,970 --> 01:14:24,110
+not gonna be easy either,
+
+1037
+01:14:24,110 --> 01:14:26,570
+but on the other hand, like if there's not byte sharing,
+
+1038
+01:14:26,900 --> 01:14:30,440
+like the user one actually only have to share to lose ten other users,
+
+1039
+01:14:30,950 --> 01:14:32,660
+will probably not be a big issue,
+
+1040
+01:14:32,690 --> 01:14:37,190
+in some ways you can think about the decentralized architecture is basically sharded by user,
+
+1041
+01:14:42,280 --> 01:14:45,580
+and each app here runs in one of user's computers,
+
+1042
+01:14:46,380 --> 01:14:51,080
+so you don't need might data centers of caches,
+
+1043
+01:14:57,370 --> 01:14:59,230
+so I don't know what the answer to that question actually is,
+
+1044
+01:15:00,850 --> 01:15:02,680
+I will not be able to give you a different answer.
+
+1045
+01:15:07,120 --> 01:15:14,200
+It's clearly the case that people have demonstrated bigger scalability of those centralized designs,
+
+1046
+01:15:14,200 --> 01:15:17,050
+at least so far we've seen in the decentralized once,
+
+1047
+01:15:17,050 --> 01:15:23,170
+but one reason of that of course is that the centralized designs are widely used,
+
+1048
+01:15:23,170 --> 01:15:26,800
+the most popular, the most deployed cases.
+
+1049
+01:15:28,430 --> 01:15:33,170
+I think the, to me the decentralized design is just intriguing design
+
+1050
+01:15:33,590 --> 01:15:36,140
+and that it could make to work,
+
+1051
+01:15:36,140 --> 01:15:37,250
+you know it would be pretty cool.
+
+1052
+01:15:45,980 --> 01:15:52,940
+Any other thoughts that people might have for, or like to argue about.
+
+1053
+01:15:59,330 --> 01:16:02,990
+I still feel like the storage aspect,
+
+1054
+01:16:03,760 --> 01:16:07,990
+is, like the thing that that William was pointing out,
+
+1055
+01:16:07,990 --> 01:16:13,960
+where like you maybe have an immutable file that's the the user information,
+
+1056
+01:16:13,960 --> 01:16:17,200
+but the mutable file that you have somewhere else,
+
+1057
+01:16:17,650 --> 01:16:21,430
+is like a huge problem?
+
+1058
+01:16:22,160 --> 01:16:22,880
+In so much that,
+
+1059
+01:16:22,880 --> 01:16:33,650
+like I I don't really understand how you can assure redundancy for a large amount of mutable storage that you might have.
+
+1060
+01:16:34,100 --> 01:16:38,120
+Yeah, I think the answer, the redundancy maybe not that tough
+
+1061
+01:16:38,150 --> 01:16:40,640
+and I think the user is responsible for redundancy,
+
+1062
+01:16:41,030 --> 01:16:45,470
+so if you like to use you own it todo list file,
+
+1063
+01:16:45,780 --> 01:16:48,330
+and your job to replicate it, you know multiple times,
+
+1064
+01:16:48,330 --> 01:16:51,810
+so the blockstack storage servers do that for you,
+
+1065
+01:16:52,050 --> 01:17:00,540
+but you've got to arrange you know basically for space and a different storage providers to do that.
+
+1066
+01:17:01,450 --> 01:17:02,470
+And so I think in the paper,
+
+1067
+01:17:02,470 --> 01:17:03,040
+they talk about like,
+
+1068
+01:17:03,040 --> 01:17:06,760
+oh you replicated that maybe a Google drive and S3,
+
+1069
+01:17:07,640 --> 01:17:10,430
+and presumably S3 internally its own replication, right,
+
+1070
+01:17:10,430 --> 01:17:12,920
+so hopefully you know maybe just actually thought only S3
+
+1071
+01:17:12,920 --> 01:17:14,180
+and it should be pretty reliable,
+
+1072
+01:17:14,890 --> 01:17:18,070
+probably more reliable than storing data on your SSD, in your laptop.
+
+1073
+01:17:22,080 --> 01:17:23,370
+The zone files are small,
+
+1074
+01:17:23,370 --> 01:17:24,990
+so they're just widely replicated
+
+1075
+01:17:25,050 --> 01:17:27,900
+and you don't have to trust the store provider.
+
+1076
+01:17:54,240 --> 01:17:55,260
+Any other thoughts?
+
+1077
+01:17:58,090 --> 01:18:00,100
+I was thinking it's a little bit wasteful,
+
+1078
+01:18:00,100 --> 01:18:02,440
+that you have in order to register a name
+
+1079
+01:18:02,440 --> 01:18:05,350
+and to use this name system, you have to pay.
+
+1080
+01:18:07,440 --> 01:18:12,810
+Yeah, so I was thinking obviously on a blockchain based system,
+
+1081
+01:18:12,810 --> 01:18:14,940
+you have to incentivize the miners,
+
+1082
+01:18:14,940 --> 01:18:18,390
+but maybe there's a different cheaper way.
+
+1083
+01:18:19,600 --> 01:18:22,450
+Yeah, yeah, I I'm not sure,
+
+1084
+01:18:22,480 --> 01:18:25,870
+it seems in some ways currency
+
+1085
+01:18:25,870 --> 01:18:29,080
+and this is sort of very [coupled],
+
+1086
+01:18:29,440 --> 01:18:31,480
+as a reason, exactly for the reason you mentioned,
+
+1087
+01:18:31,480 --> 01:18:34,270
+because you have minors and you have to incentivize them.
+
+1088
+01:18:35,060 --> 01:18:37,640
+I think in general with these transactions are pretty cheap,
+
+1089
+01:18:37,670 --> 01:18:40,190
+you know basically you know you have to just pay enough, correct,
+
+1090
+01:18:40,190 --> 01:18:43,190
+the miners willing to include your transaction.
+
+1091
+01:18:44,300 --> 01:18:51,270
+And you know today, you also pay for if you want to register a name in in DNS,
+
+1092
+01:18:51,270 --> 01:18:54,970
+you know actually quite a bit of money, not free.
+
+1093
+01:18:58,410 --> 01:19:00,750
+I don't know exactly how economics would work out,
+
+1094
+01:19:00,750 --> 01:19:05,640
+but the obviously clear that this is actually a much more expensive way of doing it,
+
+1095
+01:19:05,670 --> 01:19:08,550
+other than maybe you're burning the planet within electricity,
+
+1096
+01:19:09,430 --> 01:19:10,840
+at least in the Bitcoin cage.
+
+1097
+01:19:10,870 --> 01:19:18,880
+But maybe you should use a one of the state of work ledgers instead of the,
+
+1098
+01:19:20,360 --> 01:19:26,380
+okay, proof of state instead of these proof of work ledgers.
+
+1099
+01:19:29,960 --> 01:19:32,300
+It will be possible just to swap it out,
+
+1100
+01:19:32,360 --> 01:19:33,740
+in place of.
+
+1101
+01:19:33,770 --> 01:19:37,460
+I think I think this is what the papers argue, correct,
+
+1102
+01:19:37,460 --> 01:19:42,290
+their particular design is really not very dependent on the underlying blockchain
+
+1103
+01:19:42,290 --> 01:19:44,270
+and they could easily switch to another blockchain,
+
+1104
+01:19:44,270 --> 01:19:46,790
+in fact this is the second blockchain that worked out, correct,
+
+1105
+01:19:46,790 --> 01:19:49,490
+they first use namecoin and then they switch to Bitcoin,
+
+1106
+01:19:50,120 --> 01:19:54,590
+and I think the argument in the paper is making we could actually switch to another blockchain, we wanted to.
+
+1107
+01:20:10,080 --> 01:20:12,540
+What in particular is stored in the name history?
+
+1108
+01:20:14,570 --> 01:20:15,260
+In the,
+
+1109
+01:20:16,610 --> 01:20:19,760
+sorry, what, what's the question really?
+
+1110
+01:20:20,230 --> 01:20:23,080
+Oh, sorry, the name history in the blockstack database.
+
+1111
+01:20:23,790 --> 01:20:24,510
+Yeah, this, this,
+
+1112
+01:20:24,510 --> 01:20:27,510
+yeah I don't really mean like these three different guys.
+
+1113
+01:20:28,100 --> 01:20:28,820
+Yeah.
+
+1114
+01:20:28,820 --> 01:20:30,170
+Different versions of the zone file.
+
+1115
+01:20:31,610 --> 01:20:34,190
+Oh, so just like version numbers.
+
+1116
+01:20:34,310 --> 01:20:36,350
+Yeah, I think so, I'm not hundred percent sure,
+
+1117
+01:20:37,190 --> 01:20:41,560
+but the, but like these correspond to the three updates through the zone file, correct,
+
+1118
+01:20:41,560 --> 01:20:43,090
+here's number one, here's number two,
+
+1119
+01:20:45,350 --> 01:20:47,630
+maybe they keep using version of zone file around.
+
+1120
+01:20:59,720 --> 01:21:03,410
+Any other topics that people want to bring up?
+
+1121
+01:21:09,300 --> 01:21:11,340
+Okay, so we end the sort of time anyway,
+
+1122
+01:21:11,760 --> 01:21:13,260
+okay, so let's say why don't we stop here,
+
+1123
+01:21:13,260 --> 01:21:15,840
+so people need to need to leave can leave
+
+1124
+01:21:15,870 --> 01:21:19,650
+and I'll see hopefully everybody on Thursday,
+
+1125
+01:21:19,650 --> 01:21:24,150
+I'm going to see eight we have eight design, eight projects
+
+1126
+01:21:24,150 --> 01:21:32,080
+and so the eight teams will present the first idea what they've done instead of lab lab 4
+
+1127
+01:21:32,140 --> 01:21:35,710
+and it should be and the the projects quite cool and interesting,
+
+1128
+01:21:35,710 --> 01:21:39,220
+so hopefully you will be entertained,
+
+1129
+01:21:39,220 --> 01:21:41,380
+and that makes concludes this lecture,
+
+1130
+01:21:41,380 --> 01:21:45,790
+hopefully a bit of goal is a little bit []
+
+1131
+01:21:45,790 --> 01:21:51,160
+and you know sort of talk about designs decentralized designs
+
+1132
+01:21:51,160 --> 01:21:53,770
+to the has and that's probably the user on their data
+
+1133
+01:21:54,100 --> 01:22:00,130
+and you know and we look in the context of blockstack at least one particular design,
+
+1134
+01:22:00,370 --> 01:22:02,560
+how they did naming in a way,
+
+1135
+01:22:02,560 --> 01:22:08,540
+that gives global names, unique names, and human readable, okay.
+
+1136
+01:22:08,630 --> 01:22:10,220
+So that's the end of this lecture,
+
+1137
+01:22:10,250 --> 01:22:11,990
+and then hopefully see you on Thursday,
+
+1138
+01:22:12,230 --> 01:22:13,790
+which is going to be our final class meeting.
+
+1139
+01:22:18,300 --> 01:22:23,910
+And if you have any questions, please feel free to stick around, you can talk.
+
+1140
+01:22:24,500 --> 01:22:31,190
+Professor, for presentation, are we supposed to do something more of a demo
+
+1141
+01:22:31,190 --> 01:22:34,580
+or should we have slides prepared or combination both.
+
+1142
+01:22:34,610 --> 01:22:40,310
+Yeah, we've some structures,
+
+1143
+01:22:42,320 --> 01:22:44,030
+you're pretty free to do,
+
+1144
+01:22:44,030 --> 01:22:45,410
+so what you wanna do,
+
+1145
+01:22:45,410 --> 01:22:46,970
+do the things you want to do
+
+1146
+01:22:46,970 --> 01:22:48,860
+is to convince you the class,
+
+1147
+01:22:48,890 --> 01:22:52,340
+you know what [] did and why is cool.
+
+1148
+01:22:52,950 --> 01:22:54,660
+Show demo is a good idea,
+
+1149
+01:22:54,930 --> 01:22:57,150
+yeah you don't have a ton of time,
+
+1150
+01:22:57,150 --> 01:22:58,920
+so I think the typical thing to do is,
+
+1151
+01:22:58,920 --> 01:23:02,250
+people have a few slides for explaining what they did,
+
+1152
+01:23:02,250 --> 01:23:03,930
+and then maybe cook demos
+
+1153
+01:23:03,930 --> 01:23:05,790
+to see how it actually materialized.
+
+1154
+01:23:06,980 --> 01:23:08,930
+Great, okay, thanks.
+
+1155
+01:23:11,640 --> 01:23:12,750
+Yeah, we don't expect you to
+
+1156
+01:23:12,750 --> 01:23:15,180
+whatever in hours preparing for this, correct,
+
+1157
+01:23:15,660 --> 01:23:18,030
+do we try to share what you've done.
+
+1158
+01:23:20,540 --> 01:23:23,780
+Okay, thank you.
+
+1159
+01:23:25,060 --> 01:23:27,520
+I just wanted to ask,
+
+1160
+01:23:27,670 --> 01:23:31,730
+so it's like what is the reasoning,
+
+1161
+01:23:31,730 --> 01:23:38,600
+behind just having just using the same Bitcoin on the blockchain,
+
+1162
+01:23:39,120 --> 01:23:44,270
+and just putting the, the transactions for the naming on there,
+
+1163
+01:23:44,720 --> 01:23:47,510
+together with all the rest of the things, right.
+
+1164
+01:23:48,650 --> 01:23:53,870
+I I think these are the papers,
+
+1165
+01:23:53,870 --> 01:23:56,000
+so they started out building on top of namecoin,
+
+1166
+01:23:56,490 --> 01:23:58,740
+which is a special purpose ledger for naming
+
+1167
+01:23:59,190 --> 01:24:08,250
+and, and they discovered basically the, sure welcome to security issues with namecoin,
+
+1168
+01:24:08,250 --> 01:24:11,340
+one of them being actually not many miners,
+
+1169
+01:24:12,410 --> 01:24:17,240
+so, it observes that basically there are minor pools
+
+1170
+01:24:17,240 --> 01:24:22,270
+and basically have more than 50% of the capacity,
+
+1171
+01:24:23,080 --> 01:24:26,950
+and work capacity, therefore you could do anything they wanted to do
+
+1172
+01:24:26,950 --> 01:24:28,690
+to the principal to the ledger.
+
+1173
+01:24:29,750 --> 01:24:34,220
+And so they wanted ton sit on a blockchain that is widely used very popular
+
+1174
+01:24:34,220 --> 01:24:36,680
+and not easy to overtake by the adversary.
+
+1175
+01:24:38,410 --> 01:24:41,950
+Okay, I remember the 51% yeah, remember.
+
+1176
+01:24:42,940 --> 01:24:44,290
+Okay, makes sense.
+
+1177
+01:24:44,680 --> 01:24:47,860
+And I also wanted to ask about,
+
+1178
+01:24:48,540 --> 01:24:54,390
+the URIs there you're writes to, to the zone file storage system
+
+1179
+01:24:54,390 --> 01:24:58,180
+not just like S3 something something, right.
+
+1180
+01:24:58,210 --> 01:25:01,420
+There could be, the problem is something a little bit more general,
+
+1181
+01:25:01,420 --> 01:25:06,400
+because it's actually interpreted by by blockstack file system,
+
+1182
+01:25:06,790 --> 01:25:12,100
+so and the blockstack file system has backends for the different storage provider,
+
+1183
+01:25:12,100 --> 01:25:14,890
+where it S3 or Google drive or whatever.
+
+1184
+01:25:15,370 --> 01:25:17,830
+And so there's some naming schemes,
+
+1185
+01:25:17,830 --> 01:25:22,720
+the blockstack file system can interpret
+
+1186
+01:25:22,720 --> 01:25:28,960
+and then figure out how to retrieve the right file from the the correct backend.
+
+1187
+01:25:31,130 --> 01:25:33,560
+This is just to make them the same.
+
+1188
+01:25:33,650 --> 01:25:37,280
+Yeah, usually an application writer doesn't really want doesn't care,
+
+1189
+01:25:37,280 --> 01:25:39,170
+whether it's stored S3 or Google drive,
+
+1190
+01:25:39,170 --> 01:25:41,660
+or we shoot you where you usually have to deal with that.
+
+1191
+01:25:43,180 --> 01:25:44,650
+Thank you so much.
+
+1192
+01:25:45,860 --> 01:25:46,460
+You're welcome.
+
+1193
+01:25:47,350 --> 01:25:52,300
+I had a question about why [] triangle is kind of like,
+
+1194
+01:25:52,930 --> 01:25:54,430
+I think that people think about a lot like,
+
+1195
+01:25:54,430 --> 01:25:59,590
+it seems that you have a client side interpret the human non meaningful data,
+
+1196
+01:25:59,950 --> 01:26:02,050
+that you can make kind of all the data human meaningful,
+
+1197
+01:26:02,260 --> 01:26:04,450
+on the client side to the to the user,
+
+1198
+01:26:04,830 --> 01:26:07,740
+and so I wasn't completely sure like what,
+
+1199
+01:26:08,780 --> 01:26:11,000
+like what the innovation here is
+
+1200
+01:26:11,000 --> 01:26:14,660
+or why people why this is a trade off.
+
+1201
+01:26:15,410 --> 01:26:19,010
+Yeah, well, I guess this is the best slide, I can give you,
+
+1202
+01:26:19,010 --> 01:26:21,050
+were I can give you a whole bunch of naming examples,
+
+1203
+01:26:21,050 --> 01:26:22,820
+basically two of three, but not all three.
+
+1204
+01:26:23,680 --> 01:26:27,610
+And, in for example like you know,
+
+1205
+01:26:27,610 --> 01:26:32,420
+the you know we talked about keybase, correct,
+
+1206
+01:26:32,420 --> 01:26:36,350
+decentralized, you knew over not unique.
+
+1207
+01:26:38,680 --> 01:26:39,730
+And now you're gonna argue,
+
+1208
+01:26:39,730 --> 01:26:42,130
+when it's that important to have globally unique names,
+
+1209
+01:26:42,710 --> 01:26:44,750
+it's like whatever it's a globally unique name,
+
+1210
+01:26:44,750 --> 01:26:46,700
+like 6.824 what does it mean,
+
+1211
+01:26:47,780 --> 01:26:49,040
+and who's associated with it,
+
+1212
+01:26:49,160 --> 01:26:50,690
+so if you're coming from that angle,
+
+1213
+01:26:50,690 --> 01:26:52,040
+I think that's a very valid question.
+
+1214
+01:26:57,190 --> 01:26:57,670
+Thank you.
+
+1215
+01:26:59,940 --> 01:27:03,180
+So one of the things that has always kind of bothered me,
+
+1216
+01:27:03,180 --> 01:27:06,090
+when we're reading through these blockchain type of papers is,
+
+1217
+01:27:06,270 --> 01:27:08,160
+like what happens in a hundred years,
+
+1218
+01:27:08,160 --> 01:27:12,120
+when the ledger gets to like multiple terror,
+
+1219
+01:27:12,240 --> 01:27:15,120
+I don't know if yeah like multiple terabytes or something.
+
+1220
+01:27:18,320 --> 01:27:19,010
+Yeah.
+
+1221
+01:27:19,010 --> 01:27:21,230
+Do we not, do we not having escape plan,
+
+1222
+01:27:21,230 --> 01:27:22,730
+like what's gonna happen then.
+
+1223
+01:27:23,620 --> 01:27:25,210
+I don't know.
+
+1224
+01:27:26,490 --> 01:27:30,510
+Hard to speculate on the hundred years out into the future.
+
+1225
+01:27:30,690 --> 01:27:32,010
+I presume, what would you do,
+
+1226
+01:27:32,010 --> 01:27:34,110
+so you put a checkpoint in,
+
+1227
+01:27:34,620 --> 01:27:38,340
+yeah I can imagine multiple schemes for getting out of this,
+
+1228
+01:27:38,340 --> 01:27:41,800
+one you could make a checkpoint of the state,
+
+1229
+01:27:41,800 --> 01:27:43,120
+you know build on the ledger
+
+1230
+01:27:43,120 --> 01:27:46,210
+and include the hash that checkpoint into the ledger
+
+1231
+01:27:46,210 --> 01:27:50,530
+and then as long as you can replicate the checkpoint widely
+
+1232
+01:27:50,950 --> 01:27:54,580
+and then you can basically start running from the checkpoint to cut out the beginning.
+
+1233
+01:27:55,300 --> 01:27:57,550
+This is like not even like you were doing in lab,
+
+1234
+01:27:57,790 --> 01:27:59,320
+you know raft doing, correct.
+
+1235
+01:28:01,370 --> 01:28:04,640
+Would the party that does that have to be trusted or.
+
+1236
+01:28:05,830 --> 01:28:08,920
+What we did,
+
+1237
+01:28:10,790 --> 01:28:13,220
+presumably clieng one go have to go along,
+
+1238
+01:28:14,380 --> 01:28:17,200
+and you realize that they should get that checkpoint,
+
+1239
+01:28:17,200 --> 01:28:20,020
+you'll be able to construct you know the current state of the world.
+
+1240
+01:28:20,880 --> 01:28:24,690
+So I presume that which requires some critical changes probably some fork.
+
+1241
+01:28:28,990 --> 01:28:30,520
+This is not a huge issue, correct,
+
+1242
+01:28:31,180 --> 01:28:32,320
+usually the rate of Bitcoin,
+
+1243
+01:28:32,320 --> 01:28:36,610
+because like you know the number of transactions for seconds, you can do, is actually small,
+
+1244
+01:28:37,090 --> 01:28:38,650
+like if you remember from the Bitcoin paper,
+
+1245
+01:28:38,650 --> 01:28:42,160
+there's some calculation like you know what the total size would be,
+
+1246
+01:28:42,190 --> 01:28:44,690
+if you do this, furthermore
+
+1247
+01:28:44,750 --> 01:28:47,480
+and you remember correctly from the Bitcoin paper,
+
+1248
+01:28:47,480 --> 01:28:54,290
+there's a bunch of optimizations, where you don't really have to remember every transaction for every coin,
+
+1249
+01:28:54,290 --> 01:28:57,770
+you basically have to remember the last transaction for every coin
+
+1250
+01:28:58,100 --> 01:29:03,600
+and you could do that by just remembering the block headers instead of the complete block.
+
+1251
+01:29:06,970 --> 01:29:09,670
+So Bitcoing have sort of a built-in solution to this problem.
+
+1252
+01:29:10,860 --> 01:29:15,180
+I see, so the main bottleneck is more or less when new machines come up,
+
+1253
+01:29:15,180 --> 01:29:16,800
+they need to verify the [],
+
+1254
+01:29:17,130 --> 01:29:21,030
+but after that then things are relatively more optimized.
+
+1255
+01:29:23,170 --> 01:29:23,710
+Thank you.
+
+1256
+01:29:35,760 --> 01:29:37,050
+Okay, that for today,
+
+1257
+01:29:39,270 --> 01:29:40,620
+thank you all, see you Thursday.
+
