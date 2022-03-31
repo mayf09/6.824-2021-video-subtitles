@@ -3514,7 +3514,7 @@ Yeah.|
 704
 00:23:48,540 --> 00:23:49,740
 0,420 420,630 630,810 810,1050 1050,1200
-Alright so you guys have
+Alright, so you guys have
 
 705
 00:23:49,740 --> 00:23:51,060
@@ -3524,7 +3524,7 @@ already kind of discussed some
 706
 00:23:51,060 --> 00:23:53,130
 0,120 120,180 180,660 750,1410 1410,2070
-of the alternate organization designs
+of the alternate synchronization designs,|
 
 707
 00:23:53,520 --> 00:23:54,870
@@ -3534,7 +3534,7 @@ like waiting in the worker
 708
 00:23:54,870 --> 00:23:56,520
 0,300 300,450 450,540 540,1500 1500,1650
-rather than the coordinator and
+rather than the coordinator| and
 
 709
 00:23:56,520 --> 00:23:57,270
@@ -3549,12 +3549,12 @@ the pros and cons of
 711
 00:23:58,050 --> 00:23:58,900
 0,360
-that.
+that,
 
 712
 00:23:58,900 --> 00:24:00,490
 0,330 330,540 540,1140 1170,1500 1500,1590
-I'm using time, actually I
+{} using time,| actually I
 
 713
 00:24:00,490 --> 00:24:01,180
@@ -3564,22 +3564,21 @@ think you covered all of
 714
 00:24:01,180 --> 00:24:02,800
 0,240 240,630 630,750 750,1140 1140,1620
-these except for channels, maybe,
+these except for channels, maybe,|
 
 715
 00:24:03,130 --> 00:24:04,520
 0,600
-um.
 
 716
 00:24:04,640 --> 00:24:06,380
 0,510 510,1020 1230,1500 1500,1620 1620,1740
-So there's one thing I
+so there's one thing I
 
 717
 00:24:06,380 --> 00:24:07,340
 0,270 270,360 360,570 570,810 810,960
-wanted to know because there
+wanted to know,| because there
 
 718
 00:24:07,340 --> 00:24:08,450
@@ -3589,12 +3588,12 @@ are a couple questions about
 719
 00:24:08,450 --> 00:24:10,850
 0,360 570,930 930,1290 1290,1890 1980,2400
-this, so waiting for map
+this,| so waiting for map
 
 720
 00:24:10,850 --> 00:24:11,750
 0,270 270,330 330,420 420,780 780,900
-has to be done or
+has to be done| or
 
 721
 00:24:11,750 --> 00:24:14,420
@@ -3609,7 +3608,7 @@ shown is on a single
 723
 00:24:16,400 --> 00:24:19,070
 0,750 810,1260 1260,1620 1620,1890 1890,2670
-server, so cross server communication
+server,| so cross server communication
 
 724
 00:24:19,070 --> 00:24:20,720
@@ -3619,17 +3618,17 @@ between the worker and the
 725
 00:24:20,720 --> 00:24:22,100
 0,750
-coordinator.
+coordinator,|
 
 726
 00:24:22,250 --> 00:24:23,660
 0,270 270,510 510,990 990,1200 1200,1410
-Um, they're only it's only
+{} they're only it's only
 
 727
 00:24:23,660 --> 00:24:25,340
 0,270 270,570 570,750 750,960 960,1680
-done ever by our PCs,
+done ever by {RPCs -},|
 
 728
 00:24:25,520 --> 00:24:27,080
@@ -3649,12 +3648,12 @@ to do with locking on
 731
 00:24:29,300 --> 00:24:31,550
 0,90 90,630 810,1350 1410,1650 1650,2250
-the worker or on interactive
+the worker| or on interactive
 
 732
 00:24:31,550 --> 00:24:33,560
 0,570 570,990 990,1110 1110,1410 1410,2010
-implementation locking on different servers
+implementation locking on different servers,|
 
 733
 00:24:33,980 --> 00:24:35,750
@@ -3664,7 +3663,7 @@ like don't interfere with each
 734
 00:24:35,750 --> 00:24:36,600
 0,420
-other.
+other,|
 
 735
 00:24:37,110 --> 00:24:37,740
@@ -3674,7 +3673,7 @@ I just want to be
 736
 00:24:37,740 --> 00:24:40,050
 0,240 240,750 1530,1950 1950,2130 2130,2310
-clear about, um, so one
+clear {about,that}.| {} So one
 
 737
 00:24:40,050 --> 00:24:41,580
@@ -3684,17 +3683,17 @@ thing I thought would be
 738
 00:24:41,580 --> 00:24:42,870
 0,660 660,930 930,1050 1050,1200 1200,1290
-interesting is for you to
+interesting is| for you to
 
 739
 00:24:42,870 --> 00:24:45,180
 0,420 420,1050 1080,1410 1410,1800
-see a kind of.
+see a kind of
 
 740
 00:24:45,530 --> 00:24:47,390
 0,360 360,810 810,1050 1050,1620 1620,1860
-An example using channels because
+an example using channels,| because
 
 741
 00:24:47,390 --> 00:24:48,620
@@ -3704,47 +3703,47 @@ there are also some questions
 742
 00:24:48,620 --> 00:24:50,780
 0,270 270,900 930,1260 1260,1500 1500,2160
-using channels about using channels,
+using channels, about using channels.|
 
 743
 00:24:51,680 --> 00:24:54,200
 0,840 1530,1800 1800,2010 2010,2340 2340,2520
-so this is kind of
+So this is kind of,
 
 744
 00:24:54,200 --> 00:24:58,700
 0,960 1410,1980 2190,3060 3270,4110 4110,4500
-a not complete implementation of
+{is,a} not complete implementation of
 
 745
 00:24:58,730 --> 00:25:00,800
 0,300 300,870 1080,1620 1620,1830 1830,2070
-using channels, um, but it's
+using channels,| {} but it's
 
 746
 00:25:00,800 --> 00:25:03,160
 0,180 180,930 930,1320 1320,1890
-a potential way to.
+a potential way to,|
 
 747
 00:25:03,160 --> 00:25:04,120
 0,180 180,300 300,510 510,690 690,960
-But you could think about
+but you could think about
 
 748
 00:25:04,120 --> 00:25:05,770
 0,330 330,600 600,1050 1050,1380 1380,1650
-having used channels and map
+having used channels in {mapreduce
 
 749
 00:25:05,770 --> 00:25:06,820
 0,540
-reduce.
+-}.|
 
 750
 00:25:06,910 --> 00:25:09,160
 0,330 330,900 930,1140 1140,1350 1350,2250
-And so in this example,
+And so in this example,|
 
 751
 00:25:09,340 --> 00:25:10,960
@@ -3754,37 +3753,37 @@ the input to the coordinator
 752
 00:25:10,960 --> 00:25:13,440
 0,480 480,1170 1170,1320 1320,1950
-actually includes a channel.
+actually includes a channel,|
 
 753
 00:25:13,530 --> 00:25:15,780
 0,180 180,840 1050,1440 1440,2100 2100,2250
-In which the coordinator is
+in which the coordinator is
 
 754
 00:25:15,780 --> 00:25:18,840
 0,540 540,990 1020,1440 1440,2130 2130,3060
-told of what workers exist,
+told of what workers exist,|
 
 755
 00:25:19,140 --> 00:25:21,480
 0,630 630,840 840,1230 1260,1530 1530,2340
-and this is to handle.
+and this is to handle
 
 756
 00:25:22,030 --> 00:25:24,820
 0,1020 1260,2130 2130,2340 2340,2670 2670,2790
-The possibility that workers are
+the possibility that workers are
 
 757
 00:25:24,820 --> 00:25:26,920
 0,660 690,1020 1020,1230 1230,1470 1470,2100
-failing, and then some client
+failing,| and then some client
 
 758
 00:25:26,920 --> 00:25:28,960
 0,600 630,1080 1080,1140 1140,1770 1770,2040
-is telling the coordinator hey
+is telling the coordinator,| hey,
 
 759
 00:25:28,960 --> 00:25:30,160
@@ -3794,7 +3793,7 @@ this other worker joined our
 760
 00:25:30,160 --> 00:25:31,870
 0,690 720,1110 1110,1140 1140,1350 1350,1710
-cluster here's a new worker
+cluster,| here's a new worker
 
 761
 00:25:31,870 --> 00:25:32,770
@@ -3804,7 +3803,7 @@ that you can give tasks
 762
 00:25:32,770 --> 00:25:34,450
 0,330 540,750 750,900 900,1290 1290,1680
-to so it's slightly different
+to,| so it's slightly different
 
 763
 00:25:34,450 --> 00:25:36,280
@@ -3814,57 +3813,57 @@ than what we had in
 764
 00:25:36,310 --> 00:25:37,400
 0,180 180,660
-the lab.
+the lab.|
 
 765
 00:25:37,950 --> 00:25:40,980
 0,630 1020,1530 1530,1650 1650,2460 2460,3030
-Um, so the coordinator has
+{} So the coordinator has
 
 766
 00:25:40,980 --> 00:25:42,320
 0,210 210,840
-two channels.
+two channels,|
 
 767
 00:25:42,440 --> 00:25:45,380
 0,810 960,1260 1260,1650 1650,2460 2610,2940
-One in which it will
+one in which it will
 
 768
 00:25:45,380 --> 00:25:48,140
 0,600 600,1290 1290,1500 1500,2100 2220,2760
-send tasks to workers or
+send tasks to workers| or
 
 769
 00:25:48,350 --> 00:25:49,790
 0,600 600,870 870,1050 1050,1320 1320,1440
-they won't send tasks to
+it won't send tasks to
 
 770
 00:25:49,790 --> 00:25:51,170
 0,360 360,480 480,780 780,1170 1170,1380
-workers will send tasks to
+workers,| will send tasks to
 
 771
 00:25:51,170 --> 00:25:53,030
 0,540 570,1200 1200,1320 1320,1500 1500,1860
-a thread that will issue
+a thread, that will issue
 
 772
 00:25:53,030 --> 00:25:55,220
 0,330 330,420 420,1080 1830,2040 2040,2190
-tasks to workers and then
+tasks to workers| and then
 
 773
 00:25:55,220 --> 00:25:56,810
 0,150 150,570 570,780 780,1050 1050,1590
-it has a done channel.
+it has a done channel.|
 
 774
 00:25:57,310 --> 00:26:00,780
 0,660 930,1860 1890,2580 2580,2880
-So again, just like.
+So again, just like,|
 
 775
 00:26:01,080 --> 00:26:02,370
@@ -3874,7 +3873,7 @@ I I know I said
 776
 00:26:02,370 --> 00:26:03,780
 0,390 390,480 480,780 780,1200 1200,1410
-something a little strange, which
+something a little strange,| which
 
 777
 00:26:03,780 --> 00:26:04,650
@@ -3894,12 +3893,12 @@ the channel, but you actually
 780
 00:26:07,170 --> 00:26:09,360
 0,480 600,840 840,1260 1260,1740 1740,2190
-can't the channel is only
+can't,| the channel is only
 
 781
 00:26:09,360 --> 00:26:10,860
 0,180 180,240 240,750 810,990 990,1500
-on the coordinate your server
+on the coordinate your server,|
 
 782
 00:26:11,070 --> 00:26:11,790
@@ -3909,7 +3908,7 @@ and we'll see how that
 783
 00:26:11,790 --> 00:26:13,180
 0,270 270,360 360,450 450,870
-works in a second.
+works in a second.|
 
 784
 00:26:13,660 --> 00:26:15,250
@@ -3924,7 +3923,7 @@ the coordinator that we create
 786
 00:26:17,200 --> 00:26:18,700
 0,270 270,420 420,630 630,1110 1110,1500
-is a go routine that
+is a Go routine,| that
 
 787
 00:26:18,730 --> 00:26:21,520
@@ -3939,17 +3938,17 @@ start the issue worker task
 789
 00:26:25,030 --> 00:26:25,980
 0,450
-thread.
+thread.|
 
 790
 00:26:25,980 --> 00:26:27,280
 0,690
-SO.
+So,
 
 791
 00:26:27,280 --> 00:26:28,660
 0,240 240,450 450,870 870,1200 1200,1380
-What this does is as
+what this does is,| as
 
 792
 00:26:28,660 --> 00:26:30,820
@@ -3959,17 +3958,17 @@ workers are you know coming
 793
 00:26:30,820 --> 00:26:32,320
 0,150 150,540 540,810 810,960 960,1500
-and going because they're failing
+and going,| because they're failing
 
 794
 00:26:32,320 --> 00:26:34,390
 0,120 120,300 300,1110 1290,1680 1680,2070
-and then restarting this channel
+and then restarting,| this channel
 
 795
 00:26:34,390 --> 00:26:35,920
 0,420 420,810 810,1140 1140,1290 1290,1530
-basically says okay, we want
+basically says,| okay, we want
 
 796
 00:26:35,920 --> 00:26:37,120
@@ -3979,57 +3978,57 @@ to for any of these
 797
 00:26:37,120 --> 00:26:39,670
 0,600 900,1620 1650,1800 1800,2400 2400,2550
-workers start a thread that
+workers,| start a thread that
 
 798
 00:26:39,670 --> 00:26:41,260
 0,150 150,450 450,630 630,960 960,1590
-will issue this worker tasks.
+will issue this worker tasks.|
 
 799
 00:26:41,960 --> 00:26:44,150
 0,570 750,960 960,1110 1110,1590 1740,2190
-Um, so this is one
+{} So this is one
 
 800
 00:26:44,150 --> 00:26:45,760
 0,180 180,330 330,690 690,1050
-go a team here.
+Go {routine -} here,|
 
 801
 00:26:46,620 --> 00:26:47,940
 0,360 360,450 450,1020 1020,1170 1170,1320
-Then the coordinator what it
+then the coordinator what it
 
 802
 00:26:47,940 --> 00:26:49,800
 0,420 420,750 750,1080 1500,1740 1740,1860
-does, is it for all
+does,| is it for all
 
 803
 00:26:49,800 --> 00:26:50,760
 0,90 90,390 390,510 510,600 600,960
-the tasks that were giving
+the tasks that were giving,|
 
 804
 00:26:50,760 --> 00:26:51,880
 0,210 210,630
-it just.
+it just
 
 805
 00:26:51,880 --> 00:26:53,020
 0,180 180,360 360,690 690,900 900,1140
-Push those tasks onto that
+push those tasks onto this
 
 806
 00:26:53,020 --> 00:26:54,260
 0,210 210,660
-ass channel.
+tasks channel.|
 
 807
 00:26:54,590 --> 00:26:56,570
 0,540 630,1020 1020,1350 1350,1830 1830,1980
-And this test channel, we
+And this tasks channel, we
 
 808
 00:26:56,570 --> 00:26:57,950
@@ -4039,17 +4038,17 @@ actually made it a buffer
 809
 00:26:57,950 --> 00:26:59,780
 0,540 780,1230 1230,1350 1350,1470 1470,1830
-channel so that we know
+channel,| so that we know
 
 810
 00:26:59,780 --> 00:27:01,430
 0,120 120,240 240,540 540,1350 1350,1650
-it will hold exactly non
+it will hold exactly {numTask
 
 811
 00:27:01,430 --> 00:27:03,320
 0,480 480,840 840,1260 1290,1530 1530,1890
-test tests, which are the
+-} tasks,| which are the
 
 812
 00:27:04,130 --> 00:27:05,570
@@ -4059,12 +4058,12 @@ that's the limit of the
 813
 00:27:05,570 --> 00:27:07,250
 0,300 300,360 360,870 900,1260 1260,1680
-number of tasks that will
+number of tasks,| that will
 
 814
 00:27:07,280 --> 00:27:08,690
 0,390 390,480 480,540 540,870 870,1410
-exist on the system, so
+exist on the system,| so
 
 815
 00:27:09,080 --> 00:27:10,190
@@ -4074,12 +4073,12 @@ what this also means is
 816
 00:27:10,190 --> 00:27:11,840
 0,180 180,270 270,480 480,1140
-that we can push.
+that,| we can push
 
 817
 00:27:11,870 --> 00:27:13,850
 0,330 330,630 630,690 690,1290 1410,1980
-The number of tasks a
+the number of tasks {}
 
 818
 00:27:13,880 --> 00:27:16,400
@@ -4089,17 +4088,17 @@ task onto this channel without
 819
 00:27:16,400 --> 00:27:18,350
 0,660 840,1110 1110,1200 1200,1800 1800,1950
-blocking so the coordinator will
+blocking,| so the coordinator will
 
 820
 00:27:18,350 --> 00:27:20,390
 0,360 360,960 1020,1410 1410,1710 1710,2040
-not block on pushing test
+not block on pushing task
 
 821
 00:27:20,390 --> 00:27:21,700
 0,90 90,180 180,480 480,780
-to the test channel.
+to the tasks channel.|
 
 822
 00:27:22,170 --> 00:27:24,690
@@ -4109,7 +4108,7 @@ And then the coordinator will
 823
 00:27:24,720 --> 00:27:27,000
 0,480 480,1080 1080,1320 1320,1590 1590,2280
-read from this done channel
+read from this done channel|
 
 824
 00:27:27,030 --> 00:27:29,700
@@ -4119,17 +4118,17 @@ until it has done so
 825
 00:27:29,700 --> 00:27:31,350
 0,330 330,420 420,750 750,1320 1500,1650
-number of test times in
+number of task times,| in
 
 826
 00:27:31,350 --> 00:27:33,240
 0,510 810,1230 1230,1380 1380,1650 1650,1890
-which case it knows it's
+which case, it knows it's
 
 827
 00:27:33,240 --> 00:27:34,710
 0,420 420,750 750,900 900,1140 1140,1470
-done in this case where
+done,| in this case, where
 
 828
 00:27:34,920 --> 00:27:36,540
@@ -4139,12 +4138,12 @@ I'm not separating map or
 829
 00:27:36,540 --> 00:27:37,800
 0,330 330,540 540,690 690,870 870,1260
-reduce tasks, let's just imagine
+reduce tasks,| let's just imagine
 
 830
 00:27:37,800 --> 00:27:39,270
 0,180 180,390 390,720 750,1170 1170,1470
-that there are some number
+that there are,| some number
 
 831
 00:27:39,270 --> 00:27:40,800
@@ -4154,7 +4153,7 @@ of tasks that the coordinator
 832
 00:27:40,800 --> 00:27:42,200
 0,270 270,420 420,810
-needs to run.
+needs to run.|
 
 833
 00:27:42,700 --> 00:27:44,800
@@ -4164,27 +4163,27 @@ And once it knows that
 834
 00:27:44,800 --> 00:27:45,730
 0,270 270,450 450,540 540,810 810,930
-asks all the tasks have
+tasks, all the tasks have
 
 835
 00:27:45,730 --> 00:27:47,230
 0,540 540,690 690,1080 1080,1170 1170,1500
-finished it closes the test
+finished,| it closes the tasks
 
 836
 00:27:47,230 --> 00:27:51,280
 0,510 1230,1410 1410,2010 2040,2520 2550,4050
-channel, and then I'm basically
+channel, and then {} basically
 
 837
 00:27:51,580 --> 00:27:52,980
 0,390 390,870
-will exit.
+will exit.|
 
 838
 00:27:53,520 --> 00:27:56,640
 0,270 270,750 780,1620 2280,2910 2910,3120
-And so the where some
+And so the, where some
 
 839
 00:27:56,640 --> 00:27:58,110
@@ -4194,17 +4193,17 @@ of the interesting part comes
 840
 00:27:58,110 --> 00:28:00,480
 0,180 180,630 870,1380 1380,1920 1920,2370
-in is these worker task
+in is,| these worker task
 
 841
 00:28:00,480 --> 00:28:01,800
 0,360 360,540 540,720 720,1140 1140,1320
-threads which I've separated out
+threads,| which I've separated out
 
 842
 00:28:01,800 --> 00:28:04,160
 0,120 120,480 510,1350 1350,1740
-and just function here.
+and just function here.|
 
 843
 00:28:04,420 --> 00:28:06,220
@@ -4214,27 +4213,27 @@ So, these all run on
 844
 00:28:06,220 --> 00:28:07,880
 0,510 510,1170
-separate routines.
+separate {Go,routines},|
 
 845
 00:28:07,910 --> 00:28:10,010
 0,210 210,420 420,540 540,1200 1470,2100
-And what it does is
+and what it does is
 
 846
 00:28:10,190 --> 00:28:11,900
 0,1170
-for.
+for,|
 
 847
 00:28:11,990 --> 00:28:13,100
 0,210 210,600 600,780 780,1020 1020,1110
-As long as there are
+as long as there are
 
 848
 00:28:13,100 --> 00:28:14,540
 0,450 450,570 570,660 660,1020 1020,1440
-tasks in the task queue,
+tasks in the task queue,|
 
 849
 00:28:14,990 --> 00:28:16,340
@@ -4244,27 +4243,27 @@ it will pull a task
 850
 00:28:16,340 --> 00:28:19,640
 0,360 840,1050 1050,1530 1680,2220 3060,3300
-out and then oops I
+out| and then oops, I
 
 851
 00:28:19,640 --> 00:28:20,870
 0,240 240,390 390,480 480,750 900,1230
-didn't mean to that, and
+didn't mean to that,| and
 
 852
 00:28:20,870 --> 00:28:24,350
 0,270 270,630 630,1470 1770,2880 2880,3480
-then a call basically an.
+then {} call basically an
 
 853
 00:28:24,930 --> 00:28:26,490
 0,750 750,930 930,1050 1050,1500 1500,1560
-RBC that will send the
+RPC,| that will send the
 
 854
 00:28:26,490 --> 00:28:28,860
 0,360 360,450 450,570 570,1110 1500,2370
-task to the worker, so
+task to the worker,| so
 
 855
 00:28:28,950 --> 00:28:31,140
@@ -4279,7 +4278,7 @@ is talking to another thread
 857
 00:28:33,150 --> 00:28:35,100
 0,90 90,210 210,1080 1140,1650 1650,1950
-of the coordinator and that
+of the coordinator| and that
 
 858
 00:28:35,100 --> 00:28:36,480
@@ -4294,22 +4293,22 @@ that's in charge of calling
 860
 00:28:39,150 --> 00:28:41,420
 0,660 720,1140 1200,1830
-a the worker.
+{} the worker,|
 
 861
 00:28:42,020 --> 00:28:43,700
 0,540 540,1080 1140,1440 1440,1560 1560,1680
-And then once it's done
+and then once it's done
 
 862
 00:28:43,700 --> 00:28:44,990
 0,120 120,180 180,630 630,840 840,1290
-with a task it says
+with a task, it says
 
 863
 00:28:44,990 --> 00:28:46,180
 0,180 180,630
-it's done.
+it's done.|
 
 864
 00:28:46,620 --> 00:28:48,330
@@ -4319,22 +4318,22 @@ If it's not able to
 865
 00:28:48,330 --> 00:28:49,710
 0,390 390,510 510,780 780,1260 1260,1380
-if the call fails for
+if the call fails, for
 
 866
 00:28:49,710 --> 00:28:51,150
 0,210 210,840 840,960 960,1350 1350,1440
-some reason for example it
+some reason, for example it
 
 867
 00:28:51,150 --> 00:28:53,520
 0,300 300,720 840,1830
-turns out then.
+turns out,| then,
 
 868
 00:28:53,520 --> 00:28:54,570
 0,270 270,450 450,660 660,930 930,1050
-What this loop does is
+what this loop does is,|
 
 869
 00:28:54,570 --> 00:28:56,160
@@ -4344,7 +4343,7 @@ it'll push that task back
 870
 00:28:56,160 --> 00:28:58,260
 0,300 300,390 390,750 750,1320 1530,2100
-onto the task channel, so
+onto the task channel,| so
 
 871
 00:28:58,260 --> 00:29:00,120
@@ -4354,12 +4353,12 @@ another worker or potentially this
 872
 00:29:00,120 --> 00:29:01,320
 0,240 240,630 630,870 870,1050 1050,1200
-threat again could pick up
+thread again could pick up
 
 873
 00:29:01,320 --> 00:29:02,460
 0,180 180,690
-that task.
+that task.|
 
 874
 00:29:03,360 --> 00:29:05,580
@@ -4369,7 +4368,7 @@ So just to clarify how
 875
 00:29:05,580 --> 00:29:07,440
 0,180 180,570 570,1200 1200,1620 1620,1860
-the channel communication works so
+the channel communication works,| so
 
 876
 00:29:07,440 --> 00:29:09,180
@@ -4379,17 +4378,17 @@ the worker says tasks on
 877
 00:29:09,180 --> 00:29:10,230
 0,90 90,300 300,660 660,870 870,1050
-the chat channel, which is
+the tasks channel,| which is
 
 878
 00:29:10,230 --> 00:29:12,360
 0,330 330,480 480,720 720,1320
-read through these loops.
+read through these loops,|
 
 879
 00:29:12,680 --> 00:29:15,110
 0,810 840,1230 1230,1530 1530,1740 1740,2430
-And this loop will exit
+and this loop will exit
 
 880
 00:29:15,140 --> 00:29:17,930
@@ -4399,12 +4398,12 @@ when the coordinator closes the
 881
 00:29:17,930 --> 00:29:22,670
 0,570 2160,3180 3840,4140 4140,4500 4500,4740
-channel done, it's sent on
+channel,| done, it's sent on
 
 882
 00:29:22,670 --> 00:29:24,830
 0,330 330,870 870,1170 1170,1500 1500,2160
-these worker issue worker threads
+these worker, issue worker threads|
 
 883
 00:29:25,940 --> 00:29:27,290
@@ -4414,22 +4413,22 @@ and it's read by the
 884
 00:29:27,290 --> 00:29:29,540
 0,840 840,960 960,1350 1350,1860 1860,2250
-coordinator, the original coordinator thread
+coordinator, the original coordinator thread|
 
 885
 00:29:30,320 --> 00:29:32,510
 0,720 960,1560 1560,1740 1740,1920 1920,2190
-and this I say equals
+and this {exit -} equals
 
 886
 00:29:32,510 --> 00:29:34,730
 0,510 510,720 720,1230 1230,1950 2100,2220
-true, will basically tell the
+true,| will basically tell the
 
 887
 00:29:34,730 --> 00:29:36,170
 0,810 810,1050 1050,1050 1050,1290 1290,1440
-coordinator like oh I don't
+coordinator,| like, oh, I don't
 
 888
 00:29:36,170 --> 00:29:37,070
@@ -4439,12 +4438,12 @@ need to listen for any
 889
 00:29:37,070 --> 00:29:38,990
 0,210 210,600 600,1170 1230,1530 1530,1920
-more workers coming our workers
+more workers coming or workers
 
 890
 00:29:38,990 --> 00:29:39,900
 0,300 300,600
-starting up.
+starting up.|
 
 891
 00:29:40,020 --> 00:29:41,910
@@ -4454,17 +4453,17 @@ So it will cause this
 892
 00:29:42,180 --> 00:29:43,800
 0,390 390,540 540,930 930,990 990,1620
-other guy routine to exit.
+other Go routine to exit,|
 
 893
 00:29:44,850 --> 00:29:45,810
 0,300 300,450 450,600 600,780 780,960
-So I know that this
+so I know that this
 
 894
 00:29:45,810 --> 00:29:47,370
 0,90 90,240 240,660 660,1140 1140,1560
-is a pretty complex example,
+is a pretty complex example,|
 
 895
 00:29:47,370 --> 00:29:48,810
@@ -4474,7 +4473,7 @@ it's also not quite what
 896
 00:29:48,810 --> 00:29:51,570
 0,570 1410,2250 2250,2310 2310,2430 2430,2760
-we specified in the lab,
+we specified in the lab,|
 
 897
 00:29:51,570 --> 00:29:52,560
@@ -4484,22 +4483,22 @@ but as an example of
 898
 00:29:52,560 --> 00:29:54,000
 0,240 240,600 600,780 780,930 930,1440
-how channels can be used
+how channels can be used|
 
 899
 00:29:54,060 --> 00:29:55,500
 0,360 360,750 750,1020 1020,1230 1230,1440
-to implement something like map,
+to implement something like {mapreduce
 
 900
 00:29:55,500 --> 00:29:57,060
 0,600 780,930 930,1140 1140,1440 1440,1560
-reduce or something similar to
+-} or something similar to
 
 901
 00:29:57,060 --> 00:29:58,640
 0,180 180,720
-map reduce.
+{mapreduce -}.|
 
 902
 00:30:00,380 --> 00:30:01,640
@@ -4509,22 +4508,22 @@ There is a question in
 903
 00:30:02,150 --> 00:30:03,740
 0,360 360,660 660,900 900,1320 1320,1590
-the chat about where's exit
+the chat,| about where's exit
 
 904
 00:30:03,740 --> 00:30:05,800
 0,360 360,900 900,1080 1080,1530
-divine, in this code.
+define in this code?|
 
 905
 00:30:08,640 --> 00:30:10,380
 0,360 360,570 570,1020 1050,1290 1290,1740
-That is a good question,
+That is a good question,|
 
 906
 00:30:10,380 --> 00:30:13,770
 0,330 330,750 1680,2160 2160,2910 2940,3390
-it's not so it'll it'll
+it's not,| so it'll, it'll
 
 907
 00:30:13,770 --> 00:30:14,910
@@ -4534,47 +4533,47 @@ be exactly the same thing
 908
 00:30:14,910 --> 00:30:16,650
 0,180 180,660 1320,1440 1440,1530 1530,1740
-is done, it will just
+is done,| it will just
 
 909
 00:30:16,650 --> 00:30:18,280
 0,150 150,1110
-be another.
+be another
 
 910
 00:30:18,370 --> 00:30:20,380
 0,600 600,900 900,1470
-Channel that's um.
+channel that's {}
 
 911
 00:30:20,710 --> 00:30:22,920
 0,180 180,510 510,660 660,1260
-A bully and yeah.
+a {boolean -}, yeah,|
 
 912
 00:30:23,160 --> 00:30:25,020
 0,450 450,960 960,1230 1230,1590 1620,1860
-That's a good a good
+that's a good, a good
 
 913
 00:30:25,020 --> 00:30:26,140
 0,600
-gosh.
+cache.|
 
 914
 00:30:27,020 --> 00:30:28,790
 0,330 330,510 510,720 720,1230 1230,1770
-Oh, can I I've seen
+Oh, can I.| I've seen.|
 
 915
 00:30:28,970 --> 00:30:30,860
 0,420 420,510 510,990 1320,1620 1620,1890
-how do you add things
+How do you add things
 
 916
 00:30:30,860 --> 00:30:31,760
 0,90 90,210 210,570 570,780 780,900
-to the workers channel or
+to the workers channel| or
 
 917
 00:30:31,760 --> 00:30:32,450
@@ -4584,32 +4583,32 @@ when you add things to
 918
 00:30:32,450 --> 00:30:33,470
 0,60 60,360 360,660 660,840 840,1020
-the workers channel like how
+the workers channel,| like how
 
 919
 00:30:33,470 --> 00:30:34,310
 0,90 90,270 270,480 480,630 630,840
-do you handle them, this
+do you handle them {in,this}
 
 920
 00:30:34,310 --> 00:30:35,260
 0,420
-gig.
+case?|
 
 921
 00:30:35,410 --> 00:30:37,180
 0,450 450,780 780,990 990,1200 1200,1770
-Yeah, so in this case,
+Yeah, so in this case,|
 
 922
 00:30:37,420 --> 00:30:39,370
 0,510 540,1110 1110,1230 1230,1560 1560,1950
-a worker the workers channel
+{} worker the workers channel
 
 923
 00:30:39,370 --> 00:30:41,320
 0,450 450,1050 1050,1110 1110,1200 1200,1950
-is provided to the coordinator,
+is provided to the coordinator,|
 
 924
 00:30:41,410 --> 00:30:43,690
@@ -4624,47 +4623,47 @@ and you know how your
 926
 00:30:45,760 --> 00:30:48,970
 0,1020 1050,1260 1260,1950 2070,2760 2790,3210
-coordinator was actually called or
+coordinator was actually called| or
 
 927
 00:30:49,150 --> 00:30:51,080
 0,780 780,1440
-created by.
+created by
 
 928
 00:30:51,120 --> 00:30:54,930
 0,840 900,1830 1860,2760 3000,3300 3300,3810
-The Mr coordinator in maine
+the MR coordinator in main,
 
 929
 00:30:54,960 --> 00:30:57,720
 0,630 690,1320 1470,2190 2310,2610 2610,2760
-in the folder so we
+in the {that,folder},| so we
 
 930
 00:30:57,720 --> 00:31:00,330
 0,300 300,900 900,1350 1740,2100 2100,2610
-would imagine that in Mr
+would imagine that in MR
 
 931
 00:31:00,330 --> 00:31:02,160
 0,900 900,1080 1080,1290 1290,1680 1680,1830
-coordinator, we would create a
+coordinator,| we would create a
 
 932
 00:31:02,160 --> 00:31:04,100
 0,780 810,1470
-worker's channel.
+worker's channel,|
 
 933
 00:31:04,460 --> 00:31:06,620
 0,270 270,540 540,1200 1200,1380 1380,2160
-And Mr coordinator would basically
+and MR coordinator would basically
 
 934
 00:31:06,710 --> 00:31:08,990
 0,270 270,450 450,1230 1230,1470 1470,2280
-be in charged of tracking
+be in charged of tracking,|
 
 935
 00:31:09,140 --> 00:31:11,360
@@ -4674,12 +4673,12 @@ when workers crash and when
 936
 00:31:11,360 --> 00:31:13,580
 0,480 480,1080 1110,1620 1620,1860 1860,2220
-workers join so this is
+workers join,| so this is
 
 937
 00:31:13,760 --> 00:31:15,170
 0,240 240,810 810,900 900,990 990,1410
-for example in a case
+for example in a case,|
 
 938
 00:31:15,170 --> 00:31:17,690
@@ -4694,7 +4693,7 @@ servers are added to our
 940
 00:31:18,800 --> 00:31:20,390
 0,450 450,630 630,750 750,1050 1050,1590
-cluster at some later point
+cluster at some later point|
 
 941
 00:31:20,450 --> 00:31:22,070
@@ -4704,32 +4703,32 @@ or some worker crashed and
 942
 00:31:22,070 --> 00:31:23,780
 0,240 240,570 570,990 1020,1590 1590,1710
-then came back and our
+then came back,| and MR
 
 943
 00:31:23,780 --> 00:31:26,450
 0,540 540,720 720,810 810,1710 1770,2670
-coordinator would be constantly sending
+coordinator would be constantly sending,|
 
 944
 00:31:26,510 --> 00:31:29,030
 0,600 600,960 960,1290 1290,1890 1920,2520
-like these worker IDs to
+like these worker ids to
 
 945
 00:31:29,060 --> 00:31:30,580
 0,270 270,1170
-our coordinator.
+[our] coordinator,|
 
 946
 00:31:30,960 --> 00:31:32,070
 0,210 210,510 510,660 660,930 930,1110
-In order to tell it
+in order to tell it,
 
 947
 00:31:32,070 --> 00:31:33,480
 0,240 240,480 480,690 690,900 900,1410
-hey like there's new worker,
+hey, like there's new worker,|
 
 948
 00:31:33,480 --> 00:31:34,740
@@ -4739,57 +4738,57 @@ you should start issuing it
 949
 00:31:34,740 --> 00:31:36,990
 0,630 1350,1560 1560,1920 1920,2160 2160,2250
-tasks so that part is
+tasks,| so that part is
 
 950
 00:31:36,990 --> 00:31:38,140
 0,210 210,630
-not shown.
+not shown.|
 
 951
 00:31:38,350 --> 00:31:40,270
 0,540 540,930 930,1230 1230,1740 1770,1920
-God, yeah I just I
+God, yeah, I just I
 
 952
 00:31:40,270 --> 00:31:42,580
 0,300 300,780 810,1320 1320,1680 1710,2310
-just um wondering like so
+just {} wondering like,| so
 
 953
 00:31:42,850 --> 00:31:43,840
 0,180 180,510 510,840 840,900 900,990
-that's really cool I was
+that's really cool,| I was
 
 954
 00:31:43,840 --> 00:31:46,690
 0,150 150,510 510,1230 1410,2040 2490,2850
-just wondering inside the lab,
+just wondering inside the lab
 
 955
 00:31:46,690 --> 00:31:48,190
 0,330 330,570 570,1140 1170,1380 1380,1500
-one like how I think
+1,| like how I think
 
 956
 00:31:48,190 --> 00:31:49,480
 0,150 150,510 660,930 930,1200 1200,1290
-it's like call worker and
+it's like [call] worker and
 
 957
 00:31:49,480 --> 00:31:50,560
 0,150 150,510 510,660 660,960 960,1080
-you've defended our PC to
+you've defended {RPC -} to
 
 958
 00:31:50,560 --> 00:31:51,700
 0,90 90,660
-the worker.
+the worker,|
 
 959
 00:31:51,700 --> 00:31:53,350
 0,720 720,930 1050,1200 1200,1410 1410,1650
-Um, if if that's something
+{} if if that's something
 
 960
 00:31:53,350 --> 00:31:53,830
@@ -4799,12 +4798,12 @@ we could have done in
 961
 00:31:53,830 --> 00:31:55,120
 0,240 240,660
-block one.
+lab 1?|
 
 962
 00:31:57,100 --> 00:31:59,560
 0,570 720,1320 1320,1800 1800,2220 2220,2460
-It's possible it but it
+It's possible it,| but it
 
 963
 00:31:59,560 --> 00:32:00,910
@@ -4814,12 +4813,12 @@ definitely was not what we
 964
 00:32:00,910 --> 00:32:03,070
 0,270 270,390 390,900 1110,1680 1680,2160
-pushed you toward a because
+pushed you toward,| {} because
 
 965
 00:32:03,070 --> 00:32:04,600
 0,120 120,240 240,990 990,1320 1320,1530
-you would basically instead of
+you would basically, instead of
 
 966
 00:32:04,630 --> 00:32:06,040
@@ -4829,7 +4828,7 @@ setting up the coordinator as
 967
 00:32:06,040 --> 00:32:07,510
 0,300 300,540 540,840 840,1410 1410,1470
-being our PC server, you
+being {RPC -} server,| you
 
 968
 00:32:07,510 --> 00:32:08,260
@@ -4839,27 +4838,27 @@ would have to set up
 969
 00:32:08,380 --> 00:32:10,000
 0,390 390,510 510,780 780,1230 1230,1620
-like our PC servers on
+like {RPC -} servers on
 
 970
 00:32:10,000 --> 00:32:12,550
 0,300 330,1050 1440,2160 2220,2430 2430,2550
-the workers, um, you can
+the workers,| {} you can
 
 971
 00:32:12,550 --> 00:32:13,930
 0,300 300,570 570,960 990,1200 1200,1380
-also think of in this
+also think of, in this
 
 972
 00:32:13,930 --> 00:32:17,600
 0,1020 1200,1950 1950,2430 2490,3330
-implementation coworker could have.
+implementation call_worker could have
 
 973
 00:32:17,600 --> 00:32:19,850
 0,780 780,1200 1200,1410 1410,1620 1620,2250
-Handlers actually for each worker
+handlers actually for each worker|
 
 974
 00:32:20,210 --> 00:32:22,400
@@ -4874,17 +4873,17 @@ sending the coordinator like get
 976
 00:32:24,710 --> 00:32:26,480
 0,360 360,480 480,1080 1110,1590 1590,1770
-task, our PCs but a
+task {RPCs -},| but a
 
 977
 00:32:26,480 --> 00:32:28,120
 0,1110
-little.
+little,
 
 978
 00:32:28,850 --> 00:32:30,350
 0,240 240,270 270,570 570,1080 1110,1500
-That's a little funky, um,
+that's a little funky, {}|
 
 979
 00:32:30,350 --> 00:32:31,490
@@ -4894,17 +4893,17 @@ so in this example is
 980
 00:32:31,490 --> 00:32:33,230
 0,300 300,480 480,900 900,1020 1020,1740
-actually more natural to imagine
+actually more natural to imagine,|
 
 981
 00:32:33,260 --> 00:32:35,810
 0,300 300,1140 1260,1650 1650,1920 1920,2550
-that coworker, um, the coordinator
+that call_worker, {} the coordinator
 
 982
 00:32:35,810 --> 00:32:37,040
 0,150 150,180 180,660 660,810 810,1230
-is a client and the
+is a client| and the
 
 983
 00:32:37,400 --> 00:32:38,810
@@ -4914,27 +4913,27 @@ workers are the ones that
 984
 00:32:39,110 --> 00:32:40,940
 0,210 210,720 720,990 1020,1200 1200,1830
-are handling the are PCs.
+are handling that {RPCs -}.|
 
 985
 00:32:41,510 --> 00:32:43,820
 0,750 750,1140 1140,1620 1620,1890 1890,2310
-Yeah okay, thanks very cool.
+Yeah, okay, thanks, very cool.|
 
 986
 00:32:45,230 --> 00:32:46,850
 0,120 120,240 240,420 420,1050 1080,1620
-I have two questions, um,
+I have two questions, {}|
 
 987
 00:32:47,150 --> 00:32:48,650
 0,420 420,840 870,1140 1140,1200 1200,1500
-first is just a general
+first is just a generally
 
 988
 00:32:48,650 --> 00:32:49,940
 0,360 360,690 690,870 870,990 990,1290
-LegCo question, so in that
+Go question,| so in that
 
 989
 00:32:49,970 --> 00:32:51,260
@@ -4944,67 +4943,67 @@ second for loop on the
 990
 00:32:51,260 --> 00:32:52,760
 0,480 540,870 870,990 990,1110 1110,1500
-left a at the bottom.
+left, {} at the bottom,|
 
 991
 00:32:53,700 --> 00:32:54,540
 0,180 180,300 300,510 510,840 840,840
-If you don't use I
+if you don't use i,
 
 992
 00:32:54,960 --> 00:32:57,620
 0,360 360,570 570,1230 1380,2010
-will go complain or.
+will Go complain or
 
 993
 00:32:57,620 --> 00:32:58,940
 0,270 270,720
-Enough oil.
+{in,a} {for,loop}.|
 
 994
 00:32:59,480 --> 00:33:02,090
 0,810 810,1530 1800,2130 2130,2400 2400,2610
-Um, so I run like
+{} So I run like
 
 995
 00:33:02,090 --> 00:33:03,500
 0,150 150,300 300,780 780,1290 1290,1410
-all the goal, inter and
+all the Go linter and
 
 996
 00:33:03,500 --> 00:33:05,960
 0,90 90,330 330,900 1080,1560 1800,2460
-all that stuff and it's
+all that stuff| and it's
 
 997
 00:33:06,080 --> 00:33:08,700
 0,600 780,1050 1050,1470 1500,1980
-fine I think like.
+fine, I think,| like,
 
 998
 00:33:08,790 --> 00:33:10,780
 0,210 210,420 420,840 840,1440
-In this case you.
+in this case, you,
 
 999
 00:33:10,870 --> 00:33:12,460
 0,120 120,360 360,1050 1080,1260 1260,1590
-Do you need to have
+do you need to have
 
 1000
 00:33:12,460 --> 00:33:15,070
 0,480 510,1140 1230,1710 1710,2370 2370,2610
-I because your incremented and
+i,| because you're incremented and
 
 1001
 00:33:15,070 --> 00:33:16,390
 0,480 480,570 570,930 930,1050 1050,1320
-keeping the state of AI
+keeping the state of i
 
 1002
 00:33:16,390 --> 00:33:19,420
 0,690 720,1710 1980,2490
-around through the.
+around through the.|
 
 1003
 00:33:19,420 --> 00:33:20,350
@@ -5014,42 +5013,42 @@ Couldn't you do the same
 1004
 00:33:20,350 --> 00:33:21,700
 0,180 180,330 330,510 510,1050 1170,1350
-thing with like a like
+thing,| with like a like
 
 1005
 00:33:21,700 --> 00:33:24,190
 0,1260 1260,1560 1560,1860 1860,2190 2190,2490
-a while loop like just
+a while loop,| like just
 
 1006
 00:33:24,190 --> 00:33:25,690
 0,360 360,600 600,840 840,1260 1260,1500
-four empty for loop with
+for empty for loop with
 
 1007
 00:33:25,690 --> 00:33:26,920
 0,120 120,720
-a select.
+a select,|
 
 1008
 00:33:27,430 --> 00:33:29,830
 0,510 510,840 840,1020 1020,1770 1830,2400
-Um where it's like popping
+{} where it's like popping
 
 1009
 00:33:29,830 --> 00:33:32,080
 0,210 210,330 330,810 1080,1710
-off of done, um.
+off of done. {}|
 
 1010
 00:33:32,250 --> 00:33:33,920
 0,1110
-SO.
+So,
 
 1011
 00:33:35,240 --> 00:33:38,210
 0,690 870,1920 1920,2340 2340,2760 2790,2970
-You can't actually well you
+you can't actually,| well, you
 
 1012
 00:33:38,210 --> 00:33:39,530
@@ -5064,12 +5063,12 @@ of how many times you've
 1014
 00:33:41,360 --> 00:33:43,250
 0,270 270,480 480,960 1140,1590 1590,1890
-read from done right because
+read from done, right,| because
 
 1015
 00:33:43,250 --> 00:33:46,100
 0,180 180,600 600,930 930,1620 1980,2850
-you can't just read once
+you can't just read once,|
 
 1016
 00:33:46,130 --> 00:33:47,630
@@ -5079,27 +5078,26 @@ you have to read number
 1017
 00:33:47,630 --> 00:33:49,160
 0,90 90,540 540,1140
-of past times.
+of task times.|
 
 1018
 00:33:52,070 --> 00:33:54,830
 0,420 420,960 1470,2130 2190,2430 2430,2760
-Ashley yeah yeah so you
+{I,see,okay}.| Yeah, yeah, so you
 
 1019
 00:33:54,830 --> 00:33:56,510
 0,150 150,540 540,840 840,1140 1140,1680
-do need some type of.
+do need some type of
 
 1020
 00:33:57,640 --> 00:33:59,260
 0,540 540,720 720,930 930,1290 1290,1620
-State that will track that,
+state that will track that.|
 
 1021
 00:33:59,710 --> 00:34:01,220
 0,660
-um.
 
 1022
 00:34:02,800 --> 00:34:04,300
@@ -5109,7 +5107,7 @@ And then for for the
 1023
 00:34:04,300 --> 00:34:05,470
 0,270 270,390 390,510 510,870 870,1170
-one on the right, like
+one on the right,| like
 
 1024
 00:34:05,470 --> 00:34:07,120
@@ -5119,22 +5117,22 @@ where you're reading from ask
 1025
 00:34:07,120 --> 00:34:08,710
 0,120 120,240 240,780 780,1020 1050,1590
-and {re-populating -} it, eyes,
+and {re-populating -} it,| is
 
 1026
 00:34:09,100 --> 00:34:10,840
 0,270 270,420 420,1020 1200,1650 1650,1740
-they're like any downside to
+there like any downside to
 
 1027
 00:34:10,840 --> 00:34:12,080
 0,300 300,660
-that, um.
+that, {}|
 
 1028
 00:34:12,530 --> 00:34:13,610
 0,240 240,360 360,540 540,720 720,1080
-If you're like just constantly
+if you're like just constantly
 
 1029
 00:34:13,610 --> 00:34:15,050
@@ -5144,87 +5142,86 @@ reading and adding back and
 1030
 00:34:15,050 --> 00:34:17,200
 0,300 300,600 600,930 930,1560
-forth the same channel.
+forth {to,the} same channel.|
 
 1031
 00:34:17,290 --> 00:34:18,660
 0,630
-AH.
 
 1032
 00:34:19,740 --> 00:34:21,140
 0,180 180,630
-I don't.
+I don't,
 
 1033
 00:34:21,140 --> 00:34:22,340
 0,300 300,660 660,810 810,960 960,1200
-I can't think of off
+I can't think of that
 
 1034
 00:34:22,340 --> 00:34:23,090
 0,90 90,270 270,360 360,570 570,750
-the top my head so
+the top my head,| so
 
 1035
 00:34:23,090 --> 00:34:24,440
 0,360 360,570 570,810 810,930 930,1350
-in this case at least
+in this case, at least
 
 1036
 00:34:24,470 --> 00:34:26,540
 0,330 330,570 570,1110 1440,1860 1860,2070
-you won't block because every
+you won't block,| because every
 
 1037
 00:34:26,540 --> 00:34:28,040
 0,390 390,600 600,780 780,1050 1050,1500
-time you read it you're
+time you read it,| you're
 
 1038
 00:34:28,040 --> 00:34:29,990
 0,570 570,960 960,1230 1230,1380 1380,1950
-popping something off the channel,
+popping something off the channel,|
 
 1039
 00:34:30,020 --> 00:34:31,940
 0,300 300,480 480,960 1500,1770 1770,1920
-every time you add it
+every time you add it,
 
 1040
 00:34:31,940 --> 00:34:34,970
 0,180 180,480 480,1050 1230,2160 2430,3030
-you're pushing something so because
+you're pushing something,| so because
 
 1041
 00:34:34,970 --> 00:34:36,830
 0,180 180,570 570,900 1020,1380 1380,1860
-we have that the test
+we have that the task
 
 1042
 00:34:36,830 --> 00:34:38,450
 0,180 180,390 390,720 720,1290 1320,1620
-is a buffer channel but
+is a buffer channel,| but
 
 1043
 00:34:38,450 --> 00:34:40,010
 0,150 150,420 420,900 930,1200 1200,1560
-you'll never block on that.
+you'll never block on that.|
 
 1044
 00:34:41,160 --> 00:34:42,240
 0,540
-SO.
+So,
 
 1045
 00:34:42,520 --> 00:34:45,010
 0,210 210,510 510,660 660,1140 1170,2490
-In terms of like performance
+in terms of like performance,|
 
 1046
 00:34:45,430 --> 00:34:46,880
 0,150 150,540
-I think.
+I think,
 
 1047
 00:34:46,940 --> 00:34:48,710
@@ -5234,77 +5231,77 @@ I mean channels are built
 1048
 00:34:48,710 --> 00:34:50,630
 0,240 240,690 690,1200 1200,1650 1650,1920
-using locks, so locks are
+using locks,| so locks are
 
 1049
 00:34:50,630 --> 00:34:53,990
 0,300 300,540 540,1260 1800,2700 3210,3360
-usually more lightweight, but I
+usually more lightweight,| but I
 
 1050
 00:34:53,990 --> 00:34:55,010
 0,240 240,570 570,720 720,870 870,1020
-don't think I don't think
+don't think, I don't think,
 
 1051
 00:34:55,010 --> 00:34:56,990
 0,150 150,390 390,750 750,1410 1440,1980
-you'll see a huge performance,
+you'll see a huge performance
 
 1052
 00:34:56,990 --> 00:34:58,670
 0,120 120,630 900,1350 1350,1560 1560,1680
-in fact doing something like
+in fact,| doing something like
 
 1053
 00:34:58,670 --> 00:34:59,540
 0,450
-this.
+this.|
 
 1054
 00:34:59,630 --> 00:35:00,980
 0,600 630,780 780,990 990,1200 1200,1350
-OK I guess, I've like
+Okay, I guess, I've like
 
 1055
 00:35:00,980 --> 00:35:02,570
 0,420 660,990 990,1140 1140,1230 1230,1590
-a sari just like a
+a,| sorry, just like a
 
 1056
 00:35:02,570 --> 00:35:04,860
 0,600 720,1140 1140,1290 1290,1680
-general question of like.
+general question of like,|
 
 1057
 00:35:04,860 --> 00:35:06,060
 0,240 240,390 390,540 540,1080 1080,1200
-What's your like calculus for
+what's your like calculus for
 
 1058
 00:35:06,060 --> 00:35:07,640
 0,390 390,990
-choosing between.
+choosing between
 
 1059
 00:35:07,790 --> 00:35:09,530
 0,180 180,750 750,1140 1140,1650 1650,1740
-New texas and channels are
+{mutexes -} and channels or
 
 1060
 00:35:09,530 --> 00:35:11,380
 0,180 180,510 540,1050 1050,1050
-like a hybrid or.
+like a hybrid {},|
 
 1061
 00:35:11,380 --> 00:35:13,060
 0,150 150,210 210,450 450,960
-At the very beginning.
+at the very beginning.|
 
 1062
 00:35:13,560 --> 00:35:16,080
 0,780 780,1440 1650,1890 1890,2340 2340,2520
-Yeah, so new taxes are
+Yeah, so {mutexes -} are
 
 1063
 00:35:16,080 --> 00:35:17,850
@@ -5314,7 +5311,7 @@ very natural for just protecting
 1064
 00:35:17,850 --> 00:35:19,530
 0,150 150,420 420,540 540,1290 1380,1680
-a piece of stage, so
+a piece of state,| so
 
 1065
 00:35:19,530 --> 00:35:22,230
@@ -5324,22 +5321,22 @@ like your coordinator or like
 1066
 00:35:22,230 --> 00:35:23,280
 0,150 150,420 420,810 810,990 990,1050
-your ras servers have a
+your raft servers have a
 
 1067
 00:35:23,280 --> 00:35:25,140
 0,600 750,900 900,1140 1140,1350 1350,1860
-log I want to protect
+log,| I want to protect
 
 1068
 00:35:25,140 --> 00:35:26,820
 0,420 420,510 510,870 870,1020 1020,1680
-everytime I append the log,
+everytime I append the log,|
 
 1069
 00:35:26,910 --> 00:35:31,080
 0,660 810,1710 1710,2130 2130,2940 3060,4170
-um that seems very difficult,
+{} that seems very difficult,|
 
 1070
 00:35:31,110 --> 00:35:32,730
@@ -5354,12 +5351,12 @@ to try and do using
 1072
 00:35:33,600 --> 00:35:36,120
 0,660 870,1680 1740,2250 2250,2430 2430,2520
-channels because essentially you'd be
+channels,| because essentially, you'd be
 
 1073
 00:35:36,120 --> 00:35:37,830
 0,240 240,330 330,780 780,1320 1380,1710
-using the channels lock you'd
+using the channels lock,| you'd
 
 1074
 00:35:37,830 --> 00:35:39,630
@@ -5374,7 +5371,7 @@ one else is modifying the
 1076
 00:35:40,770 --> 00:35:42,360
 0,420 420,630 630,840 840,1350 1350,1590
-state while you're modifying it
+state,| while you're modifying it,|
 
 1077
 00:35:42,600 --> 00:35:43,530
@@ -5389,7 +5386,7 @@ to essentially before you modify
 1079
 00:35:45,690 --> 00:35:46,680
 0,300 330,510 510,660 660,900 900,990
-it, try to read on
+it,| try to read on
 
 1080
 00:35:46,680 --> 00:35:47,880
@@ -5399,12 +5396,12 @@ the channel to ensure that
 1081
 00:35:47,880 --> 00:35:48,920
 0,120 120,240 240,780
-no one else.
+no one else,|
 
 1082
 00:35:48,920 --> 00:35:50,300
 0,450 750,960 960,1170 1170,1260 1260,1380
-Alright, like someone would have
+alright, like someone would have
 
 1083
 00:35:50,300 --> 00:35:51,110
@@ -5414,22 +5411,22 @@ to send something on the
 1084
 00:35:51,110 --> 00:35:52,220
 0,360 360,570 570,720 720,900 900,1110
-channel just show that they've
+channel,| just show that they've
 
 1085
 00:35:52,220 --> 00:35:54,350
 0,420 480,840 840,1020 1020,1350 1350,2130
-done they've been finished modifying
+done,| they've been finished modifying
 
 1086
 00:35:54,350 --> 00:35:56,360
 0,270 270,510 510,690 690,1380 1410,2010
-so and so forth so.
+so and so forth.| So,
 
 1087
 00:35:57,520 --> 00:35:58,450
 0,120 120,360 360,570 570,660 660,930
-In that case it's actually
+in that case, it's actually
 
 1088
 00:35:58,450 --> 00:35:59,650
@@ -5439,22 +5436,22 @@ very hard to imagine how
 1089
 00:35:59,650 --> 00:36:01,330
 0,180 180,510 510,870 870,1260 1410,1680
-you do channel where new
+you do channel,| where {mutexes
 
 1090
 00:36:01,330 --> 00:36:02,920
 0,390 390,570 570,750 750,1050 1080,1590
-taxes would make that completely
+-} would make that completely
 
 1091
 00:36:02,920 --> 00:36:06,520
 0,780 2340,2610 2610,3030 3030,3270 3270,3600
-straightforward where channels come in
+straightforward,| where channels come in
 
 1092
 00:36:06,520 --> 00:36:08,800
 0,330 330,1050 1230,1830 1860,2160 2160,2280
-very handy is like I
+very handy is,| like I
 
 1093
 00:36:08,800 --> 00:36:11,440
@@ -5464,17 +5461,17 @@ think our implementation already has
 1094
 00:36:11,440 --> 00:36:13,450
 0,120 120,630 630,1140 1410,1710 1710,2010
-this supply channel is where
+this apply channel,| is where
 
 1095
 00:36:13,450 --> 00:36:15,400
 0,210 210,570 570,750 750,1170 1170,1950
-you have to wait for.
+you have to wait for,|
 
 1096
 00:36:16,640 --> 00:36:17,960
 0,240 240,660 660,840 840,1050 1050,1320
-A in some ways it's
+{} in some ways, it's
 
 1097
 00:36:17,990 --> 00:36:21,290
@@ -5484,7 +5481,7 @@ almost like a specific instance
 1098
 00:36:21,290 --> 00:36:23,060
 0,150 150,240 240,690 690,1380 1440,1770
-of a condition variable in
+of a condition variable,| in
 
 1099
 00:36:23,060 --> 00:36:24,020
@@ -5494,32 +5491,32 @@ which you want to wait
 1100
 00:36:24,020 --> 00:36:25,850
 0,120 120,780 780,960 960,1200 1200,1830
-for something to be ready,
+for something to be ready,|
 
 1101
 00:36:26,030 --> 00:36:28,460
 0,330 330,900 1140,1920
-um, or a.
+{} or a,
 
 1102
 00:36:28,840 --> 00:36:30,140
 0,750
-I'm.
+{}
 
 1103
 00:36:30,900 --> 00:36:33,000
 0,330 360,870 900,1290 1290,1860 1860,2100
-Like a very specific type
+like a very specific type
 
 1104
 00:36:33,000 --> 00:36:34,980
 0,390 510,1080 1080,1170 1170,1410 1410,1980
-of command to be finished,
+of command to be finished,|
 
 1105
 00:36:35,010 --> 00:36:37,980
 0,810 1050,1860 2130,2520 2520,2790 2790,2970
-um, so for something like
+{} so for something like
 
 1106
 00:36:37,980 --> 00:36:39,570
@@ -5529,22 +5526,22 @@ issuing tasks is actually not
 1107
 00:36:39,570 --> 00:36:42,240
 0,120 120,360 360,1020 2160,2310 2310,2670
-a bad example or something
+a bad example| or something
 
 1108
 00:36:42,240 --> 00:36:43,260
 0,420
-like.
+like,
 
 1109
 00:36:43,260 --> 00:36:45,630
 0,660 660,1530 1740,1920 1920,2100 2100,2370
-Blocking until you have something
+blocking until you have something
 
 1110
 00:36:45,630 --> 00:36:47,310
 0,150 150,210 210,1020 1080,1320 1320,1680
-on a cue like eye,
+on a queue,| like is
 
 1111
 00:36:47,370 --> 00:36:48,120
@@ -5559,7 +5556,7 @@ it as like a queuing
 1113
 00:36:49,110 --> 00:36:50,820
 0,540 990,1260 1260,1380 1380,1530 1530,1710
-system, or at least that's
+system,| or at least that's
 
 1114
 00:36:50,820 --> 00:36:51,810
@@ -5569,107 +5566,107 @@ how I like to think
 1115
 00:36:51,810 --> 00:36:53,260
 0,210 210,420 420,930
-about it, but.
+about it,| but,
 
 1116
 00:36:53,260 --> 00:36:55,390
 0,330 330,810 810,1320 1320,2040 2040,2130
-For almost all modifications to
+for almost all modifications to
 
 1117
 00:36:55,390 --> 00:36:56,620
 0,330 330,750 750,930 930,1020 1020,1230
-shared state like the race
+shared state,| like the race
 
 1118
 00:36:56,620 --> 00:36:58,060
 0,450 450,900
-conditions yo.
+conditions {},
 
 1119
 00:36:58,150 --> 00:37:01,580
 0,360 360,1110 1140,1770 1770,2430
-A encounter locks are.
+{} encounter locks are
 
 1120
 00:37:01,920 --> 00:37:03,180
 0,390 390,870 870,1020 1020,1110 1110,1260
-Much simpler and in some
+much simpler| and in some
 
 1121
 00:37:03,180 --> 00:37:04,200
 0,330 330,420 420,630 630,900 900,1020
-ways a lot easier to
+ways, a lot easier to
 
 1122
 00:37:04,200 --> 00:37:05,500
 0,300 300,720
-reason about.
+reason about,|
 
 1123
 00:37:07,990 --> 00:37:09,000
 0,450
-But.
+but,
 
 1124
 00:37:09,000 --> 00:37:11,200
 0,750 780,1200 1200,1410
-Yeah, thank you.
+yeah.| Thank you.|
 
 1125
 00:37:11,580 --> 00:37:12,660
 0,390 390,510 510,720 720,960 960,1080
-Sorry I will follow up
+Sorry, I {have,a} follow up
 
 1126
 00:37:12,660 --> 00:37:15,270
 0,390 390,900 930,1110 1110,1680 1710,2610
-question to this slide, um,
+question to this slide, {}|
 
 1127
 00:37:15,360 --> 00:37:17,550
 0,210 210,690 690,1170 1470,2010 2010,2190
-what happens if the so
+what happens if the,| so
 
 1128
 00:37:17,550 --> 00:37:19,110
 0,120 120,450 450,600 600,810 810,1560
-you call the go issue
+you call the Go {issueWorkerTaskThread
 
 1129
 00:37:19,290 --> 00:37:20,880
 0,390 390,780 780,1020 1020,1260 1260,1590
-worker task thread which spins
+- - -} which spins
 
 1130
 00:37:20,880 --> 00:37:23,100
 0,150 150,870 900,1140 1140,2040 2070,2220
-up another go routine, I
+up another Go routine,| I
 
 1131
 00:37:23,100 --> 00:37:24,420
 0,180 180,510 510,900 900,1200 1200,1320
-mean it goes through all
+mean, it goes through all
 
 1132
 00:37:24,420 --> 00:37:25,500
 0,90 90,510 510,630 630,720 720,1080
-the tasks in the channel,
+the tasks in the channel,|
 
 1133
 00:37:25,500 --> 00:37:26,620
 0,240 240,360 360,630
-what is it.
+what is it
 
 1134
 00:37:26,710 --> 00:37:28,690
 0,900 900,1140 1140,1590 1620,1770 1770,1980
-Fails when it's what if
+fails,| when it's what if
 
 1135
 00:37:28,690 --> 00:37:30,040
 0,180 180,360 360,720 720,1170 1170,1350
-the go routine fails when
+the Go routine fails,| when
 
 1136
 00:37:30,040 --> 00:37:31,660
@@ -5679,97 +5676,97 @@ it's sitting on the if
 1137
 00:37:31,660 --> 00:37:33,100
 0,330 330,930
-call worker.
+{call_worker -}.|
 
 1138
 00:37:34,550 --> 00:37:37,500
 0,900 1020,1620
-So, um.
+So, {}
 
 1139
 00:37:38,030 --> 00:37:40,520
 0,210 210,570 570,1530
-If it fails.
+if it fails,|
 
 1140
 00:37:40,520 --> 00:37:42,440
 0,240 240,450 450,1020 1050,1500 1500,1920
-Then I guess you've taken
+then I guess you've taken
 
 1141
 00:37:42,440 --> 00:37:44,120
 0,150 150,600 600,1110
-a task out.
+a task out
 
 1142
 00:37:45,380 --> 00:37:47,700
 0,240 240,570 570,930 1020,1770
-And not put back.
+and not put back.|
 
 1143
 00:37:48,860 --> 00:37:51,440
 0,660 1050,1650 1650,1890 1890,2250 2280,2580
-I'm actually not sure that
+I'm actually not sure,| that
 
 1144
 00:37:51,440 --> 00:37:53,060
 0,240 240,450 450,1080
-seems like a.
+seems like {},|
 
 1145
 00:37:53,980 --> 00:37:55,270
 0,300 300,420 420,870 900,1080 1080,1290
-Like you're not you're saying
+like you're not, you're saying
 
 1146
 00:37:55,270 --> 00:37:57,310
 0,210 210,330 330,840 840,1230 1230,2040
-like the entire thread crashes.
+like the entire thread crashes,
 
 1147
 00:37:58,130 --> 00:38:00,620
 0,390 390,720 720,960 960,1800 1830,2490
-Rather than as co-worker, not
+rather than as call_worker,| not
 
 1148
 00:38:00,710 --> 00:38:02,420
 0,330 330,720 720,1050 1050,1140 1140,1710
-like returning falls or something,
+like returning falls or something.|
 
 1149
 00:38:02,690 --> 00:38:04,640
 0,330 330,510 510,1440 1440,1620 1620,1950
-yeah like z go routine
+Yeah, like the Go routine
 
 1150
 00:38:04,640 --> 00:38:05,860
 0,750
-crashes.
+crashes|
 
 1151
 00:38:06,010 --> 00:38:07,570
 0,240 240,330 330,690 690,1290 1290,1560
-Or is that possible for
+or is that possible for
 
 1152
 00:38:07,570 --> 00:38:09,280
 0,120 120,720 720,930 930,1500 1500,1710
-a single go routine to
+a single Go routine to
 
 1153
 00:38:09,280 --> 00:38:10,870
 0,480 480,810 810,1170 1260,1500 1500,1590
-fail or would like the
+fail| or would like the
 
 1154
 00:38:10,870 --> 00:38:12,070
 0,300 300,480 480,690 690,900 900,1200
-entire thing, just blow up.
+entire thing just blow up.|
 
 1155
 00:38:14,180 --> 00:38:15,800
 0,300 300,720 720,960 1260,1500 1500,1620
-Hey francine, um I think
+Hey, {Frans,you,know}?| {} I think
 
 1156
 00:38:15,800 --> 00:38:16,670
@@ -5779,92 +5776,91 @@ the model you should have
 1157
 00:38:16,670 --> 00:38:18,440
 0,90 90,270 270,1170 1200,1590 1590,1770
-is that if a go
+is that,| if a Go
 
 1158
 00:38:18,440 --> 00:38:20,090
 0,270 270,690 690,780 780,1140 1140,1650
-routine crashes, the process crashes.
+routine crashes, the process crashes.|
 
 1159
 00:38:21,580 --> 00:38:23,780
 0,570 570,630 630,840 840,1350
-Yeah I saw it.
+Yeah, that {would,solve} it.|
 
 1160
 00:38:25,580 --> 00:38:27,830
 0,450 450,780 780,1230 1260,1800 1830,2250
-Um, sorry, so if just
+{} Sorry, so if just
 
 1161
 00:38:27,830 --> 00:38:31,700
 0,660 690,1260 1260,2100 2610,3300 3330,3870
-the worker crashes, then you
+the worker crashes,| then you
 
 1162
 00:38:32,060 --> 00:38:33,260
 0,690
-pick.
+pick
 
 1163
 00:38:33,260 --> 00:38:35,300
 0,120 120,480 480,990 990,1470
-A different task but.
+a different task,| but,
 
 1164
 00:38:35,300 --> 00:38:37,430
 0,360 360,900 1170,1590 1590,1950 1980,2130
-Should you I guess you
+should you, I guess you
 
 1165
 00:38:37,430 --> 00:38:38,990
 0,90 90,300 300,600 600,750 750,1560
-would still have the same.
+would still have the same
 
 1166
 00:38:39,540 --> 00:38:41,520
 0,930 960,1350
-Worker like.
+worker like
 
 1167
 00:38:41,840 --> 00:38:43,420
 0,330 330,1020
-Worker number.
+worker number,|
 
 1168
 00:38:43,420 --> 00:38:44,600
 0,630
-I'm.
 
 1169
 00:38:44,660 --> 00:38:46,580
 0,720 720,1290 1290,1740 1740,1830 1830,1920
-Xu still connect to the
+{so,you} still connect to the
 
 1170
 00:38:46,580 --> 00:38:47,930
 0,270 270,780 780,1020 1020,1200 1200,1350
-same worker even though they
+same worker, even though they
 
 1171
 00:38:47,930 --> 00:38:50,540
 0,480 480,1350 1980,2280 2280,2520 2520,2610
-have failed yeah, so in
+have failed.| Yeah, so in
 
 1172
 00:38:50,540 --> 00:38:52,730
 0,180 180,540 540,1440 1500,1830 1830,2190
-this case, basically call worker
+this case,| basically {call_worker -}
 
 1173
 00:38:52,730 --> 00:38:54,620
 0,150 150,300 300,870 900,1320 1320,1890
-would just continue returning false
+would just continue returning false|
 
 1174
 00:38:55,100 --> 00:38:57,470
 0,600 600,690 690,870 870,1410 1530,2370
-and you know this thirteen
+and you know this {Go,routine}
 
 1175
 00:38:57,470 --> 00:38:59,540
@@ -5874,22 +5870,22 @@ that's a specific for this
 1176
 00:38:59,540 --> 00:39:00,800
 0,300 300,450 450,570 570,810 810,1260
-work, or we just continue
+{worker -},| we just continue
 
 1177
 00:39:00,800 --> 00:39:03,100
 0,120 120,660 690,1440
-to loop loop.
+to loop, {}|
 
 1178
 00:39:03,420 --> 00:39:06,540
 0,360 390,1110 1110,1860 1890,2760 2790,3120
-And eventually when the ma
+and eventually when the map,
 
 1179
 00:39:06,540 --> 00:39:08,640
 0,240 240,330 330,930 930,1440 1590,2100
-and the coordinator has determined
+when the coordinator has determined
 
 1180
 00:39:08,640 --> 00:39:09,360
@@ -5899,17 +5895,17 @@ that all the tasks have
 1181
 00:39:09,360 --> 00:39:11,220
 0,630 630,960 960,1050 1050,1620 1650,1860
-finished close the channel and
+finished,| {it'll,close} the channel and
 
 1182
 00:39:11,220 --> 00:39:12,510
 0,150 150,570 570,750 750,900 900,1290
-then discover team will exit.
+then {like,Go,routine -} will exit.|
 
 1183
 00:39:13,220 --> 00:39:15,560
 0,600 600,1230 1440,1710 1710,2160 2160,2340
-So there could potentially like
+So there could potentially like,|
 
 1184
 00:39:15,560 --> 00:39:17,780
@@ -5919,12 +5915,12 @@ if all your workers continue
 1185
 00:39:17,780 --> 00:39:19,160
 0,510 510,630 630,750 750,900 900,1380
-crashing you have like hundreds
+crashing,| you have like hundreds
 
 1186
 00:39:19,160 --> 00:39:20,930
 0,120 120,300 300,750 750,1290 1440,1770
-of new workers joining like
+of new workers joining,| like
 
 1187
 00:39:20,930 --> 00:39:21,890
@@ -5934,27 +5930,27 @@ you could potentially have a
 1188
 00:39:21,890 --> 00:39:23,390
 0,300 300,480 480,690 690,1110 1110,1500
-lot of go routines just
+lot of Go routines just
 
 1189
 00:39:23,390 --> 00:39:24,410
 0,270 270,450 450,690 690,780 780,1020
-there just like I can't
+there,| just like I can't
 
 1190
 00:39:24,410 --> 00:39:25,310
 0,390 390,480 480,720 720,810 810,900
-contact my work or I
+contact my work| or I
 
 1191
 00:39:25,310 --> 00:39:27,350
 0,210 210,570 570,660 660,1230 1530,2040
-can't contact my worker but
+can't contact my worker,| but
 
 1192
 00:39:27,380 --> 00:39:28,850
 0,330 330,420 420,720 720,900 900,1470
-once the task is finished,
+once the task is finished,|
 
 1193
 00:39:28,850 --> 00:39:30,260
@@ -5964,12 +5960,12 @@ this all of them will
 1194
 00:39:30,260 --> 00:39:31,200
 0,480
-exit.
+exit
 
 1195
 00:39:31,200 --> 00:39:32,500
 0,750
-Properly.
+properly.|
 
 1196
 00:39:39,440 --> 00:39:41,480
