@@ -5970,12 +5970,12 @@ properly.|
 1196
 00:39:39,440 --> 00:39:41,480
 0,480 510,960 990,1530 1530,1920 1920,2040
-Cool alright, so that's an
+Cool, alright, so that's an
 
 1197
 00:39:41,480 --> 00:39:44,030
 0,480 480,840 840,1500 1800,2310 2310,2550
-example with channels and now
+example with channels| and now
 
 1198
 00:39:44,030 --> 00:39:45,230
@@ -5985,17 +5985,17 @@ let's move on to some
 1199
 00:39:45,230 --> 00:39:46,600
 0,210 210,780
-of the.
+of the
 
 1200
 00:39:46,600 --> 00:39:48,850
 0,330 330,780 1050,1380 1380,2100 2100,2250
-More like your questions and
+more like your questions and
 
 1201
 00:39:48,850 --> 00:39:49,810
 0,360 360,480 480,660 660,810 810,960
-bugs and things like that,
+bugs and things like that,|
 
 1202
 00:39:49,810 --> 00:39:51,340
@@ -6005,7 +6005,7 @@ so some common but passing
 1203
 00:39:51,340 --> 00:39:52,690
 0,300 300,690 690,780 780,900 900,1350
-design mistakes that we saw
+design mistakes that we saw|
 
 1204
 00:39:52,900 --> 00:39:54,760
@@ -6015,12 +6015,12 @@ was pushing too much work
 1205
 00:39:54,760 --> 00:39:56,620
 0,90 90,180 180,870 1140,1470 1470,1860
-to the coordinator so essentially
+to the coordinator,| so essentially
 
 1206
 00:39:56,620 --> 00:39:59,260
 0,270 270,360 360,1140 1140,1830 1920,2640
-making the coordinator bottleneck and
+making the coordinator bottleneck| and
 
 1207
 00:39:59,260 --> 00:40:01,540
@@ -6030,27 +6030,27 @@ this included both the coordinator
 1208
 00:40:01,540 --> 00:40:04,750
 0,360 1050,1770 1770,1830 1830,2610 2700,3210
-and sorting the results or
+and sorting the results| or
 
 1209
 00:40:04,750 --> 00:40:06,790
 0,60 60,720 720,1050 1050,1380 1380,2040
-the coordinator reading file contents
+the coordinator reading file contents|
 
 1210
 00:40:06,820 --> 00:40:08,620
 0,540 540,780 780,1020 1020,1230 1230,1800
-whereas a lot of the.
+whereas a lot of the
 
 1211
 00:40:09,140 --> 00:40:10,340
 0,480 510,750 750,810 810,1140 1140,1200
-A kind of beauty of
+{} kind of beauty of
 
 1212
 00:40:10,340 --> 00:40:12,560
 0,240 240,720 720,900 900,1290 1830,2220
-map reduce is that all
+{mapreduce -} is that,| all
 
 1213
 00:40:12,560 --> 00:40:15,110
@@ -6060,17 +6060,17 @@ the state all the computation
 1214
 00:40:15,110 --> 00:40:17,240
 0,570 570,840 840,960 960,1680
-happens on the workers.
+happens on the workers.|
 
 1215
 00:40:17,660 --> 00:40:20,630
 0,540 540,720 720,1260 1260,1920 2310,2970
-Um, and another coin, um,
+{} And another con, {}
 
 1216
 00:40:20,840 --> 00:40:22,250
 0,390 390,600 600,810 810,930 930,1410
-it's not really a mistake
+it's not really a mistake,|
 
 1217
 00:40:22,250 --> 00:40:23,720
@@ -6080,27 +6080,27 @@ but potentially something to think
 1218
 00:40:23,720 --> 00:40:24,950
 0,300 300,510 540,960 960,1140 1140,1230
-about is how many are
+about is,| how many {RPCs
 
 1219
 00:40:24,950 --> 00:40:26,720
 0,390 390,480 480,570 570,1080 1080,1770
-PCs are you sending and
+-} are you sending| and
 
 1220
 00:40:26,930 --> 00:40:27,840
 0,420
-like.
+like,
 
 1221
 00:40:28,070 --> 00:40:29,210
 0,270 270,510 510,810 810,1050 1050,1140
-Do you really need to
+do you really need to
 
 1222
 00:40:29,210 --> 00:40:30,530
 0,210 210,390 390,600 600,1140 1140,1320
-send that many {RBC's -}
+send that many {RPCs -},|
 
 1223
 00:40:30,800 --> 00:40:32,330
@@ -6110,17 +6110,17 @@ so for example sending an
 1224
 00:40:32,330 --> 00:40:33,890
 0,480 480,600 600,990 990,1350 1350,1560
-RBC to check whether there's
+RPC to check whether there's
 
 1225
 00:40:33,890 --> 00:40:35,510
 0,60 60,360 360,660 660,1380 1440,1620
-a math task available and
+a map task available| and
 
 1226
 00:40:35,510 --> 00:40:36,830
 0,150 150,390 390,810 810,1200 1200,1320
-then sending another RBC to
+then sending another RPC to
 
 1227
 00:40:36,830 --> 00:40:37,910
@@ -6130,12 +6130,12 @@ ask like give me a
 1228
 00:40:37,910 --> 00:40:39,820
 0,750 780,1470
-task is.
+task,| is
 
 1229
 00:40:39,820 --> 00:40:41,320
 0,150 150,450 450,990 990,1380 1380,1500
-A little redundant and you
+{} little redundant| and you
 
 1230
 00:40:41,320 --> 00:40:42,820
@@ -6145,7 +6145,7 @@ want to try and reduce
 1231
 00:40:42,850 --> 00:40:45,190
 0,420 450,1260 1260,1680 1680,2010 2010,2340
-the number and types of
+the number and types of,|
 
 1232
 00:40:45,280 --> 00:40:46,930
@@ -6160,17 +6160,17 @@ the master or the coordinator
 1234
 00:40:48,730 --> 00:40:49,980
 0,120 120,210 210,750
-and the worker.
+and the worker,|
 
 1235
 00:40:50,460 --> 00:40:52,260
 0,390 420,600 600,780 780,1170 1470,1800
-Um, but these were like
+{} but these were, like
 
 1236
 00:40:52,260 --> 00:40:53,280
 0,120 120,270 270,510 510,570 570,1020
-they were passed the test
+they were passed the test|
 
 1237
 00:40:53,280 --> 00:40:54,720
@@ -6180,7 +6180,7 @@ and it's just things we
 1238
 00:40:54,720 --> 00:40:56,220
 0,240 240,330 330,630 630,930
-wanted to point out.
+wanted to point out.|
 
 1239
 00:40:57,610 --> 00:41:00,160
