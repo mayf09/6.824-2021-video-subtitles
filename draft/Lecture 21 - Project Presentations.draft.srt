@@ -1675,17 +1675,17 @@ me and you guys can
 336
 00:10:35,560 --> 00:10:37,160
 0,180 180,600 840,1380
-see my winner.
+see my pointer?|
 
 337
 00:10:37,420 --> 00:10:40,990
 0,510 1020,1920 1950,2520 2970,3450 3450,3570
-Yes, okay, cool everyone, I'm
+Yes.| Okay, cool,| everyone, I'm
 
 338
 00:10:40,990 --> 00:10:42,100
 0,480 480,750 750,900 900,960 960,1110
-Kevin and today I'm going
+Kevin| and today I'm going
 
 339
 00:10:42,100 --> 00:10:43,240
@@ -1695,7 +1695,7 @@ to be presenting this very
 340
 00:10:43,420 --> 00:10:45,010
 0,450 450,630 630,900 900,1110 1110,1590
-creatively named system called sis,
+creatively named system called Sys,|
 
 341
 00:10:45,310 --> 00:10:46,450
@@ -1710,12 +1710,12 @@ for collecting aggregate statistics in
 343
 00:10:48,490 --> 00:10:49,980
 0,150 150,570 570,960 960,1260
-a privacy preserving way.
+a privacy preserving way,|
 
 344
 00:10:50,440 --> 00:10:51,610
 0,210 210,390 390,480 480,720 720,1170
-And so the last presentation
+and so the last presentation
 
 345
 00:10:51,610 --> 00:10:52,780
@@ -1725,12 +1725,12 @@ was good leading to my
 346
 00:10:52,780 --> 00:10:53,950
 0,540 570,840 840,990 990,1080 1080,1170
-project, um, so for the
+project,| {} so for the
 
 347
 00:10:53,950 --> 00:10:55,960
 0,240 240,570 570,750 750,1530 1830,2010
-most part in 64, we've
+most part in 6.824,| we've
 
 348
 00:10:55,960 --> 00:10:56,800
@@ -1745,12 +1745,12 @@ build reliable systems in the
 350
 00:10:58,510 --> 00:11:00,490
 0,420 420,630 630,1110 1110,1410 1410,1980
-presence of visiting a philosophical
+presence of byzantine or []
 
 351
 00:11:00,490 --> 00:11:02,080
 0,390 540,840 840,1110 1110,1200 1200,1590
-yours, so servers can crash
+fails,| so servers can crash|
 
 352
 00:11:02,080 --> 00:11:03,160
@@ -1760,7 +1760,7 @@ and clients are generally well
 353
 00:11:03,160 --> 00:11:05,110
 0,660 870,1470 1470,1590 1590,1710 1710,1950
-behaved, but from this talk,
+behaved,| but from this talk,|
 
 354
 00:11:05,110 --> 00:11:05,890
@@ -1770,7 +1770,7 @@ I hope you learn some
 355
 00:11:05,890 --> 00:11:07,030
 0,150 150,720 720,840 840,1020 1020,1140
-new concepts on how we
+new concepts| on how we
 
 356
 00:11:07,030 --> 00:11:08,950
@@ -1785,7 +1785,7 @@ guarantees in the presence of
 358
 00:11:10,150 --> 00:11:11,890
 0,390 390,1050 1290,1470 1470,1680 1680,1740
-visiting failures on behalf of
+byzantine failures| on behalf of
 
 359
 00:11:11,890 --> 00:11:13,240
@@ -1795,7 +1795,7 @@ both clients and servers within
 360
 00:11:13,240 --> 00:11:13,780
 0,60 60,450
-the system.
+the system.|
 
 361
 00:11:14,450 --> 00:11:15,980
@@ -1810,17 +1810,17 @@ we're going to use to
 363
 00:11:16,580 --> 00:11:18,350
 0,270 270,420 420,990 990,1320 1440,1770
-achieve these guarantees are graphic
+achieve these guarantees are cryptographic
 
 364
 00:11:18,350 --> 00:11:20,330
 0,420 420,630 630,870 870,1260 1260,1980
-primitives, such as multiparty computation
+primitives,| such as multiparty computation
 
 365
 00:11:20,510 --> 00:11:22,010
 0,270 270,390 390,630 630,1260 1350,1500
-and zero knowledge proofs and
+and {zero-knowledge -} proofs| and
 
 366
 00:11:22,010 --> 00:11:23,600
@@ -1830,12 +1830,12 @@ also distributed computing primitives, such
 367
 00:11:23,600 --> 00:11:24,620
 0,120 120,870
-as broadcast.
+as broadcast.|
 
 368
 00:11:27,040 --> 00:11:28,510
 0,180 180,360 360,480 480,1170 1200,1470
-Okay, so for simplicity let's
+Okay, so for simplicity,| let's
 
 369
 00:11:28,510 --> 00:11:29,020
@@ -1850,17 +1850,17 @@ build a system that computes
 371
 00:11:30,100 --> 00:11:31,240
 0,570 720,900 900,960 960,1080 1080,1140
-sums so we're going to
+sums,| so we're going to
 
 372
 00:11:31,240 --> 00:11:32,500
 0,270 270,360 360,840 840,1110 1110,1260
-have an aggregation server that
+have an aggregation server,| that
 
 373
 00:11:32,500 --> 00:11:34,210
 0,570 570,690 690,870 870,1320 1320,1710
-stores a key value store,
+stores {} key value store,|
 
 374
 00:11:34,450 --> 00:11:35,260
@@ -1875,27 +1875,27 @@ to be indices for some
 376
 00:11:36,280 --> 00:11:38,560
 0,1440 1500,1860 1860,1950 1950,2220 2220,2280
-statistics and the values are
+statistics| and the values are
 
 377
 00:11:38,560 --> 00:11:39,280
 0,120 120,180 180,300 300,630 630,720
-going to be tacos of
+going to be tuples of
 
 378
 00:11:39,280 --> 00:11:40,080
 0,630
-sums.
+sums,|
 
 379
 00:11:40,850 --> 00:11:41,450
 0,240 240,330 330,450 450,540 540,600
-And we're gonna have a
+and we're gonna have a
 
 380
 00:11:41,450 --> 00:11:42,830
 0,150 150,210 210,900 990,1200 1200,1380
-bunch of clients, so each
+bunch of clients,| so each
 
 381
 00:11:42,830 --> 00:11:43,790
@@ -1905,27 +1905,27 @@ client is gonna have some
 382
 00:11:43,790 --> 00:11:45,470
 0,540 540,870 870,1140 1140,1470 1470,1680
-identity say its client IP
+identity,| say its client IP
 
 383
 00:11:45,470 --> 00:11:46,280
 0,510
-address.
+addresses,|
 
 384
 00:11:46,380 --> 00:11:47,160
 0,270 270,450 450,510 510,690 690,780
-It's going to have the
+it's going to have the
 
 385
 00:11:47,160 --> 00:11:48,210
 0,330 330,420 420,480 480,990 990,1050
-index of the statistic, they
+index of the statistic they
 
 386
 00:11:48,210 --> 00:11:49,710
 0,240 240,720 1020,1170 1170,1290 1290,1500
-wanna bump and it's also
+wanna bump| and it's also
 
 387
 00:11:49,710 --> 00:11:51,030
@@ -1935,17 +1935,17 @@ going to have its private
 388
 00:11:51,030 --> 00:11:51,820
 0,540
-inputs.
+inputs,|
 
 389
 00:11:52,040 --> 00:11:53,000
 0,240 240,300 300,570 570,780 780,960
-So the most three forward
+so the most {straightforward -}
 
 390
 00:11:53,000 --> 00:11:53,600
 0,120 120,240 240,390 390,480 480,600
-thing to do is we
+thing to do is,| we
 
 391
 00:11:53,600 --> 00:11:54,710
@@ -1955,47 +1955,47 @@ can have all the clients
 392
 00:11:54,710 --> 00:11:56,540
 0,540 690,1020 1020,1170 1170,1680 1680,1830
-send, um their inputs that
+send {} their inputs {to,the}
 
 393
 00:11:56,540 --> 00:11:57,800
 0,690 690,810 810,900 900,1020 1020,1260
-surprises and they can compete
+{server,as,is}| and they can compete
 
 394
 00:11:57,800 --> 00:11:58,660
 0,60 60,630
-the sums.
+the sums,|
 
 395
 00:11:59,120 --> 00:11:59,990
 0,240 240,360 360,480 480,630 630,870
-Now see this is bad
+but obviously this is bad,|
 
 396
 00:11:59,990 --> 00:12:01,790
 0,270 270,600 600,1140 1140,1320 1320,1800
-because now this leads everything
+because now this leads everything,
 
 397
 00:12:01,820 --> 00:12:03,050
 0,360 510,660 660,870 870,1020 1020,1230
-right, the server will learn
+right,| the server will learn
 
 398
 00:12:03,050 --> 00:12:04,610
 0,90 90,360 360,960 1080,1380 1380,1560
-the client's identity, it'll learn
+the client's identity,| it'll learn
 
 399
 00:12:04,610 --> 00:12:06,050
 0,60 60,330 330,540 540,960 1140,1440
-the index being bumped and
+the index being bumped| and
 
 400
 00:12:06,050 --> 00:12:07,580
 0,240 240,660 690,870 870,1140 1140,1530
-they'll learn their private input.
+they'll learn their private input.|
 
 401
 00:12:09,130 --> 00:12:09,640
@@ -2005,12 +2005,12 @@ So we can do a
 402
 00:12:09,640 --> 00:12:10,810
 0,150 150,270 270,690 780,1020 1020,1170
-little bit better, um, we
+little bit better,| {} we
 
 403
 00:12:10,810 --> 00:12:12,220
 0,120 120,390 390,510 510,750 750,1410
-can compute these sums privately
+can compute these sums privately,|
 
 404
 00:12:12,340 --> 00:12:13,750
@@ -2020,7 +2020,7 @@ if we deploy to non
 405
 00:12:13,750 --> 00:12:15,490
 0,420 420,1050 1320,1560 1560,1650 1650,1740
-colluding servers, and then we're
+colluding servers,| and then we're
 
 406
 00:12:15,490 --> 00:12:16,810
@@ -2035,22 +2035,22 @@ secret share their input to
 408
 00:12:18,190 --> 00:12:19,380
 0,150 150,240 240,360 360,990
-each of these servers.
+each of these servers,|
 
 409
 00:12:19,620 --> 00:12:20,520
 0,180 180,540 540,630 630,810 810,900
-So as we said in
+so as we said in
 
 410
 00:12:20,520 --> 00:12:21,990
 0,180 210,540 540,1050 1050,1230 1230,1470
-the previous presentation so each
+the previous presentation,| so each
 
 411
 00:12:21,990 --> 00:12:24,390
 0,540 570,1020 1020,1410 1410,1920 1950,2400
-server, each signature alone leaks,
+server, each signature alone leaks
 
 412
 00:12:24,390 --> 00:12:25,950
@@ -2060,7 +2060,7 @@ no information about the client's
 413
 00:12:25,950 --> 00:12:28,020
 0,240 240,780 1050,1230 1230,1860 1920,2070
-private input, but still the
+private input,| but still the
 
 414
 00:12:28,020 --> 00:12:29,250
@@ -2070,7 +2070,7 @@ servers can add up these
 415
 00:12:29,250 --> 00:12:31,020
 0,510 510,660 660,1080 1110,1230 1230,1770
-shares and compute a local
+shares| and compute a local
 
 416
 00:12:31,200 --> 00:12:32,550
@@ -2080,12 +2080,12 @@ version of the key value
 417
 00:12:32,550 --> 00:12:33,200
 0,450
-store.
+store,|
 
 418
 00:12:33,660 --> 00:12:34,560
 0,150 150,240 240,570 570,810 810,900
-And then later when the
+and then later when the
 
 419
 00:12:34,560 --> 00:12:35,880
@@ -2095,12 +2095,12 @@ servers want to recover the
 420
 00:12:35,880 --> 00:12:37,620
 0,330 330,840 930,1200 1200,1350 1350,1740
-actual sums they can combine
+actual sums,| they can combine
 
 421
 00:12:37,620 --> 00:12:38,760
 0,120 120,390 390,600 600,840 840,1140
-their local key value stores
+their local key value stores|
 
 422
 00:12:38,760 --> 00:12:40,260
@@ -2110,17 +2110,17 @@ to reconstruct the global key
 423
 00:12:40,260 --> 00:12:41,140
 0,240 240,600
-value store.
+value store,|
 
 424
 00:12:42,120 --> 00:12:42,630
 0,120 120,240 240,300 300,360 360,510
-And this is a little
+and this is a little
 
 425
 00:12:42,630 --> 00:12:44,310
 0,120 120,510 510,900 900,1260 1500,1680
-bit better at least if
+bit better,| at least if
 
 426
 00:12:44,310 --> 00:12:45,120
@@ -2130,7 +2130,7 @@ one of these servers is
 427
 00:12:45,120 --> 00:12:46,560
 0,540 690,840 840,930 930,1320 1320,1440
-honest, then the servers are
+honest,| then the servers are
 
 428
 00:12:46,560 --> 00:12:47,460
@@ -2140,12 +2140,12 @@ still gonna learn the client's
 429
 00:12:47,460 --> 00:12:48,780
 0,570 600,900 900,1110 1110,1230 1230,1320
-identity, they're still going to
+identity,| they're still going to
 
 430
 00:12:48,780 --> 00:12:50,550
 0,330 330,420 420,840 840,1530 1590,1770
-learn the client's index, but
+learn the client's index,| but
 
 431
 00:12:50,550 --> 00:12:51,690
@@ -2155,7 +2155,7 @@ now instead of learning each
 432
 00:12:51,690 --> 00:12:53,490
 0,450 450,840 840,1350 1440,1680 1680,1800
-individual client's input they're going
+individual client's input,| they're going
 
 433
 00:12:53,490 --> 00:12:54,690
@@ -2165,17 +2165,17 @@ to learn the sums of
 434
 00:12:54,690 --> 00:12:56,340
 0,210 210,660 660,900 930,1530
-all clients and inputs.
+all clients and inputs,|
 
 435
 00:12:56,880 --> 00:12:58,500
 0,180 180,300 300,510 510,900 900,1620
-Okay, so that's better but
+okay, so that's better,| but
 
 436
 00:12:58,500 --> 00:12:59,760
 0,150 150,240 240,720 720,1020 1020,1260
-still a problem, namely that
+still a problem,| namely that
 
 437
 00:12:59,760 --> 00:13:01,830
@@ -2190,7 +2190,7 @@ still leak a lot of
 439
 00:13:03,060 --> 00:13:04,000
 0,630
-information.
+information.|
 
 440
 00:13:04,510 --> 00:13:05,230
@@ -2200,22 +2200,22 @@ So how can we fix
 441
 00:13:05,230 --> 00:13:06,400
 0,390 450,690 690,810 810,1020 1020,1170
-this, we can make things
+this,| we can make things
 
 442
 00:13:06,400 --> 00:13:08,470
 0,720 930,1440 1440,1590 1590,1920 1920,2070
-anonymous, so we're still going
+anonymous,| so we're still going
 
 443
 00:13:08,470 --> 00:13:09,640
 0,60 60,540 570,870 870,1050 1050,1170
-to adapt a set up
+to adapt {} {setup -}
 
 444
 00:13:09,640 --> 00:13:11,020
 0,150 150,210 210,660 870,1140 1140,1380
-from the floor, but now
+from the [floor],| but now
 
 445
 00:13:11,020 --> 00:13:11,800
@@ -2230,12 +2230,12 @@ server a public key for
 447
 00:13:13,450 --> 00:13:14,260
 0,540
-encryption.
+encryption,|
 
 448
 00:13:14,840 --> 00:13:15,830
 0,150 150,300 300,420 420,870 870,990
-And that each client is
+and that each client is
 
 449
 00:13:15,830 --> 00:13:17,000
@@ -2245,12 +2245,12 @@ going to encrypt each of
 450
 00:13:17,000 --> 00:13:18,060
 0,150 150,840
-their shares.
+their shares,|
 
 451
 00:13:18,380 --> 00:13:19,130
 0,150 150,420 420,480 480,690 690,750
-And instead of having the
+and instead of having the
 
 452
 00:13:19,130 --> 00:13:20,780
@@ -2260,7 +2260,7 @@ clients send their shares directly
 453
 00:13:20,780 --> 00:13:21,860
 0,90 90,600 630,900 900,960 960,1080
-to servers, now we're going
+to servers,| now we're going
 
 454
 00:13:21,860 --> 00:13:22,580
@@ -2270,27 +2270,27 @@ to have a layer of
 455
 00:13:22,580 --> 00:13:24,340
 0,330 330,810 810,930 930,1470
-forwarding proxies in between.
+forwarding proxies in between,|
 
 456
 00:13:24,980 --> 00:13:25,550
 0,180 180,270 270,390 390,510 510,570
-And so what's going to
+and so what's going to
 
 457
 00:13:25,550 --> 00:13:26,480
 0,210 210,330 330,420 420,780 780,930
-happen is the client's going
+happen is,| the clients going
 
 458
 00:13:26,480 --> 00:13:28,370
 0,90 90,570 690,990 990,1290 1290,1890
-to send their encrypted chairs
+to send their encrypted shares
 
 459
 00:13:28,490 --> 00:13:31,520
 0,390 390,1350 1380,1560 1560,2400 2400,3030
-VIA broadcast does zis proxies
+via broadcast to those proxies|
 
 460
 00:13:31,700 --> 00:13:33,200
@@ -2305,27 +2305,27 @@ each share to their respective
 462
 00:13:34,880 --> 00:13:35,760
 0,690
-servers.
+servers,|
 
 463
 00:13:36,160 --> 00:13:37,750
 0,210 210,510 510,630 630,1200 1200,1590
-And then the aggregation can
+and then the aggregation can
 
 464
 00:13:37,750 --> 00:13:39,820
 0,240 240,990 990,1230 1230,1740
-go as as explained.
+go as as explained,|
 
 465
 00:13:40,720 --> 00:13:41,230
 0,180 180,270 270,420 420,450 450,510
-And so what are the
+and so what are the
 
 466
 00:13:41,230 --> 00:13:43,060
 0,330 330,690 690,1140 1440,1710 1710,1830
-privacy guarantees here if at
+privacy guarantees here,| if at
 
 467
 00:13:43,060 --> 00:13:44,050
@@ -2335,7 +2335,7 @@ least one of these properties
 468
 00:13:44,050 --> 00:13:45,520
 0,150 150,810 900,1050 1050,1110 1110,1470
-is honest, then the proxy
+is honest,| then the proxy
 
 469
 00:13:45,520 --> 00:13:46,750
@@ -2345,22 +2345,22 @@ will still learn the client's
 470
 00:13:46,750 --> 00:13:48,310
 0,630 900,1080 1080,1230 1230,1440 1440,1560
-identity and it'll learn some
+identity| and it'll learn some
 
 471
 00:13:48,310 --> 00:13:49,990
 0,300 300,900 900,1200 1200,1320 1320,1680
-timing information based on when
+timing information,| based on when
 
 472
 00:13:49,990 --> 00:13:51,430
 0,330 360,720 720,900 900,990 990,1440
-the client set the share.
+the client set the share,|
 
 473
 00:13:52,100 --> 00:13:54,140
 0,150 150,420 420,840 840,1170 1170,2040
-But nothing else because z
+but nothing else,| because the
 
 474
 00:13:54,140 --> 00:13:55,070
@@ -2370,17 +2370,17 @@ shares are encrypted to the
 475
 00:13:55,070 --> 00:13:56,390
 0,330 330,480 480,570 570,1020 1050,1320
-server, so they learn nothing
+server,| so they learn nothing
 
 476
 00:13:56,390 --> 00:13:57,240
 0,240 240,540
-from that.
+from that,|
 
 477
 00:13:58,100 --> 00:13:59,510
 0,150 150,360 360,780 1020,1230 1230,1410
-And then if at least
+and then if at least
 
 478
 00:13:59,510 --> 00:14:00,470
@@ -2390,7 +2390,7 @@ one of the servers is
 479
 00:14:00,470 --> 00:14:01,670
 0,510 540,660 660,720 720,1050 1050,1200
-honest, then the servers will
+honest,| then the servers will
 
 480
 00:14:01,670 --> 00:14:03,230
@@ -2405,47 +2405,47 @@ based on the proxy forward
 482
 00:14:04,490 --> 00:14:05,040
 0,210
-it.
+it,|
 
 483
 00:14:05,180 --> 00:14:06,110
 0,210 210,300 300,630 630,840 840,930
-It will certainly learn the
+it will certainly learn the
 
 484
 00:14:06,110 --> 00:14:07,790
 0,420 420,570 570,660 660,1290 1380,1680
-index of the statistic and
+index of the statistic| and
 
 485
 00:14:07,790 --> 00:14:08,820
 0,180 180,240 240,720
-learn the sum.
+learn the sum,|
 
 486
 00:14:09,260 --> 00:14:11,570
 0,450 450,660 660,1350 1800,2040 2040,2310
-But most importantly as long
+but most importantly as long
 
 487
 00:14:11,570 --> 00:14:13,220
 0,180 180,420 420,960 960,1080 1080,1650
-as not both a proxy
+as not both {} proxy
 
 488
 00:14:13,220 --> 00:14:14,450
 0,240 240,270 270,630 630,720 720,1230
-and a Silver are compromised
+and {} server are compromised
 
 489
 00:14:14,450 --> 00:14:15,890
 0,90 90,180 180,450 450,1020 1140,1440
-at the same time, then
+at the same time,| then
 
 490
 00:14:15,890 --> 00:14:17,120
 0,150 150,600 600,840 840,1110 1110,1230
-this design an links the
+this design {unlinks -} the
 
 491
 00:14:17,120 --> 00:14:18,530
@@ -2455,17 +2455,17 @@ identity from the index being
 492
 00:14:18,530 --> 00:14:19,610
 0,300 300,450 450,540 540,930 930,1080
-bumped, which is exactly what
+bumped,| which is exactly what
 
 493
 00:14:19,610 --> 00:14:20,340
 0,90 90,450
-we wanted.
+we wanted,
 
 494
 00:14:20,700 --> 00:14:21,840
 0,300 300,390 390,540 540,660 660,1140
-Right, so this is great,
+right,| so this is great,|
 
 495
 00:14:21,960 --> 00:14:23,280
@@ -2475,7 +2475,7 @@ but this also leads to
 496
 00:14:23,280 --> 00:14:25,200
 0,360 360,930 1020,1380 1380,1530 1530,1920
-another problem, namely that now
+another problem,| namely that now
 
 497
 00:14:25,200 --> 00:14:27,120
@@ -2485,7 +2485,7 @@ clients can hide behind the
 498
 00:14:27,120 --> 00:14:28,500
 0,420 420,510 510,930 930,1290 1290,1380
-privacy and anonymity guarantees of
+privacy| and anonymity guarantees of
 
 499
 00:14:28,500 --> 00:14:29,850
@@ -2495,12 +2495,12 @@ the system to send bad
 500
 00:14:29,850 --> 00:14:30,660
 0,630
-inputs.
+inputs,
 
 501
 00:14:30,900 --> 00:14:31,920
 0,330 330,480 480,690 690,930 930,1020
-Right, so let's say the
+right,| so let's say the
 
 502
 00:14:31,920 --> 00:14:33,570
@@ -2510,12 +2510,12 @@ system expected client inputs to
 503
 00:14:33,570 --> 00:14:35,010
 0,120 120,390 390,510 510,1020 1140,1440
-be zeros and ones well
+be zeros and ones,| well
 
 504
 00:14:35,010 --> 00:14:36,300
 0,330 330,480 480,630 630,690 690,1290
-behind this veil of privacy,
+behind this [] of privacy,|
 
 505
 00:14:36,330 --> 00:14:37,350
@@ -2530,27 +2530,27 @@ the secret share of a
 507
 00:14:38,190 --> 00:14:40,020
 0,510 540,720 720,810 810,1410 1560,1830
-billion through the system, and
+billion through the system,| and
 
 508
 00:14:40,020 --> 00:14:41,250
 0,210 210,390 390,540 540,1110 1110,1230
-now it can undetected Li
+now it can {undetectably -}
 
 509
 00:14:41,250 --> 00:14:43,260
 0,540 540,750 750,1200 1590,1740 1740,2010
-skew, this sum so clearly
+skew this sum,| so clearly
 
 510
 00:14:43,260 --> 00:14:44,400
 0,150 150,300 300,930
-this is bad.
+this is bad.|
 
 511
 00:14:45,280 --> 00:14:46,210
 0,270 270,510 510,690 690,810 810,930
-Let's fix this we want
+Let's fix this,| we want
 
 512
 00:14:46,210 --> 00:14:46,990
@@ -2560,47 +2560,47 @@ to make the system more
 513
 00:14:46,990 --> 00:14:48,550
 0,690 840,1140 1140,1290 1290,1440 1440,1560
-robust so what we're going
+robust,| so what we're going
 
 514
 00:14:48,550 --> 00:14:49,760
 0,90 90,330 330,960
-to do is.
+to do is,|
 
 515
 00:14:50,320 --> 00:14:51,010
 0,150 150,270 270,330 330,540 540,690
-We're going to have each
+we're going to have each
 
 516
 00:14:51,010 --> 00:14:52,060
 0,330 330,630 630,780 780,1020 1020,1050
-client generate what's called a
+client generate,| what's called a
 
 517
 00:14:52,060 --> 00:14:53,770
 0,210 210,540 540,1080 1110,1560 1560,1710
-zero knowledge proof over their
+{zero-knowledge -} proof over their
 
 518
 00:14:53,770 --> 00:14:55,180
 0,840 840,990 990,1170 1170,1320 1320,1410
-shares and send these to
+shares| and send these to
 
 519
 00:14:55,180 --> 00:14:56,160
 0,90 90,750
-the servers.
+the servers,|
 
 520
 00:14:56,680 --> 00:14:58,420
 0,150 150,210 210,360 360,990 1050,1740
-And the many servers collect
+and the many servers collect
 
 521
 00:14:58,420 --> 00:14:59,860
 0,180 180,540 540,1080 1170,1320 1320,1440
-these journals proofs, they can
+these zero-knowledge proofs,| they can
 
 522
 00:14:59,860 --> 00:15:02,830
@@ -2610,7 +2610,7 @@ interactively check that the client's
 523
 00:15:02,830 --> 00:15:04,540
 0,420 420,1020 1020,1140 1140,1440 1440,1710
-inputs, actually the client shares
+inputs,| actually the client shares
 
 524
 00:15:04,540 --> 00:15:07,210
@@ -2620,22 +2620,22 @@ actually reconstruct to some well
 525
 00:15:07,210 --> 00:15:08,180
 0,270 270,720
-formed input.
+formed input,|
 
 526
 00:15:08,640 --> 00:15:09,900
 0,300 300,720 720,900 900,1110 1110,1260
-And because this proof is
+and because this proof is
 
 527
 00:15:09,900 --> 00:15:11,700
 0,150 150,360 360,1020 1110,1620 1620,1800
-in zero knowledge, um, it
+in {zero-knowledge -},| {} it
 
 528
 00:15:11,700 --> 00:15:13,920
 0,210 210,660 660,1230 1260,1860 1860,2220
-leaves nothing about a input
+leaves nothing about {} input,
 
 529
 00:15:13,950 --> 00:15:14,970
@@ -2645,17 +2645,17 @@ other than that it's well
 530
 00:15:14,970 --> 00:15:15,660
 0,450
-formed.
+formed,|
 
 531
 00:15:16,160 --> 00:15:17,120
 0,180 180,270 270,480 480,570 570,960
-And so again our privacy
+and so again our privacy
 
 532
 00:15:17,120 --> 00:15:18,200
 0,330 330,480 480,540 540,960 960,1080
-properties stay the same, the
+properties stay the same,| the
 
 533
 00:15:18,200 --> 00:15:19,490
@@ -2665,32 +2665,32 @@ property still learns that client's
 534
 00:15:19,490 --> 00:15:20,870
 0,630 720,930 930,1080 1080,1260 1260,1380
-identity is still learns some
+identity,| is still learns some
 
 535
 00:15:20,870 --> 00:15:22,970
 0,270 270,1080 1470,1620 1620,1890 1890,2100
-timing information, the server learns
+timing information,| the server learns
 
 536
 00:15:22,970 --> 00:15:23,930
 0,240 240,630 630,720 720,870 870,960
-timing information, it learns the
+timing information,| it learns the
 
 537
 00:15:23,930 --> 00:15:25,130
 0,300 300,420 420,570 570,630 630,1200
-index and learns the sums.
+index and learns the sums,|
 
 538
 00:15:25,510 --> 00:15:26,500
 0,180 180,330 330,480 480,930 930,990
-But now we've protected the
+but now we've protected the
 
 539
 00:15:26,500 --> 00:15:28,720
 0,330 330,660 660,1170 1170,1830 1980,2220
-system against malicious clients because
+system against malicious clients,| because
 
 540
 00:15:28,720 --> 00:15:30,070
@@ -2700,27 +2700,27 @@ it'll only accept well formed
 541
 00:15:30,070 --> 00:15:30,860
 0,600
-inputs.
+inputs,|
 
 542
 00:15:31,610 --> 00:15:32,570
 0,150 150,240 240,390 390,510 510,960
-And so this is great,
+and so this is great,|
 
 543
 00:15:32,720 --> 00:15:34,670
 0,870 870,1050 1050,1350 1350,1740 1740,1950
-still there's another problem which
+still there's another problem,| which
 
 544
 00:15:34,670 --> 00:15:36,050
 0,120 120,360 360,660 660,780 780,1380
-is that servers can crash
+is that servers can crash|
 
 545
 00:15:36,260 --> 00:15:37,190
 0,120 120,180 180,300 300,480 480,930
-and we can lose data
+and we can lose data,|
 
 546
 00:15:37,220 --> 00:15:38,270
@@ -2730,17 +2730,17 @@ so we obviously need both
 547
 00:15:38,270 --> 00:15:39,380
 0,330 330,420 420,600 600,1020 1020,1110
-servers to be online in
+servers to be online| in
 
 548
 00:15:39,380 --> 00:15:41,420
 0,180 180,480 600,1230 1380,1650 1650,2040
-order to reconstruct a global
+order to reconstruct {} global
 
 549
 00:15:41,420 --> 00:15:42,460
 0,150 150,360 360,780
-key value store.
+key value store.|
 
 550
 00:15:42,840 --> 00:15:43,410
@@ -2755,7 +2755,7 @@ to make the system more
 552
 00:15:44,190 --> 00:15:45,150
 0,360 360,450 450,540 540,720 720,960
-reliable, we can do what
+reliable,| we can do what
 
 553
 00:15:45,150 --> 00:15:46,350
@@ -2765,57 +2765,57 @@ we know best which is
 554
 00:15:46,350 --> 00:15:48,090
 0,150 150,600 600,690 690,1350 1500,1740
-to replicate the servers and
+to replicate the servers| and
 
 555
 00:15:48,090 --> 00:15:49,200
 0,90 90,180 180,390 390,720 720,1110
-so we can use ras
+so we can use raft
 
 556
 00:15:49,200 --> 00:15:50,190
 0,180 180,690 690,780 780,900 900,990
-san replication, or we can
+style replication,| or we can
 
 557
 00:15:50,190 --> 00:15:51,930
 0,180 180,330 330,870 960,1410 1410,1740
-also use primary backup Tyler
+also use primary backup style
 
 558
 00:15:51,930 --> 00:15:52,760
 0,570
-probation.
+replication.|
 
 559
 00:15:53,340 --> 00:15:54,450
 0,240 240,300 300,630 630,900 900,1110
-Now the question is okay
+Now the question is,| okay
 
 560
 00:15:54,450 --> 00:15:55,950
 0,150 150,330 330,480 480,1320 1350,1500
-with all this replication all
+with all this replication, all
 
 561
 00:15:55,950 --> 00:15:57,450
 0,150 150,570 570,1140 1170,1410 1410,1500
-this cryptographic machinery and on
+this cryptographic machinery| and on
 
 562
 00:15:57,450 --> 00:15:58,350
 0,120 120,420 420,660 660,810 810,900
-this message routing, can we
+this message routing,| can we
 
 563
 00:15:58,350 --> 00:16:00,380
 0,240 240,810 990,1230 1230,1740
-still achieve good throughput.
+still achieve good throughput,|
 
 564
 00:16:01,180 --> 00:16:01,930
 0,210 210,300 300,510 510,630 630,750
-And it turns out that
+and it turns out that
 
 565
 00:16:01,930 --> 00:16:03,040
@@ -2825,12 +2825,12 @@ we can actually paralyze the
 566
 00:16:03,040 --> 00:16:04,540
 0,300 300,600 600,930 960,1170 1170,1500
-server step here that does
+server step here,| that does
 
 567
 00:16:04,540 --> 00:16:06,340
 0,210 210,510 510,1200 1230,1560 1560,1800
-proof checking navigation, which is
+proof checking navigation,| which is
 
 568
 00:16:06,340 --> 00:16:07,240
@@ -2840,12 +2840,12 @@ likely to be the bottleneck
 569
 00:16:07,240 --> 00:16:08,590
 0,60 60,150 150,660 1020,1200 1200,1350
-of the system and what's
+of the system| and what's
 
 570
 00:16:08,590 --> 00:16:09,490
 0,120 120,180 180,480 480,780 780,900
-going to happen is that
+going to happen is that,|
 
 571
 00:16:09,490 --> 00:16:10,720
@@ -2855,12 +2855,12 @@ proxies are going to hash
 572
 00:16:10,720 --> 00:16:12,190
 0,660 690,900 900,1230 1230,1350 1350,1470
-partition their inputs to each
+partition,| their inputs to each
 
 573
 00:16:12,190 --> 00:16:13,510
 0,90 90,210 210,840 1110,1230 1230,1320
-of these servers and then
+of these servers| and then
 
 574
 00:16:13,510 --> 00:16:14,530
@@ -2870,12 +2870,12 @@ each of these servers in
 575
 00:16:14,530 --> 00:16:16,330
 0,150 180,660 660,1050 1080,1320 1320,1800
-a reduce step will combine
+{} reduce step,| will combine
 
 576
 00:16:16,330 --> 00:16:17,740
 0,150 150,600 600,720 720,960 960,1410
-their intermediate key value stores
+their intermediate key value stores|
 
 577
 00:16:17,800 --> 00:16:19,090
@@ -2890,12 +2890,12 @@ value store containing all the
 579
 00:16:20,350 --> 00:16:21,020
 0,600
-sums.
+sums.|
 
 580
 00:16:21,910 --> 00:16:22,720
 0,510
-Okay.
+Okay?|
 
 581
 00:16:23,200 --> 00:16:24,010
@@ -2905,7 +2905,7 @@ And so now the final
 582
 00:16:24,010 --> 00:16:24,880
 0,300 300,390 390,510 510,540 540,870
-question is did I implement
+question is,| did I implement
 
 583
 00:16:24,880 --> 00:16:25,870
@@ -2915,12 +2915,12 @@ all this before the due
 584
 00:16:25,870 --> 00:16:26,540
 0,360
-date.
+date,|
 
 585
 00:16:27,040 --> 00:16:28,570
 0,420 420,690 690,1080 1140,1290 1290,1530
-Unfortunately, no but I did
+unfortunately, no,| but I did
 
 586
 00:16:28,570 --> 00:16:29,500
@@ -2930,7 +2930,7 @@ make it much of the
 587
 00:16:29,500 --> 00:16:30,280
 0,150 150,450 450,570 570,630 630,780
-way there, so I'm gonna
+way there,| so I'm gonna
 
 588
 00:16:30,280 --> 00:16:32,140
@@ -2945,17 +2945,17 @@ the non replicated, non parallel
 590
 00:16:33,550 --> 00:16:34,400
 0,240 240,300 300,540
-version of it.
+version of it.|
 
 591
 00:16:34,700 --> 00:16:36,680
 0,240 240,990 1020,1680 1680,1830 1830,1980
-Then quickly switch to my
+{So,I'm,going,to} quickly switch to my
 
 592
 00:16:36,680 --> 00:16:37,780
 0,180 180,900
-other laptop.
+other laptop,|
 
 593
 00:16:42,520 --> 00:16:43,480
@@ -2965,22 +2965,22 @@ I gotta stop sharing this
 594
 00:16:43,480 --> 00:16:44,320
 0,120 120,600
-one first.
+one first.|
 
 595
 00:16:46,630 --> 00:16:47,740
 0,840
-Yes.
+Yes,
 
 596
 00:16:52,620 --> 00:16:55,120
 0,420 450,810 810,1440 1770,2220
-Cool okay so great.
+cool,| okay, so great,|
 
 597
 00:16:55,430 --> 00:16:56,630
 0,480 480,720 720,960 960,1110 1110,1200
-So on, these right two
+so, on these right two
 
 598
 00:16:56,630 --> 00:16:57,290
@@ -2990,17 +2990,17 @@ terminals are going to be
 599
 00:16:57,290 --> 00:16:58,100
 0,90 90,510 510,630 630,690 690,810
-with servers, so I'm going
+with servers,| so I'm going
 
 600
 00:16:58,100 --> 00:16:59,040
 0,90 90,300 300,600
-to run them.
+to run them,|
 
 601
 00:17:00,640 --> 00:17:02,080
 0,120 120,300 300,780 780,900 900,1440
-It is implemented in rust,
+it is implemented in Rust,|
 
 602
 00:17:02,200 --> 00:17:03,490
@@ -3015,22 +3015,22 @@ up these two properties in
 604
 00:17:04,480 --> 00:17:05,320
 0,60 60,540
-the middle.
+the middle,|
 
 605
 00:17:07,420 --> 00:17:08,080
 0,150 150,270 270,330 330,420 420,660
-And then on the left
+and then on the left
 
 606
 00:17:08,080 --> 00:17:09,490
 0,330 330,390 390,570 570,930 960,1410
-terminal I'm just gonna simulate
+terminal,| I'm just gonna simulate
 
 607
 00:17:09,490 --> 00:17:10,940
 0,90 90,390 390,630 630,1230
-a thousand honest coins.
+a thousand honest clients.|
 
 608
 00:17:11,820 --> 00:17:12,720
@@ -3045,37 +3045,37 @@ the clients are generating their
 610
 00:17:14,430 --> 00:17:15,660
 0,240 240,540 540,660 660,990 990,1230
-input sharing and generating zero
+input sharing| and generating {zero-knowledge
 
 611
 00:17:15,660 --> 00:17:17,010
 0,240 240,720 780,1050 1050,1230 1230,1350
-knowledge proofs and sign them
+-} proofs| and sending them
 
 612
 00:17:17,010 --> 00:17:18,120
 0,180 180,900
-with proxies.
+with proxies,|
 
 613
 00:17:18,320 --> 00:17:19,220
 0,120 120,180 180,510 510,600 600,900
-And the prices are simply
+and the proxies are simply
 
 614
 00:17:19,220 --> 00:17:20,780
 0,480 480,720 720,810 810,900 900,1560
-forwarding them to the servers.
+forwarding them to the servers,|
 
 615
 00:17:21,280 --> 00:17:22,270
 0,150 150,270 270,570 570,900 900,990
-And then here finally on
+and then here finally on
 
 616
 00:17:22,270 --> 00:17:23,170
 0,60 60,330 330,660 660,780 780,900
-the server side, they're going
+the server side,| they're going
 
 617
 00:17:23,170 --> 00:17:23,950
@@ -3085,12 +3085,12 @@ to be checking all the
 618
 00:17:23,950 --> 00:17:26,020
 0,570 660,1080 1080,1470 1500,1830 1830,2070
-proofs and if the inputs
+proofs| and if the inputs
 
 619
 00:17:26,020 --> 00:17:26,830
 0,90 90,150 150,360 360,510 510,810
-are in fact well formed,
+are in fact well formed,|
 
 620
 00:17:26,830 --> 00:17:27,400
@@ -3105,12 +3105,12 @@ to its local key value
 622
 00:17:28,840 --> 00:17:30,070
 0,330 720,930 930,1020 1020,1110 1110,1230
-store and then at some
+store| and then at some
 
 623
 00:17:30,070 --> 00:17:31,300
 0,210 210,420 420,630 630,720 720,1230
-time later when the servers
+time later,| when the servers
 
 624
 00:17:31,300 --> 00:17:32,560
@@ -3120,7 +3120,7 @@ want to reconstruct the final
 625
 00:17:32,560 --> 00:17:33,700
 0,480 480,570 570,690 690,840 840,1140
-statistics they can just combine
+statistics,| they can just combine
 
 626
 00:17:33,700 --> 00:17:34,780
@@ -3130,7 +3130,7 @@ their key value source to
 627
 00:17:34,780 --> 00:17:35,740
 0,270 270,360 360,840
-recover the sums.
+recover the sums.|
 
 628
 00:17:36,760 --> 00:17:38,110
@@ -3140,12 +3140,12 @@ And that's it for my
 629
 00:17:38,110 --> 00:17:39,400
 0,630 630,810 810,1050 1050,1110 1110,1290
-presentation, I'm happy to take
+presentation,| I'm happy to take
 
 630
 00:17:39,400 --> 00:17:40,380
 0,120 120,690
-any questions.
+any questions.|
 
 631
 00:17:45,830 --> 00:17:46,430
@@ -3155,7 +3155,7 @@ Do you have any questions
 632
 00:17:46,430 --> 00:17:48,700
 0,270 270,360 360,870
-from the audience.
+from the audience?|
 
 633
 00:17:54,380 --> 00:17:54,950
@@ -3165,17 +3165,17 @@ I guess I have a
 634
 00:17:54,950 --> 00:17:56,600
 0,540 600,990 1020,1200 1200,1410 1410,1650
-question, um, so like with
+question,| {} so like with
 
 635
 00:17:56,600 --> 00:17:58,130
 0,180 180,300 300,750 750,960 960,1530
-what you implemented so far
+what you implemented so far,|
 
 636
 00:17:58,220 --> 00:18:00,560
 0,360 360,630 630,1290 1410,1830 1980,2340
-what sort of like which
+what sort of, like which
 
 637
 00:18:00,560 --> 00:18:01,580
@@ -3185,12 +3185,12 @@ at what point do you
 638
 00:18:01,580 --> 00:18:03,830
 0,510 690,1440 1650,1980 1980,2160 2160,2250
-um, accept, what point do
+{} accept,| what point do
 
 639
 00:18:03,830 --> 00:18:05,510
 0,420 420,990 990,1290 1290,1500 1500,1680
-tolerate failures and like stuff
+tolerate failures| and like stuff
 
 640
 00:18:05,510 --> 00:18:06,560
@@ -3200,12 +3200,12 @@ like that I can talk
 641
 00:18:06,560 --> 00:18:07,700
 0,210 210,630
-about the.
+about the
 
 642
 00:18:08,660 --> 00:18:10,730
 0,600 600,660 660,1140 1170,1440 1440,2070
-Reliability of your current implementation.
+reliability of your current implementation.|
 
 643
 00:18:11,640 --> 00:18:13,290
@@ -3215,27 +3215,27 @@ Yeah, so the reliability of
 644
 00:18:13,290 --> 00:18:15,270
 0,60 60,330 330,780 780,1440 1680,1980
-the current commission is not
+the current implementation is not
 
 645
 00:18:15,270 --> 00:18:17,460
 0,420 780,1590 1590,1800 1800,1860 1860,2190
-great, mostly because the servers
+great,| mostly because the servers
 
 646
 00:18:17,460 --> 00:18:19,110
 0,180 180,810 1260,1470 1470,1560 1560,1650
-are complicated, so for the
+aren't replicated,| so for the
 
 647
 00:18:19,110 --> 00:18:21,040
 0,660 660,840 840,1770
-proxies, um because.
+proxies,| {} because,
 
 648
 00:18:21,450 --> 00:18:23,100
 0,240 240,600 600,1110 1110,1200 1200,1650
-The clients broadcast the proxies,
+the clients broadcast the proxies,|
 
 649
 00:18:23,100 --> 00:18:24,450
@@ -3245,27 +3245,27 @@ all you require is that
 650
 00:18:24,780 --> 00:18:25,590
 0,210 210,270 270,360 360,690 690,810
-one of the properties is
+one of the proxies is
 
 651
 00:18:25,590 --> 00:18:26,140
 0,240
-up.
+up,|
 
 652
 00:18:26,540 --> 00:18:27,050
 0,180 180,240 240,300 300,390 390,510
-So if we have two
+so if we have two
 
 653
 00:18:27,050 --> 00:18:29,120
 0,510 600,1110 1140,1530 1530,1860 1860,2070
-proxies, we can tolerate one
+proxies,| we can tolerate one
 
 654
 00:18:29,120 --> 00:18:30,080
 0,390 390,450 450,510 510,870 870,960
-failure of the proxies and
+failure of the proxies| and
 
 655
 00:18:30,080 --> 00:18:31,610
@@ -3275,7 +3275,7 @@ will still get the messages
 656
 00:18:31,610 --> 00:18:33,740
 0,480 570,900 900,960 960,1500 1770,2130
-to um the servers, but
+to {} the servers,| but
 
 657
 00:18:33,800 --> 00:18:34,640
@@ -3285,27 +3285,27 @@ if any of the servers
 658
 00:18:34,640 --> 00:18:35,780
 0,180 180,630 660,840 840,960 960,1140
-goes down, then you're just
+goes down,| then you're just
 
 659
 00:18:35,780 --> 00:18:36,950
 0,120 120,240 240,480 480,600 600,1170
-not going to be disrupt
+not going to be reconstruct
 
 660
 00:18:37,100 --> 00:18:38,030
 0,150 150,240 240,600 630,750 750,930
-on the data for that.
+on the data for that.|
 
 661
 00:18:41,670 --> 00:18:42,870
 0,240 240,420 420,600 600,870 870,1200
-Um, is it only for
+{} Is it only for
 
 662
 00:18:42,870 --> 00:18:44,310
 0,540 540,690 690,840 840,960 960,1440
-sounds or did you implemented
+sums| or did you implemented
 
 663
 00:18:44,310 --> 00:18:46,410
@@ -3320,17 +3320,17 @@ operates on the all those
 665
 00:18:48,000 --> 00:18:48,840
 0,630
-inputs.
+inputs.|
 
 666
 00:18:49,620 --> 00:18:51,450
 0,390 390,570 570,1140 1170,1680 1680,1830
-Yeah, for now I'm I've
+Yeah, for now, {} I've
 
 667
 00:18:51,450 --> 00:18:53,220
 0,420 420,840 840,960 960,1320 1320,1770
-only implemented for some, but
+only implemented for sums,| but
 
 668
 00:18:53,220 --> 00:18:54,750
@@ -3340,37 +3340,37 @@ basically with this additive secret
 669
 00:18:54,750 --> 00:18:56,100
 0,180 180,570 600,930 930,1020 1020,1350
-sharing scheme, you can compute
+sharing scheme,| you can compute
 
 670
 00:18:56,100 --> 00:18:58,260
 0,570 600,1110 1230,1680 1680,1800 1800,2160
-any linear function, you want.
+any linear function you want,|
 
 671
 00:18:59,000 --> 00:19:00,320
 0,450 450,690 690,870 870,1170 1170,1320
-And maybe more complex ones
+and maybe more complex ones
 
 672
 00:19:00,320 --> 00:19:02,150
 0,60 60,450 450,750 870,1440 1590,1830
-are possible but I'm still
+are possible,| but I'm still
 
 673
 00:19:02,150 --> 00:19:03,300
 0,150 150,450 450,600 600,810
-haven't explored those yet.
+haven't explored those yet,|
 
 674
 00:19:04,100 --> 00:19:04,940
 0,150 150,300 300,510 540,690 690,840
-It turns out at least
+it turns out at least
 
 675
 00:19:04,940 --> 00:19:06,830
 0,570 570,1080 1080,1440 1440,1650 1650,1890
-in practice sounds probably get
+in practice,| sums probably get
 
 676
 00:19:06,830 --> 00:19:08,150
@@ -3380,22 +3380,22 @@ like {90%,of -} the way
 677
 00:19:08,150 --> 00:19:08,820
 0,390
-there.
+there.|
 
 678
 00:19:10,350 --> 00:19:12,030
 0,630 630,1050 1050,1440 1440,1500 1500,1680
-Wow, so what do you
+{} So what do you
 
 679
 00:19:12,510 --> 00:19:14,140
 0,210 210,660 660,930 930,1320
-mean numbers looked like.
+performance numbers looked like?|
 
 680
 00:19:14,790 --> 00:19:16,500
 0,540 540,840 840,1200 1290,1590 1590,1710
-Performance numbers yeah, so the
+Performance numbers, yeah,| so the
 
 681
 00:19:16,500 --> 00:19:17,220
@@ -3405,7 +3405,7 @@ main things we want to
 682
 00:19:17,220 --> 00:19:19,170
 0,570 570,1110 1200,1560 1560,1650 1650,1950
-measure are for the client
+measure are,| for the client
 
 683
 00:19:19,170 --> 00:19:20,910
@@ -3415,17 +3415,17 @@ side clients on computation and
 684
 00:19:20,910 --> 00:19:21,980
 0,300 300,840
-client bandwidth.
+client bandwidth,|
 
 685
 00:19:22,080 --> 00:19:23,400
 0,330 330,630 630,840 840,1230 1230,1320
-I have some numbers at
+I have some numbers,| at
 
 686
 00:19:23,400 --> 00:19:25,050
 0,120 120,240 240,480 480,1200 1290,1650
-least for client computation, I'm
+least for client computation,| I'm
 
 687
 00:19:25,050 --> 00:19:26,340
@@ -3440,32 +3440,32 @@ proofs takes less than a
 689
 00:19:27,930 --> 00:19:29,370
 0,150 150,720 720,930 930,1050 1050,1440
-few milliseconds so it's very
+few milliseconds,| so it's very
 
 690
 00:19:29,490 --> 00:19:31,410
 0,780 960,1080 1080,1440 1440,1680 1680,1920
-lightweight, the bandwidth is just
+lightweight,| the bandwidth is just
 
 691
 00:19:31,410 --> 00:19:32,540
 0,30 30,180 180,930
-a few kilobytes.
+a few kilobytes,|
 
 692
 00:19:32,840 --> 00:19:34,700
 0,210 210,420 420,1080 1110,1440 1440,1860
-And then for the throughput
+and then for the throughput
 
 693
 00:19:34,700 --> 00:19:36,020
 0,90 90,150 150,390 390,810 840,1320
-on the server side, I'm
+on the server side,| I'm
 
 694
 00:19:36,140 --> 00:19:37,400
 0,390 390,600 600,810 810,990 990,1260
-actually ran on easy too,
+actually ran on {EC2 -},|
 
 695
 00:19:37,400 --> 00:19:38,660
@@ -3475,12 +3475,12 @@ but I only allocated four
 696
 00:19:38,660 --> 00:19:41,420
 0,450 450,570 570,1020 1620,2220 2430,2760
-cores to each server because
+cores to each server,| because
 
 697
 00:19:41,420 --> 00:19:42,350
 0,60 60,180 180,300 300,690 690,930
-I only had 64 cores
+I only had 64 cores|
 
 698
 00:19:42,350 --> 00:19:42,950
@@ -3495,27 +3495,27 @@ them to be on the
 700
 00:19:43,490 --> 00:19:44,870
 0,330 330,420 420,450 450,720 900,1380
-client, so I could remove
+client,| so I could remove
 
 701
 00:19:44,870 --> 00:19:46,160
 0,120 120,660 810,1050 1050,1170 1170,1290
-that bottleneck and so at
+that bottleneck| and so at
 
 702
 00:19:46,160 --> 00:19:47,600
 0,240 240,630 630,750 750,1230
-four cores I think.
+four cores,| I think,
 
 703
 00:19:49,450 --> 00:19:50,590
 0,180 180,270 270,480 480,690 690,1140
-What is that probably like
+what is that,| probably like
 
 704
 00:19:50,920 --> 00:19:52,420
 0,150 150,540 540,900 900,1020 1020,1500
-a thousand queries per second
+a thousand queries per second|
 
 705
 00:19:52,780 --> 00:19:54,040
@@ -3530,7 +3530,7 @@ if you paralyze by twenty
 707
 00:19:56,950 --> 00:19:58,300
 0,330 330,420 420,570 570,840 840,1350
-servers for each logical machine,
+servers for each logical machine,|
 
 708
 00:19:58,360 --> 00:19:59,740
@@ -3540,22 +3540,22 @@ they can probably achieve close
 709
 00:19:59,740 --> 00:20:02,260
 0,600 630,930 930,1380 1410,2400 2400,2520
-to {22,000,queries - -} per
+to {22000,queries - -} per
 
 710
 00:20:02,260 --> 00:20:02,900
 0,420
-second.
+second,|
 
 711
 00:20:03,110 --> 00:20:04,550
 0,300 330,540 540,630 630,870 870,1440
-But this is all run
+but this is all run
 
 712
 00:20:04,550 --> 00:20:05,390
 0,120 120,180 180,360 360,600 600,840
-on the same data center
+on the same data center,|
 
 713
 00:20:05,390 --> 00:20:06,440
@@ -3565,7 +3565,7 @@ so it doesn't factor into
 714
 00:20:06,860 --> 00:20:08,810
 0,660 690,1230 1350,1500 1500,1770 1770,1950
-latency, so the actual numbers
+latency,| so the actual numbers
 
 715
 00:20:08,810 --> 00:20:09,500
@@ -3575,7 +3575,7 @@ will probably be a little
 716
 00:20:09,500 --> 00:20:10,400
 0,90 90,270 270,390 390,600
-bit lower than that.
+bit lower than that.|
 
 717
 00:20:12,040 --> 00:20:12,940
@@ -3585,17 +3585,17 @@ I had a question about
 718
 00:20:12,940 --> 00:20:14,740
 0,180 180,1110 1230,1530 1530,1680 1680,1800
-your implementation, um, how do
+your implementation,| {} how do
 
 719
 00:20:14,740 --> 00:20:15,660
 0,240 240,570
-you do.
+you do,
 
 720
 00:20:16,010 --> 00:20:17,720
 0,240 240,420 420,510 510,1140 1320,1710
-So how do you actually
+so how do you actually
 
 721
 00:20:17,720 --> 00:20:19,430
@@ -3605,12 +3605,12 @@ implement your knowledge proofs and
 722
 00:20:19,430 --> 00:20:21,460
 0,510 690,1080 1080,1650
-code not theoretical.
+code not theoretical.|
 
 723
 00:20:21,770 --> 00:20:23,780
 0,450 480,720 720,1290 1290,1470 1470,2010
-Yeah that's a great question
+Yeah, that's a great question,|
 
 724
 00:20:24,170 --> 00:20:25,280
@@ -3620,27 +3620,27 @@ I can send you the
 725
 00:20:25,280 --> 00:20:27,830
 0,510 1080,1440 1440,1950 1950,2430 2430,2550
-paper that I implemented it
+paper, that I implemented it
 
 726
 00:20:27,830 --> 00:20:28,460
 0,300
-out.
+out,|
 
 727
 00:20:28,950 --> 00:20:30,750
 0,540 540,1170 1200,1440 1440,1680 1680,1800
-But it's it's not too
+but it's it's not too
 
 728
 00:20:30,750 --> 00:20:32,340
 0,600 600,1170 1170,1290 1290,1530 1530,1590
-complicated, basically it's just a
+complicated,| basically it's just a
 
 729
 00:20:32,340 --> 00:20:33,870
 0,210 210,330 330,690 690,900 900,1530
-bunch of finite field operations
+bunch of finite field operations|
 
 730
 00:20:33,870 --> 00:20:34,560
@@ -3650,7 +3650,7 @@ and so if you find
 731
 00:20:34,560 --> 00:20:35,790
 0,120 120,510 510,840 840,1020 1020,1230
-your file library, just follow
+your file library,| just follow
 
 732
 00:20:35,790 --> 00:20:36,990
@@ -3660,27 +3660,27 @@ the paper and follow the
 733
 00:20:36,990 --> 00:20:38,780
 0,570 930,1050 1050,1230 1230,1530
-steps and it's a.
+steps| and it's {}
 
 734
 00:20:39,100 --> 00:20:40,030
 0,210 210,360 360,570 570,840 840,930
-So much straight forward from
+so much {straightforward -} from
 
 735
 00:20:40,030 --> 00:20:41,020
 0,150 150,480 630,750 750,870 870,990
-that point as long as
+that point,| as long as
 
 736
 00:20:41,020 --> 00:20:41,800
 0,90 90,450
-you can.
+you can
 
 737
 00:20:42,340 --> 00:20:43,600
 0,360 360,480 480,960
-Decrease the paper.
+decrypt the paper.|
 
 738
 00:20:44,020 --> 00:20:45,430
@@ -3695,12 +3695,12 @@ is it possible to like
 740
 00:20:46,840 --> 00:20:49,160
 0,390 390,720 1260,2010
-test that like.
+test that,| like,
 
 741
 00:20:49,460 --> 00:20:50,120
 0,180 180,330 330,480 480,570 570,660
-Like, how would you know
+like, how would you know
 
 742
 00:20:50,120 --> 00:20:51,110
@@ -3710,17 +3710,17 @@ that it's working or not
 743
 00:20:51,110 --> 00:20:52,850
 0,510 960,1230 1230,1350 1350,1410 1410,1740
-working yeah, so I guess
+working.| Yeah, so I guess,|
 
 744
 00:20:52,880 --> 00:20:53,600
 0,180 180,270 270,450 450,660 660,720
-yeah I only showed the
+yeah, I only showed the
 
 745
 00:20:53,600 --> 00:20:55,760
 0,450 450,750 750,1350 1530,1830 1830,2160
-simulation with a honest clients,
+simulation with a honest clients,|
 
 746
 00:20:55,760 --> 00:20:57,080
@@ -3730,12 +3730,12 @@ but you can also generate
 747
 00:20:57,230 --> 00:20:58,850
 0,210 210,600 600,1230 1260,1530 1530,1620
-a summation with clients that
+a simulation with clients that
 
 748
 00:20:58,850 --> 00:21:00,110
 0,150 150,660 660,900 900,1140 1140,1260
-don't submit bad proofs and
+{} submit bad proofs| and
 
 749
 00:21:00,110 --> 00:21:01,640
@@ -3745,22 +3745,22 @@ then you can see them
 750
 00:21:01,640 --> 00:21:02,520
 0,180 180,660
-being rejected.
+being rejected.|
 
 751
 00:21:02,960 --> 00:21:04,100
 0,300 300,480 480,630 630,810 810,1140
-Okay, yeah that makes sense,
+Okay, yeah, that makes sense,
 
 752
 00:21:04,100 --> 00:21:05,260
 0,270 270,420 450,840
-thank you yeah.
+thank you.| Yeah.|
 
 753
 00:21:10,280 --> 00:21:13,730
 0,510 780,1410 1560,1770 1770,2250 2640,3450
-Great, thanks, pretty sweet eyes,
+Great, thanks, pretty sweet,| is
 
 754
 00:21:13,730 --> 00:21:14,780
@@ -3770,7 +3770,7 @@ the next group ready to
 755
 00:21:14,780 --> 00:21:15,540
 0,390
-go.
+go?|
 
 756
 00:21:17,760 --> 00:21:18,640
