@@ -1303,7 +1303,7 @@ be {} log things are
 262
 00:07:33,790 --> 00:07:35,890
 0,480 480,750 750,1140 1140,1710 1710,2100
-pretty fine grained,| {[] -}
+pretty {fine-grained -},| {[] -}
 
 263
 00:07:35,890 --> 00:07:37,100
@@ -3088,7 +3088,7 @@ reason I log, it's sort
 619
 00:17:50,530 --> 00:17:52,180
 0,90 90,210 210,450 450,960 1110,1650
-of a fine grain,| always
+of a {fine-grained -},| always
 
 620
 00:17:52,180 --> 00:17:52,960
@@ -4192,12 +4192,12 @@ RPC handlers
 840
 00:24:29,380 --> 00:24:33,640
 0,810 1470,2340 3360,3630 3630,4050 4050,4260
-atomic {or,serialized},| {} {so,you,know} fine
+atomic {or,serialized},| {} {so,you,know} {fine-grained
 
 841
 00:24:33,640 --> 00:24:35,590
 0,270 270,870 1020,1530 1530,1830 1830,1950
-grain locking,| {} and that
+-} locking,| {} and that
 
 842
 00:24:35,590 --> 00:24:36,700
@@ -4227,7 +4227,7 @@ careful with,| if you do
 847
 00:24:42,460 --> 00:24:43,870
 0,180 180,240 240,720 720,930 930,1410
-sort of coarse grained locking,|
+sort of {coarse-grained -} locking,|
 
 848
 00:24:44,200 --> 00:24:45,880
@@ -4827,12 +4827,12 @@ what is risky about this
 967
 00:28:39,990 --> 00:28:41,370
 0,270 270,360 360,930 930,1110 1110,1380
-sort of style of fine
+sort of style of {fine-grained
 
 968
 00:28:41,370 --> 00:28:42,620
 0,240 240,720
-grained locking.|
+-} locking.|
 
 969
 00:28:42,740 --> 00:28:43,550
@@ -5457,7 +5457,7 @@ and no change in between.|
 1093
 00:32:26,350 --> 00:32:28,510
 0,720 810,1260 1260,1680 1740,2010 2010,2160
-Okay, um, so okay, let
+Okay, {} so okay, let
 
 1094
 00:32:28,510 --> 00:32:29,950
@@ -5467,7 +5467,7 @@ me then talk a little
 1095
 00:32:29,950 --> 00:32:32,080
 0,120 120,300 300,420 420,1740 1740,2130
-bit about the implementation can
+bit about the implementation,| can
 
 1096
 00:32:32,110 --> 00:32:34,780
@@ -5477,17 +5477,17 @@ people read, can people read
 1097
 00:32:34,780 --> 00:32:35,780
 0,60 60,480
-the screen.
+the screen?|
 
 1098
 00:32:35,870 --> 00:32:39,140
 0,390 390,600 600,1170 2010,2430 2790,3270
-Sorry I'll follow yeah, um,
+Sorry, {I,have,a} {follow,question}.| Yeah. {}|
 
 1099
 00:32:39,170 --> 00:32:40,310
 0,300 300,420 420,600 600,720 720,1140
-so I think you mentioned
+So I think you mentioned
 
 1100
 00:32:40,310 --> 00:32:41,780
@@ -5497,27 +5497,27 @@ that we shouldn't lock around
 1101
 00:32:41,780 --> 00:32:43,520
 0,540 540,960 960,1170 1170,1380 1410,1740
-sending things over the ply
+sending things over the apply
 
 1102
 00:32:43,520 --> 00:32:45,220
 0,600 720,1170
-channel, um.
+channel. {}|
 
 1103
 00:32:45,720 --> 00:32:49,260
 0,1140 1410,2280 2280,2850 2850,3180 3180,3540
-Yes, um, although let me
+Yes, {} although let me,|
 
 1104
 00:32:49,500 --> 00:32:53,040
 0,420 1170,1410 1410,1950 2340,3210 3210,3540
-yeah it's risky because while
+yeah, it's risky,| because while
 
 1105
 00:32:53,040 --> 00:32:54,450
 0,150 150,510 510,630 630,1140 1170,1410
-you're holding the lock right
+you're holding the lock, right,|
 
 1106
 00:32:54,450 --> 00:32:55,380
@@ -5527,47 +5527,47 @@ you send on the apply
 1107
 00:32:55,380 --> 00:32:56,730
 0,420 420,570 570,750 750,990 990,1350
-channel, you might also block
+channel,| you might also block
 
 1108
 00:32:56,730 --> 00:32:57,630
 0,90 90,390 390,510 510,600 600,900
-I'm sitting on the apply
+{} sitting on the apply
 
 1109
 00:32:57,630 --> 00:33:00,930
 0,450 450,1050 1260,2040 2070,2790 3090,3300
-channel because the service you
+channel,| because the servers you
 
 1110
 00:33:00,930 --> 00:33:02,430
 0,120 120,720 720,960 960,1140 1140,1500
-know most the other site
+know most the other side
 
 1111
 00:33:02,430 --> 00:33:03,930
 0,210 210,330 330,660 660,1080 1080,1500
-must be reading correctly for
+must be reading, correct,| before
 
 1112
 00:33:03,930 --> 00:33:05,100
 0,120 120,330 330,780
-your room walk.
+you're {unlock -},|
 
 1113
 00:33:05,590 --> 00:33:06,550
 0,120 120,360 360,450 450,570 570,960
-Of course, you have buffered
+of course, you have buffered
 
 1114
 00:33:06,550 --> 00:33:07,780
 0,240 240,600 600,900 900,1200 1200,1230
-and buffered it changed a
+and buffered,| it changed a
 
 1115
 00:33:07,780 --> 00:33:08,710
 0,150 150,330 330,540 540,780 780,930
-little bit let's say we
+little bit,| let's say we
 
 1116
 00:33:08,710 --> 00:33:09,550
@@ -5577,37 +5577,37 @@ have a lot of buffer
 1117
 00:33:09,550 --> 00:33:11,560
 0,270 270,450 450,690 690,1080 1380,2010
-channel, but just an unbuttoned
+channel,| but just an unbuffered
 
 1118
 00:33:11,560 --> 00:33:12,580
 0,480
-channel.
+channel,|
 
 1119
 00:33:12,880 --> 00:33:16,090
 0,300 300,480 480,600 600,1230 2970,3210
-And so the reader if
+and so the reader, if
 
 1120
 00:33:16,090 --> 00:33:18,340
 0,180 180,390 390,990 1740,2040 2040,2250
-there's no reader then this
+there's no reader,| then this
 
 1121
 00:33:18,340 --> 00:33:20,080
 0,450 450,630 630,1230
-writer will block.
+writer will block,|
 
 1122
 00:33:20,770 --> 00:33:22,270
 0,270 270,540 540,930 930,1020 1020,1500
-And maybe holding the walk
+and maybe holding the lock|
 
 1123
 00:33:22,360 --> 00:33:24,190
 0,660 660,960 960,1170 1170,1350 1350,1830
-and um that might be
+and {} that might be
 
 1124
 00:33:24,190 --> 00:33:25,750
@@ -5617,27 +5617,26 @@ you know mainly to problems
 1125
 00:33:25,750 --> 00:33:27,730
 0,420 720,1200 1200,1350 1350,1440 1440,1980
-later and lead to deadlock.
+later| and lead to deadlocks.|
 
 1126
 00:33:28,510 --> 00:33:29,620
 0,690
-OH.
 
 1127
 00:33:30,460 --> 00:33:33,430
 0,630 630,780 780,1200 1230,1860 2400,2970
-Grant on that, um isn't
+[] on that, {} isn't
 
 1128
 00:33:33,430 --> 00:33:34,900
 0,150 150,330 330,720 720,1200 1260,1470
-this all right like like
+this all right,| like like
 
 1129
 00:33:34,900 --> 00:33:36,790
 0,120 120,510 510,990 990,1170 1170,1890
-the applied channel will never
+the apply channel will never,|
 
 1130
 00:33:37,150 --> 00:33:40,570
@@ -5647,87 +5646,87 @@ like the client who's calling
 1131
 00:33:40,570 --> 00:33:42,400
 0,600 930,1230 1230,1440 1440,1590 1590,1830
-raft well, dad would hold
+raft,| well [never] would hold
 
 1132
 00:33:42,400 --> 00:33:43,600
 0,90 90,450 450,690 690,840 840,1200
-the lock right there like
+the lock, right, they're like.|
 
 1133
 00:33:43,630 --> 00:33:45,490
 0,600 720,1110 1110,1230 1230,1650 1650,1860
-a you know not not
+{} You don't, not not
 
 1134
 00:33:45,490 --> 00:33:46,340
 0,420
-true.
+true,|
 
 1135
 00:33:46,370 --> 00:33:47,480
 0,180 180,330 330,570 570,870 870,1110
-Make some views are sort
+{here's - -} are sort
 
 1136
 00:33:47,480 --> 00:33:48,950
 0,210 330,900 900,1140 1140,1380 1380,1470
-of service quick sitting on
+of servers quick sitting on
 
 1137
 00:33:48,950 --> 00:33:50,000
 0,510
-top.
+top,|
 
 1138
 00:33:50,140 --> 00:33:52,120
 0,450 450,1050 1050,1230 1230,1620 1620,1980
-Calling start and reading from
+calling start and reading from
 
 1139
 00:33:52,120 --> 00:33:54,300
 0,420 600,1050 1050,1620
-the apply channel.
+the apply channel,|
 
 1140
 00:33:54,360 --> 00:33:56,400
 0,180 180,420 420,630 630,1200 1440,2040
-A bit cold start, start
+but it's called start,| start
 
 1141
 00:33:56,400 --> 00:33:57,450
 0,390 390,510 510,630 630,960 960,1050
-use, you know depending on
+is you know depending on
 
 1142
 00:33:57,450 --> 00:33:58,230
 0,120 120,240 240,420 420,600 600,780
-how you do it, you
+how you do it,| you
 
 1143
 00:33:58,230 --> 00:33:59,340
 0,330 330,450 450,510 510,900 930,1110
-start as a threat and
+start as a thread| and
 
 1144
 00:33:59,340 --> 00:34:00,690
 0,300 300,630 630,810 810,1050 1050,1350
-jumps into with that threat
+jumps into with that thread
 
 1145
 00:34:00,690 --> 00:34:02,430
 0,420 420,600 600,930 930,1410 1410,1740
-into the raft library and
+into the raft library| and
 
 1146
 00:34:02,430 --> 00:34:03,600
 0,180 180,330 330,390 390,540 540,1170
-at least in my implementation,
+at least in my implementation,|
 
 1147
 00:34:03,600 --> 00:34:04,740
 0,90 90,300 300,420 420,600 600,1140
-the first thing that a
+the first thing that {}
 
 1148
 00:34:04,860 --> 00:34:06,120
@@ -5737,67 +5736,67 @@ start function does is actually
 1149
 00:34:06,120 --> 00:34:07,580
 0,270 270,330 330,630 630,1020
-wrap the raf lok.
+wrap the raft lock,|
 
 1150
 00:34:10,250 --> 00:34:11,600
 0,600 630,780 780,1020 1020,1260 1260,1350
-And it can grab the
+and it can't grab the
 
 1151
 00:34:11,600 --> 00:34:13,310
 0,390 420,810 810,1110 1110,1350 1350,1710
-lock raf lock is actually
+lock, raft lock,| is actually
 
 1152
 00:34:13,310 --> 00:34:14,750
 0,600 600,750 750,1050 1050,1350 1350,1440
-either the apply Fred is
+either the apply thread is
 
 1153
 00:34:14,750 --> 00:34:15,830
 0,270 270,660 660,780 780,1020 1020,1080
-already holding it trying to
+already holding it,| trying to
 
 1154
 00:34:15,830 --> 00:34:16,820
 0,150 150,420 420,570 570,630 630,990
-get something on the applied
+get something on the apply
 
 1155
 00:34:16,820 --> 00:34:18,380
 0,390 660,930 930,990 990,1380 1380,1560
-channel, but the servers now
+channel,| but the servers now
 
 1156
 00:34:18,380 --> 00:34:19,400
 0,270 270,450 450,630 630,690 690,1020
-won't read from the applied
+won't read from the apply
 
 1157
 00:34:19,400 --> 00:34:20,330
 0,270 270,600 600,660 660,780 780,930
-channel depending on how you
+channel,| depending on how you
 
 1158
 00:34:20,330 --> 00:34:21,590
 0,180 180,270 270,630 630,1020 1020,1260
-set it up, but as
+set it up,| but as
 
 1159
 00:34:21,590 --> 00:34:22,460
 0,120 120,420 420,630 630,780 780,870
-you're saying that there is
+you're saying that,| there is
 
 1160
 00:34:22,460 --> 00:34:23,420
 0,90 90,330 330,630 660,870 870,960
-a risk here you've got
+a risk here,| you've got
 
 1161
 00:34:23,420 --> 00:34:24,230
 0,90 90,150 150,210 210,420 420,810
-to be a little careful.
+to be a little careful.|
 
 1162
 00:34:25,190 --> 00:34:26,330
@@ -5812,27 +5811,27 @@ just to like create a
 1164
 00:34:27,530 --> 00:34:30,170
 0,240 240,990 1410,2400 2400,2520 2520,2640
-new {thread's -} heirs, all
+new {thread -}.| {Yes,there's} all
 
 1165
 00:34:30,170 --> 00:34:31,610
 0,180 180,240 240,690 690,1140 1140,1440
-kinds of possible solutions here
+kinds of possible solutions here,|
 
 1166
 00:34:31,640 --> 00:34:32,930
 0,120 120,330 330,570 570,1050 1050,1290
-I'm just like warning you
+{} just like warning you
 
 1167
 00:34:32,930 --> 00:34:33,800
 0,270 270,390 390,690 690,870 870,870
-that you know a sh
+that you know {} there's
 
 1168
 00:34:34,190 --> 00:34:35,300
 0,480 480,660 660,810 810,960 960,1110
-alerting you that you have
+alerting you| that you have
 
 1169
 00:34:35,300 --> 00:34:36,020
@@ -5842,42 +5841,42 @@ to think a little bit
 1170
 00:34:36,020 --> 00:34:37,910
 0,210 210,360 360,480 480,1050 1380,1890
-about how you arrange this.
+about how you arrange this.|
 
 1171
 00:34:40,710 --> 00:34:41,840
 0,600
-Okay.
+Okay?|
 
 1172
 00:34:42,380 --> 00:34:44,810
 0,210 210,630 1290,1590 1590,1800 1860,2430
-But isn't isn't it amazing,
+But isn't isn't it using
 
 1173
 00:34:44,810 --> 00:34:46,310
 0,120 120,450 450,750 750,960 960,1500
-a single thread not sufficient,
+a single thread not sufficient,|
 
 1174
 00:34:46,310 --> 00:34:48,100
 0,450 450,570 570,930 930,1230
-because the thread that.
+because the thread that
 
 1175
 00:34:48,160 --> 00:34:49,180
 0,240 240,360 360,630 630,750 750,1020
-Puts it onto the pan
+puts it onto the apply
 
 1176
 00:34:49,180 --> 00:34:50,350
 0,330 330,450 450,720 720,810 810,1170
-channel will still be looking
+channel,| will still be looking
 
 1177
 00:34:50,350 --> 00:34:52,120
 0,180 480,840 1080,1290 1290,1590 1590,1770
-at the right, so it
+at data, right,| so it
 
 1178
 00:34:52,120 --> 00:34:53,200
@@ -5887,17 +5886,17 @@ still need to acquire the
 1179
 00:34:53,200 --> 00:34:54,140
 0,390
-lock.
+lock.|
 
 1180
 00:34:54,550 --> 00:34:56,380
 0,330 330,990 1020,1530 1530,1620 1620,1830
-OK, OK, let me get
+Okay, Okay, let me get
 
 1181
 00:34:56,380 --> 00:34:57,430
 0,240 240,420 420,570 570,810 810,1050
-back on your memory, it's
+back on {here -},| it's
 
 1182
 00:34:57,430 --> 00:34:58,360
@@ -5907,12 +5906,12 @@ easy to see that the
 1183
 00:34:58,360 --> 00:34:59,890
 0,450 450,630 630,990 1200,1410 1410,1530
-deadlock here, correct like if
+deadlock here, correct,| like if
 
 1184
 00:34:59,890 --> 00:35:01,210
 0,300 300,360 360,450 450,750 750,1320
-you're in the apply channel,
+you're in the apply channel,|
 
 1185
 00:35:01,240 --> 00:35:02,080
@@ -5922,22 +5921,22 @@ you're not reading from the
 1186
 00:35:02,080 --> 00:35:04,180
 0,360 360,660 660,930 930,1620 1650,2100
-apply channel because you're using
+apply channel,| because you're using
 
 1187
 00:35:04,180 --> 00:35:05,780
 0,150 150,450 450,1080
-your calling start.
+your calling start,|
 
 1188
 00:35:05,870 --> 00:35:07,640
 0,240 240,660 660,1050 1050,1230 1230,1770
-Like maybe I get because
+like maybe I get because,|
 
 1189
 00:35:08,600 --> 00:35:10,640
 0,540 600,930 930,1110 1110,1590 1620,2040
-and staff can't run because
+and start can't run because
 
 1190
 00:35:10,640 --> 00:35:11,960
@@ -5947,32 +5946,32 @@ the guy actually holds a
 1191
 00:35:11,960 --> 00:35:13,970
 0,420 420,1170 1170,1320 1320,1590 1590,2010
-lock, but he can't actually
+lock,| but he can't actually
 
 1192
 00:35:13,970 --> 00:35:15,140
 0,450 450,690 690,750 750,960 960,1170
-unlock because you can't write
+unlock,| because he can't write
 
 1193
 00:35:15,140 --> 00:35:16,190
 0,90 90,390 390,660 660,870 870,1050
-to apply channel because there's
+to apply channel,| because there's
 
 1194
 00:35:16,190 --> 00:35:18,830
 0,150 150,750 900,1620 2010,2370 2370,2640
-no reader a know there's
+no reader {} {you,know} there's
 
 1195
 00:35:18,830 --> 00:35:20,150
 0,270 270,720 720,1050 1050,1200 1200,1320
-easy construction areas where you
+easy {to,construct} scenarios,| where you
 
 1196
 00:35:20,150 --> 00:35:21,080
 0,120 120,300 300,450 450,840 840,930
-can get into deadlocks, of
+can get into deadlocks,| of
 
 1197
 00:35:21,080 --> 00:35:22,010
@@ -5982,17 +5981,17 @@ course you can avoid all
 1198
 00:35:22,010 --> 00:35:23,330
 0,150 150,690 750,1080 1080,1170 1170,1320
-these deadlocks that's the whole
+these deadlocks,| that's the whole
 
 1199
 00:35:23,330 --> 00:35:24,530
 0,360 360,450 450,720 720,1080 1080,1200
-goal and one way to
+goal| and one way to
 
 1200
 00:35:24,530 --> 00:35:25,760
 0,360 360,480 480,960 960,1020 1020,1230
-avoid these deadlocks is actually
+avoid these deadlocks is| actually
 
 1201
 00:35:25,760 --> 00:35:26,720
@@ -6002,17 +6001,17 @@ not to hold the lock
 1202
 00:35:26,720 --> 00:35:28,100
 0,270 270,780 780,900 900,990 990,1380
-while rewriting on the channel.
+while {read,writing} on the channel,|
 
 1203
 00:35:31,260 --> 00:35:31,950
 0,270 270,300 300,420 420,630 630,690
-There are other ways of
+there are other ways of
 
 1204
 00:35:31,950 --> 00:35:33,060
 0,180 180,270 270,540
-doing it too.
+doing it too,|
 
 1205
 00:35:34,370 --> 00:35:35,510
@@ -6022,7 +6021,7 @@ I just tell you in
 1206
 00:35:35,510 --> 00:35:37,070
 0,150 150,990 1080,1350 1350,1440 1440,1560
-my implementation, you know I
+my implementation,| you know I
 
 1207
 00:35:37,070 --> 00:35:38,180
@@ -6037,7 +6036,7 @@ have a whole box while
 1209
 00:35:39,980 --> 00:35:41,380
 0,270 270,390 390,480 480,810
-riding on a channel.
+writing on a channel,|
 
 1210
 00:35:41,380 --> 00:35:42,160
@@ -6047,32 +6046,30 @@ I think in general it's
 1211
 00:35:42,160 --> 00:35:43,440
 0,210 210,780
-bad practice.
+bad practice.|
 
 1212
 00:35:44,710 --> 00:35:50,060
 0,2040
-ZA.
 
 1213
 00:35:50,270 --> 00:35:51,480
 0,630
-Okay.
+Okay,
 
 1214
 00:35:51,540 --> 00:35:53,000
 0,930
-Bathroom.
+{back,to}
 
 1215
 00:35:53,000 --> 00:35:54,040
 0,480
-Crude.
+code.|
 
 1216
 00:35:54,690 --> 00:35:56,020
 0,780
-I'm.
 
 1217
 00:35:56,450 --> 00:35:58,340
@@ -6082,27 +6079,27 @@ Okay good, so I'm gonna
 1218
 00:35:58,340 --> 00:35:59,900
 0,180 180,240 240,600 600,990 990,1560
-show you one particular implementation
+show you one particular implementation,|
 
 1219
 00:35:59,900 --> 00:36:01,520
 0,540 540,540 1170,1260 1260,1440 1440,1620
-again, um, you know, this
+again, {} you know this
 
 1220
 00:36:01,520 --> 00:36:02,570
 0,120 120,240 240,720 720,840 840,1050
-is a meditation that I
+is an implementation that I
 
 1221
 00:36:02,570 --> 00:36:04,430
 0,300 300,930 960,1620 1620,1710 1710,1860
-wrote over january to get
+wrote over January| to get
 
 1222
 00:36:04,430 --> 00:36:05,420
 0,180 180,300 300,360 360,690 690,990
-ready for the class, so
+ready for the class,| so
 
 1223
 00:36:05,420 --> 00:36:06,920
@@ -6112,12 +6109,12 @@ there's nothing particularly special about
 1224
 00:36:06,920 --> 00:36:08,810
 0,240 360,1020 1020,1410 1410,1740 1740,1890
-it, um, you're purely for
+it,| {} {you,know} purely for
 
 1225
 00:36:08,810 --> 00:36:10,820
 0,660 1050,1350 1350,1470 1470,1920 1920,2010
-myself and I'm sure you
+myself| and I'm sure you
 
 1226
 00:36:10,820 --> 00:36:11,870
@@ -6127,12 +6124,12 @@ know there are things about
 1227
 00:36:11,870 --> 00:36:12,980
 0,270 270,390 390,540 540,750 750,1110
-it that you were to
+it,| that you were to
 
 1228
 00:36:13,010 --> 00:36:15,350
 0,600 600,930 930,1230 1500,2100 2100,2340
-violently object to a but
+violently object to,| {} but
 
 1229
 00:36:15,350 --> 00:36:16,280
@@ -6142,32 +6139,32 @@ it gives you a sense
 1230
 00:36:16,280 --> 00:36:16,880
 0,90 90,180 180,330 330,420 420,600
-you know what I did.
+you know what I did.|
 
 1231
 00:36:17,500 --> 00:36:19,420
 0,180 180,420 420,720 720,1170 1380,1920
-And so year ago, um
+And so here {I,go}, {}|
 
 1232
 00:36:19,450 --> 00:36:20,950
 0,180 180,480 480,570 570,840 840,1500
-so there's the raft structure,
+so there's the raft structure,|
 
 1233
 00:36:21,070 --> 00:36:22,390
 0,390 390,540 540,990 990,1080 1080,1320
-um I basically you know
+{} I basically you know
 
 1234
 00:36:22,390 --> 00:36:24,280
 0,510 510,750 750,1050 1200,1590 1590,1890
-copy figure to a usual
+copy figure 2,| {} {as,you,will}
 
 1235
 00:36:24,280 --> 00:36:25,210
 0,300 300,390 390,450 450,780 780,930
-see in the code that's
+see, in the code,| that's
 
 1236
 00:36:25,210 --> 00:36:25,990
@@ -6177,12 +6174,12 @@ going to be a lot
 1237
 00:36:26,020 --> 00:36:26,860
 0,180 180,480 480,690 690,780 780,840
-of figure two in the
+of figure 2 in the
 
 1238
 00:36:26,860 --> 00:36:29,260
 0,420 930,1440 1440,2070 2070,2190 2190,2400
-code, um, and you know
+code,| {} and you know
 
 1239
 00:36:29,260 --> 00:36:30,610
@@ -6192,22 +6189,22 @@ here's the main thing you
 1240
 00:36:30,610 --> 00:36:31,390
 0,150 150,420 420,480 480,660 660,780
-make probably the main thing
+make,| probably the main thing
 
 1241
 00:36:31,390 --> 00:36:32,320
 0,90 90,300 300,540 540,780 780,930
-to point out there's like
+to point out,| there's like,
 
 1242
 00:36:32,320 --> 00:36:33,490
 0,210 210,300 300,510 510,990 990,1170
-here's the big mutexes and
+here's the big mutexes| and
 
 1243
 00:36:33,490 --> 00:36:34,930
 0,180 180,300 300,630 630,930 930,1440
-there's the raf lock that
+here's the raft lock,| that
 
 1244
 00:36:34,930 --> 00:36:36,160
@@ -6217,17 +6214,17 @@ and my code will acquire
 1245
 00:36:36,160 --> 00:36:37,570
 0,420 420,630 630,840 840,900 900,1410
-release all over the place,
+release all over the place,|
 
 1246
 00:36:37,600 --> 00:36:38,560
 0,270 270,360 360,420 420,720 720,960
-but in a very coarse
+but in a very {coarse-grained
 
 1247
 00:36:38,560 --> 00:36:40,450
 0,210 210,600 1350,1500 1500,1560 1560,1890
-rate manner and the rest
+-} manner| and the rest
 
 1248
 00:36:40,450 --> 00:36:41,920
@@ -6237,17 +6234,17 @@ is just you know exactly
 1249
 00:36:41,920 --> 00:36:42,820
 0,90 90,180 180,660 660,720 720,900
-as you expect you know
+as you expect,| you know
 
 1250
 00:36:42,820 --> 00:36:44,680
 0,180 180,600 600,1020 1020,1470 1470,1860
-the precision state voltage state
+the Persistent state, Volatile state,
 
 1251
 00:36:44,680 --> 00:36:46,570
 0,240 240,720 720,900 900,1560 1560,1890
-leaders state and snapshot states
+Leader state and Snapshot state,|
 
 1252
 00:36:46,600 --> 00:36:47,470
@@ -6257,7 +6254,7 @@ I won't talk much about
 1253
 00:36:47,470 --> 00:36:48,610
 0,420 420,510 510,750 750,1050 1050,1140
-snapshot at all, since you
+snapshot at all,| since you
 
 1254
 00:36:48,610 --> 00:36:49,660
@@ -6267,17 +6264,17 @@ know that what we do
 1255
 00:36:49,660 --> 00:36:50,680
 0,240 240,660
-for friday.
+for Friday.|
 
 1256
 00:36:51,560 --> 00:36:54,590
 0,690 960,1500 1500,1980 1980,2310 2370,3030
-Um, that's basically it, um,
+{} That's basically it, {}|
 
 1257
 00:36:54,590 --> 00:36:57,020
 0,660 1020,1530 1530,2130 2130,2280 2280,2430
-then, um interesting, I'm just
+then, {} interesting, I'm just
 
 1258
 00:36:57,020 --> 00:36:58,250
@@ -6287,52 +6284,51 @@ gonna go bottom-up sort of
 1259
 00:36:58,250 --> 00:36:59,270
 0,210 210,270 270,360 360,900 900,1020
-like in the beginning, you
+like in the beginning,| you
 
 1260
 00:36:59,270 --> 00:37:01,220
 0,60 60,240 240,780 780,1260 1590,1950
-know what happens, so at
+know what happens,| so at
 
 1261
 00:37:01,220 --> 00:37:02,860
 0,150 150,390 390,450 450,1110
-some point the tester.
+some point the tester,|
 
 1262
 00:37:03,950 --> 00:37:05,160
 0,660
-AH.
 
 1263
 00:37:11,450 --> 00:37:13,660
 0,420 420,570 570,810 810,1650
-A the test rule.
+{} the tester will
 
 1264
 00:37:15,610 --> 00:37:17,710
 0,480 480,990 1020,1410 1410,1860 1860,2100
-Cole make right and um
+call Make, right| and {}
 
 1265
 00:37:17,710 --> 00:37:20,380
 0,360 360,690 690,1530 1650,2250 2250,2670
-here's my um, basically the
+here's my {} basically the
 
 1266
 00:37:20,410 --> 00:37:24,400
 0,690 810,1380 1380,2040 2280,3120 3360,3990
-make a call, um, it
+Make {} call,| {} it
 
 1267
 00:37:24,400 --> 00:37:25,660
 0,600 600,690 690,840 840,990 990,1260
-constructs you know the raf
+constructs you know the raft
 
 1268
 00:37:25,660 --> 00:37:27,850
 0,510 900,1710 1710,1800 1800,1920 1920,2190
-states, um, you know apply
+states,| {} you know apply
 
 1269
 00:37:27,850 --> 00:37:29,350
@@ -6342,7 +6338,7 @@ channel, the condition variable that
 1270
 00:37:29,350 --> 00:37:32,050
 0,30 30,600 1080,1680 1680,2490 2490,2700
-I mentioned a itself to
+I mentioned,| {it,sets} itself to
 
 1271
 00:37:32,050 --> 00:37:34,000
@@ -6352,17 +6348,17 @@ a follower, it's election time
 1272
 00:37:34,000 --> 00:37:34,860
 0,420
-out.
+out,|
 
 1273
 00:37:34,920 --> 00:37:36,120
 0,570 570,720 720,870 870,1050 1050,1200
-Um, and I'll talk about
+{} and I'll talk about
 
 1274
 00:37:36,120 --> 00:37:37,200
 0,180 180,270 270,330 330,870 930,1080
-that in a second you
+that in a second,| you
 
 1275
 00:37:37,200 --> 00:37:38,700
@@ -6372,37 +6368,37 @@ know initially some other parts
 1276
 00:37:38,700 --> 00:37:40,020
 0,150 150,360 360,450 450,720 720,1320
-you make an empty log.
+you make an empty log,|
 
 1277
 00:37:40,560 --> 00:37:42,660
 0,810 840,1260 1260,1500 1500,1800 1800,2100
-And, um, then basically forks
+and, um, then basically forks
 
 1278
 00:37:42,660 --> 00:37:45,480
 0,120 120,780 780,1740 1740,2430 2490,2820
-have two ago routines want
+have two Go routines,| {one,is}
 
 1279
 00:37:45,480 --> 00:37:47,010
 0,180 180,510 510,750 750,1290 1290,1530
-to apply or just the
+the {applier -}, that's the
 
 1280
 00:37:47,010 --> 00:37:48,030
 0,270 270,390 390,690 690,930 930,1020
-friend that actually writes on
+thread that actually writes on
 
 1281
 00:37:48,030 --> 00:37:49,680
 0,60 60,360 360,900 1110,1320 1320,1650
-the apply channel and then
+the apply channel,| and then
 
 1282
 00:37:49,680 --> 00:37:50,940
 0,150 150,360 360,660 660,840 840,1260
-I got my the taker
+I got my the ticker|
 
 1283
 00:37:50,940 --> 00:37:52,380
@@ -6412,32 +6408,32 @@ and we basically gave you
 1284
 00:37:52,500 --> 00:37:54,750
 0,390 390,1110 1110,1500 1500,1920 1920,2250
-a to a basically runs
+{} to a basically runs
 
 1285
 00:37:54,750 --> 00:37:56,300
 0,360 390,660 660,1080
-the ticker code.
+the ticker code,|
 
 1286
 00:37:57,460 --> 00:38:00,010
 0,540 570,840 870,1290 1290,1980 2010,2550
-Um, so, nothing particularly exciting
+{} so, nothing particularly exciting
 
 1287
 00:38:00,010 --> 00:38:02,050
 0,210 210,450 450,930 1290,1830 1830,2040
-going on here, um, so
+going on here.| {} So
 
 1288
 00:38:02,050 --> 00:38:04,300
 0,210 210,420 420,510 510,1020 1800,2250
-let's look at the pic,
+let's look at the {ticker
 
 1289
 00:38:04,300 --> 00:38:06,070
 0,60 60,510 660,1170 1170,1410 1410,1770
-a goat, awesome people ask
+-} code,| some people ask
 
 1290
 00:38:06,070 --> 00:38:07,390
@@ -6447,17 +6443,17 @@ you know, should you structure
 1291
 00:38:07,390 --> 00:38:08,950
 0,300 300,450 450,510 510,870 870,1560
-everything in a single file
+everything in a single file,
 
 1292
 00:38:08,980 --> 00:38:11,410
 0,660 690,1050 1050,1740 2010,2220 2220,2430
-a multiple files of course
+{} multiple files,| of course
 
 1293
 00:38:11,410 --> 00:38:12,010
 0,90 90,210 210,330 330,420 420,600
-it's all up to you
+it's all up to you,|
 
 1294
 00:38:12,010 --> 00:38:13,360
@@ -6467,12 +6463,12 @@ what actually is most convenient
 1295
 00:38:13,360 --> 00:38:14,470
 0,180 180,420 420,630 630,1020 1020,1110
-for you to actually you
+for you| to actually you
 
 1296
 00:38:14,470 --> 00:38:15,400
 0,120 120,300 300,420 420,810 810,930
-know find your goats in
+know find your code,| in
 
 1297
 00:38:15,400 --> 00:38:16,810
@@ -6482,17 +6478,17 @@ this case I instructed in
 1298
 00:38:16,810 --> 00:38:18,400
 0,390 390,810 810,900 900,990 990,1590
-multiple files and a half
+multiple files| and {} have
 
 1299
 00:38:18,610 --> 00:38:20,800
 0,300 300,780 780,1500 1500,1980 1980,2190
-basically voto go deals with
+basically {vote.go -}, deals with
 
 1300
 00:38:20,800 --> 00:38:22,900
 0,210 210,540 750,1320 1320,1770
-all the election part.
+all the election part.|
 
 1301
 00:38:25,070 --> 00:38:25,760
@@ -6502,37 +6498,36 @@ So let's look at the
 1302
 00:38:25,760 --> 00:38:26,880
 0,570
-ticker.
+ticker,|
 
 1303
 00:38:27,670 --> 00:38:29,020
 0,810
-AH.
 
 1304
 00:38:29,560 --> 00:38:31,120
 0,300 300,420 420,660 660,990 990,1560
-So the ticker basically runs
+so the ticker basically runs
 
 1305
 00:38:31,150 --> 00:38:34,090
 0,240 240,450 450,1320 1440,2310 2310,2940
-every fifty milliseconds and a
+every 50 milliseconds| and {}
 
 1306
 00:38:34,090 --> 00:38:35,050
 0,60 60,270 270,390 390,780 780,960
-it calls this function to
+it calls this function {tick
 
 1307
 00:38:35,050 --> 00:38:36,730
 0,570 570,900 900,1230 1230,1500 1500,1680
-canned function tickets like right
+-},| function tick like right
 
 1308
 00:38:36,730 --> 00:38:38,770
 0,150 150,690 960,1440 1440,1560 1560,2040
-up here, um, it grips
+up here,| {} it grips
 
 1309
 00:38:38,770 --> 00:38:39,880
@@ -6542,12 +6537,12 @@ you know you'll see that
 1310
 00:38:39,880 --> 00:38:41,080
 0,480 480,660 660,720 720,1050 1050,1200
-all over the place it
+all over the place,| it
 
 1311
 00:38:41,080 --> 00:38:43,750
 0,360 360,930 960,1320 1320,1860 2220,2670
-grasps the raf lock calls
+grasps the raft lock,| calls
 
 1312
 00:38:43,750 --> 00:38:45,340
@@ -6557,42 +6552,42 @@ use defer to make sure
 1313
 00:38:45,340 --> 00:38:46,690
 0,330 330,450 450,690 690,1230 1230,1350
-that no matter why I
+that no matter when I
 
 1314
 00:38:46,690 --> 00:38:48,520
 0,450 450,540 540,1170 1440,1680 1680,1830
-leave the function, um, the
+leave the function,| {} the
 
 1315
 00:38:48,520 --> 00:38:50,140
 0,300 300,630 630,840 840,1020 1020,1620
-lock actually will be released
+lock actually will be released|
 
 1316
 00:38:50,590 --> 00:38:52,780
 0,720 810,1350 1350,1560 1560,1860 1860,2190
-and then you check what
+and then {you,know} check what
 
 1317
 00:38:52,780 --> 00:38:55,270
 0,360 360,480 480,1140 1140,1770 1770,2490
-is the leader, um, if
+is the leader,| {} if
 
 1318
 00:38:55,270 --> 00:38:56,320
 0,90 90,390 390,570 570,780 780,1050
-the leader does one thing,
+the leader does one thing,|
 
 1319
 00:38:56,320 --> 00:38:57,250
 0,180 180,360 360,420 420,780 780,930
-it's not a leader that
+it's not a leader, that
 
 1320
 00:38:57,250 --> 00:38:58,870
 0,210 210,420 420,480 480,1170 1230,1620
-means that's a follower then
+means that's a follower,| then
 
 1321
 00:38:58,870 --> 00:39:00,460
@@ -6602,27 +6597,27 @@ just check whether actually the
 1322
 00:39:00,790 --> 00:39:02,300
 0,480 480,1260
-election time.
+election time
 
 1323
 00:39:02,300 --> 00:39:04,310
 0,180 180,450 450,1170 1560,1890 1890,2010
-Um has passed, and so
+{} has passed,| and so
 
 1324
 00:39:04,310 --> 00:39:05,510
 0,480 480,570 570,780 780,840 840,1200
-basically the way a computer
+basically the way I compute
 
 1325
 00:39:05,510 --> 00:39:06,500
 0,240 240,480 480,750 750,930 930,990
-that is I get the
+that is,| I get the
 
 1326
 00:39:06,500 --> 00:39:09,200
 0,330 330,900 1170,1680 1680,2220 2220,2700
-current time, um and see
+current time,| {} and see
 
 1327
 00:39:09,200 --> 00:39:10,280
@@ -6632,62 +6627,62 @@ if the current time is
 1328
 00:39:10,280 --> 00:39:13,130
 0,240 240,720 720,1350 1380,1860 1860,2850
-actually passed the law, if
+actually passed the,| {} if
 
 1329
 00:39:13,130 --> 00:39:14,870
 0,420 420,540 540,690 690,1140 1140,1740
-now is now past the
+now, is now past the
 
 1330
 00:39:14,900 --> 00:39:16,100
 0,360 360,720
-election time.
+election time,|
 
 1331
 00:39:17,430 --> 00:39:18,600
 0,360 360,450 450,750 750,840 840,1170
-And if that's the case
+and if that's the case,
 
 1332
 00:39:18,600 --> 00:39:20,580
 0,90 90,330 330,390 390,1050 1080,1980
-I'll start the election and,
+I'll start the election| and,
 
 1333
 00:39:20,640 --> 00:39:22,170
 0,450 450,960 960,1230 1230,1290 1290,1530
-um well first I'll set
+{} well first I'll set
 
 1334
 00:39:22,170 --> 00:39:24,420
 0,450 630,1020 1020,1410 1410,1890 1890,2250
-the election timeout again as
+the election timeout again,| as
 
 1335
 00:39:24,420 --> 00:39:26,310
 0,480 480,570 570,840 840,1350 1710,1890
-required by figure two and
+required by figure 2| and
 
 1336
 00:39:26,310 --> 00:39:27,330
 0,420 420,540 540,720 720,960 960,1020
-then they all start the
+then {they'll -} start the
 
 1337
 00:39:27,330 --> 00:39:28,300
 0,450
-election.
+election,|
 
 1338
 00:39:30,120 --> 00:39:31,290
 0,270 270,450 450,780 780,870 870,1170
-Instead of setting the election
+{in,terms} of setting the election
 
 1339
 00:39:31,290 --> 00:39:32,550
 0,270 270,540 540,690 690,1140 1140,1260
-time outs like the the
+{timeouts -},| like the the
 
 1340
 00:39:32,550 --> 00:39:33,480
@@ -6697,7 +6692,7 @@ first thing you know the
 1341
 00:39:33,480 --> 00:39:35,550
 0,690 690,1440 1440,1680 1680,1980 1980,2070
-way I do it's you
+way I do it,| you
 
 1342
 00:39:35,550 --> 00:39:37,080
@@ -6707,17 +6702,17 @@ know an election timeout is
 1343
 00:39:37,080 --> 00:39:38,190
 0,180 180,240 240,450 450,900 930,1110
-set to one second which
+set to one second,| which
 
 1344
 00:39:38,190 --> 00:39:38,820
 0,60 60,210 210,270 270,360 360,630
-is sort of a target
+is sort of I got
 
 1345
 00:39:38,820 --> 00:39:40,780
 0,480 870,1470
-from a.
+from, {}|
 
 1346
 00:39:40,980 --> 00:39:41,640
@@ -6727,27 +6722,27 @@ I can hold on a
 1347
 00:39:41,640 --> 00:39:43,260
 0,270 270,840 870,1110 1110,1380 1380,1620
-second lol, there's a good
+second [],| there's a good
 
 1348
 00:39:43,260 --> 00:39:45,600
 0,390 870,1680 1680,1890 1890,1980 1980,2340
-reason, um from the child,
+reason {} from the chat,|
 
 1349
 00:39:45,690 --> 00:39:48,080
 0,990 1020,1800
-the the.
+the the
 
 1350
 00:39:48,400 --> 00:39:50,860
 0,630 1080,1470 1470,1800 1800,2190 2190,2460
-Um the selection diamonds, one
+{} the selection timeouts one
 
 1351
 00:39:50,860 --> 00:39:52,300
 0,480 480,690 690,1020 1020,1110 1110,1440
-second and then of course
+second| and then of course
 
 1352
 00:39:52,300 --> 00:39:52,990
@@ -6762,27 +6757,27 @@ randomize you know the peers
 1354
 00:39:55,090 --> 00:39:57,190
 0,420 420,540 540,1200 1530,1950 1950,2100
-across an interval, and I
+across an interval,| and I
 
 1355
 00:39:57,190 --> 00:39:58,240
 0,210 210,330 330,690 690,780 780,1050
-use an interval from zero
+use an interval from 0
 
 1356
 00:39:58,240 --> 00:40:01,570
 0,120 120,1290 1590,2250 2250,2880 2940,3330
-to {300,milliseconds} a and add
+to {300,milliseconds}| {} and add
 
 1357
 00:40:01,570 --> 00:40:02,590
 0,240 240,300 300,390 390,720 720,1020
-that to the election time
+that to the election {timeouts
 
 1358
 00:40:02,590 --> 00:40:03,910
 0,270 270,390 390,570 570,990 990,1320
-outs and so basically every
+-}| and so basically every
 
 1359
 00:40:03,910 --> 00:40:05,410
@@ -6792,52 +6787,52 @@ peer likely has to have
 1360
 00:40:05,410 --> 00:40:07,780
 0,360 360,840 840,1260 1290,1770 1770,2370
-a slightly different election timeout
+a slightly different election timeout|
 
 1361
 00:40:08,140 --> 00:40:09,760
 0,360 360,900 960,1350 1350,1470 1470,1620
-and so, um, they will
+and so, {} they will
 
 1362
 00:40:09,760 --> 00:40:12,160
 0,660 690,1170 1170,1650 1650,1740 1740,2400
-call a take at different
+call, {} take at different
 
 1363
 00:40:12,160 --> 00:40:13,720
 0,660 660,1260 1260,1350 1350,1440 1440,1560
-stages and you know we
+stages| and you know we
 
 1364
 00:40:13,720 --> 00:40:14,680
 0,90 90,150 150,300 300,390 390,960
-had a bit of luck
+had a bit of lock,|
 
 1365
 00:40:14,770 --> 00:40:16,480
 0,540 540,810 810,1140 1140,1200 1200,1710
-a only one or few
+{} only one or few
 
 1366
 00:40:16,480 --> 00:40:17,710
 0,270 270,390 390,720 720,810 810,1230
-actually go start the election.
+actually will start the election.|
 
 1367
 00:40:19,180 --> 00:40:20,380
 0,150 150,240 240,330 330,810 810,1200
-I have a question now
+I have a question.| Yeah.|
 
 1368
 00:40:20,590 --> 00:40:24,160
 0,570 750,1320 1320,1800 2010,2520 3000,3570
-so you're only like checking
+So, you're only like checking
 
 1369
 00:40:24,160 --> 00:40:26,110
 0,300 300,660 660,1080 1080,1740 1740,1950
-every like fifty milliseconds right
+every like 50 milliseconds, right,|
 
 1370
 00:40:26,110 --> 00:40:27,130
@@ -6847,67 +6842,67 @@ doesn't that lead to a
 1371
 00:40:27,130 --> 00:40:29,060
 0,630 660,1500
-contested elections.
+contested elections,|
 
 1372
 00:40:29,360 --> 00:40:31,520
 0,270 270,570 570,960 960,1590 1860,2160
-Like because you're essentially it
+like because you're essentially,| it
 
 1373
 00:40:31,520 --> 00:40:33,920
 0,300 300,510 510,1320 1620,2190 2220,2400
-doesn't this limit like you
+doesn't this limit,| like you
 
 1374
 00:40:33,920 --> 00:40:37,280
 0,480 510,990 1020,1740 1740,2190 2820,3360
-know you technically can get.
+know you technically can get
 
 1375
 00:40:38,140 --> 00:40:39,760
 0,180 180,660 660,840 840,1230 1230,1620
-For anywhere from three to
+for anywhere from 3 to
 
 1376
 00:40:40,000 --> 00:40:42,920
 0,510 510,660 660,1950 1950,2340
-zero to {300,right} like.
+0 to {300,right}, like.|
 
 1377
 00:40:42,920 --> 00:40:43,640
 0,210 210,300 300,420 420,570 570,720
-Now I can get from
+No, I can get from
 
 1378
 00:40:43,640 --> 00:40:45,080
 0,180 180,720 750,1110 1110,1380 1380,1440
-one second to after the
+one second to after {300
 
 1379
 00:40:45,080 --> 00:40:47,060
 0,510 570,810 810,1110 1110,1410 1410,1980
-hundred and one second to
+-}| and one second to
 
 1380
 00:40:47,210 --> 00:40:49,850
 0,270 270,600 600,1230 1260,2550 2550,2640
-any value between {2000,milliseconds} of
+any value between {1000,milliseconds} to
 
 1381
 00:40:49,850 --> 00:40:52,580
 0,270 270,480 480,1200 1380,1980 2070,2730
-thirteen hundred milliseconds right, so
+{1300 -} milliseconds.| Right, so,
 
 1382
 00:40:52,730 --> 00:40:53,780
 0,270 270,690 690,810 810,930 930,1050
-um, but at the end
+{} but at the end
 
 1383
 00:40:53,780 --> 00:40:55,520
 0,60 60,210 210,540 540,990 1080,1740
-of the day like because
+of the day,| like because
 
 1384
 00:40:55,520 --> 00:40:57,080
@@ -6917,37 +6912,37 @@ you're like only checking every
 1385
 00:40:57,080 --> 00:40:58,820
 0,300 300,960 960,1260 1260,1500 1500,1740
-fifty milliseconds doesn't that just
+50 milliseconds,| doesn't that just
 
 1386
 00:40:58,820 --> 00:40:59,860
 0,180 180,300 300,570
-give it like.
+give it like.|
 
 1387
 00:40:59,950 --> 00:41:01,030
 0,240 240,390 390,540 540,810 810,1080
-It gives us more course
+It gives us more {course-grained
 
 1388
 00:41:01,030 --> 00:41:02,050
 0,270 270,360 360,450 450,630 630,1020
-grained but it's good enough.
+-}, but it's good enough.|
 
 1389
 00:41:02,580 --> 00:41:03,600
 0,600
-Okay.
+Okay.|
 
 1390
 00:41:03,660 --> 00:41:05,340
 0,150 150,660 690,1200 1200,1560 1560,1680
-Um, I mean basically two
+{} I mean basically two
 
 1391
 00:41:05,340 --> 00:41:06,690
 0,450 450,660 660,1020 1020,1080 1080,1350
-constraints here correct, you know
+constraints here, correct,| you know
 
 1392
 00:41:06,690 --> 00:41:07,530
@@ -6957,12 +6952,12 @@ you don't want to be
 1393
 00:41:07,530 --> 00:41:09,960
 0,150 150,690 1260,1620 1620,2160 2160,2430
-too slow and yeah because
+too slow| and {} because
 
 1394
 00:41:09,960 --> 00:41:11,790
 0,510 510,750 750,930 930,1590 1620,1830
-that means that your takes
+that means that you're takes
 
 1395
 00:41:11,790 --> 00:41:12,450
@@ -6972,7 +6967,7 @@ a long time before you
 1396
 00:41:12,450 --> 00:41:13,830
 0,180 180,210 210,360 360,960 960,1380
-start a new election and
+start a new election,| and
 
 1397
 00:41:13,830 --> 00:41:14,340
@@ -6982,12 +6977,12 @@ you don't want to be
 1398
 00:41:14,340 --> 00:41:16,470
 0,210 210,750 750,990 990,1680 1950,2130
-too fast because then you
+too fast,| because then you
 
 1399
 00:41:16,470 --> 00:41:17,820
 0,210 210,300 300,570 570,1080 1080,1350
-start too many elections and
+start too many elections,| and
 
 1400
 00:41:17,820 --> 00:41:18,750
@@ -7002,22 +6997,22 @@ some time for an election
 1402
 00:41:20,160 --> 00:41:22,170
 0,240 240,540 540,1020 1500,1890 1890,2010
-to lose some votes may
+to lose some votes, may
 
 1403
 00:41:22,170 --> 00:41:24,150
 0,180 180,720 1050,1560 1590,1860 1860,1980
-get delayed and you don't
+get delayed| and you don't
 
 1404
 00:41:24,150 --> 00:41:26,070
 0,180 180,270 270,900 900,1770 1800,1920
-want to restart before you,
+want to restart before you
 
 1405
 00:41:26,070 --> 00:41:28,020
 0,210 210,750 1020,1440 1440,1770 1770,1950
-you have just before the
+you have,| just before the
 
 1406
 00:41:28,020 --> 00:41:29,340
@@ -7032,7 +7027,7 @@ of do a couple rounds
 1408
 00:41:30,690 --> 00:41:32,220
 0,90 90,690 690,840 840,900 900,1530
-of communication with the followers.
+of communication with the followers.|
 
 1409
 00:41:34,810 --> 00:41:36,130
@@ -7047,17 +7042,17 @@ people speculating about my capital
 1411
 00:41:37,960 --> 00:41:39,850
 0,450 750,1290 1290,1560 1560,1740 1740,1890
-L A this was just
+L,| {} this was just
 
 1412
 00:41:39,850 --> 00:41:41,860
 0,60 60,750 810,930 930,1140 1140,2010
-an experiment, you know for
+an experiment,| you know for
 
 1413
 00:41:41,890 --> 00:41:43,450
 0,120 120,720 720,900 900,1200 1200,1560
-this implementation I followed the
+this implementation,| I followed the
 
 1414
 00:41:43,450 --> 00:41:44,770
@@ -7067,42 +7062,42 @@ convention and I probably broke
 1415
 00:41:44,770 --> 00:41:45,580
 0,90 90,150 150,330 330,660 660,810
-it in some places, but
+it in some places,| but
 
 1416
 00:41:45,580 --> 00:41:46,840
 0,60 60,300 300,360 360,900 900,1260
-I followed the conception that,
+I followed the conception that,|
 
 1417
 00:41:47,290 --> 00:41:51,190
 0,600 870,1500 1530,2250 2250,2940 3300,3900
-um, if um, the color,
+{} if {} the caller
 
 1418
 00:41:51,190 --> 00:41:52,300
 0,60 60,480 480,900 900,1020 1020,1110
-the CALI assumes that the
+the [] assumes that the
 
 1419
 00:41:52,300 --> 00:41:54,160
 0,330 330,540 540,1050 1230,1650 1650,1860
-walk is held then I
+lock is held,| then I
 
 1420
 00:41:54,160 --> 00:41:55,630
 0,210 210,240 240,630 630,1080 1080,1470
-put a capital l behind
+put a capital L behind
 
 1421
 00:41:55,630 --> 00:41:56,680
 0,210 210,660
-the function.
+the function,|
 
 1422
 00:41:56,920 --> 00:41:58,900
 0,360 360,660 660,1200 1200,1440 1440,1980
-So start election, that assumes
+so start election, that assumes
 
 1423
 00:41:58,900 --> 00:42:00,130
@@ -7112,32 +7107,32 @@ that the caller actually is
 1424
 00:42:00,130 --> 00:42:01,660
 0,420 420,510 510,870 900,1200 1200,1530
-required to lock and basically
+required the lock| and basically
 
 1425
 00:42:01,660 --> 00:42:02,800
 0,360 360,690 690,780 780,1020 1020,1140
-any function that starts with
+any function that [] with
 
 1426
 00:42:02,800 --> 00:42:04,330
 0,90 90,570 630,840 840,990 990,1530
-an l as that particular
+an L,| as that particular
 
 1427
 00:42:04,330 --> 00:42:05,680
 0,120 120,300 300,720 720,870 870,1350
-you know assumes that convention.
+you know assumes that convention,|
 
 1428
 00:42:07,660 --> 00:42:08,950
 0,150 150,270 270,390 390,540 540,1290
-And so this is purely
+and so this is purely
 
 1429
 00:42:09,250 --> 00:42:11,470
 0,270 270,870 870,1380 1380,1530 1530,2220
-a coding prevention for myself
+a coding prevention for myself|
 
 1430
 00:42:11,470 --> 00:42:12,340
@@ -7152,27 +7147,27 @@ sort of interesting to try
 1432
 00:42:13,180 --> 00:42:14,560
 0,210 210,480 480,600 600,750 750,1380
-it out in this implementation
+it out in this implementation,|
 
 1433
 00:42:15,010 --> 00:42:16,180
 0,150 150,360 360,660 660,780 780,1170
-might not always do that,
+might not always do that,|
 
 1434
 00:42:16,180 --> 00:42:17,260
 0,510 510,630 630,780 780,900 900,1080
-but I just did that,
+but I just did that
 
 1435
 00:42:17,260 --> 00:42:18,300
 0,120 120,300 300,510
-in this one.
+in this one.|
 
 1436
 00:42:20,720 --> 00:42:22,000
 0,180 180,780
-Any questions.
+Any questions?|
 
 1437
 00:42:22,500 --> 00:42:23,190
@@ -7182,47 +7177,47 @@ Or should we look at
 1438
 00:42:23,190 --> 00:42:25,040
 0,390 420,870 870,1320
-the election park.
+the election part.|
 
 1439
 00:42:28,510 --> 00:42:30,010
 0,420 450,1110 1110,1290 1290,1410 1410,1500
-Okay, well let's look at
+Okay, well, let's look at
 
 1440
 00:42:30,010 --> 00:42:32,650
 0,480 660,1050 1050,1500 1500,1920 2100,2640
-the election part and you'll
+the election part| and you'll
 
 1441
 00:42:32,650 --> 00:42:34,690
 0,690 690,1020 1020,1230 1230,1500 1500,2040
-see a here start election
+see {} here start election,|
 
 1442
 00:42:34,690 --> 00:42:36,160
 0,480 510,870 870,1050 1050,1440 1440,1470
-so it does require a
+so it doesn't require a
 
 1443
 00:42:36,160 --> 00:42:38,740
 0,390 390,960 990,1140 1140,1440 1440,2580
-lock because I assume the
+lock,| because I assume the
 
 1444
 00:42:38,860 --> 00:42:40,810
 0,330 330,570 570,810 1200,1560 1560,1950
-color holds it and basically
+caller holds it,| and basically
 
 1445
 00:42:40,810 --> 00:42:42,340
 0,180 180,630 630,960 960,1260 1350,1530
-just follows figure to you
+just follows figure 2,| you
 
 1446
 00:42:42,340 --> 00:42:43,660
 0,390 390,810 810,990 990,1200 1200,1320
-know first you know the
+know first, you know the
 
 1447
 00:42:43,660 --> 00:42:44,770
@@ -7232,42 +7227,42 @@ rule is you have to
 1448
 00:42:44,770 --> 00:42:46,600
 0,390 390,450 450,720 720,1260 1560,1830
-incorrect the current term by
+increment the current term by
 
 1449
 00:42:46,600 --> 00:42:48,250
 0,420 420,540 540,690 690,1170 1170,1650
-once I do that I
+one,| {so,I} do that,| I
 
 1450
 00:42:48,250 --> 00:42:49,510
 0,210 210,300 300,540 540,630 630,1260
-set the state to candidates
+set the state to Candidate|
 
 1451
 00:42:49,510 --> 00:42:51,340
 0,150 150,630 690,1290 1290,1710 1710,1830
-and also a dictated by
+and also {} dictated by
 
 1452
 00:42:51,340 --> 00:42:53,200
 0,270 270,510 510,1110 1410,1740 1740,1860
-finger to basically, um I
+figure 2 basically,| {} I
 
 1453
 00:42:53,200 --> 00:42:55,060
 0,210 210,720 750,1440 1440,1740 1740,1860
-am cort azar voted for
+{} {[record] -} voted for
 
 1454
 00:42:55,060 --> 00:42:56,380
 0,540 540,720 720,840 840,1110 1110,1320
-myself, this is also part
+myself,| this is also part
 
 1455
 00:42:56,380 --> 00:42:58,210
 0,60 60,330 330,840 1140,1650 1650,1830
-of figure tube, um, and
+of figure 2,| {} and
 
 1456
 00:42:58,210 --> 00:42:59,110
@@ -7277,12 +7272,12 @@ then you know this is
 1457
 00:42:59,110 --> 00:43:00,790
 0,390 390,810 810,1260 1260,1440 1440,1680
-four laps e you know
+for lab c,|  you know
 
 1458
 00:43:00,790 --> 00:43:02,080
 0,180 180,360 360,480 480,780 780,1290
-to see you already know
+to see you already know,|
 
 1459
 00:43:02,170 --> 00:43:03,880
@@ -7292,22 +7287,22 @@ that whenever you change basically
 1460
 00:43:03,880 --> 00:43:04,840
 0,450 450,630 630,780 780,840 840,960
-state that seemed to be
+state, that seemed to be
 
 1461
 00:43:04,840 --> 00:43:06,850
 0,750 960,1230 1230,1440 1440,1500 1500,2010
-persistent, you have to persistent
+persistent,| you have to persistent
 
 1462
 00:43:06,850 --> 00:43:08,780
 0,240 240,600 870,1230 1230,1620
-right after and so.
+right after,| and so,
 
 1463
 00:43:09,080 --> 00:43:10,610
 0,150 150,360 360,690 720,1080 1080,1530
-So that's it, and basically
+so that's it,| and basically
 
 1464
 00:43:10,610 --> 00:43:11,780
@@ -7317,12 +7312,12 @@ you're you see my debugging
 1465
 00:43:11,780 --> 00:43:14,240
 0,660 750,1920 1920,2040 2040,2250 2250,2460
-messages like you know from
+messages,| like you know from
 
 1466
 00:43:14,240 --> 00:43:15,530
 0,630 630,720 720,810 810,960 960,1290
-Jesus, you know I always
+{Jose,says}, you know I always
 
 1467
 00:43:15,530 --> 00:43:16,310
@@ -7332,22 +7327,22 @@ have the source at the
 1468
 00:43:16,310 --> 00:43:18,260
 0,570 570,870 870,1200 1290,1830 1830,1950
-beginning and this simplifies my
+beginning| and this simplifies my
 
 1469
 00:43:18,260 --> 00:43:19,670
 0,510 900,1110 1110,1230 1230,1320 1320,1410
-life and I have a
+life| and I have a
 
 1470
 00:43:19,670 --> 00:43:20,600
 0,210 210,300 300,540 540,720 720,930
-bunch of other sort of
+bunch of other sort of,|
 
 1471
 00:43:20,900 --> 00:43:21,920
 0,540 540,660 660,810 810,960 960,1020
-um I don't have a
+{} I don't have a
 
 1472
 00:43:21,920 --> 00:43:23,300
@@ -7357,7 +7352,7 @@ perl script or python script
 1473
 00:43:23,300 --> 00:43:24,560
 0,390 390,600 600,1050 1050,1200 1200,1260
-nicely, yes Jose but I
+nicely as Jose,| but I
 
 1474
 00:43:24,560 --> 00:43:25,880
@@ -7367,32 +7362,32 @@ have a bunch of unique
 1475
 00:43:25,880 --> 00:43:27,290
 0,300 300,420 420,540 540,930 930,1410
-scripts that I used to
+scripts,| that I used to
 
 1476
 00:43:27,320 --> 00:43:30,080
 0,480 480,540 540,990 1350,2220
-parse the log processing.
+parse the log, {print,and,process},|
 
 1477
 00:43:31,090 --> 00:43:33,310
 0,570 570,750 750,1380 1380,1860 1890,2220
-Um, and then we call
+{} and then we call
 
 1478
 00:43:33,310 --> 00:43:35,110
 0,390 390,900 930,1140 1140,1530 1530,1800
-request modes and request modes
+{requestVotesL -} and {requestVotesL -}
 
 1479
 00:43:35,110 --> 00:43:37,630
 0,240 240,390 390,870 1320,2220 2220,2520
-right up here and you'll
+right up here,| and you'll
 
 1480
 00:43:37,630 --> 00:43:38,830
 0,240 240,720 750,870 870,990 990,1200
-see second you know how
+see {in,a,second} you know how
 
 1481
 00:43:38,830 --> 00:43:39,700
@@ -7402,12 +7397,12 @@ this is going to work
 1482
 00:43:39,700 --> 00:43:42,640
 0,270 270,360 360,1050 1140,1830 1830,2940
-out but basically it as
+out,| but basically it as
 
 1483
 00:43:43,210 --> 00:43:44,500
 0,360 360,630 630,1020 1020,1140 1140,1290
-a sale set, you know
+a [] set,| you know
 
 1484
 00:43:44,500 --> 00:43:46,180
@@ -7417,27 +7412,27 @@ we construct the arguments once
 1485
 00:43:46,180 --> 00:43:48,550
 0,150 150,300 300,480 480,930 1230,2370
-you know up front a
+you know [up front] {}|
 
 1486
 00:43:48,550 --> 00:43:50,320
 0,720 720,930 930,1380 1380,1560 1560,1770
-and let me so let's
+and let me, so let's
 
 1487
 00:43:50,320 --> 00:43:51,250
 0,150 150,240 240,300 300,720 720,930
-look at the recourse for
+look at the {RequestVoteArgs -
 
 1488
 00:43:51,250 --> 00:43:53,710
 0,390 390,690 780,1470 1740,2310 2310,2460
-votes are arguments a and
+- -} arguments| {} and
 
 1489
 00:43:53,710 --> 00:43:56,350
 0,660 720,1200 1230,1650 1650,2280 2280,2640
-basically your data here and
+basically your data here| and
 
 1490
 00:43:56,350 --> 00:43:57,370
@@ -7447,42 +7442,42 @@ you know basically it contains
 1491
 00:43:57,370 --> 00:43:59,660
 0,750 1050,1980
-exactly, um.
+exactly {}
 
 1492
 00:43:59,810 --> 00:44:01,370
 0,180 180,300 300,690 750,1320 1320,1560
-You know what basically figure
+you know what basically figure
 
 1493
 00:44:01,370 --> 00:44:02,540
 0,150 150,450 450,600 600,690 690,1170
-two says that you contain
+2 says,| that you contain
 
 1494
 00:44:02,540 --> 00:44:03,860
 0,90 90,480 480,900 900,1230 1230,1320
-the term candidate ID, the
+the Term, {CandidateId -}, the
 
 1495
 00:44:03,860 --> 00:44:04,850
 0,270 270,510 510,870 870,930 930,990
-last block index in the
+{LastLogIndex - -}, and the
 
 1496
 00:44:04,850 --> 00:44:08,390
 0,330 330,1080 1560,2280 2280,3150 3150,3540
-last Long-term a instruct and
+{LastLogTerm -},| and [] and
 
 1497
 00:44:08,390 --> 00:44:09,770
 0,90 90,690 690,870 870,1140 1140,1380
-I one thing, maybe worth
+{} one thing, maybe worth
 
 1498
 00:44:09,770 --> 00:44:11,210
 0,270 270,540 540,720 720,870 870,1440
-pointing out is I do
+pointing out is,| I do
 
 1499
 00:44:11,240 --> 00:44:12,440
@@ -7492,7 +7487,7 @@ try to write the string
 1500
 00:44:12,440 --> 00:44:15,710
 0,690 1080,1620 1620,2370 2370,2370 2370,3270
-functions that allow a go
+functions,| that allow {} Go
 
 1501
 00:44:15,710 --> 00:44:16,490
@@ -7502,7 +7497,7 @@ you know when you're typing
 1502
 00:44:16,490 --> 00:44:17,630
 0,360 360,660 660,750 750,1020 1020,1140
-percent fee, you know, we'll
+{%v -},| you know, we'll
 
 1503
 00:44:17,630 --> 00:44:18,710
@@ -7512,7 +7507,7 @@ call that string function on
 1504
 00:44:18,710 --> 00:44:20,570
 0,570 870,1140 1140,1260 1260,1500 1500,1860
-destructive and so that allows
+{this,struct}| and so that allows
 
 1505
 00:44:20,570 --> 00:44:21,770
@@ -7522,37 +7517,37 @@ you to format, you know
 1506
 00:44:21,770 --> 00:44:24,800
 0,690 1140,1860 2070,2250 2250,2910 2910,3030
-the um, the structure, the
+the {} the structure,| the
 
 1507
 00:44:24,800 --> 00:44:26,810
 0,420 420,570 570,1050 1050,1560 1680,2010
-question is recognized way, um
+request in {a,nice} way, {}|
 
 1508
 00:44:26,810 --> 00:44:28,280
 0,90 90,660 660,900 900,1140 1140,1470
-and again a that helps
+and again {} that helps
 
 1509
 00:44:28,280 --> 00:44:29,390
 0,210 210,480 480,630 630,900 900,1110
-with me that helps me
+with me, that helps me
 
 1510
 00:44:29,390 --> 00:44:30,780
 0,480 480,630 630,1080
-processing my log.
+processing my log,|
 
 1511
 00:44:30,810 --> 00:44:33,060
 0,210 210,330 330,660 660,1290 1440,2250
-And so basically every request
+and so basically every request
 
 1512
 00:44:33,150 --> 00:44:34,740
 0,210 210,930 930,1080 1080,1170 1170,1590
-a argument that I have
+{} argument that I have,|
 
 1513
 00:44:34,740 --> 00:44:36,420
@@ -7562,72 +7557,72 @@ I print in one standard
 1514
 00:44:36,420 --> 00:44:38,370
 0,420 420,600 600,1170 1290,1470 1470,1950
-way and again to simplify
+way| and again to simplify
 
 1515
 00:44:38,370 --> 00:44:39,740
 0,300 300,810
-lock processing.
+lock processing.|
 
 1516
 00:44:45,730 --> 00:44:46,820
 0,540
-Okay.
+Okay,
 
 1517
 00:44:46,880 --> 00:44:48,520
 0,360 360,1080
-Back to.
+back to
 
 1518
 00:44:48,520 --> 00:44:50,770
 0,240 240,540 540,870 870,1380 1410,2250
-A starting election so multiple
+{} starting election,| so multiple
 
 1519
 00:44:50,830 --> 00:44:52,060
 0,330 330,870 870,1110 1110,1170 1170,1230
-a followers start at the
+{} followers start at the
 
 1520
 00:44:52,060 --> 00:44:53,350
 0,240 240,780 780,840 840,1020 1020,1290
-same time you know they
+same time,| you know they
 
 1521
 00:44:53,350 --> 00:44:54,790
 0,330 330,960 960,1050 1050,1230 1230,1440
-become one of them is
+become, one of them is
 
 1522
 00:44:54,790 --> 00:44:56,290
 0,480 480,660 660,960 960,1290 1290,1500
-hopefully it starts first it
+hopefully it starts first,| it
 
 1523
 00:44:56,290 --> 00:44:57,970
 0,270 270,930 1290,1440 1440,1530 1530,1680
-becomes candidate and it does
+becomes candidate| and it does
 
 1524
 00:44:57,970 --> 00:45:00,160
 0,360 360,990 990,1380 1380,1620 1620,2190
-regress votes and your construct
+request votes| and here {the,struct}
 
 1525
 00:45:00,160 --> 00:45:02,290
 0,60 60,210 210,570 570,1350 1620,2130
-you know the arguments put
+you know the arguments,| put
 
 1526
 00:45:02,290 --> 00:45:03,610
 0,60 60,390 390,660 660,810 810,1320
-the current term in here
+the {currentTerm -} in here,
 
 1527
 00:45:03,640 --> 00:45:04,720
 0,330 330,450 450,510 510,630 630,1080
-was going to be one
+was going to be one,|
 
 1528
 00:45:04,720 --> 00:45:05,500
@@ -7637,37 +7632,37 @@ if this is the first
 1529
 00:45:05,500 --> 00:45:06,400
 0,150 150,270 270,330 330,810 810,900
-time for the election, you
+time for the election,| you
 
 1530
 00:45:06,400 --> 00:45:07,780
 0,150 150,390 390,540 540,990 1200,1380
-know who I am, but
+know who I am,| and
 
 1531
 00:45:07,780 --> 00:45:09,430
 0,90 90,630 630,1380 1380,1530 1530,1650
-my lifelong indexes, you know
+my {log,lastindex -}, you know
 
 1532
 00:45:09,430 --> 00:45:12,100
 0,180 180,720 720,930 930,1860 2190,2670
-which usually is zero or
+which usually is 0 or
 
 1533
 00:45:12,100 --> 00:45:14,400
 0,330 330,1230 1350,1920
-one whatever um.
+1 whatever {},|
 
 1534
 00:45:14,550 --> 00:45:16,080
 0,300 300,450 450,630 630,1140 1170,1530
-Yeah it's gonna be zero
+yeah it's gonna be 0,
 
 1535
 00:45:16,080 --> 00:45:17,670
 0,90 90,420 720,1050 1050,1590 1590,1590
-I guess and then um
+I guess| and then {}
 
 1536
 00:45:17,670 --> 00:45:20,340
@@ -7677,37 +7672,37 @@ the term in that entry
 1537
 00:45:20,700 --> 00:45:22,680
 0,210 210,390 390,1080 1110,1380 1380,1980
-which is a term zero,
+which is {} term 0,|
 
 1538
 00:45:23,310 --> 00:45:24,480
 0,420 420,780 780,870 870,960 960,1170
-um, because you know what
+{} because you know what
 
 1539
 00:45:24,480 --> 00:45:25,800
 0,120 120,480 480,930 930,1050 1050,1320
-we're doing correctly, we're running
+we're doing correctly,| we're running
 
 1540
 00:45:25,800 --> 00:45:27,180
 0,60 60,480 480,600 600,1020 1020,1380
-an election for one and
+an election for one| and
 
 1541
 00:45:27,180 --> 00:45:29,160
 0,120 120,300 300,720 990,1470 1650,1980
-we need to a show
+we need to {} show
 
 1542
 00:45:29,160 --> 00:45:30,360
 0,180 180,360 360,690 690,930 930,1200
-what the previous ones were.
+what the previous ones were.|
 
 1543
 00:45:32,990 --> 00:45:34,400
 0,870
-Okay.
+Okay.|
 
 1544
 00:45:34,400 --> 00:45:35,660
@@ -7722,17 +7717,17 @@ my standard way of sending
 1546
 00:45:37,460 --> 00:45:39,440
 0,150 150,960 1170,1620 1620,1800 1800,1980
-our PCs, um, just go
+{RPCs -},| {} just go
 
 1547
 00:45:39,440 --> 00:45:40,880
 0,150 150,240 240,330 330,930 960,1440
-for all the {peers's -}
+for all the {peers -},
 
 1548
 00:45:40,880 --> 00:45:43,040
 0,300 300,1050 1410,1890 1890,1950 1950,2160
-skipping myself, um, of course
+skipping myself, {} of course,|
 
 1549
 00:45:43,040 --> 00:45:43,820
@@ -7742,27 +7737,27 @@ I have to count that
 1550
 00:45:43,820 --> 00:45:44,840
 0,60 60,360 360,480 480,930 930,1020
-I voted for myself, so
+I voted for myself,| so
 
 1551
 00:45:44,840 --> 00:45:45,380
 0,60 60,240 240,300 300,480 480,540
-I said the number of
+I set the number of
 
 1552
 00:45:45,380 --> 00:45:47,210
 0,240 240,330 330,810 1110,1530 1530,1830
-votes to one and then
+votes to 1| and then
 
 1553
 00:45:47,210 --> 00:45:49,010
 0,90 90,630 630,900 900,1320 1320,1800
-I basically, um, fork off
+I basically {} fork off
 
 1554
 00:45:49,070 --> 00:45:50,750
 0,390 390,420 420,960 990,1260 1260,1680
-a um in a thread
+a { -} a thread,|
 
 1555
 00:45:50,750 --> 00:45:51,890
@@ -7772,37 +7767,37 @@ that basically is gonna do
 1556
 00:45:51,890 --> 00:45:53,720
 0,390 390,870 870,1140 1140,1320 1320,1830
-actually thus ending the RBC
+actually the sending the RPC
 
 1557
 00:45:53,720 --> 00:45:55,440
 0,150 150,330 330,840 840,1320
-to each individual pier.
+to each individual peer,|
 
 1558
 00:45:55,630 --> 00:45:56,830
 0,210 210,450 450,930 930,1050 1050,1200
-The first argument is the
+the first argument is the
 
 1559
 00:45:56,830 --> 00:45:58,090
 0,270 270,330 330,570 570,750 750,1260
-pier to which the archdiocese
+peer to which the RPC
 
 1560
 00:45:58,090 --> 00:45:59,080
 0,450 450,600 600,750 750,900 900,990
-sent they all get the
+sent,| they all get the
 
 1561
 00:45:59,080 --> 00:46:01,120
 0,270 270,990 1170,1380 1380,1650 1650,2040
-same arguments and also passing
+same arguments| and also passing
 
 1562
 00:46:01,120 --> 00:46:02,320
 0,90 90,390 390,510 510,660 660,1200
-the address of the foods
+the address of the votes,|
 
 1563
 00:46:02,320 --> 00:46:03,160
@@ -7812,12 +7807,12 @@ you know, so they can
 1564
 00:46:03,400 --> 00:46:05,020
 0,330 330,450 450,810 810,1140 1140,1620
-have a shared vote count.
+have a shared vote count.|
 
 1565
 00:46:07,870 --> 00:46:09,620
 0,270 270,600 600,810 810,1230
-Any questions about this.
+Any questions about this?|
 
 1566
 00:46:10,080 --> 00:46:12,840
@@ -7827,52 +7822,52 @@ So for request votes, the
 1567
 00:46:12,840 --> 00:46:14,070
 0,120 120,420 420,570 570,780 780,1230
-the lock is being held
+the lock is being held|
 
 1568
 00:46:14,070 --> 00:46:15,720
 0,150 150,300 300,540 540,1170 1170,1650
-and then you're sending the
+and then you're sending the.|
 
 1569
 00:46:16,020 --> 00:46:18,000
 0,450 450,720 720,870 870,1500 1710,1980
-yeah, so our PC yeah,
+Yeah, so.| {RPC -}.| Yeah,
 
 1570
 00:46:18,000 --> 00:46:19,530
 0,270 270,690 690,900 900,1290 1290,1530
-so in a request code
+so in a request vote
 
 1571
 00:46:19,530 --> 00:46:20,460
 0,270 270,360 360,450 450,660 660,930
-here is the lock actually
+here, is the lock actually
 
 1572
 00:46:20,460 --> 00:46:21,400
 0,450
-health.
+held
 
 1573
 00:46:22,080 --> 00:46:23,740
 0,360 360,420 420,570 570,1110
-Inside of this function.
+inside of this function.|
 
 1574
 00:46:24,840 --> 00:46:26,160
 0,360 360,600 600,870 870,1110 1110,1320
-No right, because it's a
+No, right, because it's a
 
 1575
 00:46:26,190 --> 00:46:28,170
 0,210 210,780 840,1590 1590,1770 1770,1980
-new thread yeah it doesn't
+new thread.| {Yeah,,new,thread}, it doesn't
 
 1576
 00:46:28,170 --> 00:46:29,280
 0,210 210,240 240,570 630,960 960,1110
-hold a walk and you
+hold a lock,| and you
 
 1577
 00:46:29,280 --> 00:46:30,660
@@ -7882,37 +7877,37 @@ see my naming convention hinted
 1578
 00:46:30,660 --> 00:46:31,530
 0,210 210,420 420,480 480,720 720,870
-at because it doesn't have
+that,| because it doesn't have
 
 1579
 00:46:31,530 --> 00:46:32,680
 0,90 90,330 330,630
-an owl there.
+an L there.|
 
 1580
 00:46:35,580 --> 00:46:38,070
 0,570 1020,1290 1290,1590 1590,1980 1980,2490
-Okay so readers request votes
+Okay.| So really {requestVote -}
 
 1581
 00:46:38,070 --> 00:46:39,390
 0,270 270,420 420,810 810,1050 1050,1320
-and the request folks when
+and the {requestVote -} when
 
 1582
 00:46:39,390 --> 00:46:41,220
 0,480 480,870 870,1200 1200,1470 1470,1830
-actually he stopped running Graham
+actually it starts running,| it
 
 1583
 00:46:41,220 --> 00:46:42,780
 0,210 210,390 390,870 870,1140 1140,1560
-has no walks because only
+has no locks,| because only
 
 1584
 00:46:42,780 --> 00:46:44,820
 0,450 750,1350 1350,1560 1560,1620 1620,2040
-the parent held the lock
+the parent held the lock|
 
 1585
 00:46:44,820 --> 00:46:46,050
@@ -7922,47 +7917,47 @@ and this guy this thread
 1586
 00:46:46,050 --> 00:46:47,460
 0,240 240,480 480,810 810,1110 1110,1410
-actually hasn't required block, yet
+actually hasn't required {the,lock} yet,|
 
 1587
 00:46:47,610 --> 00:46:49,080
 0,360 360,540 540,780 780,1020 1020,1470
-it does not have lock.
+it does not have lock.|
 
 1588
 00:46:51,150 --> 00:46:52,980
 0,300 300,450 450,1110 1110,1380 1380,1830
-Um, so, um, so basically
+{} So, {} so basically
 
 1589
 00:46:52,980 --> 00:46:54,900
 0,330 330,630 630,930 930,1590 1620,1920
-one friend runs for each
+one thread runs for each
 
 1590
 00:46:54,900 --> 00:46:56,010
 0,90 90,300 300,630 630,960 960,1110
-of these requests photos for
+of these {requestVote -} for
 
 1591
 00:46:56,010 --> 00:46:58,200
 0,150 150,750 900,1590 1590,1740 1740,2190
-each peer, um, it allocates
+each peer,| {} it allocates
 
 1592
 00:46:58,200 --> 00:46:59,880
 0,480 480,780 780,1350 1350,1470 1470,1680
-a reply structure, and then
+a reply structure,| and then
 
 1593
 00:46:59,880 --> 00:47:01,170
 0,360 360,450 450,750 750,1170 1200,1290
-visibly it sends off, you
+basically it sends off you
 
 1594
 00:47:01,170 --> 00:47:02,220
 0,180 180,360 360,540 540,690 690,1050
-know the R T C
+know the {RPC - -}|
 
 1595
 00:47:02,250 --> 00:47:03,210
@@ -7972,27 +7967,27 @@ and this is all done
 1596
 00:47:03,210 --> 00:47:04,920
 0,330 330,660 660,720 720,1230
-without holding the walk.
+without holding the lock,|
 
 1597
 00:47:04,920 --> 00:47:06,000
 0,480 480,630 630,720 720,840 840,1080
-And then, at some point
+and then, at some point
 
 1598
 00:47:06,000 --> 00:47:07,230
 0,90 90,210 210,270 270,720 720,1230
-we get a response back
+we get a response back|
 
 1599
 00:47:07,620 --> 00:47:09,030
 0,570 570,810 810,870 870,1050 1050,1410
-and then at that point
+and then at that point,
 
 1600
 00:47:09,030 --> 00:47:10,650
 0,270 270,690 690,1200 1200,1290 1290,1620
-in response handler I grab
+in response handler,| I grab
 
 1601
 00:47:10,650 --> 00:47:11,310
@@ -8002,72 +7997,72 @@ the log right at the
 1602
 00:47:11,310 --> 00:47:13,830
 0,600 750,930 930,1020 1020,1560 1590,2520
-beginning and do whatever response
+beginning| and do whatever response
 
 1603
 00:47:13,830 --> 00:47:15,760
 0,540 570,720 720,810 810,1410
-handling that is necessary.
+handling that is necessary.|
 
 1604
 00:47:17,260 --> 00:47:20,170
 0,1050 1320,1680 1680,2490 2490,2700 2700,2910
-Yeah yeah, alright, you said
+Yeah, {go,ahead}.| Alright, you said
 
 1605
 00:47:20,170 --> 00:47:21,760
 0,510 510,750 750,930 930,1320 1320,1590
-earlier that you shouldn't hold
+earlier,| that you shouldn't hold
 
 1606
 00:47:21,760 --> 00:47:23,050
 0,60 60,420 420,690 690,900 900,1290
-a lot when you're doing
+a lock,| when you're doing
 
 1607
 00:47:23,050 --> 00:47:25,420
 0,1230 1320,1530 1530,1800 1800,2040 2040,2370
-like you're doing our PC
+like you're doing {RPC -}
 
 1608
 00:47:25,420 --> 00:47:26,890
 0,300 300,480 480,690 690,990 990,1470
-call you mean like, basically
+call,| you mean like basically
 
 1609
 00:47:26,890 --> 00:47:28,750
 0,180 180,540 540,1050 1380,1620 1620,1860
-it's okay to it's okay
+it's okay to,| it's okay
 
 1610
 00:47:28,750 --> 00:47:29,740
 0,120 120,210 210,420 420,750 750,990
-for the art PC call
+for the {RPC -} call
 
 1611
 00:47:29,740 --> 00:47:31,060
 0,510 510,720 720,810 810,1020 1020,1320
-itself in the art PC
+itself| in the {RPC -}
 
 1612
 00:47:31,060 --> 00:47:32,260
 0,360 360,450 450,840 840,990 990,1200
-called to do to hold
+called to do, to hold
 
 1613
 00:47:32,260 --> 00:47:33,220
 0,90 90,420 420,570 570,810 810,960
-a lock but not like
+a lock,| but not like
 
 1614
 00:47:33,220 --> 00:47:34,660
 0,300 300,480 480,870 870,1050 1050,1440
-while you're calling yeah I'm
+while you're calling.| Yeah, I'm
 
 1615
 00:47:34,660 --> 00:47:35,950
 0,150 150,210 210,570 570,1050 1050,1290
-not a cross disc, why
+not a cross this,| why
 
 1616
 00:47:35,950 --> 00:47:37,720
@@ -8077,7 +8072,7 @@ are you sitting a cross
 1617
 00:47:37,720 --> 00:47:38,890
 0,240 240,330 330,540 540,630 630,1170
-sending it over the network.
+sending it over the network.|
 
 1618
 00:47:39,220 --> 00:47:40,000
@@ -8087,32 +8082,32 @@ But it's okay, if you're
 1619
 00:47:40,000 --> 00:47:41,740
 0,240 240,390 390,900 900,1140 1140,1740
-doing it within our PC
+doing it within {RPC -}.|
 
 1620
 00:47:41,830 --> 00:47:43,000
 0,240 240,480 480,570 570,960 960,1170
-or even the reply head
+Or even the reply handler,|
 
 1621
 00:47:43,000 --> 00:47:44,260
 0,180 270,660 660,930 930,1110 1110,1260
-Mark think about this as
+like think about this as
 
 1622
 00:47:44,260 --> 00:47:46,030
 0,420 420,570 570,1050 1050,1410 1410,1770
-ways we reply handler running
+ways we reply handler running,|
 
 1623
 00:47:46,270 --> 00:47:47,470
 0,150 150,270 270,600 600,780 780,1200
-so the response came back
+so the response came back|
 
 1624
 00:47:47,740 --> 00:47:48,910
 0,150 150,420 420,660 660,720 720,1170
-and now there's a reply
+and now there's a reply,
 
 1625
 00:47:48,910 --> 00:47:49,930
@@ -8122,112 +8117,112 @@ you have to process the
 1626
 00:47:49,930 --> 00:47:50,980
 0,540
-reply.
+reply.|
 
 1627
 00:47:51,950 --> 00:47:53,000
 0,150 150,300 300,420 420,780 780,1050
-Oh, no, I'm talking about
+Oh, {} I'm talking about
 
 1628
 00:47:53,000 --> 00:47:54,350
 0,210 210,420 420,630 630,780 780,1350
-like say in the request,
+like say in the request,|
 
 1629
 00:47:54,350 --> 00:47:56,000
 0,210 210,390 390,510 510,1170 1170,1650
-but like the capital, our
+but like the capital R
 
 1630
 00:47:56,000 --> 00:47:58,940
 0,870 900,1410 1410,1680 1680,2310 2640,2940
-requests capital v vote that's
+requests, capital V vote,| that's
 
 1631
 00:47:58,940 --> 00:48:00,350
 0,240 240,330 330,630 630,1140 1170,1410
-okay to hold locks in
+okay to hold locks, in
 
 1632
 00:48:00,350 --> 00:48:02,100
 0,360 360,510 510,810 840,1290
-there at least right.
+there at least right.|
 
 1633
 00:48:02,220 --> 00:48:03,480
 0,510 510,600 600,720 720,900 900,1260
-Where you want to watch
+Where you want to {hold,locks},
 
 1634
 00:48:03,480 --> 00:48:05,520
 0,360 360,660 660,1140 1470,1710 1710,2040
-I'm actually like so like
+I'm actually.| Like, so like
 
 1635
 00:48:05,520 --> 00:48:08,580
 0,570 570,1140 1140,1710 1770,2190 2580,3060
-capsule request votes here, yeah,
+capital {RequestVote -} here, yeah,|
 
 1636
 00:48:08,730 --> 00:48:09,870
 0,210 210,330 330,420 420,780 780,1140
-that's what I'm talking about.
+that's what I'm talking about.|
 
 1637
 00:48:10,440 --> 00:48:11,620
 0,210 210,630
-This one.
+This one?|
 
 1638
 00:48:11,620 --> 00:48:13,150
 0,270 270,510 510,630 630,1170 1170,1530
-No, like the function here.
+No, like the function here,|
 
 1639
 00:48:14,080 --> 00:48:15,640
 0,510 510,660 660,780 780,1230 1230,1560
-Yeah, so it's request vote
+{} so it's request vote,|
 
 1640
 00:48:15,640 --> 00:48:17,080
 0,150 150,480 510,990 990,990 990,1440
-but it's A I think
+but it's {} I think
 
 1641
 00:48:17,080 --> 00:48:20,240
 0,540 570,1170 1170,1620 2160,2610
-it's capital r yeah.
+it's capital R, yeah,|
 
 1642
 00:48:21,890 --> 00:48:24,110
 0,1170 1230,1500 1500,1980 1980,2100 2100,2220
-Like you probably have a
+like you probably have a
 
 1643
 00:48:24,110 --> 00:48:25,850
 0,360 360,630 630,960 990,1110 1110,1740
-method right it's the {RBC's
+method, right,| it's the {RPC,call
 
 1644
 00:48:25,940 --> 00:48:27,860
 0,720 720,720 720,1740 1740,1860 1860,1920
--} a RBC on the
+-}.| {I,think,the} RPC on the
 
 1645
 00:48:27,860 --> 00:48:31,310
 0,390 390,780 870,2760 2760,2910 3030,3450
-receiver side, yeah yeah yeah,
+receiver side.| Yeah yeah yeah,
 
 1646
 00:48:31,310 --> 00:48:32,240
 0,240 240,420 420,600 600,660 660,930
-well look at the second,
+we'll look at the second
 
 1647
 00:48:32,240 --> 00:48:33,650
 0,60 60,330 330,510 510,1290 1290,1410
-of course that was on
+of course,| that was on
 
 1648
 00:48:33,650 --> 00:48:34,490
@@ -8237,27 +8232,27 @@ a completely new way to
 1649
 00:48:34,490 --> 00:48:35,840
 0,180 180,360 360,1020 1020,1050 1050,1350
-think about it a totally
+think about it,| {} totally
 
 1650
 00:48:35,840 --> 00:48:38,150
 0,270 270,780 780,1620 1650,2010 2010,2310
-different machine, yeah yeah yeah.
+different machine, yeah yeah yeah,
 
 1651
 00:48:38,760 --> 00:48:40,800
 0,690 690,1020 1320,1590 1590,1920 1920,2040
-Absolutely so, so basically these
+absolutely.| So, so basically these
 
 1652
 00:48:40,800 --> 00:48:41,640
 0,180 180,450 450,510 510,660 660,840
-two plays of our whole
+two places of our whole
 
 1653
 00:48:41,640 --> 00:48:43,050
 0,360 360,540 540,720 720,810 810,1410
-block like in the handler
+block,| like in the handler
 
 1654
 00:48:43,080 --> 00:48:44,700
@@ -8267,27 +8262,27 @@ in the request handler and
 1655
 00:48:44,700 --> 00:48:46,360
 0,150 150,270 270,690 690,1170
-in the reply handler.
+in the reply handler.|
 
 1656
 00:48:48,640 --> 00:48:49,980
 0,300 300,540 540,780
-Okay, thank you.
+Okay, thank you.|
 
 1657
 00:48:50,420 --> 00:48:52,130
 0,510 510,810 810,990 990,1170 1170,1710
-Sorry, sorry for being confused,
+Sorry, sorry for being confused,|
 
 1658
 00:48:52,550 --> 00:48:54,290
 0,450 450,780 780,990 990,1470 1470,1740
-I'm glad we clarified that
+I'm glad we clarified that.|
 
 1659
 00:48:54,680 --> 00:48:57,140
 0,570 750,1110 1110,1530 1560,2010 2010,2460
-I'm okay so grab block
+{} Okay, so grab block
 
 1660
 00:48:57,140 --> 00:48:58,160
@@ -8297,7 +8292,7 @@ then put a print statement
 1661
 00:48:58,160 --> 00:48:59,510
 0,690 720,810 810,1140 1140,1260 1260,1350
-in the log, so I
+in the log,| so I
 
 1662
 00:48:59,510 --> 00:49:00,470
@@ -8307,7 +8302,7 @@ can know what later on
 1663
 00:49:00,470 --> 00:49:01,820
 0,60 60,150 150,480 480,750 1170,1350
-I can study it and
+I can study it| and
 
 1664
 00:49:01,820 --> 00:49:03,260
@@ -8317,12 +8312,12 @@ then of course the basic
 1665
 00:49:03,260 --> 00:49:04,370
 0,390 390,510 510,630 630,960 960,1110
-checks, you know that you
+checks,| you know that you
 
 1666
 00:49:04,370 --> 00:49:06,980
 0,270 270,810 810,1800 2190,2520 2520,2610
-know you actually figure two
+know you actually figure 2
 
 1667
 00:49:06,980 --> 00:49:08,000
@@ -8332,7 +8327,7 @@ different from saying much about
 1668
 00:49:08,000 --> 00:49:09,200
 0,510 510,780 780,900 900,1020 1020,1200
-it, but you know this
+it,| but you know this
 
 1669
 00:49:09,200 --> 00:49:11,180
@@ -8342,27 +8337,27 @@ is the rule that applies
 1670
 00:49:11,180 --> 00:49:14,360
 0,120 120,720 1140,2190 2220,2730 2730,3180
-to all a surface correctly
+to all {} servers correct,|
 
 1671
 00:49:14,360 --> 00:49:15,400
 0,630
-the.
+the
 
 1672
 00:49:15,490 --> 00:49:17,560
 0,450 450,570 570,1080 1110,1620 1620,2070
-Term is bigger than the
+term is bigger than the
 
 1673
 00:49:17,830 --> 00:49:18,970
 0,330 330,690 690,960 960,1080 1080,1140
-reply terms better than the
+reply terms,| better than the
 
 1674
 00:49:18,970 --> 00:49:21,010
 0,300 300,840 900,1680 1710,1920 1920,2040
-current term then a you
+current term,| then {} you
 
 1675
 00:49:21,010 --> 00:49:22,810
@@ -8372,17 +8367,17 @@ gotta switch to the follower
 1676
 00:49:22,810 --> 00:49:24,430
 0,480 480,960 990,1320 1320,1530 1530,1620
-state and a to the
+state| and {} to the
 
 1677
 00:49:24,430 --> 00:49:27,220
 0,390 390,600 600,1110 1500,2310 2370,2790
-term of the um person
+term of the {} person
 
 1678
 00:49:27,220 --> 00:49:28,360
 0,150 150,570 570,660 660,900 930,1140
-that responded to you so
+that responded to you,| so
 
 1679
 00:49:28,360 --> 00:49:28,960
@@ -8392,12 +8387,12 @@ look at that in a
 1680
 00:49:28,960 --> 00:49:29,920
 0,480
-second.
+second.|
 
 1681
 00:49:30,340 --> 00:49:31,510
 0,360 360,540 540,690 690,1080 1080,1170
-Um, so that basically you
+{} So that basically you
 
 1682
 00:49:31,510 --> 00:49:32,920
@@ -8407,7 +8402,7 @@ know if this this was
 1683
 00:49:32,920 --> 00:49:34,360
 0,90 90,720 1020,1290 1290,1320 1320,1440
-the candidate and I was
+the candidate| and I was
 
 1684
 00:49:34,360 --> 00:49:35,530
@@ -8417,7 +8412,7 @@ talking to appear that actually
 1685
 00:49:35,530 --> 00:49:36,610
 0,150 150,210 210,270 270,540 540,1080
-works in the higher term
+works in the higher term|
 
 1686
 00:49:36,730 --> 00:49:38,530
@@ -8427,27 +8422,26 @@ and basically backs off and
 1687
 00:49:38,560 --> 00:49:40,340
 0,540 540,780 780,1260
-becomes a follower.
+becomes a follower.|
 
 1688
 00:49:41,860 --> 00:49:43,280
 0,840
-I'm.
 
 1689
 00:49:43,310 --> 00:49:44,760
 0,270 270,870
-Okay so.
+Okay, so,
 
 1690
 00:49:44,910 --> 00:49:47,280
 0,300 300,690 690,1410 1440,1830 1830,2370
-A if the follower responded
+{} if the follower responded
 
 1691
 00:49:47,280 --> 00:49:48,930
 0,270 270,660 660,1080 1080,1230 1230,1650
-saying I'm grabbing my phone,
+saying,| I'm grabbing my vote,|
 
 1692
 00:49:49,050 --> 00:49:50,850
@@ -8457,22 +8451,22 @@ then I increment the number
 1693
 00:49:50,850 --> 00:49:52,410
 0,60 60,630 840,990 990,1380 1380,1560
-of votes the chef guy
+of votes, the self vote
 
 1694
 00:49:52,410 --> 00:49:53,850
 0,120 120,720 720,870 870,1110 1110,1440
-buy one it is totally
+by 1,| it is totally
 
 1695
 00:49:53,850 --> 00:49:55,170
 0,270 270,330 330,540 540,960 960,1320
-safe to do correctly because
+safe to do correctly,| because
 
 1696
 00:49:55,170 --> 00:49:56,850
 0,270 270,720 720,960 960,1260 1260,1680
-I'm holding the raf lock
+I'm holding the raft lock|
 
 1697
 00:49:57,180 --> 00:49:57,840
@@ -8482,37 +8476,37 @@ and so this is a
 1698
 00:49:57,840 --> 00:50:00,780
 0,630 630,1080 1110,1830 2550,2850 2850,2940
-serialized, so multiple things that
+serialized,| so multiple things that
 
 1699
 00:50:00,780 --> 00:50:02,520
 0,120 120,450 450,810 810,1230 1230,1740
-will happen correct multiple responses
+will happen correct,| multiple responses
 
 1700
 00:50:02,520 --> 00:50:03,810
 0,150 150,300 300,720 900,1110 1110,1290
-will come back, they may
+will come back,| they may
 
 1701
 00:50:03,810 --> 00:50:05,370
 0,210 210,330 330,1080 1200,1440 1440,1560
-run in parallel, but they
+run in parallel,| but they
 
 1702
 00:50:05,370 --> 00:50:06,540
 0,180 180,270 270,900 900,1110 1110,1170
-won't be sterilized because of
+won't be serialized,| because of
 
 1703
 00:50:06,540 --> 00:50:07,600
 0,90 90,390 390,750
-the raf lok.
+the raft lock,|
 
 1704
 00:50:09,390 --> 00:50:11,100
 0,300 300,540 540,630 630,1320 1350,1710
-So edit the vote, if
+so {add,up} the votes,| if
 
 1705
 00:50:11,100 --> 00:50:12,570
@@ -8522,7 +8516,7 @@ the vote is longer than
 1706
 00:50:12,570 --> 00:50:13,680
 0,540 600,840 840,930 930,1050 1050,1110
-the you know if I
+the| you know if I
 
 1707
 00:50:13,680 --> 00:50:15,270
@@ -8532,7 +8526,7 @@ have a majority of the
 1708
 00:50:15,270 --> 00:50:17,460
 0,390 390,1050 1260,1590 1590,1740 1740,2190
-votes, then if I'm still
+votes,| then if I'm still
 
 1709
 00:50:17,460 --> 00:50:19,470
@@ -8542,22 +8536,22 @@ in the same term as
 1710
 00:50:19,470 --> 00:50:21,660
 0,750 780,1500 1500,1740 1740,1800 1800,2190
-the start when I started
+the start,| when I started
 
 1711
 00:50:21,660 --> 00:50:23,160
 0,180 180,660 660,1020 1050,1440 1440,1500
-out actually, um running the
+out actually {} running the
 
 1712
 00:50:23,160 --> 00:50:24,540
 0,600 720,990 990,1200 1200,1320 1320,1380
-election then I'm going to
+election,| then I'm going to
 
 1713
 00:50:24,540 --> 00:50:26,190
 0,240 240,330 330,930 1110,1470 1470,1650
-become the leader and I'll
+become the leader| and I'll
 
 1714
 00:50:26,190 --> 00:50:27,180
@@ -8567,12 +8561,12 @@ send out you know the
 1715
 00:50:27,180 --> 00:50:28,890
 0,240 240,630 630,780 780,1440 1440,1710
-first round of heartbeats which
+first round of heartbeats,| which
 
 1716
 00:50:28,890 --> 00:50:29,910
 0,150 150,300 300,480 480,510 510,1020
-all look in a second.
+all look in a second.|
 
 1717
 00:50:31,820 --> 00:50:32,540
@@ -8582,12 +8576,12 @@ Yeah, so I want to
 1718
 00:50:32,540 --> 00:50:34,010
 0,180 180,300 300,510 510,1020 1050,1470
-look at two things, let's
+look at two things,| let's
 
 1719
 00:50:34,010 --> 00:50:35,180
 0,90 90,300 300,570 570,900 900,1170
-see what become leader is
+see what become leader is,|
 
 1720
 00:50:35,180 --> 00:50:36,620
@@ -8597,17 +8591,17 @@ become leader is right up
 1721
 00:50:36,620 --> 00:50:38,600
 0,480 870,1320 1320,1440 1440,1650 1650,1980
-here a you know as
+here,| {} you know as
 
 1722
 00:50:38,600 --> 00:50:40,040
 0,330 330,690 690,930 930,1260 1260,1440
-capital l because it's you
+capital L,| because it's you
 
 1723
 00:50:40,040 --> 00:50:41,510
 0,420 420,810 810,1050 1050,1110 1110,1470
-know already holds a walk
+know already holds a lock,|
 
 1724
 00:50:41,510 --> 00:50:43,010
@@ -8617,17 +8611,17 @@ basically sets the state to
 1725
 00:50:43,010 --> 00:50:46,400
 0,120 120,360 360,900 1380,2460 2460,3390
-the leader state a initialize
+the leader state,| and initialize
 
 1726
 00:50:46,400 --> 00:50:48,020
 0,150 150,300 300,570 570,1230
-is the next index.
+is the next index,|
 
 1727
 00:50:48,050 --> 00:50:49,010
 0,120 120,180 180,420 420,780 780,960
-And the next index or
+and the next index or
 
 1728
 00:50:49,010 --> 00:50:50,240
@@ -8637,12 +8631,12 @@ simply the last lecture is
 1729
 00:50:50,240 --> 00:50:51,350
 0,420 420,840 840,930 930,1050 1050,1110
-basically guess and it's an
+basically guess| and it's an
 
 1730
 00:50:51,350 --> 00:50:53,420
 0,510 510,930 990,1920 1920,2010 2010,2070
-optimistic guess, um, you know
+optimistic guess,| {} you know
 
 1731
 00:50:53,420 --> 00:50:54,620
@@ -8652,17 +8646,17 @@ I just said to whatever
 1732
 00:50:54,620 --> 00:50:55,820
 0,120 120,480 480,840 840,990 990,1200
-my last index is plus
+my last index {} plus
 
 1733
 00:50:55,820 --> 00:50:56,740
 0,330
-one.
+1,|
 
 1734
 00:50:56,740 --> 00:50:58,180
 0,300 300,660 660,1170 1170,1290 1290,1440
-So basically assuming that all
+so basically assuming that all
 
 1735
 00:50:58,180 --> 00:50:59,350
@@ -8672,12 +8666,12 @@ the followers are up to
 1736
 00:50:59,350 --> 00:51:00,280
 0,360
-date.
+date,|
 
 1737
 00:51:00,500 --> 00:51:01,280
 0,150 150,240 240,360 360,720 720,780
-And if they're not, you
+and if they're not,| you
 
 1738
 00:51:01,280 --> 00:51:02,210
@@ -8687,52 +8681,52 @@ know we'll see later they
 1739
 00:51:02,210 --> 00:51:03,540
 0,180 180,450 450,810
-will back off.
+will back off,|
 
 1740
 00:51:04,120 --> 00:51:05,980
 0,270 270,690 690,960 960,1290 1320,1860
-Okay, I'll back off um.
+okay, I'll back off {}
 
 1741
 00:51:06,860 --> 00:51:08,120
 0,270 270,480 480,600 600,900 900,1260
-Now on the event entries
+{} on the append entry,
 
 1742
 00:51:08,120 --> 00:51:09,460
 0,180 180,780
-I reply.
+{sorry,by} reply.|
 
 1743
 00:51:10,740 --> 00:51:12,300
 0,510 540,990
-Okay good.
+Okay good,|
 
 1744
 00:51:12,300 --> 00:51:13,560
 0,120 120,270 270,390 390,690 690,1260
-I said has become leader
+so that has become leader,|
 
 1745
 00:51:13,590 --> 00:51:14,730
 0,510 510,690 690,780 780,990 990,1140
-a let me look at
+{} let me look at
 
 1746
 00:51:14,730 --> 00:51:16,260
 0,360 360,990
-new term.
+{newTermL -},|
 
 1747
 00:51:17,550 --> 00:51:19,380
 0,390 390,540 540,690 690,1380 1440,1830
-Um, so new terms, nothing
+{} so {newTermL -}, nothing
 
 1748
 00:51:19,380 --> 00:51:20,580
 0,420 420,510 510,630 630,750 750,1200
-really, you know to exciting
+really, you know too exciting|
 
 1749
 00:51:20,580 --> 00:51:21,600
@@ -8742,22 +8736,22 @@ and basically says I can
 1750
 00:51:21,600 --> 00:51:23,580
 0,360 360,480 480,570 570,840 840,1980
-go to the next a
+go to the next {}
 
 1751
 00:51:23,610 --> 00:51:25,050
 0,450 450,690 690,810 810,1230 1230,1440
-term that is supplied by
+term,| that is supplied by
 
 1752
 00:51:25,050 --> 00:51:27,570
 0,600 990,1590 1890,2190 2190,2310 2310,2520
-the color, um I said
+the caller,| {} I set
 
 1753
 00:51:27,570 --> 00:51:28,800
 0,300 300,450 450,540 540,810 810,1230
-voted four to minus one
+{votedFor -} to {-1 -},|
 
 1754
 00:51:28,800 --> 00:51:29,970
@@ -8767,7 +8761,7 @@ because I haven't voted yet
 1755
 00:51:29,970 --> 00:51:31,110
 0,90 90,270 270,690 690,960 960,1140
-in this term, and I
+in this term,| and I
 
 1756
 00:51:31,110 --> 00:51:32,610
@@ -8777,7 +8771,7 @@ changed to a my state
 1757
 00:51:32,610 --> 00:51:34,500
 0,630 720,1230 1230,1410 1410,1740 1740,1890
-follower because this is kind
+{to,follower},| because this is kind
 
 1758
 00:51:34,500 --> 00:51:35,220
@@ -8787,7 +8781,7 @@ of state that needs to
 1759
 00:51:35,220 --> 00:51:37,160
 0,150 150,690 690,1050 1050,1590
-be persisted, aiko persist.
+be persisted,| {I,call} persist.|
 
 1760
 00:51:41,480 --> 00:51:42,290
@@ -8797,7 +8791,7 @@ Okay, so this is sort
 1761
 00:51:42,290 --> 00:51:44,420
 0,180 180,390 390,960 960,1500 1710,2130
-of the candidate site and
+of the candidate side| and
 
 1762
 00:51:44,420 --> 00:51:45,050
@@ -8807,32 +8801,32 @@ now we want to look
 1763
 00:51:45,050 --> 00:51:48,960
 0,810 1170,2040 2250,2970 2970,3420
-at a Polar site.
+at {} follower side,|
 
 1764
 00:51:49,080 --> 00:51:51,450
 0,450 450,930 930,1710 1710,2130 2130,2370
-Or perhaps another candidate that's
+or perhaps another candidate, that's
 
 1765
 00:51:51,450 --> 00:51:53,640
 0,300 300,540 540,1050 1050,1590 1620,2190
-also running election in parallel.
+also running election in parallel.|
 
 1766
 00:51:55,170 --> 00:51:57,390
 0,600 630,1650 1710,1890 1890,2130 2130,2220
-Sure, um, so here's the
+So, {} so here's the
 
 1767
 00:51:57,390 --> 00:51:58,950
 0,360 360,600 600,1110 1140,1470 1470,1560
-request vote handler, this is
+{RequestVote -} handler,| this is
 
 1768
 00:51:58,950 --> 00:52:00,240
 0,630 630,810 810,1140 1140,1200 1200,1290
-running so this is the
+running,| so this is the
 
 1769
 00:52:00,240 --> 00:52:01,080
@@ -8842,12 +8836,12 @@ piece of code that runs
 1770
 00:52:01,080 --> 00:52:02,130
 0,90 90,210 210,420 420,930 930,1050
-on the other machine, if
+on the other machine,| if
 
 1771
 00:52:02,130 --> 00:52:04,920
 0,120 120,390 390,870 870,1740 1890,2790
-you will correct were where
+you will, correct,| were where
 
 1772
 00:52:04,920 --> 00:52:05,910
@@ -8862,7 +8856,7 @@ little bit in answering that
 1774
 00:52:07,530 --> 00:52:09,570
 0,480 1140,1680 1680,1800 1800,1890 1890,2040
-question and you know you
+question| and you know you
 
 1775
 00:52:09,570 --> 00:52:10,440
@@ -8872,17 +8866,17 @@ succeeded the first thing it
 1776
 00:52:10,440 --> 00:52:12,240
 0,450 930,1170 1170,1320 1320,1620 1620,1800
-does is a revolt by
+does| is {} vote by
 
 1777
 00:52:12,240 --> 00:52:14,220
 0,60 60,510 510,840 840,1260 1260,1980
-the RBC library system correct
+the RPC library system, correct,|
 
 1778
 00:52:14,220 --> 00:52:15,210
 0,150 150,300 300,480 480,900 900,990
-with its own thread and
+with its own thread| and
 
 1779
 00:52:15,210 --> 00:52:15,900
@@ -8897,22 +8891,22 @@ it actually wraps the lock
 1781
 00:52:17,250 --> 00:52:19,380
 0,300 300,600 720,1260 1260,1740
-on the raft structure.
+on the raft structure,|
 
 1782
 00:52:20,420 --> 00:52:22,340
 0,150 150,360 360,990 990,1170 1170,1920
-And then basically this follows
+and then basically this follows
 
 1783
 00:52:22,370 --> 00:52:24,280
 0,630 630,750 750,1410
-literally the rules.
+literally the rules
 
 1784
 00:52:24,280 --> 00:52:25,720
 0,240 240,570 570,960 990,1230 1230,1440
-A figure too yeah there's
+{} figure 2,| {you,know} there's
 
 1785
 00:52:25,720 --> 00:52:27,040
@@ -8922,12 +8916,12 @@ the rule for all servers
 1786
 00:52:27,070 --> 00:52:28,960
 0,450 450,600 600,1080
-correctly, if the.
+correct,| if the
 
 1787
 00:52:29,240 --> 00:52:30,800
 0,330 360,720 720,780 780,1080 1080,1560
-A term the arguing determined
+{} term, the argument {the,term}
 
 1788
 00:52:30,800 --> 00:52:31,790
@@ -8937,22 +8931,22 @@ argument is higher than my
 1789
 00:52:31,790 --> 00:52:33,290
 0,330 330,840 840,1110 1110,1350 1350,1500
-current term, then I should
+current term,| then I should
 
 1790
 00:52:33,290 --> 00:52:34,400
 0,570 570,660 660,780 780,900 900,1110
-switch you know through this
+switch you know to this
 
 1791
 00:52:34,400 --> 00:52:36,950
 0,210 210,780 780,1860 1890,2250 2250,2550
-new term and a that's
+new term| and {} that's
 
 1792
 00:52:36,950 --> 00:52:40,310
 0,330 990,1890 2220,2940 2940,3150 3150,3360
-it, um, then here, sort
+it,| {} then here, sort
 
 1793
 00:52:40,310 --> 00:52:41,390
@@ -8962,32 +8956,32 @@ of the you know the
 1794
 00:52:41,390 --> 00:52:42,650
 0,330 330,750 750,1020 1020,1140 1140,1260
-interesting piece correct, this is
+interesting piece correct,| this is
 
 1795
 00:52:42,650 --> 00:52:44,180
 0,270 270,630 630,810 810,1410 1410,1530
-all related to figure A
+all related to figure {[]
 
 1796
 00:52:44,180 --> 00:52:45,620
 0,390 390,630 630,750 750,1170 1170,1440
-C what it means to
+-},| what it means to
 
 1797
 00:52:45,620 --> 00:52:46,880
 0,330 330,510 510,750 750,1020 1020,1260
-be worth about eighty figure
+be worth about [] figure
 
 1798
 00:52:46,880 --> 00:52:48,650
 0,420 720,1200 1200,1410 1410,1500 1500,1770
-seven a what it means
+7,| {} what it means
 
 1799
 00:52:48,650 --> 00:52:49,940
 0,90 90,390 390,570 570,660 660,1290
-to be up to date,
+to be up to date,|
 
 1800
 00:52:49,940 --> 00:52:50,750
@@ -9002,22 +8996,22 @@ leader, if you're up to
 1802
 00:52:52,160 --> 00:52:53,040
 0,450
-date.
+date,|
 
 1803
 00:52:53,040 --> 00:52:54,270
 0,270 270,450 450,600 600,1080 1080,1230
-Um, so I compute you
+{} so I compute you
 
 1804
 00:52:54,270 --> 00:52:56,400
 0,180 180,450 450,930 930,1620 1740,2130
-know the update function, um
+know the uptodate function, {}|
 
 1805
 00:52:56,400 --> 00:52:58,530
 0,510 900,1470 1470,1620 1620,1830 1830,2130
-in um, and that's basically
+in {} and that's basically
 
 1806
 00:52:58,530 --> 00:53:00,360
@@ -9032,17 +9026,17 @@ or in the term in
 1808
 00:53:01,470 --> 00:53:02,880
 0,60 60,390 390,930
-the last index.
+the last index,|
 
 1809
 00:53:03,000 --> 00:53:04,110
 0,180 180,270 270,360 360,570 570,1110
-And so it says update
+and so it says uptodate
 
 1810
 00:53:04,110 --> 00:53:07,230
 0,450 510,1260 1260,1470 1470,2520 2580,3120
-is a if my term
+is,| {} if my term
 
 1811
 00:53:07,230 --> 00:53:08,280
@@ -9052,32 +9046,32 @@ in the argument is equal
 1812
 00:53:08,280 --> 00:53:11,010
 0,90 90,270 270,900 1170,1950 1980,2730
-to my term in the
+to my term| and the
 
 1813
 00:53:11,310 --> 00:53:12,580
 0,750
-um.
+{}
 
 1814
 00:53:12,760 --> 00:53:14,620
 0,600 630,1110 1110,1380 1410,1770 1770,1860
-The color, the color the
+the caller, the caller the
 
 1815
 00:53:14,620 --> 00:53:16,420
 0,600 630,990 990,1110 1110,1470 1470,1800
-candidate as a last login
+candidate as a {LastLogIndex -}
 
 1816
 00:53:16,420 --> 00:53:17,710
 0,150 150,360 390,780 780,1170 1170,1290
-that just eco Ohio to
+that just equal {or,higher} to
 
 1817
 00:53:17,710 --> 00:53:19,060
 0,150 150,660 660,900 900,1260 1260,1350
-my index, so basically to
+{myIndex -},| so basically to
 
 1818
 00:53:19,060 --> 00:53:20,470
@@ -9087,27 +9081,27 @@ turn to equal the longest
 1819
 00:53:20,470 --> 00:53:23,980
 0,330 330,510 510,900 1470,2130 2340,3510
-walk should win a or
+log should win| and or
 
 1820
 00:53:24,010 --> 00:53:25,840
 0,420 420,1110 1140,1260 1260,1410 1410,1830
-a if you know the
+{} if you know the
 
 1821
 00:53:25,870 --> 00:53:27,970
 0,690 690,780 780,1350 1350,1800 1800,2100
-candidates in hydrothermal period, then
+candidates in {higher,than,term} period,| then
 
 1822
 00:53:27,970 --> 00:53:29,500
 0,210 210,570 570,930 960,1140 1140,1530
-he always wins the candidate
+it always wins, the candidate
 
 1823
 00:53:29,500 --> 00:53:30,280
 0,450
-wins.
+wins.|
 
 1824
 00:53:31,110 --> 00:53:31,860
@@ -9117,12 +9111,12 @@ So that means it to
 1825
 00:53:31,860 --> 00:53:32,700
 0,150 150,300 300,390 390,690 690,840
-be up to date, so
+be up to date,| so
 
 1826
 00:53:32,700 --> 00:53:33,810
 0,360 360,480 480,570 570,1020 1020,1110
-computer up to date and
+compute {uptodate - -}| and
 
 1827
 00:53:33,810 --> 00:53:35,340
@@ -9132,42 +9126,42 @@ then basically go through different
 1828
 00:53:35,340 --> 00:53:36,420
 0,540 540,690 690,780 780,1020 1020,1080
-cases, if the term is
+cases,| if the term is
 
 1829
 00:53:36,420 --> 00:53:37,950
 0,510 510,630 630,720 720,1020 1020,1530
-smaller than the current term
+smaller than the current term,|
 
 1830
 00:53:38,160 --> 00:53:40,890
 0,210 210,510 510,780 780,1290 2310,2730
-that means that the color
+that means that the caller
 
 1831
 00:53:40,890 --> 00:53:42,300
 0,150 150,690 780,1200 1200,1320 1320,1410
-is behind and so I
+is behind| and so I
 
 1832
 00:53:42,300 --> 00:53:43,980
 0,360 360,720 720,930 930,1560 1560,1680
-vote granted to false and
+{VoteGranted -} to false| and
 
 1833
 00:53:43,980 --> 00:53:44,880
 0,240 240,330 330,420 420,570 570,900
-then in the other case,
+then in the other case,|
 
 1834
 00:53:44,880 --> 00:53:46,400
 0,150 150,270 270,480 480,1020
-if I hadn't voted.
+if I hadn't voted,|
 
 1835
 00:53:46,400 --> 00:53:48,140
 0,570 570,870 870,900 900,1440 1590,1740
-Um, or I voted you
+{} or I voted you
 
 1836
 00:53:48,140 --> 00:53:49,130
@@ -9177,87 +9171,87 @@ know already voted for this
 1837
 00:53:49,130 --> 00:53:52,070
 0,690 1110,1830 1980,2130 2130,2370 2370,2940
-candidate in you know, um,
+candidate,| and you know {}
 
 1838
 00:53:52,100 --> 00:53:53,000
 0,180 180,600 600,660 660,840 840,900
-the candidate is up to
+the candidate is {uptodate -
 
 1839
 00:53:53,000 --> 00:53:54,800
 0,480 540,1140 1140,1380 1380,1680 1680,1800
-date, then I grip my
+-},| then I grant my
 
 1840
 00:53:54,800 --> 00:53:57,940
 0,570 600,1320 1590,2580
-vote and I'm.
+vote| and {}
 
 1841
 00:53:58,340 --> 00:53:59,390
 0,210 210,450 450,510 510,810 810,1050
-And reset the election time
+and reset the election {timeout
 
 1842
 00:53:59,390 --> 00:54:00,240
 0,240
-out.
+-},|
 
 1843
 00:54:01,010 --> 00:54:02,930
 0,630 1140,1290 1290,1590 1590,1800 1800,1920
-Um, so why, why is
+{} so why, why is
 
 1844
 00:54:02,930 --> 00:54:04,580
 0,450 450,570 570,900 900,1170 1170,1650
-this the second case here
+this the second case here,|
 
 1845
 00:54:04,610 --> 00:54:06,110
 0,180 180,690 690,870 870,1170 1170,1500
-the or are voted for
+the or are {votedFor -}
 
 1846
 00:54:06,110 --> 00:54:07,900
 0,120 120,330 330,750 750,1260
-is our candidate ID.
+is args {CandidateId -}.|
 
 1847
 00:54:13,340 --> 00:54:15,720
 0,1080 1110,1740
-Because the.
+Because the,
 
 1848
 00:54:15,720 --> 00:54:18,240
 0,150 150,630 630,960 960,1890 2010,2520
-The candidate may resend a
+the candidate may resend, {}
 
 1849
 00:54:18,270 --> 00:54:20,100
 0,390 390,750 750,1020 1020,1200 1200,1830
-maybe their PC was delayed
+maybe their RPC was delayed.|
 
 1850
 00:54:20,490 --> 00:54:23,160
 0,720 930,1710
-delayed delayed.
+{Yeah,delayed} {or,actually,never,made,it,right}.|
 
 1851
 00:54:23,580 --> 00:54:25,470
 0,420 420,660 660,1080 1080,1710 1740,1890
-Um, and so, um, you
+{} And so, {} you
 
 1852
 00:54:25,470 --> 00:54:27,460
 0,90 90,450 450,780 780,1410
-know just basically checking.
+know just basically checking,|
 
 1853
 00:54:27,460 --> 00:54:28,480
 0,270 270,420 420,570 570,840 840,1020
-Um, so, this allows me
+{} so this allows me
 
 1854
 00:54:28,480 --> 00:54:29,410
@@ -9267,22 +9261,22 @@ to vote twice for the
 1855
 00:54:29,410 --> 00:54:31,240
 0,240 240,870 1200,1500 1500,1590 1590,1830
-same candidate, but I can't
+same candidate,| but I can't
 
 1856
 00:54:31,240 --> 00:54:32,500
 0,210 210,330 330,510 510,720 720,1260
-vote for any other candidate.
+vote for any other candidate.|
 
 1857
 00:54:33,440 --> 00:54:35,180
 0,630 930,1230 1230,1440 1440,1530 1530,1740
-Okay, so just to double
+Okay?| So just to double
 
 1858
 00:54:35,180 --> 00:54:37,280
 0,210 210,270 270,1140 1140,1470 1620,2100
-check the logic here, so
+check the logic here,| so
 
 1859
 00:54:37,280 --> 00:54:39,230
@@ -9292,22 +9286,22 @@ if we have the candidate
 1860
 00:54:39,230 --> 00:54:40,640
 0,210 210,270 270,900 1110,1290 1290,1410
-has a term that is
+has a term,| that is
 
 1861
 00:54:40,640 --> 00:54:41,840
 0,270 270,420 420,510 510,810 810,1200
-bigger than the current term,
+bigger than the current term,|
 
 1862
 00:54:42,140 --> 00:54:43,760
 0,360 360,690 690,1380 1380,1500 1500,1620
-um, we obviously have to
+{} we obviously have to
 
 1863
 00:54:43,760 --> 00:54:45,230
 0,270 270,360 360,840 840,1020 1020,1470
-convert the follower and update
+convert the follower| and update
 
 1864
 00:54:45,230 --> 00:54:46,070
@@ -9317,7 +9311,7 @@ the term to the term
 1865
 00:54:46,070 --> 00:54:47,510
 0,90 90,150 150,660 960,1170 1170,1440
-of the candidate, um, but
+of the candidate,| {} but
 
 1866
 00:54:47,510 --> 00:54:49,820
@@ -9327,7 +9321,7 @@ we don't automatically grant them
 1867
 00:54:49,820 --> 00:54:52,580
 0,420 450,1350 1440,1710 1710,2310 2340,2760
-vote unless, um their log
+vote,| unless {} their log
 
 1868
 00:54:52,580 --> 00:54:53,510
@@ -9337,12 +9331,12 @@ is at least as up
 1869
 00:54:53,510 --> 00:54:54,640
 0,90 90,360
-to date.
+to date.|
 
 1870
 00:54:54,640 --> 00:54:57,040
 0,390 810,960 960,1380 1710,1890 1890,2400
-God, we're trying out something.
+Yeah, {exactly -}.| Awesome, {thank,you}.|
 
 1871
 00:54:58,470 --> 00:55:00,720
@@ -9352,47 +9346,47 @@ I'm also wondering is voted
 1872
 00:55:00,720 --> 00:55:02,670
 0,510 510,1020 1020,1380 1380,1500 1500,1950
-for every set to minus
+for every reset to {-1
 
 1873
 00:55:02,670 --> 00:55:04,410
 0,540 900,1230 1230,1500 1500,1620 1620,1740
-one yeah when we go
+-}.| Yeah, when we go
 
 1874
 00:55:04,410 --> 00:55:06,640
 0,750 780,1050 1050,1650
-to a always.
+to {new,term}, always,|
 
 1875
 00:55:06,790 --> 00:55:08,080
 0,180 180,480 480,750 750,1050 1050,1290
-Hey, it's new said always
+{} it's new said always
 
 1876
 00:55:08,080 --> 00:55:09,580
 0,690 720,1200 1200,1290 1290,1380 1380,1500
-to whenever you go to
+to,| whenever you go to
 
 1877
 00:55:09,580 --> 00:55:11,680
 0,60 60,240 240,720 930,1560 1920,2100
-the new term, okay I
+the new term.| Okay.| I
 
 1878
 00:55:11,680 --> 00:55:13,000
 0,240 240,510 510,780 930,1080 1080,1320
-said to one is one
+set to -1, is one
 
 1879
 00:55:13,000 --> 00:55:14,560
 0,270 270,420 420,510 510,1050
-place where this happens.
+place where this happens.|
 
 1880
 00:55:17,220 --> 00:55:18,600
 0,180 180,840
-Any questions.
+Any questions?|
 
 1881
 00:55:24,930 --> 00:55:25,860
@@ -9407,7 +9401,7 @@ a reasonable good sense about
 1883
 00:55:26,700 --> 00:55:27,900
 0,90 90,390 390,960 960,1080 1080,1200
-the overall structure and this
+the overall structure| and this
 
 1884
 00:55:27,900 --> 00:55:29,220
@@ -9417,17 +9411,17 @@ is what everything else follows
 1885
 00:55:29,280 --> 00:55:31,080
 0,480 480,570 570,780 780,1290
-roughly the same structure.
+roughly the same structure.|
 
 1886
 00:55:31,080 --> 00:55:32,610
 0,630 630,900 900,1020 1020,1350 1350,1530
-Um, and so let's go
+{} And so let's go
 
 1887
 00:55:32,610 --> 00:55:35,130
 0,600 600,1230 1350,2040 2040,2370 2370,2520
-back and go here, so
+back and go here,| so
 
 1888
 00:55:35,130 --> 00:55:36,330
@@ -9447,42 +9441,42 @@ where the candidate wins the
 1891
 00:55:38,880 --> 00:55:40,080
 0,600
-election.
+election.|
 
 1892
 00:55:40,460 --> 00:55:41,660
 0,390 390,570 570,810 810,1140 1140,1200
-Um, so it started the
+{} So it started the
 
 1893
 00:55:41,660 --> 00:55:43,610
 0,660 690,870 870,1140 1170,1620 1650,1950
-election, let me go trace
+election,| let me go trace
 
 1894
 00:55:43,610 --> 00:55:45,140
 0,540 810,1020 1020,1170 1170,1260 1260,1530
-back, um, so we started
+back,| {} so we started
 
 1895
 00:55:45,140 --> 00:55:47,240
 0,60 60,750 1260,1560 1560,1680 1680,2100
-the election, um, we requested
+the election,| {} we requested
 
 1896
 00:55:47,240 --> 00:55:51,230
 0,810 1110,2220 2220,2850 2850,3600 3630,3990
-devotes a and we won
+{the,votes}| {} and we won
 
 1897
 00:55:51,230 --> 00:55:52,460
 0,60 60,720
-the election.
+the election,|
 
 1898
 00:55:52,460 --> 00:55:54,020
 0,510 510,630 630,960 960,1050 1050,1560
-And we became the leader
+and we became the leader|
 
 1899
 00:55:54,020 --> 00:55:55,070
@@ -9492,22 +9486,22 @@ and then the first thing
 1900
 00:55:55,070 --> 00:55:56,750
 0,720 750,1170 1170,1500 1500,1590 1590,1680
-that figure tells you to
+that {figure,2} tells you to
 
 1901
 00:55:56,750 --> 00:55:58,220
 0,180 180,330 330,540 540,840 840,1470
-do is like send heartbeats
+do is| like send heartbeats
 
 1902
 00:55:58,220 --> 00:56:00,980
 0,150 150,810 1200,2250
-to every peer.
+to every peer,|
 
 1903
 00:56:02,540 --> 00:56:04,040
 0,270 270,660 660,1020 1020,1230 1230,1500
-And so basically this is
+and so basically this is
 
 1904
 00:56:04,040 --> 00:56:05,240
@@ -9517,12 +9511,12 @@ going to be the standard
 1905
 00:56:05,240 --> 00:56:07,040
 0,510 510,870 870,1140 1140,1230 1230,1800
-code for sending a pants.
+code for {sendAppendsL - -}.|
 
 1906
 00:56:07,750 --> 00:56:09,010
 0,630 630,750 750,1020 1020,1110 1110,1260
-Um, in fact you know
+{} In fact you know
 
 1907
 00:56:09,010 --> 00:56:10,810
@@ -9532,7 +9526,7 @@ the heartbeat code is identical
 1908
 00:56:10,810 --> 00:56:13,180
 0,450 450,570 570,990 990,1470 1470,2370
-to the setup entry code
+to the sendAppendsL entry code,|
 
 1909
 00:56:13,180 --> 00:56:14,980
@@ -9542,12 +9536,12 @@ except you know the heartbeat
 1910
 00:56:14,980 --> 00:56:16,090
 0,360 360,570 570,750 750,1020 1020,1110
-often will may have a
+often will may have {}
 
 1911
 00:56:16,090 --> 00:56:17,590
 0,420 420,780 780,960 960,1170 1170,1500
-no entry or no entry
+no entry| or no entry
 
 1912
 00:56:17,590 --> 00:56:18,340
@@ -9557,12 +9551,12 @@ in the log that is
 1913
 00:56:18,340 --> 00:56:19,990
 0,180 180,540 540,750 750,1020 1020,1650
-being sent to the followers.
+being sent to the followers.|
 
 1914
 00:56:23,280 --> 00:56:24,540
 0,330 330,480 480,660 660,750 750,1260
-Okay, so say the pencils
+Okay, so {sendAppendsL,follows - -}
 
 1915
 00:56:24,540 --> 00:56:26,250
@@ -9572,17 +9566,17 @@ the same structure as in
 1916
 00:56:26,250 --> 00:56:28,470
 0,600 840,1590 1590,1770 1770,1950 1950,2220
-votes, um, you know go
+votes,| {} you know go
 
 1917
 00:56:28,470 --> 00:56:31,140
 0,600 600,1560 1560,2190 2190,2550 2550,2670
-cycle overall appears, and it
+cycle overall peers,| and if
 
 1918
 00:56:31,140 --> 00:56:32,220
 0,330 330,510 510,690 690,780 780,1080
-appears not equal to me,
+peers not equal to me,|
 
 1919
 00:56:32,220 --> 00:56:33,570
@@ -9592,32 +9586,31 @@ then basically send it to
 1920
 00:56:33,570 --> 00:56:34,520
 0,450
-Pence.
+appends.|
 
 1921
 00:56:36,200 --> 00:56:39,470
 0,810 810,1740 1740,2400 2550,2910 2910,3270
-Um, yeah, and so years
+{} Yeah, and so here's
 
 1922
 00:56:39,470 --> 00:56:41,040
 0,90 90,330 330,390 390,930
-to send a pent.
+to {sendAppendL - -},|
 
 1923
 00:56:41,160 --> 00:56:42,760
 0,1020
-I'm.
 
 1924
 00:56:42,940 --> 00:56:44,830
 0,450 480,1170 1170,1320 1320,1410 1410,1890
-And, um, you know basically
+and, {} you know basically
 
 1925
 00:56:44,830 --> 00:56:47,350
 0,600 840,1140 1140,1440 1440,1830 1830,2520
-we're keeping track corrective what
+we're keeping track correct what
 
 1926
 00:56:47,350 --> 00:56:49,330
@@ -9627,12 +9620,12 @@ did the next a log
 1927
 00:56:49,330 --> 00:56:51,100
 0,300 300,540 540,750 750,1560 1560,1770
-entry that the pier should
+entry,| that the peer should
 
 1928
 00:56:51,100 --> 00:56:52,870
 0,510 510,990 990,1500 1500,1590 1590,1770
-have we initialize it to
+have,| we initialize it to
 
 1929
 00:56:52,870 --> 00:56:54,280
@@ -9642,7 +9635,7 @@ an optimistic guest in equal
 1930
 00:56:54,280 --> 00:56:55,960
 0,120 120,630 990,1260 1260,1620 1620,1680
-to ours, so basically in
+to [],| so basically in
 
 1931
 00:56:55,960 --> 00:56:56,770
@@ -9652,12 +9645,12 @@ this case, there's gonna be
 1932
 00:56:56,770 --> 00:56:58,540
 0,690 720,1170 1170,1500 1500,1650 1650,1770
-no log entries, there's going
+no log entries,| there's going
 
 1933
 00:56:58,540 --> 00:57:00,160
 0,60 60,210 210,720 1260,1410 1410,1620
-to be sent so I
+to be sent,| so I
 
 1934
 00:57:00,160 --> 00:57:01,420
@@ -9667,37 +9660,37 @@ can skip all this stuff
 1935
 00:57:01,420 --> 00:57:02,710
 0,150 150,690 720,930 930,1050 1050,1290
-for now we'll come back
+for now,| we'll come back
 
 1936
 00:57:02,710 --> 00:57:03,670
 0,120 120,240 240,510 510,690 690,960
-to it when we're looking
+to it, when we're looking
 
 1937
 00:57:03,670 --> 00:57:06,310
 0,510 510,1260 1260,1830 2010,2400 2400,2640
-actually at start I fill
+actually at start,| I fill
 
 1938
 00:57:06,310 --> 00:57:08,720
 0,120 120,390 390,1050 1290,2130
-in the entry arguments.
+in the {AppendEntriesArgs - -},|
 
 1939
 00:57:09,000 --> 00:57:11,610
 0,630 630,1350 1380,1890 2190,2490 2490,2610
-Um, and um, we can
+{} and {} we can
 
 1940
 00:57:11,610 --> 00:57:12,300
 0,150 150,210 210,270 270,630 630,690
-look at the structure, you
+look at the structure,| you
 
 1941
 00:57:12,300 --> 00:57:13,080
 0,90 90,300 300,510 510,690 690,780
-would like to, but you
+would like to,| but you
 
 1942
 00:57:13,080 --> 00:57:14,040
@@ -9707,7 +9700,7 @@ know it is exactly as
 1943
 00:57:14,040 --> 00:57:17,190
 0,180 180,480 480,780 780,2340 2370,3150
-in figure two a may
+in figure 2,| {} may
 
 1944
 00:57:17,190 --> 00:57:18,330
@@ -9717,7 +9710,7 @@ be the only thing that'll
 1945
 00:57:18,330 --> 00:57:19,170
 0,210 210,570 570,690 690,780 780,840
-be careful, you've got to
+be careful,| you've got to
 
 1946
 00:57:19,170 --> 00:57:20,220
@@ -9727,7 +9720,7 @@ be a little careful about
 1947
 00:57:20,220 --> 00:57:23,310
 0,390 660,1560 1560,2400 2400,3000 3000,3090
-is a allocated slice, you
+is| {} allocated slice, you
 
 1948
 00:57:23,310 --> 00:57:25,080
@@ -9737,87 +9730,87 @@ know to hold the entries
 1949
 00:57:25,080 --> 00:57:26,280
 0,390 390,510 510,600 600,720 720,1200
-that need to be sent
+that need to be sent,|
 
 1950
 00:57:26,610 --> 00:57:28,020
 0,300 300,510 510,960 960,1230 1230,1410
-in this particular case number
+in this particular case, number
 
 1951
 00:57:28,020 --> 00:57:29,940
 0,90 90,420 420,1080 1110,1470 1500,1920
-of entries zero were a
+of entries zero,| were {x}
 
 1952
 00:57:29,940 --> 00:57:31,230
 0,300 300,480 480,810 810,930 930,1290
-because, we're assuming that everybody's
+because we're assuming that everybody's
 
 1953
 00:57:31,230 --> 00:57:32,460
 0,120 120,210 210,630 960,1110 1110,1230
-up to date and then
+up to date| and then
 
 1954
 00:57:32,460 --> 00:57:33,990
 0,120 120,690 690,780 780,960 960,1530
-a copy, you know the
+{} copy you know the
 
 1955
 00:57:34,200 --> 00:57:37,350
 0,840 840,1050 1050,1470 1830,2820 2820,3150
-part from the sliced effort,
+part from the slices from
 
 1956
 00:57:37,350 --> 00:57:38,910
 0,90 90,720 810,1170 1170,1320 1320,1560
-the log in the raf
+the log in the raft
 
 1957
 00:57:38,910 --> 00:57:40,620
 0,480 480,840 840,1350
-structure to the.
+structure| to the,
 
 1958
 00:57:41,240 --> 00:57:42,800
 0,360 360,630 630,750 750,1290 1320,1560
-A to the entries in
+{} to the entries in
 
 1959
 00:57:42,800 --> 00:57:44,220
 0,90 90,840
-the arguments.
+the arguments,|
 
 1960
 00:57:44,480 --> 00:57:45,920
 0,720 720,930 930,1080 1080,1170 1170,1440
-Um, and so I have
+{} and so I have
 
 1961
 00:57:45,920 --> 00:57:47,300
 0,240 240,390 390,660 660,1290 1290,1380
-really my own cocky at
+really my own copy at
 
 1962
 00:57:47,300 --> 00:57:49,490
 0,150 150,540 540,840 840,1560 1590,2190
-this point of the log,
+this point of the log,|
 
 1963
 00:57:49,730 --> 00:57:50,840
 0,420 420,660 660,840 840,990 990,1110
-um, there's a little bit
+{} there's a little bit
 
 1964
 00:57:50,840 --> 00:57:52,250
 0,120 120,450 450,810 810,1020 1020,1410
-of danger correct like slice
+of danger, correct,| like slice
 
 1965
 00:57:52,250 --> 00:57:53,960
 0,240 240,750 780,1320 1320,1530 1530,1710
-share memory a so this
+share memory,| {} so this
 
 1966
 00:57:53,960 --> 00:57:54,980
@@ -9827,17 +9820,17 @@ is why the copy needs
 1967
 00:57:54,980 --> 00:57:56,140
 0,90 90,630
-to happen.
+to happen,|
 
 1968
 00:57:56,490 --> 00:57:57,990
 0,480 480,600 600,690 690,1110 1110,1500
-Um, so I copied entries
+{} so I copied entries
 
 1969
 00:57:57,990 --> 00:57:59,310
 0,210 210,330 330,450 450,750 750,1320
-out of the raft structure
+out of the raft structure,|
 
 1970
 00:57:59,310 --> 00:58:00,330
@@ -9852,12 +9845,12 @@ on into my private argument
 1972
 00:58:02,400 --> 00:58:03,840
 0,930
-structure.
+structure,|
 
 1973
 00:58:04,620 --> 00:58:07,260
 0,750 810,1320 1320,1830 1830,2220 2220,2640
-And, um was done, basically
+and, {} {once,that,is} done,| basically
 
 1974
 00:58:07,260 --> 00:58:08,520
@@ -9867,42 +9860,42 @@ I sent you know started
 1975
 00:58:08,520 --> 00:58:10,800
 0,210 210,900 930,1410 1410,1890 1890,2280
-over function go undergo routine
+Go function, Go Go routine
 
 1976
 00:58:10,800 --> 00:58:12,870
 0,210 210,810 900,1590 1680,1920 1920,2070
-for every peer and in
+for every peer| and in
 
 1977
 00:58:12,870 --> 00:58:15,030
 0,360 360,1140 1140,1470 1470,1740 1740,2160
-that no function in depth
+that Go function,| in that
 
 1978
 00:58:15,660 --> 00:58:17,430
 0,180 180,390 390,630 630,1140 1470,1770
-and in that function A
+and in that function, {}
 
 1979
 00:58:17,430 --> 00:58:19,320
 0,120 120,360 360,480 480,1290 1740,1890
-I sent the RBC and
+I sent the RPC| and
 
 1980
 00:58:19,320 --> 00:58:20,520
 0,120 120,210 210,300 300,720 720,1200
-then in the reply handler
+then in the reply handler,|
 
 1981
 00:58:20,520 --> 00:58:21,900
 0,330 330,660 660,750 750,1170 1170,1380
-I grabbed the log just
+I grab the log,| just
 
 1982
 00:58:21,900 --> 00:58:23,730
 0,360 360,810 810,990 990,1200 1200,1830
-reply handler of your pci,
+reply handler of {RPC -},|
 
 1983
 00:58:23,730 --> 00:58:24,600
@@ -9912,37 +9905,37 @@ grab the log and then
 1984
 00:58:24,600 --> 00:58:25,900
 0,330 330,420 420,900
-process, the reply.
+process the reply,|
 
 1985
 00:58:25,990 --> 00:58:27,520
 0,180 180,510 510,960
-The event reply.
+the append reply.|
 
 1986
 00:58:30,640 --> 00:58:32,100
 0,180 180,270 270,450 450,960
-It all makes sense.
+{Does,this} all make sense?|
 
 1987
 00:58:34,550 --> 00:58:38,300
 0,210 210,2550 2820,3180 3180,3420 3420,3750
-But yeah, maybe one by
+But.| Yeah, maybe one by
 
 1988
 00:58:38,900 --> 00:58:40,430
 0,510 510,720 720,1110 1110,1380 1380,1530
-one little question, yes, oh
+one.| {One,little} question, yeah, so
 
 1989
 00:58:40,430 --> 00:58:42,540
 0,300 300,600 600,660 660,1560
-and send a pencil.
+in {sendAppendL - -},|
 
 1990
 00:58:42,540 --> 00:58:43,560
 0,180 180,480 510,750 750,840 840,1020
-We have a we have
+we have, {} we have
 
 1991
 00:58:43,560 --> 00:58:44,370
@@ -9952,32 +9945,32 @@ the loop in which we
 1992
 00:58:44,370 --> 00:58:46,110
 0,450 750,900 900,1170 1170,1440 1440,1740
-call a ref dot send
+call {} {rf.sendAppendL - -
 
 1993
 00:58:46,110 --> 00:58:47,320
 0,180 180,630
-up endo.
+- -},|
 
 1994
 00:58:47,410 --> 00:58:49,180
 0,570 570,810 810,1260 1260,1470 1470,1770
-And we assume the lock
+and we assume the lock
 
 1995
 00:58:49,180 --> 00:58:51,190
 0,90 90,660 720,1200 1230,1560 1560,2010
-is held through that call
+is held through that call,|
 
 1996
 00:58:51,250 --> 00:58:52,820
 0,330 330,450 450,660 660,1020
-but we do there.
+but we do there
 
 1997
 00:58:52,880 --> 00:58:54,050
 0,150 150,300 300,450 450,900 1020,1170
-You know any thread at
+you know any thread,| at
 
 1998
 00:58:54,050 --> 00:58:56,450
@@ -9987,57 +9980,57 @@ which point a thread, let's
 1999
 00:58:56,450 --> 00:58:57,530
 0,150 150,210 210,330 330,660 660,1080
-go to the lock, right.
+go to the lock, right.|
 
 2000
 00:58:58,770 --> 00:58:59,820
 0,240 240,420 420,810 810,960 960,1050
-Okay so like there's an
+Okay, so like there's an
 
 2001
 00:58:59,820 --> 00:59:01,380
 0,270 270,630 630,930 930,1140 1140,1560
-outer loop Greg where somebody
+outer loop, correct,| where somebody
 
 2002
 00:59:01,380 --> 00:59:02,670
 0,90 90,540 540,810 810,900 900,1290
-to color holds the walk
+to caller holds the lock|
 
 2003
 00:59:02,700 --> 00:59:04,350
 0,180 180,570 570,660 660,1440 1440,1650
-and basically it calls set
+and basically it calls {sendAppendL
 
 2004
 00:59:04,350 --> 00:59:05,640
 0,120 120,780 810,930 930,1050 1050,1290
-up Intel you know n
+- -} you know n
 
 2005
 00:59:05,640 --> 00:59:06,690
 0,390 390,750 750,870 870,960 960,1050
-times where n is the
+times,| where n is the
 
 2006
 00:59:06,690 --> 00:59:07,860
 0,180 180,300 300,570 570,870 870,1170
-number of years minus one.
+number of peers minus 1,|
 
 2007
 00:59:08,680 --> 00:59:09,880
 0,300 300,690 690,930 930,1110 1110,1200
-And for every one of
+and for every one of
 
 2008
 00:59:09,880 --> 00:59:11,920
 0,480 780,1230 1230,1410 1410,1620 1620,2040
-them a for every iteration
+them,| {} for every iteration
 
 2009
 00:59:11,920 --> 00:59:13,210
 0,60 60,210 210,630 720,1170 1170,1290
-of the loop, we're going
+of the loop,| we're going
 
 2010
 00:59:13,210 --> 00:59:14,380
@@ -10047,12 +10040,12 @@ to create a new go
 2011
 00:59:14,380 --> 00:59:16,300
 0,570 780,1110 1110,1290 1290,1680 1680,1920
-function that go function runs
+function,| that go function runs
 
 2012
 00:59:16,300 --> 00:59:18,190
 0,420 420,750 750,840 840,1350 1380,1890
-without holding the watch right
+without holding the locks, right,|
 
 2013
 00:59:18,490 --> 00:59:19,840
@@ -10062,7 +10055,7 @@ so it will send its
 2014
 00:59:19,840 --> 00:59:21,220
 0,180 180,510 510,750 750,1050 1050,1380
-our PC without holding locks
+{RPC -} without holding locks|
 
 2015
 00:59:21,220 --> 00:59:22,120
@@ -10072,12 +10065,12 @@ and at the same time,
 2016
 00:59:22,120 --> 00:59:23,080
 0,60 60,270 270,450 450,750 750,960
-the new go function might
+the new Go function might
 
 2017
 00:59:23,080 --> 00:59:24,190
 0,60 60,360 360,450 450,540 540,1110
-be started by the caller
+be started by the caller,|
 
 2018
 00:59:24,490 --> 00:59:26,350
@@ -10087,77 +10080,77 @@ that actually also is going
 2019
 00:59:26,350 --> 00:59:28,090
 0,150 150,420 420,540 540,1050 1470,1740
-to send our PC no
+to send {RPC -},| although
 
 2020
 00:59:28,090 --> 00:59:29,260
 0,180 180,420 420,540 540,870 870,1170
-they're sent our PCs go
+they're sent {RPCs -} go
 
 2021
 00:59:29,260 --> 00:59:31,360
 0,660 660,810 810,900 900,1620 1860,2100
-parallel to the followers, the
+parallel to the followers,| the
 
 2022
 00:59:31,360 --> 00:59:32,840
 0,360 360,1050
-followers respond.
+followers respond,|
 
 2023
 00:59:32,870 --> 00:59:33,980
 0,240 240,420 420,480 480,960 960,1110
-And all the responses come
+and all the responses come
 
 2024
 00:59:33,980 --> 00:59:35,900
 0,300 300,630 930,1290 1290,1530 1530,1920
-back in a that will
+back in,| {} that will,
 
 2025
 00:59:35,960 --> 00:59:37,580
 0,240 240,420 420,570 570,1290 1320,1620
-so that will return when
+so that will return, when
 
 2026
 00:59:37,580 --> 00:59:38,900
 0,60 60,360 360,900 900,1110 1110,1320
-the following response comes in
+the following response comes in,|
 
 2027
 00:59:38,900 --> 00:59:40,160
 0,300 300,720 720,870 870,1110 1110,1260
-that returns from St, our
+that returns from send {RPC
 
 2028
 00:59:40,160 --> 00:59:41,510
 0,480 480,600 600,780 780,1050 1050,1350
-PC and at that point
+-}| and at that point
 
 2029
 00:59:41,510 --> 00:59:42,740
 0,180 180,420 420,480 480,930 930,1230
-I'll grab the log to
+I'll grab the lock to
 
 2030
 00:59:42,740 --> 00:59:44,180
 0,330 330,510 510,570 570,930
-process through a plot.
+process to {reply -},|
 
 2031
 00:59:44,490 --> 00:59:47,310
 0,420 420,1230 1230,1620 2070,2550 2550,2820
-Now, if the caller still
+now, if the caller still
 
 2032
 00:59:47,310 --> 00:59:50,310
 0,570 930,1770 1830,2100 2100,2850 2850,3000
-busy sending a {RBC's -}
+busy sending {} {RPCs -}
 
 2033
 00:59:50,310 --> 00:59:52,350
 0,270 270,480 480,1080 1230,1560 1560,2040
-to new followers, then basically
+to new followers,| then basically
 
 2034
 00:59:52,350 --> 00:59:53,640
@@ -10167,7 +10160,7 @@ you know the reply handler
 2035
 00:59:53,640 --> 00:59:56,760
 0,150 150,690 1020,1410 1410,1770 2700,3120
-will block until the color
+will block| until the caller
 
 2036
 00:59:56,760 --> 00:59:57,900
@@ -10177,22 +10170,22 @@ is done, sending all the
 2037
 00:59:57,900 --> 00:59:59,080
 0,840
-archdiocese.
+RPCs.|
 
 2038
 01:00:00,430 --> 01:00:02,230
 0,570 570,780 780,990 990,1440 1440,1800
-Yeah, so, um my question
+Yeah, so, {} my question
 
 2039
 01:00:02,230 --> 01:00:05,230
 0,720 840,1500 1500,1500 1500,2580 2730,3000
-was I I assumed why
+was,| I I assumed why
 
 2040
 01:00:05,230 --> 01:00:06,280
 0,180 180,510 510,630 630,960 960,1050
-that happens is because you
+that happens is,| because you
 
 2041
 01:00:06,280 --> 01:00:07,240
@@ -10202,12 +10195,12 @@ had a we had a
 2042
 01:00:07,240 --> 01:00:08,360
 0,600
-differ.
+defer
 
 2043
 01:00:08,600 --> 01:00:10,340
 0,150 150,810 930,1080 1080,1170 1170,1740
-{R,F} deadlock and the unlock
+{rf.lock -} and the unlock,|
 
 2044
 01:00:10,370 --> 01:00:11,930
@@ -10217,32 +10210,32 @@ is that's why it doesn't
 2045
 01:00:11,930 --> 01:00:12,860
 0,300 300,420 420,630 630,780 780,930
-hold the lock when it
+hold the lock,| when it
 
 2046
 01:00:13,070 --> 01:00:14,660
 0,390 390,450 450,750 750,1050
-starts a thread, right.
+starts a thread, right,|
 
 2047
 01:00:15,880 --> 01:00:17,380
 0,150 150,240 240,420 420,750
-Or is that just.
+or is that just.|
 
 2048
 01:00:17,900 --> 01:00:18,890
 0,270 270,360 360,540 540,600 600,990
-When you start a threat,
+When you start a thread,|
 
 2049
 01:00:18,890 --> 01:00:20,300
 0,210 210,420 420,660 660,870 870,1410
-you don't hold any watch.
+you don't hold any locks.|
 
 2050
 01:00:21,100 --> 01:00:23,080
 0,540 630,1020 1140,1560 1560,1650 1650,1980
-Yeah, like whatever it is
+Yeah, like whatever it is,|
 
 2051
 01:00:23,110 --> 01:00:24,190
@@ -10252,7 +10245,7 @@ even if we don't have
 2052
 01:00:24,190 --> 01:00:26,320
 0,630 870,1350 1440,1770 1770,1950 1950,2130
-like that, like even if
+like that,| like even if
 
 2053
 01:00:26,320 --> 01:00:27,250
@@ -10262,37 +10255,37 @@ we tried to hold the
 2054
 01:00:27,250 --> 01:00:28,420
 0,300 300,480 480,810 810,960 960,1170
-lock right before the go
+lock right,| before the go
 
 2055
 01:00:28,420 --> 01:00:29,980
 0,330 720,840 840,1170 1170,1410 1410,1560
-code it wouldn't hold it.
+code, it wouldn't hold it.|
 
 2056
 01:00:30,860 --> 01:00:33,950
 0,210 210,720 780,1050 1050,2340 2460,3090
-That's right, yeah yeah yeah.
+That's right, yeah yeah.| Yeah.|
 
 2057
 01:00:34,850 --> 01:00:36,140
 0,270 270,420 420,630 630,720 720,1290
-I will sort of follow
+I will sort of follow,|
 
 2058
 01:00:36,170 --> 01:00:39,320
 0,720 1050,1290 1290,2010 2490,2760 2760,3150
-so in the if okay
+so in the if ok
 
 2059
 01:00:39,320 --> 01:00:41,960
 0,600 810,1320 1320,1890 1890,2040 2040,2640
-block, um, where's the differ,
+block,| {} where's the defer
 
 2060
 01:00:41,960 --> 01:00:43,760
 0,390 390,630 630,960 960,1320 1530,1800
-being like called from from
+being like called from,| from
 
 2061
 01:00:43,760 --> 01:00:45,410
@@ -10302,22 +10295,22 @@ the return statement of that
 2062
 01:00:45,410 --> 01:00:48,050
 0,450 1020,1500 1500,2100 2190,2460 2460,2640
-method block exits when this
+method.| {When,this,block} exits, when this
 
 2063
 01:00:48,050 --> 01:00:49,760
 0,300 300,660 660,930 930,1050 1050,1710
-block exits then the defer
+block exits,| then the defer
 
 2064
 01:00:49,760 --> 01:00:50,840
 0,300 300,420 420,810 810,960 960,1080
-them you unlock will be
+{mu.unlock - -} will be
 
 2065
 01:00:50,840 --> 01:00:51,700
 0,390
-called.
+called.|
 
 2066
 01:00:53,020 --> 01:00:55,210
@@ -10332,42 +10325,42 @@ when the surrounding basic block
 2068
 01:00:57,490 --> 01:00:58,620
 0,630
-exits.
+exits.|
 
 2069
 01:00:58,860 --> 01:01:00,540
 0,150 150,390 390,600 600,1020 1020,1680
-Oh not just return statements
+Oh not just return statements.|
 
 2070
 01:01:00,780 --> 01:01:02,190
 0,450 450,600 600,870 870,1230 1230,1410
-not just return statements that's
+Not just return statements, that's
 
 2071
 01:01:02,190 --> 01:01:03,680
 0,300 300,900
-correct Alpha.
+correct.| {Okay,cool}.|
 
 2072
 01:01:05,170 --> 01:01:06,670
 0,300 300,690 720,840 840,1050 1050,1500
-That's cool, it's very heavy,
+That's cool, it's very handy.|
 
 2073
 01:01:07,060 --> 01:01:08,110
 0,210 210,330 330,660 660,930 930,1050
-can you repeat that, so
+Can you repeat that,| so
 
 2074
 01:01:08,110 --> 01:01:10,630
 0,240 240,360 360,480 480,1080 1530,2520
-what does the differential differs
+what does the {defer,exists}.| defer
 
 2075
 01:01:10,630 --> 01:01:12,460
 0,570 600,870 870,1080 1080,1290 1290,1830
-called like when this differ
+called like when this defer
 
 2076
 01:01:12,460 --> 01:01:14,950
@@ -10377,7 +10370,7 @@ or this unlock runs when
 2077
 01:01:14,980 --> 01:01:17,260
 0,330 330,660 660,1170 1230,1890 2040,2280
-this basic block exits or
+this basic block exits| or
 
 2078
 01:01:17,260 --> 01:01:18,850
@@ -10387,7 +10380,7 @@ returns or goes out whatever
 2079
 01:01:18,850 --> 01:01:20,080
 0,510 510,660 660,990 990,1140 1140,1230
-terminology went around, so if
+[] went around,| so if
 
 2080
 01:01:20,080 --> 01:01:20,980
@@ -10397,17 +10390,17 @@ you return from this basic
 2081
 01:01:20,980 --> 01:01:23,050
 0,480 780,1170 1170,1590 1590,1710 1710,2070
-block, this unlock will happen.
+block,| this unlock will happen.|
 
 2082
 01:01:24,060 --> 01:01:25,200
 0,240 240,630
-That's awesome.
+That's awesome.|
 
 2083
 01:01:27,160 --> 01:01:29,470
 0,330 330,630 630,1380 1620,2100 2130,2310
-I'm sorry, why, um, you
+{} Sorry, why, {} you
 
 2084
 01:01:29,470 --> 01:01:30,400
@@ -10427,12 +10420,12 @@ term that you thought you
 2087
 01:01:33,520 --> 01:01:36,010
 0,270 270,720 930,1380 1380,1590 1590,2490
-were in because some requests
+were in,| because some requests
 
 2088
 01:01:36,190 --> 01:01:37,780
 0,270 270,360 360,1050 1320,1500 1500,1590
-can be slow and you
+can be slow| and you
 
 2089
 01:01:37,780 --> 01:01:39,790
@@ -10442,17 +10435,17 @@ might receive a response now
 2090
 01:01:39,790 --> 01:01:41,920
 0,420 420,540 540,750 750,1320 1470,2130
-after a long time, yep
+after a long time.| Yep.|
 
 2091
 01:01:42,100 --> 01:01:44,230
 0,570 750,960 960,1560 1560,1890 1890,2130
-okay, so here's all let's
+Okay.| So here's all let's
 
 2092
 01:01:44,230 --> 01:01:45,430
 0,210 210,300 300,690 690,870 870,1200
-look at process and reply
+look at process and reply,|
 
 2093
 01:01:45,430 --> 01:01:46,060
@@ -10462,37 +10455,37 @@ I think that's what you're
 2094
 01:01:46,060 --> 01:01:47,260
 0,360 360,690 690,810 810,930 930,1200
-asking what does it do.
+asking what does it do,|
 
 2095
 01:01:48,210 --> 01:01:49,560
 0,570 570,840 840,990 990,1110 1110,1350
-Um, and we have looked
+{} and we have looked
 
 2096
 01:01:49,560 --> 01:01:50,220
 0,60 60,150 150,330 330,540 540,660
-at it yet, so we
+at it yet,| so we
 
 2097
 01:01:50,220 --> 01:01:51,460
 0,120 120,300 300,390 390,660
-can look at it.
+can look at it,|
 
 2098
 01:01:52,250 --> 01:01:55,580
 0,930 930,1410 1410,1770 1770,2550 2580,3330
-Um, actually reasonable, complicated, um.
+{} actually reasonable complicated, {}|
 
 2099
 01:01:56,790 --> 01:01:57,780
 0,120 120,570 570,660 660,780 780,990
-It follows you know the
+it follows you know the
 
 2100
 01:01:57,780 --> 01:01:59,160
 0,240 240,450 450,570 570,690 690,1380
-general rule for all service
+general rule for all servers,|
 
 2101
 01:01:59,160 --> 01:02:00,390
@@ -10502,7 +10495,7 @@ you have the required terms
 2102
 01:02:00,390 --> 01:02:01,920
 0,270 270,360 360,660 660,1080 1080,1530
-beginning my current term, then
+beginning my current term,| then
 
 2103
 01:02:01,920 --> 01:02:03,000
@@ -10512,7 +10505,7 @@ you know I got switched
 2104
 01:02:03,000 --> 01:02:04,800
 0,60 60,420 420,510 510,1140 1200,1800
-to becoming a follower and
+to becoming a follower| and
 
 2105
 01:02:04,800 --> 01:02:05,430
@@ -10522,7 +10515,7 @@ you know going to a
 2106
 01:02:05,430 --> 01:02:06,870
 0,180 180,690 870,1140 1140,1230 1230,1440
-new term, if it is
+new term,| if it is
 
 2107
 01:02:06,870 --> 01:02:07,980
@@ -10532,12 +10525,12 @@ actually equal to my term,
 2108
 01:02:07,980 --> 01:02:08,670
 0,180 180,330 330,420 420,570 570,690
-correct this is what you
+correct,| this is what you
 
 2109
 01:02:08,670 --> 01:02:11,610
 0,120 120,720 1110,1890 1920,2700 2730,2940
-are asking like if the
+are asking,| like if the
 
 2110
 01:02:11,610 --> 01:02:12,900
@@ -10547,12 +10540,12 @@ reply comes in the same
 2111
 01:02:12,900 --> 01:02:14,280
 0,390 390,570 570,660 660,960 960,1380
-term that I sent in
+term,| that I sent in
 
 2112
 01:02:14,340 --> 01:02:15,900
 0,390 390,690 690,990 990,1380 1380,1560
-my arch term then I'm
+my args term,| then I'm
 
 2113
 01:02:15,900 --> 01:02:18,480
@@ -10562,12 +10555,12 @@ gonna do a have a
 2114
 01:02:18,480 --> 01:02:20,400
 0,360 360,720 720,900 900,1530 1560,1920
-different function that actually does
+different function,| that actually does
 
 2115
 01:02:20,400 --> 01:02:22,200
 0,120 120,210 210,900 930,1620 1620,1800
-all the processing, assuming that
+all the processing,| assuming that
 
 2116
 01:02:22,200 --> 01:02:23,790
@@ -10577,72 +10570,72 @@ at least the terms are
 2117
 01:02:23,790 --> 01:02:24,600
 0,420
-matching.
+matching.|
 
 2118
 01:02:25,360 --> 01:02:26,620
 0,330 330,780 780,870 870,1110 1110,1260
-Oh, sorry I meant in
+Oh, sorry, I meant in
 
 2119
 01:02:26,620 --> 01:02:28,090
 0,210 210,630 630,960 960,1380 1380,1470
-the leader, when receives a
+the leader,| when receives a
 
 2120
 01:02:28,090 --> 01:02:29,680
 0,540 540,630 630,1050
-response you have.
+response you have,|
 
 2121
 01:02:29,830 --> 01:02:31,210
 0,150 150,420 420,630 630,870 870,1380
-It had like a check,
+it had like a check.|
 
 2122
 01:02:31,210 --> 01:02:33,580
 0,390 1260,1650 1650,1980 1980,2220 2220,2370
-yeah yeah basically happening here
+Yeah, yeah basically happening here
 
 2123
 01:02:33,580 --> 01:02:34,690
 0,360 390,660 660,840 840,900 900,1110
-too, it's like the same
+too,| it's like the same
 
 2124
 01:02:34,690 --> 01:02:36,820
 0,270 270,630
-check here.
+check here.|
 
 2125
 01:02:36,820 --> 01:02:38,040
 0,120 120,300 300,660
-I see, okay.
+I see, okay.|
 
 2126
 01:02:39,950 --> 01:02:42,200
 0,1470 1470,1710 1710,2040 2040,2160 2160,2250
-Um, OK so you know
+{} Okay, so you know
 
 2127
 01:02:42,200 --> 01:02:43,820
 0,450 450,660 660,810 810,1080 1080,1620
-basically this is then the.
+basically this is then the
 
 2128
 01:02:44,540 --> 01:02:45,860
 0,750
-AH.
+{}
 
 2129
 01:02:45,950 --> 01:02:48,470
 0,120 120,450 450,1170 1350,2040 2070,2520
-A paint entries, a reply
+{append -} entries, {} reply
 
 2130
 01:02:48,470 --> 01:02:50,090
 0,540 570,840 840,1080 1080,1140 1140,1620
-code like what the handler
+code,| like what the handler
 
 2131
 01:02:50,090 --> 01:02:51,440
@@ -10652,17 +10645,17 @@ that runs in response to
 2132
 01:02:51,440 --> 01:02:53,030
 0,120 120,870 1020,1170 1170,1350 1350,1590
-the reply, um, we know
+the reply,| {} we know
 
 2133
 01:02:53,030 --> 01:02:55,730
 0,210 210,1020 1050,1380 1380,2100 2310,2700
-that the term mattress and
+that the term matches and
 
 2134
 01:02:55,730 --> 01:02:58,100
 0,270 270,630 630,930 930,1710 2070,2370
-we check reply success, um,
+we check reply success, {}|
 
 2135
 01:02:58,100 --> 01:02:59,510
@@ -10677,32 +10670,32 @@ we update our match indexes
 2137
 01:03:03,080 --> 01:03:06,720
 0,630 660,1560 1590,2610 2610,3300
-and a next index.
+and {} next index,|
 
 2138
 01:03:07,020 --> 01:03:08,880
 0,330 330,660 660,1230 1230,1530 1530,1860
-A follow exactly the rules
+{} follow exactly the rules
 
 2139
 01:03:08,880 --> 01:03:10,280
 0,60 60,390 390,840
-of figure two.
+of figure 2,|
 
 2140
 01:03:10,400 --> 01:03:11,690
 0,450 450,660 660,870 870,930 930,1290
-A if there's a conflict
+{} if there's a conflict
 
 2141
 01:03:11,690 --> 01:03:14,630
 0,480 480,540 540,1740 1950,2790 2820,2940
-valid you know then you
+valid,| you know then you
 
 2142
 01:03:14,630 --> 01:03:16,130
 0,210 210,480 480,840 840,930 930,1500
-know I process, the conflict
+know I process the conflict|
 
 2143
 01:03:16,130 --> 01:03:16,790
@@ -10722,37 +10715,36 @@ to deal with like backing
 2146
 01:03:18,740 --> 01:03:19,940
 0,210 210,780
-off fast.
+off fast.|
 
 2147
 01:03:20,130 --> 01:03:21,500
 0,810
-I'm.
 
 2148
 01:03:21,590 --> 01:03:23,000
 0,810
-And.
+And,
 
 2149
 01:03:23,000 --> 01:03:25,490
 0,690 690,1680 2040,2190 2190,2340 2340,2490
-Um, and if there's no
+{} and if there's no
 
 2150
 01:03:25,490 --> 01:03:27,350
 0,390 390,990 990,1530 1530,1710 1710,1860
-conflict information available, then I
+conflict information available,| then I
 
 2151
 01:03:27,350 --> 01:03:28,340
 0,150 150,390 390,540 540,660 660,990
-just back off by one.
+just back off by one.|
 
 2152
 01:03:30,490 --> 01:03:32,770
 0,720 960,1230 1230,1590 1590,1770 1770,2280
-Okay, is it a question
+Okay?| Is it a question
 
 2153
 01:03:32,770 --> 01:03:34,120
@@ -10762,62 +10754,62 @@ about how we back off
 2154
 01:03:34,120 --> 01:03:37,000
 0,90 90,600 1440,2130 2460,2700 2700,2880
-by one eyes, is it
+by one,| {} is it
 
 2155
 01:03:37,000 --> 01:03:38,040
 0,510
-not.
+not
 
 2156
 01:03:38,040 --> 01:03:39,750
 0,450 450,810 870,1080 1080,1500 1500,1710
-Problem that I was thinking
+problem that,| I was thinking
 
 2157
 01:03:39,750 --> 01:03:40,800
 0,180 180,300 300,390 390,660 900,1050
-about this and I I
+about this| and I I
 
 2158
 01:03:40,800 --> 01:03:41,670
 0,300 300,360 360,630 630,750 750,870
-think it wasn't true, but
+think it wasn't true,| but
 
 2159
 01:03:41,670 --> 01:03:43,830
 0,180 210,540 540,930 930,1260 1260,2160
-I haven't fully convinced myself
+I haven't fully convinced myself,|
 
 2160
 01:03:43,860 --> 01:03:45,750
 0,570 600,1110 1140,1380 1380,1500 1500,1890
-um, but isn't it possible
+{} but isn't it possible
 
 2161
 01:03:45,750 --> 01:03:47,250
 0,240 240,330 330,600 600,1170 1200,1500
-that a ref dot next
+that {} {rf.nextIndex - -
 
 2162
 01:03:47,250 --> 01:03:50,300
 0,450 450,840 840,1680 1710,2550
-index peer changed between.
+-} peer changed,| between
 
 2163
 01:03:50,300 --> 01:03:51,230
 0,150 150,270 270,630 630,780 780,930
-When we sent it and
+when we sent it| and
 
 2164
 01:03:51,230 --> 01:03:53,810
 0,180 180,510 660,1470 1500,1890 1890,2580
-when we're processing, this response,
+when we're processing this response,|
 
 2165
 01:03:53,810 --> 01:03:56,180
 0,720 720,900 900,1590 1650,1800 1800,2370
-you're not problematic the document
+you're not problematic, the document
 
 2166
 01:03:56,180 --> 01:03:58,040
@@ -10827,12 +10819,12 @@ kind of using a value
 2167
 01:03:58,040 --> 01:04:00,320
 0,180 180,690 690,1260 1470,1770 1770,2280
-that's potentially changed, um, probably
+that's potentially changed.| {} Probably
 
 2168
 01:04:00,320 --> 01:04:02,480
 0,420 420,690 690,1020 1020,1680 1860,2160
-not great because you think
+not, great,| because you think
 
 2169
 01:04:02,480 --> 01:04:04,010
@@ -10842,32 +10834,32 @@ your risk your concern is
 2170
 01:04:04,010 --> 01:04:06,080
 0,480 780,1410 1410,1860 1860,1950 1950,2070
-valid, because certainly you know
+valid,| because certainly you know
 
 2171
 01:04:06,080 --> 01:04:06,980
 0,90 90,330 330,660 660,780 780,900
-the rap structure might have
+the raft structure might have
 
 2172
 01:04:06,980 --> 01:04:08,720
 0,630 630,1320 1320,1410 1410,1500 1500,1740
-completely changed by the time
+completely changed| by the time
 
 2173
 01:04:08,720 --> 01:04:10,160
 0,150 150,540 540,780 780,990
-this response comes in.
+this response comes in.|
 
 2174
 01:04:10,360 --> 01:04:13,210
 0,660 660,1200 1200,1560 1560,1650 1650,2850
-Um, in fact you know
+{} In fact, you know
 
 2175
 01:04:14,740 --> 01:04:16,390
 0,450 450,990 990,1080 1080,1290 1290,1650
-although unlikely of course, because
+although unlikely of course,| because
 
 2176
 01:04:16,390 --> 01:04:17,470
@@ -10877,12 +10869,11 @@ the response to the same
 2177
 01:04:17,470 --> 01:04:18,880
 0,420 450,870
-peer right.
+peer right.|
 
 2178
 01:04:18,970 --> 01:04:20,300
 0,720
-I'm.
 
 2179
 01:04:23,460 --> 01:04:24,420
@@ -10892,17 +10883,17 @@ And so there's a you
 2180
 01:04:24,420 --> 01:04:25,590
 0,210 210,480 480,540 540,840 840,1170
-know, but I might have
+know,| but I might have
 
 2181
 01:04:25,590 --> 01:04:27,150
 0,480 480,810 810,1290 1290,1380 1380,1560
-multiple procedures outstanding to that
+multiple RPC outstanding to that
 
 2182
 01:04:27,150 --> 01:04:28,830
 0,390 390,780 1020,1290 1290,1440 1440,1680
-particular peer and so those
+particular peer| and so those
 
 2183
 01:04:28,830 --> 01:04:30,300
@@ -10912,32 +10903,31 @@ reply handlers here might run
 2184
 01:04:30,300 --> 01:04:31,560
 0,90 90,300 300,750
-in some order.
+in some order.|
 
 2185
 01:04:33,920 --> 01:04:34,760
 0,390 420,600 600,690 690,780 780,840
-Um, so I have a
+{} So I have a
 
 2186
 01:04:34,760 --> 01:04:36,110
 0,330 330,480 480,720 720,870 870,1350
-question, so why do we
+question,| so why do we
 
 2187
 01:04:36,110 --> 01:04:37,520
 0,510 510,600 600,810 810,1260 1260,1410
-decrement the next index by
+decrement the {nextIndex -} by
 
 2188
 01:04:37,520 --> 01:04:38,810
 0,300 300,420 420,630 630,720 720,1290
-one if there's no conflict.
+1,| if there's no conflict.|
 
 2189
 01:04:40,480 --> 01:04:42,180
 0,1110
-I'm.
 
 2190
 01:04:43,160 --> 01:04:44,210
@@ -10947,12 +10937,12 @@ I think this has to
 2191
 01:04:44,210 --> 01:04:45,200
 0,180 180,420 420,720 720,840 840,990
-do that, maybe at some
+do that,| maybe at some
 
 2192
 01:04:45,200 --> 01:04:46,730
 0,210 210,270 270,480 480,960 960,1530
-point I haven't implemented conflict
+point, I haven't implemented conflict
 
 2193
 01:04:46,760 --> 01:04:48,590
@@ -10962,7 +10952,7 @@ or the conflict term stuff
 2194
 01:04:48,590 --> 01:04:49,480
 0,360
-yet.
+yet,|
 
 2195
 01:04:50,620 --> 01:04:52,600
@@ -10977,17 +10967,17 @@ this action is essential or
 2197
 01:04:53,590 --> 01:04:54,520
 0,360
-not.
+not.|
 
 2198
 01:04:54,550 --> 01:04:55,760
 0,360 570,810 810,990
-Okay, thank you.
+Okay, thank you.|
 
 2199
 01:04:55,850 --> 01:04:57,260
 0,690 690,810 810,900 900,960 960,1410
-Um, you know, of course
+{} You know, of course
 
 2200
 01:04:57,290 --> 01:04:58,340
@@ -10997,7 +10987,7 @@ like you I've changed my
 2201
 01:04:58,340 --> 01:04:59,990
 0,360 360,690 690,1050 1050,1500 1500,1650
-coach multiple times and you
+code multiple times| and you
 
 2202
 01:04:59,990 --> 01:05:01,550
@@ -11012,57 +11002,57 @@ implementing the response of the
 2204
 01:05:03,800 --> 01:05:04,740
 0,510
-test.
+test,|
 
 2205
 01:05:07,390 --> 01:05:08,230
 0,270 270,420 420,540 540,720 720,840
-Um I don't think there's
+{} I don't think there's
 
 2206
 01:05:08,230 --> 01:05:09,660
 0,450 450,570 570,870
-harm in it.
+harm in it,|
 
 2207
 01:05:09,690 --> 01:05:11,280
 0,270 270,690 690,1290 1290,1410 1410,1590
-The only downside could be
+the only downside could be
 
 2208
 01:05:11,280 --> 01:05:12,120
 0,180 180,210 210,420 420,720 720,840
-that I may send to
+that I may send too
 
 2209
 01:05:12,120 --> 01:05:14,490
 0,330 330,1080 1080,1890 1920,2190 2190,2370
-many a entries on our
+many {} entries on {RPC
 
 2210
 01:05:14,490 --> 01:05:16,290
 0,720 720,990 990,1140 1140,1560 1560,1800
-PC or send more entries
+-}| or send more entries
 
 2211
 01:05:16,290 --> 01:05:17,190
 0,60 60,150 150,540 540,630 630,900
-in the RBC I really
+in the RPC I really
 
 2212
 01:05:17,190 --> 01:05:18,180
 0,210 210,420
-have to.
+have to,|
 
 2213
 01:05:18,560 --> 01:05:20,140
 0,240 240,330 330,600 600,1020
-On the next event.
+on the next append.|
 
 2214
 01:05:24,430 --> 01:05:25,940
 0,240 240,390 390,1020
-OK, any questions.
+Okay, any questions?|
 
 2215
 01:05:28,100 --> 01:05:29,150
