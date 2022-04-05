@@ -23,7 +23,7 @@
 | 5       | &check; | &check; |      |
 | 6       | &check; | &check; |      |
 | 7       | &check; | &check; |      |
-| 8       | &check; |         |      |
+| 8       | &check; | &check; |      |
 | 9       | &check; | &check; |      |
 | 10      | &check; | &check; |      |
 | 11      | &check; | &check; |      |
