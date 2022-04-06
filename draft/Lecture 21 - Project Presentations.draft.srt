@@ -13651,17 +13651,17 @@ many of you have played
 2734
 01:19:24,360 --> 01:19:26,190
 0,420 420,870 870,1110 1110,1290 1290,1830
-multiplayer games, um in quarantine,
+multiplayer games {} in quarantine,|
 
 2735
 01:19:26,220 --> 01:19:27,340
 0,150 150,240 240,630
-when you're bored.
+when you're bored.|
 
 2736
 01:19:27,660 --> 01:19:29,280
 0,270 270,450 450,960 960,1410 1410,1620
-So let's imagine that you
+So let's imagine that,| you
 
 2737
 01:19:29,280 --> 01:19:31,080
@@ -13671,7 +13671,7 @@ are a small indie game
 2738
 01:19:31,080 --> 01:19:32,790
 0,150 150,660 1110,1440 1440,1530 1530,1710
-dev company and you're trying
+dev company| and you're trying
 
 2739
 01:19:32,790 --> 01:19:33,750
@@ -13681,17 +13681,17 @@ to develop a most player
 2740
 01:19:33,750 --> 01:19:36,690
 0,390 420,1050 1050,1620 2070,2430 2430,2940
-game possibly that has either
+game,| possibly that has either
 
 2741
 01:19:36,690 --> 01:19:38,310
 0,210 210,480 480,1080 1080,1440 1440,1620
-several different rooms, something like
+several different rooms,| something like
 
 2742
 01:19:38,310 --> 01:19:39,390
 0,210 210,600 600,810 810,900 900,1080
-chat penguin where you might
+chat penguin,| where you might
 
 2743
 01:19:39,390 --> 01:19:40,590
@@ -13701,12 +13701,12 @@ interact with other players in
 2744
 01:19:40,590 --> 01:19:41,940
 0,90 90,300 300,630 780,1020 1020,1350
-the same room, or perhaps
+the same room,| or perhaps
 
 2745
 01:19:41,940 --> 01:19:43,440
 0,120 120,270 270,720 720,1050 1050,1500
-it's like matchmaking base where
+it's like matchmaking base,| where
 
 2746
 01:19:43,440 --> 01:19:44,550
@@ -13716,17 +13716,17 @@ you're in a Lobby with
 2747
 01:19:44,550 --> 01:19:45,620
 0,270 270,450 450,870
-several other players.
+several other players.|
 
 2748
 01:19:45,930 --> 01:19:47,640
 0,390 390,690 690,1260 1260,1470 1470,1710
-Well, so traditionally how these
+Well, so traditionally, how these
 
 2749
 01:19:47,640 --> 01:19:49,920
 0,270 270,510 510,960 1050,1740 1830,2280
-work is that everything goes
+work is that,| everything goes
 
 2750
 01:19:50,010 --> 01:19:51,270
@@ -13736,12 +13736,12 @@ against process on one central
 2751
 01:19:51,270 --> 01:19:53,220
 0,540 780,1140 1170,1350 1350,1620 1620,1950
-server but that central server
+server,| but that central server
 
 2752
 01:19:53,220 --> 01:19:55,170
 0,300 300,420 420,990 1230,1560 1560,1950
-is a bottleneck, if every
+is a bottleneck,| if every
 
 2753
 01:19:55,170 --> 01:19:56,280
@@ -13756,12 +13756,12 @@ to that server to handle
 2755
 01:19:57,750 --> 01:19:59,130
 0,120 120,330 330,840 900,1170 1170,1380
-the game logic, um, that's
+the game logic,| {} {that,server
 
 2756
 01:19:59,130 --> 01:20:00,990
 0,180 180,540 540,1290 1380,1680 1680,1860
-ever began a bottom left
+-} began a {bottleneck -}
 
 2757
 01:20:00,990 --> 01:20:01,920
@@ -13771,17 +13771,17 @@ by the number of requests
 2758
 01:20:01,920 --> 01:20:03,330
 0,120 120,300 300,630 990,1170 1170,1410
-that come through and also
+that come through| and also
 
 2759
 01:20:03,330 --> 01:20:04,560
 0,150 150,330 330,570 570,750 750,1230
-if that server goes down
+if that server goes down,|n
 
 2760
 01:20:05,070 --> 01:20:06,160
 0,150 150,330 330,420 420,900
-there goes your game.
+there goes your game.|
 
 2761
 01:20:06,760 --> 01:20:08,140
@@ -13796,12 +13796,12 @@ to create a distributed game
 2763
 01:20:09,520 --> 01:20:12,190
 0,540 540,1020 1110,1650 2130,2460 2460,2670
-framework that instead that's also
+framework,| that instead, that's also
 
 2764
 01:20:12,190 --> 01:20:13,720
 0,180 180,510 750,1110 1110,1470 1470,1530
-fault tolerant, so instead of
+fault tolerant,| so instead of
 
 2765
 01:20:13,720 --> 01:20:15,250
@@ -13811,7 +13811,7 @@ having all the processing being
 2766
 01:20:15,250 --> 01:20:16,570
 0,150 150,270 270,540 540,960 960,1320
-on that central server, we
+on that central server,| we
 
 2767
 01:20:16,570 --> 01:20:18,340
@@ -13826,17 +13826,17 @@ processing to several different worker
 2769
 01:20:19,990 --> 01:20:21,580
 0,420 990,1170 1170,1290 1290,1500 1500,1590
-servers, but on top of
+servers,| but on top of
 
 2770
 01:20:21,580 --> 01:20:22,220
 0,450
-that.
+that,|
 
 2771
 01:20:22,560 --> 01:20:23,880
 0,180 180,330 330,540 540,960 990,1320
-To be fault tolerant a
+to be fault tolerant {},|
 
 2772
 01:20:23,880 --> 01:20:25,020
@@ -13846,7 +13846,7 @@ so when one of these
 2773
 01:20:25,050 --> 01:20:26,550
 0,420 420,750 750,930 930,1290 1320,1500
-worker servers goes down we
+worker servers goes down,| we
 
 2774
 01:20:26,550 --> 01:20:27,420
@@ -13856,22 +13856,22 @@ need to be able to
 2775
 01:20:27,420 --> 01:20:29,250
 0,390 390,780 810,1230 1230,1590 1590,1830
-handle that game logic and
+handle that game logic| and
 
 2776
 01:20:29,250 --> 01:20:31,170
 0,270 270,630 630,1110 1380,1740 1740,1920
-further move players, um to
+further move players {} to
 
 2777
 01:20:31,170 --> 01:20:33,420
 0,150 150,390 390,660 960,1380 1680,2250
-some other service workers so
+some other service workers,| so
 
 2778
 01:20:33,810 --> 01:20:34,590
 0,210 210,390 390,450 450,660 660,780
-as part of that we
+as part of that, we
 
 2779
 01:20:34,590 --> 01:20:36,240
@@ -13881,12 +13881,12 @@ need to actually balance latency
 2780
 01:20:36,240 --> 01:20:37,950
 0,180 180,450 450,960 960,1470 1470,1710
-with fault tolerance, because if
+with fault tolerance,| because if
 
 2781
 01:20:37,950 --> 01:20:40,050
 0,120 120,330 330,810 1110,1500 1500,2100
-we make everything baseball tolerant,
+we make everything {stay,fault} tolerant,|
 
 2782
 01:20:40,170 --> 01:20:42,660
@@ -13901,7 +13901,7 @@ each move taking a long
 2784
 01:20:44,040 --> 01:20:45,080
 0,240 240,360 360,840
-time to process.
+time to process.|
 
 2785
 01:20:46,080 --> 01:20:47,310
@@ -13911,12 +13911,12 @@ So that's why we're introducing
 2786
 01:20:47,310 --> 01:20:48,480
 0,210 210,330 330,510 750,1020 1020,1170
-think we know which is
+{Pinguino - -},| which is
 
 2787
 01:20:48,480 --> 01:20:49,860
 0,180 180,450 450,750 750,960 960,1380
-our fault aren't game framework
+our fault tolerant game framework,|
 
 2788
 01:20:49,860 --> 01:20:51,510
@@ -13926,7 +13926,7 @@ that addresses all of the
 2789
 01:20:51,510 --> 01:20:53,880
 0,360 360,930 960,1380 1380,1980 1980,2370
-previous issues with distributed networks.
+previous issues with distributed networks.|
 
 2790
 01:20:59,160 --> 01:21:00,240
@@ -13936,7 +13936,7 @@ To dive a bit into
 2791
 01:21:00,240 --> 01:21:01,680
 0,180 180,510 510,660 660,810 810,1440
-the system of our framework,
+the system of our framework,|
 
 2792
 01:21:01,710 --> 01:21:03,330
@@ -13946,12 +13946,12 @@ let's imagine the game club
 2793
 01:21:03,330 --> 01:21:05,160
 0,360 720,960 960,1170 1170,1380 1380,1830
-penguin, so in club penguin
+penguin,| so in club penguin,
 
 2794
 01:21:05,190 --> 01:21:06,540
 0,210 210,690 690,900 900,1020 1020,1350
-a user that is assigned
+{} user that is assigned
 
 2795
 01:21:06,540 --> 01:21:07,740
@@ -13961,7 +13961,7 @@ into one room or one
 2796
 01:21:07,740 --> 01:21:09,540
 0,600 840,1020 1020,1230 1230,1440 1440,1800
-region, it only really cares
+region,| it only really cares
 
 2797
 01:21:09,540 --> 01:21:11,070
@@ -13971,12 +13971,12 @@ about talking and interacting with
 2798
 01:21:11,070 --> 01:21:13,560
 0,300 300,870 870,1290 1350,1980 2010,2490
-other users and the objects
+other users| and the objects
 
 2799
 01:21:13,560 --> 01:21:14,850
 0,180 180,390 390,600 600,1050 1080,1290
-in that one room and
+in that one room| and
 
 2800
 01:21:14,850 --> 01:21:15,480
@@ -13991,12 +13991,12 @@ care about anything else that's
 2802
 01:21:16,920 --> 01:21:18,120
 0,270 270,390 390,750 750,1020
-happening in another room.
+happening in another room,|
 
 2803
 01:21:18,440 --> 01:21:19,730
 0,240 240,450 450,630 630,1080 1080,1290
-So there's no reason to
+so there's no reason to
 
 2804
 01:21:19,730 --> 01:21:21,710
@@ -14011,7 +14011,7 @@ user be processed by one
 2806
 01:21:23,030 --> 01:21:25,250
 0,570 570,1110 1500,1710 1710,2130 2130,2220
-centralized servers, so instead we
+centralized servers,| so instead we
 
 2807
 01:21:25,250 --> 01:21:26,510
@@ -14021,12 +14021,12 @@ decided that we will have
 2808
 01:21:26,510 --> 01:21:28,250
 0,120 120,210 210,570 750,1590 1590,1740
-all of these requests, we
+all of these requests be
 
 2809
 01:21:28,250 --> 01:21:30,950
 0,510 510,1080 1080,1500 1500,2070 2220,2700
-process across multiple workers in
+process across multiple workers,| in
 
 2810
 01:21:30,950 --> 01:21:31,970
@@ -14041,7 +14041,7 @@ have workers that are assigned
 2812
 01:21:33,470 --> 01:21:35,030
 0,120 120,630 630,1080 1080,1320 1320,1560
-to different regions, so if
+to different regions,| so if
 
 2813
 01:21:35,030 --> 01:21:36,080
@@ -14051,7 +14051,7 @@ a player is in one
 2814
 01:21:36,080 --> 01:21:37,400
 0,480 600,870 870,1020 1020,1230 1230,1320
-region, um, they might be
+region,| {} they might be
 
 2815
 01:21:37,400 --> 01:21:39,080
@@ -14061,12 +14061,12 @@ talking with the worker that
 2816
 01:21:39,080 --> 01:21:40,280
 0,150 150,660 660,810 810,960 960,1200
-is assigned to that region,
+is assigned to that region,|
 
 2817
 01:21:40,280 --> 01:21:41,510
 0,210 210,360 360,690 690,840 840,1230
-so for example in here
+so for example in here,|
 
 2818
 01:21:41,630 --> 01:21:42,710
@@ -14076,22 +14076,22 @@ the penguin that is in
 2819
 01:21:42,710 --> 01:21:44,210
 0,360 450,660 660,960 990,1380 1380,1500
-work that is assigned to
+work,| that is assigned to
 
 2820
 01:21:44,210 --> 01:21:45,320
 0,120 120,450 450,630 630,900 900,1110
-the region for worker to
+the region for worker 2,|
 
 2821
 01:21:45,320 --> 01:21:46,400
 0,180 180,480 480,570 570,870 870,1080
-we'll talk with worker to
+we'll talk with worker 2
 
 2822
 01:21:46,400 --> 01:21:47,990
 0,450 540,900 900,1170 1170,1260 1260,1590
-only but then the one
+only,| but then the one
 
 2823
 01:21:47,990 --> 01:21:49,760
@@ -14101,12 +14101,12 @@ in the worker and will
 2824
 01:21:49,760 --> 01:21:50,680
 0,210 210,300 300,750
-talk with worker.
+talk with worker.|
 
 2825
 01:21:51,210 --> 01:21:52,860
 0,180 180,780 780,1050 1050,1470 1470,1650
-And additionally we mentioned we
+And additionally we mentioned,| we
 
 2826
 01:21:52,860 --> 01:21:54,600
@@ -14116,7 +14116,7 @@ decided that this wouldn't the
 2827
 01:21:54,630 --> 01:21:56,940
 0,630 630,1080 1080,1590 1590,1800 1800,2310
-relation between worker and regions
+relation between worker and regions,|
 
 2828
 01:21:56,940 --> 01:21:57,990
@@ -14126,7 +14126,7 @@ doesn't necessarily have to be
 2829
 01:21:57,990 --> 01:21:59,700
 0,240 240,360 360,570 570,1110 1500,1710
-one to one mapping for
+one to one mapping,| for
 
 2830
 01:21:59,700 --> 01:22:00,720
@@ -14141,7 +14141,7 @@ less popular and have less
 2832
 01:22:02,100 --> 01:22:04,500
 0,660 690,1020 1020,1470 1470,1860 1980,2400
-traffic it's possible that a
+traffic,| it's possible that a
 
 2833
 01:22:04,500 --> 01:22:05,970
@@ -14151,17 +14151,17 @@ worker can handle multiple of
 2834
 01:22:05,970 --> 01:22:07,800
 0,420 540,840 840,1410 1410,1650 1650,1830
-those so there's that type
+those,| so there's that type
 
 2835
 01:22:07,800 --> 01:22:09,240
 0,180 180,780 1020,1230 1230,1290 1290,1440
-of relation that we need
+of relation,| that we need
 
 2836
 01:22:09,240 --> 01:22:10,160
 0,60 60,240 240,540 540,720
-to keep track of.
+to keep track of.|
 
 2837
 01:22:10,540 --> 01:22:11,260
@@ -14171,17 +14171,17 @@ And so in order to
 2838
 01:22:11,260 --> 01:22:12,160
 0,210 210,420 420,540 540,780 780,900
-keep track of this, we
+keep track of this,| we
 
 2839
 01:22:12,160 --> 01:22:13,870
 0,180 180,390 390,660 660,1350 1350,1710
-do need one centralized server,
+do need one centralized server,|
 
 2840
 01:22:13,870 --> 01:22:15,610
 0,270 270,390 390,480 480,1290 1500,1740
-which is the coordinator so
+which is the coordinator,| so
 
 2841
 01:22:15,610 --> 01:22:17,110
@@ -14191,7 +14191,7 @@ the coordinator will be keeping
 2842
 01:22:17,110 --> 01:22:18,250
 0,240 240,330 330,540 540,720 720,1140
-track of all these mappings
+track of all these mappings|
 
 2843
 01:22:18,580 --> 01:22:19,480
@@ -14201,47 +14201,47 @@ and some of the mapping
 2844
 01:22:19,480 --> 01:22:21,640
 0,720 750,1320 1320,1710 1710,1890 1890,2160
-includes the region to work
+includes the region to {worker
 
 2845
 01:22:21,640 --> 01:22:23,500
 0,120 120,870 900,1230 1230,1500 1500,1860
-a relation as well as
+-} relation as well as
 
 2846
 01:22:23,500 --> 01:22:25,210
 0,420 450,750 750,1140 1140,1500 1500,1710
-region, the worker to their
+region,| the worker to their
 
 2847
 01:22:25,210 --> 01:22:26,900
 0,510 900,1500
-replica, um.
+replica {}
 
 2848
 01:22:27,260 --> 01:22:29,390
 0,600 630,1110 1110,1320 1320,1590 1590,2130
-A relation as well as
+{} relation,| as well as
 
 2849
 01:22:29,540 --> 01:22:32,150
 0,180 180,630 630,1110 1320,2070 2100,2610
-the players itself so for
+the players itself,| so for
 
 2850
 01:22:32,150 --> 01:22:33,560
 0,120 120,420 420,600 600,1200 1230,1410
-the fault an aspect, we
+the fault tolerant aspect,| we
 
 2851
 01:22:33,560 --> 01:22:35,240
 0,480 480,840 840,990 990,1470 1470,1680
-have that the workers will
+have, that the workers will
 
 2852
 01:22:35,240 --> 01:22:37,310
 0,240 240,450 450,960 990,1380 1410,2070
-have to replicate each and
+have two replicate each| and
 
 2853
 01:22:37,310 --> 01:22:38,420
@@ -14256,7 +14256,7 @@ little bit more about what
 2855
 01:22:39,680 --> 01:22:41,150
 0,210 210,390 390,990 990,1170 1170,1470
-kind of information is sent
+kind of information| is sent
 
 2856
 01:22:41,150 --> 01:22:43,400
@@ -14266,12 +14266,12 @@ to the worker from there
 2857
 01:22:43,610 --> 01:22:45,220
 0,150 150,600 750,1440
-to there later.
+to [there] later.|
 
 2858
 01:22:45,610 --> 01:22:47,890
 0,210 210,990 990,1230 1230,1860 1860,2280
-And, additionally the coordinator because
+And additionally, the coordinator,|n because
 
 2859
 01:22:47,890 --> 01:22:49,090
@@ -14281,17 +14281,17 @@ it is that one centralized
 2860
 01:22:49,090 --> 01:22:49,930
 0,240 240,390 390,480 480,750 750,840
-server, it is also a
+server,| it is also a
 
 2861
 01:22:49,930 --> 01:22:52,150
 0,660 810,1380 1380,1740 1740,2040 2040,2220
-possible a failure point, so
+possible a failure point,| so
 
 2862
 01:22:52,150 --> 01:22:53,590
 0,150 150,330 330,420 420,900 900,1440
-we have a coordinator backup
+we have a coordinator backup|
 
 2863
 01:22:53,650 --> 01:22:55,900
@@ -14301,7 +14301,7 @@ and here the {coordinator's -}
 2864
 01:22:55,900 --> 01:22:56,950
 0,270 270,480 480,660 660,930 930,1050
-main role is just to
+main role is| just to
 
 2865
 01:22:56,950 --> 01:22:57,820
@@ -14316,7 +14316,7 @@ these relations of the game
 2867
 01:22:59,590 --> 01:23:02,080
 0,390 510,840 840,1470 1470,2010 2280,2490
-states, so information about the
+states,| so information about the
 
 2868
 01:23:02,080 --> 01:23:04,060
@@ -14326,17 +14326,17 @@ coordinator that changes for those
 2869
 01:23:04,060 --> 01:23:05,290
 0,600 630,810 810,900 900,1140 1140,1230
-relations will be sent to
+relations| will be sent to
 
 2870
 01:23:05,290 --> 01:23:07,540
 0,90 90,600 600,1080 1080,1710 1890,2250
-the coordinator backup before being
+the coordinator backup,| before being
 
 2871
 01:23:07,540 --> 01:23:10,360
 0,870 900,1290 1320,1770 2070,2730
-processed a complete completely.
+processed a complete completely.|
 
 2872
 01:23:10,690 --> 01:23:12,580
@@ -14346,7 +14346,7 @@ So now with this, although
 2873
 01:23:12,580 --> 01:23:13,960
 0,270 270,450 450,600 600,810 810,1380
-we have that one server,
+we have that one server,|
 
 2874
 01:23:14,320 --> 01:23:15,430
@@ -14356,7 +14356,7 @@ the bulk of the traffic
 2875
 01:23:15,430 --> 01:23:17,470
 0,150 150,540 540,1110 1320,1560 1560,2040
-for games usually is players
+for games usually is| players
 
 2876
 01:23:17,470 --> 01:23:19,060
@@ -14366,7 +14366,7 @@ making moves and sending request
 2877
 01:23:19,060 --> 01:23:20,680
 0,390 390,660 660,990 1110,1410 1410,1620
-process, those moves and those
+process those moves| and those
 
 2878
 01:23:20,680 --> 01:23:22,240
@@ -14376,7 +14376,7 @@ are now divided across multiple
 2879
 01:23:22,240 --> 01:23:23,920
 0,780 780,990 990,1080 1080,1530 1530,1680
-workers and the coordinator is
+workers| and the coordinator is
 
 2880
 01:23:23,920 --> 01:23:24,820
@@ -14386,7 +14386,7 @@ in charge of just a
 2881
 01:23:24,820 --> 01:23:26,740
 0,540 540,720 720,1020 1020,1590 1710,1920
-mapping and sending heartbeat to
+mapping| and sending heartbeat to
 
 2882
 01:23:26,740 --> 01:23:28,180
@@ -14396,12 +14396,12 @@ ensure that the workers are
 2883
 01:23:28,180 --> 01:23:30,130
 0,240 240,720 750,1200 1230,1620 1620,1950
-still alive and can handle
+still alive| and can handle
 
 2884
 01:23:30,130 --> 01:23:31,380
 0,240 240,630 630,1140
-any failure cases.
+any failure cases.|
 
 2885
 01:23:33,210 --> 01:23:34,200
@@ -14411,12 +14411,12 @@ Yep, so in the case
 2886
 01:23:34,200 --> 01:23:35,640
 0,270 270,420 420,780 780,1020 1020,1440
-that a worker goes down,
+that a worker goes down,|
 
 2887
 01:23:35,730 --> 01:23:37,050
 0,270 270,420 420,630 630,720 720,1320
-um, we have the coordinator
+{} we have the coordinator
 
 2888
 01:23:37,050 --> 01:23:39,240
@@ -14431,12 +14431,12 @@ players who were in that
 2890
 01:23:40,920 --> 01:23:43,080
 0,390 750,1140 1140,1590 1590,1710 1710,2160
-worker and because the corner
+worker| and because the coordinator
 
 2891
 01:23:43,080 --> 01:23:44,880
 0,570 570,810 810,930 930,1200 1200,1800
-manages only the region nothing's
+manages only the region mapping,|
 
 2892
 01:23:44,880 --> 01:23:46,200
@@ -14446,17 +14446,17 @@ it's also easy for us
 2893
 01:23:46,200 --> 01:23:47,910
 0,120 120,360 360,780 780,1350 1350,1710
-to move around regions when
+to move around regions| when
 
 2894
 01:23:47,910 --> 01:23:49,040
 0,270 270,390 480,990
-one of us.
+one of us,|
 
 2895
 01:23:49,360 --> 01:23:51,070
 0,210 210,600 600,870 870,1050 1050,1710
-Say one worker gets overloaded,
+say one worker gets overloaded,|
 
 2896
 01:23:51,070 --> 01:23:52,090
@@ -14466,17 +14466,17 @@ this allows us to perform
 2897
 01:23:52,090 --> 01:23:53,500
 0,270 270,570 570,720 720,900 900,1410
-some amount of load balancing.
+some amount of load balancing,|
 
 2898
 01:23:54,380 --> 01:23:55,740
 0,180 180,270 270,570 570,1080
-As we mentioned earlier.
+as we mentioned earlier.|
 
 2899
 01:23:56,400 --> 01:23:57,720
 0,570 600,930 930,1050 1050,1170 1170,1320
-I'm cool, so I'll move
+{} Cool, so I'll move
 
 2900
 01:23:57,720 --> 01:23:58,950
@@ -14486,7 +14486,7 @@ on to what the developer
 2901
 01:23:58,950 --> 01:24:00,720
 0,390 390,630 630,840 840,1230 1230,1770
-API looks like, because another
+API looks like,| because another
 
 2902
 01:24:00,720 --> 01:24:02,010
@@ -14496,22 +14496,22 @@ key feature that we wanted
 2903
 01:24:02,010 --> 01:24:03,300
 0,540 570,720 720,840 840,1170 1170,1290
-was for the framer to
+was| for the framework to
 
 2904
 01:24:03,300 --> 01:24:04,530
 0,120 120,420 420,570 570,870 870,1230
-be easy to use for
+be easy to use,| for
 
 2905
 01:24:04,530 --> 01:24:06,690
 0,150 150,810 1020,1350 1650,2100 2100,2160
-a developer to code a
+a developer {trying,to} code a
 
 2906
 01:24:06,690 --> 01:24:07,770
 0,150 150,390 390,480 480,600 840,1080
-new game in it, so
+new game in it,| so
 
 2907
 01:24:07,770 --> 01:24:08,970
@@ -14521,7 +14521,7 @@ we treat the game as
 2908
 01:24:08,970 --> 01:24:10,770
 0,120 120,360 360,660 660,1230 1440,1800
-a state machine essentially and
+a state machine essentially| and
 
 2909
 01:24:10,770 --> 01:24:11,940
@@ -14531,7 +14531,7 @@ so any move that the
 2910
 01:24:11,940 --> 01:24:13,530
 0,330 330,780 900,1230 1230,1410 1410,1590
-player makes actually fits into
+player makes,| actually fits into
 
 2911
 01:24:13,530 --> 01:24:14,610
@@ -14541,12 +14541,12 @@ one of two different types
 2912
 01:24:14,610 --> 01:24:15,990
 0,90 90,450 720,930 930,1080 1080,1380
-of moves, so I mentioned
+of moves,| so I mentioned
 
 2913
 01:24:15,990 --> 01:24:17,640
 0,480 480,780 780,1110 1110,1410 1410,1650
-earlier that we're trying to
+earlier,| that we're trying to
 
 2914
 01:24:17,640 --> 01:24:19,350
@@ -14556,7 +14556,7 @@ balance a bit of latency
 2915
 01:24:19,350 --> 01:24:21,210
 0,180 180,450 450,870 1170,1620 1620,1860
-with fault tolerant, so in
+with fault tolerant,| so in
 
 2916
 01:24:21,210 --> 01:24:23,100
@@ -14566,7 +14566,7 @@ order to provide a sort
 2917
 01:24:23,100 --> 01:24:24,540
 0,300 300,720 720,840 840,930 930,1440
-of choice for the developer,
+of choice for the developer,|
 
 2918
 01:24:24,540 --> 01:24:26,760
@@ -14581,17 +14581,17 @@ that we expose to the
 2920
 01:24:27,750 --> 01:24:29,430
 0,510 600,870 870,1200 1200,1350 1350,1680
-developer, the first is send
+developer,| the first is send
 
 2921
 01:24:29,430 --> 01:24:31,380
 0,360 360,690 810,1380 1380,1620 1620,1950
-fast move, so this fast
+fast move,| so this fast
 
 2922
 01:24:31,380 --> 01:24:32,610
 0,360 390,690 690,990 990,1170 1170,1230
-move, make sure that the
+move make sure that the
 
 2923
 01:24:32,610 --> 01:24:34,020
@@ -14601,7 +14601,7 @@ move gets to the replicas
 2924
 01:24:34,020 --> 01:24:35,010
 0,150 150,330 330,450 450,870 870,990
-as soon as possible, so
+as soon as possible,| so
 
 2925
 01:24:35,010 --> 01:24:36,330
@@ -14616,12 +14616,12 @@ fast as possible on the
 2927
 01:24:37,770 --> 01:24:40,020
 0,450 1320,1590 1590,1680 1680,1920 1920,2250
-worker on the other hand,
+worker,| on the other hand,
 
 2928
 01:24:40,020 --> 01:24:42,030
 0,120 120,480 510,1080 1080,1470 1560,2010
-we have sensible move which
+we have {sendStableMove - -},| which
 
 2929
 01:24:42,030 --> 01:24:43,530
@@ -14631,12 +14631,12 @@ actually is a more fault
 2930
 01:24:43,530 --> 01:24:44,880
 0,510 540,990 990,1020 1020,1260 1260,1350
-tolerant move, um that we
+tolerant move,| {} that we
 
 2931
 01:24:44,880 --> 01:24:46,650
 0,360 360,450 450,750 750,1320 1470,1770
-expose to the developer and
+expose to the developer| and
 
 2932
 01:24:46,650 --> 01:24:48,150
@@ -14651,7 +14651,7 @@ used for game critical logic
 2934
 01:24:50,400 --> 01:24:52,200
 0,450 450,630 630,870 930,1140 1140,1800
-changes such as say transaction,
+changes,| such as say transaction,|
 
 2935
 01:24:52,530 --> 01:24:53,550
@@ -14661,17 +14661,17 @@ so if you're buying something
 2936
 01:24:53,550 --> 01:24:54,660
 0,240 240,630 630,990
-you don't want.
+you don't want,|
 
 2937
 01:24:55,090 --> 01:24:56,530
 0,390 390,840 840,990 990,1200 1200,1440
-Like if you've already spent
+like if you've already spent
 
 2938
 01:24:56,530 --> 01:24:57,310
 0,180 180,420 420,510 510,690 690,780
-that money you want to
+that money,| you want to
 
 2939
 01:24:57,310 --> 01:24:58,270
@@ -14686,12 +14686,12 @@ whatever you spend that money
 2941
 01:24:59,860 --> 01:25:01,930
 0,420 420,570 570,870 1170,1440 1440,2070
-on your game and so
+on your game| and so
 
 2942
 01:25:02,290 --> 01:25:04,300
 0,420 420,1170 1170,1500 1500,1770 1770,2010
-we guarantee that if that
+we guarantee that,| if that
 
 2943
 01:25:04,300 --> 01:25:06,700
@@ -14701,17 +14701,17 @@ move gets fully processed and
 2944
 01:25:06,730 --> 01:25:08,380
 0,270 300,510 510,570 570,930 1140,1650
-a on the game, it's.
+{} on the game,| it's,
 
 2945
 01:25:08,820 --> 01:25:10,140
 0,210 210,510 600,960 960,1110 1110,1320
-Um, it's stored on both
+{} it's stored on both
 
 2946
 01:25:10,140 --> 01:25:11,700
 0,60 60,150 150,660 810,1140 1140,1560
-of the replica which ensures
+of the replica,| which ensures
 
 2947
 01:25:11,700 --> 01:25:12,840
@@ -14721,7 +14721,7 @@ that if the worker that
 2948
 01:25:12,840 --> 01:25:14,460
 0,390 390,780 780,960 960,1290 1290,1620
-you're talking to goes down
+you're talking to goes down|
 
 2949
 01:25:14,460 --> 01:25:15,450
@@ -14731,7 +14731,7 @@ and the player gets transferred
 2950
 01:25:15,450 --> 01:25:16,890
 0,120 120,150 150,390 390,900 1170,1440
-to a new worker that
+to a new worker,| that
 
 2951
 01:25:16,890 --> 01:25:18,090
@@ -14741,22 +14741,22 @@ new worker will be able
 2952
 01:25:18,090 --> 01:25:19,620
 0,150 150,660 660,720 720,1020 1020,1530
-to reconstruct the game including
+to reconstruct the game,| including
 
 2953
 01:25:19,620 --> 01:25:21,720
 0,180 180,870 1050,1260 1260,1740 1740,2100
-that transaction, this guarantee isn't
+that transaction,| this guarantee isn't
 
 2954
 01:25:21,720 --> 01:25:22,890
 0,270 270,510 510,570 570,930 930,1170
-done for a fast move
+done for a fast move,|
 
 2955
 01:25:22,890 --> 01:25:25,290
 0,210 210,1050 1050,1200 1200,1800 1860,2400
-which prioritizes the latency aspect,
+which prioritizes the latency aspect,|
 
 2956
 01:25:25,590 --> 01:25:26,580
@@ -14766,17 +14766,17 @@ but you can also see
 2957
 01:25:26,580 --> 01:25:28,410
 0,360 360,450 450,780 780,1200 1410,1830
-here, the move struck that
+here,| the move struct, that
 
 2958
 01:25:28,410 --> 01:25:30,720
 0,60 60,630 630,1320 1350,1710 1710,2310
-the developer defines a are
+the developer defines {} are
 
 2959
 01:25:30,750 --> 01:25:32,430
 0,360 360,810 810,1350 1380,1620 1620,1680
-pretty general, so in the
+pretty general,| so in the
 
 2960
 01:25:32,430 --> 01:25:34,110
@@ -14791,17 +14791,17 @@ we kind of developed as
 2962
 01:25:35,340 --> 01:25:37,020
 0,270 270,750 780,990 990,1440 1440,1680
-a um toy demo for
+a {} toy demo for
 
 2963
 01:25:37,020 --> 01:25:38,880
 0,360 360,990 1290,1530 1530,1770 1770,1860
-our framework, it's kind of
+our framework,| it's kind of
 
 2964
 01:25:38,880 --> 01:25:40,380
 0,120 120,390 390,720 720,930 930,1500
-a chat penguin like interface.
+a chat penguin like interface.|
 
 2965
 01:25:40,580 --> 01:25:42,140
@@ -14811,17 +14811,17 @@ So each player is in
 2966
 01:25:42,140 --> 01:25:44,120
 0,390 390,1050 1080,1650
-several different, um.
+several different {}
 
 2967
 01:25:44,810 --> 01:25:47,150
 0,540 840,1260 1260,1710 1740,2070 2070,2340
-Brooms and so within each
+rooms| and so within each
 
 2968
 01:25:47,150 --> 01:25:48,380
 0,210 210,510 510,690 690,930 930,1230
-room, there's a chat window
+room,| there's a chat window
 
 2969
 01:25:48,380 --> 01:25:49,910
@@ -14831,27 +14831,27 @@ that you can talk to
 2970
 01:25:49,910 --> 01:25:51,230
 0,150 150,540 540,690 690,930 930,1320
-to interact with another player,
+to interact with another player,|
 
 2971
 01:25:51,620 --> 01:25:52,730
 0,390 390,630 630,720 720,870 870,1110
-um, so the two types
+{} so the two types
 
 2972
 01:25:52,730 --> 01:25:53,720
 0,90 90,420 420,720 720,870 870,990
-of main moves that you
+of main moves,| that you
 
 2973
 01:25:53,720 --> 01:25:54,710
 0,180 180,450 450,540 540,720 720,990
-can make in this game
+can make in this game|
 
 2974
 01:25:54,710 --> 01:25:56,630
 0,360 360,660 660,840 840,1230 1320,1920
-are first a move so
+are first a move,| so
 
 2975
 01:25:56,630 --> 01:25:58,220
@@ -14871,7 +14871,7 @@ the username of the player
 2978
 01:26:00,890 --> 01:26:02,450
 0,510 780,1110 1110,1380 1380,1500 1500,1560
-moving, um, and so the
+moving,| {} and so the
 
 2979
 01:26:02,450 --> 01:26:03,350
@@ -14881,7 +14881,7 @@ chat message is kind of
 2980
 01:26:03,350 --> 01:26:04,370
 0,90 90,360 360,720 720,900 900,1020
-the same words just like
+the same words| just like
 
 2981
 01:26:04,370 --> 01:26:05,210
@@ -14891,32 +14891,32 @@ a chat message that you
 2982
 01:26:05,210 --> 01:26:07,520
 0,240 240,420 420,540 540,1920
-send into the window.
+send into the window.|
 
 2983
 01:26:07,760 --> 01:26:09,080
 0,420 420,1050
-And so.
+And so,
 
 2984
 01:26:09,460 --> 01:26:10,900
 0,570 570,750 750,870 870,1140 1140,1440
-We in our game, we
+we, in our game,| we
 
 2985
 01:26:10,930 --> 01:26:12,820
 0,240 240,480 480,1110 1110,1440 1440,1890
-made chat messages, a stable
+made chat messages a stable
 
 2986
 01:26:12,820 --> 01:26:14,200
 0,360 360,660 660,1080 1080,1290 1290,1380
-move and move as a
+move| and move as a
 
 2987
 01:26:14,200 --> 01:26:16,180
 0,360 360,750 960,1470 1470,1800 1800,1980
-fast move, so even if
+fast move,| so even if
 
 2988
 01:26:16,180 --> 01:26:17,230
@@ -14926,47 +14926,47 @@ like say one move gets
 2989
 01:26:17,230 --> 01:26:18,490
 0,300 300,450 450,810 810,930 930,1260
-dropped, it's okay, if you're
+dropped,| it's okay,| if you're
 
 2990
 01:26:18,520 --> 01:26:19,720
 0,90 90,240 240,480 480,540 540,1200
-a new kind of teleports,
+a new kind of [teleports],|
 
 2991
 01:26:19,750 --> 01:26:21,320
 0,690 720,1350
-but um.
+but, {}
 
 2992
 01:26:21,670 --> 01:26:22,990
 0,210 210,420 420,600 600,810 810,1320
-We don't want chat messages
+we don't want chat messages
 
 2993
 01:26:22,990 --> 01:26:24,190
 0,90 90,420 420,870 870,1110 1110,1200
-to randomly disappear because they
+to randomly disappear,| because they
 
 2994
 01:26:24,190 --> 01:26:25,820
 0,180 180,300 300,720 720,1230
-could be important messages.
+could be important messages.|
 
 2995
 01:26:26,080 --> 01:26:27,310
 0,510 540,720 720,960 960,1020 1020,1230
-So with that I'll move
+So with that, I'll move
 
 2996
 01:26:27,310 --> 01:26:28,930
 0,240 240,690 690,870 870,1380 1410,1620
-on to the demo which
+on to the demo,| which
 
 2997
 01:26:28,930 --> 01:26:30,070
 0,180 180,300 300,510 510,690 690,1140
-is a little bare bones,
+is a little bare bones,|
 
 2998
 01:26:30,070 --> 01:26:31,720
@@ -14976,7 +14976,7 @@ but should show off the
 2999
 01:26:31,720 --> 01:26:32,660
 0,660
-functionality.
+functionality.|
 
 3000
 01:26:40,500 --> 01:26:41,280
@@ -14986,27 +14986,27 @@ So we have our super
 3001
 01:26:41,280 --> 01:26:43,560
 0,480 480,840 1020,1680
-minimalist front of.
+minimalist {frontend -},|
 
 3002
 01:26:44,690 --> 01:26:45,650
 0,390 390,540 540,690 690,780 780,960
-And so when we move
+and so when we move
 
 3003
 01:26:45,650 --> 01:26:46,700
 0,210 210,300 300,780 780,900 900,1050
-around the penguin we can
+around the penguin,| we can
 
 3004
 01:26:46,700 --> 01:26:47,960
 0,240 240,570 570,810 810,1020 1020,1260
-see that it's first sense
+see that, it's first sense
 
 3005
 01:26:47,960 --> 01:26:49,820
 0,90 90,420 420,810 1020,1620 1620,1860
-of fast move, um, and
+of fast move,| {} and
 
 3006
 01:26:49,820 --> 01:26:51,680
@@ -15016,47 +15016,47 @@ the replica that same move
 3007
 01:26:51,680 --> 01:26:53,030
 0,300 300,570 570,870 870,1020 1020,1350
-gets a sent to the
+gets {} sent to the
 
 3008
 01:26:53,030 --> 01:26:54,110
 0,270 270,600 600,660 660,1020 1020,1080
-other replica is assigned to
+other replica| is assigned to
 
 3009
 01:26:54,110 --> 01:26:55,010
 0,60 60,270 270,600 600,750 750,900
-the maine workers so right
+the maine workers,| so right
 
 3010
 01:26:55,010 --> 01:26:56,120
 0,150 150,300 300,450 450,720 720,1110
-now we're on workers zero,
+now, we're on worker zero,|
 
 3011
 01:26:56,300 --> 01:26:57,290
 0,210 210,300 300,480 480,870 870,990
-um, it gets replicated to
+{} it gets replicated to
 
 3012
 01:26:57,290 --> 01:26:58,640
 0,180 180,510 510,750 750,1050 1080,1350
-work one and two so
+work one and two,| so
 
 3013
 01:26:58,640 --> 01:26:59,720
 0,120 120,270 270,390 390,840
-we have two copies.
+we have two copies,|
 
 3014
 01:26:59,870 --> 01:27:01,370
 0,690 690,930 930,990 990,1200 1200,1500
-Um, and the game server
+{} and the game server
 
 3015
 01:27:01,370 --> 01:27:03,410
 0,330 360,1050 1050,1320 1320,1770 1770,2040
-then receives that change and
+then receives that change| and
 
 3016
 01:27:03,410 --> 01:27:04,400
@@ -15066,32 +15066,32 @@ so they can process that
 3017
 01:27:04,400 --> 01:27:05,060
 0,390
-locally.
+locally,|
 
 3018
 01:27:05,300 --> 01:27:06,650
 0,450 450,630 630,870 870,1080 1080,1350
-Um, and then if we
+{} and then if we
 
 3019
 01:27:06,830 --> 01:27:08,380
 0,270 270,360 360,600 600,1320
-send a chat message.
+send a chat message,|
 
 3020
 01:27:09,460 --> 01:27:10,990
 0,240 240,540 540,1080 1080,1440 1440,1530
-We also have a the
+we also have {} the
 
 3021
 01:27:10,990 --> 01:27:12,640
 0,480 480,900 900,1440 1440,1560 1560,1650
-player username identified with the
+player username| identified with the
 
 3022
 01:27:12,640 --> 01:27:14,290
 0,150 150,540 540,960 1020,1380 1380,1650
-chat message sent, um, but
+chat message sent,| {} but
 
 3023
 01:27:14,290 --> 01:27:15,250
@@ -15101,17 +15101,17 @@ this is actually a stable
 3024
 01:27:15,250 --> 01:27:17,350
 0,360 540,930 930,1590 1770,1950 1950,2100
-move, um, so it's not
+move,| {} so it's not
 
 3025
 01:27:17,350 --> 01:27:18,640
 0,300 300,390 390,450 450,990 990,1290
-visible in the blogs, but
+visible in the logs,| but
 
 3026
 01:27:18,640 --> 01:27:20,350
 0,90 90,540 540,930 930,1200 1200,1710
-the stable moves, wait until
+the stable moves wait until
 
 3027
 01:27:20,350 --> 01:27:22,150
@@ -15121,12 +15121,12 @@ those moves are actually replicated
 3028
 01:27:22,270 --> 01:27:23,410
 0,180 180,300 300,900 900,1050 1050,1140
-to the workers and it's
+to the workers| and it's
 
 3029
 01:27:23,410 --> 01:27:24,280
 0,210 210,300 300,390 390,540 540,870
-not easy to see here
+not easy to see here,|
 
 3030
 01:27:24,280 --> 01:27:25,810
@@ -15136,32 +15136,32 @@ because normally there might be
 3031
 01:27:25,810 --> 01:27:28,000
 0,210 240,540 540,630 630,2010
-some amount of lag.
+some amount of lag,|
 
 3032
 01:27:28,530 --> 01:27:29,760
 0,270 270,510 510,600 600,780 780,1230
-But when we do introduce
+but when we do introduce
 
 3033
 01:27:29,760 --> 01:27:30,630
 0,150 150,390 390,450 450,720 720,870
-some amount of back into
+some amount of lag into
 
 3034
 01:27:30,630 --> 01:27:31,980
 0,120 120,690 720,990 990,1050 1050,1350
-the network that's a move
+the network,| that's {} move
 
 3035
 01:27:31,980 --> 01:27:33,420
 0,270 270,570 570,750 1140,1230 1230,1440
-takes longer than it does.
+takes longer than it does,|
 
 3036
 01:27:34,160 --> 01:27:35,360
 0,300 300,450 450,780 780,1080 1080,1200
-Um, and now move it
+{} and now move it
 
 3037
 01:27:35,360 --> 01:27:37,220
@@ -15171,17 +15171,16 @@ back to some future work
 3038
 01:27:37,220 --> 01:27:38,630
 0,90 90,210 210,450 450,780 810,1410
-that we want to implement.
+that we want to implement.|
 
 3039
 01:27:40,060 --> 01:27:40,900
 0,600
-Okay.
 
 3040
 01:27:44,060 --> 01:27:45,080
 0,150 150,330 330,420 420,540 540,1020
-In terms of the backend,
+In terms of the backend,|
 
 3041
 01:27:45,080 --> 01:27:46,310
@@ -15191,7 +15190,7 @@ one additional thing that we
 3042
 01:27:46,310 --> 01:27:47,480
 0,120 120,270 270,390 390,690 690,1170
-would like to do is
+would like to do| is
 
 3043
 01:27:47,480 --> 01:27:48,950
@@ -15201,27 +15200,27 @@ to allow the users to
 3044
 01:27:48,950 --> 01:27:50,840
 0,270 270,690 690,1140 1140,1590 1710,1890
-move across different rooms so
+move across different rooms,| so
 
 3045
 01:27:50,840 --> 01:27:52,490
 0,150 150,330 330,990 990,1140 1140,1650
-right now upon a user
+right now, upon a user
 
 3046
 01:27:52,640 --> 01:27:54,110
 0,630 630,720 720,930 930,1320 1320,1470
-joining the game, it'd be
+joining the game,| it'd be
 
 3047
 01:27:54,110 --> 01:27:55,520
 0,630 630,750 750,990 990,1290 1290,1410
-initialized, they are assigned to
+initialized,| they are assigned to
 
 3048
 01:27:55,520 --> 01:27:57,380
 0,300 300,720 780,1170 1170,1710 1710,1860
-one room, but ideally if
+one room,| but ideally if
 
 3049
 01:27:57,380 --> 01:27:58,430
@@ -15231,7 +15230,7 @@ they want to move across
 3050
 01:27:58,460 --> 01:27:59,390
 0,240 240,450 480,600 600,720 720,930
-to it if they want
+to it,| if they want
 
 3051
 01:27:59,390 --> 01:28:00,200
@@ -15241,7 +15240,7 @@ to move to a different
 3052
 01:28:00,200 --> 01:28:01,250
 0,390 420,630 630,750 750,930 930,1050
-room, then they should be
+room,| then they should be
 
 3053
 01:28:01,250 --> 01:28:01,940
@@ -15251,7 +15250,7 @@ able to talk to the
 3054
 01:28:01,940 --> 01:28:03,170
 0,420 420,570 570,690 690,840 840,1230
-corner to be like hey
+coordinator to be like,| hey
 
 3055
 01:28:03,200 --> 01:28:04,340
@@ -15261,7 +15260,7 @@ I'm gonna go to this
 3056
 01:28:04,340 --> 01:28:05,540
 0,360 360,690 690,900 900,990 990,1200
-region now can we load
+region now,| can we load
 
 3057
 01:28:05,540 --> 01:28:07,250
@@ -15271,7 +15270,7 @@ up the information of the
 3058
 01:28:07,250 --> 01:28:08,390
 0,240 240,480 480,600 600,840 840,1140
-game state from that region
+game state from that region|
 
 3059
 01:28:08,390 --> 01:28:09,320
@@ -15286,7 +15285,7 @@ going to start talking to
 3061
 01:28:10,130 --> 01:28:11,200
 0,60 60,330 330,930
-a new worker.
+a new worker.|
 
 3062
 01:28:11,620 --> 01:28:13,180
@@ -15296,7 +15295,7 @@ And additionally we hinted at
 3063
 01:28:13,180 --> 01:28:15,190
 0,150 150,720 1020,1410 1410,1800 1800,2010
-this earlier where we wanted
+this earlier,| where we wanted
 
 3064
 01:28:15,190 --> 01:28:16,240
@@ -15306,17 +15305,17 @@ to deal with region based
 3065
 01:28:16,240 --> 01:28:17,830
 0,300 300,510 510,1140 1230,1470 1470,1590
-worker load balancing so the
+worker load balancing,| so the
 
 3066
 01:28:17,830 --> 01:28:19,150
 0,300 300,510 510,660 660,990 990,1320
-reason why we had that
+reason why we had that,|
 
 3067
 01:28:19,180 --> 01:28:20,860
 0,510 660,930 930,1260 1290,1470 1470,1680
-um, why we did not
+{} why we did not
 
 3068
 01:28:20,860 --> 01:28:21,610
@@ -15326,7 +15325,7 @@ go for one to one
 3069
 01:28:21,610 --> 01:28:23,590
 0,450 450,720 930,1380 1380,1560 1560,1980
-mapping with worker to region
+mapping with worker to region|
 
 3070
 01:28:23,590 --> 01:28:25,090
@@ -15336,7 +15335,7 @@ was to allow for this
 3071
 01:28:25,240 --> 01:28:26,770
 0,810 810,1080 1080,1230 1230,1350 1350,1530
-future work and we hope
+future work| and we hope
 
 3072
 01:28:26,770 --> 01:28:27,400
@@ -15346,67 +15345,66 @@ to be able to do
 3073
 01:28:27,400 --> 01:28:29,320
 0,240 240,300 300,540 540,1020 1050,1920
-that in order to control
+that| in order to control
 
 3074
 01:28:29,350 --> 01:28:31,330
 0,360 360,540 540,1140 1260,1680 1710,1980
-a how much load each
+{} how much load each
 
 3075
 01:28:31,330 --> 01:28:32,890
 0,420 420,660 660,840 840,1260 1260,1560
-worker will be based with.
+worker will be based with.|
 
 3076
 01:28:37,900 --> 01:28:40,200
 0,450 450,480 480,690 690,1230
-{It's -} a question.
 
 3077
 01:28:44,260 --> 01:28:46,420
 0,300 1320,1710 1710,1980 1980,2070 2070,2160
-I'm sorry I have a
+{} Sorry, I have a
 
 3078
 01:28:46,420 --> 01:28:48,970
 0,480 540,930 930,1410 1650,1890 1890,2550
-question, um, so are your.
+question,| {} so are your,|
 
 3079
 01:28:49,880 --> 01:28:51,170
 0,300 300,480 480,600 600,810 810,1290
-Again, you have two actions
+again, you have two actions
 
 3080
 01:28:51,170 --> 01:28:53,570
 0,480 480,630 630,1230 1230,1680 1680,2400
-sending a message and a
+sending a message and {}
 
 3081
 01:28:53,600 --> 01:28:55,790
 0,570 600,840 840,1170 1170,1680 1680,2190
-movie so those actions are
+moving,| so those actions are
 
 3082
 01:28:56,000 --> 01:28:57,620
 0,240 240,840 840,1170 1260,1470 1470,1620
-all atomic right, are they
+all atomic right,| are they
 
 3083
 01:28:57,620 --> 01:28:58,680
 0,300
-late.
+like.|
 
 3084
 01:28:59,640 --> 01:29:02,600
 0,1530
-Yeah.
+Yeah.|
 
 3085
 01:29:03,000 --> 01:29:04,710
 0,120 120,270 270,630 630,1230 1230,1710
-They get sequentially processed and
+They get sequentially processed| and
 
 3086
 01:29:04,710 --> 01:29:05,640
@@ -15416,7 +15414,7 @@ since they are like individual
 3087
 01:29:05,640 --> 01:29:07,650
 0,480 480,1050 1170,1890 1890,1950 1950,2010
-moves they most of the
+moves,| they most of the
 
 3088
 01:29:07,650 --> 01:29:09,720
@@ -15426,22 +15424,22 @@ time they only modify some
 3089
 01:29:09,720 --> 01:29:11,190
 0,540 540,720 720,1020 1020,1380 1380,1470
-variables and they acquire that
+variables| and they acquire that
 
 3090
 01:29:11,190 --> 01:29:12,270
 0,240 240,330 330,480 480,870 870,1080
-walks on those variables before
+locks on those variables before
 
 3091
 01:29:12,270 --> 01:29:13,000
 0,120 180,540
-the moves.
+the moves.|
 
 3092
 01:29:16,350 --> 01:29:17,940
 0,240 240,900 900,1080 1080,1440 1440,1590
-So you said earlier that
+So you said earlier, that
 
 3093
 01:29:17,940 --> 01:29:19,560
@@ -15451,7 +15449,7 @@ you have a coordinator and
 3094
 01:29:19,560 --> 01:29:22,290
 0,540 540,1140 1320,1770 1770,1920 1920,2730
-coordinator backup a and z
+coordinator backup| {} and the
 
 3095
 01:29:22,590 --> 01:29:23,910
@@ -15461,7 +15459,7 @@ replicas can talk to either
 3096
 01:29:23,910 --> 01:29:25,950
 0,90 90,450 750,1260 1290,1590 1590,2040
-of them, um, what happens
+of them,| {} what happens
 
 3097
 01:29:25,950 --> 01:29:27,120
@@ -15471,7 +15469,7 @@ if you have a network
 3098
 01:29:27,120 --> 01:29:29,640
 0,690 900,1080 1080,1770 1770,1860 1860,2520
-partition that separates the coordinator
+partition,| that separates the coordinator|
 
 3099
 01:29:29,640 --> 01:29:31,260
@@ -15481,12 +15479,12 @@ and some set of replicas
 3100
 01:29:31,380 --> 01:29:32,760
 0,180 180,240 240,750 750,1170 1170,1380
-from the coordinator backup and
+from the coordinator backup| and
 
 3101
 01:29:32,760 --> 01:29:34,080
 0,120 120,360 360,540 540,630 630,1320
-some other set of replicas.
+some other set of replicas.|
 
 3102
 01:29:37,900 --> 01:29:39,550
@@ -15496,7 +15494,7 @@ So the coordinator backup in
 3103
 01:29:39,550 --> 01:29:41,320
 0,300 300,390 390,450 450,870 870,1770
-case of a network partition,
+case of a network partition,|
 
 3104
 01:29:41,560 --> 01:29:43,180
@@ -15506,7 +15504,7 @@ the workers will be kind
 3105
 01:29:43,180 --> 01:29:44,530
 0,120 120,420 420,660 660,780 780,1350
-of lost like the coordinator
+of lost,| like the coordinator
 
 3106
 01:29:44,530 --> 01:29:45,430
@@ -15526,7 +15524,7 @@ talk to either the coordinator
 3109
 01:29:47,710 --> 01:29:49,390
 0,150 150,270 270,690 690,1170 1170,1680
-or the coordinator backup they'll
+or the coordinator backup,| they'll
 
 3110
 01:29:49,390 --> 01:29:50,350
@@ -15536,12 +15534,12 @@ only be able to talk
 3111
 01:29:50,350 --> 01:29:51,730
 0,90 90,210 210,930 960,1230 1230,1380
-to the coordinator and if
+to the coordinator| and if
 
 3112
 01:29:51,730 --> 01:29:53,170
 0,60 60,660 660,900 900,1260 1260,1440
-a coordinator goes down, then
+a coordinator goes down,| then
 
 3113
 01:29:53,170 --> 01:29:54,730
@@ -15551,7 +15549,7 @@ the backup gets brought up
 3114
 01:29:54,790 --> 01:29:57,250
 0,300 300,1080 1110,1500 1500,2250 2280,2460
-to actually start processing so
+to actually start processing,| so
 
 3115
 01:29:57,250 --> 01:29:58,420
@@ -15561,12 +15559,12 @@ in that case of network
 3116
 01:29:58,420 --> 01:29:59,620
 0,480 480,570 570,780 780,1020 1020,1200
-partition I don't think we
+partition,| I don't think we
 
 3117
 01:29:59,620 --> 01:30:00,680
 0,240 270,570 600,930
-will be like.
+will be like.|
 
 3118
 01:30:00,930 --> 01:30:03,000
@@ -15576,7 +15574,7 @@ The workers that are isolated
 3119
 01:30:03,000 --> 01:30:04,950
 0,180 180,450 450,630 630,930 1080,1950
-and away from that coordinator
+and away from that coordinator|
 
 3120
 01:30:05,010 --> 01:30:06,210
@@ -15586,22 +15584,22 @@ will not be able to
 3121
 01:30:06,210 --> 01:30:08,460
 0,150 150,810 810,1050 1170,1620 1980,2250
-be processed with the like
+be processed| with the like
 
 3122
 01:30:08,460 --> 01:30:10,440
 0,240 270,780 780,1350 1440,1740 1740,1980
-the coordinator itself and turns
+the coordinator itself| and turns
 
 3123
 01:30:10,440 --> 01:30:11,840
 0,90 90,210 210,540 540,1140
-out the user side.
+out the user side,|
 
 3124
 01:30:12,070 --> 01:30:13,150
 0,210 210,360 360,600 600,720 720,1080
-It can still be processed
+it can still be processed,|
 
 3125
 01:30:13,150 --> 01:30:14,530
@@ -15616,7 +15614,7 @@ to continue talking to that
 3127
 01:30:15,700 --> 01:30:17,170
 0,570 630,900 900,1110 1110,1260 1260,1470
-worker, it's just that if
+worker,| it's just that, if
 
 3128
 01:30:17,170 --> 01:30:18,310
@@ -15626,7 +15624,7 @@ there's any changes in the
 3129
 01:30:18,310 --> 01:30:20,500
 0,630 960,1230 1230,1800 1800,1980 1980,2190
-region {like's -} a state
+region,| {like -} the state
 
 3130
 01:30:20,500 --> 01:30:21,100
@@ -15636,22 +15634,22 @@ of the game as a
 3131
 01:30:21,100 --> 01:30:22,870
 0,570 600,900 900,1140 1140,1290 1290,1770
-whole that will be processed
+whole,| that will be processed
 
 3132
 01:30:22,870 --> 01:30:24,700
 0,210 630,960 990,1680 1680,1710 1710,1830
-yet yeah, additionally I want
+yet.| Yeah, additionally I want
 
 3133
 01:30:24,700 --> 01:30:25,960
 0,60 60,270 270,660 870,1080 1080,1260
-to make that a if
+to make that,| {} if
 
 3134
 01:30:25,960 --> 01:30:27,520
 0,120 120,390 390,570 570,1140 1140,1560
-we have a partition, um,
+we have a partition, {}|
 
 3135
 01:30:27,550 --> 01:30:28,990
@@ -15661,7 +15659,7 @@ the coordinator backup essentially acts
 3136
 01:30:28,990 --> 01:30:29,980
 0,120 120,180 180,720 720,900 900,990
-as a coordinator for all
+as a coordinator| for all
 
 3137
 01:30:29,980 --> 01:30:30,850
@@ -15671,12 +15669,12 @@ of the workers that it
 3138
 01:30:30,850 --> 01:30:32,470
 0,420 450,690 690,960 1140,1470 1470,1620
-can talk to and this
+can talk to| and this
 
 3139
 01:30:32,470 --> 01:30:33,790
 0,180 180,540 540,840 840,990 990,1320
-is fine because we want
+is fine,| because we want
 
 3140
 01:30:33,790 --> 01:30:35,050
@@ -15691,7 +15689,7 @@ running for all of the
 3142
 01:30:35,980 --> 01:30:37,180
 0,450 450,600 600,690 690,1110 1110,1200
-regions in the workers at
+regions| in the workers at
 
 3143
 01:30:37,180 --> 01:30:38,320
@@ -15701,42 +15699,42 @@ the coordinator backup is talking
 3144
 01:30:38,320 --> 01:30:40,060
 0,300 420,870 870,1080 1080,1410 1410,1740
-to a this family becomes
+to,| {} this mainly becomes
 
 3145
 01:30:40,060 --> 01:30:41,710
 0,60 60,450 450,780 780,1290 1320,1650
-a problem when they do
+a problem,| when they do
 
 3146
 01:30:41,710 --> 01:30:43,630
 0,630 660,1080 1080,1290 1290,1500 1500,1920
-reunite and in this case
+reunite| and in this case
 
 3147
 01:30:43,630 --> 01:30:45,640
 0,450 480,660 660,1140 1140,1650 1650,2010
-a the coordinator backup then,
+{} the coordinator backup then
 
 3148
 01:30:45,640 --> 01:30:46,840
 0,150 150,480 480,720 720,870 870,1200
-um takes all of its
+{} takes all of its
 
 3149
 01:30:46,840 --> 01:30:47,480
 0,540
-um.
+{}
 
 3150
 01:30:48,190 --> 01:30:49,270
 0,330 330,660 660,780 780,870 870,1080
-Data and it can send
+data| and it can send
 
 3151
 01:30:49,270 --> 01:30:50,110
 0,90 90,180 180,300 300,720 720,840
-it to the coordinator and
+it to the coordinator| and
 
 3152
 01:30:50,110 --> 01:30:51,730
@@ -15746,7 +15744,7 @@ the coordinator can locally resolve
 3153
 01:30:51,730 --> 01:30:52,990
 0,150 180,660 660,990 990,1080 1080,1260
-it because there is kind
+it,| because there is kind
 
 3154
 01:30:52,990 --> 01:30:54,760
@@ -15756,22 +15754,22 @@ of an original coordinator and
 3155
 01:30:54,760 --> 01:30:56,230
 0,60 60,450 450,960 960,1320 1320,1470
-the coordinator backup and they
+the coordinator backup| and they
 
 3156
 01:30:56,230 --> 01:30:58,180
 0,270 270,570 750,960 960,1380 1650,1950
-know that the backup was
+know that the backup was,
 
 3157
 01:30:58,270 --> 01:30:59,410
 0,150 150,420 420,540 540,630 630,1140
-a backup of the coordinator
+{} backup of the coordinator,|
 
 3158
 01:30:59,440 --> 01:31:00,980
 0,300 300,420 420,750 780,1260
-because it's stored locally.
+because it's stored locally.|
 
 3159
 01:31:02,330 --> 01:31:04,670
@@ -15781,12 +15779,12 @@ But if the coordinator backup
 3160
 01:31:04,670 --> 01:31:06,740
 0,270 270,300 300,1020 1050,1650 1680,2070
-becomes a coordinator then wouldn't
+becomes a coordinator,| then wouldn't
 
 3161
 01:31:06,740 --> 01:31:08,600
 0,300 540,750 750,1260 1260,1530 1530,1860
-it for example say oh
+it,| for example say, oh
 
 3162
 01:31:08,600 --> 01:31:09,680
@@ -15796,12 +15794,12 @@ I need to make sure
 3163
 01:31:09,680 --> 01:31:10,850
 0,120 120,210 210,390 390,720 720,1170
-that we have active replicas
+that,| we have active replicas
 
 3164
 01:31:10,850 --> 01:31:14,060
 0,150 150,450 450,1050 1950,2760 2760,3210
-for all these rooms that
+for all these rooms,| that
 
 3165
 01:31:14,180 --> 01:31:14,990
@@ -15811,7 +15809,7 @@ are that are on the
 3166
 01:31:14,990 --> 01:31:16,190
 0,360 360,510 510,570 570,630 630,1200
-other side of the partition
+other side of the partition,|
 
 3167
 01:31:16,250 --> 01:31:17,390
@@ -15821,7 +15819,7 @@ wouldn't you have the same
 3168
 01:31:17,390 --> 01:31:18,770
 0,270 270,630 630,840 840,1080 1080,1380
-room hosts on both sides,
+room hosts on both sides,|
 
 3169
 01:31:18,770 --> 01:31:19,910
@@ -15831,12 +15829,12 @@ the partition and be able
 3170
 01:31:19,910 --> 01:31:20,940
 0,120 120,900
-to diverge.
+to diverge.|
 
 3171
 01:31:23,820 --> 01:31:25,530
 0,360 360,690 690,1080 1080,1440 1440,1710
-A no, because each room
+{} No, because each room
 
 3172
 01:31:25,530 --> 01:31:27,630
@@ -15846,42 +15844,42 @@ belongs only to like one
 3173
 01:31:27,660 --> 01:31:30,480
 0,900 1170,1680 1680,2160 2190,2550
-worker, um, so like.
+worker,| {} so like,|
 
 3174
 01:31:30,920 --> 01:31:32,630
 0,180 180,240 240,390 390,1200 1380,1710
-So I guess like each
+so I guess, like each
 
 3175
 01:31:32,630 --> 01:31:34,540
 0,570 720,1020 1020,1590
-room like can't.
+room, like can't,|
 
 3176
 01:31:34,960 --> 01:31:35,890
 0,180 180,270 270,660 660,810 810,930
-Like the replicas for the
+like the replicas for the
 
 3177
 01:31:35,890 --> 01:31:38,110
 0,360 360,1080 1080,1350 1350,1950 1950,2220
-rooms would get abandoned so
+rooms would get abandoned,| so
 
 3178
 01:31:38,110 --> 01:31:39,550
 0,420 420,510 510,900 900,1140 1140,1440
-essentially what happens is if
+essentially what happens is,| if
 
 3179
 01:31:39,550 --> 01:31:40,960
 0,150 150,870 1050,1260 1260,1350 1350,1410
-a worker like in the
+a worker,| like in the
 
 3180
 01:31:40,960 --> 01:31:41,950
 0,210 210,300 300,390 390,900 900,990
-case of a partition, the
+case of a partition,| the
 
 3181
 01:31:41,950 --> 01:31:42,940
@@ -15896,12 +15894,12 @@ access a worker that's in
 3183
 01:31:44,020 --> 01:31:45,700
 0,90 90,390 390,960 1110,1500 1500,1680
-the other partition, um, so
+the other partition,| {} so
 
 3184
 01:31:45,700 --> 01:31:47,770
 0,150 150,420 420,1110 1590,1950 1950,2070
-what happens is I think
+what happens is,| I think
 
 3185
 01:31:47,770 --> 01:31:49,450
@@ -15911,27 +15909,27 @@ they like move their replicas
 3186
 01:31:49,450 --> 01:31:50,080
 0,480
-over.
+over,|
 
 3187
 01:31:50,220 --> 01:31:51,750
 0,360 360,630 630,750 750,1260 1260,1530
-But because the players also
+but because the players also
 
 3188
 01:31:51,750 --> 01:31:54,200
 0,270 270,720 720,1260 1380,2010
-can't contact worker, um.
+can't contact worker, {}|
 
 3189
 01:31:54,590 --> 01:31:55,700
 0,630 630,690 690,780 780,1020 1020,1110
-None of the moves would
+none of the moves would
 
 3190
 01:31:55,700 --> 01:31:57,380
 0,120 120,810 870,1170 1170,1320 1320,1680
-be processed and so the
+be processed| and so the
 
 3191
 01:31:57,410 --> 01:31:59,570
@@ -15941,57 +15939,57 @@ more recent replicas after the
 3192
 01:31:59,600 --> 01:32:01,910
 0,600 600,1110 1110,1320 1320,1470 1470,2310
-partition heals would be prioritized
+partition heals would be prioritized,|
 
 3193
 01:32:01,910 --> 01:32:03,740
 0,360 360,630 630,810 810,1230
-when healing that network.
+when healing that network.|
 
 3194
 01:32:08,590 --> 01:32:10,090
 0,210 210,600 600,750 750,840 840,1500
-Um, why did you decide
+{} Why did you decide
 
 3195
 01:32:10,120 --> 01:32:12,280
 0,150 150,540 540,990 990,1440 1470,2160
-on that API with move
+on that API with move|
 
 3196
 01:32:12,310 --> 01:32:14,380
 0,600 630,960 960,1290 1290,1350 1350,2070
-and I'm sending a message.
+and {} sending a message.|
 
 3197
 01:32:16,330 --> 01:32:18,970
 0,360 360,1020 1080,1860 1860,2190 2190,2640
-Um, so specifically for this
+{} So specifically for this
 
 3198
 01:32:18,970 --> 01:32:20,680
 0,690 720,1050 1050,1230 1230,1530 1530,1710
-API a we wanted two
+API,| {} we wanted two
 
 3199
 01:32:20,680 --> 01:32:22,660
 0,360 360,720 720,1020 1020,1830 1830,1980
-different types of moves two
+different types of moves,| two
 
 3200
 01:32:22,660 --> 01:32:24,520
 0,300 300,480 480,540 540,930 1200,1860
-distinct types of moves demonstrate
+distinct types of moves,| demonstrate
 
 3201
 01:32:24,520 --> 01:32:25,480
 0,180 180,300 300,360 360,720 720,960
-one with a fast move
+one, with a fast move,
 
 3202
 01:32:25,480 --> 01:32:26,980
 0,270 270,330 330,630 630,960 1110,1500
-with a stable move a
+{one,with} a stable move, {}|
 
 3203
 01:32:26,980 --> 01:32:29,020
@@ -16001,32 +15999,32 @@ ideally stable move is used
 3204
 01:32:29,020 --> 01:32:31,870
 0,990 1260,1830 1830,2100 2400,2700 2700,2850
-mora barely and used more
+more {like,raraly}| and used more
 
 3205
 01:32:31,870 --> 01:32:33,310
 0,120 120,720 720,1050 1080,1320 1320,1440
-for transactions that where it's
+for transactions,| that where it's
 
 3206
 01:32:33,310 --> 01:32:34,150
 0,330 330,450 450,510 510,600 600,840
-OK for it to take
+okay for it to take
 
 3207
 01:32:34,150 --> 01:32:35,770
 0,480 480,990 990,1110 1110,1440 1440,1620
-longer but we wanted to
+longer,| but we wanted to
 
 3208
 01:32:35,770 --> 01:32:36,850
 0,180 180,270 270,690 690,810 810,1080
-not be dropped at all,
+not be dropped at all,|
 
 3209
 01:32:37,090 --> 01:32:38,080
 0,270 270,480 480,780 780,870 870,990
-um, the easiest way to
+{} the easiest way to
 
 3210
 01:32:38,080 --> 01:32:39,670
@@ -16036,67 +16034,67 @@ replicate this in a simple
 3211
 01:32:39,670 --> 01:32:40,450
 0,180 180,330 330,570 570,690 690,780
-front end was with a
+{frontend -} was with a
 
 3212
 01:32:40,450 --> 01:32:41,980
 0,210 210,750 1200,1320 1320,1410 1410,1530
-chat message, so it's kind
+chat message,| so it's kind
 
 3213
 01:32:41,980 --> 01:32:42,960
 0,60 60,630
-of arbitrary.
+of arbitrary,|
 
 3214
 01:32:43,670 --> 01:32:44,780
 0,420 420,570 570,810 810,990 990,1110
-Moves for sure should be
+moves for sure should be
 
 3215
 01:32:44,780 --> 01:32:46,540
 0,390 390,750 750,930 930,1410
-fast because we are.
+fast,| because we are,
 
 3216
 01:32:47,030 --> 01:32:48,050
 0,210 210,300 300,450 450,630 870,1020
-Like we don't want it
+like we don't want it
 
 3217
 01:32:48,050 --> 01:32:49,430
 0,60 60,330 330,660 840,1200 1200,1380
-to be because players move
+to be,| because players move
 
 3218
 01:32:49,430 --> 01:32:50,380
 0,60 60,330
-a lot.
+a lot.|
 
 3219
 01:32:52,390 --> 01:32:53,480
 0,270 270,810
-Thank you.
+Thank you.|
 
 3220
 01:32:59,650 --> 01:33:01,090
 0,330 330,540 540,660 660,1050 1080,1440
-Awesome, thanks so much that
+Awesome, thanks so much,| that
 
 3221
 01:33:01,090 --> 01:33:02,860
 0,480 480,750 750,1410 1410,1590 1590,1770
-concludes the presentations, great job
+concludes the presentations,| great job
 
 3222
 01:33:02,860 --> 01:33:04,090
 0,330 330,510 510,690 690,1050 1050,1230
-everyone, this was a pretty
+everyone,| this was a pretty
 
 3223
 01:33:04,090 --> 01:33:06,430
 0,360 1710,1860 1860,2070 2070,2190 2190,2340
-exciting I have one more
+exciting.| I have one more
 
 3224
 01:33:06,430 --> 01:33:08,140
