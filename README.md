@@ -14,30 +14,30 @@
 
 ## 工作进展
 
-| 课程    | 预览    | 英文    | 中文 |
-|---------|---------|---------|------|
-| 1       | &check; | &check; |      |
-| 2       | &check; | &check; |      |
-| 3       | &check; | &check; |      |
-| 4       | &check; | &check; |      |
-| 5       | &check; | &check; |      |
-| 6       | &check; | &check; |      |
-| 7       | &check; | &check; |      |
-| 8       | &check; | &check; |      |
-| 9       | &check; | &check; |      |
-| 10      | &check; | &check; |      |
-| 11      | &check; | &check; |      |
-| 12      | &check; | &check; |      |
-| 13      | &check; | &check; |      |
-| 14      | &check; | &check; |      |
-| 15      | &check; | &check; |      |
-| 15-cont | &check; | &check; |      |
-| 16      | &check; | &check; |      |
-| 17      | &check; | &check; |      |
-| 18      | &check; | &check; |      |
-| 19      | &check; | &check; |      |
-| 20      | &check; | &check; |      |
-| 21      | &check; | &check; |      |
+| 课程    | 预览    | 英文    | 中文    |
+|---------|---------|---------|---------|
+| 1       | &check; | &check; | &check; |
+| 2       | &check; | &check; |         |
+| 3       | &check; | &check; |         |
+| 4       | &check; | &check; |         |
+| 5       | &check; | &check; |         |
+| 6       | &check; | &check; |         |
+| 7       | &check; | &check; |         |
+| 8       | &check; | &check; |         |
+| 9       | &check; | &check; |         |
+| 10      | &check; | &check; |         |
+| 11      | &check; | &check; |         |
+| 12      | &check; | &check; |         |
+| 13      | &check; | &check; |         |
+| 14      | &check; | &check; |         |
+| 15      | &check; | &check; |         |
+| 15-cont | &check; | &check; |         |
+| 16      | &check; | &check; |         |
+| 17      | &check; | &check; |         |
+| 18      | &check; | &check; |         |
+| 19      | &check; | &check; |         |
+| 20      | &check; | &check; |         |
+| 21      | &check; | &check; |         |
 
 ## 文件（夹）说明
 
