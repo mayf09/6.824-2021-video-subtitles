@@ -17,7 +17,7 @@
 | 课程    | 预览    | 英文    | 中文    |
 |---------|---------|---------|---------|
 | 1       | &check; | &check; | &check; |
-| 2       | &check; | &check; |         |
+| 2       | &check; | &check; | &check; |
 | 3       | &check; | &check; |         |
 | 4       | &check; | &check; |         |
 | 5       | &check; | &check; |         |
