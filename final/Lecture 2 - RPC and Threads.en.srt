@@ -12,35 +12,35 @@ again we're going to mostly look at threads and RPC in the context of Go,
 
 4
 00:00:14,880 --> 00:00:18,570
-you know programming language that we're using in the labs
+you know programming language that we're using in the labs,
 
 5
 00:00:18,630 --> 00:00:21,900
-and in fact most of this lecture is really tailored
+and in fact most of this lecture is really tailored,
 
 6
 00:00:21,900 --> 00:00:27,060
 towords helping you do Go programming for the labs,
 
 7
-00:00:27,960 --> 00:00:30,330
-that's all you've done,
+00:00:27,960 --> 00:00:33,870
+so all of you've done hopefully the tutorial and the crawler exercise,
 
 8
-00:00:30,330 --> 00:00:33,870
-hopefully the tutorial and the crawler exercise
+00:00:33,870 --> 00:00:37,170
+which we'll discuss them quite a bit of detail later in the lecture,
 
 9
-00:00:33,870 --> 00:00:37,170
-which will discuss them quite a bit of detail later in the lecture,
-
-10
 00:00:37,410 --> 00:00:39,510
 but before jumping into the details,
 
+10
+00:00:39,510 --> 00:00:41,940
+let me a little bit more of code calling,
+
 11
-00:00:39,510 --> 00:00:44,670
-let me a little bit more of code calling to break the [] and get people to ask questions.
+00:00:41,970 --> 00:00:44,670
+to break the [] and get people to ask questions.
 
 12
 00:00:45,200 --> 00:00:47,630
@@ -64,7 +64,7 @@ Yeah, how about Evan Feldman?
 
 17
 00:00:59,940 --> 00:01:02,550
-Hi folks, I'm Batman,
+Hi, folks, I'm Batman,
 
 18
 00:01:02,550 --> 00:01:06,270
@@ -80,7 +80,7 @@ it was my first exposure to you know an object oriented language,
 
 21
 00:01:12,300 --> 00:01:15,840
-so it's, it's kind of a change a change in framework,
+so it's, it's kind of a change, a change in framework,
 
 22
 00:01:15,840 --> 00:01:18,030
@@ -88,7 +88,7 @@ that was interesting to adapt to.
 
 23
 00:01:19,290 --> 00:01:21,990
-Hey, how about Brendan Wall?
+Okay, how about Brendan Wall?
 
 24
 00:01:28,390 --> 00:01:29,680
@@ -96,7 +96,7 @@ Brendan, are you there?
 
 25
 00:01:30,530 --> 00:01:32,210
-Yes, I was just finding mute button,
+Yes, I was just finding the unmute button,
 
 26
 00:01:32,360 --> 00:01:33,860
@@ -107,16 +107,16 @@ sorry, what was the question, I just joined.
 Where are you and what is your first impressions of Go?
 
 28
-00:01:38,000 --> 00:01:40,160
-Yeah, it's, I had used to Go before,
+00:01:38,000 --> 00:01:40,910
+Yeah, it's, I had used to Go before, for an internship,
 
 29
-00:01:40,160 --> 00:01:43,700
-for an internship that was my first time actually dealing with the concurrency stuff
+00:01:40,910 --> 00:01:43,700
+that was my first time actually dealing with the concurrency stuff,
 
 30
 00:01:43,730 --> 00:01:45,500
-and I like like really working with goroutine,
+and I like Go, like really working with goroutine,
 
 31
 00:01:45,500 --> 00:01:51,010
@@ -136,7 +136,7 @@ but it's interesting.
 
 35
 00:02:00,670 --> 00:02:02,140
-How about the [Corner] [Prisby]?
+How about the [Connor Prisby]?
 
 36
 00:02:13,170 --> 00:02:14,250
@@ -148,7 +148,7 @@ Okay, try somebody else, Dory Shen.
 
 38
 00:02:27,120 --> 00:02:29,640
-Hi, I'm in Cambridge right now
+Hi, I'm in Cambridge right now,
 
 39
 00:02:29,640 --> 00:02:32,520
@@ -156,7 +156,7 @@ and I found Go to be pretty interesting,
 
 40
 00:02:32,520 --> 00:02:35,280
-I thought like Go through through the first part of the tutorial,
+I thought like go through through the first part of the tutorial,
 
 41
 00:02:35,280 --> 00:02:39,030
@@ -164,7 +164,7 @@ I like learning about the for loops and the way they do for loops,
 
 42
 00:02:39,060 --> 00:02:40,500
-I thought that was pretty interesting
+I thought that was pretty interesting,
 
 43
 00:02:40,500 --> 00:02:42,450
@@ -172,4357 +172,4889 @@ and like the way it's kind of structured,
 
 44
 00:02:42,480 --> 00:02:45,990
-I think that I like the the threads
+I think that I like the the threads,
 
 45
-00:02:45,990 --> 00:02:50,700
-and found to be a little bit more difficult about when it ended,
+00:02:45,990 --> 00:02:49,770
+and I found to be a little bit more difficult about,
 
 46
-00:02:50,700 --> 00:02:55,500
-like when sometimes the function would end before all the routines like ended,
+00:02:49,770 --> 00:02:50,700
+when it ended,
 
 47
+00:02:50,700 --> 00:02:54,900
+like when sometimes the function would end before all the routines,
+
+48
+00:02:54,900 --> 00:02:55,500
+like ended,
+
+49
 00:02:55,500 --> 00:02:58,230
 so that was like interesting to think about,
 
-48
+50
 00:02:58,230 --> 00:02:59,430
 and like I learned more about that,
 
-49
+51
 00:02:59,430 --> 00:03:00,630
 so it's pretty cool, I liked it.
 
-50
-00:03:01,200 --> 00:03:08,160
-Well, hope you gonna have a very positive experience with Go this semester,
-
-51
-00:03:08,460 --> 00:03:13,320
-and, so let me say a little bit like you know why Go?
-
 52
-00:03:14,210 --> 00:03:17,150
-In principle, you know there's a lot of programming languages
+00:03:01,200 --> 00:03:08,160
+Well, hope all of you gonna have a very positive experience with Go this semester.
 
 53
-00:03:17,150 --> 00:03:19,550
-that you could have used for doing distributed programming
+00:03:08,460 --> 00:03:13,320
+And so let me say a little bit like you know why Go?
 
 54
+00:03:14,210 --> 00:03:17,150
+In principle, you know there's a lot of programming languages,
+
+55
+00:03:17,150 --> 00:03:19,550
+that you could have used for doing distributed programming,
+
+56
 00:03:19,550 --> 00:03:21,320
 and Go is absolutely not the only one,
 
-55
-00:03:21,740 --> 00:03:26,000
-but some reasons why we why we chose Go in 6.824,
-
-56
-00:03:26,180 --> 00:03:32,060
-you know first of all, it has good support for threads and RPC
-
 57
+00:03:21,740 --> 00:03:26,000
+but some reasons why we why we chose Go in 6.824.
+
+58
+00:03:26,180 --> 00:03:32,060
+You know first of all, it has good support for threads and RPC,
+
+59
 00:03:33,590 --> 00:03:37,970
 and those two are very important for distributed programming,
 
-58
-00:03:38,360 --> 00:03:41,270
-so it makes sense to you know it,
-
-59
-00:03:41,270 --> 00:03:42,560
-Go there's a good match for that.
-
 60
-00:03:43,010 --> 00:03:46,160
-Second reason we like it a lot is you know they have a garbage collector
+00:03:38,360 --> 00:03:40,850
+so it makes sense to you know
 
 61
-00:03:46,220 --> 00:03:49,010
-and if you do share namely style parallelism
+00:03:40,850 --> 00:03:42,560
+Go there's a good match for that.
 
 62
-00:03:49,010 --> 00:03:52,010
-where multiple threads share a structure,
+00:03:43,010 --> 00:03:44,570
+Second reason we like it a lot is
 
 63
-00:03:52,190 --> 00:03:56,150
-where variable then having a garbage collector is nice,
+00:03:44,570 --> 00:03:46,160
+you know it has a garbage collector,
 
 64
-00:03:56,150 --> 00:04:01,460
-because then the threads don't have to decide who's the last thread that actually has a reference to his memory
+00:03:46,220 --> 00:03:49,010
+and if you do shared memory style parallelism,
 
 65
+00:03:49,010 --> 00:03:53,810
+where multiple threads share a structure or variable,
+
+66
+00:03:53,810 --> 00:03:56,150
+then having a garbage collector is nice,
+
+67
+00:03:56,150 --> 00:03:57,770
+because then the threads don't have to decide,
+
+68
+00:03:57,770 --> 00:04:01,460
+who's the last thread that actually has a reference to this memory,
+
+69
 00:04:01,460 --> 00:04:03,230
 and should therefore deallocated,
 
-66
+70
 00:04:03,320 --> 00:04:06,440
-a garbage collector just takes care of all those problems.
+the garbage collector use takes care of all those problems,
 
-67
-00:04:06,980 --> 00:04:10,250
-That's convenient type safe.
+71
+00:04:06,980 --> 00:04:07,790
+that's convenient.
 
-68
+72
+00:04:08,450 --> 00:04:10,250
+It's type safe.
+
+73
 00:04:14,420 --> 00:04:18,440
 It is simple, it's a reasonable simple programming language,
 
-69
+74
 00:04:18,470 --> 00:04:19,940
-quite easy to learn,
+quite easy to learn.
 
-70
-00:04:19,940 --> 00:04:23,660
-and in fact you know ideas, hopefully you've got that experience with in Go tutorial,
+75
+00:04:19,940 --> 00:04:21,320
+And in fact you know ideas,
 
-71
-00:04:23,660 --> 00:04:26,690
-that I want you to Go tutorial, you mostly got most of Go
+76
+00:04:21,380 --> 00:04:23,660
+hopefully you've got that experience with in Go tutorial,
 
-72
+77
+00:04:23,660 --> 00:04:25,160
+that I want you to Go tutorial,
+
+78
+00:04:25,160 --> 00:04:26,690
+you mostly got most of Go.
+
+79
 00:04:27,440 --> 00:04:30,620
-and then finally, it actually have a compiler,
+And then finally, it actually have a compiler,
 
-73
+80
 00:04:30,620 --> 00:04:31,520
 so it's compiled,
 
-74
+81
 00:04:32,200 --> 00:04:34,450
-unlike python
+unlike Python,
 
-75
+82
 00:04:34,480 --> 00:04:38,650
-or you know actually the compiler producers actually usable code,
+or you know actually the compiler produces actually usable code,
 
-76
+83
 00:04:38,650 --> 00:04:41,170
-so the runtime overhead is not as large,
+so the runtime overhead is not as large.
 
-77
+84
 00:04:41,980 --> 00:04:46,870
 I guess sort of the final reason why 6.824 in Go,
 
-78
+85
 00:04:46,870 --> 00:04:50,110
-in those pictures, I enjoyed writing Go programs
+is actually I enjoyed writing Go programs,
 
-79
+86
 00:04:50,110 --> 00:04:52,510
 and so that may be also an important reason.
 
-80
+87
 00:04:54,140 --> 00:04:56,180
 So what I'm gonna do is,
 
-81
+88
 00:04:56,180 --> 00:04:59,390
-I'm going to talk a little bit about threads in general, machine in general,
+I'm going to talk a little bit about threads in general, RPC in general,
 
-82
+89
 00:04:59,540 --> 00:05:05,240
 and you know talk a little bit about different aspects of programming with threads,
 
-83
+90
 00:05:05,570 --> 00:05:07,430
 some of that is pretty tutorial,
 
-84
-00:05:07,460 --> 00:05:09,620
-you have seen this before,
+91
+00:05:07,460 --> 00:05:11,720
+you have seen this before you know my [apologies],
 
-85
-00:05:09,800 --> 00:05:13,790
-you know my apologies, I'm gonna go reasonable quickly through it,
+92
+00:05:11,720 --> 00:05:13,790
+I'm gonna go reasonable quickly through it,
 
-86
+93
 00:05:13,820 --> 00:05:17,300
 it's definitely not a comprehensive introduction to concurrent programming,
 
-87
-00:05:17,570 --> 00:05:20,750
-but hopefully enough to remind you of what the issues are
+94
+00:05:17,570 --> 00:05:19,760
+but hopefully enough to remind you of
 
-88
-00:05:20,780 --> 00:05:22,160
-and what you should look out for.
+95
+00:05:19,760 --> 00:05:22,160
+what the issues are and what you should look out for.
 
-89
+96
 00:05:22,560 --> 00:05:25,740
 And we also spend some time quite a bit of talk about the crawler.
 
-90
-00:05:26,520 --> 00:05:30,600
-And so I'll show you a solution that I have two solutions,
+97
+00:05:26,520 --> 00:05:29,460
+And so I'll share you a solution,
 
-91
+98
+00:05:29,460 --> 00:05:30,600
+that I have two solutions,
+
+99
 00:05:30,600 --> 00:05:33,240
-one using channels and ones using mutexes
+one using channels and ones using mutexes,
 
-92
+100
 00:05:33,360 --> 00:05:34,530
 and we'll go through both of them.
 
-93
+101
 00:05:36,140 --> 00:05:38,540
 Any questions so far before I dive in.
 
-94
+102
 00:05:44,920 --> 00:05:47,500
-Okay, when you get started with threads,
+Okay, what we get started with threads,
 
-95
+103
 00:05:50,050 --> 00:05:53,140
 so thread is basically shorthand for a thread of execution,
 
-96
+104
 00:05:57,360 --> 00:06:01,440
 in Go, thread called the goroutine,
 
-97
+105
 00:06:01,440 --> 00:06:05,550
-but everybody else, basically in the world Go, calls a thread of thread
+but everybody else, basically in the world Go, calls a thread of thread,
 
-98
+106
 00:06:06,270 --> 00:06:07,830
 and so the way to think about it is that,
 
-99
+107
 00:06:07,830 --> 00:06:10,500
-when you do Go run,
+when you do go run,
 
-100
+108
 00:06:10,500 --> 00:06:14,910
 you know the Go will create a process you know on your operating system,
 
-101
+109
 00:06:15,480 --> 00:06:18,690
-and in the sight of process you know the Go runtime system,
+and in the side of process you know the Go runtime system,
 
-102
+110
 00:06:19,860 --> 00:06:21,030
 and when Go start,
 
-103
+111
 00:06:21,030 --> 00:06:23,490
-it actually has one thread of execution, the main thread
+it actually has one thread of execution, the main thread,
 
-104
+112
 00:06:23,790 --> 00:06:26,580
-and then it has primitives to create new threads
+but then it has primitives to create new threads,
 
-105
+113
 00:06:26,580 --> 00:06:27,660
 and so you can think about this,
 
-106
-00:06:27,660 --> 00:06:29,610
-those are many many threads of execution,
+114
+00:06:27,660 --> 00:06:32,160
+those are many many threads of execution you know running in parallel.
 
-107
-00:06:30,180 --> 00:06:32,160
-you know running in parallel,
-
-108
+115
 00:06:32,460 --> 00:06:36,360
-you can think about a single thread is basically sort of a sequential program running.
+You can think about a single thread is basically sort of a sequential program line,
 
-109
+116
 00:06:36,920 --> 00:06:39,620
-So the program has a program counter,
+so the program has a program counter,
 
-110
+117
 00:06:40,100 --> 00:06:41,510
 has his own stack,
 
-111
+118
 00:06:42,180 --> 00:06:44,190
-and has his own set of registers.
+and has his own set of registers,
 
-112
+119
 00:06:47,920 --> 00:06:49,990
-And so this behaves like a sequential program,
+and so this behaves like a sequential program,
 
-113
+120
 00:06:50,320 --> 00:06:54,670
 you can execute instruction one and instruction two, and instruction three and four,
 
-114
+121
 00:06:54,670 --> 00:06:57,520
-you may make a procedure call allocate memory on the stack,
+you know may make a procedure call allocate memory on the stack,
 
-115
+122
 00:06:57,520 --> 00:07:01,090
-I'll return from a procedure call, recursive call,
+and will return from a procedure call, recursive call,
 
-116
+123
 00:07:01,120 --> 00:07:03,490
-all sort of your standard sequence call programming,
+all sort of you know standard sequence programming,
 
-117
+124
 00:07:03,490 --> 00:07:06,280
 just like happens about as a sequential thread basically.
 
-118
-00:07:07,980 --> 00:07:14,070
-The interesting thing is that, you know the threads may actually share memory with other threads.
+125
+00:07:07,980 --> 00:07:10,110
+The interesting thing is that,
 
-119
+126
+00:07:10,110 --> 00:07:14,070
+you know the threads may actually share memory with other threads,
+
+127
 00:07:15,940 --> 00:07:20,260
-Since, all the threads are running in the same address space,
+since all the threads are running in the same address space,
 
-120
+128
 00:07:20,350 --> 00:07:22,600
 the same operating system address space,
 
-121
+129
 00:07:22,810 --> 00:07:24,610
 which is the same process address space,
 
-122
+130
 00:07:24,790 --> 00:07:27,520
 they can actually share memory,
 
-123
+131
 00:07:27,520 --> 00:07:31,270
-so one thread can write a location say you know 10
+so one thread can write location say you know 10,
 
-124
+132
 00:07:31,480 --> 00:07:33,820
 and then other thread can actually read that location 10,
 
-125
+133
 00:07:34,000 --> 00:07:36,460
 so that way they can actually communicate information.
 
-126
+134
 00:07:37,390 --> 00:07:41,500
-One way to think about a thread too is
+One way to think about a thread too is,
 
-127
+135
 00:07:41,500 --> 00:07:46,540
-to think about it as sort of an abstraction that are supported by the runtime
+to think about it as sort of an abstraction that are supported by the runtime,
 
-128
+136
 00:07:46,540 --> 00:07:48,970
 and the runtime as a number of operations on a thread,
 
-129
+137
 00:07:48,970 --> 00:07:52,480
 so one operation, you know we've seen many times,
 
-130
+138
 00:07:52,480 --> 00:07:55,450
-if you've seen you know many times to actually started for create threads,
+and you've seen you know many times to actually started, for create threads,
 
-131
+139
 00:07:55,450 --> 00:07:59,950
-you know this is Go syntax, the Go keyboard,
+you know this is go syntax, the go keyboard.
 
-132
+140
 00:08:00,580 --> 00:08:01,930
-thread can exit,
+Thread can exit,
 
-133
+141
 00:08:03,310 --> 00:08:06,130
-generally, this means the [] can implicit,
+generally this means the exit can implicit,
 
-134
+142
 00:08:06,130 --> 00:08:09,160
 like when a thread returns from this,
 
-135
-00:08:09,160 --> 00:08:12,970
-if you create a function,
+143
+00:08:09,160 --> 00:08:15,100
+if you create a function using go, go keyword,
 
-136
-00:08:12,970 --> 00:08:15,100
-you can Go go keyword,
-
-137
+144
 00:08:15,100 --> 00:08:16,840
-and you return out of the function,
+and you know return out of the function,
 
-138
+145
 00:08:16,840 --> 00:08:19,180
-then implicitly the thread exits,
+then implicitly the thread exits.
 
-139
+146
 00:08:19,720 --> 00:08:24,190
 Go runtime also has a couple other of under the hoods operations,
 
-140
+147
 00:08:24,190 --> 00:08:26,800
-if you will, one it can actually stop a thread.
+if you will, one it can actually stop a thread,
 
-141
-00:08:27,580 --> 00:08:32,740
-For example, if a thread writes to a channel and there's no reader on the channel yet,
+148
+00:08:27,580 --> 00:08:30,700
+for example, if a thread writes to a channel
 
-142
+149
+00:08:30,700 --> 00:08:32,740
+and there's no reader on the channel yet,
+
+150
 00:08:32,740 --> 00:08:34,780
-then the thread might get blocked
+then the thread might get blocked,
 
-143
+151
 00:08:35,020 --> 00:08:37,330
 and so the Go runtime stops the thread,
 
-144
+152
 00:08:37,360 --> 00:08:38,590
-puts its side,
+puts it aside,
 
-145
+153
 00:08:38,980 --> 00:08:42,820
 so it can actually run another thread on the processor,
 
-146
+154
 00:08:42,820 --> 00:08:45,220
-and then maybe later on resume that thread,
+and then maybe later on, resume that thread,
 
-147
+155
 00:08:45,220 --> 00:08:49,480
-so a third primitive actually is resumed for us.
+so third primitive actually is resume the thread.
 
-148
+156
 00:08:50,110 --> 00:08:51,970
-And really what it means to stop resume thread is
+And really what it means to stop resume thread is,
 
-149
+157
 00:08:51,970 --> 00:08:53,530
 basically taking the state of the thread,
 
-150
+158
 00:08:53,530 --> 00:08:56,770
 like the program counter stack pointer and the register,
 
-151
-00:08:56,770 --> 00:08:57,850
-put it on the side,
+159
+00:08:56,770 --> 00:09:00,700
+put it on the side, run another thread on the processor,
 
-152
-00:08:58,180 --> 00:09:00,700
-run another thread on the processor
-
-153
+160
 00:09:00,970 --> 00:09:03,520
-and then at some point you decided to resume the process
+and then at some point you know decided to resume the processor,
 
-154
+161
 00:09:03,520 --> 00:09:08,020
 which means basically loading the program counter stack pointer and the registers back into the processor,
 
-155
+162
 00:09:08,020 --> 00:09:09,160
 so they start to run it.
 
-156
+163
 00:09:10,260 --> 00:09:14,520
 So that's sort of a very mechanical view of what thread is.
 
-157
-00:09:19,180 --> 00:09:21,610
-So why you have threads in the first place
-
-158
-00:09:21,730 --> 00:09:24,220
-that seems like an important point to discuss.
-
-159
-00:09:28,110 --> 00:09:30,840
-Because in some ways, the only thing threads do is,
-
-160
-00:09:30,840 --> 00:09:32,760
-make your life more complicated as a programmer.
-
-161
-00:09:33,660 --> 00:09:37,110
-You know, like writing sequential code is actually easier than writing parallel code,
-
-162
-00:09:37,530 --> 00:09:38,940
-the main reason to have it,
-
-163
-00:09:39,500 --> 00:09:45,750
-the main reason we care a lot about in 6.824 is to express concurrency.
-
 164
-00:09:49,890 --> 00:09:54,720
-And sort of three different types or two or three different types of concurrency that we actually care about,
+00:09:19,180 --> 00:09:20,770
+So why you have threads,
 
 165
+00:09:20,770 --> 00:09:24,220
+in the first place, that seems like an important point to discuss.
+
+166
+00:09:28,110 --> 00:09:29,040
+Because in some ways,
+
+167
+00:09:29,040 --> 00:09:30,840
+the only thing threads do is,
+
+168
+00:09:30,840 --> 00:09:32,760
+make your life more complicated as a programmer,
+
+169
+00:09:33,660 --> 00:09:37,110
+you know like writing sequential code is actually easier than writing parallel code.
+
+170
+00:09:37,530 --> 00:09:38,940
+The main reason to have it,
+
+171
+00:09:39,500 --> 00:09:45,750
+the main reason we care a lot about in 6.824 is to express concurrency,
+
+172
+00:09:49,890 --> 00:09:53,790
+and sort of three different types or two or three different types of concurrency,
+
+173
+00:09:53,790 --> 00:09:54,720
+that we actually care about,
+
+174
 00:09:54,720 --> 00:09:57,210
 so we think about our process,
 
-166
-00:09:57,210 --> 00:10:00,060
-we are in time with our thread running,
-
-167
-00:10:00,560 --> 00:10:04,460
-you know one type of concurrency that we care a lot about is IO concurrency.
-
-168
-00:10:08,740 --> 00:10:11,290
-So one of these threads that running here,
-
-169
-00:10:11,380 --> 00:10:15,820
-it might actually make a network call connect to another machine on the network,
-
-170
-00:10:16,120 --> 00:10:18,520
-you know to implement a distributed application
-
-171
-00:10:18,730 --> 00:10:19,870
-of like mapreduce,
-
-172
-00:10:20,080 --> 00:10:23,740
-and you know as it makes up a call,
-
-173
-00:10:23,740 --> 00:10:26,050
-you know it's gonna be blocked waiting for a response
-
-174
-00:10:26,080 --> 00:10:28,330
-and why it's blocked and they're waiting for a response,
-
 175
+00:09:57,210 --> 00:10:00,060
+we have runtime with our thread running.
+
+176
+00:10:00,560 --> 00:10:04,460
+You know one type of concurrency that we care a lot about is IO concurrency,
+
+177
+00:10:08,740 --> 00:10:11,290
+so one of these threads that running here,
+
+178
+00:10:11,380 --> 00:10:13,030
+it might actually make a network call,
+
+179
+00:10:13,390 --> 00:10:15,820
+connect to another machine on the network,
+
+180
+00:10:16,120 --> 00:10:19,870
+you know to implement a distributed application, like mapreduce,
+
+181
+00:10:20,080 --> 00:10:23,740
+and you know as it makes a call,
+
+182
+00:10:23,740 --> 00:10:26,050
+you know it's gonna be blocked, waiting for a response,
+
+183
+00:10:26,080 --> 00:10:28,330
+and when it's blocked and waiting for a response,
+
+184
 00:10:28,480 --> 00:10:30,880
 everything you need to actually run some other threads.
 
-176
+185
 00:10:31,340 --> 00:10:34,100
-So that we're sort of give more,
+So that we're sort of [] more,
 
-177
-00:10:34,100 --> 00:10:39,890
-we're done for example, we want to issue multiple requests and multiple machines, roughly parallel,
+186
+00:10:34,100 --> 00:10:34,610
+we're done,
 
-178
+187
+00:10:34,610 --> 00:10:36,740
+for example, we want to issue multiple requests
+
+188
+00:10:36,740 --> 00:10:39,890
+and multiple machines roughly in parallel,
+
+189
 00:10:39,890 --> 00:10:42,560
 you know we could just do that with fire off one goroutine
 
-179
-00:10:42,560 --> 00:10:45,800
-and the fire in another goroutine, goroutine that all kind of sent
+190
+00:10:42,560 --> 00:10:44,570
+and the fire in another goroutine, another goroutine,
 
-180
-00:10:45,920 --> 00:10:47,720
-and make connections to other remote machines.
+191
+00:10:44,570 --> 00:10:47,720
+that all kind of sent and make connections to other remote machines.
 
-181
+192
 00:10:48,810 --> 00:10:52,230
 That's one reason we care a lot about it, IO concurrency.
 
-182
-00:10:52,230 --> 00:10:56,130
-The second reason that we care about is you know allows for multi-core parallelism.
+193
+00:10:52,230 --> 00:10:54,000
+The second reason that we care about is,
 
-183
+194
+00:10:54,000 --> 00:10:56,130
+you know allows for multi-core parallelism.
+
+195
 00:11:03,310 --> 00:11:05,530
 So we have a multiple cores,
 
-184
+196
 00:11:05,530 --> 00:11:09,100
-you know our you know computer or processor,
+you know are you know computer or processor,
 
-185
+197
 00:11:09,190 --> 00:11:11,980
 then we can have one thread running on,
 
-186
+198
 00:11:11,980 --> 00:11:13,900
-one goroutine running on one core
+one goroutine running on one core,
 
-187
+199
 00:11:14,020 --> 00:11:16,690
 and another thread or another goroutine running on another core,
 
-188
+200
 00:11:16,690 --> 00:11:17,950
 just straight in parallel.
 
-189
+201
 00:11:18,440 --> 00:11:21,110
 And for example we implement a key-value servers,
 
-190
+202
 00:11:21,110 --> 00:11:24,230
-then we could process request for different keys
+then we could process request for different keys,
 
-191
+203
 00:11:24,230 --> 00:11:27,260
-and key-value servers use on different cores completely parallel,
+and key-value service use on different cores completely in parallel,
 
-192
+204
 00:11:27,260 --> 00:11:29,510
 increasing our throughput.
 
-193
+205
 00:11:30,440 --> 00:11:34,730
 So those are the two main reasons that we care a lot about concurrency,
 
-194
+206
 00:11:35,180 --> 00:11:37,670
-but threads, there's sort of a third reason
+but threads, there's sort of a third reason,
 
-195
+207
 00:11:37,670 --> 00:11:39,470
 and there's a little bit of convenience.
 
-196
+208
 00:11:43,840 --> 00:11:45,550
 There's gonna be numerous cases in the lab,
 
-197
+209
 00:11:45,550 --> 00:11:49,660
 for example where we wanna have something happened periodically,
 
-198
+210
 00:11:49,720 --> 00:11:52,390
-maybe every second or every two in milliseconds
+maybe every second or every 200 milliseconds,
 
-199
+211
 00:11:52,450 --> 00:11:55,630
-and now we can just launch a thread or a go routine for that,
+and now we can just launch a thread or a goroutine for that,
 
-200
+212
 00:11:55,630 --> 00:11:57,370
-there's a sleep for 200 milliseconds
+there's a sleep for 200 milliseconds,
 
-201
+213
 00:11:57,370 --> 00:11:58,510
-it does what it needs to do
+it does what it needs to do,
 
-202
+214
 00:11:58,510 --> 00:12:00,790
 and then it goes back to sleep for 200 milliseconds,
 
-203
+215
 00:12:01,060 --> 00:12:04,870
 so it's convenient to have these background activities,
 
-204
+216
 00:12:04,870 --> 00:12:06,310
 that need to be done periodically,
 
-205
+217
 00:12:06,310 --> 00:12:08,200
 and you can express that using threads,
 
-206
-00:12:08,200 --> 00:12:11,440
-of course you can express it in other ways, the threads are actually convenient.
+218
+00:12:08,200 --> 00:12:09,550
+of course you can express it in other ways,
 
-207
+219
+00:12:09,550 --> 00:12:11,440
+the threads are actually convenient.
+
+220
 00:12:13,200 --> 00:12:15,540
 Another question that comes up often in,
 
-208
+221
 00:12:15,540 --> 00:12:17,610
 I think came up with some of the lecture questions,
 
-209
+222
 00:12:17,610 --> 00:12:19,530
-so today look how many threads you create.
+so today like how many threads you create.
 
-210
+223
 00:12:20,100 --> 00:12:23,550
-And I think the gold design or the way they want you to think about it is
+And I think the Go designers, the way they want you to think about it is,
 
-211
+224
 00:12:23,550 --> 00:12:25,380
 that you should create as many threads as you need,
 
-212
-00:12:25,530 --> 00:12:28,980
-they're definitely not free when they tie up some memory,
+225
+00:12:25,530 --> 00:12:27,540
+they're definitely not free,
 
-213
+226
+00:12:27,570 --> 00:12:28,980
+they tie up some memory,
+
+227
 00:12:28,980 --> 00:12:30,510
 because you're going to have a stack,
 
-214
+228
 00:12:30,840 --> 00:12:33,450
 there's performance overhead we're starting them,
 
-215
+229
 00:12:33,690 --> 00:12:36,480
 but there's you should think about them as very lightweight,
 
-216
+230
 00:12:36,570 --> 00:12:41,430
 also you should be encouraging or you're encouraged to create threads as you go.
 
-217
+231
 00:12:43,640 --> 00:12:48,080
 Any questions about sort of this basic reason why to have threads?
 
-218
-00:12:55,060 --> 00:12:59,170
-Okay, let me, then you know as I mentioned earlier,
+232
+00:12:55,060 --> 00:12:55,720
+Okay, let me,
 
-219
+233
+00:12:55,720 --> 00:12:59,170
+then you know as I mentioned earlier,
+
+234
 00:12:59,200 --> 00:13:00,790
 threads actually have challenges,
 
-220
+235
 00:13:03,350 --> 00:13:05,150
 programming with threads has challenges,
 
-221
+236
 00:13:05,270 --> 00:13:07,070
 so let me talk a little bit about the challenges.
 
-222
+237
 00:13:07,780 --> 00:13:10,210
 I'm not going to go great amount of depth here,
 
-223
+238
 00:13:10,210 --> 00:13:13,180
-I I assume that you know there's a they all make sense
+I I assume that you know there's a they all make sense,
 
-224
+239
 00:13:13,180 --> 00:13:16,000
-and will become more clear if we look at some of the examples
+and will become more clear if we look at some of the examples.
 
-225
+240
 00:13:16,570 --> 00:13:21,520
-and probably the main reason that you know threads and you're challenging is that
+And probably the main reason that you know threads and you're challenging is that,
 
-226
+241
 00:13:21,520 --> 00:13:22,660
 you can have race conditions.
 
-227
+242
 00:13:30,890 --> 00:13:33,860
 And just like a basic example of race condition,
 
-228
+243
 00:13:33,860 --> 00:13:35,300
 let's say you have two threads,
 
-229
+244
 00:13:35,300 --> 00:13:38,610
 you know, here's t1, here's t2,
 
-230
+245
 00:13:39,240 --> 00:13:41,880
 and they share variable n,
 
-231
+246
 00:13:41,910 --> 00:13:43,950
 let's say the initial value 0,
 
-232
-00:13:45,390 --> 00:13:52,080
-and they both execute, you know both execute statement, the form you know adds, the increment n by 1.
+247
+00:13:45,390 --> 00:13:47,190
+and they both execute,
 
-233
-00:13:53,020 --> 00:13:57,310
-And of course you might think that statement is an atomic operation or something that is indivisible,
+248
+00:13:47,220 --> 00:13:52,080
+you know both execute statement, the form you know adds n increment n by 1,
 
-234
+249
+00:13:53,020 --> 00:13:55,720
+and of course you might think that statement is an atomic operation
+
+250
+00:13:55,720 --> 00:13:57,310
+or something that is indivisible,
+
+251
 00:13:57,310 --> 00:13:57,880
 but it isn't,
 
-235
-00:13:57,940 --> 00:14:03,640
-I mean there's a Go statement has compiled to whatever instructions the processor is executing,
+252
+00:13:57,940 --> 00:14:00,970
+I mean there's a Go statement has compiled to
 
-236
+253
+00:14:00,970 --> 00:14:03,640
+whatever instructions the processor is executing,
+
+254
 00:14:04,030 --> 00:14:06,310
 so we cannot assume that an atomic instruction
 
-237
-00:14:06,310 --> 00:14:10,720
-and in fact, you know, it's, it could consist of basically like a load,
+255
+00:14:06,310 --> 00:14:08,320
+and in fact, you know it's,
 
-238
-00:14:10,750 --> 00:14:16,180
-you know which stores the n, the content of n to register, an increment register
+256
+00:14:08,470 --> 00:14:10,720
+it could consist of basically like a load,
 
-239
+257
+00:14:10,750 --> 00:14:15,190
+you know which stores the n, the content of n to register,
+
+258
+00:14:15,190 --> 00:14:16,180
+then increment register,
+
+259
 00:14:16,180 --> 00:14:18,220
-and then you know sort of register back into memory.
+and then you know store of register back into memory.
 
-240
+260
 00:14:19,220 --> 00:14:20,810
 So if you're very unlucky,
 
-241
-00:14:20,900 --> 00:14:25,310
-you know the two threads basically try to, both execute this particular instruction,
+261
+00:14:20,900 --> 00:14:22,760
+you know the two threads basically try to,
 
-242
+262
+00:14:22,760 --> 00:14:25,310
+both execute this particular instruction,
+
+263
 00:14:25,490 --> 00:14:28,640
-then we can have a very you know unfortunate sequence of events
+then we can have a very you know unfortunate sequence of events,
 
-243
+264
 00:14:28,640 --> 00:14:32,470
 where like both threads you know perform the load instruction,
 
-244
-00:14:34,380 --> 00:14:40,560
-load variable in you know register let's say r0, you know here also in r0,
+265
+00:14:34,380 --> 00:14:38,580
+load variable in you know register let's say r0,
 
-245
+266
+00:14:38,670 --> 00:14:40,560
+you know here also in r0,
+
+267
 00:14:42,570 --> 00:14:47,450
-you know the increment so r0 becomes 1, 1,
+you know then increment, so r0 becomes 1, 1,
 
-246
-00:14:47,990 --> 00:14:56,120
-and then write it back to you know store instruction that results results back into the variable n in memory.
+268
+00:14:47,990 --> 00:14:52,250
+and then write it back to you know store instruction,
 
-247
-00:14:56,960 --> 00:15:01,730
-And, so, if this happens at this particular in this scenario,
+269
+00:14:52,250 --> 00:14:56,120
+that results results back into the variable n in memory.
 
-248
-00:15:01,730 --> 00:15:03,980
-where this happens are truly concurrently,
+270
+00:14:56,960 --> 00:15:00,890
+And, so, if this happens at this particular,
 
-249
+271
+00:15:00,920 --> 00:15:03,980
+in this scenario, where this happens are truly concurrently,
+
+272
 00:15:04,130 --> 00:15:07,850
 you know what is the value of n after these two threads that both increment.
 
-250
+273
 00:15:11,450 --> 00:15:12,170
 Just 1.
 
-251
+274
 00:15:12,710 --> 00:15:13,400
 Yes, 1,
 
-252
+275
 00:15:13,670 --> 00:15:16,130
 and what is what is this value supposed to be,
 
-253
+276
 00:15:16,130 --> 00:15:17,540
 what do we expect it to be.
 
-254
+277
 00:15:22,260 --> 00:15:22,650
 2.
 
-255
+278
 00:15:22,920 --> 00:15:24,240
-Yeah, expect it to be 2, right.
+Yeah, expect it to be 2, right,
 
-256
+279
 00:15:24,240 --> 00:15:27,450
-So, 1 is definitely not equal to 2 and there's a bug.
+so, 1 is definitely not equal to 2 and there's a bug.
 
-257
+280
 00:15:28,400 --> 00:15:32,630
 And so, and this is like you know the sort of heart of race conditions,
 
-258
-00:15:32,720 --> 00:15:40,100
-which is you know if an [] sequence of events where threads share you know state,
+281
+00:15:32,720 --> 00:15:38,060
+which is you know if an unfortunate sequence of events,
 
-259
+282
+00:15:38,060 --> 00:15:40,100
+where threads share you know state,
+
+283
 00:15:40,460 --> 00:15:43,370
-the updates actually might not be reflected correctly
+the updates actually might not be reflected correctly,
 
-260
+284
 00:15:44,120 --> 00:15:46,040
-and of course most of the time, this will work out fine,
+and of course most of the time, this will workout fine,
 
-261
+285
 00:15:46,040 --> 00:15:49,190
 because you just have to be in this sort of very,
 
-262
-00:15:49,430 --> 00:15:52,430
-sort of this very specific case before it shows up,
+286
+00:15:49,430 --> 00:15:51,470
+sort of this very specific case,
 
-263
+287
+00:15:51,470 --> 00:15:52,430
+before it shows up.
+
+288
 00:15:53,120 --> 00:15:55,580
-so general I think one of you reported,
+So general, I think one of you reported,
 
-264
+289
 00:15:55,580 --> 00:15:58,280
-like oh I didn't have my locks with my race,
+like oh I didn't have my locks on my race,
 
-265
+290
 00:15:58,280 --> 00:16:00,440
 you know I've been watching order
 
-266
+291
 00:16:00,620 --> 00:16:02,480
-and my program just worked fine
+and my program just worked fine,
 
-267
+292
 00:16:02,600 --> 00:16:05,690
 and that's actually the real issue with race conditions,
 
-268
-00:16:05,690 --> 00:16:08,360
-they typically just work fine, but sometimes it goes wrong.
+293
+00:16:05,690 --> 00:16:06,890
+they typically just work fine,
 
-269
+294
+00:16:06,890 --> 00:16:08,360
+but sometimes it goes wrong.
+
+295
 00:16:09,620 --> 00:16:13,040
 So there are two ways to [address] race conditions.
 
-270
+296
 00:16:13,430 --> 00:16:15,380
 The first way is to avoid sharing,
 
-271
+297
 00:16:17,720 --> 00:16:18,800
 don't share variables.
 
-272
+298
 00:16:20,720 --> 00:16:23,900
 And this is one style of programming that you know Go encourages,
 
-273
-00:16:23,900 --> 00:16:26,900
-by using channels, channels use communicate values,
+299
+00:16:23,900 --> 00:16:25,040
+by using channels,
 
-274
+300
+00:16:25,100 --> 00:16:26,900
+channels use communicate values,
+
+301
 00:16:26,900 --> 00:16:28,520
 but you don't really directly share memory,
 
-275
+302
 00:16:28,940 --> 00:16:31,280
 so that's one way of doing it.
 
-276
-00:16:31,670 --> 00:16:35,510
-So avoid sharing one big approach, the other approach is actually to use locks,
+303
+00:16:31,670 --> 00:16:33,590
+So avoid sharing one big approach,
 
-277
+304
+00:16:33,590 --> 00:16:35,510
+the other approach is actually to use locks,
+
+305
 00:16:38,640 --> 00:16:42,150
 you know to make a sequence of instructions in atomic operation,
 
-278
+306
 00:16:42,330 --> 00:16:44,400
 we'll talk a lot more about that in a second.
 
-279
-00:16:45,040 --> 00:16:47,740
-One of the things I want to point out that is really cool
+307
+00:16:45,040 --> 00:16:46,750
+One of the things I want to point out,
 
-280
-00:16:47,740 --> 00:16:51,520
-that a usual tool is Go actually have a race detector,
+308
+00:16:46,750 --> 00:16:47,740
+that is really cool,
 
-281
-00:16:52,760 --> 00:16:59,420
-and most of the labs that you were doing would encourage you basically run Go using the -race flag
+309
+00:16:47,740 --> 00:16:49,450
+that a useful tool,
 
-282
+310
+00:16:49,660 --> 00:16:51,520
+is Go actually have a race detector,
+
+311
+00:16:52,760 --> 00:16:55,520
+and most of the labs that you will doing,
+
+312
+00:16:55,520 --> 00:16:59,420
+would encourage you basically run Go using the -race flag,
+
+313
 00:16:59,570 --> 00:17:03,680
 and that will actually not catch every possible race,
 
-283
+314
 00:17:03,680 --> 00:17:06,680
-but it does an extremely good job of actually identifying races.
+but it does an extremely good job of actually identifying races,
 
-284
+315
 00:17:07,430 --> 00:17:11,510
-And so you should by default run Go with the race detector enabled.
+and so you should by default run Go with the race detector enabled.
 
-285
+316
 00:17:13,180 --> 00:17:15,400
-Okay, so that's one challenge with threads,
+Okay, so that's one challenge with threads.
 
-286
+317
 00:17:15,400 --> 00:17:17,590
-the second challenge with threads actually coordination.
+The second challenge with threads actually coordination.
 
-287
+318
 00:17:19,640 --> 00:17:22,490
 So it's often the case that one has to,
 
-288
+319
 00:17:22,610 --> 00:17:24,440
 you know one thread must wait another thread,
 
-289
+320
 00:17:24,440 --> 00:17:26,030
 before something is accomplished,
 
-290
+321
 00:17:26,450 --> 00:17:31,610
-you know number of the Go exercise in the tutorial have a form
+you know number of the Go exercise in the tutorial have a [form],
 
-291
+322
 00:17:31,820 --> 00:17:34,490
-and there's two ways you know Go actually two primitives,
+and there's two ways, you know Go actually two primitives,
 
-292
+323
 00:17:34,490 --> 00:17:36,650
 dealing with one again channels,
 
-293
+324
 00:17:37,550 --> 00:17:41,570
-channels basically allow you to communicate and to coordinate at the same time.
+channels basically allow you to communicate and to coordinate at the same time,
 
-294
+325
 00:17:42,140 --> 00:17:47,270
-Or, you know we talk a little bit later about you know condition variables.
+or you know we talk a little bit later about you know condition variables,
 
-295
+326
 00:17:53,640 --> 00:17:54,840
-And both can be useful,
+and both can be useful,
 
-296
+327
 00:17:54,870 --> 00:17:56,250
-I'll talk a little bit more about that,
+I'll talk a little bit more about that.
 
-297
+328
 00:17:56,520 --> 00:17:59,400
-and then finally there's sort of final challenge,
+And then finally there's sort of final challenge,
 
-298
+329
 00:17:59,730 --> 00:18:03,930
-a big sort of conceptual challenges is you can get deadlock.
+a big sort of conceptual challenges is you can get deadlock,
 
-299
-00:18:05,620 --> 00:18:10,780
-So if one thread waits like t1 waits on t2 and t2 waits for t1,
+330
+00:18:05,620 --> 00:18:06,670
+so if one thread waits,
 
-300
+331
+00:18:06,670 --> 00:18:10,780
+like t1 waits for t2 and t2 waits for t1,
+
+332
 00:18:10,780 --> 00:18:14,050
 you know for example to release your lock before some other sequence,
 
-301
+333
 00:18:14,050 --> 00:18:16,330
-you can basically set what they call deadly embrace
+you can basically so what they call deadly embrace,
 
-302
-00:18:16,540 --> 00:18:20,980
-you know where both waiting on the other as a result nothing makes for progress.
+334
+00:18:16,540 --> 00:18:18,700
+you know where both waiting on the other,
 
-303
+335
+00:18:18,700 --> 00:18:20,980
+as a result nothing makes for progress.
+
+336
 00:18:23,440 --> 00:18:27,160
-Trivial way you're getting you know deadlock in Go would be
+A trivial way you're getting you know deadlock in Go would be,
 
-304
-00:18:27,160 --> 00:18:29,920
-like you have a single thread, there's no other threads at all,
+337
+00:18:27,160 --> 00:18:28,480
+like you have a single thread,
 
-305
+338
+00:18:28,540 --> 00:18:29,920
+there's no other threads at all,
+
+339
 00:18:30,310 --> 00:18:32,560
 and you're write to channel,
 
-306
+340
 00:18:35,200 --> 00:18:37,150
 and that will block that one thread,
 
-307
+341
 00:18:37,150 --> 00:18:40,090
 until somebody else you know read, some other read from the channel,
 
-308
+342
 00:18:40,090 --> 00:18:41,770
 but if there's no other thread at all,
 
-309
+343
 00:18:41,770 --> 00:18:43,330
 you know that will result in a deadlock,
 
-310
+344
 00:18:43,990 --> 00:18:46,390
 like the simplest possible deadlock possible,
 
-311
+345
 00:18:46,960 --> 00:18:50,740
-you know Go actually will catch this case
+you know Go actually will catch this case,
 
-312
-00:18:50,740 --> 00:18:55,450
-and will run raise a runtime error saying like no threads going to run, you have a deadlock.
+346
+00:18:50,740 --> 00:18:52,870
+and will run raise a runtime error,
 
-313
+347
+00:18:52,870 --> 00:18:55,450
+saying like no threads going to run, you have a deadlock.
+
+348
 00:18:56,210 --> 00:18:59,930
-But there could be more complicated deadlock were involved multiple threads
+But there could be more complicated deadlock were involved multiple threads,
 
-314
+349
 00:19:00,350 --> 00:19:02,900
 as you're going through the labs and the semester,
 
-315
+350
 00:19:02,900 --> 00:19:04,640
 you I'm sure you were on into some.
 
-316
+351
 00:19:07,540 --> 00:19:10,000
-So take a little bit of a step back here
+So take a little bit of step back here,
 
-317
+352
 00:19:10,000 --> 00:19:14,120
 and think about Go for you know these challenges,
 
-318
+353
 00:19:17,750 --> 00:19:19,100
 that I just talked about.
 
-319
+354
 00:19:20,080 --> 00:19:23,620
-Roughly speaking, Go as sort of two plans,
+Roughly speaking, Go has sort of two plans,
 
-320
+355
 00:19:24,510 --> 00:19:28,230
 to handle these concurrency challenges.
 
-321
+356
 00:19:28,930 --> 00:19:32,950
 And one plan is you know basically around channels,
 
-322
+357
 00:19:34,980 --> 00:19:41,060
-and there's another plan basically around locks in condition variables.
+and there's another plan basically around locks and condition variables.
 
-323
+358
 00:19:51,510 --> 00:19:54,120
 And the way I think about it,
 
-324
+359
 00:19:54,120 --> 00:19:56,640
 you know some people are quite dogmatic about this,
 
-325
+360
 00:19:56,640 --> 00:19:58,500
 if one plan is better than the other plan,
 
-326
-00:19:58,800 --> 00:20:04,200
-my general approach here is like I really want a plan that is most suitable for the case that I'm looking at,
+361
+00:19:58,800 --> 00:20:01,080
+my general approach here is,
 
-327
+362
+00:20:01,080 --> 00:20:04,200
+like I really look a plan that is most suitable for the case that I'm looking at,
+
+363
 00:20:04,710 --> 00:20:06,300
-what I'm running into
+what I'm running into.
 
-328
+364
 00:20:06,360 --> 00:20:09,480
-and generally you know I've no sharing,
+And generally you know I've no sharing,
 
-329
+365
 00:20:09,900 --> 00:20:13,770
-and basically I need two threats basically to communicate,
+and basically I need two threads basically to communicate,
 
-330
-00:20:13,770 --> 00:20:17,610
-but I don't really share any memory, I tend to use you know channels.
+366
+00:20:13,770 --> 00:20:15,570
+but I don't really share any memory,
 
-331
+367
+00:20:15,630 --> 00:20:17,610
+I tend to use you know channels.
+
+368
 00:20:18,080 --> 00:20:20,960
 If there are two threads I can do share memory,
 
-332
+369
 00:20:20,990 --> 00:20:22,700
 because it's convenient to share memory,
 
-333
+370
 00:20:22,700 --> 00:20:24,500
-for example I write a key-value servers
+for example I write a key-value service,
 
-334
+371
 00:20:24,500 --> 00:20:26,510
 and I want to share the key-value table,
 
-335
+372
 00:20:26,840 --> 00:20:33,320
 then I use locks and condition variables.
 
-336
+373
 00:20:37,630 --> 00:20:41,710
-And so, you know my general approach is not to be dramatic
+And so you know my general approach is not to be dramatic,
 
-337
-00:20:41,710 --> 00:20:46,000
-and you take whatever approach gonna actually is most convenient for the problem that has.
+374
+00:20:41,710 --> 00:20:43,060
+and you know take whatever approach
 
-338
+375
+00:20:43,060 --> 00:20:46,000
+gonna actually is most convenient for the problem that has.
+
+376
 00:20:47,150 --> 00:20:54,020
 The tutorial does a pretty good job of actually teaching about channels
 
-339
+377
 00:20:54,020 --> 00:20:56,870
-mentioned locks doesn't seem much about condition variables,
+mentioned locks, doesn't seem much about condition variables,
 
-340
+378
 00:20:57,020 --> 00:21:01,580
 so I I think it's worthwhile to talk a little bit about condition variables
 
-341
+379
 00:21:01,580 --> 00:21:05,210
 to make sure that you are aware that they exist.
 
-342
+380
 00:21:05,930 --> 00:21:08,750
 And I'm going to do that using a tiny little example,
 
-343
+381
 00:21:08,960 --> 00:21:10,850
 to illustrate the issues,
 
-344
+382
 00:21:11,060 --> 00:21:13,130
 attending a little example is,
 
-345
-00:21:13,400 --> 00:21:18,950
-we have a little bit inspired, its a little bit inspired by the labs
+383
+00:21:13,400 --> 00:21:16,790
+we have a little bit inspired,
 
-346
+384
+00:21:16,790 --> 00:21:18,950
+it's a little bit inspired by the labs,
+
+385
 00:21:19,160 --> 00:21:20,630
 and have a thread t1
 
-347
-00:21:21,050 --> 00:21:26,570
-and t1 needs to collect a number of votes you know from remote machines,
+386
+00:21:21,050 --> 00:21:24,890
+and t1 needs to collect a number of votes
 
-348
+387
+00:21:24,890 --> 00:21:26,570
+you know from remote machines,
+
+388
 00:21:26,690 --> 00:21:30,440
 for example needs to decide that it has a majority,
 
-349
+389
 00:21:30,470 --> 00:21:33,590
-so that actually proceeds to commit some value
+so that actually proceeds to commit some value,
 
-350
+390
 00:21:33,890 --> 00:21:36,830
-and you'll see that later in like this shows up in the raft lab
+and you'll see that later in like this shows up in the raft lab,
 
-351
+391
 00:21:36,830 --> 00:21:39,200
-as one of the primitives that you need
+as one of the primitives that you need,
 
-352
-00:21:39,650 --> 00:21:45,770
-and so to do that you know the t1 will fork you know other threads say t2,
+392
+00:21:39,650 --> 00:21:41,510
+and so to do that,
 
-353
+393
+00:21:41,510 --> 00:21:45,770
+you know the t1 will fork you know other threads say t2,
+
+394
 00:21:46,930 --> 00:21:49,060
-and t2 amazingly it does something expensive,
+and t2 amazingly it don't does something expensive,
 
-354
+395
 00:21:49,060 --> 00:21:52,840
 like you know talk to some remote machine to actually get its vote,
 
-355
+396
 00:21:53,400 --> 00:21:56,460
-and then report back you know that vote to t1
+and then report back you know that vote to t1,
 
-356
+397
 00:21:56,460 --> 00:21:59,610
-and t1 basically need to collect all the votes held them up
+and t1 basically need to collect all the votes held them up,
 
-357
+398
 00:21:59,640 --> 00:22:01,440
-and then assume that majority,
+and then [] that majority,
 
-358
+399
 00:22:01,620 --> 00:22:03,720
 then declare sort of victory.
 
-359
+400
 00:22:04,400 --> 00:22:06,950
 So there's a pretty straightforward simple program,
 
-360
+401
 00:22:07,160 --> 00:22:08,150
 I'm going to give you a little bit,
 
-361
+402
 00:22:08,150 --> 00:22:10,970
 it allows me to illustrate you a couple of issues,
 
-362
+403
 00:22:11,300 --> 00:22:14,660
 we're going to switch to another screen.
 
-363
+404
 00:22:16,850 --> 00:22:18,140
 Can everybody see this?
 
-364
+405
 00:22:22,800 --> 00:22:28,530
 So, here I have a very simple implementation of this program,
 
-365
+406
 00:22:28,530 --> 00:22:29,550
 the vote thing,
 
-366
+407
 00:22:29,550 --> 00:22:31,590
-and again it's a little bit of a toy example
+and again it's a little bit of a toy example,
 
-367
+408
 00:22:31,590 --> 00:22:33,570
 that hopefully gets the point across.
 
-368
+409
 00:22:34,220 --> 00:22:37,580
 The two variables shared here count and finished,
 
-369
+410
 00:22:37,580 --> 00:22:39,410
 count count number of votes,
 
-370
+411
 00:22:39,530 --> 00:22:42,380
 finished count when we're done,
 
-371
+412
 00:22:42,890 --> 00:22:46,040
 so you know there's a loop going for 10,
 
-372
-00:22:46,160 --> 00:22:50,630
-creating a Go creating launching,
+413
+00:22:46,160 --> 00:22:54,170
+creating a Go creating [launching] and anonymous function,
 
-373
-00:22:50,660 --> 00:22:58,940
-and anonymous function, an anonymous function concurrently calls this function requestVote,
+414
+00:22:54,200 --> 00:22:58,940
+and anonymous function concurrently calls this function requestVote,
 
-374
-00:22:58,970 --> 00:23:04,730
-requestVote basically you know simulates doing a long expensive operation on some remote machine
+415
+00:22:58,970 --> 00:23:01,250
+requestVote basically you know simulates
 
-375
+416
+00:23:01,250 --> 00:23:04,730
+doing a long expensive operation on some remote machine,
+
+417
 00:23:04,730 --> 00:23:06,890
 and the way it simulates, it was by just going to sleep,
 
-376
-00:23:07,010 --> 00:23:08,510
-it block for a little while,
+418
+00:23:07,010 --> 00:23:09,860
+it block for a little while, then it returns,
 
-377
-00:23:08,900 --> 00:23:09,860
-then it returns
-
-378
+419
 00:23:09,980 --> 00:23:13,370
 and then you know the returns vote is yes,
 
-379
+420
 00:23:13,370 --> 00:23:14,810
-then the count goes up
+then the count goes up,
 
-380
+421
 00:23:14,810 --> 00:23:18,970
-and count in fact that actually we have one more thread voting
+and count in fact that actually we have one more thread voting,
 
-381
+422
 00:23:18,970 --> 00:23:20,020
-and then we're done
+and then we're done,
 
-382
+423
 00:23:20,440 --> 00:23:22,720
 and so that's actually fork off 10 threads,
 
-383
+424
 00:23:22,720 --> 00:23:25,840
-you know each do requestVote and report the results
+you know each do requestVote and report the results,
 
-384
+425
 00:23:25,840 --> 00:23:26,800
 and then at the end,
 
-385
+426
 00:23:26,800 --> 00:23:29,500
 we'll check if the count smaller than 5,
 
-386
-00:23:29,560 --> 00:23:30,850
-you know we know that we failed,
+427
+00:23:29,560 --> 00:23:33,210
+you know we know that we failed, lost the election,
 
-387
-00:23:31,350 --> 00:23:33,210
-lost the election
-
-388
+428
 00:23:33,240 --> 00:23:36,900
 and if we have votes equal larger than 5,
 
-389
+429
 00:23:36,900 --> 00:23:38,670
 we'll basically won the election,
 
-390
+430
 00:23:38,940 --> 00:23:42,120
 so this sort of simple, a very simple program.
 
-391
+431
 00:23:42,740 --> 00:23:44,450
 Does it all make sense?
 
-392
+432
 00:23:45,630 --> 00:23:48,000
-Let me run it just for the [kicks].
+Let me run it, you know for the kicks.
 
-393
+433
 00:23:52,180 --> 00:23:55,600
 Then, you know we're running a couple times,
 
-394
+434
 00:23:55,690 --> 00:23:58,390
 something lose, something win, you know makes sense.
 
-395
+435
 00:24:00,380 --> 00:24:04,540
 And so this program looks working and correct,
 
-396
+436
 00:24:04,540 --> 00:24:05,500
-this is actually correct.
+is it actually correct?
 
-397
+437
 00:24:09,940 --> 00:24:11,050
-Sorry, I have a question,
+Sorry, is that a question,
 
-398
+438
 00:24:11,050 --> 00:24:13,210
 whether this program is actually correct.
 
-399
+439
 00:24:13,750 --> 00:24:14,830
 Yeah it seem to produce results.
 
-400
-00:24:19,060 --> 00:24:20,290
-I think there's a race condition,
+440
+00:24:19,060 --> 00:24:20,680
+I think there's a race condition is in there,
 
-401
-00:24:20,290 --> 00:24:25,060
-isn't there like you have all of these different threads implementing the count and finished variables
+441
+00:24:20,680 --> 00:24:25,060
+like you have all of these different threads implementing the count and finished variables.
 
-402
+442
 00:24:25,480 --> 00:24:32,640
-and it's also, it's not clear to me,
+And it's also, it's not clear to me,
 
-403
+443
 00:24:32,640 --> 00:24:34,890
 that finished necessarily always reaches 10,
 
-404
+444
 00:24:35,340 --> 00:24:37,740
 is it possible that it doesn't.
 
-405
+445
 00:24:38,700 --> 00:24:40,980
 Let me, let me take these one by one
 
-406
+446
 00:24:40,980 --> 00:24:42,300
-and just go for your first point,
+and then go for your first point,
 
-407
+447
 00:24:42,300 --> 00:24:44,580
 which is really what I was after,
 
-408
-00:24:44,580 --> 00:24:45,390
-you know clear this as,
+448
+00:24:44,580 --> 00:24:48,330
+you know clear this as, a fact,
 
-409
-00:24:45,390 --> 00:24:49,770
-a fact, we have two variables here, correct,
+449
+00:24:48,330 --> 00:24:53,130
+we have two variables here, correct, you know count finished,
 
-410
-00:24:50,130 --> 00:24:54,870
-you know count finished they're access by different goroutines,
+450
+00:24:53,280 --> 00:24:54,870
+they're access by different goroutines,
 
-411
-00:24:54,870 --> 00:24:58,350
-so this is immediately a red flag, that could be a serious problem here,
+451
+00:24:54,870 --> 00:24:56,670
+so this is immediately a red flag,
 
-412
-00:24:58,440 --> 00:25:03,570
-as soon as you have a variable that has access to or modified and by two different goroutines,
+452
+00:24:56,670 --> 00:24:58,350
+that could be a serious problem here,
 
-413
+453
+00:24:58,440 --> 00:25:00,240
+as soon as you have a variable,
+
+454
+00:25:00,240 --> 00:25:03,570
+that has access to or modified and by two different goroutines,
+
+455
 00:25:03,570 --> 00:25:04,860
-you know there's gonna be a problem
+you know there's gonna be a problem,
 
-414
+456
 00:25:05,340 --> 00:25:07,920
 and so interesting to run the Go race detector,
 
-415
+457
 00:25:07,920 --> 00:25:09,090
 it actually catches it.
 
-416
-00:25:10,460 --> 00:25:16,640
-And as you expect, you know the Go the race detector tells you exactly you know there's indeed some problems here,
+458
+00:25:10,460 --> 00:25:11,780
+And as you expect,
 
-417
-00:25:16,640 --> 00:25:21,740
-this program and list the line number or things actually go wrong.
+459
+00:25:11,780 --> 00:25:14,270
+you know the Go the race detector tells you
 
-418
-00:25:22,700 --> 00:25:27,680
-So it gives you a pretty good clue that something is not up to [] this program
+460
+00:25:14,270 --> 00:25:17,690
+exactly you know there's indeed some problems here in this program
 
-419
+461
+00:25:18,020 --> 00:25:21,740
+and list the line number or things actually go wrong.
+
+462
+00:25:22,700 --> 00:25:24,650
+So it gives you a pretty good clue,
+
+463
+00:25:24,650 --> 00:25:27,680
+that something is not up to [] this program,
+
+464
 00:25:28,340 --> 00:25:30,470
 and so we're going to repair it in more steps,
 
-420
+465
 00:25:30,470 --> 00:25:36,380
 and you know that will hopefully shed some more light on computer programming.
 
-421
+466
 00:25:36,950 --> 00:25:40,160
 So let me give you my second solution to this program.
 
-422
-00:25:40,970 --> 00:25:44,750
-In this case a we'll talk about channels a little bit later,
+467
+00:25:40,970 --> 00:25:42,830
+In this case,
 
-423
+468
+00:25:42,830 --> 00:25:44,750
+we'll talk about channels a little bit later,
+
+469
 00:25:44,750 --> 00:25:49,550
 because I wanted to illustrate locks and condition variables first,
 
-424
+470
 00:25:49,580 --> 00:25:52,160
 because they've got less emphasis in the tutorial.
 
-425
+471
 00:25:52,660 --> 00:25:55,330
-So you know have a simple solution,
+So you know a simple solution,
 
-426
+472
 00:25:55,360 --> 00:25:58,600
 you know Go correct introduce a lock,
 
-427
+473
 00:25:58,600 --> 00:26:00,880
 the lock is completely independent of the variables
 
-428
-00:26:00,910 --> 00:26:07,690
-and you follow some convention which says like wow this lock new protects count and finished.
+474
+00:26:00,910 --> 00:26:04,030
+and you follow some convention,
 
-429
+475
+00:26:04,030 --> 00:26:07,690
+which says like, well this lock mu protects count and finished,
+
+476
 00:26:08,340 --> 00:26:11,250
-And so whenever you know you access count finished,
+and so whenever you know you access count finished,
 
-430
+477
 00:26:11,250 --> 00:26:14,190
-basically you have to wrap that into the lock and unlock statements
+basically you have to wrap that into the lock and unlock statements,
 
-431
+478
 00:26:14,190 --> 00:26:17,970
-and so here we see two like this is there Go function runs concurrently
+and so here we see two like this is there Go function runs concurrently,
 
-432
+479
 00:26:18,420 --> 00:26:21,600
 and after you know the requestVote,
 
-433
+480
 00:26:21,840 --> 00:26:23,700
 it's about of the vote and finished,
 
-434
+481
 00:26:23,700 --> 00:26:24,780
-we take a lock out.
+we take a lock out,
 
-435
+482
 00:26:25,240 --> 00:26:28,750
-And then Go has this nice feature called defer statement,
+and then Go has this nice feature called defer statement,
 
-436
+483
 00:26:28,960 --> 00:26:32,170
-but if you exit the basic block,
+that if you exit the basic block,
 
-437
+484
 00:26:32,170 --> 00:26:37,720
-you know will run will run the function that is declared by defer,
+you know will run, will run the function that is declared by defer,
 
-438
+485
 00:26:37,720 --> 00:26:40,240
 after the keyword defer,
 
-439
-00:26:40,750 --> 00:26:46,000
-so this means like we execute, we leave the Go function here will automatically unlock,
+486
+00:26:40,750 --> 00:26:42,430
+so this means like we execute,
 
-440
-00:26:46,420 --> 00:26:47,260
-this is convenient,
+487
+00:26:42,490 --> 00:26:46,000
+we leave the Go function here will automatically unlock,
 
-441
-00:26:47,260 --> 00:26:49,000
-because then you won't forget to unlock.
+488
+00:26:46,420 --> 00:26:49,000
+this is convenient, because then you won't forget to unlock,
 
-442
+489
 00:26:49,780 --> 00:26:52,120
-So it's nice to do that write point where you do the lock
+so it's nice to do that write point where you do the lock,
 
-443
-00:26:52,150 --> 00:26:53,350
-and so you can write immediately,
+490
+00:26:52,150 --> 00:26:54,280
+and so you can write immediately defer unlock
 
-444
-00:26:53,350 --> 00:26:55,780
-do a unlock and then you don't have to worry about
+491
+00:26:54,280 --> 00:26:55,780
+and then you don't have to worry about,
 
-445
-00:26:55,780 --> 00:26:58,150
-if there are multiple exit pass out of the goroutine
+492
+00:26:55,780 --> 00:26:59,260
+if there are multiple exit pass out of the goroutine or ever function,
 
-446
-00:26:58,150 --> 00:27:01,120
-or at a function that you forget to unlock.
+493
+00:26:59,620 --> 00:27:01,120
+that you forget to unlock.
 
-447
-00:27:02,520 --> 00:27:06,540
-So now you know we're basically in the critical section where we hold the lock,
+494
+00:27:02,520 --> 00:27:05,100
+So now you know we're basically in the critical section,
 
-448
+495
+00:27:05,100 --> 00:27:06,540
+where we hold the lock,
+
+496
 00:27:06,540 --> 00:27:08,370
-we update vote count
+we update vote count,
 
-449
+497
 00:27:08,370 --> 00:27:11,370
 and then of course the function returns and unlocks automatically.
 
-450
+498
 00:27:12,240 --> 00:27:16,710
 Similarly, at the, at the, at the end,
 
-451
+499
 00:27:16,740 --> 00:27:21,030
-you know we got when every time we access you know count finished,
+you know we got, when every time we access you know count finished,
 
-452
-00:27:21,270 --> 00:27:24,540
-since they share you know we need to round it with locks
+500
+00:27:21,270 --> 00:27:22,380
+since they share,
 
-453
+501
+00:27:22,380 --> 00:27:24,540
+you know we need to round it with locks,
+
+502
 00:27:24,540 --> 00:27:26,370
 and a simple way of doing that,
 
-454
+503
 00:27:26,370 --> 00:27:28,890
 we could have written defer unlock here too in the body,
 
-455
+504
 00:27:29,010 --> 00:27:30,810
-the we're being fine, right.
+that will being fine, right.
 
-456
+505
 00:27:31,380 --> 00:27:33,360
-So we can actually run this program.
+So we can actually run this program,
 
-457
+506
 00:27:34,270 --> 00:27:35,080
-Let's see.
+let's see.
 
-458
-00:27:36,820 --> 00:27:40,180
-And so we run it you know the race detector seems to be happy,
+507
+00:27:36,820 --> 00:27:38,080
+And so we run it,
 
-459
+508
+00:27:38,080 --> 00:27:40,180
+you know the race detector seems to be happy,
+
+509
 00:27:40,180 --> 00:27:42,370
 so hopefully we'll have a better program.
 
-460
+510
 00:27:42,670 --> 00:27:43,270
 All right?
 
-461
+511
 00:27:44,160 --> 00:27:46,860
 So I just have a question here about scoping,
 
-462
+512
 00:27:47,280 --> 00:27:49,470
 so it seems that when we have the anonymous function,
 
-463
+513
 00:27:49,470 --> 00:27:50,250
-then we have mu
+then we have mu,
 
-464
+514
 00:27:50,250 --> 00:27:52,350
-and we have the count and we have the finished
+and we have the count and we have the finished,
 
-465
-00:27:52,350 --> 00:27:56,790
-and it seems that the anonymous function has access to the network defined outside the function,
+515
+00:27:52,350 --> 00:27:54,690
+and it seems that the anonymous function has access to
 
-466
+516
+00:27:54,960 --> 00:27:56,790
+the [variable] defined outside the function,
+
+517
 00:27:56,790 --> 00:27:58,440
-so how looping rules work?
+so how the scoping rules work?
 
-467
-00:27:59,300 --> 00:28:03,230
-Yeah, you've been any, with an anonymous function in any variable,
+518
+00:27:59,300 --> 00:28:01,490
+Yeah, you've been any,
 
-468
-00:28:03,230 --> 00:28:06,980
-that's used inside of the function is not declared inside a function,
+519
+00:28:01,520 --> 00:28:02,630
+with an anonymous function,
 
-469
+520
+00:28:02,630 --> 00:28:06,980
+any variable that's used inside of the function is not declared inside a function,
+
+521
 00:28:07,130 --> 00:28:11,120
 basically resolve points to variables outside of the outer scope,
 
-470
+522
 00:28:12,020 --> 00:28:12,950
-so statically scoped.
+so static scope.
 
-471
+523
 00:28:14,830 --> 00:28:18,130
-What about the scope of like the mutex.
+What about the scope of like the mutex,
 
-472
-00:28:19,040 --> 00:28:19,730
-Yeah.
+524
+00:28:19,040 --> 00:28:21,590
+like how many times you have to declare that,
 
-473
-00:28:19,730 --> 00:28:21,590
-Like how many times you have to declare that
-
-474
+525
 00:28:21,620 --> 00:28:24,050
 or what's the scope of it, I guess.
 
-475
+526
 00:28:24,320 --> 00:28:27,800
-The scope of the for statement is this block, one basic block.
+The scope of the defer statement is this block, one basic block.
 
-476
-00:28:29,190 --> 00:28:34,290
-No, I mean like when you actually declare like the mutex data structure, I guess.
+527
+00:28:29,190 --> 00:28:30,120
+No, I mean like,
 
-477
+528
+00:28:30,120 --> 00:28:34,290
+when you actually declare like the mutex data structure, I guess.
+
+529
 00:28:34,650 --> 00:28:36,990
 Like any other variable,
 
-478
+530
 00:28:37,560 --> 00:28:39,810
 it has the same scope as finished or count.
 
-479
+531
 00:28:40,550 --> 00:28:44,570
 So it applies to any variable declared in the rest of the.
 
-480
+532
 00:28:45,020 --> 00:28:46,910
 Yeah, the way to think about is that,
 
-481
+533
 00:28:46,910 --> 00:28:51,080
 the mutex is not directly associated with any variable,
 
-482
+534
 00:28:51,080 --> 00:28:53,150
-it's just a lock, it's like a name
+it's just a lock, it's like a name,
 
-483
+535
 00:28:53,510 --> 00:28:57,650
-and it's up to you as a programmer to decide what the lock protects.
+and it's up to you as a programmer to decide what the lock protects,
 
-484
+536
 00:29:01,450 --> 00:29:03,280
-But there are two independent concepts.
+but there are two independent concepts.
 
-485
+537
 00:29:04,350 --> 00:29:08,770
 What happens, what happens if you use i in the goroutine,
 
-486
+538
 00:29:08,800 --> 00:29:10,840
 that won't work, right, you need to pass that in.
 
-487
+539
 00:29:11,320 --> 00:29:13,150
 Yeah, so whatever that's a good question,
 
-488
+540
 00:29:13,150 --> 00:29:15,820
-and then the number be n number of you asked from email too,
+and then the number be, the number of you asked from email too,
 
-489
-00:29:15,820 --> 00:29:17,320
-so what yeah what happens to like
+541
+00:29:15,820 --> 00:29:17,200
+so what yeah what happens to,
 
-490
-00:29:17,320 --> 00:29:18,490
-if we use i here
+542
+00:29:17,200 --> 00:29:18,490
+like if we use i here,
 
-491
-00:29:18,520 --> 00:29:23,650
-and they want to do something with it, like whatever count is i,
+543
+00:29:18,520 --> 00:29:20,950
+and they want to do something with it,
 
-492
+544
+00:29:20,950 --> 00:29:23,650
+like whatever count is i,
+
+545
 00:29:24,620 --> 00:29:26,180
 is a good plan or not?
 
-493
+546
 00:29:31,460 --> 00:29:33,290
 What value of i will be using,
 
-494
+547
 00:29:33,350 --> 00:29:35,210
-when this thread actually happens to run.
+when this thread actually happens to run,
 
-495
+548
 00:29:36,020 --> 00:29:39,170
-If Go starts to function function and will run at some point,
+if Go starts to function function and will run at some point,
 
-496
+549
 00:29:39,170 --> 00:29:40,790
 what value i will use it.
 
-497
+550
 00:29:41,710 --> 00:29:44,200
-Whatever, i happens to be at the time
+Whatever i happens to be at the time,
 
-498
+551
 00:29:44,200 --> 00:29:47,710
 which is being changed by the for loop outside.
 
-499
+552
 00:29:47,770 --> 00:29:50,950
 Yeah, so and so this is not so great,
 
-500
+553
 00:29:51,070 --> 00:29:52,780
 it does probably not what we intended,
 
-501
+554
 00:29:52,810 --> 00:29:57,040
-we probably intended to i we whatever for desperately loop iteration, right.
+we probably intended to i we whatever for that loop iteration, right,
 
-502
+555
 00:29:58,270 --> 00:29:59,110
-So how do we want to,
+so how do we want to,
 
-503
+556
 00:29:59,110 --> 00:30:01,060
 if we have to solve, how would we do.
 
-504
+557
 00:30:01,640 --> 00:30:06,050
 You could add it as a parameter to the anonymous function and pass it in,
 
-505
+558
 00:30:06,050 --> 00:30:09,230
 so it gets evaluated, we create goroutine.
 
-506
+559
 00:30:09,500 --> 00:30:11,060
 Yeah, so would write this,
 
-507
+560
 00:30:12,340 --> 00:30:13,810
 and then pass it in, right,
 
-508
-00:30:13,810 --> 00:30:19,090
-then at a point what happens then at the point we actually create goroutine i is being captured,
+561
+00:30:13,810 --> 00:30:15,040
+then at a point what happens,
 
-509
-00:30:19,820 --> 00:30:20,660
-and then passed it.
+562
+00:30:15,040 --> 00:30:17,980
+then at the point, we actually create goroutine,
 
-510
+563
+00:30:17,980 --> 00:30:20,660
+i is being captured, and then passed it.
+
+564
 00:30:22,250 --> 00:30:22,700
 Okay?
 
-511
+565
 00:30:24,390 --> 00:30:29,280
 I also, how are the local variables allocated,
 
-512
+566
 00:30:29,640 --> 00:30:32,790
 like if if count finished are like local variables,
 
-513
+567
 00:30:32,790 --> 00:30:36,570
 wouldn't they like be destroyed after the main function exits,
 
-514
+568
 00:30:36,690 --> 00:30:38,700
-like if this often made but another function,
+like if this function made by another function,
 
-515
+569
 00:30:38,700 --> 00:30:41,880
-what is like the hitting function existed before goroutine.
+what is like the [hitting] function existed before goroutine.
 
-516
+570
 00:30:41,880 --> 00:30:44,520
 The principal allocated in stack,
 
-517
+571
 00:30:44,640 --> 00:30:47,670
-and you know the room with the other functions,
+and you know the presumably the other functions,
 
-518
+572
 00:30:47,670 --> 00:30:50,310
 there's memory addresses references to them,
 
-519
+573
 00:30:50,580 --> 00:30:51,570
 so it's indeed the case,
 
-520
-00:30:51,570 --> 00:30:56,340
-its main returns, then these you know the stack allocated variables are gone.
+574
+00:30:51,570 --> 00:30:52,770
+its main returns,
 
-521
+575
+00:30:52,860 --> 00:30:56,340
+then these you know the stack allocated variables are gone,
+
+576
 00:30:56,820 --> 00:30:59,700
-So typically what you'll see is in a go program,
+so typically what you'll see is in a Go program,
 
-522
+577
 00:30:59,700 --> 00:31:01,980
-you would allocate, I mean you know on the heap
+you would allocate, I mean you know on the heap,
 
-523
+578
 00:31:02,010 --> 00:31:05,250
 using new if you make a new struct or whatever.
 
-524
+579
 00:31:05,580 --> 00:31:07,800
 So you get a segmentation fault then, or would.
 
-525
+580
 00:31:07,800 --> 00:31:08,910
 Yeah, we'll get.
 
-526
+581
 00:31:09,210 --> 00:31:09,810
 Okay.
 
-527
-00:31:13,500 --> 00:31:17,910
-I have a question, I not remember this is the correct way to do it or not,
+582
+00:31:13,500 --> 00:31:14,670
+I have a question,
 
-528
+583
+00:31:14,670 --> 00:31:17,910
+I not remember this is the correct way to do it or not,
+
+584
 00:31:17,910 --> 00:31:19,410
 but instead of passing it in,
 
-529
+585
 00:31:19,500 --> 00:31:22,380
 would it be possible to as the first line in the for loop,
 
-530
+586
 00:31:22,380 --> 00:31:24,060
 do i colon equals i,
 
-531
+587
 00:31:24,960 --> 00:31:26,820
 and then you're like you have a,
 
-532
+588
 00:31:26,910 --> 00:31:30,960
 I don't know how the scoping works within the like block of the for loop,
 
-533
+589
 00:31:30,960 --> 00:31:34,200
 because I think that should create a new variable i,
 
-534
-00:31:34,260 --> 00:31:36,990
-that the goroutine can access, that isn't being updated again.
+590
+00:31:34,260 --> 00:31:35,580
+that the goroutine can access,
 
-535
+591
+00:31:35,580 --> 00:31:36,990
+that isn't being updated again.
+
+592
 00:31:37,440 --> 00:31:37,710
-Yeah you can do that.
+Yeah, you can do that.
 
-536
+593
 00:31:37,710 --> 00:31:41,190
-That can help makes it look ugly to me.
+That can help instead passing in, kind of makes it look ugly to me.
 
-537
+594
 00:31:41,940 --> 00:31:43,740
 Okay, I I like passing in,
 
-538
+595
 00:31:43,740 --> 00:31:45,090
 but that's another way of doing it,
 
-539
+596
 00:31:45,090 --> 00:31:46,740
 I'll shows an example later.
 
-540
+597
 00:31:49,200 --> 00:31:51,510
 So somebody asked actually you know,
 
-541
+598
 00:31:51,510 --> 00:31:54,150
 do we get a segmentation fault,
 
-542
-00:31:54,150 --> 00:31:57,060
-we're not immediately going to get a segmentation fault actually take that back,
+599
+00:31:54,150 --> 00:31:56,100
+we're not immediately going to get a segmentation fault,
 
-543
+600
+00:31:56,100 --> 00:31:57,060
+actually take that back,
+
+601
 00:31:57,390 --> 00:32:00,630
 because basically one thread will still hold a reference,
 
-544
+602
 00:32:00,930 --> 00:32:04,230
-so the garbage collector will not delete the object yet.
+so the garbage collector will not delete the object yet,
 
-545
+603
 00:32:05,000 --> 00:32:06,890
-But only when the last thread actually,
+that only when the last thread actually,
 
-546
+604
 00:32:06,890 --> 00:32:09,650
 only when no thread holds a reference,
 
-547
+605
 00:32:09,650 --> 00:32:12,140
-you know will the garbage collector delete the object.
+you know will the garbage collector delete the object,
 
-548
-00:32:12,640 --> 00:32:15,160
-And these are one of the cool things about having a garbage collected language
+606
+00:32:12,640 --> 00:32:13,690
+and these are one of the cool things
 
-549
-00:32:15,160 --> 00:32:16,630
-and shared memory programming,
+607
+00:32:13,690 --> 00:32:16,630
+about having a garbage collected language and shared memory programming,
 
-550
+608
 00:32:16,870 --> 00:32:18,760
 you don't have to worry about that scenario.
 
-551
-00:32:21,300 --> 00:32:22,050
-Okay.
+609
+00:32:21,300 --> 00:32:22,710
+Okay, So.
 
-552
-00:32:22,080 --> 00:32:22,710
-So.
+610
+00:32:24,680 --> 00:32:25,070
+Yeah.
 
-553
-00:32:24,680 --> 00:32:28,560
-Yeah, that would, could this code like deadlock,
+611
+00:32:25,620 --> 00:32:28,560
+That would, could this code like deadlock,
 
-554
+612
 00:32:28,830 --> 00:32:32,040
 because like if we if the goroutines,
 
-555
+613
 00:32:32,280 --> 00:32:34,140
-I took the first for loop will exit
+like took the first for loop exit,
 
-556
+614
 00:32:34,140 --> 00:32:36,630
-and then the second one will like.
+and then the second one will like,
 
-557
+615
 00:32:37,930 --> 00:32:38,770
-Yeah, no, nevermind.
+yeah, no, nevermind.
 
-558
+616
 00:32:40,660 --> 00:32:43,240
-There are definitely some issues that are not ideal yet,
+Okay, there are definitely some issues that are not ideal yet,
 
-559
+617
 00:32:43,240 --> 00:32:44,770
 so let me actually talk about them,
 
-560
-00:32:45,100 --> 00:32:48,040
-one of them is that this particular loop,
+618
+00:32:45,100 --> 00:32:49,090
+one of them is that this particular loop a little bit annoying,
 
-561
-00:32:48,220 --> 00:32:49,090
-a little bit annoying,
+619
+00:32:49,090 --> 00:32:50,950
+like there's this for loop is,
 
-562
-00:32:49,090 --> 00:32:53,950
-like there's this for loop is there's nothing else than waiting utill count reaches 5 finished.
+620
+00:32:50,950 --> 00:32:53,950
+there's nothing else than waiting utill count reaches 5 finished,
 
-563
+621
 00:32:54,380 --> 00:32:55,130
-And the way it does,
+and the way it does,
 
-564
+622
 00:32:55,130 --> 00:32:56,510
 it is about your spinning right,
 
-565
+623
 00:32:56,510 --> 00:32:59,360
 so it locks locks locks at the value quickly,
 
-566
+624
 00:32:59,360 --> 00:33:00,770
-it locks it and spins around again,
+unlocks it and spins around again,
 
-567
+625
 00:33:00,770 --> 00:33:03,380
-so basically is spinning on the processor doing really nothing,
+so basically is spinning on the processor, doing really nothing,
 
-568
+626
 00:33:03,950 --> 00:33:06,140
 it would be nice to express that in a little bit better way,
 
-569
+627
 00:33:06,140 --> 00:33:09,140
 so that basically the Go can give up the core again,
 
-570
+628
 00:33:09,140 --> 00:33:10,430
 so then another thread can run.
 
-571
+629
 00:33:11,040 --> 00:33:13,590
 And so the way you can do that is using condition variables,
 
-572
+630
 00:33:13,590 --> 00:33:16,170
-and so this is my next implementation.
+and so this is my next implementation,
 
-573
+631
 00:33:17,300 --> 00:33:20,810
-Or actually I show you one other implementation,
+or actually I show you one other implementation,
 
-574
-00:33:20,810 --> 00:33:22,310
-one way to do that there's a little bit,
+632
+00:33:20,810 --> 00:33:21,830
+one way to do that,
 
-575
-00:33:22,310 --> 00:33:23,600
-not you know not so nice,
+633
+00:33:21,830 --> 00:33:23,600
+there's a little bit, not you know not so nice,
 
-576
+634
 00:33:23,600 --> 00:33:25,280
 for example and somebody suggested,
 
-577
+635
 00:33:25,280 --> 00:33:27,680
 this is to actually sleep for a while,
 
-578
+636
 00:33:27,710 --> 00:33:31,850
-so instead of like a giving up the spinning like crazy,
+so instead of like giving up the spinning like crazy,
 
-579
-00:33:31,850 --> 00:33:34,790
-just sleep one period, sleep for a period and then come back.
+637
+00:33:31,850 --> 00:33:33,140
+just sleep one period,
 
-580
+638
+00:33:33,200 --> 00:33:34,790
+sleep for a period and then come back.
+
+639
 00:33:35,500 --> 00:33:36,700
 Of course, this solution will work,
 
-581
-00:33:36,700 --> 00:33:40,090
-but the downside of it is how long should you sleep, right,
+640
+00:33:36,700 --> 00:33:37,720
+but the downside of it is,
 
-582
+641
+00:33:37,720 --> 00:33:40,090
+how long should you sleep, right,
+
+642
 00:33:40,120 --> 00:33:41,590
 you really would like to be the case,
 
-583
+643
 00:33:41,590 --> 00:33:44,080
 that I assume for example this guy reaches 5,
 
-584
-00:33:44,530 --> 00:33:49,630
-then you know you wake, you could wake up this particular you know the main thread.
+644
+00:33:44,530 --> 00:33:46,480
+then you know you wake,
 
-585
+645
+00:33:46,510 --> 00:33:49,630
+you could wake up this particular you know the main thread.
+
+646
 00:33:50,130 --> 00:33:52,650
 And so I was jumping ahead a little bit,
 
-586
+647
 00:33:52,650 --> 00:33:55,830
 but so that's what condition variables are for,
 
-587
+648
 00:33:56,250 --> 00:33:59,850
-you know here's a solution with condition variables.
+you know here's a solution with condition variables,
 
-588
+649
 00:34:00,670 --> 00:34:05,140
-So, we allocated a new condition,
+so, we allocated a new condition,
 
-589
+650
 00:34:05,140 --> 00:34:07,570
-here's condition [] allocated,
+here's condition variable allocated,
 
-590
+651
 00:34:07,630 --> 00:34:09,520
 it's associated with this particular lock,
 
-591
+652
 00:34:09,520 --> 00:34:11,500
 we'll see in a second, why is important.
 
-592
+653
 00:34:12,340 --> 00:34:15,340
 And you know basically the main thread what it does now,
 
-593
+654
 00:34:15,490 --> 00:34:17,620
 it grabs the lock,
 
-594
+655
 00:34:17,620 --> 00:34:19,960
 because it needs to grab the lock to look at count and finished,
 
-595
+656
 00:34:19,960 --> 00:34:21,640
-otherwise there could be a race conditions
+otherwise there could be a race conditions,
 
-596
+657
 00:34:22,060 --> 00:34:26,380
-and then, if the condition is still not true,
+and then if the condition is still not true,
 
-597
+658
 00:34:26,440 --> 00:34:28,780
-it just calls wait on this condition variable.
+it just calls Wait on this condition variable,
 
-598
+659
 00:34:29,640 --> 00:34:33,720
-And what that does is actually done atomically goes to sleep
+and what that does is actually done atomically goes to sleep
 
-599
+660
 00:34:33,840 --> 00:34:37,500
 as well as releasing the lock that is associated with the condition variable,
 
-600
+661
 00:34:37,830 --> 00:34:41,070
 since you know mu is actually associated the condition variable,
 
-601
-00:34:41,100 --> 00:34:46,290
-can't basically unlocks the lock
+662
+00:34:41,100 --> 00:34:47,490
+can wait basically unlocks the lock and goes to sleep
 
-602
-00:34:46,320 --> 00:34:48,780
-and goes to sleep in an atomic operation.
+663
+00:34:47,520 --> 00:34:48,780
+in an atomic operation,
 
-603
+664
 00:34:49,580 --> 00:34:51,920
-And when it returns from count,
+and when it returns from cond.Wait(),
 
-604
+665
 00:34:51,920 --> 00:34:53,420
-it will actually hold the lock again.
+it will actually hold the lock again,
 
-605
+666
 00:34:53,990 --> 00:34:56,480
-So the caller is, those are absolutely sure,
+so the caller is, those are absolutely sure,
 
-606
+667
 00:34:56,480 --> 00:34:59,360
-that if caller returns will actually help to lock again,
+that if caller returns will actually held the lock again,
 
-607
+668
 00:34:59,570 --> 00:35:01,610
 so it's safe again to look at count and finished
 
-608
+669
 00:35:01,610 --> 00:35:02,690
-and then call wait again.
+and then call Wait again.
 
-609
+670
 00:35:03,690 --> 00:35:04,350
 Okay?
 
-610
+671
 00:35:05,160 --> 00:35:07,380
 So basically you know this thread will go to sleep,
 
-611
+672
 00:35:07,800 --> 00:35:12,570
-and then the goroutines that are collecting the votes
+and then the goroutines that are collecting the votes,
 
-612
+673
 00:35:12,840 --> 00:35:14,280
-the same code as before,
+you know same code as before,
 
-613
+674
 00:35:14,310 --> 00:35:16,950
-my lock and unlock or defer to unlock
+mu lock and unlock or defer unlock,
 
-614
+675
 00:35:17,160 --> 00:35:18,360
 and then when you're done,
 
-615
+676
 00:35:18,390 --> 00:35:20,640
 you know updating count finished,
 
-616
+677
 00:35:20,640 --> 00:35:22,530
 there two primitives on condition variable,
 
-617
+678
 00:35:22,530 --> 00:35:24,330
-one is signal and one is broadcast.
+one is Signal and one is Broadcast,
 
-618
+679
 00:35:24,720 --> 00:35:28,470
-And broadcast, basically signal which of one waiter,
+and Broadcast, basically Signal waits of one waiter,
 
-619
+680
 00:35:28,470 --> 00:35:29,760
-broadcast which of all waiters,
+Broadcast waits of all waiters,
 
-620
+681
 00:35:30,120 --> 00:35:31,740
 there's only one waiter here,
 
-621
+682
 00:35:31,740 --> 00:35:33,150
 so we could have used either one of them.
 
-622
+683
 00:35:34,740 --> 00:35:37,590
 And so basically when it reaches you know 5,
 
-623
+684
 00:35:37,620 --> 00:35:39,030
 you know some point or 10,
 
-624
+685
 00:35:39,180 --> 00:35:42,240
 then you know, so every time finished is incremented,
 
-625
+686
 00:35:42,270 --> 00:35:45,160
-you know, main thread will be woken up,
+you know the main thread will be woken up,
 
-626
+687
 00:35:45,370 --> 00:35:47,710
 you can check the condition and then keep going.
 
-627
+688
 00:35:48,580 --> 00:35:49,210
 Okay?
 
-628
+689
 00:35:50,260 --> 00:35:51,340
 So this is convenient,
 
-629
-00:35:51,340 --> 00:35:56,860
-so you can think about condition variables as a coordination primitive between two different threads
+690
+00:35:51,340 --> 00:35:53,230
+so you can think about condition variables as
 
-630
-00:35:57,100 --> 00:35:59,740
-and their particular convenient when you're actually using locks
+691
+00:35:53,230 --> 00:35:56,860
+a coordination primitive between two different threads,
 
-631
-00:35:59,740 --> 00:36:02,050
-you know for to protect your shared state.
+692
+00:35:57,100 --> 00:35:58,150
+and their particular convenient,
 
-632
+693
+00:35:58,150 --> 00:36:02,050
+when you're actually using locks you know for to protect your shared state.
+
+694
 00:36:10,580 --> 00:36:16,400
-So here's the same implementation of this program using channels.
+So here's the same implementation of this program using channels,
 
-633
-00:36:16,930 --> 00:36:21,640
-And more or less worked the same way, except with of course no locks,
+695
+00:36:16,930 --> 00:36:19,960
+and more or less worked the same way,
 
-634
+696
+00:36:19,960 --> 00:36:21,640
+except with of course no locks,
+
+697
 00:36:21,970 --> 00:36:25,090
-but, the main thread creates channel,
+but the main thread creates channel,
 
-635
+698
 00:36:25,090 --> 00:36:28,720
 passes the goroutine anonymous function,
 
-636
+699
 00:36:28,720 --> 00:36:30,580
 that's being created as a separate thread,
 
-637
+700
 00:36:30,820 --> 00:36:33,460
-you know writes basically the requestVote to the channel
+you know writes basically the requestVote to the channel,
 
-638
+701
 00:36:33,730 --> 00:36:36,040
-and then the main thread basically blocks here right
+and then the main thread basically blocks here right,
 
-639
+702
 00:36:36,040 --> 00:36:37,660
-when it starts reading from channel.
+when it starts reading from channel,
 
-640
-00:36:38,080 --> 00:36:41,890
-Once you actually get something when something is written to the channel will unblock,
+703
+00:36:38,080 --> 00:36:39,700
+Once it actually get something,
 
-641
-00:36:42,280 --> 00:36:43,600
-you know look at the value
+704
+00:36:39,700 --> 00:36:41,890
+when something is written to the channel, will unlock,
 
-642
-00:36:43,600 --> 00:36:45,400
-and its true add up
+705
+00:36:42,280 --> 00:36:45,400
+you know look at the value and its true, add up,
 
-643
+706
 00:36:45,400 --> 00:36:48,070
-and [auto] and always increment finished.
+and otherwise always increment finished.
 
-644
+707
 00:36:48,830 --> 00:36:50,540
 And what's going on here correct,
 
-645
+708
 00:36:50,540 --> 00:36:51,620
 we don't need locks,
 
-646
+709
 00:36:51,620 --> 00:36:53,270
-but count finished not shared,
+because count finished not shared,
 
-647
+710
 00:36:53,330 --> 00:36:56,990
-there's only one thread that actually updates count and finished
+there's only one thread that actually updates count and finished,
 
-648
+711
 00:36:56,990 --> 00:36:57,890
 and that's the main thread.
 
-649
+712
 00:36:58,830 --> 00:36:59,610
 Okay?
 
-650
+713
 00:37:01,770 --> 00:37:02,520
 The.
 
-651
-00:37:03,240 --> 00:37:11,490
-And this this you know the the main the requested for thread you know all basically just write to this channel
+714
+00:37:03,240 --> 00:37:06,510
+And this this you know the the main,
 
-652
+715
+00:37:06,510 --> 00:37:11,490
+sorry, the requestVote thread you know all basically just write to this channel,
+
+716
 00:37:11,490 --> 00:37:13,470
-with a write concurrently perhaps in a channel,
+[] write concurrently perhaps in a channel,
 
-653
+717
 00:37:13,770 --> 00:37:16,590
 but the channels are one of the things that Go that actually thread-safe,
 
-654
+718
 00:37:16,590 --> 00:37:18,720
 so multiple threads can actually write to the channel.
 
-655
+719
 00:37:21,240 --> 00:37:25,210
-Any questions about this, about the solution.
+Any questions about this, about the solution?
 
-656
+720
 00:37:27,770 --> 00:37:32,050
-What was this thing about like having a buffer for the channel.
+What was the thing about like having a buffer for the channel?
 
-657
+721
 00:37:32,260 --> 00:37:35,650
-Yeah, so, normally when you're writing to the channel
+Yeah, so, normally when you're writing to the channel,
 
-658
-00:37:35,650 --> 00:37:39,580
-and nobody's reading from the channel or no thread is reading from the channel,
+722
+00:37:35,650 --> 00:37:37,900
+and nobody's reading from the channel
 
-659
+723
+00:37:37,900 --> 00:37:39,580
+or no thread is reading from the channel,
+
+724
 00:37:39,670 --> 00:37:41,530
-then the sender will immediately be blocked.
+then the sender will immediately be blocked,
 
-660
+725
 00:37:42,330 --> 00:37:48,180
-You can specify a channel has buffers of 10 or 20
+you can specify a channel has buffers of 10 or 20,
 
-661
+726
 00:37:48,420 --> 00:37:52,110
-and that allows the channel to have multiple values.
+and that allows the channel to have multiple values,
 
-662
+727
 00:37:52,920 --> 00:37:55,140
-In in 6.824 labs,
+in in 6.824 labs,
 
-663
+728
 00:37:55,140 --> 00:37:58,230
-I've never used buffered channels
+I've never used buffered channels,
 
-664
+729
 00:37:58,230 --> 00:38:00,180
 and one of two three times I did it,
 
-665
+730
 00:38:00,180 --> 00:38:01,140
 I regretted it,
 
-666
+731
 00:38:01,170 --> 00:38:03,090
 so generally I don't use it.
 
-667
+732
 00:38:04,180 --> 00:38:05,950
-But this is important point.
+But this is important point,
 
-668
+733
 00:38:06,780 --> 00:38:09,630
-This, this program is actually still not very good,
+this, this program is actually still not very good,
 
-669
-00:38:09,990 --> 00:38:15,720
-for example when it doesn't matter in practice,
+734
+00:38:09,990 --> 00:38:12,990
+for example, when,
 
-670
-00:38:15,720 --> 00:38:16,770
-in this particular example,
+735
+00:38:13,020 --> 00:38:16,770
+it doesn't matter in practice in this particular example,
 
-671
+736
 00:38:16,770 --> 00:38:20,580
-but it does not in some collapse, that could I do,
+but it does in some the labs, that could might do,
 
-672
+737
 00:38:21,000 --> 00:38:23,970
 as soon as it reaches count 5 what will happen.
 
-673
+738
 00:38:27,800 --> 00:38:31,070
 It stops listening for a new channel,
 
-674
+739
 00:38:31,190 --> 00:38:33,800
 so any other threads are going to be blocked.
 
-675
+740
 00:38:34,070 --> 00:38:37,730
 Yeah, so basically it means like if the first 5 threads voted yes,
 
-676
+741
 00:38:38,160 --> 00:38:41,130
 then the next 5 threads will be blocked in this channel, right,
 
-677
+742
 00:38:42,480 --> 00:38:44,040
 they'll be hanging around.
 
-678
+743
 00:38:44,970 --> 00:38:48,090
 And in this case, it won't be a problem,
 
-679
+744
 00:38:48,090 --> 00:38:50,340
 because most of you guys are most observed that,
 
-680
-00:38:50,340 --> 00:38:54,090
-if the main thread exit, it actually cleans up all the other threads too.
+745
+00:38:50,340 --> 00:38:51,780
+if the main thread exit,
 
-681
+746
+00:38:52,080 --> 00:38:54,090
+it actually cleans up all the other threads too,
+
+747
 00:38:54,810 --> 00:38:57,840
-But for example if this was a long running service,
+but for example if this was a long running service,
 
-682
+748
 00:38:58,170 --> 00:38:59,610
 this would be not good,
 
-683
+749
 00:38:59,610 --> 00:39:01,350
 basically we're leaking threads here,
 
-684
-00:39:01,380 --> 00:39:05,010
-you know they're getting blocked on the side, doing nothing in that channel,
+750
+00:39:01,380 --> 00:39:03,360
+you know they're getting blocked on the side,
 
-685
+751
+00:39:03,360 --> 00:39:05,010
+doing nothing in that channel,
+
+752
 00:39:05,220 --> 00:39:06,990
-so that's quite inconvenient
+so that's quite inconvenient,
 
-686
+753
 00:39:06,990 --> 00:39:09,150
 and this is something to watch out for.
 
-687
-00:39:09,980 --> 00:39:13,460
-And this showed up in the crawler, I think for many people in the
+754
+00:39:09,980 --> 00:39:11,450
+And this showed up in the crawler,
 
-688
-00:39:13,490 --> 00:39:20,810
-and flip side of this is if the main thread and too early before any of the requestVotes are done,
+755
+00:39:11,450 --> 00:39:13,460
+I think for many people in the,
 
-689
+756
+00:39:13,490 --> 00:39:16,670
+and flip side of this is,
+
+757
+00:39:16,940 --> 00:39:20,810
+if the main thread exit too early before any of the requestVotes are done,
+
+758
 00:39:21,050 --> 00:39:22,520
-then you also have a problem
+then you also have a problem,
 
-690
+759
 00:39:22,610 --> 00:39:26,960
 and so there's management of threads that actually is often a tricky issue.
 
-691
+760
 00:39:29,040 --> 00:39:32,370
 Is there a way to kill the thread without exiting from main?
 
-692
-00:39:33,530 --> 00:39:38,990
-Well, you can send it to a variable a value on some channels seemed like please exit,
+761
+00:39:33,530 --> 00:39:37,940
+Well, you can send it to a variable a value on some channels,
 
-693
+762
+00:39:37,940 --> 00:39:38,990
+seemed like please exit,
+
+763
 00:39:39,320 --> 00:39:41,690
 but you have to coordinate it yourself.
 
-694
+764
 00:39:47,250 --> 00:39:54,760
 I'm gonna go back to one of the things that actually is cool about condition variables,
 
-695
+765
 00:39:55,450 --> 00:40:01,470
 is that, in principle you might think you have the same issue exists here,
 
-696
+766
 00:40:01,740 --> 00:40:04,260
-we're like this thread actually runs
+where like this thread actually runs,
 
-697
+767
 00:40:04,260 --> 00:40:06,720
 and in this thread,
 
-698
+768
 00:40:06,750 --> 00:40:10,140
 and it might get blocked,
 
-699
+769
 00:40:10,140 --> 00:40:12,630
 like for example if it reach you know 5,
 
-700
+770
 00:40:12,660 --> 00:40:15,810
 you know this main thread will you know perceive doing its thing,
 
-701
+771
 00:40:16,260 --> 00:40:19,290
-while the other guys are still maybe actually sitting in here.
+while the other guys are still maybe actually sitting in here,
 
-702
+772
 00:40:20,080 --> 00:40:23,710
-Notice these in this case, they won't be blocked,
+notice these in this case, they won't be blocked,
 
-703
+773
 00:40:23,830 --> 00:40:26,020
 because will grab the lock,
 
-704
+774
 00:40:26,260 --> 00:40:28,840
 then you know does the thing does a broadcast,
 
-705
+775
 00:40:28,840 --> 00:40:31,030
-the broadcast is actually not a blocking operation,
+the Broadcast is actually not a blocking operation,
 
-706
+776
 00:40:31,090 --> 00:40:32,980
 so unlike you know writing to a channel,
 
-707
+777
 00:40:32,980 --> 00:40:34,150
 that is a blocking operation,
 
-708
+778
 00:40:34,150 --> 00:40:35,320
 if nobody is listening,
 
-709
+779
 00:40:35,530 --> 00:40:37,930
 the cond.Broadcast is not a blocking operation.
 
-710
+780
 00:40:38,450 --> 00:40:40,550
 So this actually works out in this particular program,
 
-711
+781
 00:40:40,550 --> 00:40:42,410
 you know by itself correctly.
 
-712
+782
 00:40:43,690 --> 00:40:44,290
 Okay?
 
-713
+783
 00:40:49,200 --> 00:40:49,890
 Okay, good.
 
-714
+784
 00:40:50,700 --> 00:40:54,090
 Any further questions about you know these two examples just to do?
 
-715
+785
 00:41:00,480 --> 00:41:04,680
-Okay, then let's talk about the crawler.
+Okay, then let's talk about the crawler,
 
-716
+786
 00:41:05,700 --> 00:41:10,020
-So the crawler is also a more realistic example of concurrent programming.
+so the crawler is also a more realistic example of concurrent programming.
 
-717
+787
 00:41:14,550 --> 00:41:15,900
 Yeah, and just remind you,
 
-718
+788
 00:41:15,900 --> 00:41:20,910
 you know basically the idea is that,
 
-719
+789
 00:41:20,910 --> 00:41:23,850
 you started with url for some web page,
 
-720
+790
 00:41:24,210 --> 00:41:28,500
-you fetch you fetch the web page that might have more urls,
+you fetch, you fetch the web page that might have more urls,
 
-721
+791
 00:41:28,940 --> 00:41:30,590
 and when you basically proceed,
 
-722
+792
 00:41:30,590 --> 00:41:32,630
 you know then fetching those web pages,
 
-723
+793
 00:41:32,630 --> 00:41:34,730
 you know looking at those urls and you keep going.
 
-724
-00:41:35,730 --> 00:41:40,560
-The idea is to crawl basically the whole Internet you know for all the web pages that are exist
+794
+00:41:35,730 --> 00:41:38,160
+The idea is to crawl basically the whole Internet
 
-725
+795
+00:41:38,340 --> 00:41:40,560
+you know for all the web pages that are exist,
+
+796
 00:41:41,010 --> 00:41:45,540
 and of course some urls might point back to a web page you already visited,
 
-726
+797
 00:41:45,540 --> 00:41:50,160
 and so goal is to actually not visit the same web page twice.
 
-727
+798
 00:41:52,380 --> 00:41:54,690
 And so the goal of the exercise is a couple of goals,
 
-728
+799
 00:41:54,690 --> 00:41:56,520
-if you want to achieve, right,
+you want to achieve, right.
 
-729
+800
 00:41:56,520 --> 00:41:58,470
-one is IO concurrency.
+One is IO concurrency,
 
-730
+801
 00:42:03,180 --> 00:42:06,360
-The fetch operation is may take a long time,
+the fetch operation is may take a long time,
 
-731
-00:42:06,360 --> 00:42:09,090
-maybe it's a web page, it's on the other side of the world,
+802
+00:42:06,360 --> 00:42:07,740
+maybe it's a web page,
 
-732
+803
+00:42:07,740 --> 00:42:09,090
+it's on the other side of the world,
+
+804
 00:42:09,090 --> 00:42:11,280
-you know it goes over slow networks,
+you know maybe it goes over slow networks,
 
-733
+805
 00:42:11,460 --> 00:42:14,190
-and while your one thread is sort of fetching that page
+and while you know one thread is sort of fetching that page,
 
-734
+806
 00:42:14,190 --> 00:42:18,660
 you would like to be able to fetch other other other pages,
 
-735
+807
 00:42:19,260 --> 00:42:22,950
 another goals is correctness goal or performance goal,
 
-736
+808
 00:42:22,950 --> 00:42:25,950
-namely fetch one fetch url once.
+namely fetch one fetch url once,
 
-737
+809
 00:42:30,000 --> 00:42:33,240
-And you know remember your goals are like to exploit multiple cores,
+and you know presumably your goals are like to exploit multiple cores,
 
-738
+810
 00:42:33,240 --> 00:42:36,540
 you know if you have multiple cores doing work in parallelism.
 
-739
+811
 00:42:42,270 --> 00:42:42,870
 Okay?
 
-740
-00:42:43,740 --> 00:42:51,180
-So, what I'd like to do before actually talking about the concurrent solutions,
+812
+00:42:43,740 --> 00:42:46,980
+So, what I'd like to do,
 
-741
+813
+00:42:47,010 --> 00:42:51,180
+before actually talking about the concurrent solutions,
+
+814
 00:42:51,180 --> 00:42:55,650
 first let me show you a simple serial solution,
 
-742
-00:42:55,650 --> 00:43:01,280
-so that we, you know we have something to talk about as a baseline.
+815
+00:42:55,650 --> 00:42:58,080
+so that we,
 
-743
+816
+00:42:58,850 --> 00:43:01,280
+you know we have something to talk about as a baseline.
+
+817
 00:43:12,240 --> 00:43:15,960
 So, so I have three solutions in here.
 
-744
+818
 00:43:19,040 --> 00:43:21,980
-Run them, run,
+Run them, go run.
 
-745
+819
 00:43:26,080 --> 00:43:29,380
-a serious solution, and one of the mutex is, one of the channels,
+A serial solution, and one of the mutex, one of the channels,
 
-746
+820
 00:43:29,440 --> 00:43:33,940
 you know you see the more or less they produce the same results,
 
-747
+821
 00:43:33,940 --> 00:43:35,950
-you know two found, one missing, two found.
+you know two found, one missing, two found,
 
-748
-00:43:36,470 --> 00:43:39,980
-The only difference is that the order of the output slightly different once in a while
+822
+00:43:36,470 --> 00:43:37,700
+the only difference is that,
 
-749
+823
+00:43:37,700 --> 00:43:39,980
+the order of the output slightly different once in a while,
+
+824
 00:43:39,980 --> 00:43:41,780
 and of course it had to do concurrency.
 
-750
+825
 00:43:43,880 --> 00:43:49,290
-Okay, so, the main function calls in serial
+Okay, so, the main function calls in Serial,
 
-751
+826
 00:43:49,290 --> 00:43:53,160
-with the starting url, fetcher and then an empty map.
+with the starting url, fetcher and then an empty map,
 
-752
+827
 00:43:54,220 --> 00:44:00,760
-And then the serial solution is basically sort of standard sequential recursive solution,
+and then the serial solution is basically sort of standard sequential recursive solution,
 
-753
+828
 00:44:01,180 --> 00:44:04,960
 we first check if we already visited the url that's passed into us,
 
-754
+829
 00:44:05,420 --> 00:44:07,100
-if we didn't know we return immediately,
+if we did, you know we return immediately,
 
-755
+830
 00:44:07,100 --> 00:44:08,780
 otherwise we mark this visit,
 
-756
+831
 00:44:09,080 --> 00:44:10,310
 we'll fetch the url,
 
-757
+832
 00:44:10,310 --> 00:44:12,770
 that this is a bunch of urls,
 
-758
+833
 00:44:12,770 --> 00:44:14,480
-we look for all the urls
+we look for all the urls,
 
-759
+834
 00:44:14,600 --> 00:44:16,430
-and go basically zero again, right,
+and go basically Serial again, right,
 
-760
-00:44:16,430 --> 00:44:19,040
-this is your sequential solution, that's what I expected.
+835
+00:44:16,430 --> 00:44:18,080
+this is you know sequential solution,
 
-761
+836
+00:44:18,080 --> 00:44:19,040
+that's what I expected.
+
+837
 00:44:19,760 --> 00:44:23,270
 And you know your goal which is basically write concurrent version of this.
 
-762
-00:44:24,140 --> 00:44:30,280
-And so, what I like to do is actually to make the class a little bit interactive,
+838
+00:44:24,140 --> 00:44:28,450
+And so, what I like to do is
 
-763
+839
+00:44:28,450 --> 00:44:30,280
+actually to make the class a little bit interactive,
+
+840
 00:44:30,340 --> 00:44:32,800
-I wanna go switch over to breakout rooms
+I wanna go switch over to breakout rooms,
 
-764
-00:44:32,830 --> 00:44:41,290
-and what we're gonna do is basically put four to five of you in a single breakout room for about ten minutes
+841
+00:44:32,830 --> 00:44:34,180
+and what we're gonna do is
 
-765
-00:44:41,560 --> 00:44:45,970
-and I would like you to do is share your solution with each other and discuss it,
+842
+00:44:34,180 --> 00:44:39,520
+basically put four to five of you in a single breakout room,
 
-766
+843
+00:44:40,060 --> 00:44:41,290
+for about ten minutes,
+
+844
+00:44:41,560 --> 00:44:43,690
+and I would like you to do is,
+
+845
+00:44:43,690 --> 00:44:45,970
+share your solution with each other and discuss it,
+
+846
 00:44:46,270 --> 00:44:49,210
-so maybe the best way to go about it is
+so maybe the best way to go about it is,
 
-767
+847
 00:44:49,330 --> 00:44:52,120
 one of you, you know you get into a room,
 
-768
+848
 00:44:52,240 --> 00:44:53,650
 one of the persons in the room,
 
-769
-00:44:53,680 --> 00:44:58,570
-basically screen shares their solution and discuss what has been one of the issues,
+849
+00:44:53,680 --> 00:44:56,110
+basically screen shares their solution
 
-770
+850
+00:44:56,440 --> 00:44:58,570
+and discuss what has been one of the issues,
+
+851
 00:44:58,570 --> 00:45:00,070
-that you see running into
+that you see running into,
 
-771
+852
 00:45:00,070 --> 00:45:02,680
 and other people can comment or share other solutions,
 
-772
-00:45:02,920 --> 00:45:05,830
-let's just get into a discussion and meet some other students in the class.
+853
+00:45:02,920 --> 00:45:04,360
+let's just get into a discussion
 
-773
+854
+00:45:04,360 --> 00:45:05,830
+and meet some other students in the class.
+
+855
 00:45:07,480 --> 00:45:08,560
 Any questions about that?
 
-774
+856
 00:45:11,950 --> 00:45:13,960
 Okay, good, let me go back,
 
-775
+857
 00:45:13,960 --> 00:45:16,870
 to sharing my screen again,
 
-776
+858
 00:45:17,350 --> 00:45:19,060
 can everybody see my screen again.
 
-777
+859
 00:45:21,600 --> 00:45:22,590
 Yep, looks good.
 
-778
+860
 00:45:23,120 --> 00:45:24,230
 Good, thank you.
 
-779
+861
 00:45:29,140 --> 00:45:31,870
 Okay, so hopefully that was interesting,
 
-780
+862
 00:45:32,110 --> 00:45:37,750
-let me you know talk about you know the solutions that I have.
+let me you know talk about you know the solutions that I have,
 
-781
-00:45:38,380 --> 00:45:41,500
-There posted on the schedule page, if you haven't,
+863
+00:45:38,380 --> 00:45:40,210
+they're posted on the schedule page,
 
-782
-00:45:42,130 --> 00:45:45,970
-you can look concurrently with me, if you want to.
+864
+00:45:40,210 --> 00:45:45,280
+if you haven't, you can look concurrently with me,
 
-783
+865
+00:45:45,280 --> 00:45:45,970
+if you want to.
+
+866
 00:45:46,770 --> 00:45:52,050
-You should you know let me walk through the mutex version first
+You should you know let me walk through the mutex version first,
 
-784
+867
 00:45:52,050 --> 00:45:56,160
-and then I'll walk through the channel one second,
+and then I'll walk through the channel one second.
 
-785
+868
 00:45:56,340 --> 00:46:00,710
-so here's the mutex one,
+So here's the mutex one,
 
-786
+869
 00:46:00,710 --> 00:46:05,690
-mutex one the declareation struct with the have both the map and the mutex
+mutex one the declareation struct with the have both the map and the mutex,
 
-787
+870
 00:46:05,690 --> 00:46:08,660
 and the map needs to be protected by mutex,
 
-788
+871
 00:46:08,660 --> 00:46:10,940
 because it's going to be concurrent access to the map,
 
-789
-00:46:11,570 --> 00:46:12,890
+872
+00:46:11,570 --> 00:46:13,190
 map by itself it's not thread-safe,
 
-790
-00:46:12,890 --> 00:46:16,280
-it's a it's up to the programmer to actually make the map thread-safe.
+873
+00:46:13,190 --> 00:46:16,280
+it's up to the programmer to actually make the map thread-safe.
 
-791
+874
 00:46:17,330 --> 00:46:20,780
 And the concurrently mutex one more short similar to the serial one,
 
-792
-00:46:20,780 --> 00:46:22,430
-except whenever there's stage,
+875
+00:46:20,780 --> 00:46:23,510
+except whenever there's stage, basically takes a lock out,
 
-793
-00:46:22,430 --> 00:46:23,510
-basically takes a walk out,
-
-794
+876
 00:46:23,660 --> 00:46:24,950
 you know so we'll take the lock,
 
-795
+877
 00:46:24,980 --> 00:46:28,100
 we look at the url has already being fetched,
 
-796
-00:46:28,220 --> 00:46:30,770
-it hasn't been fetched from the markd has now being fetched.
+878
+00:46:28,220 --> 00:46:29,090
+it hasn't been fetched,
 
-797
+879
+00:46:29,090 --> 00:46:30,770
+we markd has now being fetched,
+
+880
 00:46:31,250 --> 00:46:33,290
-What hasn't been fetched and we lock,
+what hasn't been fetched and we unlock,
 
-798
-00:46:33,710 --> 00:46:37,580
-and we kept this already value to decide whether we should return or not.
+881
+00:46:33,710 --> 00:46:35,990
+and we kept this already value
 
-799
+882
+00:46:35,990 --> 00:46:37,580
+to decide whether we should return or not.
+
+883
 00:46:38,560 --> 00:46:44,800
 And then, you know we this goroutines starts fetching a page,
 
-800
+884
 00:46:44,800 --> 00:46:46,150
 gets a bunch of urls back,
 
-801
+885
 00:46:46,660 --> 00:46:48,940
-and then, for every url back,
+and then for every url back,
 
-802
+886
 00:46:49,240 --> 00:46:53,020
 it creates a new goroutine here on this side,
 
-803
+887
 00:46:53,500 --> 00:46:55,540
 passes in the url,
 
-804
+888
 00:46:55,540 --> 00:46:58,840
 but goroutine is supposed to fetch and crawl.
 
-805
-00:47:00,100 --> 00:47:02,710
-The only sort of other interesting thing here,
+889
+00:47:00,100 --> 00:47:04,630
+The only sort of other interesting thing here is that,
 
-806
-00:47:04,120 --> 00:47:06,610
-is that it uses something about WaitGroup
+890
+00:47:04,630 --> 00:47:06,610
+it uses something about WaitGroup,
 
-807
-00:47:07,000 --> 00:47:11,740
-and WaitGroup is a very convenient primitive to keep track how many threads you still have active
+891
+00:47:07,000 --> 00:47:09,100
+and WaitGroup is a very convenient primitive
 
-808
+892
+00:47:09,100 --> 00:47:11,740
+to keep track how many threads you still have active,
+
+893
 00:47:11,740 --> 00:47:13,060
 and when you can terminate.
 
-809
+894
 00:47:13,520 --> 00:47:16,040
-And this was a big issue in this particular assignment
+And this was a big issue in this particular assignment,
 
-810
+895
 00:47:16,040 --> 00:47:17,600
 that if you terminated too early,
 
-811
+896
 00:47:17,600 --> 00:47:19,430
 then you didn't crawl the web pages.
 
-812
+897
 00:47:19,980 --> 00:47:21,630
 And so you need to keep track whatever,
 
-813
+898
 00:47:21,630 --> 00:47:26,010
 whatever there's still outstanding web pages to be crawled,
 
-814
-00:47:26,010 --> 00:47:29,970
-seeing WaitGroup is a very easily basically every time you call thread,
+899
+00:47:26,010 --> 00:47:27,750
+sync.WaitGroup is a very easily,
 
-815
-00:47:29,970 --> 00:47:36,270
-you call add and then when the thread terminates, you call done,
+900
+00:47:27,990 --> 00:47:31,560
+basically every time you call thread, you call Add,
 
-816
+901
+00:47:31,860 --> 00:47:36,270
+and then when the thread terminates, you call Done,
+
+902
 00:47:36,390 --> 00:47:39,540
 and we could conveniently do that in a defer statement.
 
-817
+903
 00:47:39,970 --> 00:47:43,030
-And then the main thread that is waiting for all the thread defer statement,
+And then the main thread that is waiting for all the thread to terminated,
 
-818
-00:47:43,030 --> 00:47:45,850
-just goes wait and wait will return until every thread,
+904
+00:47:43,030 --> 00:47:43,780
+just goes wait
 
-819
+905
+00:47:43,780 --> 00:47:45,850
+and Wait will return until every thread,
+
+906
 00:47:45,880 --> 00:47:48,550
-that will started for every add one,
+that will started for every Add(1),
 
-820
+907
 00:47:48,790 --> 00:47:51,700
 if all those threads actually has been exited.
 
-821
+908
 00:47:53,330 --> 00:47:57,230
 That's the mutex version.
 
-822
-00:48:00,210 --> 00:48:05,070
-And you can think about sync wait as sort of being internally implemented using condition variable.
+909
+00:48:00,210 --> 00:48:01,950
+And you can think about sync wait as
 
-823
+910
+00:48:01,950 --> 00:48:05,070
+sort of being internally implemented using condition variable.
+
+911
 00:48:07,230 --> 00:48:11,490
-Okay, let me look at the channel version.
+Okay, let me look at the channel version,
 
-824
-00:48:12,380 --> 00:48:20,270
-So here's channel version is basically sort of organized as mapreduce lab,
+912
+00:48:12,380 --> 00:48:14,900
+so here's channel version
 
-825
-00:48:20,300 --> 00:48:22,700
-lab where there's a coordinator and workers.
+913
+00:48:14,900 --> 00:48:20,690
+is basically sort of organized as mapreduce lab,
 
-826
+914
+00:48:20,690 --> 00:48:22,700
+where there's a coordinator and workers,
+
+915
 00:48:23,420 --> 00:48:28,340
-So, we start off, you know we start off creating a coordinator thread,
+so, we start of, you know we start of creating a coordinator thread,
 
-827
+916
 00:48:28,790 --> 00:48:30,830
-and the way we do that actually is
+and the way we do that actually is,
 
-828
-00:48:30,830 --> 00:48:35,180
-we make a channel and then we pass the channel into the coordinator,
+917
+00:48:30,830 --> 00:48:31,880
+we make a channel,
 
-829
+918
+00:48:32,330 --> 00:48:35,180
+and then we pass the channel into the coordinator,
+
+919
 00:48:35,240 --> 00:48:38,570
 the coordinator of course has to start with a url, the beginning url,
 
-830
+920
 00:48:38,570 --> 00:48:40,520
 so we need to supply that on the channel,
 
-831
-00:48:40,520 --> 00:48:42,950
-that's the most convenient thing to do as we'll see in a second.
+921
+00:48:40,520 --> 00:48:41,930
+that's the most convenient thing to do,
 
-832
+922
+00:48:41,930 --> 00:48:42,950
+as we'll see in a second.
+
+923
 00:48:43,540 --> 00:48:45,850
 But, you know to send it on the channel,
 
-833
+924
 00:48:45,850 --> 00:48:47,380
 we basically have to create a goroutine,
 
-834
+925
 00:48:47,380 --> 00:48:49,180
-because otherwise we deadlock here.
+because otherwise we deadlock here,
 
-835
+926
 00:48:49,950 --> 00:48:51,390
-We, this is a difficult thing,
+we, this is a difficult thing,
 
-836
+927
 00:48:51,390 --> 00:48:54,180
 we're going to just send that value on the channel.
 
-837
+928
 00:48:55,150 --> 00:48:56,560
-So let's look at the coordinator.
+So let's look at the coordinator,
 
-838
+929
 00:48:57,980 --> 00:49:01,910
-Here's the coordinator, it doesn't use any locks at all,
+here's the coordinator, it doesn't use any locks at all,
 
-839
-00:49:01,940 --> 00:49:08,240
-because you know the data structures, that there's no data structures actually being shared, like fetched,
+930
+00:49:01,940 --> 00:49:03,950
+because you know the data structures,
 
-840
-00:49:08,510 --> 00:49:14,660
-the map that actually keep track of which urls manufacturers is actually the only access within the coordinator.
+931
+00:49:03,950 --> 00:49:07,340
+that there's no data structures actually being shared,
 
-841
-00:49:16,480 --> 00:49:19,540
-So the coordinator got know when we called it initially,
+932
+00:49:07,370 --> 00:49:08,240
+like fetched,
 
-842
-00:49:19,570 --> 00:49:20,980
-we've got,
+933
+00:49:08,510 --> 00:49:12,020
+the map that actually keep track of which urls actually fetched,
 
-843
+934
+00:49:12,020 --> 00:49:14,660
+is actually the only access within the coordinator.
+
+935
+00:49:16,480 --> 00:49:17,770
+So the coordinator got,
+
+936
+00:49:17,800 --> 00:49:20,980
+you know when we called it initially, we've got,
+
+937
 00:49:20,980 --> 00:49:24,910
-it has one url checks the fetch map
+it has one url, checks the fetched map,
 
-844
+938
 00:49:24,910 --> 00:49:26,260
 and for every url,
 
-845
+939
 00:49:26,800 --> 00:49:31,390
 then it goes basically you know cycles through reach the channel,
 
-846
+940
 00:49:31,390 --> 00:49:32,590
 using a range statement,
 
-847
+941
 00:49:33,010 --> 00:49:34,420
-and basically what this does is
+and basically what this does is,
 
-848
+942
 00:49:34,420 --> 00:49:35,740
-just keep reading the channel
+just keep reading the channel,
 
-849
+943
 00:49:35,740 --> 00:49:38,740
 and grab the next value, grab next value, grab next value,
 
-850
+944
 00:49:38,770 --> 00:49:40,870
 so basically grabs the url,
 
-851
+945
 00:49:40,960 --> 00:49:42,070
-we know there's one in it,
+we know there's one init,
 
-852
+946
 00:49:42,100 --> 00:49:44,380
-because we put it on when we created it.
+because we put it on, when we created it.
 
-853
+947
 00:49:45,020 --> 00:49:46,550
 And then, for that url,
 
-854
+948
 00:49:46,550 --> 00:49:50,270
-we're roughly do the same thing as the,
+we sort of roughly do the same thing as the,
 
-855
+949
 00:49:51,170 --> 00:49:53,420
 concurrent as the mutex one,
 
-856
+950
 00:49:53,750 --> 00:49:57,230
 you know we see the url has already been fetched,
 
-857
+951
 00:49:57,260 --> 00:50:00,170
-if it hasn't been fetched, then we're done,
+if it has been fetched, then we're done,
 
-858
+952
 00:50:00,230 --> 00:50:04,430
 otherwise we will create a Go worker to actually fetch that url.
 
-859
+953
 00:50:06,380 --> 00:50:10,760
 And we keep track of how many outstanding workers we have,
 
-860
+954
 00:50:10,790 --> 00:50:12,530
-so n is counting number of workers
+so n is counting number of workers,
 
-861
-00:50:12,530 --> 00:50:17,210
-and only when n is 0, do we terminate the coordinator,
+955
+00:50:12,530 --> 00:50:14,060
+and only when n is 0,
 
-862
-00:50:17,600 --> 00:50:23,030
-to make sure that basically we have fetched all the web pages, that were supposed to be fetching.
+956
+00:50:14,240 --> 00:50:17,210
+do we terminate the coordinator,
 
-863
-00:50:23,910 --> 00:50:28,530
-Unless you can work worker basically calls fetch this coordinator happens completely parallel
+957
+00:50:17,600 --> 00:50:21,620
+to make sure that basically we have fetched all the web pages,
 
-864
-00:50:28,530 --> 00:50:29,670
-with any other workers.
+958
+00:50:21,650 --> 00:50:23,030
+that were supposed to be fetching.
 
-865
+959
+00:50:23,910 --> 00:50:25,110
+And you look at worker,
+
+960
+00:50:25,110 --> 00:50:26,430
+worker basically calls Fetch,
+
+961
+00:50:26,430 --> 00:50:29,670
+this call happens completely parallel with any other workers.
+
+962
 00:50:30,190 --> 00:50:34,960
-If we actually fetch some url from that web page,
+If it actually fetch some url from that web page,
 
-866
+963
 00:50:34,960 --> 00:50:37,720
-it basically writes all those urls to the channel
+it basically writes all those urls to the channel,
 
-867
+964
 00:50:37,870 --> 00:50:42,040
-and so the coordinator will get all those channels through range statements.
+and so the coordinator will get all those channels through range statements,
 
-868
+965
 00:50:43,180 --> 00:50:44,590
-And then when it's done,
+and then when it's done,
 
-869
+966
 00:50:44,590 --> 00:50:47,320
 writing all the urls through channel,
 
-870
+967
 00:50:47,440 --> 00:50:50,440
-then the coordinator worker exits
+then the coordinator worker exits,
 
-871
+968
 00:50:50,440 --> 00:50:55,750
-and that will you know at some point decrease you know n
+and that will you know at some point decrease you know n,
 
-872
+969
 00:50:55,750 --> 00:50:57,880
-and then at the end of.
+and then at the end of,
 
-873
+970
 00:50:58,920 --> 00:50:59,940
-And that's it basically.
+and that's it basically.
 
-874
+971
 00:51:01,180 --> 00:51:01,840
 Okay?
 
-875
-00:51:02,470 --> 00:51:05,650
-So those are the two solutions, any questions about these.
+972
+00:51:02,470 --> 00:51:03,670
+So those are the two solutions,
 
-876
+973
+00:51:03,700 --> 00:51:05,650
+any questions about these?
+
+974
 00:51:12,720 --> 00:51:13,560
 Is it all clear?
 
-877
+975
 00:51:16,100 --> 00:51:17,510
 There's a question in chat.
 
-878
+976
 00:51:17,720 --> 00:51:21,980
 Okay, let me get my chat list back up.
 
-879
-00:51:32,770 --> 00:51:37,030
-Okay, so the question is when ch has a value in it,
+977
+00:51:32,770 --> 00:51:34,930
+Okay, so the question is,
 
-880
+978
+00:51:35,140 --> 00:51:37,030
+when ch has a value in it,
+
+979
 00:51:37,060 --> 00:51:40,210
 when all other threads be idle,
 
-881
-00:51:40,210 --> 00:51:42,010
-if it's the case, that's,
+980
+00:51:40,210 --> 00:51:41,350
+if it's the case,
 
-882
-00:51:42,010 --> 00:51:44,260
-since this is not a buffered channel,
+981
+00:51:41,350 --> 00:51:44,260
+that's, since this is not a buffered channel,
 
-883
+982
 00:51:44,260 --> 00:51:47,560
-but you know there's going to be only one request in the channel at the time.
+but you know there's going to be only one request in the channel at the time,
 
-884
+983
 00:51:48,170 --> 00:51:52,370
-And so all the threads you know will be appended to the channel one by one.
+and so all the threads you know will be appended to the channel one by one.
 
-885
+984
 00:51:54,010 --> 00:51:56,410
 But doesn't that make the program sequential,
 
-886
-00:51:56,410 --> 00:52:00,130
-because no two threads are running in parallel except the main thread and one.
+985
+00:51:56,410 --> 00:51:58,390
+because no two threads are running in parallel,
 
-887
+986
+00:51:58,570 --> 00:52:00,130
+except the main thread and one.
+
+987
 00:52:00,880 --> 00:52:02,950
 Well the fetchers will still happen in parallel,
 
-888
+988
 00:52:04,080 --> 00:52:05,820
 those are presuming the expensive operation,
 
-889
+989
 00:52:06,090 --> 00:52:07,740
 where those go out across the Internet.
 
-890
+990
 00:52:09,350 --> 00:52:10,580
 Got it, thank you.
 
-891
+991
 00:52:14,040 --> 00:52:17,310
-Okay, let me switch back to my other screen.
+Okay, let me switch back to my other screen,
 
-892
+992
 00:52:17,890 --> 00:52:20,950
-And, talk a little bit about RPC,
+and talk a little bit about RPC,
 
-893
+993
 00:52:20,980 --> 00:52:24,400
 since that's the other thing tool that you need for the labs.
 
-894
+994
 00:52:27,540 --> 00:52:29,100
 We're not going to say a ton about it,
 
-895
+995
 00:52:29,100 --> 00:52:34,820
 but there's RPC which stands for remote procedure calls.
 
-896
+996
 00:52:41,680 --> 00:52:46,870
-And basically the goal you know the goal in RPC system,
+And basically the goal, you know the goal of RPC system,
 
-897
+997
 00:52:46,870 --> 00:52:48,310
-like the one that Go has,
+like the one that goal has,
 
-898
+998
 00:52:48,310 --> 00:52:53,260
 so basically RPCs behave roughly similar to procedure calls,
 
-899
+999
 00:52:53,290 --> 00:52:56,390
 local procedure calls the execute on the stack, right.
 
-900
-00:52:56,390 --> 00:52:59,570
-And, so the goal is for example if you have a client,
+1000
+00:52:56,390 --> 00:52:58,010
+And so the goal is,
 
-901
+1001
+00:52:58,010 --> 00:52:59,570
+for example if you have a client,
+
+1002
 00:53:00,260 --> 00:53:04,460
 in RPC terminology, the caller typically called the client
 
-902
+1003
 00:53:04,460 --> 00:53:07,220
 and callee is called server.
 
-903
+1004
 00:53:07,820 --> 00:53:10,790
-So you have a function fn
+So you have a function fn,
 
-904
+1005
 00:53:10,790 --> 00:53:13,010
 you know we're calling with x and y
 
-905
+1006
 00:53:13,190 --> 00:53:14,720
 and then at the server,
 
-906
+1007
 00:53:14,780 --> 00:53:16,430
 there's the implementation of this function.
 
-907
+1008
 00:53:18,560 --> 00:53:22,190
-And so there's a function n whatever x you know y in it.
+And so there's a function fn whatever x you know y int,
 
-908
+1009
 00:53:22,820 --> 00:53:26,930
-And you know it returns you know whatever does some computation
+and you know it returns you know whatever does some computation,
 
-909
+1010
 00:53:26,930 --> 00:53:31,270
 when they can use this returns x plus y.
 
-910
+1011
 00:53:33,580 --> 00:53:36,820
 And so, what we would like to have happen
 
-911
+1012
 00:53:36,820 --> 00:53:40,450
-or like the model that we would like to ourselves to think about is that
+or like the model that we would like to ourselves to think about is that,
 
-912
+1013
 00:53:40,540 --> 00:53:43,210
 when the client calls this function fn,
 
-913
-00:53:43,390 --> 00:53:49,480
-the RPC system will make sure that there's any corresponding amount of application happening on the server side,
+1014
+00:53:43,390 --> 00:53:45,850
+the RPC system will make sure,
 
-914
+1015
+00:53:45,850 --> 00:53:49,480
+that there's any corresponding application happening on the server side,
+
+1016
 00:53:49,920 --> 00:53:53,040
 passes the arguments x and y you know to the server,
 
-915
+1017
 00:53:53,100 --> 00:53:54,750
 the code runs on the server,
 
-916
+1018
 00:53:54,900 --> 00:53:58,440
-it you know returns a result you see.
+it you know returns a result you see,
 
-917
+1019
 00:53:59,040 --> 00:54:02,160
-And that result is communicating back to the client
+and that result is communicating back to the client,
 
-918
+1020
 00:54:02,430 --> 00:54:06,990
-and you know and then fn will resume will return
+and you know and then fn will resume, will return,
 
-919
-00:54:06,990 --> 00:54:14,120
-and the client will return will resume with the x plus y in the value of x y and z, right.
+1021
+00:54:06,990 --> 00:54:08,490
+and the client will return,
 
-920
-00:54:14,480 --> 00:54:17,660
-So this looks like even though the programs are running on different computers,
+1022
+00:54:08,490 --> 00:54:11,310
+will resume with the x plus y,
 
-921
+1023
+00:54:11,310 --> 00:54:14,120
+in the value of x plus y as z, right.
+
+1024
+00:54:14,480 --> 00:54:15,350
+So this looks like,
+
+1025
+00:54:15,350 --> 00:54:17,660
+even though the programs are running on different computers,
+
+1026
 00:54:17,960 --> 00:54:19,940
 you know they're actually have boundary here,
 
-922
+1027
 00:54:20,060 --> 00:54:24,020
 it looks like you know they make a regular procedure calls.
 
-923
+1028
 00:54:24,920 --> 00:54:26,630
 We'll see in a second,
 
-924
+1029
 00:54:26,630 --> 00:54:29,750
-actually, we can make a lot of similarities,
+actually we can make a lot of similarities,
 
-925
+1030
 00:54:29,750 --> 00:54:32,120
 so it's possible to make them behave very similar,
 
-926
+1031
 00:54:32,210 --> 00:54:34,580
-but you'll see there's also a sort of a fundamental difference
+but you'll see there's also a sort of a fundamental difference,
 
-927
+1032
 00:54:34,580 --> 00:54:36,620
 and actually has what to do with distributed computing.
 
-928
+1033
 00:54:38,040 --> 00:54:38,910
 But before getting there,
 
-929
+1034
 00:54:38,910 --> 00:54:42,540
 let me first of sketch out how you can make this work.
 
-930
+1035
 00:54:43,300 --> 00:54:45,340
 And this is sort of roughly, let's Go does too.
 
-931
-00:54:45,670 --> 00:54:49,210
-So, so the way you think about it is that when the client,
+1036
+00:54:45,670 --> 00:54:48,190
+So, so the way you think about it is that,
 
-932
+1037
+00:54:48,220 --> 00:54:49,210
+when the client,
+
+1038
 00:54:50,060 --> 00:54:51,650
 so here our program,
 
-933
+1039
 00:54:52,660 --> 00:54:56,470
-and when the client calls the function fn with x and y in it.
+and when the client calls the function fn with x and y in it,
 
-934
+1040
 00:54:57,210 --> 00:55:00,150
-What does it actually calls something that's called stub,
+what it does, it actually calls something that's called stub,
 
-935
+1041
 00:55:01,350 --> 00:55:03,480
 and stub is basically local function,
 
-936
+1042
 00:55:03,510 --> 00:55:08,220
-you know call fn and with two arguments declared that x and y
+you know call fn and with two arguments declared that x and y,
 
-937
+1043
 00:55:08,370 --> 00:55:09,930
-and basically what the stub does.
+and basically what the stub does,
 
-938
+1044
 00:55:11,280 --> 00:55:13,260
-You think this is a stub procedure,
+you know think this is a stub procedure,
 
-939
-00:55:13,350 --> 00:55:16,260
-but stub procedure basically does, build a message,
+1045
+00:55:13,350 --> 00:55:15,390
+but stub procedure basically does,
 
-940
-00:55:17,200 --> 00:55:20,080
-you know saying which function needs to be called,
+1046
+00:55:15,390 --> 00:55:20,080
+build a message, you know saying which function needs to be called,
 
-941
+1047
 00:55:20,380 --> 00:55:22,330
 the arguments of the function,
 
-942
+1048
 00:55:22,330 --> 00:55:24,640
 you know the types of arguments,
 
-943
+1049
 00:55:24,640 --> 00:55:27,580
 the values of these arguments etc etc.
 
-944
-00:55:28,130 --> 00:55:33,110
-And then what the stuff does actually it sends it over the network
+1050
+00:55:28,130 --> 00:55:31,430
+And then what the stub does,
 
-945
+1051
+00:55:31,430 --> 00:55:33,110
+actually it sends it over the network
+
+1052
 00:55:33,290 --> 00:55:35,810
-to corresponding stub at the server.
+to corresponding stub at the server,
 
-946
+1053
 00:55:39,010 --> 00:55:41,080
-So server receives this message,
+so server receives this message,
 
-947
+1054
 00:55:42,000 --> 00:55:45,330
 and basically you know takes this message,
 
-948
-00:55:46,040 --> 00:55:58,220
-and marshall and marshall is a term that's being used to basically convert values from byte arrays, byte arrays back to values.
+1055
+00:55:46,040 --> 00:55:49,790
+and marshall unmarshall it, is a term,
 
-949
+1056
+00:55:49,790 --> 00:55:50,660
+that's being used to
+
+1057
+00:55:50,660 --> 00:55:58,220
+basically convert values from byte arrays, byte arrays back to values,
+
+1058
 00:55:58,870 --> 00:56:02,770
-And then calls you know this function fn at the server,
+and then calls you know this function fn at the server,
 
-950
+1059
 00:56:02,950 --> 00:56:07,220
-here's our fn x, blah blah blah.
+here's you know fn x, blah blah blah.
 
-951
+1060
 00:56:09,620 --> 00:56:11,300
 So stub basically calls the function,
 
-952
+1061
 00:56:11,300 --> 00:56:13,460
-the function returns back into the stub.
+the function returns back into the stub,
 
-953
+1062
 00:56:14,050 --> 00:56:19,330
-This stub marshals you know the response value like z x plus y.
+this stub marshals you know the response value like z x plus y,
 
-954
+1063
 00:56:19,990 --> 00:56:24,950
-And since that back you know to the client stub
+and since that back you know to the client stub,
 
-955
+1064
 00:56:24,980 --> 00:56:26,270
 and client stub is still waiting,
 
-956
+1065
 00:56:26,270 --> 00:56:28,370
 so basically the client stub the way it actually works,
 
-957
+1066
 00:56:28,370 --> 00:56:30,770
 it sends out the request and then wait for the response,
 
-958
+1067
 00:56:30,890 --> 00:56:32,510
 when the response comes back in,
 
-959
+1068
 00:56:32,840 --> 00:56:34,190
 you know it unmarshalls,
 
-960
+1069
 00:56:38,120 --> 00:56:40,910
-and then it returns the value to the client, right.
+and then you know returns the value to the client, right.
 
-961
+1070
 00:56:40,910 --> 00:56:42,710
-So, basically these two stub,
+So, basically these two stubs,
 
-962
+1071
 00:56:43,040 --> 00:56:47,630
-sort of make a remote procedure call look like a regular procedure call
+sort of make a remote procedure call look like a regular procedure call,
 
-963
+1072
 00:56:47,810 --> 00:56:49,040
 for almost you can't tell.
 
-964
+1073
 00:56:49,820 --> 00:56:55,790
 And the key, and these stubs are generally you know automatically generated,
 
-965
-00:56:56,390 --> 00:57:00,440
-so the compiler and in case the compiler that will generate two stubs for you,
+1074
+00:56:56,390 --> 00:56:58,700
+so the compiler, and in case Go compiler
 
-966
+1075
+00:56:58,700 --> 00:57:00,440
+that will generate two stubs for you,
+
+1076
 00:57:00,530 --> 00:57:05,030
-and do the marshalling and unmarshalling arguments for you.
+and do the marshalling and unmarshalling arguments for you,
 
-967
+1077
 00:57:06,200 --> 00:57:09,320
-And and also how it goes.
+and and that how it goes.
 
-968
+1078
 00:57:09,650 --> 00:57:14,150
 Also the, so when you're doing it from the server to the client,
 
-969
+1079
 00:57:14,150 --> 00:57:15,860
 there's also another stub again?
 
-970
+1080
 00:57:16,190 --> 00:57:19,250
 You basically return back to the first stub.
 
-971
-00:57:19,700 --> 00:57:23,900
-So this stub makes a procedure call to majorly calls the procedure fn,
+1081
+00:57:19,700 --> 00:57:21,740
+So this stub makes a procedure call,
 
-972
+1082
+00:57:21,740 --> 00:57:23,900
+to make a calls the procedure fn,
+
+1083
 00:57:24,200 --> 00:57:26,300
 that procedure returns right into the stub,
 
-973
+1084
 00:57:26,300 --> 00:57:27,740
 because stub called it.
 
-974
+1085
 00:57:27,950 --> 00:57:29,870
 Oh, it's the same stub, that it goes in.
 
-975
+1086
 00:57:30,170 --> 00:57:30,830
 Exactly.
 
-976
+1087
 00:57:31,780 --> 00:57:32,410
 Got it.
 
-977
+1088
 00:57:33,060 --> 00:57:33,450
 Okay?
 
-978
+1089
 00:57:34,940 --> 00:57:39,920
-Okay, so, let me show you how this plays out inside of Go.
+Okay, so, let me show you how this plays out inside of Go,
 
-979
+1090
 00:57:43,320 --> 00:57:48,060
-And by showing you a very simple key-value server.
+and by showing you a very simple key-value server.
 
-980
+1091
 00:57:50,010 --> 00:57:50,760
 And you'll see,
 
-981
+1092
 00:57:50,760 --> 00:57:52,920
 it doesn't look exactly our procedure calls,
 
-982
+1093
 00:57:52,920 --> 00:57:54,270
 but it's pretty close.
 
-983
+1094
 00:57:54,920 --> 00:57:57,380
-So the typical thing is that
+So the typical thing is that,
 
-984
+1095
 00:57:57,380 --> 00:58:01,190
-you actually declare typical convention should be main goal
+you actually declare typical convention should be in Go
 
-985
+1096
 00:58:01,190 --> 00:58:06,530
-that you declare the argument structure
+that you declare the argument structure,
 
-986
+1097
 00:58:06,530 --> 00:58:08,570
 and so we're going to implement two procedures,
 
-987
+1098
 00:58:09,020 --> 00:58:09,800
 two remote procedures,
 
-988
+1099
 00:58:09,800 --> 00:58:11,210
-one is put and one is get
+one is put and one is get,
 
-989
-00:58:11,630 --> 00:58:16,160
-and put is basically put arguments is the arguments through the put and put replies to response,
+1100
+00:58:11,630 --> 00:58:13,760
+and put is basically put arguments is,
 
-990
-00:58:16,160 --> 00:58:22,400
-similar there's get arguments with their request where the arguments through the request, get procedure and the reply.
+1101
+00:58:13,760 --> 00:58:16,160
+the arguments through the put and put replies to response,
 
-991
+1102
+00:58:16,160 --> 00:58:18,680
+similar there's get arguments with request,
+
+1103
+00:58:18,680 --> 00:58:22,400
+where the arguments through the request get procedure and the reply.
+
+1104
 00:58:23,690 --> 00:58:25,310
 And so let me first look at the server,
 
-992
+1105
 00:58:25,340 --> 00:58:26,810
 so here are two functions,
 
-993
+1106
 00:58:26,900 --> 00:58:31,130
-you know actually the two function that we're going to be calling on the server.
+you know actually the two function that we're going to be calling on the server,
 
-994
+1107
 00:58:31,840 --> 00:58:34,540
 I think I'll skip down for that for a second.
 
-995
+1108
 00:58:35,370 --> 00:58:37,770
 So we actually.
 
-996
+1109
 00:58:41,220 --> 00:58:43,080
 Let me talk about it a little bit,
 
-997
+1110
 00:58:43,080 --> 00:58:44,550
 so this is the client side,
 
-998
+1111
 00:58:45,180 --> 00:58:47,100
-so the client calls a function get
+so the client calls a function get,
 
-999
-00:58:47,130 --> 00:58:52,440
-and what inside of get you know you know this function actually connects to the server
+1112
+00:58:47,130 --> 00:58:49,410
+and what inside of get,
 
-1000
+1113
+00:58:49,410 --> 00:58:52,440
+you know you know this function actually connects to the server,
+
+1114
 00:58:52,440 --> 00:58:53,850
 and see exactly what that means,
 
-1001
+1115
 00:58:54,330 --> 00:58:56,760
-it, it fills in the arguments
+it, it fills in the arguments,
 
-1002
-00:58:56,760 --> 00:58:59,730
-and allocates a response and then calls this procedure client
+1116
+00:58:56,760 --> 00:58:57,900
+and allocates a response,
 
-1003
-00:58:59,730 --> 00:59:02,580
-calls call you can think about this as a generic stub,
+1117
+00:58:57,900 --> 00:59:00,540
+and then calls this procedure client.Call call,
 
-1004
+1118
+00:59:00,570 --> 00:59:02,580
+you can think about this as a generic stub,
+
+1119
 00:59:02,940 --> 00:59:05,700
-that basically takes the method that needs to be called in server
+that basically takes the method that needs to be called in server,
 
-1005
+1120
 00:59:05,730 --> 00:59:07,140
-and the arguments in the reply,
+and the arguments and the reply,
 
-1006
+1121
 00:59:07,500 --> 00:59:09,000
-and so which has three arguments,
+and so Call has three arguments,
 
-1007
+1122
 00:59:09,180 --> 00:59:12,220
-the method, the argument in response.
+the method, the argument and response,
 
-1008
+1123
 00:59:13,200 --> 00:59:17,430
-And call internally will send marshal the arguments,
+and Call internally will send marshal the arguments,
 
-1009
+1124
 00:59:17,730 --> 00:59:20,940
-send the message to the server over the connection
+send the message to the server over the connection,
 
-1010
-00:59:21,180 --> 00:59:24,570
-and wait for the response reply when the reply comes in,
+1125
+00:59:21,180 --> 00:59:23,490
+and wait for the response reply,
 
-1011
+1126
+00:59:23,490 --> 00:59:24,570
+when the reply comes in,
+
+1127
 00:59:24,570 --> 00:59:27,330
-the reply structure will be filled in by the call stub
+the reply structure will be filled in by the Call stub,
 
-1012
+1128
 00:59:27,540 --> 00:59:28,740
-and then when that's done
+and then when that's done,
 
-1013
+1129
 00:59:28,740 --> 00:59:30,690
-then return after call call.
+then return at the Call call.
 
-1014
+1130
 00:59:32,240 --> 00:59:34,190
 And basically put looks exactly the same way.
 
-1015
+1131
 00:59:36,680 --> 00:59:37,850
 And so on the server side,
 
-1016
+1132
 00:59:38,210 --> 00:59:39,770
-you know let's see how that is implemented.
+you know let's see how that is implemented,
 
-1017
+1133
 00:59:40,360 --> 00:59:42,280
-The server has a key-value map,
+the server has a key-value map,
 
-1018
+1134
 00:59:42,280 --> 00:59:45,190
-this is nothing else than a regular Go map.
+this is nothing else than a regular Go map,
 
-1019
+1135
 00:59:45,700 --> 00:59:52,380
-And, let me see actually the key-value struct,
+and, let me see actually the key-value struct,
 
-1020
+1136
 00:59:55,450 --> 00:59:57,340
-declared somewhere.
+declared somewhere,
 
-1021
+1137
 00:59:58,930 --> 01:00:00,340
-Oh, sorry it's right above it,
+oh, sorry it's right above it.
 
-1022
+1138
 01:00:00,820 --> 01:00:02,740
-so there's a structure called KV,
+So there's a struct called KV,
 
-1023
+1139
 01:00:02,770 --> 01:00:05,230
-that actually has some mutex and a map in it
+that actually has mutex and a map in it,
 
-1024
+1140
 01:00:05,530 --> 01:00:08,260
-and the map is like we're going to do the put and get operations on.
+and the map is like, we're going to do the put and get operations on.
 
-1025
+1141
 01:00:10,320 --> 01:00:12,120
-And there's a little preamble
+And there's a little preamble,
 
-1026
+1142
 01:00:12,120 --> 01:00:15,330
 that you need to sort of write to setup a server,
 
-1027
+1143
 01:00:15,600 --> 01:00:16,710
 but here it is,
 
-1028
+1144
 01:00:16,980 --> 01:00:21,690
 you know you basically allocate a new server object,
 
-1029
+1145
 01:00:22,020 --> 01:00:27,330
-and then this is the key operation RPC register KV will,
+and then this is the key operation rpcs.Register(kv) will,
 
-1030
-01:00:27,360 --> 01:00:33,690
-register basically all the methods that are implemented on the KV struct with the RPC server.
+1146
+01:00:27,360 --> 01:00:29,760
+register basically all the methods,
 
-1031
+1147
+01:00:29,760 --> 01:00:33,690
+that are implemented on the KV struct with the RPC server,
+
+1148
 01:00:35,010 --> 01:00:42,360
-With one [twist], the methods only the capital named,
+with one twist, the methods only the capital named,
 
-1032
+1149
 01:00:43,200 --> 01:00:45,990
-methods with the capital will actually be recorded
+methods with the capital will actually be recorded,
 
-1033
+1150
 01:00:46,080 --> 01:00:51,300
 and so basically Go use capital names to indicate public methods,
 
-1034
+1151
 01:00:51,300 --> 01:00:56,790
 and a method with a small small caps is in private method,
 
-1035
+1152
 01:00:57,120 --> 01:01:02,550
 so only, basically RPC register exports only capitalized methods,
 
-1036
-01:01:02,820 --> 01:01:05,010
-for example, here's a method below, use a Get method,
+1153
+01:01:02,820 --> 01:01:04,140
+for example, here's a method below,
 
-1037
-01:01:05,430 --> 01:01:06,720
-it has a capital letter
+1154
+01:01:04,140 --> 01:01:06,720
+here's a Get method, it has a capital letter,
 
-1038
-01:01:07,020 --> 01:01:11,940
-and by calling register that method is not callable by applying to the connection the server.
+1155
+01:01:07,020 --> 01:01:09,030
+and by calling Register,
 
-1039
+1156
+01:01:09,030 --> 01:01:11,940
+that method is now callable by client to the connection the server.
+
+1157
 01:01:14,040 --> 01:01:15,480
 So the server internally,
 
-1040
+1158
 01:01:15,510 --> 01:01:19,260
 basically it creates a TCP connection,
 
-1041
-01:01:19,260 --> 01:01:25,170
-and waits on TCP connection to get a request for a new connection request for TCP connection,
+1159
+01:01:19,260 --> 01:01:21,000
+and waits on TCP connection
 
-1042
+1160
+01:01:21,000 --> 01:01:25,170
+to get a request or a new connection request for TCP connection,
+
+1161
 01:01:25,170 --> 01:01:29,880
-and then calls RPC ServeConn to serve that TCP connection.
+and then calls rpcs.ServeConn to serve that TCP connection,
 
-1043
+1162
 01:01:30,380 --> 01:01:34,220
-And basically every message that comes in over that you know connection,
+and basically every message that comes in over that you know connection,
 
-1044
+1163
 01:01:34,400 --> 01:01:36,680
 it will automatically find the right method,
 
-1045
+1164
 01:01:36,740 --> 01:01:38,780
-you know is associated with the message
+you know is associated with the message,
 
-1046
+1165
 01:01:38,960 --> 01:01:43,610
 and call that method with unmarshalled arguments and marshal reply.
 
-1047
+1166
 01:01:45,380 --> 01:01:47,240
 So, for example if the client calls Get,
 
-1048
+1167
 01:01:47,240 --> 01:01:51,290
-you know connects to it will call makes this connection into existence
+you know connects to it will call makes this connection into existence,
 
-1049
+1168
 01:01:51,650 --> 01:01:54,290
 and then if the client calls call with Get,
 
-1050
+1169
 01:01:54,470 --> 01:01:56,300
 then this Get function will be run.
 
-1051
+1170
 01:01:57,280 --> 01:01:58,750
 And as you can see the Get function,
 
-1052
+1171
 01:01:58,750 --> 01:01:59,530
 first thing it does,
 
-1053
+1172
 01:01:59,530 --> 01:02:00,670
 it actually takes a lock out,
 
-1054
+1173
 01:02:00,670 --> 01:02:04,870
-because multiple clients could be calling the server
+because multiple clients could be calling the server,
 
-1055
+1174
 01:02:04,870 --> 01:02:07,960
 and so there will be multiple goroutines running at the same time,
 
-1056
+1175
 01:02:07,990 --> 01:02:09,760
-perhaps invoking get and put.
+perhaps invoking Get and Put,
 
-1057
+1176
 01:02:10,580 --> 01:02:14,150
-And so they were manipulating the the map concurrently
+and so they were manipulating the the map concurrently,
 
-1058
-01:02:14,150 --> 01:02:18,710
-and so we need to make sure that you know those that is done in an atomic way,
+1177
+01:02:14,150 --> 01:02:15,320
+and so we need to make sure that,
 
-1059
+1178
+01:02:15,320 --> 01:02:18,710
+you know those that is done in an atomic way,
+
+1179
 01:02:19,240 --> 01:02:20,710
 so therefore we use locks.
 
-1060
+1180
 01:02:22,210 --> 01:02:25,870
 So the Get function looks at the key into the map,
 
-1061
+1181
 01:02:25,870 --> 01:02:29,080
-looks at the key in the map, returns basically the value.
+looks at the key in the map, returns basically the value,
 
-1062
+1182
 01:02:29,580 --> 01:02:31,830
-If there's no entry in the map,
+if there's no entry in the map,
 
-1063
+1183
 01:02:31,830 --> 01:02:34,020
 it will return ErrNoKey,
 
-1064
+1184
 01:02:34,020 --> 01:02:37,020
-otherwise it will return the appropriate value
+otherwise it will return the appropriate value,
 
-1065
+1185
 01:02:37,170 --> 01:02:37,710
 and that's it.
 
-1066
+1186
 01:02:38,490 --> 01:02:40,140
 And so on the server side,
 
-1067
+1187
 01:02:40,140 --> 01:02:41,730
 when these Get function returns,
 
-1068
+1188
 01:02:41,730 --> 01:02:44,010
 it will marshal its response,
 
-1069
+1189
 01:02:44,340 --> 01:02:45,930
 sends a response back to client,
 
-1070
-01:02:45,930 --> 01:02:49,830
-the client will set it unmarshal it actually return it to the caller.
+1190
+01:02:45,930 --> 01:02:48,270
+the client will set it unmarshal,
 
-1071
+1191
+01:02:48,270 --> 01:02:49,830
+it actually return it to the caller.
+
+1192
 01:02:52,880 --> 01:02:54,530
-Okay, so that makes sense,
+Okay, so that makes sense?
 
-1072
+1193
 01:02:54,560 --> 01:03:00,350
-so that's sort of a do a simple key-value server in action.
+So that's sort of do a simple key-value server in action.
 
-1073
-01:03:08,690 --> 01:03:11,720
-Okay, I want to make one more point which is an important point
+1194
+01:03:08,690 --> 01:03:10,460
+Okay, I want to make one more point,
 
-1074
-01:03:11,840 --> 01:03:17,040
-and in the end, what's important to think about is
+1195
+01:03:10,460 --> 01:03:11,720
+which is an important point,
 
-1075
+1196
+01:03:11,840 --> 01:03:14,270
+and in the end,
+
+1197
+01:03:15,150 --> 01:03:17,040
+what's important to think about is,
+
+1198
 01:03:17,040 --> 01:03:19,980
 what RPC semantics are under failures.
 
-1076
+1199
 01:03:31,600 --> 01:03:33,760
 So there are different types of semantics possible,
 
-1077
+1200
 01:03:34,460 --> 01:03:36,140
-something is called at least once,
+something is called at-least-once,
 
-1078
-01:03:37,800 --> 01:03:41,610
-this all has to do with what does the client do if the server fails,
+1201
+01:03:37,800 --> 01:03:39,150
+this all has to do with,
 
-1079
+1202
+01:03:39,150 --> 01:03:41,610
+what does the client do if the server fails.
+
+1203
 01:03:42,000 --> 01:03:45,960
-so let's say the client sends request, the server crashes.
+So let's say the client sends request, the server crashes,
 
-1080
+1204
 01:03:46,940 --> 01:03:51,230
-And, of course now at some point, client will timeout
+and, of course now at some point, client will timeout,
 
-1081
+1205
 01:03:51,260 --> 01:03:54,380
-and just doesn't know whether the operation actually happened or not happened.
+and it doesn't know whether the operation actually happened or not happened,
 
-1082
-01:03:55,420 --> 01:04:00,550
-And at least once RPC semantics means that the client will automatically retry
+1206
+01:03:55,420 --> 01:03:58,540
+and at-least-once RPC semantics means,
 
-1083
-01:04:00,580 --> 01:04:01,690
-and will keep going,
+1207
+01:03:58,540 --> 01:04:01,690
+that the client will automatically retry and will keep going,
 
-1084
+1208
 01:04:01,690 --> 01:04:03,850
 so it has executed at least once.
 
-1085
-01:04:06,020 --> 01:04:10,910
-The downside, of course at least once is that you know the same operation might be executed multiple times,
+1209
+01:04:06,020 --> 01:04:08,180
+The downside of course at-least-once is that,
 
-1086
+1210
+01:04:08,180 --> 01:04:10,910
+you know the same operation might be executed multiple times,
+
+1211
 01:04:10,940 --> 01:04:12,290
-so for example if you do a put,
+so for example, if you do a put,
 
-1087
+1212
 01:04:12,350 --> 01:04:14,780
 you know the put might be actually executed multiple times
 
-1088
+1213
 01:04:14,780 --> 01:04:16,250
-and at least one RPC system.
+at at-least-one RPC system.
 
-1089
+1214
 01:04:17,580 --> 01:04:19,800
 So that's not appropriate for many applications,
 
-1090
-01:04:20,130 --> 01:04:24,840
-so another type of semantics, that's common in RPC systems is at most once.
+1215
+01:04:20,130 --> 01:04:22,170
+so another type of semantics,
 
-1091
+1216
+01:04:22,170 --> 01:04:24,840
+that's common in RPC systems is at-most-once,
+
+1217
 01:04:27,830 --> 01:04:35,270
-So the corresponding server request actually executed either zero times or once,
+so the corresponding server request actually executed either zero times or once,
 
-1092
+1218
 01:04:35,270 --> 01:04:36,560
-but no more than once.
+but no more than once,
 
-1093
+1219
 01:04:37,210 --> 01:04:40,600
-And the way you know that is typically implemented by filtering duplicates,
+and the way you know that is typically implemented by filtering duplicates,
 
-1094
+1220
 01:04:40,720 --> 01:04:45,280
-you actually doing that in in later labs.
+you actually doing that in in later labs,
 
-1095
-01:04:46,280 --> 01:04:49,310
-That could could be the case that actually both requests actually come through,
+1221
+01:04:46,280 --> 01:04:47,480
+that could could be the case,
 
-1096
+1222
+01:04:47,480 --> 01:04:49,310
+that actually both requests actually come through,
+
+1223
 01:04:49,670 --> 01:04:52,550
-maybe the networks like temporary petition,
+maybe the networks like temporary partition,
 
-1097
+1224
 01:04:52,550 --> 01:04:53,810
-the server actually gets both request
+the server actually gets both request,
 
-1098
+1225
 01:04:53,810 --> 01:04:55,430
-and the server has to arrange that
+and the server has to arrange that,
 
-1099
+1226
 01:04:55,550 --> 01:04:59,690
 it detects a resend request and doesn't execute it twice.
 
-1100
-01:05:01,390 --> 01:05:05,280
-Now, of course ideally, you might actually want exactly once.
+1227
+01:05:01,390 --> 01:05:03,070
+Now, of course ideally,
 
-1101
+1228
+01:05:03,660 --> 01:05:05,280
+you might actually want exactly-once,
+
+1229
 01:05:06,060 --> 01:05:08,550
-Because that's actually what the normal procedure would be,
+because that's actually what the normal procedure would be,
 
-1102
+1230
 01:05:08,610 --> 01:05:12,690
-like if you call a procedure in your server in a normal sequential program
+like if you call a procedure in your server in a normal sequential program,
 
-1103
+1231
 01:05:12,690 --> 01:05:14,160
 execution exactly once,
 
-1104
+1232
 01:05:14,160 --> 01:05:16,800
-it's never possible to be at least once or at most once.
+it's never possible to be at-least-once or at-most-once.
 
-1105
+1233
 01:05:17,330 --> 01:05:19,400
-This turns out to be actually very hard to arrange.
+This turns out to be actually very hard to arrange,
 
-1106
+1234
 01:05:20,220 --> 01:05:25,350
-This requires you know basically have to maintain state and disk
+this requires you know basically have to maintain state on disk,
 
-1107
+1235
 01:05:25,350 --> 01:05:27,540
-and tend to be expensive
+and tend to be expensive,
 
-1108
+1236
 01:05:27,540 --> 01:05:31,230
-and in fact in practice very few RPC systems are exactly once,
+and in fact in practice very few RPC systems are exactly-once,
 
-1109
-01:05:31,500 --> 01:05:34,530
-although in the lab you're going to build actually one in lab 3,
+1237
+01:05:31,500 --> 01:05:32,610
+although in the lab,
 
-1110
+1238
+01:05:32,610 --> 01:05:34,530
+you're going to build actually one in lab 3,
+
+1239
 01:05:34,740 --> 01:05:38,010
-you're going to actually build an RPC system that's basically exactly once.
+you're going to actually build an RPC system that's basically exactly-once.
 
-1111
+1240
 01:05:38,890 --> 01:05:39,610
 Okay?
 
-1112
+1241
 01:05:40,160 --> 01:05:45,710
-In practice Go's RPC system is at most once,
+In practice, Go's RPC system is at most once,
 
-1113
+1242
 01:05:45,740 --> 01:05:46,940
-so if you do a call
+so if you do a call,
 
-1114
+1243
 01:05:47,090 --> 01:05:49,040
 and you do the call across TCP channel,
 
-1115
+1244
 01:05:49,040 --> 01:05:51,620
 the TCP channel will make sure that there are no duplicates,
 
-1116
+1245
 01:05:52,010 --> 01:05:58,280
 and so and and RPC system will either execute once or none at all,
 
-1117
+1246
 01:05:58,310 --> 01:06:00,590
-and then in the case and return an error.
+and then in the case and return an error,
 
-1118
+1247
 01:06:01,580 --> 01:06:03,890
-And then of course the application may retry,
+and then of course the application may retry,
 
-1119
-01:06:03,920 --> 01:06:08,810
-but you know it's the applications responsibility to deal with the problems of duplication and failed messages.
+1248
+01:06:03,920 --> 01:06:05,690
+but you know it's the applications responsibility,
 
-1120
+1249
+01:06:05,690 --> 01:06:08,810
+to deal with the problems of duplication and failed messages.
+
+1250
 01:06:10,700 --> 01:06:13,280
 Okay, so here's the sort of key point, correct,
 
-1121
-01:06:13,640 --> 01:06:20,720
-the fact that their failures basically makes you know RPCs not identical to procedure calls,
+1251
+01:06:13,640 --> 01:06:15,020
+the fact that their failures,
 
-1122
-01:06:21,200 --> 01:06:25,370
-so you know the goal is to make them look as similar as possible actually not identical
+1252
+01:06:15,200 --> 01:06:20,720
+basically makes you know RPCs not identical to procedure calls,
 
-1123
+1253
+01:06:21,200 --> 01:06:22,280
+so you know the goal is,
+
+1254
+01:06:22,280 --> 01:06:25,370
+to make them look as similar as possible, actually not identical,
+
+1255
 01:06:25,400 --> 01:06:31,910
 and really the thing that exposes the differences is failures or the server crashing.
 
-1124
+1256
 01:06:35,550 --> 01:06:39,270
-Any quick questions about this quick intro for RPC?
+Any questions about this quick intro for RPC?
 
-1125
+1257
 01:06:47,190 --> 01:06:49,740
 Okay, if not, then I want to stop the lecture here,
 
-1126
+1258
 01:06:49,740 --> 01:06:51,060
 so there are people that need to go
 
-1127
+1259
 01:06:51,060 --> 01:06:52,680
 or students need to go to the next class,
 
-1128
+1260
 01:06:52,680 --> 01:06:53,760
 you can go to the next class,
 
-1129
+1261
 01:06:53,760 --> 01:06:54,720
 I'll be hanging around,
 
-1130
-01:06:54,720 --> 01:06:59,720
-so if there's any more questions, I'll be happy to to answer them
+1262
+01:06:54,720 --> 01:06:56,190
+so if there's any more questions,
 
-1131
+1263
+01:06:56,190 --> 01:06:59,720
+I'll be happy to to answer them,
+
+1264
 01:06:59,870 --> 01:07:01,460
 and stick around for a little while.
 
-1132
+1265
 01:07:03,230 --> 01:07:05,810
 In the meantime, enjoy lab 1 and good luck with it.
 
