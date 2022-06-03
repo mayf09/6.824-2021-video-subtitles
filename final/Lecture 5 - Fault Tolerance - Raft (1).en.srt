@@ -1,6 +1,6 @@
 1
 00:00:00,530 --> 00:00:08,720
-So the topic for today is raft replication [] protocol,
+So the topic for today is raft replication protocol,
 
 2
 00:00:08,840 --> 00:00:10,850
@@ -8,5677 +8,6637 @@ we'll discuss it quite a bit of detail,
 
 3
 00:00:10,910 --> 00:00:13,700
-in fact we're going to spend multiple lectures on it
+in fact we're going to spend multiple lectures on it,
 
 4
-00:00:14,600 --> 00:00:22,430
-and one because it's one of the core elements of examples of distributed replication protocol.
+00:00:14,600 --> 00:00:15,140
+and one,
 
 5
-00:00:22,900 --> 00:00:31,120
-So, today been mostly focusing on you know the material that is necessary for labs 2a and 2b,
+00:00:15,140 --> 00:00:22,430
+because it's one of the core elements of examples of distributed replication protocol.
 
 6
-00:00:32,590 --> 00:00:36,700
-so the election of the leader as well as you know pushing the logs around
+00:00:22,900 --> 00:00:27,490
+So, today been mostly focusing on
 
 7
-00:00:37,120 --> 00:00:49,890
-and then next week, we're focusing more on 2c and 2d, mainly the snapshots and log compassion
+00:00:27,610 --> 00:00:31,120
+you know the material that is necessary for labs 2A and 2B,
 
 8
-00:00:49,890 --> 00:00:53,280
-and give us opportunity to just any other aspect of raft.
+00:00:32,590 --> 00:00:36,700
+so the election of the leader as well as you know pushing the logs around,
 
 9
-00:00:53,430 --> 00:00:57,270
-In fact we'll talk about raft one more time in the week after,
+00:00:37,120 --> 00:00:38,530
+and then next week,
 
 10
-00:00:58,250 --> 00:01:05,970
-we'll have a Q&A lecture on you know 2a and 2b
+00:00:42,710 --> 00:00:45,560
+we're focusing more on 2C and 2D,
 
 11
-00:01:05,970 --> 00:01:10,020
-and so talk about the actual solutions to the labs 2a 2b.
+00:00:45,560 --> 00:00:49,890
+namely the snapshots and log compassion,
 
 12
+00:00:49,890 --> 00:00:53,280
+you know give us opportunity to any other aspect of raft.
+
+13
+00:00:53,430 --> 00:00:57,270
+In fact, we'll talk about raft one more time in the week after,
+
+14
+00:00:58,250 --> 00:01:05,970
+we'll have a Q&A lecture on you know 2A and 2B,
+
+15
+00:01:05,970 --> 00:01:10,020
+and so talk about the actual solutions to the labs 2A 2B.
+
+16
 00:01:10,600 --> 00:01:11,230
 Okay?
 
-13
-00:01:11,590 --> 00:01:13,540
-That's the plan
-
-14
-00:01:13,540 --> 00:01:18,760
-and so I'm going to just dive in with with a starting point for today.
-
-15
-00:01:19,530 --> 00:01:23,430
-The place probably start is to observe that
-
-16
-00:01:23,430 --> 00:01:27,900
-in some of the previous case studies of replicated systems,
-
 17
+00:01:11,590 --> 00:01:13,540
+That's the plan.
+
+18
+00:01:13,540 --> 00:01:18,760
+And so I'm going to just dive in with with a starting point for today,
+
+19
+00:01:19,530 --> 00:01:22,410
+the place probably start is
+
+20
+00:01:22,410 --> 00:01:27,900
+to observe that in some of the previous case studies of replicated systems,
+
+21
 00:01:27,960 --> 00:01:29,370
 we've seen as sort of pattern,
 
-18
+22
 00:01:32,180 --> 00:01:38,030
-you know look at GFS, mapreduce, virtual FT,
+you know look at GFS, mapreduce, virtual VM-FT,
 
-19
+23
 00:01:38,360 --> 00:01:41,240
 they all have a single point of failure,
 
-20
+24
 00:01:41,240 --> 00:01:44,210
 so even though they're replicated systems,
 
-21
+25
 00:01:44,810 --> 00:01:47,090
 and they do replication for fault tolerance,
 
-22
-00:01:47,780 --> 00:01:50,900
-all of them actually have a single point of failure,
-
-23
-00:01:51,780 --> 00:01:55,260
-you know in case of and mapreduce was the coordinator,
-
-24
-00:01:58,520 --> 00:02:01,250
-in the case of GFS, you know the master,
-
-25
-00:02:02,670 --> 00:02:04,740
-that hands out the leases for example
-
 26
-00:02:05,220 --> 00:02:10,580
-and you know in the VM FT case,
+00:01:47,780 --> 00:01:50,900
+all of them actually has a single point of failure,
 
 27
-00:02:10,580 --> 00:02:12,890
-the storage server really the test-and-set server.
+00:01:51,780 --> 00:01:55,260
+you know in case of you know mapreduce was the coordinator,
 
 28
+00:01:58,520 --> 00:02:04,740
+in the case of GFS you know the master, that hands out the leases for example,
+
+29
+00:02:05,220 --> 00:02:12,890
+and you know in the VM-FT case, the storage server really the test-and-set server.
+
+30
 00:02:15,470 --> 00:02:21,020
 And the reason why as we be discussed in the previous lecture,
 
-29
+31
 00:02:21,020 --> 00:02:24,800
-the reasons that actually there are you know single machines instead of replicated machines
+the reason that actually there are you know single machine instead of replicated machines
 
-30
+32
 00:02:25,040 --> 00:02:27,830
 is to avoid you know split-brain syndrome.
 
-31
-00:02:36,850 --> 00:02:41,260
-And you know for many systems, in sort of one way in this sort of [bummer],
-
-32
-00:02:41,290 --> 00:02:45,190
-we're building a high performance, building a very fault tolerant systems
-
 33
+00:02:36,850 --> 00:02:38,650
+And you know for many systems,
+
+34
+00:02:38,650 --> 00:02:41,260
+in sort of one way [] sort of bummer,
+
+35
+00:02:41,290 --> 00:02:42,460
+we're building a high performance,
+
+36
+00:02:42,610 --> 00:02:45,190
+building a very fault tolerant systems,
+
+37
 00:02:45,490 --> 00:02:47,590
 and and all these designs actually,
 
-34
+38
 00:02:47,590 --> 00:02:50,080
 we do actually still have a single point of failure,
 
-35
+39
 00:02:50,080 --> 00:02:53,800
-even though where replication is used for many other aspects of the system designs
+even though where replication is used for many other aspects of the system designs,
 
-36
+40
 00:02:54,370 --> 00:02:57,610
 and for many of the systems that we talked so far about,
 
-37
+41
 00:02:57,820 --> 00:03:02,430
-you know this to avoid this split-brain center syndrome
+you know this to avoid this split-brain syndrome
 
-38
-00:03:02,430 --> 00:03:04,320
-and actually introduce a single point of failure
+42
+00:03:02,430 --> 00:03:06,030
+and actually to do a single point of failure or maintain a single point of failure,
 
-39
-00:03:04,320 --> 00:03:06,030
-or maintain a single point of failure,
-
-40
+43
 00:03:06,060 --> 00:03:08,460
 those are perfectly acceptable in many cases,
 
-41
-00:03:09,270 --> 00:03:13,440
-because in many of these cases like the store server,
+44
+00:03:09,270 --> 00:03:10,530
+because in many of these cases,
 
-42
-00:03:13,440 --> 00:03:15,360
-or you know the master goes down,
+45
+00:03:10,530 --> 00:03:15,360
+like the storage server, or you know the master goes down,
 
-43
+46
 00:03:15,510 --> 00:03:18,870
 you know hopefully it's only a single machine,
 
-44
-00:03:18,870 --> 00:03:22,590
-so the chance of going down to smaller than any out of the chunk servers
-
-45
-00:03:22,920 --> 00:03:26,910
-and you know probably there's somebody ready you know to be [beat] up,
-
-46
-00:03:26,910 --> 00:03:28,680
-you know indicates that the master goes down,
-
 47
-00:03:28,680 --> 00:03:31,440
-comes back up and we'll make sure there's only one master online.
+00:03:18,870 --> 00:03:22,590
+so the chance of going down is smaller than any at of the chunk servers,
 
 48
-00:03:32,240 --> 00:03:35,960
-So, you know many many circumstances is perfectly fine,
+00:03:22,920 --> 00:03:26,910
+and you know probably there's somebody ready you know to be [] up,
 
 49
+00:03:26,910 --> 00:03:29,310
+you know indicates that the master goes down, comes back up
+
+50
+00:03:29,310 --> 00:03:31,440
+and we'll make sure there's only one master online,
+
+51
+00:03:32,240 --> 00:03:35,960
+so, you know many many circumstances is perfectly fine,
+
+52
 00:03:35,990 --> 00:03:38,630
 you know will lead maybe to a very short downtime.
 
-50
-00:03:39,240 --> 00:03:42,000
-But you know some systems it's really nice,
-
-51
-00:03:42,000 --> 00:03:44,400
-it would be really nice actually, if this,
-
-52
-00:03:44,400 --> 00:03:46,530
-we didn't even have to have the single points of failure,
-
 53
-00:03:46,560 --> 00:03:53,550
-that maybe we could reduce downtime even further and increase uptown.
+00:03:39,240 --> 00:03:40,860
+But you know some systems,
 
 54
+00:03:40,860 --> 00:03:44,400
+it's really nice, it would be really nice, actually if this,
+
+55
+00:03:44,400 --> 00:03:46,530
+we didn't need have have the single points of failure,
+
+56
+00:03:46,560 --> 00:03:48,900
+that maybe we could reduce downtime even further
+
+57
+00:03:49,140 --> 00:03:53,550
+and increase uptown.
+
+58
 00:03:54,490 --> 00:03:58,660
 And so, and that's really were you know the protocols,
 
-55
+59
 00:03:58,660 --> 00:04:02,560
-so just kind of protocols that raft you know fits into come into play.
+so that kind of protocols that raft you know fits into come into play.
 
-56
+60
 00:04:02,800 --> 00:04:07,750
-But just before diving into talking about sort of the key ideas into protocol,
+But just before diving into talking about sort of the key ideas of the protocol,
 
-57
+61
 00:04:07,900 --> 00:04:13,150
 let's remind ourselves why the sort of single point of failure leads,
 
-58
-00:04:13,180 --> 00:04:22,960
-why actually replicating the sort of crucial single point of failures like test-and-set server can lead you to this split-brain problem.
+62
+00:04:13,180 --> 00:04:15,790
+why actually replicating,
 
-59
+63
+00:04:15,880 --> 00:04:19,630
+the sort of crucial single point of failures, like test-and-set server,
+
+64
+00:04:19,660 --> 00:04:22,960
+can lead you know to this split-brain problem.
+
+65
 00:04:23,680 --> 00:04:25,120
 And so you might think,
 
-60
+66
 00:04:25,120 --> 00:04:28,450
-why just replicate a single point of failure too.
+why just not replicate the single point of failure too.
 
-61
+67
 00:04:29,020 --> 00:04:31,090
-So let's try to do that
+So let's try to do that,
 
-62
+68
 00:04:31,090 --> 00:04:33,910
 and then we'll quickly see what the problem is,
 
-63
+69
 00:04:33,910 --> 00:04:36,190
-so let's replicate the testing server.
+so let's replicate the test-and-set server.
 
-64
+70
 00:04:48,140 --> 00:04:53,720
 And so, so let's do a simple straightforward case,
 
-65
+71
 00:04:53,720 --> 00:04:58,880
-we'll just have one replicated, one test server S1,
+we'll just have one replicated, one test-and-set server S1,
 
-66
+72
 00:04:59,000 --> 00:05:03,200
 and here we have S2, the other replicated test-and-set server,
 
-67
+73
 00:05:03,380 --> 00:05:05,900
-and user remind correct like test-and-set,
+and usally remind correct like test-and-set,
 
-68
+74
 00:05:07,080 --> 00:05:10,530
 it takes an argument new and returns the old value.
 
-69
+75
 00:05:12,750 --> 00:05:16,500
-And the goal is that if two clients at the same time call test-and-seth,
+And the goal is that if two clients at the same time call test-and-set,
 
-70
-00:05:16,530 --> 00:05:20,880
-you know one wins, you know get so basically falls back as the old value
+76
+00:05:16,530 --> 00:05:17,460
+you know one wins,
 
-71
+77
+00:05:17,460 --> 00:05:20,880
+you know gets basically false back as the old value,
+
+78
 00:05:20,880 --> 00:05:21,810
 and the other one will lose,
 
-72
+79
 00:05:21,810 --> 00:05:25,590
-because it will get true back as is the old value.
+because it will get true back as, as the old value.
 
-73
+80
 00:05:26,140 --> 00:05:28,420
 So let's see how this might work play out,
 
-74
+81
 00:05:28,420 --> 00:05:31,000
-so we have a client with calls test-and-set
+so we have a client that calls test-and-set,
 
-75
-00:05:31,360 --> 00:05:39,730
-and communicates with the first server, communicates to the second server,
+82
+00:05:31,360 --> 00:05:38,380
+and communicates with the first server,
 
-76
-00:05:42,500 --> 00:05:46,580
-and we don't really know, actually doesn't get a response for the second server,
+83
+00:05:38,380 --> 00:05:39,730
+communicates to the second server,
 
-77
+84
+00:05:42,500 --> 00:05:44,330
+and we don't really know,
+
+85
+00:05:44,330 --> 00:05:46,580
+actually does get a response for the second server.
+
+86
 00:05:48,300 --> 00:05:50,010
-so there's sort of two cases now right,
+So there's sort of two cases now, right,
 
-78
+87
 00:05:50,010 --> 00:05:53,520
 where you know why, if S2 doesn't response,
 
-79
+88
 00:05:53,520 --> 00:05:56,070
 you know there's two possible reasons why that could be the case.
 
-80
-00:05:56,520 --> 00:06:01,860
-So one case could be S2 didn't respond, because S2 failed.
+89
+00:05:56,520 --> 00:05:58,410
+So one case could be,
 
-81
-00:06:06,260 --> 00:06:10,070
-And in some cases that's really what we'd like to be doing is that,
+90
+00:05:58,710 --> 00:06:01,860
+S2 didn't respond, because S2 failed,
 
-82
+91
+00:06:06,260 --> 00:06:07,130
+and in some cases,
+
+92
+00:06:07,250 --> 00:06:10,070
+that's scenario really what we'd like to be doing is that,
+
+93
 00:06:10,070 --> 00:06:13,160
-at that point basically C1 just declares victory,
+at that point, basically C1 just declares victory,
 
-83
+94
 00:06:13,640 --> 00:06:18,560
 since nobody else can actually see observe value S2,
 
-84
+95
 00:06:18,770 --> 00:06:21,230
 you know we should be done, we could proceed.
 
-85
-00:06:22,820 --> 00:06:25,160
-But the problem is that, there's the second case,
+96
+00:06:22,820 --> 00:06:23,900
+But the problem is that,
 
-86
+97
+00:06:23,930 --> 00:06:25,160
+there's the second case,
+
+98
 00:06:25,780 --> 00:06:27,220
 in the second case is that,
 
-87
+99
 00:06:27,550 --> 00:06:29,080
-there's no repetition,
+there's network partition,
 
-88
+100
 00:06:31,780 --> 00:06:37,000
-there's a network partition between C1 and C and S2.
+there's a network partition between C1 and C and S2,
 
-89
+101
 00:06:38,100 --> 00:06:41,370
-So in that case really C1 cannot proceed,
+so in that case, really C1 cannot proceed,
 
-90
+102
 00:06:41,580 --> 00:06:44,700
 because there could be another client you know C2
 
-91
+103
 00:06:45,120 --> 00:06:47,040
 and actually communicating with S2,
 
-92
+104
 00:06:48,350 --> 00:06:51,590
 and it would be terrible, correct,
 
-93
+105
 00:06:51,590 --> 00:06:53,120
 C1 proceeds in this case,
 
-94
+106
 00:06:53,270 --> 00:06:55,490
 because you know it might update S1,
 
-95
+107
 00:06:55,790 --> 00:06:59,480
 get basically the false value, think it succeeds,
 
-96
+108
 00:06:59,600 --> 00:07:02,660
-at the same time, S2 communicates with S2,
+at the same time, S2, communicates with S2,
 
-97
+109
 00:07:02,780 --> 00:07:04,610
-and also succeeds during the test-and-set
+and also succeeds [during] the test-and-set,
 
-98
+110
 00:07:04,610 --> 00:07:08,180
 and so now we're violating our contract with the test-and-set.
 
-99
+111
 00:07:09,240 --> 00:07:10,980
 So this is this issue of this split-brain,
 
-100
+112
 00:07:10,980 --> 00:07:12,840
 when there's a network partition,
 
-101
-00:07:12,930 --> 00:07:18,360
-we can end up in a situation where both servers are up running
+113
+00:07:12,930 --> 00:07:14,520
+we can end up in a situation,
 
-102
+114
+00:07:14,520 --> 00:07:18,360
+where both servers are up running
+
+115
 00:07:18,360 --> 00:07:20,100
 and serve different subset of clients
 
-103
-00:07:20,100 --> 00:07:24,030
-and thereby violating the contract with the specification of the system that we're building.
+116
+00:07:20,100 --> 00:07:21,660
+and thereby violating the contract,
 
-104
+117
+00:07:21,660 --> 00:07:24,030
+the specification of the system that we're building.
+
+118
 00:07:24,660 --> 00:07:27,000
 And the real challenging part here is that,
 
-105
+119
 00:07:27,000 --> 00:07:30,450
 C1 just cannot tell the difference between these two situations,
 
-106
-00:07:31,420 --> 00:07:37,650
-it doesn't know, where it actually is,
+120
+00:07:31,420 --> 00:07:33,430
+it doesn't know,
 
-107
+121
+00:07:36,120 --> 00:07:37,650
+where it actually is,
+
+122
 00:07:38,520 --> 00:07:40,140
 you know S2 is not reachable,
 
-108
+123
 00:07:40,140 --> 00:07:42,180
 because it failed or because of the network partition,
 
-109
+124
 00:07:42,920 --> 00:07:45,080
-and so that's sort of the conundrum
+and so that's sort of the conundrum,
 
-110
+125
 00:07:45,080 --> 00:07:51,800
-and that that you know, that's behind all this the previous systems
+and that that you know, that's behind all this the previous systems,
 
-111
+126
 00:07:51,800 --> 00:07:53,900
 and why they used a single,
 
-112
+127
 00:07:54,230 --> 00:07:57,410
 why they don't replicate you know these crucial services,
 
-113
-00:07:57,470 --> 00:08:04,230
-that need to be up to avoid, to avoid split-brain syndrome.
+128
+00:07:57,470 --> 00:08:00,320
+that need to be up to avoid,
 
-114
+129
+00:08:01,560 --> 00:08:04,230
+to avoid split-brain syndrome.
+
+130
 00:08:04,880 --> 00:08:08,420
-So what can be done about this
+So what can be done about this,
 
-115
+131
 00:08:08,420 --> 00:08:10,430
 and really the key problem here,
 
-116
+132
 00:08:10,430 --> 00:08:12,620
 what do we do about network partition,
 
-117
+133
 00:08:13,140 --> 00:08:14,310
-how could we handle them,
+how could we handle them.
 
-118
+134
 00:08:14,700 --> 00:08:16,470
-and so there's a key idea
+And so there's a key idea,
 
-119
+135
 00:08:16,770 --> 00:08:23,970
 that sits in raft and in many other protocols that underlies,
 
-120
+136
 00:08:25,170 --> 00:08:29,610
-basically the solution or why those protocols, actually might succeed
+basically the solution or why those protocols actually might succeed.
 
-121
-00:08:29,880 --> 00:08:32,610
-and really what it is you know sort of in a nutshell,
+137
+00:08:29,880 --> 00:08:31,140
+And really what it is,
 
-122
-00:08:32,670 --> 00:08:34,110
-it is this majority rule.
+138
+00:08:31,170 --> 00:08:34,110
+you know sort of in a nutshell, it is this majority rule.
 
-123
-00:08:37,820 --> 00:08:41,720
-And you give the example in the context of test-and-set on your server,
+139
+00:08:37,820 --> 00:08:39,110
+And sort of give an example,
 
-124
-00:08:41,720 --> 00:08:46,550
-instead of actually running the server with two replicas which I conveniently did,
+140
+00:08:39,110 --> 00:08:41,720
+in the context of test-and-set you know server,
 
-125
+141
+00:08:41,720 --> 00:08:44,870
+instead of actually running the server with two replicas,
+
+142
+00:08:44,870 --> 00:08:46,550
+which I conveniently did,
+
+143
 00:08:46,820 --> 00:08:48,500
 I'm gonna run it with three,
 
-126
+144
 00:08:49,370 --> 00:08:52,820
-so I'm gonna have S1 S2 S3.
+so I'm gonna have S1 S2 S3,
 
-127
+145
 00:08:54,600 --> 00:08:56,310
-And the rule that was going to be the like
+and the rule that was going to be the like,
 
-128
+146
 00:08:56,310 --> 00:09:00,810
 server, a client can consider an operation succeeded,
 
-129
+147
 00:09:00,900 --> 00:09:03,510
 if at least can update a majority of the servers.
 
-130
+148
 00:09:04,250 --> 00:09:05,360
 So in this case,
 
-131
-00:09:05,360 --> 00:09:07,190
-you know we can send you know message to S1,
+149
+00:09:05,360 --> 00:09:08,090
+you know we can send you know message to S1, for doing test-and-set,
 
-132
-00:09:07,190 --> 00:09:10,280
-for doing test-and-set, we send message to S2, for doing test-and-set,
+150
+00:09:08,090 --> 00:09:10,280
+we send message to S2, for doing test-and-set,
 
-133
+151
 00:09:10,490 --> 00:09:14,030
 now we get back positive responses for both of them,
 
-134
+152
 00:09:14,150 --> 00:09:15,800
 like a false in both cases,
 
-135
+153
 00:09:15,860 --> 00:09:19,100
-then will return a false to actually application
+then we'll return a false to actually application,
 
-136
+154
 00:09:19,100 --> 00:09:21,500
 and application considered the test-and-set succeeded.
 
-137
+155
 00:09:23,000 --> 00:09:24,560
 And of course we do it also to the third one,
 
-138
-00:09:24,560 --> 00:09:29,060
-but the third one may actually, you know the message actually might not arrive or the server might be down,
+156
+00:09:24,560 --> 00:09:25,790
+but the third one may actually,
 
-139
+157
+00:09:25,790 --> 00:09:27,800
+you know the message actually might not arrive
+
+158
+00:09:27,800 --> 00:09:29,060
+or the server might be down,
+
+159
 00:09:29,060 --> 00:09:31,400
 we don't really know, actually we don't really care,
 
-140
+160
 00:09:32,080 --> 00:09:35,320
 which is because consider the following situation, scenario,
 
-141
+161
 00:09:35,320 --> 00:09:39,250
-where we have the second client are also trying to do test-and-set,
+where we have the second client that also trying to do test-and-set,
 
-142
+162
 00:09:39,960 --> 00:09:41,400
 well, to be able to succeed,
 
-143
+163
 00:09:41,400 --> 00:09:45,300
 it has to talk to the majority of the servers,
 
-144
+164
 00:09:45,870 --> 00:09:48,360
 so, whatever majority is going to talk to,
 
-145
+165
 00:09:48,510 --> 00:09:50,850
 it is going to include either S1 or S2,
 
-146
-00:09:51,620 --> 00:09:56,120
-and for S1 and S2 both of these operations actually have succeeded by S C1,
+166
+00:09:51,620 --> 00:09:53,060
+and for S1 and S2,
 
-147
+167
+00:09:53,060 --> 00:09:56,120
+both of these operations actually have succeeded by S C1,
+
+168
 00:09:56,780 --> 00:10:03,800
-so S2 proceed to always observe the result of C1's operation,
+so S2 or C2 always observe the result of C1's operation,
 
-148
+169
 00:10:03,830 --> 00:10:05,420
 because there's sort of an overlap.
 
-149
+170
 00:10:21,980 --> 00:10:24,560
-Yeah, and you'll see this basically raft,
+And you'll see this basically raft,
 
-150
+171
 00:10:24,710 --> 00:10:27,500
 this is exactly the same thing as roughly what's going on, right,
 
-151
-00:10:27,500 --> 00:10:36,980
-like when a leader accepts or enters the operation in a lot of the majority of the followers,
+172
+00:10:27,500 --> 00:10:29,750
+like when a leader accepts,
 
-152
+173
+00:10:29,930 --> 00:10:36,980
+or enters the operation in a lot of the majority of the followers,
+
+174
 00:10:37,280 --> 00:10:40,550
 then it means that a subsequent leader that's going to come out in the next term,
 
-153
+175
 00:10:40,820 --> 00:10:45,410
-you know will also try to acquire majority to get voted as leader
+you know will also try to acquire majority to get voted as leader,
 
-154
+176
 00:10:45,500 --> 00:10:46,970
 and as part of that voting,
 
-155
-00:10:47,030 --> 00:10:51,980
-there's going to be one server or one follower that actually has seen the last operation,
+177
+00:10:47,030 --> 00:10:49,670
+there's going to be one server or one follower,
 
-156
+178
+00:10:49,700 --> 00:10:51,980
+that actually has seen the last operation,
+
+179
 00:10:52,160 --> 00:10:55,040
 performed by the last leader.
 
-157
-00:10:55,890 --> 00:11:03,450
-So that is going to basically be able to building stone on on which we can build the fault tolerance services,
+180
+00:10:55,890 --> 00:10:58,320
+So that is going to basically be able to building stone
 
-158
-00:11:03,510 --> 00:11:06,180
-that can handle network partitions in
+181
+00:10:58,320 --> 00:11:03,450
+on on which we can build the fault tolerance services,
 
-159
-00:11:06,330 --> 00:11:12,020
-and failures of servers while still achieving strong consistency.
+182
+00:11:03,510 --> 00:11:05,310
+that can handle network partitions
 
-160
+183
+00:11:05,460 --> 00:11:09,420
+in and failures of servers,
+
+184
+00:11:10,040 --> 00:11:12,020
+while still achieving strong consistency.
+
+185
 00:11:13,130 --> 00:11:17,510
 Another way to think about this majority business is that,
 
-161
+186
 00:11:17,780 --> 00:11:19,610
 if the network partitions,
 
-162
+187
 00:11:20,330 --> 00:11:25,040
 there can be only one partition that has majority,
 
-163
+188
 00:11:25,310 --> 00:11:27,680
 there can be no other partition that has majority
 
-164
+189
 00:11:28,130 --> 00:11:33,320
 and so only the partition that actually has the majority can actually proceed.
 
-165
+190
 00:11:35,070 --> 00:11:36,360
 Another way of saying that,
 
-166
+191
 00:11:36,360 --> 00:11:39,090
 in another implication of that is,
 
-167
+192
 00:11:39,300 --> 00:11:40,350
 it could also be the case,
 
-168
-00:11:40,350 --> 00:11:44,700
-there's multiple partitions and there's no majority anywhere
+193
+00:11:40,350 --> 00:11:42,840
+there's multiple partitions
 
-169
+194
+00:11:42,900 --> 00:11:44,700
+and there's no majority anywhere,
+
+195
 00:11:44,760 --> 00:11:46,110
 and in that particular case,
 
-170
-00:11:46,110 --> 00:11:52,170
-you know the system can just not proceed and the clients talking to this,
+196
+00:11:46,110 --> 00:11:48,450
+you know the system can just not proceed
 
-171
-00:11:52,170 --> 00:11:55,110
-we have to wait until the network is healed enough,
+197
+00:11:48,660 --> 00:11:53,070
+and the clients talking to it basically have to wait
 
-172
-00:11:55,110 --> 00:12:00,090
-that at least there's one, there's going to be at least one partition with majority of services.
+198
+00:11:53,100 --> 00:11:55,110
+until the network is healed enough,
 
-173
+199
+00:11:55,110 --> 00:11:56,400
+that at least there's one,
+
+200
+00:11:56,580 --> 00:12:00,090
+there's going to be at least one partition with majority of services.
+
+201
 00:12:04,010 --> 00:12:07,490
 The another sort of a quick observation here is that,
 
-174
+202
 00:12:07,790 --> 00:12:10,430
 of course you may want to use this particular scheme,
 
-175
+203
 00:12:10,430 --> 00:12:11,930
 that I just described three servers,
 
-176
+204
 00:12:11,930 --> 00:12:14,570
 only tolerate one server going down, correct,
 
-177
-00:12:14,570 --> 00:12:18,110
-the two servers going down, nobody can actually obtain majority
+205
+00:12:14,570 --> 00:12:15,740
+the two servers going down,
 
-178
-00:12:18,110 --> 00:12:22,730
-and so therefore nobody can actually or no client can actually get the operation through,
+206
+00:12:15,740 --> 00:12:18,110
+nobody can actually obtain majority,
 
-179
+207
+00:12:18,110 --> 00:12:19,700
+and so therefore nobody can actually
+
+208
+00:12:19,700 --> 00:12:22,730
+or no client can actually get the operation through,
+
+209
 00:12:23,630 --> 00:12:25,580
 clearly it's easy to extend this idea,
 
-180
+210
 00:12:25,640 --> 00:12:29,930
 by what's typically called into 2f+1 replication.
 
-181
+211
 00:12:30,500 --> 00:12:33,920
-So if you want to tolerate f faults instead of one,
+So if you want to tolerate f faults instead of 1,
 
-182
+212
 00:12:34,160 --> 00:12:36,830
-you need two plus f one plus server or server,
+you need 2f+1 server or server,
 
-183
+213
 00:12:36,830 --> 00:12:40,610
-so that at least you have always a majority majority if f fails.
+so that at least you have always majority majority if f fails.
 
-184
+214
 00:12:41,380 --> 00:12:43,780
 And so in case you know here f is 1
 
-185
+215
 00:12:43,780 --> 00:12:45,190
 and so we're running the 3 servers,
 
-186
+216
 00:12:45,460 --> 00:12:48,550
-you know want f to be 2, you have 5 servers, etc etc,
+you want f to be 2, you have 5 servers, etc etc,
 
-187
+217
 00:12:48,670 --> 00:12:50,710
 you want f to be 3, you have 7 servers.
 
-188
+218
 00:12:51,700 --> 00:12:52,420
 Okay?
 
-189
+219
 00:12:53,090 --> 00:12:56,840
-One other thing, this may be important to point out
+One other thing, this may be important to point out,
 
-190
+220
 00:12:56,840 --> 00:12:58,310
-and I came up a lot in the questions
+and I came up a lot in the questions,
 
-191
+221
 00:12:58,490 --> 00:13:00,170
-and what is actually the majority
+and what is actually the majority,
 
-192
+222
 00:13:00,650 --> 00:13:06,080
 and the majority is the majority of all the services that are there,
 
-193
+223
 00:13:06,110 --> 00:13:08,810
-both upwards and downwards.
+both up ones and down ones.
 
-194
+224
 00:13:09,260 --> 00:13:10,640
 And so when you take majority,
 
-195
+225
 00:13:10,640 --> 00:13:12,050
 you don't take the majority of the 2,
 
-196
+226
 00:13:12,050 --> 00:13:13,010
 if there are only 2 alive,
 
-197
+227
 00:13:13,010 --> 00:13:15,230
 you take the majority of all the servers in the system.
 
-198
+228
 00:13:20,060 --> 00:13:23,810
-Any questions about this sort of key idea or.
+Any questions about this sort of key idea of?
 
-199
+229
 00:13:23,960 --> 00:13:26,720
 Could there be an even number of servers,
 
-200
-00:13:26,720 --> 00:13:30,020
-like if you have 4 servers with the majority, then be three.
+230
+00:13:26,720 --> 00:13:28,910
+like if you have 4 servers with the majority,
 
-201
-00:13:30,260 --> 00:13:35,720
-If you will see that in a couple cases, correct, in the graph,
+231
+00:13:28,910 --> 00:13:30,020
+than be 3.
 
-202
-00:13:35,720 --> 00:13:40,220
-that you know if you know the number of servers is reduced from seven to six and one is down
+232
+00:13:30,260 --> 00:13:32,990
+If you will see that in a couple cases, correct,
 
-203
+233
+00:13:32,990 --> 00:13:35,720
+in the graph,
+
+234
+00:13:35,720 --> 00:13:37,610
+that you know if you know the number of servers
+
+235
+00:13:37,610 --> 00:13:40,220
+is reduced from 7 to 6 and 1 is down
+
+236
 00:13:40,220 --> 00:13:41,240
 and you still want to proceed,
 
-204
-00:13:41,680 --> 00:13:45,310
-you need a majority which you still need enough 4 server to actually proceed.
+237
+00:13:41,680 --> 00:13:42,490
+you need a majority,
 
-205
+238
+00:13:42,490 --> 00:13:45,310
+which you still need you know 4 server to actually proceed.
+
+239
 00:13:47,010 --> 00:13:48,360
 But if you can get 4 servers,
 
-206
+240
 00:13:48,360 --> 00:13:49,410
 then you can keep going.
 
-207
+241
 00:13:54,660 --> 00:13:56,100
 Okay.
 
-208
+242
 00:13:57,710 --> 00:14:00,350
 So I also have a question about the majority,
 
-209
+243
 00:14:00,410 --> 00:14:03,740
 so does the majority consider the server itself,
 
-210
+244
 00:14:03,800 --> 00:14:07,730
-so supposing raft does like the server itself considering this.
+so supposing raft does like the server itself considering this?
 
-211
+245
 00:14:07,970 --> 00:14:09,290
 Yeah, it's part of it,
 
-212
+246
 00:14:09,290 --> 00:14:11,780
 so like you know often as we've seen raft, correct,
 
-213
+247
 00:14:11,780 --> 00:14:14,120
 the leader vote immediately vote for itself,
 
-214
+248
 00:14:14,670 --> 00:14:16,590
-or the candidate vote for itself
+or the candidate vote for itself,
 
-215
-00:14:16,590 --> 00:14:19,380
-and in the leader when it depends you know its own log,
+249
+00:14:16,590 --> 00:14:17,670
+and in the leader,
 
-216
+250
+00:14:17,670 --> 00:14:19,380
+when it appends you know its own log,
+
+251
 00:14:19,380 --> 00:14:20,490
 it counts as one,
 
-217
+252
 00:14:21,280 --> 00:14:22,540
 so it's part of it.
 
-218
-00:14:28,820 --> 00:14:44,280
-Okay, so, there's quite a number of protocols using this idea, and sometimes these ideas referred to as quorum or quorum protocols,
+253
+00:14:28,820 --> 00:14:31,890
+Okay, so,
 
-219
-00:14:50,120 --> 00:14:54,170
-pretty obvious reason, and there sort of two,
+254
+00:14:32,420 --> 00:14:38,840
+there's quite a number of protocols using this idea,
 
-220
-00:14:54,980 --> 00:14:59,000
-the state of [yard] for a long time until the early 90s or late 80s,
+255
+00:14:39,840 --> 00:14:44,280
+and sometimes these ideas referred to as quorum or quorum protocols,
 
-221
+256
+00:14:50,120 --> 00:14:52,280
+pretty obvious reason,
+
+257
+00:14:52,550 --> 00:14:54,170
+and there sort of two,
+
+258
+00:14:54,980 --> 00:14:56,450
+the state of [] for a long time
+
+259
+00:14:56,450 --> 00:14:59,000
+until the early 90s or late 80s,
+
+260
 00:14:59,120 --> 00:15:00,800
 was there's basically no protocol,
 
-222
+261
 00:15:01,070 --> 00:15:05,060
 so basically we're always in the situation of this single point of failure.
 
-223
+262
 00:15:05,650 --> 00:15:07,210
 And then in the early 90s,
 
-224
+263
 00:15:07,210 --> 00:15:09,400
-there were two protocols came came,
+there were two protocols come came,
 
-225
+264
 00:15:10,350 --> 00:15:12,210
 were invented roughly at the same time,
 
-226
+265
 00:15:12,240 --> 00:15:13,230
-one is called paxos,
+one is called Paxos,
 
-227
+266
 00:15:13,230 --> 00:15:14,910
 which is mentioned in the paper quite a bit,
 
-228
+267
 00:15:15,060 --> 00:15:18,630
 and the other one is called View-Stamped replication,
 
-229
+268
 00:15:23,840 --> 00:15:25,010
-sometimes called VR
+sometimes called VR,
 
-230
+269
 00:15:25,490 --> 00:15:28,310
-and these were these were again run around 1990.
+and basically these were invented around around 1990.
 
-231
+270
 00:15:29,580 --> 00:15:33,930
 They didn't actually get much attention at that point in time,
 
-232
-00:15:34,110 --> 00:15:40,740
-because people didn't really have pressing need to reveal to sort of completely automatic and fault tolerant systems.
+271
+00:15:34,110 --> 00:15:36,510
+because people didn't really have pressing need
 
-233
+272
+00:15:36,510 --> 00:15:40,740
+to [] to sort of completely automatic and fault tolerant systems.
+
+273
 00:15:41,240 --> 00:15:43,850
 But that changed in the last 15 years,
 
-234
-00:15:43,850 --> 00:15:47,210
-over the last 15 years with much use of these protocols.
+274
+00:15:43,850 --> 00:15:45,470
+over the last 15 years,
 
-235
+275
+00:15:45,500 --> 00:15:47,210
+with much use of these protocols.
+
+276
 00:15:56,690 --> 00:16:00,260
-And in fact interesting to observe, correct,
+And in fact sort of interesting to observe, correct,
 
-236
+277
 00:16:00,260 --> 00:16:03,200
 that in the last 15 years.
 
-237
+278
 00:16:05,800 --> 00:16:09,250
 And that's basically sort of 15 years after these protocols were invented,
 
-238
+279
 00:16:09,430 --> 00:16:13,150
-you know so basically they sat on the table or sit on the shelf for 15 years
+you know so basically they sat on the table or sat on the shelf for 15 years
 
-239
+280
 00:16:13,150 --> 00:16:15,250
 until people actually have a real use case for that.
 
-240
+281
 00:16:16,020 --> 00:16:22,140
-The protocol that we're going to be mostly we're gonna be implementing in the lab
+The protocol that we're going to be mostly we're gonna be implementing in the lab,
 
-241
+282
 00:16:22,140 --> 00:16:23,520
-and we're going to discuss in the lecture
+and we're going to discuss in the lecture,
 
-242
-00:16:23,520 --> 00:16:29,370
-and which the topic of the paper is falls in this [] protocol in this called raft.
+283
+00:16:23,520 --> 00:16:25,020
+and which the topic of the paper
 
-243
-00:16:30,940 --> 00:16:38,230
-And it was I think which came about or was written up in 2014 the papers from 2014,
+284
+00:16:25,140 --> 00:16:29,370
+is falls in this [] protocol in this called raft.
 
-244
+285
+00:16:30,940 --> 00:16:36,100
+And it was I think which came about or was written up in 2014,
+
+286
+00:16:36,100 --> 00:16:38,230
+the papers from 2014,
+
+287
 00:16:38,230 --> 00:16:40,600
 and this is one of the more complete descriptions,
 
-245
+288
 00:16:40,840 --> 00:16:42,370
-you know it touches on a lot of different aspects
+you know it touches on a lot of different aspects,
 
-246
+289
 00:16:42,370 --> 00:16:45,430
-that you're gonna be able to complete replicated state machine
+that you're gonna be build complete replicated state machine,
 
-247
-00:16:45,430 --> 00:16:48,220
-and explains those clearly that's one of the reasons
+290
+00:16:45,430 --> 00:16:47,110
+and explains those clearly,
 
-248
-00:16:48,220 --> 00:16:50,140
-why we're using it for the labs
+291
+00:16:47,110 --> 00:16:50,140
+that's one of the reasons why we're using it for the labs,
 
-249
+292
 00:16:50,140 --> 00:16:51,880
 and you know for this particular lecture.
 
-250
+293
 00:16:55,940 --> 00:17:00,410
 Any questions about the history here around protocols,
 
-251
+294
 00:17:03,210 --> 00:17:04,740
 before I dive into raft.
 
-252
+295
 00:17:11,350 --> 00:17:18,180
 Okay, so before actually diving into raft,
 
-253
-00:17:18,180 --> 00:17:23,250
-let me first talk a little bit about how you one would use raft to build a replicated state machine,
+296
+00:17:18,180 --> 00:17:19,740
+let me first talk a little bit about
 
-254
+297
+00:17:19,740 --> 00:17:23,250
+how you one would use raft to build a replicated state machine,
+
+298
 00:17:24,320 --> 00:17:26,390
-because that's at the ends our end goal.
+because that's at the ends our end goal,
 
-255
+299
 00:17:27,540 --> 00:17:32,850
-And it will help reasoning about what raft that should be doing for us.
+and it will help reasoning about what raft that should be doing for us.
 
-256
+300
 00:17:33,510 --> 00:17:36,720
-And so the basic way you would use raft
+And so the basic way you would use raft,
 
-257
+301
 00:17:36,720 --> 00:17:38,460
 and we'll actually do this in lab 3.
 
-258
+302
 00:17:38,790 --> 00:17:41,700
 Let's say you have a server,
 
-259
+303
 00:17:43,680 --> 00:17:46,530
-and raft is basically nothing else than a library
+and raft is basically nothing else than a library,
 
-260
+304
 00:17:46,980 --> 00:17:50,400
-and so in our setting is going to Go package
+and so in our setting is going to Go package,
 
-261
-00:17:50,400 --> 00:17:55,320
-and you know you can write a replicated state machine by basically importing that package,
+305
+00:17:50,400 --> 00:17:53,400
+and you know you can write a replicated state machine
 
-262
+306
+00:17:53,400 --> 00:17:55,320
+by basically importing that package,
+
+307
 00:17:55,350 --> 00:17:57,000
 so here's we got,
 
-263
+308
 00:17:57,180 --> 00:18:00,300
 you know here's a raft at the bottom,
 
-264
+309
 00:18:02,860 --> 00:18:07,300
-and you know you build a server using raft
+and you know you build a server using raft,
 
-265
-00:18:07,450 --> 00:18:12,950
-and so for example in lab 3, we're going to build a key-value server using raft,
+310
+00:18:07,450 --> 00:18:09,790
+and so for example in lab 3,
 
-266
+311
+00:18:09,790 --> 00:18:12,950
+we're going to build a key-value server using raft,
+
+312
 00:18:14,520 --> 00:18:20,210
 and clients you know talk you know to the key-value server,
 
-267
+313
 00:18:23,760 --> 00:18:26,880
 and you know it's a bit you know put and get operations,
 
-268
-00:18:29,180 --> 00:18:33,830
-and the key-value servers when it receives one of these put and get operations,
+314
+00:18:29,180 --> 00:18:30,980
+and the key-value servers,
 
-269
+315
+00:18:30,980 --> 00:18:33,830
+when it receives one of these put and get operations,
+
+316
 00:18:34,130 --> 00:18:35,840
 it basically hands it off to raft,
 
-270
+317
 00:18:36,840 --> 00:18:39,600
 and so it basically puts the raft
 
-271
-00:18:39,600 --> 00:18:43,740
-and actually sticks it in a, what we'll see much more detail,
+318
+00:18:39,600 --> 00:18:40,920
+and actually sticks it in a,
 
-272
+319
+00:18:40,950 --> 00:18:43,740
+what we'll see much more detail,
+
+320
 00:18:43,740 --> 00:18:44,940
 it will put it in the log,
 
-273
+321
 00:18:46,050 --> 00:18:47,670
 actually draw this slightly differently,
 
-274
+322
 00:18:48,930 --> 00:18:52,260
 so appends it to the log,
 
-275
+323
 00:18:54,750 --> 00:18:57,150
 it appends to the end of the log,
 
-276
+324
 00:18:57,790 --> 00:19:00,670
 and then raft internally is going to talk to other servers
 
-277
+325
 00:19:00,670 --> 00:19:02,260
 to basically replicate that log.
 
-278
+326
 00:19:03,060 --> 00:19:05,430
 And so here are some other servers,
 
-279
+327
 00:19:05,850 --> 00:19:08,070
 they basically structured to exactly the same way,
 
-280
+328
 00:19:08,070 --> 00:19:10,080
 they have a raft library component,
 
-281
+329
 00:19:11,180 --> 00:19:12,530
 and the key-value server,
 
-282
+330
 00:19:13,370 --> 00:19:15,830
 like many other replicated state machines we've ever seen,
 
-283
+331
 00:19:16,640 --> 00:19:20,800
-you know they're identical key-value server
+you know they're identical key-value server,
 
-284
+332
 00:19:21,130 --> 00:19:22,720
 and we're gonna play the same game,
 
-285
-00:19:22,720 --> 00:19:31,570
-as I know, the other previous replicated state machines machine were basically feeding operations to the key-value servers in the same order everywhere
+333
+00:19:22,720 --> 00:19:25,420
+as I know, the other previous replicated state machines machine
 
-286
-00:19:31,780 --> 00:19:36,700
-and as a result you know the keys replicates all applied operations in exactly the same order,
+334
+00:19:25,420 --> 00:19:28,450
+were basically feeding operations to the key-value servers
 
-287
+335
+00:19:28,450 --> 00:19:31,570
+in the same order everywhere,
+
+336
+00:19:31,780 --> 00:19:32,620
+and as a result,
+
+337
+00:19:32,620 --> 00:19:36,700
+you know the keys replicates all applied operations in exactly the same order,
+
+338
 00:19:36,730 --> 00:19:41,530
 we should see the same key-value stores being built, right,
 
-288
+339
 00:19:41,530 --> 00:19:44,110
 so we have a key-value store here,
 
-289
+340
 00:19:44,110 --> 00:19:46,510
 whatever key 20 has some value,
 
-290
-00:19:46,660 --> 00:19:51,310
-we're applying updates to this in a table exactly the same order and all replicas,
+341
+00:19:46,660 --> 00:19:48,790
+we're applying updates to this in a table
 
-291
+342
+00:19:48,790 --> 00:19:51,310
+exactly the same order and all replicas,
+
+343
 00:19:51,490 --> 00:19:53,170
 things should be should be good,
 
-292
+344
 00:19:53,200 --> 00:19:54,940
 we're gonna have identical replicas.
 
-293
-00:19:56,070 --> 00:20:00,180
-So the way you raft instructed is that one of the replica is the leader,
+345
+00:19:56,070 --> 00:19:58,500
+So the way you know raft instructed is that
 
-294
+346
+00:19:58,500 --> 00:20:00,180
+one of the replica is the leader,
+
+347
 00:20:00,210 --> 00:20:02,580
 so let me this for convenience,
 
-295
+348
 00:20:02,580 --> 00:20:04,770
-you know that's going to be the first one on this side
+you know that's going to be the first one on this side,
 
-296
+349
 00:20:05,010 --> 00:20:07,380
 and actually the clients do talk to the leader,
 
-297
+350
 00:20:08,100 --> 00:20:12,630
 and then, what happens next is that,
 
-298
+351
 00:20:12,630 --> 00:20:16,500
 the client talks to one of the leader,
 
-299
+352
 00:20:16,500 --> 00:20:18,660
 the leader kv server kv server,
 
-300
+353
 00:20:18,840 --> 00:20:23,880
-appends a log entry to the raft log of the leader
+appends a log entry to the raft log of the leader,
 
-301
+354
 00:20:24,000 --> 00:20:29,430
 and then you know basically communicates with the other raft libraries,
 
-302
+355
 00:20:29,850 --> 00:20:31,860
 and there's raft libraries do exactly the same thing,
 
-303
-00:20:31,860 --> 00:20:37,480
-basically they append you know the operation to the log, to their logs,
+356
+00:20:31,860 --> 00:20:35,100
+basically they append you know the operation to the log,
 
-304
+357
+00:20:36,340 --> 00:20:37,480
+to their logs,
+
+358
 00:20:39,840 --> 00:20:44,360
 and send a response back you know to the leader.
 
-305
-00:20:46,030 --> 00:20:51,340
-And you know of course you know all these state is stored you know the log
+359
+00:20:46,030 --> 00:20:50,290
+And you know of course you know all these state is stored,
 
-306
-00:20:51,370 --> 00:20:53,080
-and some other state stored on disk,
+360
+00:20:50,650 --> 00:20:53,080
+you know the log and some other state stored on disk,
 
-307
+361
 00:20:53,080 --> 00:20:55,150
 so that if any one of them fails,
 
-308
-00:20:55,450 --> 00:20:58,750
-they at least have the last part of their log,
+362
+00:20:55,450 --> 00:21:00,070
+they at least have the last part of their log still available
 
-309
-00:20:58,750 --> 00:21:01,960
-still available and can build from there.
+363
+00:21:00,190 --> 00:21:01,960
+and can build from there.
 
-310
+364
 00:21:02,930 --> 00:21:06,710
 So once basically and we'll talk a little bit more in detail,
 
-311
+365
 00:21:06,710 --> 00:21:11,810
 but once the entry where the log entries replicated on 3 servers,
 
-312
+366
 00:21:11,900 --> 00:21:16,310
 then they can actually be delivered in order to the key-value server.
 
-313
-00:21:18,280 --> 00:21:22,150
-So every committed operation, there every log is an index,
+367
+00:21:18,280 --> 00:21:20,710
+So every committed operation,
 
-314
+368
+00:21:20,710 --> 00:21:22,150
+there every log is an index,
+
+369
 00:21:22,150 --> 00:21:27,430
-wherever operation index 0 or actually 1 2 3 4 whatever in order
+wherever operation index 0 or actually 1 2 3 4 whatever in order,
 
-315
+370
 00:21:27,430 --> 00:21:29,950
 and they're going to be delivered in order to key-value servers,
 
-316
+371
 00:21:29,950 --> 00:21:30,910
 once an operation commited,
 
-317
+372
 00:21:30,910 --> 00:21:33,820
 it's going to be delivered to the key-value server,
 
-318
+373
 00:21:33,850 --> 00:21:36,070
 the key-value server performs the operation,
 
-319
+374
 00:21:36,130 --> 00:21:40,060
-maybe updates you know the key-value table
+maybe updates you know the key-value table,
 
-320
+375
 00:21:40,180 --> 00:21:43,750
 and then since actually the leader alone sends a response back to the client.
 
-321
+376
 00:21:44,790 --> 00:21:48,180
 So that's sort of roughly the sequence of events that happens,
 
-322
+377
 00:21:48,180 --> 00:21:50,310
 so client sends request to the leader,
 
-323
+378
 00:21:50,340 --> 00:21:52,230
-leader put in [] [] raft,
+leader put in [] raft,
 
-324
+379
 00:21:52,230 --> 00:21:55,950
 raft you know chit chats with the other servers,
 
-325
+380
 00:21:55,950 --> 00:21:59,430
 once you know it's replicated enough machines,
 
-326
+381
 00:21:59,550 --> 00:22:02,280
-then you know the it's considered to be committed
+then you know the it's considered to be committed,
 
-327
+382
 00:22:02,550 --> 00:22:05,790
-and we'll talk a little bit more precisely what commit means
+and we'll talk a little bit more precisely what commit means,
 
-328
+383
 00:22:05,970 --> 00:22:09,600
 and then an committed operation is delivered to the key-value servers,
 
-329
+384
 00:22:09,960 --> 00:22:13,890
-and then they execute the operation and respond to the client
+and then they execute the operation and respond to the client,
 
-330
+385
 00:22:13,890 --> 00:22:15,180
 leader response to the client.
 
-331
+386
 00:22:17,390 --> 00:22:19,580
 So what happens on the failure,
 
-332
+387
 00:22:24,300 --> 00:22:29,390
 failure, the new leader is elected,
 
-333
+388
 00:22:31,470 --> 00:22:33,510
-and it will take over the role of the old leader
+and it will take over the role of the old leader,
 
-334
+389
 00:22:34,050 --> 00:22:35,880
 and so for example like in this particular picture,
 
-335
+390
 00:22:35,880 --> 00:22:37,350
 you know it might be the case that,
 
-336
+391
 00:22:37,650 --> 00:22:40,260
 you know this leader crashes,
 
-337
+392
 00:22:41,130 --> 00:22:44,940
 and you know this becomes the new leader in the next term,
 
-338
+393
 00:22:44,940 --> 00:22:46,380
 we'll see exactly what that means,
 
-339
+394
 00:22:46,710 --> 00:22:48,810
 and then the clients basically fail over,
 
-340
+395
 00:22:48,840 --> 00:22:50,940
 you know they will see, they don't get a response,
 
-341
+396
 00:22:50,940 --> 00:22:51,990
-so they will time out
+so they will time out,
 
-342
+397
 00:22:52,350 --> 00:22:55,950
-and they fail over to the second leader, the new leader
+and they fail over to the second leader, the new leader,
 
-343
+398
 00:22:56,070 --> 00:22:57,720
 and basically retry their operation.
 
-344
+399
 00:22:58,440 --> 00:23:01,980
-And so they insert you know that new leader will take their operation
+And so they insert you know that new leader will take their operation,
 
-345
+400
 00:23:01,980 --> 00:23:03,570
 insert it back into raft,
 
-346
+401
 00:23:03,570 --> 00:23:05,940
 you know the same thing happens as before,
 
-347
+402
 00:23:06,120 --> 00:23:07,800
-and maybe this time we get lucky
+and maybe this time we get lucky,
 
-348
+403
 00:23:07,800 --> 00:23:10,260
 and we actually get the operation without any failures.
 
-349
+404
 00:23:11,640 --> 00:23:13,380
 If you think a little bit careful about this,
 
-350
-00:23:13,380 --> 00:23:18,270
-that does mean that a client operation might end up twice in the log, right,
+405
+00:23:13,380 --> 00:23:14,790
+that does mean that,
 
-351
+406
+00:23:15,060 --> 00:23:18,270
+a client operation might end up twice in the log, right,
+
+407
 00:23:18,270 --> 00:23:20,850
 because actually may be the case that the first time it succeeded,
 
-352
+408
 00:23:20,850 --> 00:23:22,410
-but just didn't get the response
+but just didn't get the response,
 
-353
+409
 00:23:22,710 --> 00:23:24,450
 and so it doesn't know that it succeeded,
 
-354
+410
 00:23:24,450 --> 00:23:25,200
 it will retry,
 
-355
-00:23:25,200 --> 00:23:31,650
-you know this new leader will put the log, the new retry operation also in the log
+411
+00:23:25,200 --> 00:23:28,560
+you know this new leader will put the log,
 
-356
+412
+00:23:28,560 --> 00:23:31,650
+put the new retry operation also in the log
+
+413
 00:23:31,710 --> 00:23:36,720
-and it will pop out at some point in at kv key-value servers
+and it will pop out at some point in at kv key-value servers,
 
-357
+414
 00:23:36,720 --> 00:23:39,720
-and actually be a duplicate
+and actually be a duplicate,
 
-358
+415
 00:23:39,810 --> 00:23:45,490
 and so as you will see later in the lab 3,
 
-359
+416
 00:23:45,550 --> 00:23:48,640
 actually it turns out that the you know what,
 
-360
+417
 00:23:48,670 --> 00:23:52,540
 you need to do duplication, detect duplicates.
 
-361
+418
 00:24:01,060 --> 00:24:02,530
 But that's mostly an issue for lab 3,
 
-362
+419
 00:24:02,590 --> 00:24:04,960
 so it's not going to be a main issue for now,
 
-363
-00:24:04,960 --> 00:24:08,890
-but it's important to know you know that this is the sort of general style
+420
+00:24:04,960 --> 00:24:06,190
+but it's important to know,
 
-364
+421
+00:24:06,220 --> 00:24:08,890
+you know that this is the sort of general style,
+
+422
 00:24:09,070 --> 00:24:13,990
 in which you know one would actually use raft to build a replicated state machine.
 
-365
+423
 00:24:18,940 --> 00:24:24,070
 Any questions about sort of how to use raft for replicated state machines?
 
-366
+424
 00:24:25,090 --> 00:24:26,050
 We have a question in the chat.
 
-367
+425
 00:24:26,320 --> 00:24:27,010
 Yeah.
 
-368
+426
 00:24:28,230 --> 00:24:32,970
 What is typical number of clients contacting the leader?
 
-369
+427
 00:24:34,380 --> 00:24:36,390
 Well, there could be many,
 
-370
+428
 00:24:36,390 --> 00:24:39,480
 there's no real limit on it,
 
-371
-00:24:39,480 --> 00:24:43,440
-what you'll see you know it could be the case that a single machine can [mean],
+429
+00:24:39,480 --> 00:24:40,860
+what you'll see,
 
-372
-00:24:43,440 --> 00:24:45,000
-maybe that's implicitly, but the question is,
+430
+00:24:40,860 --> 00:24:43,440
+you know it could be the case that a single machine can [],
 
-373
-00:24:45,180 --> 00:24:52,620
-it could be the case that a single leader can not tolerate, the is not capable of handling that many clients
+431
+00:24:43,440 --> 00:24:44,280
+maybe that's implicitly,
 
-374
+432
+00:24:44,280 --> 00:24:45,000
+but the question is,
+
+433
+00:24:45,180 --> 00:24:48,510
+it could be the case that a single leader can just not tolerate,
+
+434
+00:24:48,510 --> 00:24:52,620
+is not capable of handling that many clients,
+
+435
 00:24:52,620 --> 00:24:55,440
-and so, what happens then is that
+and so, what happens then is that,
 
-375
+436
 00:24:55,440 --> 00:24:57,090
 basically the servers gets sharded,
 
-376
+437
 00:24:57,120 --> 00:25:01,170
 you know shard key-value servers in multiple raft groups,
 
-377
+438
 00:25:01,800 --> 00:25:04,500
-so for example shard one would be one raft instance,
+so for example shard 1 would be one raft instance,
 
-378
+439
 00:25:04,530 --> 00:25:06,270
-shard two is one raft instance,
+shard 2 is one raft instance,
 
-379
+440
 00:25:06,300 --> 00:25:07,890
-shard three is one raft instance
+shard 3 is one raft instance,
 
-380
+441
 00:25:07,890 --> 00:25:14,520
-and the clients to talk to the appropriate shard to to apply their operations
+and the clients to talk to the appropriate shard to to apply their operations,
 
-381
+442
 00:25:14,520 --> 00:25:18,390
-and in that way we can scale the server to many clients
+and in that way, we can scale the server to many clients,
 
-382
+443
 00:25:18,390 --> 00:25:20,130
 and in fact that is what lab 4 does.
 
-383
-00:25:22,760 --> 00:25:27,260
-How does the client know how to communicate with the new leader after the old leader fails?
+444
+00:25:22,760 --> 00:25:24,320
+How does the client know
 
-384
+445
+00:25:24,320 --> 00:25:27,260
+how to communicate with the new leader after the old leader fails?
+
+446
 00:25:27,410 --> 00:25:31,340
 The client basically has a list of all the servers that are in the system,
 
-385
+447
 00:25:31,760 --> 00:25:32,810
 so in this case,
 
-386
+448
 00:25:32,810 --> 00:25:34,010
 we're running with three servers,
 
-387
+449
 00:25:34,010 --> 00:25:36,050
-everybody agrees there only three servers in the world,
+everybody agrees there only three servers in the [world],
 
-388
+450
 00:25:36,200 --> 00:25:37,730
-clients know about the three servers
+clients know about the three servers,
 
-389
+451
 00:25:38,000 --> 00:25:40,730
 and did they try one randomly,
 
-390
-00:25:40,970 --> 00:25:45,410
-if that is not the client, it will redirect, that's not the leader,
+452
+00:25:40,970 --> 00:25:44,360
+if that is not the client, it will redirect,
 
-391
+453
+00:25:44,360 --> 00:25:45,410
+that's not the leader,
+
+454
 00:25:45,410 --> 00:25:48,710
 it will redirect the client to the appropriate one, the actual leader.
 
-392
+455
 00:25:51,040 --> 00:25:52,720
-Yeah the answer is quite clear.
+Yeah, the answer is quite clear.
 
-393
+456
 00:25:53,890 --> 00:25:58,180
 But do we assume the servers are like in geographically close,
 
-394
+457
 00:25:58,180 --> 00:26:00,460
-like close to each other or they are.
+like close to each other or could they be.
 
-395
+458
 00:26:00,460 --> 00:26:02,620
 They could in principle be far apart,
 
-396
+459
 00:26:02,710 --> 00:26:05,740
 there's no real restriction on that side,
 
-397
-00:26:06,010 --> 00:26:10,360
-the only issue of course if it serves a fair spread around the world,
+460
+00:26:06,010 --> 00:26:07,300
+the only issue of course,
 
-398
+461
+00:26:07,300 --> 00:26:10,360
+if it serves a very spread around the world,
+
+462
 00:26:10,570 --> 00:26:15,160
-the delays to actually get in a log record append,
+the delays to actually get in a log record appended,
 
-399
+463
 00:26:15,160 --> 00:26:16,360
 you know will take a little while,
 
-400
+464
 00:26:16,840 --> 00:26:18,430
 and so the delays will be long.
 
-401
+465
 00:26:22,750 --> 00:26:27,010
 What is the log entry being executed in the kv storage?
 
-402
+466
 00:26:27,690 --> 00:26:32,460
 When, once it's committed in by raft,
 
-403
-00:26:32,490 --> 00:26:36,450
-so once raft has decided that they're all there enough replicates have received it
+467
+00:26:32,490 --> 00:26:34,230
+so once raft has decided that,
 
-404
+468
+00:26:34,230 --> 00:26:36,450
+you know all there enough replicates have received it,
+
+469
 00:26:36,450 --> 00:26:40,290
 and it's now no way possible that one has to back out of that operation,
 
-405
+470
 00:26:40,440 --> 00:26:43,770
 then, it's headed to the key-value server.
 
-406
+471
 00:26:45,560 --> 00:26:49,010
-So the leader will first like execute this command
+So the leader will first like execute this command,
 
-407
+472
 00:26:49,010 --> 00:26:52,610
-and the leader will tell the followers that this command is committed
+and the leader will tell the followers that this command is committed,
 
-408
+473
 00:26:52,610 --> 00:26:54,440
-and then the follower called.
+and then the follower.
 
-409
+474
 00:26:54,440 --> 00:26:57,590
-The leader knows, well as soon as the operations committed
+The leader knows, well as soon as the operations committed,
 
-410
+475
 00:26:57,590 --> 00:26:59,690
 actually get handed off the key-value server.
 
-411
+476
 00:26:59,720 --> 00:27:01,520
 Let me, let's talk about it right now,
 
-412
+477
 00:27:01,910 --> 00:27:04,100
 I'll go in more detail as we go,
 
-413
+478
 00:27:04,550 --> 00:27:07,610
 so like more of an overview of the protocol.
 
-414
-00:27:07,610 --> 00:27:14,390
-So previous board was sort of an overview of how you use raft to build a replicated state machine,
+479
+00:27:07,610 --> 00:27:10,370
+So previous board was sort of an overview
 
-415
+480
+00:27:10,370 --> 00:27:14,390
+of how you use raft to build a replicated state machine,
+
+481
 00:27:14,510 --> 00:27:17,840
 now let's look at the raft itself a little bit more detail.
 
-416
-00:27:17,840 --> 00:27:22,860
-So we here some timelines, got a leader, we got two followers.
+482
+00:27:17,840 --> 00:27:19,820
+So we here some timelines,
 
-417
-00:27:24,670 --> 00:27:28,690
-So we're running three, the client to talk to the leader,
+483
+00:27:19,910 --> 00:27:22,860
+we got a leader, we got two followers,
 
-418
+484
+00:27:24,670 --> 00:27:25,930
+so we're running three.
+
+485
+00:27:26,260 --> 00:27:28,690
+The client you know talk to the leader,
+
+486
 00:27:29,380 --> 00:27:33,740
 the leader has a log,
 
-419
+487
 00:27:33,770 --> 00:27:37,250
 you know all the put and get operations,
 
-420
+488
 00:27:37,250 --> 00:27:38,480
 you know when it gets a new one,
 
-421
+489
 00:27:38,510 --> 00:27:40,610
 you know appends it you know to the end of the log,
 
-422
+490
 00:27:41,890 --> 00:27:43,840
 then it actually sends it,
 
-423
-00:27:43,990 --> 00:27:49,800
-you know sends the log entries to the new log entries to the followers.
+491
+00:27:43,990 --> 00:27:46,330
+you know sends the log entries to,
 
-424
+492
+00:27:47,640 --> 00:27:49,800
+the new log entries to the followers.
+
+493
 00:27:56,000 --> 00:27:58,490
 And you know let's say you know that follower 2,
 
-425
+494
 00:27:58,490 --> 00:28:00,200
 here follower 1, here follower 2,
 
-426
+495
 00:28:00,200 --> 00:28:02,630
 follower 1 actually received this log entry,
 
-427
+496
 00:28:02,630 --> 00:28:03,410
 everything is okay,
 
-428
+497
 00:28:03,410 --> 00:28:05,450
 appends at the end of the log,
 
-429
-00:28:05,450 --> 00:28:09,020
-it sends basically an act back, saying yes you know I appended it.
+498
+00:28:05,450 --> 00:28:07,250
+it sends basically an ack back,
 
-430
-00:28:09,500 --> 00:28:18,710
-And at this point in the raft the world two servers actually have the log entry
+499
+00:28:07,250 --> 00:28:09,020
+saying yes you know I appended it.
 
-431
+500
+00:28:09,500 --> 00:28:14,540
+And at this point in the raft the world,
+
+501
+00:28:14,570 --> 00:28:18,710
+two servers actually have the log entry,
+
+502
 00:28:19,190 --> 00:28:23,000
-and so raft actually the leader can actually commit the log entry
+and so raft actually the leader can actually commit the log entry,
 
-432
-00:28:23,840 --> 00:28:33,250
-and so at this point you know the the the leader can actually hand off that request just received,
+503
+00:28:23,840 --> 00:28:25,790
+and so at this point,
 
-433
+504
+00:28:25,790 --> 00:28:33,250
+you know the the the leader can actually hand off that request just received,
+
+505
 00:28:33,250 --> 00:28:35,380
 that can actually hand it off to the kv server.
 
-434
-00:28:36,800 --> 00:28:40,610
-And the way actually the lab does this or this lab infrastructure does this is
+506
+00:28:36,800 --> 00:28:38,630
+And the way actually the lab does this
 
-435
+507
+00:28:38,630 --> 00:28:40,610
+or this lab [] does this is
+
+508
 00:28:40,610 --> 00:28:43,820
 that basically we have a channel Go channel,
 
-436
+509
 00:28:44,060 --> 00:28:49,310
-one single Go channel were basically Raft Goroutines
+one single Go channel were basically Raft Goroutines,
 
-437
-00:28:49,490 --> 00:28:53,570
-and the Raft Goroutine actually decide that a particular operation is committed,
+510
+00:28:49,490 --> 00:28:51,410
+and the Raft Goroutine actually decide that
 
-438
+511
+00:28:51,410 --> 00:28:53,570
+a particular operation is committed,
+
+512
 00:28:53,720 --> 00:28:57,770
 it just sends that operation on the apply channel,
 
-439
+513
 00:28:57,860 --> 00:29:00,050
 so that the key-value server can actually apply it.
 
-440
-00:29:01,610 --> 00:29:04,580
-You know some point later, so notice at this point,
+514
+00:29:01,610 --> 00:29:02,690
+You know some point later,
 
-441
+515
+00:29:02,720 --> 00:29:04,580
+so notice at this point,
+
+516
 00:29:04,700 --> 00:29:08,870
 the leader basically has committed the operation,
 
-442
+517
 00:29:09,140 --> 00:29:13,310
 and it's perfectly safe for the leader to commit this operation,
 
-443
-00:29:13,490 --> 00:29:19,190
-because the majority of the servers, actually majority of the peers actually have received the operation, correct,
+518
+00:29:13,490 --> 00:29:16,010
+because the majority of the servers,
 
-444
+519
+00:29:16,010 --> 00:29:19,190
+actually majority of the peers actually have received the operation, correct,
+
+520
 00:29:19,190 --> 00:29:21,110
-so there even if there was a failure
+so there even if there was a failure,
 
-445
+521
 00:29:21,500 --> 00:29:23,000
 and we elect a new leader,
 
-446
-00:29:23,240 --> 00:29:26,180
-that's the case that that leader are one of the servers,
+522
+00:29:23,240 --> 00:29:24,470
+that's the case that,
 
-447
+523
+00:29:24,470 --> 00:29:26,180
+that leader are one of the servers,
+
+524
 00:29:26,180 --> 00:29:28,970
 that is remaining actually has the last operation,
 
-448
+525
 00:29:29,060 --> 00:29:32,930
 that was appended to the log by the previous leader.
 
-449
+526
 00:29:33,730 --> 00:29:34,780
 So everything is good,
 
-450
-00:29:35,110 --> 00:29:41,680
-of course the last guy, the first follower also at some point respond and you know said yes.
+527
+00:29:35,110 --> 00:29:36,730
+of course the last guy,
 
-451
+528
+00:29:36,760 --> 00:29:41,680
+the first follower also at some point respond and you know said yes.
+
+529
 00:29:42,720 --> 00:29:46,260
 So this point, basically from the point of view of the leader,
 
-452
+530
 00:29:46,260 --> 00:29:49,740
 the operations committed, except the followers don't really know it yet,
 
-453
+531
 00:29:50,220 --> 00:29:53,700
-because the followers you know, they only know that they got it
+because the followers you know, they only know that they got it,
 
-454
+532
 00:29:53,970 --> 00:29:56,610
 and that the leader probably has it,
 
-455
+533
 00:29:56,850 --> 00:29:59,070
 but they you know they don't really know,
 
-456
+534
 00:29:59,220 --> 00:30:00,990
 and so what actually happens is that,
 
-457
+535
 00:30:01,020 --> 00:30:05,130
 the subsequent operation, when another client request comes in,
 
-458
+536
 00:30:05,430 --> 00:30:07,650
-the leader will append another log entry
+the leader will append another log entry,
 
-459
+537
 00:30:07,860 --> 00:30:13,710
-and basically sends you know a new operation or new append entry to the followers
+and basically sends you know a new operation or new append entry to the followers,
 
-460
+538
 00:30:13,980 --> 00:30:17,340
-and that append entry, does basically two things,
+and that append entry does basically two things,
 
-461
+539
 00:30:17,400 --> 00:30:21,420
 it you know provides the new log entry for the new operation,
 
-462
+540
 00:30:21,540 --> 00:30:25,500
-but it also confirms that all the preceding operations order
+but it also confirms that all the preceding operations,
 
-463
+541
 00:30:25,560 --> 00:30:28,080
 tells us which operations actually have committed so far.
 
-464
+542
 00:30:28,680 --> 00:30:34,320
 And so when F1 and F2 receive you know this this operation, this RPC,
 
-465
+543
 00:30:34,380 --> 00:30:38,130
-they know that the operation has been committed by the leader
+they know that the operation has been committed by the leader,
 
-466
-00:30:38,340 --> 00:30:43,530
-and therefore at that point, they can also deliver it to their key-value instance,
+544
+00:30:38,340 --> 00:30:39,600
+and therefore at that point,
 
-467
+545
+00:30:39,630 --> 00:30:43,530
+they can also deliver it to their key-value instance,
+
+546
 00:30:44,240 --> 00:30:45,860
 and know that this operation is committed.
 
-468
+547
 00:30:50,460 --> 00:30:52,680
 I I had a quick question,
 
-469
-00:30:52,680 --> 00:31:02,860
-so, so when the leader sends an operation over and server replies,
+548
+00:30:52,680 --> 00:30:59,800
+so, so when the leader sends an operation over
 
-470
-00:31:03,070 --> 00:31:06,100
-does that mean, that means it's in the log, right,
+549
+00:30:59,830 --> 00:31:02,860
+and server replies,
 
-471
-00:31:07,240 --> 00:31:11,650
-but what happens if you get a majority like a slight majority
+550
+00:31:03,070 --> 00:31:04,120
+does that mean,
 
-472
+551
+00:31:04,150 --> 00:31:06,100
+that means it's in the log, right,
+
+552
+00:31:07,240 --> 00:31:08,680
+but what happens,
+
+553
+00:31:08,680 --> 00:31:11,650
+if you get a majority, like a slight majority,
+
+554
 00:31:11,680 --> 00:31:14,800
 and then one of those logs like one of those servers crash,
 
-473
+555
 00:31:14,980 --> 00:31:18,400
 like our logs, the logs have to be in storage, like in disk.
 
-474
+556
 00:31:18,550 --> 00:31:20,860
 Yep, so that's a very good question, correct,
 
-475
+557
 00:31:20,860 --> 00:31:23,320
 the every change to the log,
 
-476
+558
 00:31:23,560 --> 00:31:25,750
 so you look at the Raft paper in detail,
 
-477
+559
 00:31:26,050 --> 00:31:30,280
 the some state is must be stable,
 
-478
+560
 00:31:30,890 --> 00:31:33,830
 and the log is one of those pieces of information, that must be stable,
 
-479
+561
 00:31:33,830 --> 00:31:36,620
 as well as the term number and a bunch of other things.
 
-480
+562
 00:31:37,180 --> 00:31:39,190
 And so if a server crashes,
 
-481
+563
 00:31:39,550 --> 00:31:42,310
 no big, no big deal really,
 
-482
+564
 00:31:42,310 --> 00:31:46,420
 because you know the majority of the servers does have that entry on their disk,
 
-483
+565
 00:31:47,650 --> 00:31:49,630
 and when they come back up, they'll find it.
 
-484
+566
 00:31:53,160 --> 00:31:54,450
 I have a question?
 
-485
+567
 00:31:54,600 --> 00:31:54,990
 Yeah.
 
-486
-00:31:55,110 --> 00:32:02,070
-So what happens if for example follower one replies with yes and later commits,
+568
+00:31:55,110 --> 00:31:57,150
+So what happens,
 
-487
-00:32:03,240 --> 00:32:10,170
-just before it sends the next command to the remaining followers to also commit, it crashes,
+569
+00:31:57,150 --> 00:32:02,070
+if for example follower 1 replies with yes and later commits,
 
-488
+570
+00:32:03,240 --> 00:32:09,570
+just before it sends the next command to the remaining followers to also commit,
+
+571
+00:32:09,570 --> 00:32:10,170
+it crashes,
+
+572
 00:32:10,440 --> 00:32:13,590
 now there are many followers don't know that they need to commit,
 
-489
+573
 00:32:13,590 --> 00:32:14,910
 because the leader has crashed,
 
-490
+574
 00:32:15,880 --> 00:32:18,160
 so wouldn't this cause problems?
 
-491
+575
 00:32:18,490 --> 00:32:19,420
 They will commit,
 
-492
+576
 00:32:19,450 --> 00:32:22,060
-because one follower will have it in its log
+because one follower will have it in its log,
 
-493
+577
 00:32:22,330 --> 00:32:24,610
 and as we'll see in the leader election rules,
 
-494
+578
 00:32:24,610 --> 00:32:25,810
 it will become the leader,
 
-495
+579
 00:32:26,480 --> 00:32:31,550
-and it will propagate that append entry you know to the other servers
+and it will propagate that append entry you know to the other servers,
 
-496
+580
 00:32:31,550 --> 00:32:32,810
 and then they will apply too.
 
-497
+581
 00:32:34,010 --> 00:32:35,690
 Okay, I see, okay, thanks.
 
-498
-00:32:37,090 --> 00:32:41,050
-OK, so that brings me maybe this is a good segue to the next topic,
+582
+00:32:37,090 --> 00:32:38,230
+Okay, so that brings me maybe,
 
-499
-00:32:41,050 --> 00:32:47,170
-why logs, last three questions are all about that.
+583
+00:32:38,230 --> 00:32:41,050
+this is a good sort of [] to the next topic,
 
-500
+584
+00:32:41,050 --> 00:32:42,970
+why logs,
+
+585
+00:32:44,620 --> 00:32:47,170
+last three questions are all about that.
+
+586
 00:32:47,350 --> 00:32:47,620
 Yeah.
 
-501
+587
 00:32:47,620 --> 00:32:50,590
 I actually as a follow-up to the last question,
 
-502
+588
 00:32:50,770 --> 00:32:56,650
-so the server crashing after it has like consensus crashing,
+so the server crashing after it has like consensus, crashing,
 
-503
+589
 00:32:57,300 --> 00:32:59,400
 right, like right before committing,
 
-504
+590
 00:32:59,990 --> 00:33:02,930
 it could delay committing, right?
 
-505
+591
 00:33:02,930 --> 00:33:04,280
-What do you mean with committed?
+What do you mean with committing?
 
-506
-00:33:04,670 --> 00:33:12,360
-So so, like after it has consensus on a change right after it has a majority,
+592
+00:33:04,670 --> 00:33:09,480
+So so, like after it has consensus on a [],
 
-507
-00:33:13,180 --> 00:33:20,740
-and it can like the paper said, you [] you essentially tell other ones, like other servers,
+593
+00:33:09,480 --> 00:33:12,360
+right after it has a majority,
 
-508
+594
+00:33:13,180 --> 00:33:16,420
+and it can like the paper said,
+
+595
+00:33:16,450 --> 00:33:20,740
+you [] you essentially tell other ones, like other servers,
+
+596
 00:33:20,740 --> 00:33:22,540
 you tell them okay, this is ready for,
 
-509
-00:33:23,020 --> 00:33:29,100
-or sorry it's committed it's ready for like, like execution right into the state machine.
+597
+00:33:23,020 --> 00:33:25,180
+or sorry it's committed it's ready for like,
 
-510
-00:33:30,860 --> 00:33:35,120
-So if it crashes before it tells all the servers that it's ready for execution,
+598
+00:33:25,680 --> 00:33:29,100
+like execution right into the state machine,
 
-511
+599
+00:33:30,860 --> 00:33:31,970
+so if it crashes,
+
+600
+00:33:31,970 --> 00:33:35,120
+before it tells all the servers, that it's ready for execution,
+
+601
 00:33:35,780 --> 00:33:37,760
 it could delay execution, right.
 
-512
+602
 00:33:38,370 --> 00:33:39,750
 It could delay execution,
 
-513
-00:33:39,840 --> 00:33:43,830
-okay, first of all, if the leader fails at that point, nothing happens, right,
+603
+00:33:39,840 --> 00:33:40,890
+okay, first of all,
 
-514
+604
+00:33:40,890 --> 00:33:43,830
+if the leader fails at that point, nothing happens, right,
+
+605
 00:33:43,830 --> 00:33:47,190
-at least the clients can't proceed with any other more operations
+at least the clients can't proceed with any other more operations,
 
-515
-00:33:47,580 --> 00:33:51,930
-and so basically the if you want to think about, at that point raft reconfigure itself,
+606
+00:33:47,580 --> 00:33:49,800
+and so basically the if you want to think about,
 
-516
+607
+00:33:49,800 --> 00:33:51,930
+at that point, raft reconfigure itself,
+
+608
 00:33:52,370 --> 00:33:53,420
 elects a new leader,
 
-517
+609
 00:33:54,010 --> 00:33:56,950
 and that's going to be you know F1 or F2,
 
-518
+610
 00:33:57,040 --> 00:33:58,600
-one of the two is going to be the new leader
+one of the two is going to be the new leader,
 
-519
+611
 00:33:58,600 --> 00:34:00,220
-and the other one is going to be the follower, right
+and the other one is going to be the follower, right,
 
-520
-00:34:00,730 --> 00:34:04,270
-and one of the two actually has received you know the append entry,
+612
+00:34:00,730 --> 00:34:02,950
+and one of the two actually has received,
 
-521
-00:34:04,270 --> 00:34:06,880
-that the leader might already have committed,
+613
+00:34:02,980 --> 00:34:06,880
+you know the append entry that the leader might already have committed,
 
-522
+614
 00:34:06,910 --> 00:34:09,220
 in fact it's kv might already have executed,
 
-523
-00:34:09,690 --> 00:34:11,790
-no problem correct, because one of them has it,
+615
+00:34:09,690 --> 00:34:10,650
+no problem, correct,
 
-524
-00:34:12,210 --> 00:34:16,380
-that one will become the leader as we'll see later with the leader election rules,
+616
+00:34:10,650 --> 00:34:11,790
+because one of them has it,
 
-525
+617
+00:34:12,210 --> 00:34:14,070
+that one will become the leader,
+
+618
+00:34:14,070 --> 00:34:16,380
+as we'll see later with the leader election rules,
+
+619
 00:34:16,860 --> 00:34:20,040
-and that one will submit to its kv server
+and that one will submit to its kv server,
 
-526
+620
 00:34:20,070 --> 00:34:22,830
-and will replicate it to the other follower
+and will replicate it to the other follower,
 
-527
+621
 00:34:22,860 --> 00:34:25,080
 and then it will apply to each kv server,
 
-528
+622
 00:34:25,230 --> 00:34:28,320
-in the end all will apply all the operations in the same order.
+in the end, all will apply all the operations in the same order.
 
-529
+623
 00:34:28,780 --> 00:34:31,360
 I I I agree, like eventually it'll happen,
 
-530
+624
 00:34:31,360 --> 00:34:32,620
 but it could be delayed right?
 
-531
+625
 00:34:39,620 --> 00:34:40,070
 Yeah could be delayed absolutely,
 
-532
+626
 00:34:40,070 --> 00:34:42,950
-[] a complete lot to all the followers,
+[] a complete log to all the followers,
 
-533
-00:34:42,950 --> 00:34:46,310
-it will you stay, the way it works is actually,
+627
+00:34:42,950 --> 00:34:44,780
+it will you,
 
-534
+628
+00:34:45,050 --> 00:34:46,310
+the way it works is actually,
+
+629
 00:34:46,310 --> 00:34:48,470
-it will try to send the end of his log,
+it will try to send the end of its log,
 
-535
-00:34:48,740 --> 00:34:52,640
-if one of the followers doesn't recognize the end of the log, go back off
+630
+00:34:48,740 --> 00:34:51,860
+if one of the followers doesn't recognize the end of the log,
 
-536
+631
+00:34:51,860 --> 00:34:52,640
+go back off,
+
+632
 00:34:52,670 --> 00:34:55,880
 and you know send more and more you know earlier entries,
 
-537
+633
 00:34:55,910 --> 00:34:56,960
 we'll talk about it later.
 
-538
+634
 00:34:57,980 --> 00:34:59,930
-But, in the end it could be the case
+But, in the end it could be the case,
 
-539
+635
 00:34:59,930 --> 00:35:03,590
 that the leader will replay its complete log to one of the followers,
 
-540
+636
 00:35:03,710 --> 00:35:06,350
 if one of the followers has missed all the log entries.
 
-541
+637
 00:35:07,800 --> 00:35:09,360
 I gotta get me back to logs.
 
-542
+638
 00:35:10,440 --> 00:35:15,450
-So one reason you might wonder why you have logs at all
+So one reason you might wonder why you have logs at all,
 
-543
+639
 00:35:15,450 --> 00:35:18,480
-is because like kv server, it has a database too,
+it because like kv server, it has a database too,
 
-544
+640
 00:35:18,810 --> 00:35:21,690
-you know have some table with all the information
+you know have some table with all the information,
 
-545
+641
 00:35:21,690 --> 00:35:24,780
 and so why do we need actually you know sort of this information twice,
 
-546
+642
 00:35:24,780 --> 00:35:28,800
-once in the logs and ones in the kv table.
+ones in the logs and ones in the kv table.
 
-547
+643
 00:35:28,950 --> 00:35:30,240
 And so a couple reasons for that,
 
-548
-00:35:30,680 --> 00:35:35,450
-one, a couple that already came up in the questions basically,
+644
+00:35:30,680 --> 00:35:32,060
+one,
 
-549
+645
+00:35:32,060 --> 00:35:35,450
+a couple that already came up in the questions basically,
+
+646
 00:35:35,480 --> 00:35:36,920
 one for retransmission,
 
-550
-00:35:44,090 --> 00:35:50,420
-so when the leader sends one of these append entries you know to one of the followers that message might get lost
+647
+00:35:44,090 --> 00:35:49,160
+so when the leader sends one of these append entries you know to one of the followers,
 
-551
+648
+00:35:49,160 --> 00:35:50,420
+that message might get lost,
+
+649
 00:35:50,630 --> 00:35:53,060
 and so the leader must be able to retransmit,
 
-552
+650
 00:35:53,060 --> 00:35:56,060
 so we need to keep a record of all the log entries,
 
-553
+651
 00:35:56,060 --> 00:35:59,150
 that, that are sort of being in flight.
 
-554
+652
 00:35:59,950 --> 00:36:02,680
-Second reason that's probably the prime reason,
+Second reason that's probably the primary reason,
 
-555
+653
 00:36:02,680 --> 00:36:04,000
 first is like we need order,
 
-556
-00:36:04,790 --> 00:36:14,050
-and every append operation or every commands must be delivered in the same order at the same and all the replicas
+654
+00:36:04,790 --> 00:36:10,330
+and every append operation or every commands must be delivered
 
-557
-00:36:14,440 --> 00:36:18,010
-and the log is a very convenient way for us to actually maintain that order,
+655
+00:36:10,330 --> 00:36:14,050
+in the same order at the same at all the replicas,
 
-558
+656
+00:36:14,440 --> 00:36:16,630
+and the log is a very convenient way for us
+
+657
+00:36:16,630 --> 00:36:18,010
+to actually maintain that order,
+
+658
 00:36:18,340 --> 00:36:20,470
 so the second reason retransmission.
 
-559
+659
 00:36:20,710 --> 00:36:23,470
 The third reason is we need persistence,
 
-560
+660
 00:36:25,350 --> 00:36:27,480
-you know one of the followers might crash
+you know one of the followers might crash,
 
-561
+661
 00:36:28,020 --> 00:36:30,180
-or actually all of them might crash
+or actually all of them might crash,
 
-562
+662
 00:36:30,180 --> 00:36:31,710
-and then they come up again
+and then they come up again,
 
-563
-00:36:31,710 --> 00:36:37,350
-and we still need to be in a position that we can basically retransmit log entries to bring everybody up to date
+663
+00:36:31,710 --> 00:36:33,570
+and we still need to be in a position,
 
-564
+664
+00:36:33,570 --> 00:36:35,580
+that we can basically retransmit log entries
+
+665
+00:36:35,670 --> 00:36:37,350
+to bring everybody up to date,
+
+666
 00:36:37,380 --> 00:36:41,160
 and so log must also be persistent.
 
-565
-00:36:42,110 --> 00:36:49,490
-And finally we need sort of space for tentative operations or tentatively commits tentative commands,
+667
+00:36:42,110 --> 00:36:44,810
+And finally we need sort of space
 
-566
+668
+00:36:44,900 --> 00:36:49,490
+for tentative operations or tentatively commits, tentative commands,
+
+669
 00:36:50,390 --> 00:36:53,090
 so as we noted earlier,
 
-567
+670
 00:36:53,090 --> 00:36:54,650
-if it came up in the earlier questions,
+as it came up in the earlier questions,
 
-568
+671
 00:36:54,650 --> 00:36:58,970
 when the leader sent an operation to a follower,
 
-569
-00:36:59,060 --> 00:37:02,150
-the follower doesn't really know at that point where that operation will be committed,
+672
+00:36:59,060 --> 00:37:00,800
+the follower doesn't really know at that point,
 
-570
+673
+00:37:00,800 --> 00:37:02,150
+what that operation will be committed,
+
+674
 00:37:02,150 --> 00:37:04,280
 so just stick around for a little while
 
-571
+675
 00:37:04,400 --> 00:37:07,340
-until it actually learns that operation is committed
+until it actually learns that operation is committed,
 
-572
+676
 00:37:07,340 --> 00:37:09,620
-and so we need some space for [] operations
+and so we need some space for tentative operations,
 
-573
+677
 00:37:09,620 --> 00:37:11,630
 the log is convenient place to actually do that.
 
-574
-00:37:13,100 --> 00:37:24,440
-In the end, you know what will happen correct is that the logs are identical on all servers,
+678
+00:37:13,100 --> 00:37:16,580
+In the end, you know what will happen correct is,
 
-575
+679
+00:37:16,580 --> 00:37:24,440
+that the logs are identical on all servers,
+
+680
 00:37:28,500 --> 00:37:32,610
 you know there may be out of sync during periods of time,
 
-576
+681
 00:37:32,610 --> 00:37:36,030
 you know, one might have more entries than other logs,
 
-577
+682
 00:37:36,150 --> 00:37:38,070
-but like if you keep running the system,
+but like if you sort of keep running the system,
 
-578
+683
 00:37:38,070 --> 00:37:39,390
 and then stop the clients,
 
-579
+684
 00:37:39,570 --> 00:37:41,100
 then at some point in time,
 
-580
+685
 00:37:41,280 --> 00:37:43,680
 all the logs will be completely identical,
 
-581
-00:37:44,040 --> 00:37:47,550
-and that means that basically those since they all have the same order,
+686
+00:37:44,040 --> 00:37:45,660
+and that means that basically those,
 
-582
-00:37:47,550 --> 00:37:52,860
-all the operations all the operations will be fit to decline the kv servers in the same order
+687
+00:37:45,990 --> 00:37:47,550
+since they all have the same order,
 
-583
+688
+00:37:47,550 --> 00:37:49,230
+all the operations all the operations will
+
+689
+00:37:49,230 --> 00:37:52,860
+be fit to the client the kv servers in the same order,
+
+690
 00:37:52,860 --> 00:37:55,590
 and then kv server well end up in the same state.
 
-584
+691
 00:37:57,340 --> 00:37:58,030
 Okay?
 
-585
+692
 00:38:03,690 --> 00:38:06,570
 Okay, let me talk a little bit about an individual log entry.
 
-586
-00:38:17,150 --> 00:38:20,390
-So really, yeah whatever, we're gonna draw many pictures like this,
+693
+00:38:17,150 --> 00:38:18,560
+So really you know whatever,
 
-587
+694
+00:38:18,860 --> 00:38:20,390
+we're gonna draw many pictures like this,
+
+695
 00:38:20,390 --> 00:38:22,940
 where there's a bunch of log log entries,
 
-588
+696
 00:38:22,940 --> 00:38:26,360
-you're starting 0 1 2 blah blah,
+you know starting 0 1 2 blah blah,
 
-589
+697
 00:38:26,540 --> 00:38:29,240
 and if we look inside of one of these log entries,
 
-590
+698
 00:38:29,420 --> 00:38:30,740
 there's gonna be a command,
 
-591
+699
 00:38:32,740 --> 00:38:34,240
 which we're mostly going to sort of ignore,
 
-592
+700
 00:38:34,240 --> 00:38:36,160
 we're gonna really think about much about it at all,
 
-593
+701
 00:38:36,190 --> 00:38:38,560
 and that's the thing that's actually being delivered to the application,
 
-594
+702
 00:38:38,560 --> 00:38:42,360
 so that's an example to put or get operation with its arguments.
 
-595
+703
 00:38:43,020 --> 00:38:45,600
 And then the second thing that's in there is term,
 
-596
+704
 00:38:48,460 --> 00:38:51,340
 and this is basically the leader's term,
 
-597
+705
 00:38:55,340 --> 00:38:59,360
 so the term in which this particular command actually was appended to the log,
 
-598
+706
 00:39:00,200 --> 00:39:03,080
-one way you can think about this is that
+one way you can think about this is that,
 
-599
+707
 00:39:03,170 --> 00:39:09,530
 basically the term identifies uniquely the leader that appended the operation to the log,
 
-600
+708
 00:39:09,950 --> 00:39:12,620
 during every term, there's only one single leader,
 
-601
-00:39:13,230 --> 00:39:25,350
-and so the term id really basically implicitly signals who leader was actually appended to to that log entry.
+709
+00:39:13,230 --> 00:39:18,990
+and so the term id really basically implicitly signals
 
-602
+710
+00:39:18,990 --> 00:39:25,350
+who leader was actually appended to to that log entry,
+
+711
 00:39:26,220 --> 00:39:28,410
-The number that goes along here,
+the number that goes along here,
 
-603
+712
 00:39:28,410 --> 00:39:31,440
 so if this is n or maybe like me use i here,
 
-604
+713
 00:39:32,080 --> 00:39:34,510
 you know that's the log index,
 
-605
+714
 00:39:39,000 --> 00:39:42,030
-so the combination of the log index was a term number,
+so the combination of the log index plus term number,
 
-606
+715
 00:39:42,030 --> 00:39:45,450
 basically uniquely identifies the content of that particular entry,
 
-607
-00:39:45,450 --> 00:39:51,780
-there could be no two log entries that have the same index, the same term and have different commands,
+716
+00:39:45,450 --> 00:39:48,570
+there could be no two log entries,
 
-608
-00:39:52,050 --> 00:39:56,910
-because only a single leader you know could have been in charge, in that particular term
+717
+00:39:48,570 --> 00:39:51,780
+that have the same index, the same term and have different commands,
 
-609
+718
+00:39:52,050 --> 00:39:54,210
+because only a single leader,
+
+719
+00:39:54,210 --> 00:39:56,910
+you know could have been in charge in that particular term,
+
+720
 00:39:57,030 --> 00:40:00,840
-and leader commits appends operations,
+and that leader commits appends operations.
 
-610
+721
 00:40:03,460 --> 00:40:06,160
-will uncommit log entries will be overwritten,
+Will uncommit log entries will be overwritten?
 
-611
+722
 00:40:06,160 --> 00:40:07,450
-yeah they might get overwritten,
+Yeah, they might get overwritten,
 
-612
+723
 00:40:07,450 --> 00:40:08,440
 we'll talk about it later,
 
-613
+724
 00:40:08,620 --> 00:40:10,450
 but that's certainly possible.
 
-614
+725
 00:40:12,540 --> 00:40:16,250
 Okay, so if we look at this picture,
 
-615
+726
 00:40:16,250 --> 00:40:19,190
 so there are two things that in this part of it,
 
-616
+727
 00:40:19,190 --> 00:40:20,300
-I guess my answer to this question
+I guess my answer to this question,
 
-617
+728
 00:40:20,300 --> 00:40:22,280
 and there are two things that need to happen,
 
-618
+729
 00:40:22,490 --> 00:40:27,560
 we need to elect leader for a particular term,
 
-619
+730
 00:40:29,080 --> 00:40:31,840
 and we need to actually ensure that the,
 
-620
+731
 00:40:34,440 --> 00:40:35,940
 ensure logs become identical,
 
-621
+732
 00:40:39,060 --> 00:40:42,150
-and we have failures and we have leader changes,
+and we have [] leaders and we have leader changes,
 
-622
+733
 00:40:44,480 --> 00:40:46,460
 and so we're going to talk about both of these topics,
 
-623
+734
 00:40:46,520 --> 00:40:50,120
-and we're gonna start with leader election
+and we're gonna start with leader election,
 
-624
+735
 00:40:50,180 --> 00:40:55,310
 and then talk about the making logs identical a little bit later.
 
-625
+736
 00:40:57,020 --> 00:40:57,950
 Okay, election,
 
-626
+737
 00:41:03,010 --> 00:41:06,250
 election is really the topic of lab 2a,
 
-627
+738
 00:41:06,250 --> 00:41:08,890
 and you know really the story is some way straightforward,
 
-628
+739
 00:41:08,890 --> 00:41:10,750
 you know we have you know,
 
-629
+740
 00:41:10,750 --> 00:41:13,420
 say here we are, system with three entries,
 
-630
+741
 00:41:13,420 --> 00:41:18,010
 we have a leader in you know term 10,
 
-631
+742
 00:41:18,010 --> 00:41:19,330
-we have the following term 10,
+we have the follower term 10,
 
-632
+743
 00:41:19,330 --> 00:41:20,920
 so we're sort of stable situation,
 
-633
+744
 00:41:21,280 --> 00:41:23,080
-another following term 10
+another follower in term 10,
 
-634
-00:41:23,470 --> 00:41:29,020
-and let's say the leader crashes or gets partitions you know from network,
+745
+00:41:23,470 --> 00:41:26,560
+and let's say the leader crashes
 
-635
+746
+00:41:26,590 --> 00:41:29,020
+or gets partitions you know from network,
+
+747
 00:41:29,020 --> 00:41:30,790
 so you know can't talk anymore,
 
-636
+748
 00:41:31,090 --> 00:41:33,160
 what will happen is that,
 
-637
+749
 00:41:33,460 --> 00:41:35,440
 the followers will start an election.
 
-638
+750
 00:41:36,200 --> 00:41:38,840
 And the reason they start an election is because,
 
-639
+751
 00:41:38,840 --> 00:41:40,280
 they're missing heartbeats from the leader,
 
-640
+752
 00:41:47,200 --> 00:41:50,440
 you know the job of the leader is to periodically,
 
-641
+753
 00:41:50,530 --> 00:41:56,680
 it's sort of fixed interval send append entry to the followers,
 
-642
+754
 00:41:57,230 --> 00:41:59,810
 you know normally you know that might be happen,
 
-643
+755
 00:42:00,110 --> 00:42:02,120
-because a lot of clients are active
+because a lot of clients are active,
 
-644
+756
 00:42:02,120 --> 00:42:05,420
 and so the followers continuously get append entries,
 
-645
+757
 00:42:05,600 --> 00:42:11,180
 but if the leader doesn't receive any commands from the clients,
 
-646
+758
 00:42:11,420 --> 00:42:15,080
-then it's actually supposed to send in heartbeat periodically
+then it's actually supposed to send in heartbeat periodically,
 
-647
+759
 00:42:15,080 --> 00:42:20,270
 and telling the basically to inform the followers that actually still the leader,
 
-648
-00:42:21,010 --> 00:42:26,800
-and the heartbeat basically takes form of normal append entry except no new log entries,
+760
+00:42:21,010 --> 00:42:25,060
+and the heartbeat basically takes form of normal append entry,
 
-649
+761
+00:42:25,120 --> 00:42:26,800
+except no new log entries,
+
+762
 00:42:27,460 --> 00:42:30,940
-and so the leader tells leader to tells in the heartbeat,
+and so the leader tells, leader to tells in the heartbeat,
 
-650
+763
 00:42:30,940 --> 00:42:33,700
 like my log is you know this long,
 
-651
+764
 00:42:33,820 --> 00:42:37,090
 this is my last entry,
 
-652
+765
 00:42:37,090 --> 00:42:40,240
 if you know those match and then everything is good.
 
-653
+766
 00:42:41,190 --> 00:42:43,620
 So if the leader fails,
 
-654
+767
 00:42:43,740 --> 00:42:45,270
-then after a couple of heartbeats
+then after a couple of heartbeats,
 
-655
+768
 00:42:45,360 --> 00:42:48,840
 and we'll talk a little bit more in detail about this,
 
-656
+769
 00:42:48,840 --> 00:42:50,370
-there will be an election time out.
+there will be an election timeout.
 
-657
+770
 00:42:52,270 --> 00:42:55,270
 So the followers have a timer running,
 
-658
-00:42:56,250 --> 00:43:01,650
-and they reset the timer every time they get a heartbeat or append entry,
+771
+00:42:56,250 --> 00:42:58,980
+and they reset the timer,
 
-659
+772
+00:42:58,980 --> 00:43:01,650
+every time they get a heartbeat or append entry,
+
+773
 00:43:01,950 --> 00:43:06,030
 but if they don't receive any heartbeats or append entries,
 
-660
-00:43:06,090 --> 00:43:10,410
-then at some point of time, after this election timeout, the timer goes off,
+774
+00:43:06,090 --> 00:43:07,290
+then at some point of time,
 
-661
+775
+00:43:07,290 --> 00:43:10,410
+after this election timeout, the timer goes off,
+
+776
 00:43:10,710 --> 00:43:13,200
-and at that point follower starts an election
+and at that point, follower starts an election,
 
-662
-00:43:13,350 --> 00:43:17,490
-and just let's assume that the first follower reaches that point first
+777
+00:43:13,350 --> 00:43:14,520
+and just let's assume that,
 
-663
-00:43:17,760 --> 00:43:21,270
-and what it will do, it will send, it will increase its term number,
+778
+00:43:14,520 --> 00:43:17,490
+the first follower reaches that point first,
 
-664
+779
+00:43:17,760 --> 00:43:18,660
+and what it will do,
+
+780
+00:43:18,660 --> 00:43:19,740
+it will send,
+
+781
+00:43:19,830 --> 00:43:21,270
+it will increase its term number,
+
+782
 00:43:21,270 --> 00:43:22,980
 so we'll set the term number to 11,
 
-665
+783
 00:43:24,440 --> 00:43:27,860
-it will, you know talk to itself, if you will
+it will you know talk to itself, if you will,
 
-666
+784
 00:43:27,890 --> 00:43:32,510
-and be part of the and will vote for itself
+and be part of the and will vote for itself,
 
-667
-00:43:32,720 --> 00:43:37,820
-and then you know we'll contact you know the other follower also tried to contact the leader,
+785
+00:43:32,720 --> 00:43:36,500
+and then you know will contact you know the other follower,
 
-668
+786
+00:43:36,500 --> 00:43:37,820
+also tried to contact the leader,
+
+787
 00:43:37,820 --> 00:43:40,580
 presumably the leader, let's say the leader is down,
 
-669
-00:43:40,580 --> 00:43:43,610
-so the leader doesn't respond, but the second follower does respond,
+788
+00:43:40,580 --> 00:43:41,720
+so the leader doesn't respond,
 
-670
+789
+00:43:41,930 --> 00:43:43,610
+but the second follower does respond,
+
+790
 00:43:44,440 --> 00:43:46,090
 and so at that point, it gets two votes,
 
-671
+791
 00:43:46,090 --> 00:43:48,280
-one for himself and one from the follower
+one from himself and one from the follower,
 
-672
+792
 00:43:48,490 --> 00:43:50,650
 and at that point, actually it becomes the new leader,
 
-673
+793
 00:43:50,650 --> 00:43:52,510
 it becomes the leader for term 11,
 
-674
+794
 00:43:56,240 --> 00:43:59,540
-and then you know start doing basic clients fall over to that leader
+and then you know start basic clients fall over to that leader,
 
-675
+795
 00:43:59,570 --> 00:44:01,820
 and you know the things you just proceed as before.
 
-676
+796
 00:44:03,370 --> 00:44:04,000
 Okay?
 
-677
-00:44:04,180 --> 00:44:09,280
-Now maybe it's slightly there's a couple problems and you might worry about,
+797
+00:44:04,180 --> 00:44:08,320
+Now maybe it's slightly there's a couple problems,
 
-678
+798
+00:44:08,320 --> 00:44:09,280
+and you might worry about,
+
+799
 00:44:09,280 --> 00:44:11,980
 one of them could be the following situation,
 
-679
+800
 00:44:11,980 --> 00:44:15,550
 we it turns out there was a network partition between leader 10,
 
-680
+801
 00:44:15,580 --> 00:44:18,310
 where the leader for term 10 and the followers for term 10.
 
-681
+802
 00:44:18,840 --> 00:44:22,050
-And so at some point that network you know partition heals
+And so at some point, that network you know partition heals,
 
-682
-00:44:22,320 --> 00:44:29,790
-and so maybe the applied request came in still to leader, for leader for term 10,
+803
+00:44:22,320 --> 00:44:27,930
+and so maybe the client request came in still to leader,
 
-683
-00:44:30,120 --> 00:44:36,060
-and now of course, now it looks like oops, we might have actually two leaders
+804
+00:44:27,930 --> 00:44:29,790
+for leader for term 10,
 
-684
+805
+00:44:30,120 --> 00:44:32,970
+and now of course, now it looks like oops,
+
+806
+00:44:32,970 --> 00:44:36,060
+we might have actually two leaders,
+
+807
 00:44:36,060 --> 00:44:39,240
 and we're back into the split syndrome problem,
 
-685
+808
 00:44:39,570 --> 00:44:41,340
 that turns out not to be the case,
 
-686
-00:44:41,610 --> 00:44:47,110
-because when the leader tries to actually you know send append entries to the followers,
+809
+00:44:41,610 --> 00:44:44,310
+because when the leader tries to actually
 
-687
+810
+00:44:44,950 --> 00:44:47,110
+you know send append entries to the followers,
+
+811
 00:44:47,500 --> 00:44:51,340
 to followers that are now in term 11,
 
-688
+812
 00:44:51,430 --> 00:44:54,700
-they will just reject those append entries
+they will just reject those append entries,
 
-689
+813
 00:44:54,970 --> 00:44:56,530
 and they will tell the old leader,
 
-690
-00:44:56,530 --> 00:45:01,330
-that you know too bad you know he's not the leader anymore,
+814
+00:44:56,530 --> 00:44:57,790
+that you know too bad,
 
-691
-00:45:01,330 --> 00:45:05,920
-in fact they'll send a message back saying, no I cannot do the append,
+815
+00:44:57,820 --> 00:45:01,330
+you know he's not the leader anymore,
 
-692
+816
+00:45:01,330 --> 00:45:02,740
+in fact they'll send a message back,
+
+817
+00:45:02,770 --> 00:45:05,920
+saying, no I cannot do the append,
+
+818
 00:45:06,470 --> 00:45:12,200
 and here is my current term number 11,
 
-693
-00:45:12,200 --> 00:45:16,730
-the leader receives that sees the term number 11 is bigger than this term number 10
+819
+00:45:12,200 --> 00:45:13,670
+the leader receives that,
 
-694
+820
+00:45:13,670 --> 00:45:16,730
+sees the term number 11 is bigger than this term number 10,
+
+821
 00:45:16,790 --> 00:45:19,760
 and basically steps down as leader and becomes a follower.
 
-695
+822
 00:45:20,620 --> 00:45:22,240
 And they take up another election,
 
-696
+823
 00:45:22,360 --> 00:45:27,130
 or to basically become part of term that has all three of them,
 
-697
+824
 00:45:27,340 --> 00:45:30,940
 but basically there's no chance of split brain problem,
 
-698
+825
 00:45:31,090 --> 00:45:34,150
 because you just can't actually get any operations through,
 
-699
+826
 00:45:35,740 --> 00:45:37,540
 so no split brain.
 
-700
+827
 00:45:42,890 --> 00:45:44,480
 And the reason that we avoid split brain is,
 
-701
+828
 00:45:44,480 --> 00:45:47,540
 because of this majority rule as well as these term numbers.
 
-702
+829
 00:45:51,400 --> 00:45:53,980
 Okay, that's of course not the only problem,
 
-703
+830
 00:45:54,010 --> 00:46:00,150
 that we might have another challenge is,
 
-704
+831
 00:46:01,730 --> 00:46:04,930
 we might end up with split vote.
 
-705
+832
 00:46:09,160 --> 00:46:11,050
 So like it was a particular picture,
 
-706
+833
 00:46:11,050 --> 00:46:12,010
 we had a leader,
 
-707
+834
 00:46:12,010 --> 00:46:14,020
 maybe here was leader in 10,
 
-708
+835
 00:46:14,530 --> 00:46:15,910
 is partition of the network,
 
-709
+836
 00:46:16,480 --> 00:46:20,320
 here are two followers in 10,
 
-710
+837
 00:46:22,540 --> 00:46:25,030
 and if we're not careful,
 
-711
-00:46:25,030 --> 00:46:28,570
-you know, maybe they will actually start you know elections very close to each other,
+838
+00:46:25,030 --> 00:46:26,320
+you know maybe they will actually
 
-712
+839
+00:46:26,320 --> 00:46:28,570
+start you know elections very close to each other,
+
+840
 00:46:29,640 --> 00:46:33,630
-and so you F10 you know vote for itself,
+and so you know F10 you know vote for itself,
 
-713
+841
 00:46:33,900 --> 00:46:35,610
 first leader follower votes itself,
 
-714
+842
 00:46:35,610 --> 00:46:38,460
 the second leader, second follower of votes itself,
 
-715
+843
 00:46:38,520 --> 00:46:43,860
-then you know they sent you know vote request with each other
+then you know they sent you know vote request with each other,
 
-716
+844
 00:46:44,070 --> 00:46:51,540
 and the rule is that you know you can vote, one vote per term.
 
-717
+845
 00:46:54,860 --> 00:46:57,680
-So when you know the first followers voted for itself
+So when you know the first follower voted for itself,
 
-718
+846
 00:46:57,680 --> 00:46:59,000
 and it has voted for itself,
 
-719
-00:46:59,000 --> 00:47:03,590
-when it receives a second vote request,it actually cannot vote for that request,because it already voted for itself,
+847
+00:46:59,000 --> 00:47:00,500
+when it receives a second vote request,
 
-720
+848
+00:47:00,500 --> 00:47:03,000
+it actually cannot vote for that request,
+
+849
+00:47:03,000 --> 00:47:04,540
+because it already voted for itself,
+
+850
 00:47:05,080 --> 00:47:07,540
 and so at this point, we're gonna have split votes,
 
-721
+851
 00:47:07,540 --> 00:47:09,130
-like this guy is going to have one vote
+like this guy is going to have one vote,
 
-722
+852
 00:47:09,130 --> 00:47:10,630
 and this guy is going to have one vote,
 
-723
+853
 00:47:11,480 --> 00:47:13,460
 it won't do anything,
 
-724
+854
 00:47:13,460 --> 00:47:15,440
 in but at some point again later,
 
-725
+855
 00:47:15,680 --> 00:47:17,330
 there will be timeout,
 
-726
+856
 00:47:18,260 --> 00:47:20,510
 and then this process starts again,
 
-727
+857
 00:47:21,440 --> 00:47:23,570
 and of course you know part of that process,
 
-728
+858
 00:47:23,570 --> 00:47:27,170
 you know this is election 11, 11 result in 12,
 
-729
+859
 00:47:27,170 --> 00:47:29,300
 if you want to go to election number 12,
 
-730
+860
 00:47:29,900 --> 00:47:32,480
-and you start trying to trying to do this again,
+and you know start trying to trying to do this again,
 
-731
+861
 00:47:33,590 --> 00:47:34,970
 now if you not care for correct,
 
-732
+862
 00:47:35,450 --> 00:47:38,570
-this could just happen over over and over endlessly.
+this could just happen over over and over endlessly,
 
-733
-00:47:39,110 --> 00:47:43,910
-Basically every time you know the two followers roughly at the same time start this election
+863
+00:47:39,110 --> 00:47:40,370
+basically everytime,
 
-734
+864
+00:47:40,370 --> 00:47:43,910
+you know the two followers roughly at the same time start this election,
+
+865
 00:47:43,910 --> 00:47:46,130
 and we're not going to make forward progress.
 
-735
-00:47:46,840 --> 00:47:52,300
-And so we need to avoid this problem is that the election timers are randomized.
+866
+00:47:46,840 --> 00:47:48,430
+And so we need to avoid this problem
 
-736
-00:48:08,340 --> 00:48:16,350
-And so when the followers you know set the election timer in the paper,
+867
+00:47:48,610 --> 00:47:52,300
+is that the election timeout are randomized,
 
-737
-00:48:16,350 --> 00:48:22,620
-they talk about picking a value between 150 milliseconds and 300 milliseconds,
+868
+00:48:08,340 --> 00:48:14,850
+and so when the followers you know set the election timer,
 
-738
+869
+00:48:14,850 --> 00:48:17,580
+in the paper, they talk about
+
+870
+00:48:17,700 --> 00:48:22,620
+picking a value between 150 milliseconds and 300 milliseconds,
+
+871
 00:48:23,440 --> 00:48:25,120
 random number in that interval,
 
-739
+872
 00:48:25,720 --> 00:48:30,790
-and every time you know these followers basically reset their election timeout,
+and everytime you know these followers basically reset their election timeout,
 
-740
+873
 00:48:30,910 --> 00:48:33,760
-they pick a new number, random number in that involved
+they pick a new number, random number in that interval,
 
-741
+874
 00:48:33,880 --> 00:48:37,450
 and only when that timer goes off, they run the election,
 
-742
+875
 00:48:38,130 --> 00:48:40,770
-and, if basically you know,
+and if basically you know,
 
-743
+876
 00:48:40,980 --> 00:48:42,900
 if this interval is wide enough,
 
-744
-00:48:43,110 --> 00:48:47,880
-that it's unlikely that's like the first person or the first follower that actually gets the,
+877
+00:48:43,110 --> 00:48:44,580
+that it's unlikely,
 
-745
+878
+00:48:44,580 --> 00:48:47,880
+that's like the first person or the first follower that actually gets the,
+
+879
 00:48:48,300 --> 00:48:51,750
 the first follower whose election timer runs out,
 
-746
+880
 00:48:52,770 --> 00:48:55,410
 you know the interval is wide enough that you know,
 
-747
+881
 00:48:55,410 --> 00:48:59,640
 there's a good chance that actual succeed complete, complete election,
 
-748
+882
 00:48:59,700 --> 00:49:03,120
-before the second timer grows up,
+before the second timer goes off,
 
-749
+883
 00:49:03,270 --> 00:49:04,740
-before had another follower,
+before another follower,
 
-750
+884
 00:49:05,040 --> 00:49:08,310
 so this avoids you know the sort of endless split votes,
 
-751
+885
 00:49:08,430 --> 00:49:09,690
-you know we might get unlucky
+you know we might get unlucky,
 
-752
+886
 00:49:09,690 --> 00:49:11,580
 and we get maybe one or two split votes,
 
-753
-00:49:11,700 --> 00:49:16,650
-but over time you know that has to be the case, that in the end we will succeed.
+887
+00:49:11,700 --> 00:49:14,040
+but over time, you know that has to be the case,
 
-754
+888
+00:49:14,040 --> 00:49:16,650
+that in the end we will succeed.
+
+889
 00:49:20,380 --> 00:49:21,370
 There are a couple sort of,
 
-755
+890
 00:49:21,430 --> 00:49:23,410
 this is important maybe for the lab 2,
 
-756
+891
 00:49:23,590 --> 00:49:27,850
-there's a couple pressures on these election time outs,
+there's a couple pressures on these election timeouts,
 
-757
+892
 00:49:32,840 --> 00:49:40,290
 you don't want to make an election timeout is too short, right,
 
-758
+893
 00:49:40,290 --> 00:49:41,460
-because if it's too short
+because if it's too short,
 
-759
+894
 00:49:41,460 --> 00:49:44,820
 and for example short than heartbeat,
 
-760
+895
 00:49:44,820 --> 00:49:46,560
-you know you might lose one message
+you know you might lose one message,
 
-761
+896
 00:49:46,560 --> 00:49:48,540
 and immediately you start running an election,
 
-762
+897
 00:49:49,080 --> 00:49:50,670
 and nothing bad happens,
 
-763
+898
 00:49:50,700 --> 00:49:53,130
 because you know we'll elect a new leader,
 
-764
+899
 00:49:53,130 --> 00:49:55,110
-you will go through a new term and all that kind of stuff,
+you will go to a new term and all that kind of stuff,
 
-765
+900
 00:49:55,410 --> 00:49:58,530
-but basically you know during this an election,
+but basically you know during this election,
 
-766
-00:49:58,530 --> 00:50:02,280
-this system is actually not usable, the clients are actually blocked.
+901
+00:49:58,530 --> 00:50:00,960
+this system is actually not usable,
 
-767
+902
+00:50:00,960 --> 00:50:02,280
+the clients are actually blocked.
+
+903
 00:50:02,680 --> 00:50:07,690
 So you don't want unnecessarily cause elections,
 
-768
-00:50:07,690 --> 00:50:16,840
-and so one of the things you want to actually basically probably spit take value at least bigger than a few time out, a few heartbeats,
+904
+00:50:07,690 --> 00:50:08,890
+and so one of the things you want to do
 
-769
-00:50:22,240 --> 00:50:28,060
-perhaps in a, maybe a data center will take a few milliseconds to do an rpc
+905
+00:50:08,890 --> 00:50:13,570
+actually basically probably take value
 
-770
-00:50:28,270 --> 00:50:32,500
-and we may want to wait at least you know so maybe three four rpc around [good] times,
+906
+00:50:13,570 --> 00:50:16,840
+at least bigger than a few timeout, a few heartbeats,
 
-771
+907
+00:50:22,240 --> 00:50:23,740
+perhaps in a,
+
+908
+00:50:23,770 --> 00:50:28,060
+maybe a data center will take a few milliseconds to do an RPC,
+
+909
+00:50:28,270 --> 00:50:29,560
+and we may want to wait
+
+910
+00:50:29,560 --> 00:50:32,500
+at least you know so maybe three four rpc around [] times,
+
+911
 00:50:32,500 --> 00:50:36,190
-so that we get a chance to a retry rpc,
+so that we get a chance to a retry RPC,
 
-772
+912
 00:50:36,400 --> 00:50:40,000
 without actually having election timer go off,
 
-773
+913
 00:50:40,000 --> 00:50:42,460
 so we can cover from temporary network fails.
 
-774
+914
 00:50:44,390 --> 00:50:50,360
-Then you know we want to presumely add some random value to that,
+Then you know we want to presumably add some random value to that,
 
-775
+915
 00:50:50,840 --> 00:50:53,870
 random value to avoid you know the split votes,
 
-776
+916
 00:50:54,450 --> 00:50:58,260
 and so one hand we want to make the random values big as possible,
 
-777
+917
 00:50:58,290 --> 00:50:59,490
 because we make it big,
 
-778
+918
 00:50:59,490 --> 00:51:04,890
 then a very little chance that actually we run into a split vote problem.
 
-779
+919
 00:51:05,740 --> 00:51:07,900
 But the other hand if we do that,
 
-780
+920
 00:51:07,900 --> 00:51:11,560
 then there's a chance that you know the system may be down for a longer period of time,
 
-781
+921
 00:51:11,560 --> 00:51:14,440
-we might take a big value for the election time out,
+we might take a big value for the election timeout,
 
-782
+922
 00:51:14,680 --> 00:51:17,860
 and that means down time from the point of view of the clients,
 
-783
+923
 00:51:18,400 --> 00:51:22,270
 so we want to keep this short enough,
 
-784
+924
 00:51:27,040 --> 00:51:28,300
 the down time is short,
 
-785
-00:51:36,030 --> 00:51:40,110
-in the paper in [] election does quite a bit of work on sort of validating,
+925
+00:51:36,030 --> 00:51:38,700
+in the paper in [] election does quite a bit of work,
 
-786
-00:51:40,110 --> 00:51:43,140
-in order for reasonable values for their particular setting
+926
+00:51:38,730 --> 00:51:41,580
+on sort of validating, in order for reasonable values,
 
-787
+927
+00:51:42,180 --> 00:51:43,140
+for their particular setting,
+
+928
 00:51:43,140 --> 00:51:46,260
 and then that's how they got 250 to 300 milliseconds,
 
-788
+929
 00:51:46,650 --> 00:51:48,450
-in the lab, we're going to be original generous,
+in the lab, we're going to be use more generous,
 
-789
+930
 00:51:48,450 --> 00:51:51,900
 basically if you recover within a second,
 
-790
+931
 00:51:51,960 --> 00:51:53,700
 you're more or less going to be good,
 
-791
+932
 00:51:54,320 --> 00:51:57,800
 with for our test cases.
 
-792
+933
 00:52:02,520 --> 00:52:11,110
 Okay, I want to make one more point about the, about the elections,
 
-793
+934
 00:52:11,590 --> 00:52:15,760
-so another scenario that is important to consider is
+so another scenario that is important to consider is,
 
-794
+935
 00:52:15,760 --> 00:52:16,990
 you know we have a follower，
 
-795
-00:52:17,020 --> 00:52:17,950
-we have the leader,
+936
+00:52:17,020 --> 00:52:19,240
+we have the leader, leader goes down,
 
-796
-00:52:17,980 --> 00:52:19,240
-leader goes down,
-
-797
+937
 00:52:19,540 --> 00:52:22,630
 so this is 10, this is 10, here's follower 10.
 
-798
+938
 00:52:25,150 --> 00:52:27,760
 And we already talked a little bit about it,
 
-799
+939
 00:52:27,760 --> 00:52:31,870
 when let's say this guy goes first, vote for itself,
 
-800
-00:52:33,200 --> 00:52:41,030
-and you know we the protocol records you know unstable storage, why who we voted for,
+940
+00:52:33,200 --> 00:52:39,080
+and you know we the protocol records you know on stable storage,
 
-801
-00:52:41,850 --> 00:52:50,700
-so the record records on the this follower one, this follower two, will record voted for in term 11,
+941
+00:52:39,260 --> 00:52:41,030
+why who we voted for,
 
-802
-00:52:51,000 --> 00:52:57,590
-you know for follower one, why is it recorded on stable storage,
+942
+00:52:41,850 --> 00:52:47,400
+so the record records on the this follower 1, this follower 2,
 
-803
+943
+00:52:47,400 --> 00:52:52,740
+and record voted for in term 11, you know for follower 1,
+
+944
+00:52:55,070 --> 00:52:57,590
+why is it recorded on stable storage,
+
+945
 00:52:59,180 --> 00:53:03,310
 and why does you know follower need to remember that,
 
-804
+946
 00:53:05,670 --> 00:53:07,740
 that is voted in term 11 for itself.
 
-805
+947
 00:53:14,040 --> 00:53:17,580
 This way doesn't vote twice, if it fails.
 
-806
+948
 00:53:18,380 --> 00:53:25,950
 Yeah, it might crash, right here, and come backup,
 
-807
+949
 00:53:25,950 --> 00:53:28,920
 and it should remember that and something might have been,
 
-808
+950
 00:53:28,920 --> 00:53:33,570
-let's say it was actually referred one guy in here, follower whatever 3,
+let's say it was actually third one guy in here, follower whatever 3,
 
-809
+951
 00:53:33,840 --> 00:53:36,360
 and already voted for follower 3,
 
-810
+952
 00:53:36,630 --> 00:53:41,260
-then, it can actually not change in mind, right,
+then it can actually not change in mind, right,
 
-811
+953
 00:53:41,770 --> 00:53:44,560
 and so because in the end, we at the end of the term,
 
-812
+954
 00:53:44,560 --> 00:53:47,080
 we need to have have to be in a position,
 
-813
+955
 00:53:47,290 --> 00:53:50,920
 that per term there's only one leader and never never two,
 
-814
-00:53:51,730 --> 00:53:59,470
-and so to ensure that every follower must remember for which candidate voted and never change its mind.
+956
+00:53:51,730 --> 00:53:56,710
+and so to ensure that every follower must remember
 
-815
-00:54:07,920 --> 00:54:15,030
-Okay, I guess all discussion in the chat about a timeout numbers in relation to the lab,
+957
+00:53:56,710 --> 00:53:59,470
+for which candidate voted and never change its mind.
 
-816
+958
+00:54:07,920 --> 00:54:13,200
+Okay, I guess all discussion in the chat about the timeout numbers,
+
+959
+00:54:13,650 --> 00:54:15,030
+in relation to the lab,
+
+960
 00:54:15,210 --> 00:54:18,840
-so people can look there are confused about this,
+so people can look there, are confused about this,
 
-817
+961
 00:54:18,840 --> 00:54:22,680
 otherwise we can talk about elections a bit more,
 
-818
+962
 00:54:22,680 --> 00:54:25,920
 because this is the last thing I want to say about elections.
 
-819
+963
 00:54:28,320 --> 00:54:29,910
 Any questions about the elections?
 
-820
+964
 00:54:36,780 --> 00:54:39,210
 Have a bit more general question,
 
-821
+965
 00:54:39,240 --> 00:54:42,120
 so, in like the figure two of the lab,
 
-822
-00:54:42,120 --> 00:54:48,790
-that says that for each server storing like the current term and then who voted for,
+966
+00:54:42,120 --> 00:54:45,730
+that says that for each server
 
-823
-00:54:49,630 --> 00:54:56,830
-but not the like current state of the server like if its candidate or follower or leader.
+967
+00:54:45,730 --> 00:54:48,790
+storing like the current term and then who voted for,
 
-824
+968
+00:54:49,630 --> 00:54:52,630
+but not the like current state of the server,
+
+969
+00:54:52,630 --> 00:54:56,830
+like if its candidate or follower or leader.
+
+970
 00:54:57,630 --> 00:54:59,640
 So I'm wondering how they like,
 
-825
-00:55:00,250 --> 00:55:03,040
-is that implied or is there another way to figure that out,
+971
+00:55:00,250 --> 00:55:01,120
+is that implied
 
-826
+972
+00:55:01,120 --> 00:55:03,040
+or is there another way to figure that out?
+
+973
 00:55:03,430 --> 00:55:06,250
-I guess when you come back up
+I guess when you come back up,
 
-827
+974
 00:55:06,280 --> 00:55:07,900
 and you come back up as a follower,
 
-828
+975
 00:55:09,100 --> 00:55:10,930
 and you're starting an election,
 
-829
+976
 00:55:12,620 --> 00:55:15,920
 and then that will in the end, at the end of the election,
 
-830
+977
 00:55:15,920 --> 00:55:16,790
 you know what you are,
 
-831
+978
 00:55:18,300 --> 00:55:20,340
 you either a follower or the leader.
 
-832
+979
 00:55:24,090 --> 00:55:25,410
 I see, okay, thank you.
 
-833
+980
 00:55:25,650 --> 00:55:26,280
 That makes sense?
 
-834
-00:55:27,180 --> 00:55:32,490
-One warning about figure two mostly positive
+981
+00:55:27,180 --> 00:55:31,470
+One warning about figure two,
 
-835
-00:55:32,490 --> 00:55:33,900
-and then there's maybe negative statement.
+982
+00:55:31,500 --> 00:55:33,900
+mostly positive and then there's maybe negative [statement].
 
-836
-00:55:35,620 --> 00:55:38,860
-Anywhere in the figure two when it says like you know you should do this,
+983
+00:55:35,620 --> 00:55:36,580
+Anywhere in the figure two,
 
-837
+984
+00:55:36,580 --> 00:55:38,860
+when it says like you know you should do this,
+
+985
 00:55:39,190 --> 00:55:40,240
 you should really do it,
 
-838
+986
 00:55:40,420 --> 00:55:43,960
-so you cannot admit any detail that actually is in figure two,
+so you cannot [] any detail that actually is in figure two,
 
-839
+987
 00:55:43,960 --> 00:55:44,980
 if you do that,
 
-840
+988
 00:55:44,980 --> 00:55:47,380
 then undoubtedly going to fail some of the test cases,
 
-841
+989
 00:55:47,950 --> 00:55:50,350
-unfortunately figure two is not complete,
+unfortunately, figure two is not complete,
 
-842
+990
 00:55:50,820 --> 00:55:52,980
 and so you still have to do something,
 
-843
-00:55:53,400 --> 00:55:57,630
-so particularly figure two doesn't really say not much about how the replies are handled,
+991
+00:55:53,400 --> 00:55:56,190
+so particularly figure two doesn't really say not much about,
 
-844
+992
+00:55:56,190 --> 00:55:57,630
+how the replies are handled,
+
+993
 00:55:57,870 --> 00:56:00,300
-the vote rpc and append rpc
+the vote RPC and append RPC,
 
-845
+994
 00:56:00,300 --> 00:56:04,680
 and so, you will have to do something to fill in the missing details,
 
-846
+995
 00:56:05,010 --> 00:56:09,360
 and so, so there's two points here like figure two,
 
-847
+996
 00:56:10,000 --> 00:56:12,130
-anything that's in there you better deal with it
+anything that's in there you better deal with it,
 
-848
-00:56:12,520 --> 00:56:16,480
-and but there still might be things missing that you will have to resolve for yourself,x
+997
+00:56:12,520 --> 00:56:14,590
+and but there still might be things missing,
 
-849
+998
+00:56:14,590 --> 00:56:16,480
+that you will have to resolve for yourself,
+
+999
 00:56:20,450 --> 00:56:23,480
 you'll be looking at figure two a lot.
 
-850
+1000
 00:56:26,240 --> 00:56:28,730
 So from the description of the election process,
 
-851
-00:56:28,730 --> 00:56:32,930
-there seems to be, even for lab 2a, which deals only with election,
+1001
+00:56:28,730 --> 00:56:29,690
+there seems to be,
 
-852
+1002
+00:56:29,690 --> 00:56:32,930
+even for lab 2a, which deals only with election,
+
+1003
 00:56:32,930 --> 00:56:36,020
 there seems to be some state that we need to store on persistence,
 
-853
+1004
 00:56:36,890 --> 00:56:40,700
 look for example like who you voted for and the term number.
 
-854
+1005
 00:56:40,880 --> 00:56:41,270
 Yeah.
 
-855
+1006
 00:56:41,480 --> 00:56:43,910
 But, when you look at the code of lab 2,
 
-856
+1007
 00:56:43,970 --> 00:56:46,910
 all of the code that has to do with saving the persistent state,
 
-857
+1008
 00:56:46,910 --> 00:56:48,650
 it says above it lab 2c,
 
-858
+1009
 00:56:48,980 --> 00:56:51,770
 so is it that it's not that crucial,
 
-859
+1010
 00:56:51,770 --> 00:56:53,960
 maybe to care about persistent storage,
 
-860
+1011
 00:56:53,960 --> 00:56:56,870
 or should we absolutely start [].
 
-861
-00:56:57,080 --> 00:57:01,610
-Yeah, I think the first couple tests, we don't actually crash machines,
+1012
+00:56:57,080 --> 00:57:00,140
+Yeah, I think the first couple tests,
 
-862
+1013
+00:57:00,140 --> 00:57:01,610
+we don't actually crash machines,
+
+1014
 00:57:02,570 --> 00:57:04,400
-and so therefore it's not important
+and so therefore it's not important,
 
-863
+1015
 00:57:04,490 --> 00:57:07,040
-and in 2c were definitely crashing machines.
+and in 2c where definitely crashing machines.
 
-864
+1016
 00:57:08,120 --> 00:57:09,170
 Okay, awesome, thank you.
 
-865
+1017
 00:57:13,440 --> 00:57:19,350
 Okay, how are you doing, everybody on board?
 
-866
+1018
 00:57:25,260 --> 00:57:27,210
 Okay, here we go, next step.
 
-867
+1019
 00:57:28,000 --> 00:57:32,370
 Okay, so one important thing to realize
 
-868
+1020
 00:57:32,370 --> 00:57:34,050
-and this came up earlier in the questions
+and this came up earlier in the questions,
 
-869
+1021
 00:57:34,050 --> 00:57:36,180
-and when I hit that now that topic hard
+and when I [] that now that topic hard
 
-870
+1022
 00:57:36,390 --> 00:57:39,030
 is that logs may diverge diverge.
 
-871
+1023
 00:57:48,080 --> 00:57:50,210
-And now they can be quite dramatic,
+And they can be quite dramatic,
 
-872
+1024
 00:57:50,210 --> 00:57:53,900
 but just let's get into it, for basic understanding
 
-873
+1025
 00:57:54,140 --> 00:57:57,830
-and then discuss in more detail,
+and then discuss in more detail.
 
-874
+1026
 00:57:57,830 --> 00:57:59,750
-so let's do a couple simple examples,
+So let's do a couple simple examples,
 
-875
+1027
 00:57:59,930 --> 00:58:03,140
 so I'm going to write things and using the following notation,
 
-876
+1028
 00:58:03,140 --> 00:58:06,890
 we're going to have three servers as before,
 
-877
+1029
 00:58:07,070 --> 00:58:09,350
 but I'm going to cut all the timeline business
 
-878
+1030
 00:58:09,500 --> 00:58:11,390
 and just like draw the logs.
 
-879
+1031
 00:58:15,600 --> 00:58:19,700
 And you know we have indexes,
 
-880
-00:58:19,820 --> 00:58:23,420
-so let's say these are indexes you know there's preceding part to it,
+1032
+00:58:19,820 --> 00:58:21,380
+so let's say these are indexes,
 
-881
+1033
+00:58:21,380 --> 00:58:23,420
+you know there's preceding part to it,
+
+1034
 00:58:23,420 --> 00:58:25,670
 when we're talking about 10 11 12,
 
-882
+1035
 00:58:27,460 --> 00:58:31,420
 and so you know there is an term entry in each one of them,
 
-883
-00:58:31,630 --> 00:58:39,850
-so let's say all three servers committed or appended an operation in term 3 to index 10,
+1036
+00:58:31,630 --> 00:58:33,580
+so let's say all three servers
 
-884
+1037
+00:58:33,910 --> 00:58:39,850
+committed or appended an operation in term 3 to index 10,
+
+1038
 00:58:41,710 --> 00:58:50,470
-and you know and same thing happens in with index for 11,
+and you know and same thing happens in with index 11.
 
-885
-00:58:50,470 --> 00:58:52,690
-so one way to think, one way you could get this correct,
+1039
+00:58:50,470 --> 00:58:51,280
+So one way to think,
 
-886
+1040
+00:58:51,280 --> 00:58:52,690
+one way you could get this, correct,
+
+1041
 00:58:52,690 --> 00:58:54,370
-that server one would be the leader,
+that server 1 would be the leader,
 
-887
+1042
 00:58:54,490 --> 00:58:56,680
-server one appended to its own log,
+server 1 appended to its own log,
 
-888
+1043
 00:58:56,680 --> 00:58:59,140
 then replicates it to S2 and S3,
 
-889
+1044
 00:58:59,380 --> 00:59:01,150
 same thing happens for index 11,
 
-890
-00:59:01,210 --> 00:59:04,810
-then the next 12, maybe also successful appends,
+1045
+00:59:01,210 --> 00:59:04,180
+then the next 12 maybe also successful
 
-891
-00:59:05,080 --> 00:59:08,620
-one operation in that index for each term,
+1046
+00:59:04,180 --> 00:59:08,620
+appends one operation in that index for it's term,
 
-892
+1047
 00:59:08,620 --> 00:59:09,820
 so that's term 3,
 
-893
+1048
 00:59:09,850 --> 00:59:10,870
 but then it crashes.
 
-894
+1049
 00:59:11,980 --> 00:59:13,570
 Okay, so now we're in a situation,
 
-895
+1050
 00:59:13,570 --> 00:59:19,870
 where one server actually has an extra log entry in its log
 
-896
-00:59:19,870 --> 00:59:23,170
-and the other ones don't or maybe that one of them has two,
+1051
+00:59:19,870 --> 00:59:21,370
+and the other ones don't,
 
-897
+1052
+00:59:21,400 --> 00:59:23,170
+or maybe that one of them has two,
+
+1053
 00:59:23,170 --> 00:59:25,480
 but they are definitely not identical.
 
-898
+1054
 00:59:26,520 --> 00:59:28,020
-But that's a simple case correctly,
+But that's a simple case, correct,
 
-899
+1055
 00:59:28,020 --> 00:59:30,150
 not merely particular step we're going on,
 
-900
+1056
 00:59:30,300 --> 00:59:32,610
 but there's much more interesting cases going on.
 
-901
-00:59:32,610 --> 00:59:39,030
-So, another case could be one server, again S1 here we go,
+1057
+00:59:32,610 --> 00:59:34,920
+So, another case could be
 
-902
+1058
+00:59:36,000 --> 00:59:39,030
+one server, again S1 here we go,
+
+1059
 00:59:39,030 --> 00:59:41,820
-same scenarios S2 S3.
+same scenarios S2 S3,
 
-903
+1060
 00:59:42,820 --> 00:59:46,690
-And, let's say we have the following logs,
+and let's say we have the following logs,
 
-904
+1061
 00:59:54,550 --> 00:59:59,400
 so this is the situation we have in index 10,
 
-905
+1062
 00:59:59,960 --> 01:00:03,560
 we have entries and all servers for term 3,
 
-906
+1063
 01:00:03,800 --> 01:00:07,130
 index 11, the first server has no entry,
 
-907
+1064
 01:00:07,400 --> 01:00:10,850
-the other two have an entry for term 3
+the other two have an entry for term 3,
 
-908
-01:00:11,030 --> 01:00:21,250
-and then last one number 12 you know we have entries in index 4 at servers 2 and 3 with term numbers 4 and 5.
+1065
+01:00:11,030 --> 01:00:14,030
+and then last one number 12,
 
-909
-01:00:22,020 --> 01:00:24,630
-So the first question that we need to ask ourselves is this possible,
+1066
+01:00:14,060 --> 01:00:19,450
+you know we have entries in index 4 at servers 2 and 3
 
-910
+1067
+01:00:19,570 --> 01:00:21,250
+with term numbers 4 and 5.
+
+1068
+01:00:22,020 --> 01:00:23,760
+So the first question that we need to ask ourselves
+
+1069
+01:00:23,760 --> 01:00:24,630
+is this possible,
+
+1070
 01:00:26,330 --> 01:00:30,530
 can raft end up producing logs in this way,
 
-911
+1071
 01:00:31,010 --> 01:00:33,920
 were they in the same log entry,
 
-912
+1072
 01:00:34,010 --> 01:00:37,580
 we have two different term numbers and same log index.
 
-913
+1073
 01:00:37,610 --> 01:00:39,080
 Yeah, that's possible.
 
-914
-01:00:41,140 --> 01:00:42,640
-So basically,
+1074
+01:00:41,140 --> 01:00:45,700
+So basically, it looks like.
 
-915
-01:00:43,300 --> 01:00:45,700
-it looks like.
-
-916
+1075
 01:00:45,700 --> 01:00:47,020
-So it like scenario that produced.
+So it like what scenario that produced?
 
-917
-01:00:47,020 --> 01:00:54,730
-Yeah, so it looks like server two or server three was leader for term 3
+1076
+01:00:47,020 --> 01:00:48,730
+Yeah, so it looks like,
 
-918
+1077
+01:00:48,730 --> 01:00:54,730
+server 2 or server 3 was leader for term 3,
+
+1078
 01:00:54,730 --> 01:00:59,050
-and then got some logs out to server one
+and then got some logs out to server 1,
 
-919
+1079
 01:00:59,050 --> 01:01:04,760
 and then shared another log with only one of the two servers,
 
-920
+1080
 01:01:04,790 --> 01:01:07,550
 after which point it went down,
 
-921
+1081
 01:01:08,220 --> 01:01:12,990
 and then S2 got elected as leader for term 2,
 
-922
+1082
 01:01:12,990 --> 01:01:14,040
 which is still possible,
 
-923
-01:01:14,040 --> 01:01:20,070
-because its log is like up to date as as up to date as others, and then.
+1083
+01:01:14,040 --> 01:01:18,330
+because its log is like up to date as as up to date as others,
 
-924
+1084
+01:01:18,570 --> 01:01:20,070
+and then.
+
+1085
 01:01:20,070 --> 01:01:21,150
-And then again to make sure,
+And [] again to make sure,
 
-925
+1086
 01:01:21,150 --> 01:01:24,350
 so S2 got elected for term 4.
 
-926
+1087
 01:01:24,560 --> 01:01:25,340
 Yes.
 
-927
+1088
 01:01:25,340 --> 01:01:26,660
 Okay, not term 2.
 
-928
+1089
 01:01:27,540 --> 01:01:29,610
-Okay, so S2 get elected for term 4
+Okay, so S2 get elected for term 4,
 
-929
+1090
 01:01:29,670 --> 01:01:32,820
 and using S1 as a backup, correct,
 
-930
+1091
 01:01:32,820 --> 01:01:34,230
 basically as the follower?
 
-931
-01:01:35,900 --> 01:01:44,240
-Yes, I think, and then S3 gets elected for term 5 before S2 can put anything in the logs.
+1092
+01:01:35,900 --> 01:01:39,440
+Yes, I think,
 
-932
-01:01:44,330 --> 01:01:50,330
-Yeah, another way of saying it's like maybe S2 crashed, right away, right after I got elected to term 4
+1093
+01:01:39,440 --> 01:01:41,630
+and then S3 gets elected for term 5
 
-933
+1094
+01:01:41,630 --> 01:01:44,240
+before S2 can put anything in the logs.
+
+1095
+01:01:44,330 --> 01:01:45,290
+Yeah, another way of saying,
+
+1096
+01:01:45,290 --> 01:01:47,330
+it's like maybe S2 crashed, right away,
+
+1097
+01:01:47,360 --> 01:01:50,330
+right after I got elected to term 4
+
+1098
 01:01:50,690 --> 01:01:53,180
 and so then there's a timeout,
 
-934
+1099
 01:01:53,180 --> 01:01:56,330
 then let's say S3 is partition but now is back,
 
-935
+1100
 01:01:56,720 --> 01:01:59,600
 in that point, it will become,
 
-936
+1101
 01:01:59,630 --> 01:02:03,170
 it will, it come into a term 5, right.
 
-937
+1102
 01:02:04,350 --> 01:02:05,040
 Yeah.
 
-938
-01:02:06,460 --> 01:02:07,030
-Okay, good,
+1103
+01:02:06,460 --> 01:02:07,900
+Okay, good, so that's possible,
 
-939
-01:02:07,060 --> 01:02:07,900
-so that's possible,
-
-940
+1104
 01:02:08,080 --> 01:02:11,860
-so turns out there are quite a bit of wild variations possible,
+so turns out there are quite a bit of [] variations possible,
 
-941
+1105
 01:02:11,860 --> 01:02:13,750
 so we'll look at the,
 
-942
+1106
 01:02:16,180 --> 01:02:20,440
-so here's the figure six or figure seven sorry from the homework,
+so here's the figure 6 or figure 7 sorry from the homework,
 
-943
-01:02:20,860 --> 01:02:32,920
-and oops, in and the homework, ask basic questions about the form,
+1107
+01:02:20,860 --> 01:02:24,290
+and oops,
 
-944
+1108
+01:02:27,580 --> 01:02:32,920
+and and the homework ask basic questions about the form,
+
+1109
 01:02:32,920 --> 01:02:37,480
-like well what happens like this guy in the figure six itself, figure seven whatever it is,
+like well what happens like this guy in the figure 6 itself, figure 7 whatever it is,
 
-945
+1110
 01:02:37,660 --> 01:02:39,370
-I think figure seven,
+I think figure 7,
 
-946
+1111
 01:02:39,700 --> 01:02:43,300
 the scenarios being discussed,
 
-947
+1112
 01:02:43,300 --> 01:02:46,030
 is like this guy becomes, the top one becomes new leader
 
-948
+1113
 01:02:46,300 --> 01:02:47,950
 and in the homework, we ask the question,
 
-949
+1114
 01:02:48,070 --> 01:02:51,610
 what happens if this leader just goes away,
 
-950
+1115
 01:02:52,060 --> 01:02:54,430
-and what are the possible outcomes
+and what are the possible outcomes,
 
-951
-01:02:54,820 --> 01:02:59,980
-you know and the possible outcomes like for every log index
+1116
+01:02:54,820 --> 01:02:56,170
+you know and the possible outcomes,
 
-952
-01:03:00,220 --> 01:03:02,560
-and the question is which one gets rejected,
+1117
+01:02:56,170 --> 01:03:01,150
+like for every log index you know the question is,
 
-953
+1118
+01:03:01,180 --> 01:03:02,560
+which one gets rejected,
+
+1119
 01:03:06,210 --> 01:03:08,580
 which one will be accepted for sure,
 
-954
+1120
 01:03:11,170 --> 01:03:13,270
 and which ones depends.
 
-955
+1121
 01:03:16,280 --> 01:03:18,620
 And I think there's an important thing exercise to do,
 
-956
-01:03:18,620 --> 01:03:22,070
-because once we have to understand what all log entries are possible,
+1122
+01:03:18,620 --> 01:03:20,570
+because what we have to understand,
 
-957
-01:03:22,070 --> 01:03:24,560
-they're possible outcomes gonna do a whole really firm up,
+1123
+01:03:20,570 --> 01:03:22,970
+what all log entries are possible, their possible outcomes,
 
-958
-01:03:24,560 --> 01:03:27,860
-like our understanding about how raft actually supposed to be operating,
+1124
+01:03:22,970 --> 01:03:25,430
+it's gonna do a whole really firm up like our understanding,
 
-959
+1125
+01:03:25,430 --> 01:03:27,860
+about how raft actually supposed to be operating,
+
+1126
 01:03:28,620 --> 01:03:31,050
-what I'd like to do is like do a quick breakout room
+what I'd like to do is like do a quick breakout room,
 
-960
-01:03:31,380 --> 01:03:39,470
-and I'd like you to identify the two possible outcomes, that not guaranteed,
+1127
+01:03:31,380 --> 01:03:37,970
+and I'd like you to identify the two possible outcomes,
 
-961
+1128
+01:03:38,000 --> 01:03:39,470
+that not guaranteed,
+
+1129
 01:03:40,280 --> 01:03:44,000
 and in the corresponding scenario,
 
-962
+1130
 01:03:44,150 --> 01:03:49,250
-so let me let's take a quick break out room session here
+so let me let's take a quick breakout room session here
 
-963
+1131
 01:03:49,250 --> 01:03:54,110
-and let's try to figure out the answer to the homework question in five minutes.
+and let's try to figure out the answer to the homework question in 5 minutes.
 
-964
+1132
 01:04:00,930 --> 01:04:02,430
 Lily you're able to.
 
-965
+1133
 01:04:02,490 --> 01:04:03,780
 You want me to.
 
-966
+1134
 01:04:03,960 --> 01:04:05,550
 Yeah, oh, yeah.
 
-967
-01:04:05,550 --> 01:04:20,850
-Yeah yup, let me actually make you participants host, now you're host.
+1135
+01:04:05,550 --> 01:04:19,800
+Yeah, yep, let me actually make you participants host,
 
-968
+1136
+01:04:19,950 --> 01:04:20,850
+now you're host.
+
+1137
 01:11:58,250 --> 01:11:59,090
 Hey, ones.
 
-969
+1138
 01:12:10,150 --> 01:12:12,700
 Okay, can everybody hear me again?
 
-970
+1139
 01:12:15,460 --> 01:12:17,260
 Can I get a positive signal.
 
-971
-01:12:17,980 --> 01:12:19,630
-Yes, okay sure,
+1140
+01:12:17,980 --> 01:12:18,490
+Yes.
 
-972
+1141
+01:12:18,700 --> 01:12:19,630
+Okay [],
+
+1142
 01:12:20,080 --> 01:12:25,960
-okay, so hope everybody gotta have a good time discussing this
+okay, so hope everybody gotta have a good time discussing this,
 
-973
+1143
 01:12:26,950 --> 01:12:30,730
 and so let's this is really a discussion about log divergence
 
-974
+1144
 01:12:31,750 --> 01:12:33,970
 and we see here correcting this figure,
 
-975
+1145
 01:12:33,970 --> 01:12:36,040
 there are pretty wild variations,
 
-976
+1146
 01:12:36,550 --> 01:12:39,130
-in what can happen
+in what can happen,
 
-977
-01:12:39,550 --> 01:12:43,540
-and these are all possible as the caption of the figure explains,
+1147
+01:12:39,550 --> 01:12:41,170
+and these are all possible
 
-978
+1148
+01:12:41,230 --> 01:12:43,540
+as the caption of the figure explains,
+
+1149
 01:12:43,540 --> 01:12:47,050
 they're all possible scenarios,
 
-979
-01:12:48,340 --> 01:12:53,710
-so the question in the homework and just to quickly review that I'm sure most of you already.
+1150
+01:12:48,340 --> 01:12:50,890
+so the question in the homework
 
-980
+1151
+01:12:50,890 --> 01:12:52,030
+and just to quickly review that,
+
+1152
+01:12:52,030 --> 01:12:53,710
+I'm sure most of you already.
+
+1153
 01:12:54,160 --> 01:12:55,510
-I don't think, we can see your screen.
+I don't think we can see your screen.
 
-981
+1154
 01:12:55,900 --> 01:12:57,610
-Oh, how'd you do that,
+Oh, that be too bad,
 
-982
+1155
 01:12:58,000 --> 01:13:01,090
-that's because I forgot to click yes,
+that's because I forgot to click share yes,
 
-983
+1156
 01:13:01,540 --> 01:13:04,240
 okay, let me fix that right,
 
-984
+1157
 01:13:04,760 --> 01:13:05,540
 appreciate that.
 
-985
+1158
 01:13:14,680 --> 01:13:17,080
-Okay, do you see much of it on the screen.
+Okay, do you see much of it on the screen?
 
-986
-01:13:18,980 --> 01:13:21,230
-Yeah, okay okay, thank you sorry,
+1159
+01:13:18,980 --> 01:13:19,370
+Yeah.
 
-987
-01:13:21,230 --> 01:13:26,330
-but okay, so go so going back to this caption of figure seven,
+1160
+01:13:19,400 --> 01:13:21,350
+Okay, okay, thank you sorry about that,
 
-988
+1161
+01:13:21,350 --> 01:13:26,330
+okay, so go so going back to this caption of figure 7,
+
+1162
 01:13:26,330 --> 01:13:29,120
-figure seven explains like these all possible situations
+figure 7 explains like these all possible situations,
 
-989
-01:13:29,600 --> 01:13:34,640
-and what we want to figure out, you know before talking about the details about how the logs gets repaired
+1163
+01:13:29,600 --> 01:13:31,460
+and what we want to figure out,
 
-990
+1164
+01:13:31,460 --> 01:13:34,640
+you know before talking about the details about how the logs gets repaired,
+
+1165
 01:13:35,000 --> 01:13:37,160
 you know what actually is possible,
 
-991
+1166
 01:13:37,160 --> 01:13:42,460
 so soon actually this top guy did not get elected leader,
 
-992
+1167
 01:13:42,460 --> 01:13:45,910
 so the caption of the figure,
 
-993
+1168
 01:13:45,910 --> 01:13:48,250
-but basically what outcomes are possible
+but basically what outcomes are possible,
 
-994
+1169
 01:13:48,250 --> 01:13:49,480
 and they're going to be,
 
-995
-01:13:49,480 --> 01:13:52,750
-what I mean with that is like for example we look at f,
+1170
+01:13:49,480 --> 01:13:50,710
+what I mean with that is,
 
-996
+1171
+01:13:50,710 --> 01:13:52,750
+like for example we look at f,
+
+1172
 01:13:52,840 --> 01:13:58,330
-you know it has 2 an index of an entry from term 2 index 4.
+you know it has 2 an index of an entry from term 2 index 4,
 
-997
+1173
 01:13:59,230 --> 01:14:01,810
-And the question that we want to ask and understand is
+and the question that we want to ask and understand is,
 
-998
+1174
 01:14:02,110 --> 01:14:03,760
 the clear this is possible,
 
-999
+1175
 01:14:03,760 --> 01:14:05,110
 because this could have happened,
 
-1000
+1176
 01:14:05,200 --> 01:14:06,580
 you know what will happen next,
 
-1001
+1177
 01:14:07,060 --> 01:14:09,880
-you know, is it possible that this entry will survive,
+you know is it possible that this entry will survive,
 
-1002
+1178
 01:14:10,890 --> 01:14:13,110
 so we reconfigured like the leader,
 
-1003
+1179
 01:14:13,110 --> 01:14:17,310
-basically you know logs get being you know put together in synchronized
+basically you know logs get being you know put together in [synchronized],
 
-1004
+1180
 01:14:17,310 --> 01:14:20,550
 where you know the leaders force logs could be identical,
 
-1005
-01:14:20,700 --> 01:14:26,100
-is there a scenario in which actually the log entry, the entry from term 2 will survive.
+1181
+01:14:20,700 --> 01:14:21,630
+is there a scenario,
 
-1006
+1182
+01:14:21,630 --> 01:14:26,100
+in which actually the log entry, the entry from term 2 will survive.
+
+1183
 01:14:29,880 --> 01:14:30,600
 No.
 
-1007
+1184
 01:14:31,130 --> 01:14:32,060
 No, correct,
 
-1008
+1185
 01:14:32,060 --> 01:14:34,040
-this will definitely be rejected, correct
+this will definitely be rejected, correct,
 
-1009
+1186
 01:14:34,370 --> 01:14:35,480
 and why is that the case?
 
-1010
+1187
 01:14:36,740 --> 01:14:40,850
 There are entries from term 6 that are already committed,
 
-1011
+1188
 01:14:41,550 --> 01:14:44,490
 so f will never be elected.
 
-1012
+1189
 01:14:45,000 --> 01:14:46,350
-Yeah, f will never be elected
+Yeah, f will never be elected,
 
-1013
+1190
 01:14:46,350 --> 01:14:47,970
-and so somebody else will be elected
+and so somebody else will be elected,
 
-1014
+1191
 01:14:47,970 --> 01:14:51,000
 and nobody has 2 in term 2 index 4,
 
-1015
-01:14:51,030 --> 01:14:54,180
-so it will be overwritten, with what value will be overwritten.
+1192
+01:14:51,030 --> 01:14:52,290
+so it will be overwritten,
 
-1016
+1193
+01:14:52,440 --> 01:14:54,180
+with what value will be overwritten?
+
+1194
 01:14:58,360 --> 01:15:01,240
 There will be a 4 overwritten.
 
-1017
+1195
 01:15:01,780 --> 01:15:03,520
 There will be, this will become a 4,
 
-1018
+1196
 01:15:03,700 --> 01:15:06,520
 so when later on when we talk about sort of log,
 
-1019
+1197
 01:15:06,520 --> 01:15:09,850
 you know synchronization were forcing logs on the followers,
 
-1020
-01:15:09,970 --> 01:15:13,270
-it has to be the case that these 2 turns into 4 at f.
+1198
+01:15:09,970 --> 01:15:10,960
+it has to be the case,
 
-1021
+1199
+01:15:10,960 --> 01:15:13,270
+that these 2 turns into 4 at f.
+
+1200
 01:15:14,190 --> 01:15:18,130
 Good, so, so, this also answers the second question,
 
-1022
+1201
 01:15:18,130 --> 01:15:25,150
 like the entry from the index 4 from term 4 is definitely going to be accepted.
 
-1023
+1202
 01:15:26,910 --> 01:15:32,730
 Okay, then maybe more interesting is discussion about depends,
 
-1024
+1203
 01:15:33,790 --> 01:15:37,660
 you know, so we know at least one entry term that's definitely going to reject it,
 
-1025
+1204
 01:15:37,660 --> 01:15:39,640
 we know one term that's definitely going to accept it,
 
-1026
+1205
 01:15:39,970 --> 01:15:45,700
-and you know are there any sort of in terms and indexes that maybe possibly accepted.
+and you know are there any sort of in terms and indexes that maybe possibly accepted?
 
-1027
+1206
 01:15:47,570 --> 01:15:49,190
 Oh, the 7s maybe.
 
-1028
+1207
 01:15:50,060 --> 01:15:51,080
 Yeah, 7s.
 
-1029
+1208
 01:15:52,180 --> 01:15:54,640
-So when would this 7s not be accepted.
+So when would this 7s not be accepted?
 
-1030
+1209
 01:15:55,240 --> 01:15:56,650
 Okay, so the easy scenarios,
 
-1031
+1210
 01:15:56,650 --> 01:15:58,090
 the 7s will be accepted correct,
 
-1032
+1211
 01:15:58,090 --> 01:15:59,710
-because d gets elected leader
+because d gets elected leader,
 
-1033
+1212
 01:15:59,920 --> 01:16:02,890
-and then it will force it log on everybody else.
+and then it will force it log on everybody else,
 
-1034
+1213
 01:16:03,420 --> 01:16:05,190
-So that's the case where 7s gets appected,
+so that's the case where 7s gets appected,
 
-1035
+1214
 01:16:05,190 --> 01:16:07,200
-when I get this 7 getting rejected.
+when I get this 7 getting rejected?
 
-1036
+1215
 01:16:08,620 --> 01:16:12,580
 If c gets elected leader and then d is down,
 
-1037
+1216
 01:16:13,300 --> 01:16:14,500
-it is all overwritten.
+it is overwritten.
 
-1038
+1217
 01:16:14,890 --> 01:16:18,400
 Yeah, so d goes down, c becomes leader,
 
-1039
+1218
 01:16:18,910 --> 01:16:22,900
-and then c's log entries are being pushed on everybody else entries
+and then c's log entries are being pushed on everybody else entries,
 
-1040
-01:16:23,020 --> 01:16:27,640
-and then whenever d and so we're going to be term 7, correct,
+1219
+01:16:23,020 --> 01:16:24,880
+and then whenever d
 
-1041
-01:16:27,640 --> 01:16:30,520
-at some point it will be longer and every d comes back up,
+1220
+01:16:24,970 --> 01:16:27,640
+and so we're going to be term 7, correct,
 
-1042
+1221
+01:16:27,640 --> 01:16:29,050
+at some point, it will be longer,
+
+1222
+01:16:29,140 --> 01:16:30,520
+and ever d comes back up,
+
+1223
 01:16:30,760 --> 01:16:33,580
 you know it's you know entries are going to be overwritten, right.
 
-1043
+1224
 01:16:34,730 --> 01:16:35,840
 Is a possible.
 
-1044
+1225
 01:16:36,320 --> 01:16:39,410
-So 7 is definitely possible, but not guaranteed.
+So 7 is definitely possible, but not guaranteed,
 
-1045
+1226
 01:16:40,220 --> 01:16:41,810
-In the other case.
+any other case?
 
-1046
+1227
 01:16:41,810 --> 01:16:45,230
-I had a question, a could become leader too, right.
+I had a question, a could become leader too, right?
 
-1047
-01:16:47,490 --> 01:16:49,520
-a? Yeah.
+1228
+01:16:47,490 --> 01:16:48,030
+a?
 
-1048
+1229
+01:16:48,740 --> 01:16:49,520
+Yeah.
+
+1230
 01:16:49,980 --> 01:16:53,100
 Yeah, a could be a leader if c and d are down.
 
-1049
+1231
 01:16:55,280 --> 01:16:58,670
-Well d don't even have to be down for a to be elected leader right,
+Well, d don't even have to be down for a to be elected leader, right,
 
-1050
+1232
 01:16:59,150 --> 01:17:00,860
 it just goes to [].
 
-1051
+1233
 01:17:00,860 --> 01:17:01,580
 The first one.
 
-1052
-01:17:02,870 --> 01:17:07,670
-Is a longer longer if two terms equal at the end,
+1234
+01:17:02,870 --> 01:17:05,000
+If the longest log,
 
-1053
+1235
+01:17:05,000 --> 01:17:07,670
+if two terms equal at the end,
+
+1236
 01:17:07,670 --> 01:17:08,930
 then you pick the longest log.
 
-1054
-01:17:09,800 --> 01:17:17,390
-But, I think if a is the first one to call for an election, right,
+1237
+01:17:09,800 --> 01:17:13,640
+But, I think,
 
-1055
+1238
+01:17:13,640 --> 01:17:17,390
+if a is the first one to call for an election, right,
+
+1239
 01:17:17,750 --> 01:17:19,790
 like potentially be.
 
-1056
+1240
 01:17:20,490 --> 01:17:25,200
 Yeah, if c and d are down and a could win the election.
 
-1057
+1241
 01:17:25,930 --> 01:17:29,320
 But if they're alive, can it also still win the election?
 
-1058
+1242
 01:17:30,320 --> 01:17:32,940
 Ah, so let's say c,
 
-1059
+1243
 01:17:32,940 --> 01:17:33,960
 okay let's d is down,
 
-1060
+1244
 01:17:33,960 --> 01:17:35,160
 let's do that for sure, correct,
 
-1061
-01:17:35,160 --> 01:17:38,660
-because we know that d will win the election period, d done.
+1245
+01:17:35,160 --> 01:17:37,290
+because we know that d will win the election period,
 
-1062
-01:17:39,340 --> 01:17:45,760
-Does it have to, like we know we know we know it won't get a vote from d right for sure,
+1246
+01:17:38,120 --> 01:17:38,660
+d done.
 
-1063
+1247
+01:17:39,340 --> 01:17:40,420
+Does it have to,
+
+1248
+01:17:40,450 --> 01:17:42,220
+like we know, we know, we know,
+
+1249
+01:17:42,220 --> 01:17:45,760
+it won't get a vote from d right for sure,
+
+1250
 01:17:46,870 --> 01:17:50,840
 but, but what does it have to win.
 
-1064
+1251
 01:17:51,540 --> 01:17:52,350
 Why, what do you think?
 
-1065
+1252
 01:17:54,820 --> 01:17:59,500
 What if a received the vote from b e and f first
 
-1066
+1253
 01:17:59,500 --> 01:18:01,930
 and then received the vote from.
 
-1067
+1254
 01:18:04,840 --> 01:18:08,410
 Yeah, you can get a majority without actually d participating.
 
-1068
+1255
 01:18:18,800 --> 01:18:20,630
 Even if d participated in the election,
 
-1069
+1256
 01:18:20,630 --> 01:18:23,690
 it's possible for a to get the majority votes, right.
 
-1070
+1257
 01:18:28,840 --> 01:18:30,790
 Yes, I think we just answered that.
 
-1071
-01:18:34,780 --> 01:18:45,830
-Isn't isn't there a mechanism though where, if the candidate sees a message from another server of the higher term number like stands down.
+1258
+01:18:34,780 --> 01:18:37,540
+Isn't isn't there a mechanism though where,
 
-1072
-01:18:48,090 --> 01:18:53,100
-From a higher term number, but a has, if d is down.
+1259
+01:18:38,460 --> 01:18:42,080
+if the candidate sees a message
 
-1073
+1260
+01:18:42,080 --> 01:18:45,830
+from another server of the higher term number like stands down.
+
+1261
+01:18:48,090 --> 01:18:51,660
+From a higher term number, but a has,
+
+1262
+01:18:51,870 --> 01:18:53,100
+if d is down.
+
+1263
 01:18:56,910 --> 01:18:58,350
 It doesn't have to be down, right,
 
-1074
+1264
 01:18:58,350 --> 01:19:00,600
 we just have to get them first, just.
 
-1075
-01:19:00,600 --> 01:19:01,200
-Yeah.
+1265
+01:19:00,600 --> 01:19:02,570
+Yeah, exactly.
 
-1076
-01:19:01,970 --> 01:19:02,570
-Exactly.
-
-1077
+1266
 01:19:06,160 --> 01:19:09,970
-But it will step down when it gets to vote from 7 for d.
+But it will step down when it gets to vote for 7 for d.
 
-1078
+1267
 01:19:10,880 --> 01:19:12,740
 Wait, are you sure about that,
 
-1079
+1268
 01:19:12,740 --> 01:19:15,770
 because I don't think so.
 
-1080
+1269
 01:19:16,450 --> 01:19:18,490
 Well, what okay, if d at some point,
 
-1081
+1270
 01:19:18,490 --> 01:19:22,000
-well, it depends, they're gonna start racing, correct,
+well, it depends, they're gonna start racing, right,
 
-1082
+1271
 01:19:22,330 --> 01:19:27,310
-the, okay, let me ask this very important topic
+the, okay, let me ask this very important topic,
 
-1083
+1272
 01:19:27,310 --> 01:19:29,140
-and so I don't want to do it in ten seconds
+and so I don't want to do it in ten seconds,
 
-1084
+1273
 01:19:30,040 --> 01:19:31,540
 and let me come back to this,
 
-1085
+1274
 01:19:31,540 --> 01:19:32,980
 at the start of the next lecture,
 
-1086
+1275
 01:19:33,130 --> 01:19:35,020
 okay, this is a great point to stop.
 
-1087
-01:19:39,320 --> 01:19:44,360
-I think the state machine in figure four clarifies or like a candidate goes back to follower,
+1276
+01:19:39,320 --> 01:19:42,170
+I think the state machine in figure 4 clarifies it,
 
-1088
+1277
+01:19:42,350 --> 01:19:44,360
+like a candidate goes back to follower,
+
+1278
 01:19:44,360 --> 01:19:46,520
 if discovers a higher terms,
 
-1089
-01:19:46,520 --> 01:19:51,920
-so if d wasn't down it will go back to follower at once trying to elect its own.
+1279
+01:19:46,520 --> 01:19:48,440
+so if d wasn't down,
 
-1090
+1280
+01:19:48,830 --> 01:19:50,750
+it will go back to follower at once,
+
+1281
+01:19:50,780 --> 01:19:51,920
+trying to elect.
+
+1282
 01:19:53,350 --> 01:19:57,520
 Wait, but I thought that it would only go back to a follower state,
 
-1091
+1283
 01:19:57,850 --> 01:20:01,840
 if it received an append entries from a current leader,
 
-1092
+1284
 01:20:02,700 --> 01:20:05,850
 like a request vote, is not the same.
 
-1093
-01:20:06,830 --> 01:20:12,110
-So it is worth worth and there's a difference between the term number the servers at
+1285
+01:20:06,830 --> 01:20:09,050
+So it is worth,
 
-1094
-01:20:12,230 --> 01:20:15,620
-and the term of the most recent entry in the log.
+1286
+01:20:09,050 --> 01:20:15,620
+and there's a difference between the term number the servers at and the term of the most recent entry in the log.
 
-1095
+1287
 01:20:15,830 --> 01:20:17,030
-Oh yeah.
+Oh, yeah.
 
-1096
+1288
 01:20:17,810 --> 01:20:23,330
 Like server a, it has most recent entries the log be 6, the term 6,
 
-1097
+1289
 01:20:23,360 --> 01:20:26,630
 but have its current term number be 7.
 
-1098
+1290
 01:20:26,840 --> 01:20:29,810
 And current term can actually be arbitrarily high.
 
-1099
+1291
 01:20:30,110 --> 01:20:30,500
 Yes.
 
-1100
+1292
 01:20:30,530 --> 01:20:32,030
-Correct, that's correct
+Correct, that's correct,
 
-1101
+1293
 01:20:32,060 --> 01:20:35,210
 and so a could start term 8,
 
-1102
+1294
 01:20:35,600 --> 01:20:37,880
-and then get elected in term 8
+and then get elected in term 8,
 
-1103
+1295
 01:20:38,330 --> 01:20:42,320
 and that and whatever these tells it doesn't matter,
 
-1104
+1296
 01:20:42,320 --> 01:20:44,930
-because if these most recent terms 7,
+because if these most recent term is 7,
 
-1105
+1297
 01:20:45,260 --> 01:20:46,970
-it won't go back to follow,
+it won't go back to follower,
 
-1106
+1298
 01:20:46,970 --> 01:20:48,980
 because it's a higher term than 7.
 
-1107
+1299
 01:20:49,500 --> 01:20:53,010
 I see, so it could be a higher term arbitrary.
 
-1108
+1300
 01:20:53,880 --> 01:20:59,370
-Wait, could could a going to into terms 7,
+Wait, could could a going to into term 7,
 
-1109
-01:21:00,420 --> 01:21:04,340
-its own term 7 if d was like partition,
+1301
+01:21:00,420 --> 01:21:01,740
+its own term 7,
 
-1110
+1302
+01:21:01,770 --> 01:21:04,340
+if d was like partition,
+
+1303
 01:21:04,340 --> 01:21:06,440
 like if there was a network partition
 
-1111
+1304
 01:21:06,440 --> 01:21:08,240
 and it didn't know about d.
 
-1112
+1305
 01:21:09,060 --> 01:21:10,530
-I think confused is,
+I think confused,
 
-1113
+1306
 01:21:10,530 --> 01:21:12,330
 like even if it does know about d,
 
-1114
+1307
 01:21:12,330 --> 01:21:14,820
 why does that matter, it shouldn't matter.
 
-1115
+1308
 01:21:19,070 --> 01:21:21,950
-If a promotes itself to candidate
+If a promotes itself to candidate,
 
-1116
+1309
 01:21:21,950 --> 01:21:28,730
 and then sends out a request, a vote request,
 
-1117
+1310
 01:21:29,280 --> 01:21:32,310
 then, like d could come back and say like,
 
-1118
+1311
 01:21:32,340 --> 01:21:37,890
-oh well my latest log entry was at this index for term 7,
+oh well, my latest log entry was at this index for term 7,
 
-1119
+1312
 01:21:38,340 --> 01:21:41,540
 but I don't think that a,
 
-1120
+1313
 01:21:41,570 --> 01:21:44,590
 wait, actually, it doesn't even see that, right,
 
-1121
+1314
 01:21:44,590 --> 01:21:47,350
-in in their response to a request for rpc,
+in in their response to a request for RPC,
 
-1122
+1315
 01:21:47,680 --> 01:21:53,620
 basically says like its current term which would be 7, which matches a's,
 
-1123
+1316
 01:21:54,040 --> 01:21:56,830
 because that way that's our hypothesis and then.
 
-1124
+1317
 01:21:57,250 --> 01:22:00,850
-Yeah a started the election in turn 7,
+Yeah a started the election in term 7,
 
-1125
+1318
 01:22:04,370 --> 01:22:06,440
 with a and d would not vote for a.
 
-1126
+1319
 01:22:06,740 --> 01:22:07,880
 Yes, that's true,
 
-1127
-01:22:08,400 --> 01:22:11,550
-but I don't know I think it's totally fine,
+1320
+01:22:08,400 --> 01:22:09,360
+but I don't know,
 
-1128
-01:22:11,550 --> 01:22:17,430
-if d is alive and gives it a response to a's vote request,
+1321
+01:22:09,570 --> 01:22:11,550
+I think it's totally fine,
 
-1129
+1322
+01:22:11,550 --> 01:22:12,630
+if d is alive
+
+1323
+01:22:12,630 --> 01:22:17,430
+and gives a a response to a's vote request,
+
+1324
 01:22:17,850 --> 01:22:20,820
 I don't think that deters a from being a candidate.
 
-1130
-01:22:22,120 --> 01:22:25,270
-Someone just put in the chat, I think the answer to that,
+1325
+01:22:22,120 --> 01:22:24,070
+Someone just put in the chat,
 
-1131
+1326
+01:22:24,070 --> 01:22:25,270
+I think the answer to that,
+
+1327
 01:22:25,300 --> 01:22:26,800
 so I grant said that,
 
-1132
+1328
 01:22:26,950 --> 01:22:29,320
 as soon as d rejects the vote,
 
-1133
+1329
 01:22:29,650 --> 01:22:32,800
 a will revert to being a follower,
 
-1134
+1330
 01:22:32,800 --> 01:22:35,740
 because it will realize that it has a lower term number.
 
-1135
+1331
 01:22:35,770 --> 01:22:36,760
 But, okay.
 
-1136
-01:22:37,090 --> 01:22:47,360
-Not necessarily, because again the remember that the most recent term on their log is not the same thing as the most recent term that the server keep track of,
+1332
+01:22:37,090 --> 01:22:38,290
+Not necessarily,
 
-1137
+1333
+01:22:38,320 --> 01:22:42,280
+because again the remember that the most recent term on their log
+
+1334
+01:22:42,280 --> 01:22:47,360
+is not the same thing as the most recent term that the server keep track of,
+
+1335
 01:22:47,990 --> 01:22:52,010
-you can have a higher current term than the most recent thing on the log
+you can have a higher current term than the most recent thing on the log,
 
-1138
+1336
 01:22:52,430 --> 01:22:56,240
 and so if a tries to elect itself in term 7,
 
-1139
+1337
 01:22:56,270 --> 01:22:59,090
 yes when it tries to contact d,
 
-1140
+1338
 01:22:59,480 --> 01:23:00,500
 it will give up,
 
-1141
+1339
 01:23:00,560 --> 01:23:02,750
 but if a tries elect itself in term 8,
 
-1142
+1340
 01:23:02,780 --> 01:23:06,620
-which it would if it's already seen that the has reached term 7,
+which it would if it's already seen that the d has reached term 7,
 
-1143
+1341
 01:23:08,110 --> 01:23:10,030
-then, like a can get elected.
+then like a can get elected.
 
-1144
-01:23:10,570 --> 01:23:15,100
-Wait, but. if d if we assume that d is in term 7,
+1342
+01:23:10,570 --> 01:23:12,670
+Wait, but, if d,
 
-1145
+1343
+01:23:12,670 --> 01:23:15,100
+if we assume that d is in term 7,
+
+1344
 01:23:15,460 --> 01:23:19,780
-like if a tries to elect itself for term seven,
+like if a tries to elect itself for term 7,
 
-1146
+1345
 01:23:20,110 --> 01:23:23,180
 then the we don't actually have this case,
 
-1147
+1346
 01:23:23,180 --> 01:23:26,660
-because if the rpc request response contains a term
+because if the RPC request response contains a term,
 
-1148
+1347
 01:23:26,660 --> 01:23:29,030
-which is strictly greater than the current term, you give up,
+which is strictly greater than the current term you give that,
 
-1149
+1348
 01:23:29,030 --> 01:23:30,110
 but if they're the same,
 
-1150
+1349
 01:23:30,290 --> 01:23:31,400
 then it doesn't matter,
 
-1151
+1350
 01:23:31,400 --> 01:23:33,020
 it will just proceed as normal.
 
-1152
+1351
 01:23:34,170 --> 01:23:34,860
-That's great.
+That's correct.
 
-1153
+1352
 01:23:34,860 --> 01:23:35,340
 Yes.
 
-1154
+1353
 01:23:35,640 --> 01:23:38,760
 The d's entris get replaced by whatever a telling it.
 
-1155
+1354
 01:23:40,100 --> 01:23:43,190
 So, at the end of section,
 
-1156
+1355
 01:23:43,220 --> 01:23:47,150
 like the election restriction section 5.4.1,
 
-1157
-01:23:47,450 --> 01:23:54,350
-if the raft determines which of the two logs is more up to date by comparing the index in terms of the last entries in the log,
+1356
+01:23:47,450 --> 01:23:51,110
+if the raft determines which of the two logs is more up to date
 
-1158
+1357
+01:23:51,110 --> 01:23:54,350
+by comparing the index in terms of the last entries in the log,
+
+1358
 01:23:54,800 --> 01:24:00,080
 so wouldn't that mean that d has to become the leader,
 
-1159
+1359
 01:24:00,080 --> 01:24:01,430
 if we're comparing.
 
-1160
+1360
 01:24:01,760 --> 01:24:04,220
 No, because d just vote no,
 
-1161
+1361
 01:24:04,670 --> 01:24:06,350
 but other people might vote yes.
 
-1162
+1362
 01:24:09,380 --> 01:24:10,280
 Yeah.
 
-1163
+1363
 01:24:11,680 --> 01:24:12,190
 So.
 
-1164
-01:24:12,220 --> 01:24:23,090
-What, what about the case where e runs for election in term 5 [] 5,
+1364
+01:24:12,220 --> 01:24:23,390
+What, what about the case where e runs for election in term 5 [] 5, yeah,
 
-1165
-01:24:23,090 --> 01:24:26,900
-yeah and then it gets a vote from d saying no,
+1365
+01:24:23,480 --> 01:24:26,900
+and then it gets a vote from d saying no,
 
-1166
+1366
 01:24:26,900 --> 01:24:29,600
 it would then update its term right and stop running.
 
-1167
+1367
 01:24:30,530 --> 01:24:34,370
 Hold on, like so you're thinking about e starting the election for 5.
 
-1168
+1368
 01:24:34,400 --> 01:24:39,230
 Yeah, and if it gets a response from almost anybody,
 
-1169
+1369
 01:24:39,230 --> 01:24:41,480
 it's going to see that it's behind a term, right,
 
-1170
+1370
 01:24:41,480 --> 01:24:44,180
 so, it does update its term in that case, right,
 
-1171
+1371
 01:24:44,180 --> 01:24:44,570
 to append.
 
-1172
-01:24:44,570 --> 01:24:48,080
-So another way to ask this question, who can become leader,
+1372
+01:24:44,570 --> 01:24:47,090
+So another way to ask this question,
 
-1173
-01:24:48,920 --> 01:24:49,250
-correct,
+1373
+01:24:47,090 --> 01:24:49,250
+who can become leader, correct,
 
-1174
-01:24:49,250 --> 01:24:55,460
-this you know from this, you know whatever from these 6 a b c to f who can become leader.
+1374
+01:24:49,250 --> 01:24:50,570
+this you know from this,
 
-1175
+1375
+01:24:50,570 --> 01:24:55,460
+you know whatever from these 6 a b c to f who can become leader?
+
+1376
 01:24:57,840 --> 01:24:59,220
 Can what f become leader?
 
-1176
-01:24:59,820 --> 01:25:00,330
+1377
+01:24:59,820 --> 01:25:01,830
 No.
 
-1177
-01:25:00,600 --> 01:25:04,660
+1378
+01:25:03,430 --> 01:25:04,660
 Can e become leader?
 
-1178
+1379
 01:25:06,660 --> 01:25:10,650
 Also no, the only ones that can become leader are a c and d.
 
-1179
+1380
 01:25:11,040 --> 01:25:15,420
 That's correct, possible leaders.
 
-1180
+1381
 01:25:17,690 --> 01:25:21,470
 But can, can a become a leader, if d is alive,
 
-1181
-01:25:21,500 --> 01:25:28,850
-because the because the safety section says that the rpc, the request for rpc implements the restriction,
+1382
+01:25:21,500 --> 01:25:25,100
+because the because the safety section says,
 
-1182
+1383
+01:25:25,190 --> 01:25:28,850
+that the RPC, the request for RPC implements the restriction,
+
+1384
 01:25:28,850 --> 01:25:32,030
-that it compares the last log entries
+that it compares the last log entries,
 
-1183
+1385
 01:25:32,030 --> 01:25:35,930
 and the one with the highest log entry should become the leader.
 
-1184
+1386
 01:25:36,380 --> 01:25:41,090
 I I only think it doesn't vote for someone.
 
-1185
+1387
 01:25:42,060 --> 01:25:42,870
 Exactly.
 
-1186
+1388
 01:25:43,410 --> 01:25:47,340
 So like they will never vote for a, right for anything else.
 
-1187
+1389
 01:25:47,370 --> 01:25:48,390
 That's exactly right.
 
-1188
-01:25:48,450 --> 01:25:56,100
-I mean it's also not true, that like if you have an entry in a higher term than another node,
+1390
+01:25:48,450 --> 01:25:50,250
+I mean it's also not true,
 
-1189
+1391
+01:25:50,250 --> 01:25:56,100
+that like if you have an entry in a higher term than another node,
+
+1392
 01:25:56,100 --> 01:25:59,570
-like you're actually sort of like better right,
+like you're actually sort of like better [],
 
-1190
+1393
 01:25:59,570 --> 01:26:04,050
-because I mean you can be like becoming leader
+because I mean you can be like becoming leader,
 
-1191
-01:26:04,050 --> 01:26:09,180
-and trying to append entries into the log what they like don't go through, so.
+1394
+01:26:04,050 --> 01:26:06,960
+and trying to append entries into the log,
 
-1192
+1395
+01:26:06,960 --> 01:26:09,180
+what they like don't go through, so.
+
+1396
 01:26:09,900 --> 01:26:11,700
-Well,d is like when you go through,
+Well, d is like when you go through,
 
-1193
-01:26:12,290 --> 01:26:16,010
-okay, d is like, correct, d voted again, a becomes leader,
+1397
+01:26:12,290 --> 01:26:13,880
+okay, d is like, correct,
 
-1194
+1398
+01:26:14,000 --> 01:26:16,010
+d voted again, a becomes leader,
+
+1399
 01:26:16,040 --> 01:26:17,540
 d actually tries to,
 
-1195
-01:26:17,870 --> 01:26:23,910
-well, a won't contact d, if actually didn't vote for it.
+1400
+01:26:17,870 --> 01:26:21,990
+well, a won't contact d,
 
-1196
+1401
+01:26:22,020 --> 01:26:23,910
+if actually didn't vote for it.
+
+1402
 01:26:27,780 --> 01:26:29,070
 And so they would just proceed.
 
-1197
+1403
 01:26:31,380 --> 01:26:34,170
 So why could they have logs in terms 7,
 
-1198
+1404
 01:26:34,170 --> 01:26:36,210
 if it's not a leader in terms 7?
 
-1199
+1405
 01:26:37,940 --> 01:26:40,370
 d must have been the leader in term 7, right.
 
-1200
+1406
 01:26:41,760 --> 01:26:42,660
 Yeah, I agree.
 
-1201
+1407
 01:26:43,590 --> 01:26:45,060
 Otherwise, you would have no log entries.
 
-1202
+1408
 01:26:54,360 --> 01:26:58,230
-When you have log [] I think I forgot.
+When you pass log [] I think I forgot.
 
-1203
+1409
 01:26:58,230 --> 01:27:06,550
 So in this case, was d was d a leader in term 7,
 
-1204
+1410
 01:27:06,580 --> 01:27:08,230
-who got disconnected
+who got disconnected,
 
-1205
+1411
 01:27:08,230 --> 01:27:11,620
 and then the new leader got elected the one at the top.
 
-1206
+1412
 01:27:12,740 --> 01:27:13,820
-Yeah I think so.
+Yeah, I think so.
 
-1207
+1413
 01:27:15,120 --> 01:27:16,380
 Actually, let me take that back,
 
-1208
+1414
 01:27:16,380 --> 01:27:18,330
 I don't really remember exactly sequence,
 
-1209
+1415
 01:27:18,330 --> 01:27:20,370
 I didn't really pay attention much to the top guy,
 
-1210
+1416
 01:27:20,820 --> 01:27:23,490
-but I presume that is the case,
+but I presume that is the case.
 
-1211
+1417
 01:27:23,790 --> 01:27:30,840
-it does say that it's neither for term 8 and [] a log.
+It does say, that it's neither for term 8 and [] a log.
 
-1212
+1418
 01:27:33,110 --> 01:27:34,640
-I think the case we're looking at
+I think the case we're looking at，
 
-1213
+1419
 01:27:34,640 --> 01:27:37,820
 the one where a has a higher term number than d is,
 
-1214
+1420
 01:27:37,820 --> 01:27:40,940
-the contradiction case in the safety argument, they mentioned,
+the [contradiction] case in the safety argument, they mentioned,
 
-1215
+1421
 01:27:41,270 --> 01:27:43,520
 like I think they proved that this is not possible.
 
-1216
+1422
 01:27:45,890 --> 01:27:47,120
 What one is not possible?
 
-1217
-01:27:47,780 --> 01:27:54,260
-Like that, a could be elected, b missing an entry and have a higher term than d,
+1423
+01:27:47,780 --> 01:27:50,660
+Like that, a could be elected,
 
-1218
+1424
+01:27:51,110 --> 01:27:54,260
+b missing an entry and have a higher term than d,
+
+1425
 01:27:54,260 --> 01:27:55,340
 which is the case here,
 
-1219
+1426
 01:27:55,370 --> 01:27:58,910
 I think there's like step proof that this is a contradiction.
 
-1220
+1427
 01:27:59,570 --> 01:28:00,740
 I I don't think so,
 
-1221
+1428
 01:28:00,740 --> 01:28:03,320
-I think it's totally fine for [it] to be elected leader.
+I think it's totally fine for [] to be elected leader.
 
-1222
-01:28:03,920 --> 01:28:14,190
-Yeah, I think the, I think the safety proof says that a future leader cannot have, needs to have all of the log commited.
+1429
+01:28:03,920 --> 01:28:07,160
+Yeah, I think the, I think the safety proof says that,
 
-1223
+1430
+01:28:07,400 --> 01:28:14,190
+a future leader cannot have, needs to have all of the log commited.
+
+1431
 01:28:14,190 --> 01:28:15,570
 Commited, yeah.
 
-1224
+1432
 01:28:15,570 --> 01:28:17,010
 And 7 is not committed.
 
-1225
+1433
 01:28:17,220 --> 01:28:17,820
 Exactly.
 
-1226
+1434
 01:28:18,700 --> 01:28:20,230
 I could use a whole bunch of operations here,
 
-1227
+1435
 01:28:20,230 --> 01:28:21,250
-they're not committed right,
+they're not committed, right,
 
-1228
+1436
 01:28:21,250 --> 01:28:22,180
-they're just tentative
+they're just tentative,
 
-1229
+1437
 01:28:22,210 --> 01:28:23,800
 and so anything can happen to them,
 
-1230
+1438
 01:28:24,190 --> 01:28:25,960
 then nothing wrong will happen in the end.
 
-1231
+1439
 01:28:27,490 --> 01:28:30,190
 And the reason that the whole committed thing works is,
 
-1232
+1440
 01:28:30,190 --> 01:28:35,080
-because if it's committed then more than the majority have,
+because if it's committed than more than the majority have,
 
-1233
-01:28:35,110 --> 01:28:39,850
-those entries and so someone who doesn't have the committed entries could never become elected, right.
+1441
+01:28:35,110 --> 01:28:35,980
+those entries
 
-1234
+1442
+01:28:35,980 --> 01:28:39,850
+and so someone who doesn't have the committed entries could never become elected, right.
+
+1443
 01:28:40,030 --> 01:28:40,720
 Yes.
 
-1235
+1444
 01:28:41,180 --> 01:28:42,050
 That's exactly right.
 
-1236
+1445
 01:28:49,450 --> 01:28:51,250
 Yeah, they they discussed like,
 
-1237
+1446
 01:28:51,250 --> 01:28:56,530
 yeah, like in terms of only someone who has older committed entries can get elected,
 
-1238
-01:28:56,530 --> 01:29:04,540
-I think it gets more complicated with you know within the people who have all committed entries which ones can get elected,
+1447
+01:28:56,530 --> 01:28:59,080
+I think it gets more complicated with
 
-1239
+1448
+01:28:59,410 --> 01:29:04,540
+you know within the people who have all committed entries which ones can get elected,
+
+1449
 01:29:05,060 --> 01:29:05,780
 that's.
 
-1240
+1450
 01:29:06,380 --> 01:29:07,850
 Yeah, some ways it doesn't matter.
 
-1241
+1451
 01:29:08,800 --> 01:29:10,090
 Yeah.
 
-1242
+1452
 01:29:15,060 --> 01:29:15,990
 So all.
 
-1243
+1453
 01:29:16,230 --> 01:29:21,180
 All the commits after term 4 are not committed then here, right.
 
-1244
+1454
 01:29:22,020 --> 01:29:27,130
 So these two 4s, those are not.
 
-1245
+1455
 01:29:27,130 --> 01:29:29,020
 The first, the first two 4s.
 
-1246
+1456
 01:29:29,630 --> 01:29:31,640
 Those are, where your question,
 
-1247
+1457
 01:29:31,790 --> 01:29:32,750
 they will be committed.
 
-1248
+1458
 01:29:33,200 --> 01:29:34,340
 Yeah, those would be committed,
 
-1249
+1459
 01:29:34,340 --> 01:29:35,960
 but done everything after wouldn't be?
 
-1250
+1460
 01:29:37,220 --> 01:29:38,390
-5 will be committed.
+Two 5 will be committed.
 
-1251
+1461
 01:29:38,690 --> 01:29:39,350
 Two 6.
 
-1252
+1462
 01:29:39,560 --> 01:29:41,600
 And two 6 also be commited.
 
-1253
+1463
 01:29:42,780 --> 01:29:44,520
 Okay, you only need exactly,
 
-1254
+1464
 01:29:44,520 --> 01:29:45,630
 it's okay,
 
-1255
+1465
 01:29:45,810 --> 01:29:47,130
 exactly how it's okay, okay.
 
-1256
+1466
 01:29:48,120 --> 01:29:49,380
 No, another one.
 
-1257
+1467
 01:29:49,380 --> 01:29:50,520
 Over 4.
 
-1258
+1468
 01:29:52,430 --> 01:29:54,410
 Yeah, so the 5 and 6 wouldn't be committed,
 
-1259
+1469
 01:29:55,400 --> 01:29:58,130
 oh, but you have another leader right.
 
-1260
+1470
 01:29:58,130 --> 01:29:59,450
 Yeah yeah.
 
-1261
-01:29:59,450 --> 01:30:02,660
-Okay, well let's not forget about those right, I got it.
+1471
+01:29:59,450 --> 01:30:01,850
+Okay, well let's not forget about those right,
 
-1262
-01:30:03,610 --> 01:30:08,260
-Okay, okay, I'll come back to this, at the beginning of next lecture,
+1472
+01:30:02,180 --> 01:30:02,660
+I got it.
 
-1263
+1473
+01:30:03,610 --> 01:30:07,270
+Okay, okay, I'll come back to this,
+
+1474
+01:30:07,270 --> 01:30:08,260
+at the beginning of next lecture,
+
+1475
 01:30:08,260 --> 01:30:11,020
 because some some of you probably have to run to another class,
 
-1264
+1476
 01:30:12,220 --> 01:30:13,960
 but, I'll come back to this,
 
-1265
+1477
 01:30:14,050 --> 01:30:16,120
-if you have more questions feel free to stick around,
+if you have more questions, feel free to stick around,
 
-1266
+1478
 01:30:16,270 --> 01:30:19,030
 you know we'll resume this.
 
-1267
+1479
 01:30:23,000 --> 01:30:27,230
-Oh, can you see the log duplication, again,
+Oh, can you say the log duplication again,
 
-1268
+1480
 01:30:27,230 --> 01:30:29,960
-why, when could there be log duplication.
+when, when could there be log duplication.
 
-1269
-01:30:30,910 --> 01:30:37,630
-What, what I mean is that the leader at some point forces its log on the followers.
+1481
+01:30:30,910 --> 01:30:32,860
+What, what I mean is that,
 
-1270
+1482
+01:30:33,370 --> 01:30:37,630
+the leader at some point forces its log on the followers.
+
+1483
 01:30:41,910 --> 01:30:45,840
-I think I think you meant it on some of the previous slides.
+I think I think you meationed on some of the previous slides.
 
-1271
+1484
 01:30:45,840 --> 01:30:54,660
 Okay, so maybe, yeah maybe I I can't remember I said.
 
-1272
+1485
 01:30:55,050 --> 01:30:58,520
 It is a little more, maybe a little more.
 
-1273
+1486
 01:31:09,510 --> 01:31:12,780
-Oh, is there is there deleted duplicates.
+Oh, is there is there deleted duplicates?
 
-1274
+1487
 01:31:13,490 --> 01:31:14,750
 Detect duplicates.
 
-1275
+1488
 01:31:14,780 --> 01:31:16,610
 Yeah, it's difficult.
 
-1276
+1489
 01:31:16,670 --> 01:31:20,450
 Yeah, this is, this is not a raft issue correct,
 
-1277
+1490
 01:31:20,450 --> 01:31:23,840
-this is really a kv, a key-value service issue.
+this is really a kv, a key-value service issue,
 
-1278
-01:31:24,340 --> 01:31:27,370
-Where a client request,
+1491
+01:31:24,340 --> 01:31:28,600
+where a client request, you know might be [],
 
-1279
-01:31:27,400 --> 01:31:29,350
-you might be reaching a client may,
+1492
+01:31:28,600 --> 01:31:31,930
+a client may, client might not get a response,
 
-1280
-01:31:29,350 --> 01:31:31,930
-client might not get a response,
-
-1281
+1493
 01:31:32,460 --> 01:31:35,790
 even though you know that request actually went through raft,
 
-1282
-01:31:36,180 --> 01:31:40,260
-because what happened is that the leader may be applied to operation to its state,
+1494
+01:31:36,180 --> 01:31:37,470
+because what happened is that,
 
-1283
+1495
+01:31:37,470 --> 01:31:40,260
+the leader may be applied to operation to its state,
+
+1496
 01:31:40,260 --> 01:31:42,540
 before responding to the client, it crashed,
 
-1284
+1497
 01:31:43,880 --> 01:31:45,290
 so the client will retry,
 
-1285
+1498
 01:31:45,860 --> 01:31:48,170
 and we will send this request to the new leader,
 
-1286
+1499
 01:31:48,200 --> 01:31:49,940
-the new lender will run it through raft
+the new leader will run it through raft,
 
-1287
+1500
 01:31:49,940 --> 01:31:51,350
 and it will pop out of raft again.
 
-1288
+1501
 01:31:52,570 --> 01:31:53,920
 And so it has to be the case,
 
-1289
+1502
 01:31:53,920 --> 01:31:56,290
 that the kv server does duplicate detection.
 
-1290
+1503
 01:31:58,240 --> 01:32:01,210
 Oh, this is like only if the client didn't get the response.
 
-1291
+1504
 01:32:02,350 --> 01:32:03,220
 Yeah, exactly.
 
-1292
+1505
 01:32:03,580 --> 01:32:05,770
 Okay, okay I see, thank you.
 
-1293
+1506
 01:32:05,950 --> 01:32:08,110
 You will do this in lab 3.
 
-1294
+1507
 01:32:13,380 --> 01:32:15,450
 I think I also ask questions during the lecture,
 
-1295
+1508
 01:32:15,450 --> 01:32:17,790
 but I don't think I fully understood the answers,
 
-1296
+1509
 01:32:17,790 --> 01:32:19,650
 so I just repeat the question,
 
-1297
+1510
 01:32:20,550 --> 01:32:21,840
 the question is that,
 
-1298
+1511
 01:32:21,870 --> 01:32:26,130
 you said that a way commits work is that,
 
-1299
+1512
 01:32:26,160 --> 01:32:31,090
-once the leader commits, it waits for a new client message
+once the leader commits, it waits for a new client message,
 
-1300
+1513
 01:32:31,090 --> 01:32:33,700
-and then it just appends that message to the log entry
+and then it just appends that message to the log entry,
 
-1301
+1514
 01:32:33,700 --> 01:32:36,640
-and send append entry to the remaining followers
+and send append entry to the remaining followers,
 
-1302
-01:32:37,060 --> 01:32:41,410
-with an additional message saying that they should also commit all the previous entries, correct.
+1515
+01:32:37,060 --> 01:32:38,770
+with an additional message saying that,
 
-1303
+1516
+01:32:38,770 --> 01:32:41,410
+they should also commit all the previous entries, correct.
+
+1517
 01:32:41,740 --> 01:32:44,110
-Yeah, there's indirectly the protocol the staff correct.
+Yeah, there's indirectly the protocol the [] correct.
 
-1304
+1518
 01:32:44,290 --> 01:32:46,450
 Right, so my question is that,
 
-1305
+1519
 01:32:46,480 --> 01:32:50,200
-what if a the leader commits all the entries,
+what if the leader commits all the entries,
 
-1306
+1520
 01:32:50,640 --> 01:32:54,990
 and right before it is able to send this message to the remaining followers,
 
-1307
+1521
 01:32:55,020 --> 01:32:56,160
 the leader crashes.
 
-1308
-01:32:56,460 --> 01:33:02,520
-It cannot commit until have a majority response from majority of the followers.
+1522
+01:32:56,460 --> 01:32:57,750
+It cannot commit
 
-1309
+1523
+01:32:57,750 --> 01:33:02,520
+until have a majority response from majority of the followers.
+
+1524
 01:33:03,760 --> 01:33:07,300
-I see, so it at first like even.
+I see, so it it first like even.
 
-1310
+1525
 01:33:07,300 --> 01:33:08,920
 It sticks to a log,
 
-1311
+1526
 01:33:08,920 --> 01:33:11,590
 but it doesn't actually deliver to the kv servers yet.
 
-1312
-01:33:12,650 --> 01:33:16,790
-I see, so it waits from a reply of commit, from all the remaining followers
+1527
+01:33:12,650 --> 01:33:13,010
+I see,
 
-1313
+1528
+01:33:13,010 --> 01:33:16,790
+so it waits from a reply of commit from all the remaining followers,
+
+1529
 01:33:16,790 --> 01:33:18,800
 and then it commits its own.
 
-1314
+1530
 01:33:20,120 --> 01:33:21,050
-Okay okay.
+Okay, okay.
 
-1315
-01:33:21,050 --> 01:33:25,160
-So there's the basic, there's a variable last applied commited index, right,
+1531
+01:33:21,050 --> 01:33:22,160
+So there's the basic,
 
-1316
+1532
+01:33:22,160 --> 01:33:25,160
+there's a variable last applied commited index, right,
+
+1533
 01:33:25,190 --> 01:33:26,450
 that is actually maintaining,
 
-1317
+1534
 01:33:26,780 --> 01:33:29,000
-it only increases the commited index
+it only increases the commited index,
 
-1318
+1535
 01:33:29,000 --> 01:33:32,360
 and once it receives a response from the majority of the followers.
 
-1319
+1536
 01:33:32,940 --> 01:33:35,670
 And all of the followers say that they have committed their own,
 
-1320
+1537
 01:33:36,180 --> 01:33:38,910
 like they have committed the log entries on their own servers.
 
-1321
-01:33:39,890 --> 01:33:45,500
-They will commit their log entries once they know that the leader actually has committed it.
+1538
+01:33:39,890 --> 01:33:41,540
+They will commit their log entries,
 
-1322
-01:33:48,280 --> 01:33:53,470
-Right, so that's my question, like how would they know if the leaders unable to send that message to the remaining.
+1539
+01:33:41,540 --> 01:33:45,500
+once they know that the leader actually has committed it.
 
-1323
-01:33:53,710 --> 01:33:58,000
-Well, yeah, so then we basically we end in situations that we just saw in this figure 7,
+1540
+01:33:48,280 --> 01:33:49,750
+Right, so that's my question,
 
-1324
+1541
+01:33:49,750 --> 01:33:50,920
+like how would they know,
+
+1542
+01:33:50,920 --> 01:33:53,470
+if the leaders unable to send that message to the remaining.
+
+1543
+01:33:53,710 --> 01:33:55,510
+Well, yeah, so then we basically,
+
+1544
+01:33:55,510 --> 01:33:58,000
+we end in situations that we just saw in this figure 7,
+
+1545
 01:33:58,330 --> 01:34:02,290
-there's going to be tentative log entries in their logs
+there's going to be tentative log entries in their logs,
 
-1325
+1546
 01:34:02,620 --> 01:34:05,830
-and depending who becomes new leader
+and depending who becomes new leader,
 
-1326
+1547
 01:34:05,830 --> 01:34:07,390
 and what the log situation is,
 
-1327
+1548
 01:34:07,390 --> 01:34:09,970
-in that operation may get committed or may not get committed.
+you know that operation may get committed or may not get committed.
 
-1328
+1549
 01:34:11,490 --> 01:34:12,240
-I see.
+I see,
 
-1329
-01:34:12,650 --> 01:34:13,790
-Okay, yeah.
+1550
+01:34:12,650 --> 01:34:15,590
+okay, yeah, I get it.
 
-1330
-01:34:14,360 --> 01:34:15,590
-I get it.
-
-1331
+1551
 01:34:15,590 --> 01:34:17,480
 Hi, I had a follow-up question on this,
 
-1332
+1552
 01:34:17,660 --> 01:34:21,710
 so if says a leader pushes a log entry,
 
-1333
+1553
 01:34:21,830 --> 01:34:23,480
 it's accepted by majority,
 
-1334
+1554
 01:34:23,480 --> 01:34:24,560
 but it crashes,
 
-1335
-01:34:25,100 --> 01:34:29,990
-then later on, this log entry can be committed, right, by some other leader.
+1555
+01:34:25,100 --> 01:34:28,880
+then later on, this log entry can be committed, right,
 
-1336
+1556
+01:34:28,940 --> 01:34:29,990
+by some other leader.
+
+1557
 01:34:30,080 --> 01:34:31,850
-It can also may not.
+It can, also may not.
 
-1337
+1558
 01:34:32,700 --> 01:34:34,680
 Yeah, but say if it's get committed,
 
-1338
-01:34:34,680 --> 01:34:38,220
-then, how does the new leader know who was the client,
+1559
+01:34:34,680 --> 01:34:37,260
+then, how does the new leader know,
 
-1339
-01:34:38,220 --> 01:34:44,220
-who requested for this log entry or the client be qualified.
+1560
+01:34:37,260 --> 01:34:38,220
+who was the client,
 
-1340
+1561
+01:34:38,220 --> 01:34:40,230
+who requested for this log entry
+
+1562
+01:34:40,230 --> 01:34:44,220
+or the client be qualified.
+
+1563
 01:34:49,540 --> 01:34:53,560
 The, the, what okay,
 
-1341
-01:34:53,560 --> 01:34:58,960
-so there's really a question about actually how the kv serves actually store information with raft,
+1564
+01:34:53,560 --> 01:34:54,820
+so there's really a question
 
-1342
+1565
+01:34:54,820 --> 01:34:58,960
+about actually how the kv servers actually store information with raft,
+
+1566
 01:34:59,350 --> 01:35:01,360
 so the scenario is,
 
-1343
+1567
 01:35:01,420 --> 01:35:02,740
 client talk to the leader,
 
-1344
-01:35:02,890 --> 01:35:07,240
-the the client, leader actually committed,
+1568
+01:35:02,890 --> 01:35:09,960
+the the client, leader actually committed, did executive this operation or not,
 
-1345
-01:35:08,130 --> 01:35:09,960
-did executive this operation or not,
-
-1346
+1569
 01:35:10,170 --> 01:35:11,100
 they did not know,
 
-1347
+1570
 01:35:12,060 --> 01:35:13,050
 they did not know with,
 
-1348
+1571
 01:35:13,050 --> 01:35:18,180
 so then one of the followers later will get this operation,
 
-1349
+1572
 01:35:18,300 --> 01:35:19,440
 maybe apply it,
 
-1350
-01:35:19,830 --> 01:35:23,160
-won't send a response because it doesn't know about the client,
+1573
+01:35:19,830 --> 01:35:21,600
+won't send a response,
 
-1351
+1574
+01:35:21,600 --> 01:35:23,160
+because it doesn't know about the client,
+
+1575
 01:35:23,600 --> 01:35:25,460
-but the client will retry right,
+but the client will retry, right,
 
-1352
+1576
 01:35:25,460 --> 01:35:27,320
 because it actually haven't gotten response,
 
-1353
+1577
 01:35:27,350 --> 01:35:28,730
-it will contact the new leader
+it will contact the new leader,
 
-1354
+1578
 01:35:28,880 --> 01:35:32,990
-and basically enter the same operation in the, in the raft again
+and basically enter the same operation in the, in the raft again,
 
-1355
+1579
 01:35:33,470 --> 01:35:35,030
-and will pop out again
+and will pop out again,
 
-1356
-01:35:35,270 --> 01:35:39,740
-and then the server will send, as we'll see in the lab 3,
+1580
+01:35:35,270 --> 01:35:38,120
+and then the server will send,
 
-1357
+1581
+01:35:38,180 --> 01:35:39,740
+as we'll see in the lab 3,
+
+1582
 01:35:39,740 --> 01:35:41,090
 will send the last response, right,
 
-1358
+1583
 01:35:41,090 --> 01:35:44,630
 in fact, servers remember the last value that they send back.
 
-1359
+1584
 01:35:46,770 --> 01:35:48,150
 Okay.
 
-1360
-01:35:48,180 --> 01:35:53,850
-If get request, you know the first get request is executed,
+1585
+01:35:48,180 --> 01:35:51,630
+If get request,
 
-1361
+1586
+01:35:51,630 --> 01:35:53,850
+you know the first get request is executed,
+
+1587
 01:35:54,210 --> 01:35:55,740
-there's no response to be sent back
+there's no response to be sent back,
 
-1362
-01:35:55,950 --> 01:36:03,150
-and get request actually will store the response in the in the kv server, will remember the response.
+1588
+01:35:55,950 --> 01:36:01,680
+and get request actually will store the response in the in the kv server,
 
-1363
-01:36:03,660 --> 01:36:06,960
-So when it sees you do duplicate, then will send a response,
+1589
+01:36:01,680 --> 01:36:03,150
+will remember the response.
 
-1364
+1590
+01:36:03,660 --> 01:36:05,730
+So when it sees you duplicate,
+
+1591
+01:36:05,730 --> 01:36:06,960
+then will send a response,
+
+1592
 01:36:08,050 --> 01:36:09,880
 so there will be duplicate detection table,
 
-1365
+1593
 01:36:10,600 --> 01:36:11,890
 that includes the response.
 
-1366
+1594
 01:36:13,270 --> 01:36:14,950
 Okay, yeah, makes sense, thanks.
 
-1367
+1595
 01:36:16,950 --> 01:36:17,580
 You're welcome.
 
-1368
+1596
 01:36:19,260 --> 01:36:20,520
 I I was a little curious,
 
-1369
-01:36:20,520 --> 01:36:24,810
-I think I asked roughly this is my question like pre lecture questions well,
+1597
+01:36:20,520 --> 01:36:21,180
+I think I asked,
 
-1370
-01:36:25,170 --> 01:36:31,770
-like how raft compares to other like consensus algorithm in terms of like optimization you could do
+1598
+01:36:21,240 --> 01:36:23,430
+roughly this is my question,
 
-1371
+1599
+01:36:23,460 --> 01:36:24,810
+like pre lecture questions well,
+
+1600
+01:36:25,170 --> 01:36:28,560
+like how raft compares to other like consensus algorithm
+
+1601
+01:36:28,560 --> 01:36:31,770
+in terms of like optimization you could do,
+
+1602
 01:36:32,010 --> 01:36:36,000
 and as an example I was thinking the only thing I could think of was batching.
 
-1372
+1603
 01:36:36,330 --> 01:36:36,540
 Yeah.
 
-1373
+1604
 01:36:36,540 --> 01:36:39,150
 It seemed like raft is like perfect for batching,
 
-1374
+1605
 01:36:39,150 --> 01:36:42,570
 because the leader could just like put more than one entry on its log,
 
-1375
+1606
 01:36:42,570 --> 01:36:44,550
 wait a little before sending its next entries,
 
-1376
+1607
 01:36:44,670 --> 01:36:49,620
-then send up entries with whatever batch set of operations
+then send [] entries with whatever batch set of operations
 
-1377
+1608
 01:36:49,620 --> 01:36:51,900
 or whatever it wants the replicas to do,
 
-1378
+1609
 01:36:52,320 --> 01:36:55,830
-just trying to figure out what what the deficiencies are raft,
+just trying to figure out what what the deficiencies of raft,
 
-1379
+1610
 01:36:55,830 --> 01:36:57,660
 like from performance point of view.
 
-1380
+1611
 01:36:57,810 --> 01:37:00,240
-Well, raft does not do that [shape], right
+Well, raft does not do that [], right,
 
-1381
+1612
 01:37:00,540 --> 01:37:01,980
 and you know maybe it could,
 
-1382
+1613
 01:37:02,010 --> 01:37:03,870
 but it would make protocol more complicated
 
-1383
+1614
 01:37:03,900 --> 01:37:05,280
 and so they decide nothing.
 
-1384
-01:37:05,830 --> 01:37:09,580
-I guess, okay, I guess the way I happen to have written my raft lab code,
+1615
+01:37:05,830 --> 01:37:06,310
+I guess,
 
-1385
+1616
+01:37:06,310 --> 01:37:09,580
+okay, I guess the way I happen to have written my raft lab code,
+
+1617
 01:37:09,580 --> 01:37:12,490
 like I sort of did batching implicitly,
 
-1386
-01:37:12,490 --> 01:37:15,610
-because I'll just wait a little bit sometimes before sending append entry,
+1618
+01:37:12,490 --> 01:37:14,500
+because I'll just wait a little bit sometimes,
 
-1387
-01:37:15,610 --> 01:37:21,100
-so I guess I felt like you don't really need to do anything other than just like maybe wait if you feel like it before.
+1619
+01:37:14,500 --> 01:37:15,610
+before sending append entry,
 
-1388
+1620
+01:37:15,610 --> 01:37:16,900
+so I guess I felt like,
+
+1621
+01:37:17,140 --> 01:37:18,220
+you don't really need to do anything
+
+1622
+01:37:18,220 --> 01:37:21,100
+other than just like maybe wait if you feel like it before.
+
+1623
 01:37:21,100 --> 01:37:22,120
-Yeah you can have.
+Yeah, you can have.
 
-1389
+1624
 01:37:23,920 --> 01:37:27,610
 So yeah like.
 
-1390
+1625
 01:37:27,640 --> 01:37:33,190
 Yeah, yeah, I I think it all comes down to performance,
 
-1391
+1626
 01:37:33,580 --> 01:37:36,190
 so you know there's a whole bunch of optimization that raft doesn't do,
 
-1392
+1627
 01:37:36,190 --> 01:37:37,660
 you know that some other systems do,
 
-1393
+1628
 01:37:37,660 --> 01:37:40,390
-you know for example you might be able to communicate your operations,
+you know for example you might be able to [communicate] your operations,
 
-1394
+1629
 01:37:40,390 --> 01:37:43,330
 because doesn't matter in what order you do them,
 
-1395
+1630
 01:37:43,450 --> 01:37:46,120
-so there's a slew of optimizations
+so there's a slew of optimizations,
 
-1396
+1631
 01:37:46,120 --> 01:37:48,010
 and in raft basically do none of it.
 
-1397
+1632
 01:37:48,760 --> 01:37:51,900
 Okay, thanks.
 
-1398
+1633
 01:37:52,230 --> 01:37:54,660
 It might be perfectly fine for like use case, right.
 
-1399
+1634
 01:37:55,240 --> 01:37:55,780
 Right.
 
-1400
+1635
 01:37:59,380 --> 01:38:02,170
 You mentioned something a couple minutes ago,
 
-1401
+1636
 01:38:02,170 --> 01:38:04,540
 that log entry could be lost,
 
-1402
+1637
 01:38:04,810 --> 01:38:08,020
 so is it possible that a client request could never be executed,
 
-1403
-01:38:08,020 --> 01:38:14,170
-but raft guarantees that, all the servers will execute the same set of block entries in the same sequence.
+1638
+01:38:08,020 --> 01:38:09,460
+but raft guarantees that,
 
-1404
+1639
+01:38:09,730 --> 01:38:14,170
+all the servers will execute the same set of log entries in the same sequence.
+
+1640
 01:38:15,920 --> 01:38:20,630
 And so that means raft does not cannot be usable for all applications,
 
-1405
+1641
 01:38:20,630 --> 01:38:26,360
 we can only afford the some lost requests.
 
-1406
-01:38:27,340 --> 01:38:36,250
-Well, you know we have to assume that you know the responses from the from the raft servers as a whole correct kv servers plus raft,
+1642
+01:38:27,340 --> 01:38:29,680
+Well, you know we have to assume that
 
-1407
+1643
+01:38:29,680 --> 01:38:34,720
+you know the responses from the from the raft servers as a whole, correct,
+
+1644
+01:38:34,720 --> 01:38:36,250
+kv servers plus raft,
+
+1645
 01:38:36,280 --> 01:38:37,360
 may get lost anyway,
 
-1408
+1646
 01:38:37,360 --> 01:38:38,530
 because the network gets lost,
 
-1409
+1647
 01:38:39,220 --> 01:38:40,870
 network network may lost responses,
 
-1410
+1648
 01:38:40,870 --> 01:38:42,850
 so the client has to be able to repeat,
 
-1411
+1649
 01:38:44,200 --> 01:38:47,500
-they call it must be recent, must retry.
+the client must resend, must retry.
 
-1412
-01:38:48,700 --> 01:38:51,970
-I see, so like when it actually commits log entry
+1650
+01:38:48,700 --> 01:38:49,300
+I see,
 
-1413
+1651
+01:38:49,300 --> 01:38:51,970
+so like when it actually commits log entry,
+
+1652
 01:38:51,970 --> 01:38:54,520
 and excuses it replies to the client,
 
-1414
+1653
 01:38:54,520 --> 01:38:55,630
 that it did actually do.
 
-1415
-01:38:56,020 --> 01:39:00,160
-Yeah, so this is like we're a little bit earlier we talked about the duplicate detection table,
+1654
+01:38:56,020 --> 01:38:58,420
+Yeah, so this is like we're a little bit earlier we talked about,
 
-1416
+1655
+01:38:58,420 --> 01:39:00,160
+the duplicate detection table,
+
+1656
 01:39:00,160 --> 01:39:03,760
-the duplicate detection table has the response that was sent
+the duplicate detection table has the response that was sent,
 
-1417
+1657
 01:39:03,970 --> 01:39:06,910
 or was constructed in response to executing that operation.
 
-1418
+1658
 01:39:08,890 --> 01:39:09,340
 Okay.
 
-1419
+1659
 01:39:13,740 --> 01:39:14,970
 Any further questions?
 
-1420
+1660
 01:39:18,320 --> 01:39:19,640
 Okay, thank you so much.
 
-1421
+1661
 01:39:20,030 --> 01:39:22,400
 Alright, welcome, it's great to ask so many questions.
 
