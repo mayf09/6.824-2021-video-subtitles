@@ -1,6 +1,6 @@
 1
 00:00:00,540 --> 00:00:01,440
-Okay thank you.
+Okay, thank you.
 
 2
 00:00:02,130 --> 00:00:05,670
@@ -11,4458 +11,4998 @@ Okay, so good afternoon, good evening, good morning, good night, wherever you ar
 we're going to talk today about transactions.
 
 4
-00:00:09,720 --> 00:00:15,330
-And you probably noticed the reading material for today a little bit more tutorial in nature,
+00:00:09,720 --> 00:00:11,760
+And you probably noticed,
 
 5
-00:00:15,360 --> 00:00:17,520
-we're not studying a particular system
+00:00:11,760 --> 00:00:15,330
+the reading material for today a little bit more tutorial in nature,
 
 6
+00:00:15,360 --> 00:00:17,520
+we're not studying a particular system,
+
+7
 00:00:17,520 --> 00:00:23,280
 and see how a set of ideas are implemented in that system,
 
-7
+8
 00:00:23,280 --> 00:00:29,520
 instead what we're gonna be doing is talking about just the concept of transactions,
 
-8
+9
 00:00:29,520 --> 00:00:33,570
 because it it shows up in the next two papers,
 
-9
-00:00:33,570 --> 00:00:39,450
-that we'll be studying those two papers have a quite a lot of material in them
-
 10
-00:00:39,450 --> 00:00:42,810
-and assume a familiar with transactions,
+00:00:33,570 --> 00:00:36,060
+that we'll be studying those two papers,
 
 11
+00:00:36,060 --> 00:00:39,450
+have a quite a lot of material in them,
+
+12
+00:00:39,450 --> 00:00:42,810
+and assume familiar with transactions,
+
+13
 00:00:42,930 --> 00:00:48,390
 in particular that you're familiar with the two core ideas that we'll see the today's lecture,
 
-12
+14
 00:00:48,390 --> 00:00:57,950
-mainly 2-phase locking and 2-phase commit,
+namely 2-phase locking and 2-phase commit,
 
-13
+15
 00:01:06,430 --> 00:01:10,390
 and sometimes they are abbreviated as you know 2PC for 2-phase commit
 
-14
+16
 00:01:10,390 --> 00:01:13,060
 and 2PL for 2-phase locking,
 
-15
+17
 00:01:13,750 --> 00:01:15,730
 one point of confusion,
 
-16
+18
 00:01:16,030 --> 00:01:19,090
 the two terms really don't have to do much,
 
-17
-00:01:19,090 --> 00:01:20,590
-don't have to, don't it,
-
-18
-00:01:21,380 --> 00:01:23,000
-I'm really not much related,
-
 19
+00:01:19,090 --> 00:01:20,590
+don't have to, don't do,
+
+20
+00:01:21,380 --> 00:01:23,000
+really not much related,
+
+21
 00:01:23,030 --> 00:01:28,670
 you know they happen to have both words two words 2-phase in it,
 
-20
+22
 00:01:28,910 --> 00:01:31,610
 but you know they show completely different problems,
 
-21
+23
 00:01:31,640 --> 00:01:35,930
 they they have to also show up on typically in the context of transactions,
 
-22
+24
 00:01:36,110 --> 00:01:38,300
 but there are even outside of transactions,
 
-23
+25
 00:01:38,300 --> 00:01:41,900
 they are good ideas or worthwhile ideas,
 
-24
+26
 00:01:42,420 --> 00:01:46,410
 and so don't let your self confused by the fact that they both have 2-phase in it,
 
-25
+27
 00:01:46,620 --> 00:01:48,540
 they're pretty unrelated.
 
-26
+28
 00:01:50,090 --> 00:01:52,370
 Okay, so I'm just gonna dive in a little bit
 
-27
+29
 00:01:52,370 --> 00:01:54,860
 and start talking about transactions in general,
 
-28
+30
 00:01:55,220 --> 00:02:01,610
 and the reason that we're going to care about transactions a lot is,
 
-29
+31
 00:02:01,640 --> 00:02:05,330
 that we want to be able to do cross-machine operations.
 
-30
+32
 00:02:06,360 --> 00:02:08,700
 So the problem that we're going to try to tackle
 
-31
+33
 00:02:11,220 --> 00:02:14,190
 in this lecture as well as in the two upcoming papers
 
-32
+34
 00:02:14,460 --> 00:02:22,030
 is cross-machine atomic ops.
 
-33
+35
 00:02:25,890 --> 00:02:28,530
 And so for example just to make it a little bit concrete,
 
-34
+36
 00:02:28,560 --> 00:02:30,570
 let's say we have a client,
 
-35
-00:02:31,250 --> 00:02:36,710
-we have two, we have a sharded key value server,
-
-36
-00:02:36,770 --> 00:02:40,580
-so some of the keys are on key value server one,
-
 37
-00:02:41,840 --> 00:02:44,060
-some are on key value server two,
+00:02:31,250 --> 00:02:34,040
+we have two,
 
 38
+00:02:34,700 --> 00:02:36,710
+we have a sharded key value server,
+
+39
+00:02:36,770 --> 00:02:40,580
+so some of the keys are on key value server 1,
+
+40
+00:02:41,840 --> 00:02:44,060
+some are on key value server 2,
+
+41
 00:02:44,830 --> 00:02:46,750
 so the keys are split across them,
 
-39
-00:02:46,750 --> 00:02:51,340
-so for example, maybe kv1 has x, kv2 has y
-
-40
-00:02:51,940 --> 00:02:56,080
-and we want to basically want to atomic operation across those two keys
-
-41
-00:02:56,080 --> 00:03:02,500
-and the easy way or the classic example in the context of transactions is always doing a transfer.
-
 42
+00:02:46,750 --> 00:02:51,340
+so for example, maybe kv1 has x, kv2 has y,
+
+43
+00:02:51,940 --> 00:02:56,080
+and we want to basically want to atomic operation across those two keys,
+
+44
+00:02:56,080 --> 00:03:00,820
+and the easy way or the classic example in the context of transactions
+
+45
+00:03:01,000 --> 00:03:02,500
+is always doing a transfer.
+
+46
 00:03:03,290 --> 00:03:08,030
 So let's say the client wants to do a transfer from x to y,
 
-43
+47
 00:03:09,140 --> 00:03:10,190
-here's our client
+here's our client,
 
-44
+48
 00:03:10,580 --> 00:03:15,920
-and it's gonna do basically a put you know to x,
+and it's gonna do basically put you know to x,
 
-45
+49
 00:03:15,920 --> 00:03:21,080
 to maybe add or subtract from the account,
 
-46
-00:03:21,080 --> 00:03:22,460
-so let's do it x -1
-
-47
-00:03:23,090 --> 00:03:28,370
-and then the client is going to do put of y +1,
-
-48
-00:03:29,430 --> 00:03:34,470
-transfer immediately one dollar from you know the account x to the account y
-
-49
-00:03:35,460 --> 00:03:37,590
-and our goal is basically going to be,
-
 50
+00:03:21,080 --> 00:03:22,460
+so let's do x,-1
+
+51
+00:03:23,090 --> 00:03:28,370
+and then the client is going to do put of y,+1,
+
+52
+00:03:29,430 --> 00:03:34,470
+transfer namely one dollar from you know the account x to the account y.
+
+53
+00:03:35,460 --> 00:03:37,590
+And our goal is basically going to be,
+
+54
 00:03:40,300 --> 00:03:50,020
 you know we want atomicity with respect to failures and concurrency.
 
-51
-00:03:55,540 --> 00:04:03,730
-So even if a you know a variable key one of the first key value server fails after the put,
-
-52
-00:04:04,030 --> 00:04:08,860
-then we would like to arrange it basically the transfer didn't happen at all,
-
-53
-00:04:08,890 --> 00:04:12,880
-so generally the semantics that we're looking for is that both operations happen
-
-54
-00:04:12,940 --> 00:04:14,620
-or neither one of them happens.
-
 55
-00:04:15,190 --> 00:04:17,500
-And so, similarly from a concurrency perspective,
+00:03:55,540 --> 00:04:00,310
+So even if you know [] kv,
 
 56
-00:04:17,500 --> 00:04:21,070
-if another client is running and also tries to inspect these accounts
+00:04:00,310 --> 00:04:03,730
+the first key value server fails after the put,
 
 57
-00:04:21,160 --> 00:04:22,900
-now what we would like to be the case is
+00:04:04,030 --> 00:04:07,030
+then we want like to arrange it,
 
 58
-00:04:22,900 --> 00:04:25,930
-that both puts show atomically
+00:04:07,030 --> 00:04:08,860
+basically the transfer didn't happen at all,
 
 59
-00:04:25,930 --> 00:04:30,100
-and so other transaction cannot observe an intermediate results
+00:04:08,890 --> 00:04:11,380
+so generally the semantics that we're looking for is that,
 
 60
-00:04:30,100 --> 00:04:33,670
-where an intermediate result, for example the money is deducted from x,
+00:04:11,410 --> 00:04:14,620
+both operations happen or neither one of them happens.
 
 61
+00:04:15,190 --> 00:04:17,500
+And so, similarly from concurrency perspective,
+
+62
+00:04:17,500 --> 00:04:19,030
+if another client is running
+
+63
+00:04:19,030 --> 00:04:21,070
+and also tries to inspect these accounts,
+
+64
+00:04:21,160 --> 00:04:23,260
+now what we would like to be the case is that,
+
+65
+00:04:23,260 --> 00:04:25,930
+both puts show atomically,
+
+66
+00:04:25,930 --> 00:04:30,100
+and so other transaction cannot observe intermediate results,
+
+67
+00:04:30,100 --> 00:04:31,420
+where intermediate result,
+
+68
+00:04:31,420 --> 00:04:33,670
+for example, the money is deducted from x,
+
+69
 00:04:33,700 --> 00:04:35,260
 that hasn't been added to y yet.
 
-62
+70
 00:04:36,070 --> 00:04:38,740
 So, these are the type of things we want to do
 
-63
+71
 00:04:38,920 --> 00:04:41,170
 and it's complete common in distributed systems,
 
-64
+72
 00:04:41,170 --> 00:04:45,490
 you know that you would like to do operation across shards.
 
-65
+73
 00:04:48,130 --> 00:04:52,630
 So that's sort of the context of what we'd like to do
 
-66
+74
 00:04:52,930 --> 00:04:57,610
 and the general plan for doing this is comes directly from the database community,
 
-67
+75
 00:04:58,030 --> 00:05:00,790
 this general plan is transactions.
 
-68
+76
 00:05:09,780 --> 00:05:13,650
 And what we'd like to do is basically group these operations,
 
-69
-00:05:13,650 --> 00:05:18,120
-for example in the case with the transfer two put operations into a single transaction.
+77
+00:05:13,650 --> 00:05:15,360
+for example in the case with the transfer,
 
-70
+78
+00:05:15,360 --> 00:05:18,120
+two put operations into a single transaction.
+
+79
 00:05:18,700 --> 00:05:23,320
 And, we like, then the property that this transaction executes atomically,
 
-71
+80
 00:05:23,530 --> 00:05:26,950
-so you know typically this requires some programmer annotations.
+so you know typically this requires some program annotations,
 
-72
+81
 00:05:28,820 --> 00:05:34,850
-So begin_x to indicate that the client wants to start a transaction,
+so begin_x to indicate that the client wants to start a transaction,
 
-73
-00:05:34,880 --> 00:05:39,310
-that may be then you know the operations like add,
+82
+00:05:34,880 --> 00:05:41,320
+you know may be then you know the operations like add, you know add x -1
 
-74
-00:05:39,700 --> 00:05:41,320
-you know add x -1
-
-75
+83
 00:05:41,680 --> 00:05:45,550
 and then add y you know +1,
 
-76
+84
 00:05:46,570 --> 00:05:50,110
 and then you have to indicate when the transaction is completed
 
-77
+85
 00:05:51,250 --> 00:05:55,450
-and so typically we come to make of commit.
+and so typically we come to make a commit.
 
-78
+86
 00:05:56,410 --> 00:06:00,430
 And, and so the semantics that we're looking for is that,
 
-79
-00:06:00,430 --> 00:06:06,520
-these operations are executed atomically with respect to concurrency and respect to a failure
+87
+00:06:00,430 --> 00:06:03,490
+these operations are executed atomically
 
-80
+88
+00:06:03,520 --> 00:06:06,520
+with respect to concurrency and respect to failure.
+
+89
 00:06:07,060 --> 00:06:08,860
-and just to make it a little bit more exciting,
+And just to make it a little bit more exciting,
 
-81
+90
 00:06:08,860 --> 00:06:10,360
-let's look at a second transaction,
+let's look at second transaction,
 
-82
-00:06:10,360 --> 00:06:15,160
-so that we can look at some case studies about how transactions actually interact,
+91
+00:06:10,360 --> 00:06:12,910
+so that we can look at some case studies
 
-83
+92
+00:06:12,910 --> 00:06:15,160
+about how transactions actually interact,
+
+93
 00:06:15,370 --> 00:06:19,240
 we might have a second transaction begin_x,
 
-84
+94
 00:06:19,960 --> 00:06:23,560
 which reads actually these accounts,
 
-85
+95
 00:06:24,460 --> 00:06:30,870
-so t1 get x, and then t2 you know gets y,
+so t1 gets x, and then t2 you know gets y,
 
-86
+96
 00:06:33,120 --> 00:06:37,770
-and print t1 and t2
+and print t1 and t2,
 
-87
+97
 00:06:37,950 --> 00:06:42,000
 and then end or commit.
 
-88
-00:06:47,590 --> 00:06:51,880
-So we have a second transaction that basically reads the account x and y and prints the values
+98
+00:06:47,590 --> 00:06:48,850
+So we have a second transaction,
 
-89
+99
+00:06:48,850 --> 00:06:51,880
+that basically reads the account x and y and prints the values.
+
+100
 00:06:52,180 --> 00:06:55,420
-and one reason that we have two transactions,
+And one reason that we have two transactions,
 
-90
+101
 00:06:55,420 --> 00:06:57,370
 so that we can look from the concurrency perspective,
 
-91
+102
 00:06:57,580 --> 00:06:59,860
 how these transactions actually ordered,
 
-92
+103
 00:06:59,860 --> 00:07:02,650
 what are legal outcome and what are illegal outcomes.
 
-93
-00:07:03,540 --> 00:07:07,440
-Transactions turned out to be a general,
+104
+00:07:03,540 --> 00:07:09,540
+Transactions turned out to be a general, almost like a piece of magic,
 
-94
-00:07:07,890 --> 00:07:09,540
-almost like a piece of magic,
-
-95
+105
 00:07:09,570 --> 00:07:14,940
-basically programmers can annotate these begin and end operations
+basically programmers can annotate these begin and end operations,
 
-96
-00:07:15,060 --> 00:07:18,750
-and it takes a whole group of operations together make them atomic
+106
+00:07:15,060 --> 00:07:17,850
+and it takes a whole group of operations together,
 
-97
+107
+00:07:17,850 --> 00:07:18,750
+make them atomic
+
+108
 00:07:18,870 --> 00:07:20,640
 and use the system will take care of everything,
 
-98
-00:07:20,640 --> 00:07:23,730
-it will take care of the locking, will take care of the recovery,
+109
+00:07:20,640 --> 00:07:22,050
+it will take care of the locking,
 
-99
+110
+00:07:22,200 --> 00:07:23,730
+will take care of the recovery,
+
+111
 00:07:23,790 --> 00:07:25,980
-it's all like the program doesn't have to worry about it,
+it's all like the programmer doesn't have to worry about it,
 
-100
-00:07:26,160 --> 00:07:34,460
-but the transactions are a very very powerful construct, and they're useful in non distributed systems,
+112
+00:07:26,160 --> 00:07:30,210
+the transactions is a very very powerful construct,
 
-101
+113
+00:07:30,980 --> 00:07:34,460
+and they're useful in non distributed systems,
+
+114
 00:07:34,460 --> 00:07:38,600
-you know you have a single database machine or multi-core database machine
+you know you have a single database machine or multi-core database machine,
 
-102
+115
 00:07:38,600 --> 00:07:40,610
 and clients are submitting transactions to it,
 
-103
-00:07:41,000 --> 00:07:46,190
-then the transaction systems will execute these transactions in as much as concurrently as possible,
+116
+00:07:41,000 --> 00:07:43,730
+then the transaction system will execute these transactions
 
-104
+117
+00:07:43,730 --> 00:07:46,190
+as much as concurrently as possible,
+
+118
 00:07:46,190 --> 00:07:48,980
 but also even if machine fails, it comes back up,
 
-105
+119
 00:07:49,010 --> 00:07:53,330
 you know you can actually expect the results to be there.
 
-106
+120
 00:07:54,080 --> 00:07:58,550
-And our focus of course is going to be distributed transactions.
+And our focus of course is going to be distributed transactions,
 
-107
+121
 00:08:02,430 --> 00:08:05,190
-After you know wanted I had the previous slide
+you know what I had the previous slide,
 
-108
-00:08:05,250 --> 00:08:13,220
-namely one example across shards which is a common case in data centers.
+122
+00:08:05,250 --> 00:08:09,860
+namely one example across shards,
 
-109
-00:08:14,220 --> 00:08:19,800
-The typical API of transaction also has one more operation that I didn't list here,
+123
+00:08:09,860 --> 00:08:13,220
+which is a common case in data centers.
 
-110
+124
+00:08:14,220 --> 00:08:18,450
+The typical API of transaction also has one more operation
+
+125
+00:08:18,450 --> 00:08:19,800
+that I didn't list here,
+
+126
 00:08:19,950 --> 00:08:21,210
 and that is abort,
 
-111
+127
 00:08:23,700 --> 00:08:26,670
 so the two transactions shown here are both committing,
 
-112
+128
 00:08:26,670 --> 00:08:29,610
-you could easily have transaction that decides to abort,
+but you could immediately have transaction that decides to abort,
 
-113
+129
 00:08:29,640 --> 00:08:33,870
-you know, for example you might discover that,
+you know for example you might discover that,
 
-114
-00:08:33,930 --> 00:08:39,690
-for example transaction T1 might check the x has sufficient money in it in the account
+130
+00:08:33,930 --> 00:08:37,230
+for example transaction T1 might check
 
-115
+131
+00:08:37,230 --> 00:08:39,690
+the x has sufficient money in it in the account,
+
+132
 00:08:39,960 --> 00:08:42,720
-and if have the account doesn't have sufficient money,
+and if the account doesn't have sufficient money,
 
-116
+133
 00:08:42,840 --> 00:08:45,690
-instead of calling commit, it would call abort
+instead of calling commit, it would call abort,
 
-117
+134
 00:08:45,840 --> 00:08:49,680
-and at that point the transaction would be cancelled
+and at that point the transaction would be cancelled,
 
-118
-00:08:50,010 --> 00:08:51,930
-and even if the transaction aborts,
+135
+00:08:50,010 --> 00:08:53,370
+and even if the transaction aborts you know sort of halfway through,
 
-119
-00:08:51,930 --> 00:08:53,370
-you know sort of halfway through
-
-120
+136
 00:08:53,430 --> 00:08:55,920
 and maybe has done some put operations,
 
-121
-00:08:55,920 --> 00:08:59,790
-the still the semantics should be that none of those put operations actually happened.
+137
+00:08:55,920 --> 00:08:57,270
+the still the semantics should be,
 
-122
+138
+00:08:57,270 --> 00:08:59,790
+that none of those put operations actually happened.
+
+139
 00:09:00,730 --> 00:09:04,540
 So in all cases where it's abort or commit,
 
-123
-00:09:04,690 --> 00:09:08,830
-either all of them happen or none of them happen, never partial result.
+140
+00:09:04,690 --> 00:09:07,240
+either all of them happen or none of them happen,
 
-124
+141
+00:09:07,510 --> 00:09:08,830
+never partial result,
+
+142
 00:09:09,710 --> 00:09:14,030
-Abort also might be called by the transaction system itself,
+abort also might be called by the transaction system itself,
 
-125
+143
 00:09:14,270 --> 00:09:16,250
 for example as we'll see later,
 
-126
+144
 00:09:16,250 --> 00:09:20,840
 if a there's a, there's a deadlock between two transactions,
 
-127
+145
 00:09:20,990 --> 00:09:24,020
 then the transaction system actually can abort one of the transactions,
 
-128
-00:09:24,170 --> 00:09:28,970
-in the, so that the other transaction continue and maybe retry later,
+146
+00:09:24,170 --> 00:09:25,460
+in the,
 
-129
-00:09:28,970 --> 00:09:30,200
-the transaction that was abort.
+147
+00:09:25,550 --> 00:09:27,320
+so that the other transaction continue
 
-130
+148
+00:09:27,320 --> 00:09:30,200
+and maybe retry later the transaction that was abort.
+
+149
 00:09:31,870 --> 00:09:34,330
-Okay, so this is a primitives,
+Okay, so this is sort of primitives,
 
-131
+150
 00:09:34,330 --> 00:09:41,170
-you know begin_x commit and abort three key interface operations,
+you know begin_x commit and abort, three key interface operations.
 
-132
-00:09:41,560 --> 00:09:50,730
-and then the semantics of transactions are typically summarized by a single word, namely ACID,
+151
+00:09:41,560 --> 00:09:45,670
+And then the semantics of transactions
 
-133
+152
+00:09:45,670 --> 00:09:50,730
+are typically summarized by a single word, namely ACID,
+
+153
 00:09:53,570 --> 00:09:58,370
 and that stands for four key properties with transactions.
 
-134
+154
 00:09:58,400 --> 00:10:01,210
-One it's atomic,
+One, it's atomic,
 
-135
-00:10:04,640 --> 00:10:09,650
-and here really atomic refers to the case where we have two transactions running,
+155
+00:10:04,640 --> 00:10:07,100
+and here really atomic refers to the case,
 
-136
+156
+00:10:07,100 --> 00:10:09,650
+where we have two transactions running,
+
+157
 00:10:09,650 --> 00:10:13,850
 and one transaction does multiple put operations or multiple add operations,
 
-137
+158
 00:10:13,970 --> 00:10:15,410
 all those results will be,
 
-138
+159
 00:10:15,410 --> 00:10:18,920
 all visible to the other transaction or none of them will be visible,
 
-139
-00:10:19,660 --> 00:10:22,840
-so that's one aspect, sorry, um,
+160
+00:10:19,660 --> 00:10:21,160
+so that's one aspect,
 
-140
-00:10:26,870 --> 00:10:28,550
-I say this, I said this is wrong,
+161
+00:10:21,460 --> 00:10:28,550
+sorry, I say this, I said this is wrong,
 
-141
+162
 00:10:28,550 --> 00:10:30,890
-so the actomic actually means to crash recovery case,
+so the atomic actually means to crash recovery case,
 
-142
+163
 00:10:31,130 --> 00:10:35,900
 so, if a transaction actually multiple put operations,
 
-143
+164
 00:10:35,960 --> 00:10:38,990
 the transaction crashes halfway,
 
-144
+165
 00:10:39,560 --> 00:10:42,650
 the rule is that all the writes are visible,
 
-145
+166
 00:10:42,680 --> 00:10:44,990
 all writes around a stable storage or none of them,
 
-146
+167
 00:10:45,760 --> 00:10:48,430
-was the atomics with respect to crash recovery.
+was the atomic sort of respect to crash recovery.
 
-147
+168
 00:10:49,060 --> 00:10:52,150
 The C stands for consistent,
 
-148
+169
 00:10:53,090 --> 00:10:55,430
-which is something we're emotionally not going to talk about,
+which is something we're mostly not going to talk about,
 
-149
+170
 00:10:55,700 --> 00:10:57,920
 it's more related to databases,
 
-150
+171
 00:10:58,100 --> 00:11:01,130
 it's often the case that database have internal variants,
 
-151
+172
 00:11:01,130 --> 00:11:04,310
-like referential integrity, is one of them
+like referential integrity, is one of them,
 
-152
+173
 00:11:04,460 --> 00:11:09,560
 and the transaction is supposed to maintain that consistency,
 
-153
+174
 00:11:10,320 --> 00:11:12,270
 and so no internal consistencies,
 
-154
+175
 00:11:12,720 --> 00:11:14,880
 this is going to be less of a topic for us today.
 
-155
+176
 00:11:15,180 --> 00:11:18,930
 The three is isolated, the I stands for isolated,
 
-156
-00:11:23,100 --> 00:11:27,300
-and isolated was what I just said earlier incorrectly,
+177
+00:11:23,100 --> 00:11:25,140
+and isolated was,
 
-157
-00:11:27,300 --> 00:11:30,000
-isolated actually refers to the case, we're running two transactions
+178
+00:11:25,170 --> 00:11:27,300
+what I just said earlier incorrectly,
 
-158
-00:11:30,270 --> 00:11:34,860
-and they don't see, they should observe intermediate results from each other,
+179
+00:11:27,300 --> 00:11:28,590
+isolated actually refers to the case,
 
-159
+180
+00:11:28,590 --> 00:11:30,000
+we're running two transactions,
+
+181
+00:11:30,270 --> 00:11:32,730
+and they don't see,
+
+182
+00:11:32,730 --> 00:11:34,860
+they should not observe intermediate results from each other,
+
+183
 00:11:34,890 --> 00:11:38,610
 so again all the writes are applied,
 
-160
+184
 00:11:39,600 --> 00:11:43,650
-all or nothing with respect to disability to another transactions.
+all or nothing with respect to [] to another transactions.
 
-161
+185
 00:11:44,500 --> 00:11:47,110
 And finally, the D stands for durable,
 
-162
+186
 00:11:49,410 --> 00:11:51,270
 meaning that if the transaction commits,
 
-163
+187
 00:11:51,760 --> 00:11:54,970
 then the results are written to a stable storage,
 
-164
+188
 00:11:54,970 --> 00:11:57,520
 so that if the system crashes, comes back up later,
 
-165
+189
 00:11:57,700 --> 00:12:01,360
 the latest writes or the latest transactions,
 
-166
+190
 00:12:01,360 --> 00:12:05,260
 the latest committed transactions are actually recorded on stable storage.
 
-167
+191
 00:12:08,420 --> 00:12:12,110
-Any questions about a quick introduction to transactions?
+Any questions about quick introduction to transactions?
 
-168
+192
 00:12:22,210 --> 00:12:27,910
 Okay, so I'm gonna talk basically about two topics quite a bit,
 
-169
+193
 00:12:27,910 --> 00:12:32,950
-namely the, A part of the transactions in the eye part of transactions,
+namely the A part of the transactions and the I part of transactions.
 
-170
+194
 00:12:33,070 --> 00:12:35,840
-we're gonna start with the I part
+We're gonna start with the I part,
 
-171
+195
 00:12:36,230 --> 00:12:40,040
 and talk a little bit about what actually correct isolation means.
 
-172
-00:12:44,420 --> 00:12:46,040
-So basically what we're looking for
+196
+00:12:44,420 --> 00:12:47,150
+So basically what we're looking for is a definition
 
-173
-00:12:46,070 --> 00:12:51,770
-is a definition for a correct execution of multiple transactions, for concurrency transactions.
+197
+00:12:47,480 --> 00:12:51,770
+for correct execution of multiple transactions or concurrency transactions,
 
-174
+198
 00:12:52,330 --> 00:12:56,920
-In the typical definition or gold standard in the database literature
+in the typical definition or [] standard in the database literature,
 
-175
+199
 00:12:57,040 --> 00:13:06,370
-I is called serializable or serializability,
+is called serializable or serializability,
 
-176
+200
 00:13:08,980 --> 00:13:10,450
 and what that means is that,
 
-177
+201
 00:13:10,450 --> 00:13:13,120
 if you have two transactions or many transactions,
 
-178
+202
 00:13:13,120 --> 00:13:14,530
 they execute concurrently,
 
-179
+203
 00:13:14,890 --> 00:13:19,030
 then the outcome has to be some serial order,
 
-180
+204
 00:13:20,080 --> 00:13:27,910
 so either t1 executes before t2 or t2 executes before t1,
 
-181
+205
 00:13:27,910 --> 00:13:30,790
 there's some serial or serial order,
 
-182
+206
 00:13:35,910 --> 00:13:44,320
 and the serial order has to produce the same outcome as the concurrent execution,
 
-183
+207
 00:13:44,320 --> 00:13:47,260
 so you get run two transaction concurrently,
 
-184
-00:13:47,260 --> 00:13:51,760
-they produce an outcome, that outcome which only valid or legal or correct,
+208
+00:13:47,260 --> 00:13:48,430
+they produce some outcome,
 
-185
+209
+00:13:48,550 --> 00:13:51,760
+that outcome is only valid or legal or correct,
+
+210
 00:13:51,940 --> 00:13:56,260
 if it could have been the result of a serial execution.
 
-186
-00:13:57,500 --> 00:13:59,510
-So just to make concrete,
+211
+00:13:57,500 --> 00:14:00,470
+So just to make concrete, for example,
 
-187
-00:13:59,510 --> 00:14:05,150
-for example, let's say in the account case x starts out as being 10,
+212
+00:14:00,530 --> 00:14:05,150
+let's say in the account case x starts out as being 10,
 
-188
+213
 00:14:05,300 --> 00:14:07,160
 y starts out as being 10,
 
-189
-00:14:07,850 --> 00:14:11,570
-we run these two transactions that we had earlier on the board,
+214
+00:14:07,850 --> 00:14:09,830
+we run these two transactions,
 
-190
+215
+00:14:09,830 --> 00:14:11,570
+that we had earlier on the board,
+
+216
 00:14:12,080 --> 00:14:13,940
-here might be what the two transactions are
+here might be what the two transactions are,
 
-191
+217
 00:14:14,300 --> 00:14:18,200
 and one basically moves one between two accounts
 
-192
+218
 00:14:18,200 --> 00:14:19,790
 and the other one prints the results of the two.
 
-193
+219
 00:14:21,400 --> 00:14:23,140
 So if you think a little bit about it,
 
-194
+220
 00:14:23,140 --> 00:14:24,370
 if t1 goes first,
 
-195
+221
 00:14:24,860 --> 00:14:28,280
-then the outcome is gonna be 9 10,
+then the outcome is gonna be 9,10,
 
-196
+222
 00:14:29,720 --> 00:14:33,170
 and the print statement is going to be,
 
-197
-00:14:40,240 --> 00:14:43,870
-yeah, and the print state actually there's 9 10,
+223
+00:14:40,240 --> 00:14:42,370
+yeah, and the print statement,
 
-198
-00:14:43,870 --> 00:14:46,450
-sorry 9 11, that's why I got confused,
+224
+00:14:42,460 --> 00:14:45,220
+actually there's 9,10, sorry 9,11,
 
-199
-00:14:47,540 --> 00:14:53,300
-and the print statement is also going to say x was the one that was substract, so 9 11,
+225
+00:14:45,280 --> 00:14:46,450
+that's why I got confused,
 
-200
+226
+00:14:47,540 --> 00:14:49,760
+and the print statement is also going to say,
+
+227
+00:14:50,240 --> 00:14:53,300
+x was the one that was substract, so 9 11,
+
+228
 00:14:54,570 --> 00:14:56,640
-so we get the string 9 11 out
+so we get the string 9,11 out
 
-201
+229
 00:14:56,700 --> 00:15:00,330
-and two dollars of the accounts are 9 9 11,
+and two value of the accounts are 9,11,
 
-202
+230
 00:15:00,420 --> 00:15:03,510
 if two t2 goes first,
 
-203
+231
 00:15:03,600 --> 00:15:06,570
-then the outcome is you know 10 10,
+then the outcome is you know 10,10,
 
-204
+232
 00:15:06,690 --> 00:15:08,430
-because nothing no money has moved yet
+because nothing no money has moved yet,
 
-205
+233
 00:15:08,790 --> 00:15:12,000
 and then t1 goes,
 
-206
+234
 00:15:12,000 --> 00:15:13,470
 so that's a possible outcome.
 
-207
+235
 00:15:14,960 --> 00:15:18,380
-And so that's the two legal outcomes of the transaction,
+And so that's the two legal outcomes of the two transaction,
 
-208
-00:15:18,380 --> 00:15:23,450
-that we're actually, if we executed the two transactions concurrently
+236
+00:15:18,380 --> 00:15:20,630
+that we're actually,
 
-209
+237
+00:15:20,960 --> 00:15:23,450
+if we executed the two transactions concurrently
+
+238
 00:15:23,450 --> 00:15:26,960
-and the system guarantees serializability,
+and the system guarantees serializability.
 
-210
+239
 00:15:27,690 --> 00:15:32,940
-now you notice that serializability has probably a lot of flavor
+Now you notice that serializability has probably a lot of flavor,
 
-211
+240
 00:15:32,940 --> 00:15:36,360
 of like the terminology that we used before namely linearizability,
 
-212
+241
 00:15:36,950 --> 00:15:40,640
-the key difference between serializability and linearizability is that
+the key difference between serializability and linearizability is that,
 
-213
+242
 00:15:40,640 --> 00:15:44,480
 in linearizability, there's a real-time, a real-time component,
 
-214
+243
 00:15:44,480 --> 00:15:49,430
-that if it was actually to start after t1 ends,
+that if transaction t2 start after t1 ends,
 
-215
-00:15:49,520 --> 00:15:53,900
-then t2 has to show up later in the total order, in the serial order,
+244
+00:15:49,520 --> 00:15:52,940
+then t2 has to show up later in the total order,
 
-216
+245
+00:15:52,970 --> 00:15:53,900
+in the serial order,
+
+246
 00:15:54,200 --> 00:15:56,390
-in serializability that is not required,
+in serializability, that is not required,
 
-217
-00:15:56,420 --> 00:16:03,080
-so even if transaction started were clock time little bit later than another transaction stopped or finished
+247
+00:15:56,420 --> 00:15:58,040
+so even if transaction started
 
-218
+248
+00:15:58,280 --> 00:16:03,080
+were clock time a little bit later than another transaction stopped or finished,
+
+249
 00:16:03,290 --> 00:16:06,740
-and the system is still allowed to reward it,
+and the system is still allowed to reorder it,
 
-219
+250
 00:16:07,980 --> 00:16:12,510
-so serializability build in some ways a little bit weaker than linearizability,
+so serializability in some ways a little bit weaker than linearizability.
 
-220
+251
 00:16:13,610 --> 00:16:18,920
-nevertheless, serializability is a very convenient programming idea right,
+Nevertheless, serializability is a very convenient programming [idea], right,
 
-221
+252
 00:16:18,920 --> 00:16:21,440
-because from a programming perspective,
+because from programming perspective,
 
-222
+253
 00:16:21,590 --> 00:16:25,100
 you could always think about transactions executing in some serial order,
 
-223
+254
 00:16:25,990 --> 00:16:28,900
 and you don't have to consider all kinds of interleavings.
 
-224
+255
 00:16:31,330 --> 00:16:37,540
 Okay, so even though serializability slightly weaker than linearizability,
 
-225
+256
 00:16:37,630 --> 00:16:42,220
 it actually disallows a whole bunch of problematic cases.
 
-226
-00:16:43,630 --> 00:16:46,780
-So let me talk a little bit about that just to make clear,
+257
+00:16:43,630 --> 00:16:45,760
+So let me talk a little bit about that,
 
-227
-00:16:47,700 --> 00:16:50,370
-there's a lot actually serializability means,
+258
+00:16:45,760 --> 00:16:50,370
+just to make clear what actually serializability means,
 
-228
-00:16:51,680 --> 00:16:58,640
-and what sort of executions the transactions, the transaction system actually has to forbid.
+259
+00:16:51,680 --> 00:16:54,890
+and what sort of executions,
 
-229
+260
+00:16:54,890 --> 00:16:58,640
+the transactions, the transaction system actually has to forbid?
+
+261
 00:17:00,730 --> 00:17:03,490
-And, so let's you know two cases,
+And, so let's, you know two cases,
 
-230
+262
 00:17:03,490 --> 00:17:07,630
 like here we have the first transaction,
 
-231
+263
 00:17:07,630 --> 00:17:10,000
 we have the second transaction running,
 
-232
+264
 00:17:11,270 --> 00:17:13,550
-so t1 runs, t2
+so t1 runs, t2,
 
-233
-00:17:14,090 --> 00:17:19,490
-and you know one outcome that we could have is like one possible execution,
+265
+00:17:14,090 --> 00:17:16,850
+and you know one outcome that we could have,
 
-234
-00:17:19,700 --> 00:17:23,240
-that might happen is if we if we don't do something special,
+266
+00:17:16,850 --> 00:17:21,020
+is like one possible execution that might happen is,
 
-235
+267
+00:17:21,020 --> 00:17:23,240
+if we if we don't do something special,
+
+268
 00:17:23,390 --> 00:17:26,660
 you know t1 gets x,
 
-236
+269
 00:17:28,790 --> 00:17:31,070
 you know here the transfer happens,
 
-237
+270
 00:17:31,100 --> 00:17:33,380
-so the updates actually y happen,
+so the updates x y happen,
 
-238
+271
 00:17:35,290 --> 00:17:39,040
 and then you know t2 does get y,
 
-239
-00:17:40,240 --> 00:17:46,600
-and you know, is this illegal or is this a serializable, is this a serializable execution.
+272
+00:17:40,240 --> 00:17:43,060
+and you know is this illegal
 
-240
+273
+00:17:43,060 --> 00:17:46,600
+or is this a serializable, is this a serializable execution?
+
+274
 00:17:47,260 --> 00:17:49,120
-That's sort of question we have to ask
+That's sort of question we have to ask,
 
-241
+275
 00:17:49,690 --> 00:17:51,430
-and what is the answer to that one.
+and what is the answer to that one?
 
-242
+276
 00:17:54,420 --> 00:17:56,370
 This is not serializable.
 
-243
+277
 00:17:57,220 --> 00:17:59,440
 Yeah, and because you know the outcome,
 
-244
+278
 00:17:59,440 --> 00:18:01,450
 you know if we write down what the outcome is, correct,
 
-245
+279
 00:18:01,450 --> 00:18:04,510
-then the outcome is gonna be 9 11 here,
+then the outcome is gonna be 9,11 here,
 
-246
+280
 00:18:04,630 --> 00:18:10,150
-and this is going to write down a 10 11,right.
+and this is going to write down a 10,11, right.
 
-247
+281
 00:18:11,490 --> 00:18:12,240
 I think so.
 
-248
+282
 00:18:12,860 --> 00:18:15,050
 And if we go back to our previous slides,
 
-249
+283
 00:18:15,050 --> 00:18:17,780
 that is not one of the two legal outcomes, right,
 
-250
+284
 00:18:17,960 --> 00:18:19,490
 so this is not good.
 
-251
+285
 00:18:20,330 --> 00:18:23,600
-So when we think about the implications of a transaction system,
+So when we think about the implications of transaction system,
 
-252
-00:18:23,900 --> 00:18:29,060
-it has to be the case that it forbids this particular execution schedule.
+286
+00:18:23,900 --> 00:18:25,070
+it has to be the case,
 
-253
+287
+00:18:25,070 --> 00:18:29,060
+that it forbids this particular execution schedule,
+
+288
 00:18:29,860 --> 00:18:31,360
-You know there's a similar version,
+you know this is a simple version,
 
-254
+289
 00:18:31,540 --> 00:18:33,880
-our transactions for these two examples are not so complicated,
+transactions for these two examples are not so complicated,
 
-255
+290
 00:18:33,880 --> 00:18:35,770
-so they're not that many in the leavings you have to,
+so there not that many interleavings you have to,
 
-256
+291
 00:18:36,190 --> 00:18:38,440
-you, you could consider that could go wrong,
+you, you could consider that could go wrong.
 
-257
+292
 00:18:38,590 --> 00:18:40,390
-but there's at least one other one,
+But there's at least one, other one,
 
-258
+293
 00:18:40,420 --> 00:18:43,720
 that can result in not an incorrect outcome,
 
-259
+294
 00:18:43,900 --> 00:18:48,230
 which is we do the put x first,
 
-260
+295
 00:18:50,040 --> 00:18:51,660
 so here we go,
 
-261
-00:18:52,550 --> 00:19:00,410
-then you know we actually print the two, do two gets, get x, get y,
+296
+00:18:52,550 --> 00:18:55,550
+then you know we actually print the two,
 
-262
+297
+00:18:55,580 --> 00:19:00,410
+do two gets, get(x) get(y),
+
+298
 00:19:02,520 --> 00:19:07,080
-and we do the put y,
+and we do the put(y),
 
-263
+299
 00:19:07,080 --> 00:19:10,080
 is this a serializable execution,
 
-264
+300
 00:19:22,180 --> 00:19:26,500
 is this an execution that we should be forbidden by the serializable transaction system,
 
-265
+301
 00:19:26,500 --> 00:19:28,510
-or is it okay execution.
+or is it okay execution?
 
-266
+302
 00:19:30,800 --> 00:19:31,640
 It should be forbidden.
 
-267
+303
 00:19:32,280 --> 00:19:33,270
 It should be forbidden, correct,
 
-268
-00:19:33,270 --> 00:19:37,440
-because as an outcome, that could not have happened if we executed t1
+304
+00:19:33,270 --> 00:19:34,650
+because as an outcome,
 
-269
-00:19:37,890 --> 00:19:42,150
-or first followed by t2 or t2 first followed by t1, right.
+305
+00:19:34,800 --> 00:19:36,000
+that could not have happened,
 
-270
-00:19:43,900 --> 00:19:50,980
-Okay, so what we clearly see is that gonna serializability excludes you know executions,
+306
+00:19:36,000 --> 00:19:39,630
+if we executed t1 first followed by t2
 
-271
-00:19:50,980 --> 00:19:57,820
-and just do a in order to actually make it easier for programmers to think about actually what database does,
+307
+00:19:39,660 --> 00:19:42,150
+or t2 first followed by t1, right.
 
-272
+308
+00:19:43,900 --> 00:19:46,360
+Okay, so what we clearly see is that,
+
+309
+00:19:46,360 --> 00:19:50,980
+you know serializability excludes you know executions,
+
+310
+00:19:50,980 --> 00:19:55,270
+and just do, in order to actually make it easier for programmers
+
+311
+00:19:55,270 --> 00:19:57,820
+to think about actually what database does.
+
+312
 00:19:58,480 --> 00:20:04,480
-and there are two broad approaches to forbidding executions.
+And there are two broad approaches to forbidding executions,
 
-273
-00:20:05,300 --> 00:20:12,380
-And, in these approaches the approach forbidding is called concurrency control.
+313
+00:20:05,300 --> 00:20:08,060
+and in these approaches,
 
-274
-00:20:22,020 --> 00:20:29,490
-In the first approach, for the first category of solutions is what is called pessimistic solutions,
+314
+00:20:08,060 --> 00:20:12,380
+the approach forbidding is called concurrency control.
 
-275
+315
+00:20:22,020 --> 00:20:24,450
+In the first approach,
+
+316
+00:20:24,450 --> 00:20:27,600
+for the first category of solutions is,
+
+317
+00:20:27,600 --> 00:20:29,490
+what is called pessimistic solutions,
+
+318
 00:20:35,400 --> 00:20:37,980
-and the pessimistic solution basically evolve locks,
+and the pessimistic solution basically involve locks,
 
-276
-00:20:40,350 --> 00:20:44,490
-so the idea is that when the transaction runs or starts,
+319
+00:20:40,350 --> 00:20:41,760
+so the idea is that,
 
-277
+320
+00:20:41,760 --> 00:20:44,490
+when the transaction runs or starts,
+
+321
 00:20:44,580 --> 00:20:50,640
-it requires necessary necessary locks to maintain serializability
+it requires necessary, necessary locks to maintain serializability,
 
-278
-00:20:50,790 --> 00:20:58,710
-and only release the locks when it's guaranteed that the executions will result in a serializable execution,
+322
+00:20:50,790 --> 00:20:54,930
+and only release the locks when it's guaranteed,
 
-279
-00:20:59,450 --> 00:21:02,450
-so that's one approach and we're going to talk a little bit more about in a second.
+323
+00:20:54,930 --> 00:20:58,710
+that the executions will result in a serializable execution,
 
-280
+324
+00:20:59,450 --> 00:21:00,650
+so that's one approach
+
+325
+00:21:00,650 --> 00:21:02,450
+and we're going to talk a little bit more about in a second.
+
+326
 00:21:03,100 --> 00:21:07,150
-The second approach is a is a is optimistic,
+The second approach is is is optimistic,
 
-281
+327
 00:21:12,050 --> 00:21:15,020
 and in the optimistic approach, there was basically no locks,
 
-282
+328
 00:21:16,730 --> 00:21:19,640
 and optimistic approach, you just assume things are gonna work out,
 
-283
+329
 00:21:20,960 --> 00:21:23,390
 and basically when you get to the commit point,
 
-284
+330
 00:21:24,130 --> 00:21:27,880
-you know there's actually system sort of ask yourself the question,
+you know the [] system sort of ask yourself the question,
 
-285
+331
 00:21:27,910 --> 00:21:31,660
-well you know all the given the operation I've done in the past,
+well, you know all the given the operation I've done in the past,
 
-286
+332
 00:21:31,660 --> 00:21:35,920
 is that actually could that be a the result of a linearizable execution,
 
-287
+333
 00:21:36,280 --> 00:21:39,190
-or could that be the result of a serializable execution.
+or could that be the result of a serializable execution,
 
-288
+334
 00:21:39,890 --> 00:21:43,340
-If so things are fine, no problem at all,
+if so, things are fine, no problem at all,
 
-289
+335
 00:21:43,790 --> 00:21:45,290
 then you know we're good,
 
-290
+336
 00:21:45,320 --> 00:21:49,730
 if it is result this doesn't correspond to a single execution,
 
-291
+337
 00:21:49,850 --> 00:21:51,170
 they were basically just abort,
 
-292
+338
 00:22:01,560 --> 00:22:05,610
 and maybe and it will retry probably.
 
-293
-00:22:06,150 --> 00:22:11,880
-And so we'll see, I'm not gonna talk much about optimistic concurrency control right now,
+339
+00:22:06,150 --> 00:22:08,010
+And so we'll see,
 
-294
-00:22:12,120 --> 00:22:15,840
-but next week or two weeks from now after reading the FaRM paper,
+340
+00:22:08,040 --> 00:22:11,880
+I'm not gonna talk much about optimistic concurrency control right now,
 
-295
+341
+00:22:12,120 --> 00:22:14,220
+but next week or two weeks from now,
+
+342
+00:22:14,220 --> 00:22:15,840
+after reading the FaRM paper,
+
+343
 00:22:16,260 --> 00:22:21,300
-and you'll see an optimistic transaction system distributed transaction system
+and you'll see an optimistic transaction system, distributed transaction system
 
-296
-00:22:21,300 --> 00:22:28,110
-of the type that we're considering that uses an optimistic optimistic control concurrency control approach.
+344
+00:22:21,300 --> 00:22:22,860
+of the type that we're considering,
 
-297
+345
+00:22:22,980 --> 00:22:28,110
+that uses an optimistic, optimistic control concurrency control approach,
+
+346
 00:22:28,870 --> 00:22:31,660
-Yeah, but the focus for today is going to be pessimistic.
+but the focus for today is going to be pessimistic.
 
-298
+347
 00:22:33,700 --> 00:22:38,770
-And one you know sort of the flip way,
+And one you know sort of the [flip way],
 
-299
-00:22:38,770 --> 00:22:42,190
-that these two approaches are described a in literature often
+348
+00:22:38,770 --> 00:22:42,460
+that these two approaches are described a in literature often is,
 
-300
-00:22:42,190 --> 00:22:47,680
-is a sort of pessimistic is you ask for permission first and then you do your operations.
+349
+00:22:42,460 --> 00:22:43,930
+sort of pessimistic is,
 
-301
+350
+00:22:44,140 --> 00:22:47,680
+you know you ask for permission first and then you do your operations,
+
+351
 00:22:48,070 --> 00:22:50,410
-And the optimistic sort the other way around,
+and the optimistic sort the other way around,
 
-302
+352
 00:22:50,470 --> 00:22:52,840
-you just go ahead and do your operations
+you just go ahead and do your operations,
 
-303
+353
 00:22:52,870 --> 00:22:55,480
 and it turns out to be wrong, you just apologize later.
 
-304
+354
 00:22:56,520 --> 00:23:01,470
 So that is sort of analogy if you will,
 
-305
+355
 00:23:01,950 --> 00:23:03,900
 between the two different approaches.
 
-306
+356
 00:23:05,200 --> 00:23:06,910
 And now within each approach,
 
-307
+357
 00:23:06,940 --> 00:23:08,770
-whether it's a pessimistic or optimistic,
+whether it's pessimistic or optimistic,
 
-308
+358
 00:23:08,830 --> 00:23:13,030
 there are many different concurrency control plans,
 
-309
+359
 00:23:13,030 --> 00:23:15,880
 you know to either increase their concurrency
 
-310
+360
 00:23:15,880 --> 00:23:19,510
-or provide weaker consistency and with more concurrency
+or provide weaker consistency and with more concurrency,
 
-311
+361
 00:23:19,660 --> 00:23:22,240
-and so there's like a there's a huge literature.
+and so there's like a, there's a [huge literature].
 
-312
+362
 00:23:22,900 --> 00:23:29,400
 And I'm just gonna talk about one particular approach,
 
-313
+363
 00:23:30,020 --> 00:23:31,340
 which is very popular,
 
-314
+364
 00:23:31,490 --> 00:23:34,580
 particularly if you want to achieve serializability,
 
-315
+365
 00:23:34,580 --> 00:23:35,600
 it turns out that not,
 
-316
+366
 00:23:35,660 --> 00:23:38,930
 alrough I said like serializability is a gold standard for databases,
 
-317
+367
 00:23:39,080 --> 00:23:44,090
-it's often decades that databases offer multiple degrees of isolation,
+it's often [] that databases offer multiple degrees of isolation,
 
-318
+368
 00:23:44,120 --> 00:23:45,320
-so you as a programmer,
+so you know as a programmer,
 
-319
+369
 00:23:45,320 --> 00:23:48,500
-you can pick you know the degree of isolation that you like
+you can sort of pick you know the degree of isolation that you like,
 
-320
+370
 00:23:48,800 --> 00:23:52,160
 and the reason you may want to pick a weaker degree of isolation,
 
-321
+371
 00:23:52,160 --> 00:23:53,600
 so that you can get more concurrency.
 
-322
+372
 00:23:54,540 --> 00:23:57,810
 Now we're going to stick to the gold standard of concurrency,
 
-323
+373
 00:23:57,960 --> 00:23:59,580
 which is namely serializability,
 
-324
+374
 00:23:59,730 --> 00:24:01,470
 and if you do serializability,
 
-325
+375
 00:24:01,530 --> 00:24:04,620
 then a common approache is 2-phase locking,
 
-326
+376
 00:24:15,090 --> 00:24:19,140
 in 2-phase locking, basically sort of lock per record,
 
-327
+377
 00:24:21,100 --> 00:24:24,370
-that's the starting point a database record
+that's the starting point for database record,
 
-328
-00:24:24,370 --> 00:24:31,390
-and you know in our little example, that would be a sort of a lock for variable
+378
+00:24:24,370 --> 00:24:26,320
+and you know in our little example,
 
-329
+379
+00:24:26,530 --> 00:24:31,390
+that would be sort of a lock for variable,
+
+380
 00:24:31,390 --> 00:24:33,430
-and they lock for x and lock for y.
+and lock for x and lock for y.
 
-330
+381
 00:24:34,430 --> 00:24:36,080
 And there's basically two rules,
 
-331
+382
 00:24:36,590 --> 00:24:46,980
-one transaction requires a lock before using,
+one, transaction requires a lock before using,
 
-332
-00:24:52,020 --> 00:24:57,420
-and so the idea is before you know you can read or write you know to x y,
+383
+00:24:52,020 --> 00:24:53,370
+and so the idea is,
 
-333
+384
+00:24:53,370 --> 00:24:57,420
+before you know you can read or write you know to x y,
+
+385
 00:24:57,510 --> 00:24:59,520
-you first have to obtain the lock
+you first have to obtain the lock,
 
-334
+386
 00:24:59,520 --> 00:25:01,380
-and the transaction system will do this for you.
+and the transaction system will do this for you,
 
-335
+387
 00:25:03,470 --> 00:25:07,490
-Two, the t holds a lock,
+two, the T holds a lock,
 
-336
-00:25:07,730 --> 00:25:16,510
-once you're acquired, you're not allowed to release it until commit or abort whatever,
+388
+00:25:07,730 --> 00:25:08,990
+once you're acquired,
 
-337
-00:25:17,760 --> 00:25:19,140
-whatever is the end of the transaction.
+389
+00:25:09,720 --> 00:25:15,790
+you're not allowed to release it until commit or abort,
 
-338
+390
+00:25:15,880 --> 00:25:19,140
+whatever, whatever is the end of the transaction.
+
+391
 00:25:20,260 --> 00:25:22,300
 Okay, and so in our particular case,
 
-339
+392
 00:25:22,300 --> 00:25:27,190
-if we are like t1 running and we have t2 running,
+if we have like T1 running and we have T2 running,
 
-340
+393
 00:25:27,840 --> 00:25:30,840
-and t1 locks x first
+and T1 locks x first,
 
-341
+394
 00:25:31,290 --> 00:25:33,870
-and then you know lock y
+and then you know lock y,
 
-342
-00:25:34,020 --> 00:25:37,830
-and it has to maintain those locks until it actually reaches commit points,
+395
+00:25:34,020 --> 00:25:36,060
+and it has to maintain those locks
 
-343
+396
+00:25:36,060 --> 00:25:37,830
+until it actually reaches commit points,
+
+397
 00:25:40,520 --> 00:25:43,910
-so t2 runs at the same time or roughly at the same time,
+so T2 runs at the same time or roughly at the same time,
 
-344
+398
 00:25:44,060 --> 00:25:46,730
-if t2 starts a little bit later
+if T2 starts a little bit later,
 
-345
+399
 00:25:46,940 --> 00:25:49,010
 and it tries to grab the lock in x,
 
-346
+400
 00:25:49,460 --> 00:25:51,020
 t1 will have it,
 
-347
+401
 00:25:51,170 --> 00:25:52,850
-it t2 started a little bit later
+if T2 started a little bit later,
 
-348
+402
 00:25:53,030 --> 00:25:55,940
-and at that point basically t2 has to wait,
+and at that point, basically T2 has to wait,
 
-349
+403
 00:25:58,140 --> 00:26:00,390
 sort of standard locking protocol.
 
-350
+404
 00:26:00,810 --> 00:26:03,330
 And the basic idea 2-phase locking is that,
 
-351
+405
 00:26:03,690 --> 00:26:08,850
 it's sort of a refinement or improvement over this simple locking scheme,
 
-352
-00:26:08,850 --> 00:26:15,090
-that is described in the document and which sometimes are called simple locking or strict locking,
+406
+00:26:08,850 --> 00:26:11,040
+that is described in the document
 
-353
+407
+00:26:11,040 --> 00:26:15,090
+and which sometimes are called simple locking or strict locking,
+
+408
 00:26:15,180 --> 00:26:17,010
 where basically at the beginning of the transaction,
 
-354
+409
 00:26:17,070 --> 00:26:19,890
 you grab all of the locks you need for the whole transaction,
 
-355
+410
 00:26:19,950 --> 00:26:21,990
-you hold them until the end and then you release them.
+you hold them until the end and then you release them,
 
-356
-00:26:22,620 --> 00:26:27,630
-And 2-phase locking is a little bit more fine-grained, in that,
+411
+00:26:22,620 --> 00:26:25,650
+and 2-phase locking is a little bit more fine-grained,
 
-357
-00:26:27,720 --> 00:26:29,940
-even if the transactions make,
+412
+00:26:25,890 --> 00:26:29,940
+in that, even if the transactions [],
 
-358
-00:26:32,440 --> 00:26:35,770
-and they are not required to lock immediately all at the same time at the beginning,
+413
+00:26:32,440 --> 00:26:34,240
+and they are not required to lock immediately
 
-359
+414
+00:26:34,240 --> 00:26:35,770
+all at the same time at the beginning,
+
+415
 00:26:36,620 --> 00:26:40,550
-instead, they require the locks incrementally as the transaction runs
+instead, they require the locks incrementally as the transaction runs,
 
-360
+416
 00:26:40,730 --> 00:26:45,590
 which allows certain concurrency patterns that are disallowed by strict lock.
 
-361
-00:26:47,320 --> 00:26:51,250
-Now, the first rule seems pretty clear, why you need it,
+417
+00:26:47,320 --> 00:26:50,320
+Now, the first rule seems pretty clear,
 
-362
+418
+00:26:50,350 --> 00:26:51,250
+why you need it,
+
+419
 00:26:51,580 --> 00:26:55,180
-the second rule might be, maybe less obvious
+the second rule might be, maybe less obvious,
 
-363
-00:26:55,510 --> 00:27:00,160
-and so it's a probably a good idea to actually see what goes wrong,
+420
+00:26:55,510 --> 00:26:57,580
+and so it's a probably a good idea
 
-364
+421
+00:26:57,580 --> 00:27:00,160
+to actually see what goes wrong,
+
+422
 00:27:00,160 --> 00:27:01,960
 if you did not maintain the second rule.
 
-365
+423
 00:27:02,900 --> 00:27:06,650
-And so, let's say talk a little bit about when to commit,
+And so, let's say talk a little bit about until commit,
 
-366
+424
 00:27:12,250 --> 00:27:15,370
 and so here we have our two transactions,
 
-367
+425
 00:27:16,310 --> 00:27:21,460
-t1 and t2 you know the transfer and the print statement
+T1 and T2 you know the transfer and the print statement,
 
-368
+426
 00:27:21,850 --> 00:27:23,350
-and so let's say you know
+and so let's say you know,
 
-369
+427
 00:27:23,350 --> 00:27:25,180
-here we do our put of x
+here we do our put of x,
 
-370
-00:27:25,750 --> 00:27:30,130
-and so that means before the put x, transaction system locks x,
+428
+00:27:25,750 --> 00:27:28,090
+and so that means before the put x,
 
-371
+429
+00:27:28,090 --> 00:27:30,130
+transaction system locks x,
+
+430
 00:27:31,480 --> 00:27:34,630
-and let's say that we're not following the 2-phase locking rule
+and let's say that we're not following the 2-phase locking rule,
 
-372
+431
 00:27:34,900 --> 00:27:39,700
 and we actually release the lock x right after the put,
 
-373
+432
 00:27:39,700 --> 00:27:40,600
 because we're done with it,
 
-374
+433
 00:27:40,600 --> 00:27:43,390
 actually doesn't show up in transaction t1 anymore,
 
-375
+434
 00:27:43,510 --> 00:27:45,640
-there will be a later put for us put to y,
+there will be a later put, for us put to y,
 
-376
-00:27:47,660 --> 00:27:53,420
-and let's assume that before actually get to the locking of y, t2 runs,
+435
+00:27:47,660 --> 00:27:48,440
+and let's assume that,
 
-377
-00:27:53,540 --> 00:27:59,580
-and actually t2 basically the whole, you know the two gets,
+436
+00:27:48,440 --> 00:27:53,420
+before actually get to the locking of y, T2 runs,
 
-378
-00:27:59,580 --> 00:28:03,060
-you get of x and get y run
+437
+00:27:53,540 --> 00:27:57,320
+and actually T2 basically the whole,
 
-379
+438
+00:27:57,960 --> 00:28:03,060
+you know the two gets, you get of x and get y run,
+
+439
 00:28:03,990 --> 00:28:07,410
-and so since you know t1 release the lock x,
+and so since you know T1 release the lock x,
 
-380
+440
 00:28:07,410 --> 00:28:09,000
 you know it can get the lock x,
 
-381
+441
 00:28:09,450 --> 00:28:13,260
-since t1 hasn't gone to the put yet,
+since T1 hasn't done to the put yet,
 
-382
+442
 00:28:13,260 --> 00:28:15,510
 you know it can also get the lock on y
 
-383
+443
 00:28:15,840 --> 00:28:17,790
-and so you know print x and y
+and so you know print x and y,
 
-384
+444
 00:28:18,720 --> 00:28:22,160
 and reset and then release locks.
 
-385
+445
 00:28:26,180 --> 00:28:36,180
 So, is this, would this be a serializable execution?
 
-386
+446
 00:28:41,010 --> 00:28:42,750
-Oh, it's the same as before.
+No, it's the same as before.
 
-387
+447
 00:28:42,810 --> 00:28:44,820
 Yeah, exactly the same as before, right,
 
-388
+448
 00:28:44,820 --> 00:28:48,450
 because basically the print statements like here,
 
-389
+449
 00:28:48,510 --> 00:28:51,750
 they sort of slipped in between the two put in x and y,
 
-390
+450
 00:28:51,810 --> 00:28:53,880
-between the two put of the x and y
+between the two put of the x and y,
 
-391
+451
 00:28:54,240 --> 00:28:55,740
 and we already concluded earlier,
 
-392
-00:28:55,740 --> 00:28:57,360
-that is not a serializable execution,
+452
+00:28:55,740 --> 00:28:58,830
+that is not a serializable conclusion, serializable execution.
 
-393
-00:28:57,420 --> 00:28:58,830
-that serializable execution.
-
-394
+453
 00:28:59,540 --> 00:29:00,560
 So this is wrong,
 
-395
+454
 00:29:00,890 --> 00:29:02,810
 and so this is a good example of demonstrating,
 
-396
+455
 00:29:02,810 --> 00:29:04,640
 that if you release the lock too early,
 
-397
+456
 00:29:04,700 --> 00:29:08,660
-in this case t1 release the x too early,
+in this case T1 release the x too early,
 
-398
+457
 00:29:08,810 --> 00:29:11,030
 you're not gonna get a serializable execution.
 
-399
+458
 00:29:12,390 --> 00:29:14,220
-And one way to think about it basically is that
+And one way to think about it basically is that,
 
-400
+459
 00:29:14,280 --> 00:29:19,620
 whatever there's sort of an intersection between you know two lock sets,
 
-401
+460
 00:29:19,620 --> 00:29:21,510
-so t1 has a lock set of x and y,
+so T1 has a lock set of x and y,
 
-402
+461
 00:29:21,510 --> 00:29:24,960
-t2 has a lock set of x y too,
+T2 has a lock set of x y too,
 
-403
-00:29:25,080 --> 00:29:31,530
-it is important that you know during these two transactions can order in a particular way,
+462
+00:29:25,080 --> 00:29:27,300
+it is important that,
 
-404
+463
+00:29:27,300 --> 00:29:31,530
+you know during, these two transactions can order in a particular way,
+
+464
 00:29:31,530 --> 00:29:34,560
 that means that if the locks intersect,
 
-405
+465
 00:29:34,710 --> 00:29:37,080
 you know we have to make ensure some total ordering,
 
-406
-00:29:37,470 --> 00:29:41,820
-and that means that we actually have to hold the lock to the end until the commit point,
+466
+00:29:37,470 --> 00:29:39,030
+and that means that we actually have to
 
-407
+467
+00:29:39,030 --> 00:29:41,820
+hold the lock to the end until the commit point,
+
+468
 00:29:42,100 --> 00:29:46,480
 so that no intermediate results of the transaction are actually visible to other transactions,
 
-408
+469
 00:29:47,530 --> 00:29:49,600
 and we release locks before the commit point,
 
-409
+470
 00:29:49,840 --> 00:29:52,240
 we might actually make a result visible,
 
-410
+471
 00:29:52,330 --> 00:29:55,390
-even though you know may be later it's actually even abort, right
+even though you know may be later it's actually even abort, right,
 
-411
+472
 00:29:55,390 --> 00:29:56,980
-and then the whole change will go away.
+and then the whole change will go away,
 
-412
+473
 00:29:58,610 --> 00:30:01,490
-So this is the reason why the locks must be held to the end.
+so this is the reason why the locks must be held to the end.
 
-413
+474
 00:30:03,670 --> 00:30:06,910
 Now, an obvious problem that many of you asked about,
 
-414
-00:30:07,300 --> 00:30:12,430
-in 2-phase locking is there is a, is there a chance of deadlock,
+475
+00:30:07,300 --> 00:30:09,850
+in 2-phase locking,
 
-415
+476
+00:30:09,850 --> 00:30:12,430
+is there is a, is there a chance of deadlock,
+
+477
 00:30:14,200 --> 00:30:18,920
-if you're requiring the locks as the transactions execute
+if you're requiring the locks as the transactions execute.
 
-416
-00:30:19,430 --> 00:30:21,830
-and so let's this is absolutely the case
+478
+00:30:19,430 --> 00:30:20,090
+And so let's,
 
-417
+479
+00:30:20,090 --> 00:30:21,830
+this is absolutely the case,
+
+480
 00:30:22,010 --> 00:30:25,940
-and so for example let's modify t2 slightly,
+and so for example, let's modify T2 slightly,
 
-418
-00:30:26,480 --> 00:30:29,990
-so t2 used to be you know t1 gets x,
+481
+00:30:26,480 --> 00:30:27,770
+so T2 used to be,
 
-419
+482
+00:30:27,770 --> 00:30:29,990
+you know t1 gets x,
+
+483
 00:30:30,260 --> 00:30:33,560
 instead we're going to do with in the opposite order refers to get y,
 
-420
+484
 00:30:34,380 --> 00:30:38,550
 and t2 gets x,
 
-421
+485
 00:30:39,060 --> 00:30:41,730
-and we remain we keep t1 the same, right,
+and we remain we keep T1 the same, right,
 
-422
+486
 00:30:41,730 --> 00:30:45,030
-so t1 actually still the first put to x and then put the y,
+so T1 actually still the first put to x and then put to y,
 
-423
+487
 00:30:45,540 --> 00:30:47,880
 so now we can easily get into trouble,
 
-424
+488
 00:30:48,850 --> 00:30:50,530
-so this is t2 print,
+so this is T2 prime,
 
-425
+489
 00:30:51,060 --> 00:30:54,630
-and this is just the ordinary t1 that we already have,
+and this is just the ordinary T1 that we already have,
 
-426
+490
 00:30:54,990 --> 00:30:56,340
 it does put of x,
 
-427
+491
 00:30:57,340 --> 00:30:58,870
 you know before doing the put of x
 
-428
+492
 00:30:58,870 --> 00:31:01,390
 and needs to get the lock on x,
 
-429
+493
 00:31:01,390 --> 00:31:03,220
-so L locks Lx,
+so L locks Lx.
 
-430
+494
 00:31:04,000 --> 00:31:07,990
-now let's say that the ordering works out as follows,
+Now let's say that the ordering works out as follows,
 
-431
+495
 00:31:07,990 --> 00:31:11,350
-you know the same time to t2 print runs,
+you know the same time to T2' runs,
 
-432
+496
 00:31:11,590 --> 00:31:14,050
 it does get y,
 
-433
+497
 00:31:14,950 --> 00:31:17,500
 so that means you've got the lock on y,
 
-434
+498
 00:31:18,490 --> 00:31:20,920
 and now you can easily see what goes wrong here,
 
-435
+499
 00:31:21,040 --> 00:31:25,990
-now t1 is gonna do a put of y or wants to do put y,
+now t1 is gonna do put of y or wants to do put y,
 
-436
+500
 00:31:26,530 --> 00:31:29,350
 so we need to get the lock on y,
 
-437
+501
 00:31:29,680 --> 00:31:31,720
 but you can't get it,
 
-438
+502
 00:31:31,720 --> 00:31:35,200
-because you know t2 print actually has the lock,
+because you know T2' actually has the lock,
 
-439
-00:31:35,200 --> 00:31:36,640
-so it has to wait here,
+503
+00:31:35,200 --> 00:31:37,480
+so it has to wait here and the block,
 
-440
-00:31:36,670 --> 00:31:37,480
-that's the block,
-
-441
+504
 00:31:38,280 --> 00:31:40,560
 you know same thing is gonna happen of course on the other side,
 
-442
+505
 00:31:40,560 --> 00:31:43,740
-you know one before doing the get of x,
+you know when before doing the get of x,
 
-443
+506
 00:31:44,130 --> 00:31:47,970
-t2 will need to get the lock of x,
+T2 will need to get the lock of x,
 
-444
+507
 00:31:48,450 --> 00:31:51,120
 and you know it can't get the lock of x,
 
-445
+508
 00:31:51,120 --> 00:31:52,410
-because t1 has it
+because T1 has it,
 
-446
+509
 00:31:52,680 --> 00:31:55,230
 and so this has to wait too,
 
-447
+510
 00:31:57,200 --> 00:32:01,580
-and now we have a t1 waiting t2 print,
+and now we have you know T1 waiting T2',
 
-448
+511
 00:32:01,580 --> 00:32:03,680
-and we have t2 print waiting t1,
+and we have T2' waiting T1,
 
-449
+512
 00:32:03,740 --> 00:32:05,030
 we basically have a deadlock.
 
-450
+513
 00:32:08,670 --> 00:32:12,210
-Now, what is the cool part about transaction systems is that
+Now, what is the cool part about transaction systems is that,
 
-451
+514
 00:32:12,210 --> 00:32:13,560
 we have the abort operation,
 
-452
+515
 00:32:14,380 --> 00:32:18,700
 and so if the transaction system could detect a deadlock,
 
-453
+516
 00:32:18,730 --> 00:32:20,920
 could use abort one of the two transactions,
 
-454
+517
 00:32:21,420 --> 00:32:23,010
-let the other one proceed
+let the other one proceed,
 
-455
-00:32:23,160 --> 00:32:25,170
-and hopefully that will actually get to the end
+518
+00:32:23,160 --> 00:32:25,830
+and hopefully that will actually get to the end and commit
 
-456
-00:32:25,170 --> 00:32:28,380
-and commit and abort the other one
+519
+00:32:26,280 --> 00:32:28,380
+and abort the other one,
 
-457
-00:32:28,440 --> 00:32:33,300
-and then the client or the application can decide what to do with abort of transactions,
+520
+00:32:28,440 --> 00:32:31,590
+and then the client or the application can decide
 
-458
+521
+00:32:31,590 --> 00:32:33,300
+what to do with abort of transactions,
+
+522
 00:32:33,300 --> 00:32:34,530
 it can actually retry it,
 
-459
+523
 00:32:34,530 --> 00:32:36,810
-you may be so wait a little bit and then retry,
+you know may be so wait a little bit and then retry,
 
-460
+524
 00:32:37,260 --> 00:32:41,220
 in the hope at that point you're not going to run into a deadlock.
 
-461
-00:32:42,470 --> 00:32:45,890
-And so one way to think a little bit about 2-phase locking is
+525
+00:32:42,470 --> 00:32:46,040
+And so one way to think a little bit about 2-phase locking is that,
 
-462
-00:32:45,890 --> 00:32:49,910
-that it has a little bit of optimistic you know flavor to it,
+526
+00:32:46,040 --> 00:32:49,910
+it has a little bit of optimistic you know flavor to it,
 
-463
-00:32:49,910 --> 00:32:52,250
-in the sense that it's not guaranteed,
+527
+00:32:49,910 --> 00:32:50,810
+in the sense that,
 
-464
+528
+00:32:51,140 --> 00:32:52,250
+it's not guaranteed,
+
+529
 00:32:52,250 --> 00:32:53,840
 it won't run into problems,
 
-465
+530
 00:32:53,870 --> 00:32:55,640
 but even if it runs into problems,
 
-466
+531
 00:32:55,670 --> 00:32:59,750
 you know you can always abort and then recover from that problem.
 
-467
+532
 00:33:03,060 --> 00:33:04,410
 Any questions about this?
 
-468
+533
 00:33:10,530 --> 00:33:13,350
-So you see how do you, how do you find the deadlock?
+So you say how do you, how do you find the deadlock?
 
-469
+534
 00:33:13,500 --> 00:33:16,440
 That's exactly I was hoping that somebody was asking that question.
 
-470
+535
 00:33:16,770 --> 00:33:21,090
 So the way, there's sort of two broad approaches that people use,
 
-471
-00:33:21,360 --> 00:33:26,010
-one is, yeah one is not solid as well,
+536
+00:33:21,360 --> 00:33:23,550
+one is,
 
-472
+537
+00:33:23,580 --> 00:33:26,010
+yeah, one is not solid as well,
+
+538
 00:33:26,010 --> 00:33:31,530
 one is basically on a timeout basis,
 
-473
+539
 00:33:31,530 --> 00:33:34,530
-like if the transaction on running for a long time,
+like if the transaction running for a long time,
 
-474
+540
 00:33:34,530 --> 00:33:36,720
 and you know they don't seem to make forward progress,
 
-475
+541
 00:33:36,960 --> 00:33:38,910
 you just abort one of them,
 
-476
+542
 00:33:39,700 --> 00:33:41,020
 and so this timeout based,
 
-477
+543
 00:33:41,680 --> 00:33:44,830
-the more systematic sort of way of thinking about it is
+the more systematic sort of way of thinking about it is,
 
-478
+544
 00:33:44,830 --> 00:33:47,440
-to construct and wait for graph,
+to construct an wait-for graph,
 
-479
+545
 00:33:47,620 --> 00:33:50,650
 as the transaction systems you know are moving,
 
-480
+546
 00:33:50,650 --> 00:33:53,920
 so for example if t1 runs,
 
-481
+547
 00:33:53,950 --> 00:33:55,540
-so a in the wait for graph,
+so a in the wait-for graph,
 
-482
+548
 00:33:55,540 --> 00:33:56,890
 the transactions are nodes,
 
-483
-00:33:56,920 --> 00:34:00,490
-so we got a node t1 and we make an node t2,
+549
+00:33:56,920 --> 00:33:58,600
+so we got a node T1
 
-484
-00:34:00,490 --> 00:34:02,710
-when they start with t2 print if you will,
+550
+00:33:58,930 --> 00:34:00,490
+and we make a node T2,
 
-485
+551
+00:34:00,490 --> 00:34:01,360
+when they start,
+
+552
+00:34:01,360 --> 00:34:02,710
+with T2' if you will,
+
+553
 00:34:03,190 --> 00:34:06,550
-and when t1 runs you know gets x nothing together,
+and when T1 runs you know gets x, [] [],
 
-486
+554
 00:34:06,580 --> 00:34:08,320
 then gets to the lock of y,
 
-487
-00:34:08,320 --> 00:34:14,380
-I can't do it, so we'll make an array from t1 to t2 print
+555
+00:34:08,320 --> 00:34:09,250
+it can't do it,
 
-488
+556
+00:34:09,520 --> 00:34:14,380
+so we'll make an arrow from T1 to T2'
+
+557
 00:34:14,380 --> 00:34:16,960
-to indicate that t1 is waiting for t2 print.
+to indicate that T1 is waiting for T2',
 
-489
+558
 00:34:17,740 --> 00:34:19,600
-Then at some point like you know t2 running,
+then at some point, like you know T2 running,
 
-490
+559
 00:34:19,600 --> 00:34:23,560
-you know t2 hits this, t2 print hits this point,
+you know T2 hits this, T2' hits this point,
 
-491
+560
 00:34:23,680 --> 00:34:25,870
-where they want to lock x, it can't do it.
+where it want to lock x, it can't do it.
 
-492
-00:34:26,460 --> 00:34:30,150
-So we'll look at what's waiting for, who's holding the lock,
+561
+00:34:26,460 --> 00:34:28,020
+So we'll look at,
 
-493
+562
+00:34:28,020 --> 00:34:30,150
+what's waiting for, who's holding the lock,
+
+563
 00:34:30,150 --> 00:34:31,200
-well it's t1,
+well, it's t1,
 
-494
-00:34:31,440 --> 00:34:38,280
-so we'll put an edge you know in the wait for graph from t2 to t2 print t1
+564
+00:34:31,440 --> 00:34:34,830
+so we'll put an edge you know in the wait-for graph
 
-495
+565
+00:34:34,830 --> 00:34:38,280
+from T2 to T2' to T1,
+
+566
 00:34:38,580 --> 00:34:40,560
 and now we see there's a cycle,
 
-496
+567
 00:34:41,660 --> 00:34:43,310
 and whenever there's a cycle,
 
-497
+568
 00:34:43,310 --> 00:34:44,510
 that means there's a deadlock,
 
-498
+569
 00:34:44,840 --> 00:34:46,490
-because one is waiting on the other
+because one is waiting on the other,
 
-499
+570
 00:34:46,550 --> 00:34:48,350
 and the other is waiting on the first.
 
-500
+571
 00:34:49,040 --> 00:34:53,870
 And so, the transaction system can construct these graphs on the fly,
 
-501
+572
 00:34:53,960 --> 00:34:57,170
 detect when there's a cycle in the graph,
 
-502
+573
 00:34:57,230 --> 00:35:00,620
-and then for example either abort t1 or t2 [prime].
+and then for example either abort T1 or abort T2'.
 
-503
+574
 00:35:02,650 --> 00:35:07,130
-So let's call the wait-for graph.
+It's call the wait-for graph.
 
-504
+575
 00:35:13,170 --> 00:35:14,610
 What happens after the abort?
 
-505
+576
 00:35:16,080 --> 00:35:20,130
-Well, so let's say we have abort t2,
+Well, so let's say we have abort T2,
 
-506
+577
 00:35:20,770 --> 00:35:22,510
 just for as an experiment,
 
-507
+578
 00:35:23,300 --> 00:35:25,010
 so we're gonna kill this guy,
 
-508
+579
 00:35:25,040 --> 00:35:29,660
-so t2 basically this transaction system is going to arrange,
+so T2 basically the transaction system is going to arrange,
 
-509
+580
 00:35:29,660 --> 00:35:30,620
 so we'll see in a second,
 
-510
-00:35:31,100 --> 00:35:35,630
-it's going to arrange that basically none results of t2 or t2 is visible,
+581
+00:35:31,100 --> 00:35:33,770
+it's going to arrange that basically none results of T2
 
-511
+582
+00:35:33,770 --> 00:35:35,630
+or t2 is visible,
+
+583
 00:35:35,960 --> 00:35:38,720
 at that point, the lock is released,
 
-512
+584
 00:35:39,080 --> 00:35:43,610
-the abort will forced to lock, the release of the y,
+the abort will force the lock release of the y,
 
-513
+585
 00:35:43,610 --> 00:35:45,440
-because t2 [prime] is backing out,
+because t2 is backing out,
 
-514
+586
 00:35:45,860 --> 00:35:50,150
-that means that you know t1 can get the lock on y and proceed to finish.
+that means that you know T1 can get the lock on y and proceed to finish,
 
-515
+587
 00:35:50,740 --> 00:35:54,340
-The client that called t2 prime is going to learn
+the client that called T2' is going to learn,
 
-516
+588
 00:35:54,340 --> 00:35:55,510
-that the transaction abort
+that the transaction abort it,
 
-517
+589
 00:35:55,810 --> 00:35:58,360
 and for general you can just choose to rerun it again.
 
-518
+590
 00:36:04,570 --> 00:36:05,410
 Does it makes sense?
 
-519
+591
 00:36:10,910 --> 00:36:14,690
 Okay, so this is sort of the first part,
 
-520
+592
 00:36:14,690 --> 00:36:17,480
 and you know actually what I wanted to say about 2-phase locking,
 
-521
+593
 00:36:17,570 --> 00:36:21,530
 except I wanted to address the sort of homework assignment again,
 
-522
-00:36:21,680 --> 00:36:27,710
-which is like in what situations does 2-phase locking allow for more concurrency than strict locking,
+594
+00:36:21,680 --> 00:36:23,810
+which is like in what situations,
 
-523
-00:36:27,740 --> 00:36:34,360
-where strict locking was the protocol where of transaction acquires all the locks in adance,
+595
+00:36:23,810 --> 00:36:27,710
+does 2-phase locking allow for more concurrency than strict locking,
 
-524
+596
+00:36:27,740 --> 00:36:30,050
+where strict locking was the protocol,
+
+597
+00:36:30,050 --> 00:36:34,360
+where the transaction acquires all the locks in advance,
+
+598
 00:36:34,950 --> 00:36:37,440
 and this requires that the programmer
 
-525
-00:36:37,440 --> 00:36:41,760
-or like the beginning of the transaction basis declares which locks the transaction actually needs,
+599
+00:36:37,440 --> 00:36:39,570
+or like the beginning of the transaction basically declares
 
-526
+600
+00:36:39,570 --> 00:36:41,760
+which locks the transaction actually needs,
+
+601
 00:36:42,300 --> 00:36:44,940
-sort of slightly desirable less programmer friendly,
+sort of slightly indesirable, less programmer friendly,
 
-527
-00:36:45,210 --> 00:36:48,360
-but it has the advantage that you know you don't actually,
+602
+00:36:45,210 --> 00:36:46,650
+but it has the advantage,
 
-528
+603
+00:36:46,650 --> 00:36:48,360
+that you know you don't actually,
+
+604
 00:36:48,390 --> 00:36:49,950
 you can run into these,
 
-529
+605
 00:36:51,340 --> 00:36:54,400
 you don't have to abort transaction at the end,
 
-530
+606
 00:36:54,580 --> 00:36:56,320
 in case you run into a deadlock.
 
-531
+607
 00:36:57,060 --> 00:37:01,350
-So 2-phase locking allowed for more concurrency in principle,
+So 2-phase locking allow for more concurrency in principle,
 
-532
-00:37:01,350 --> 00:37:06,810
-or should allow for more concurrency than the strict locking or simple locking scheme
+608
+00:37:01,350 --> 00:37:02,910
+or should allow for more concurrency
 
-533
+609
+00:37:03,120 --> 00:37:06,810
+than the strict locking or simple locking scheme.
+
+610
 00:37:06,840 --> 00:37:10,230
-and so I would like to do is a quick breakout room
+And so I would like to do is a quick breakout room
 
-534
+611
 00:37:10,230 --> 00:37:12,690
 for a couple minutes like five minutes again,
 
-535
+612
 00:37:12,960 --> 00:37:17,160
 and you know convince yourself or constructing case,
 
-536
+613
 00:37:17,190 --> 00:37:21,120
-where simple locking which disallows some concurrency
+where simple locking which disallows some concurrency,
 
-537
+614
 00:37:21,180 --> 00:37:24,450
 that 2-phase locking is actually able to exploit.
 
-538
+615
 00:37:26,730 --> 00:37:29,940
 Cool, all right, let's do breakout rooms.
 
-539
+616
 00:37:34,410 --> 00:37:36,330
 Okay, see you in five minutes.
 
-540
+617
 00:44:07,130 --> 00:44:08,150
 We can't hear you.
 
-541
+618
 00:44:17,730 --> 00:44:19,080
 I think you're muted.
 
-542
+619
 00:44:36,180 --> 00:44:40,710
 I have a question about one of the previous slides that you're talking about.
 
-543
+620
 00:44:40,740 --> 00:44:43,410
-Well, let me double check if everybody can hear me now.
+Hold on, let me double check if everybody can hear me now.
 
-544
+621
 00:44:44,330 --> 00:44:44,870
 Yes.
 
-545
+622
 00:44:45,110 --> 00:44:49,060
 Okay, good, go ahead.
 
-546
+623
 00:44:50,620 --> 00:44:54,040
 On one of your previous or I guess this is just a general question,
 
-547
+624
 00:44:54,040 --> 00:44:57,100
 but is the lock point always the same as the commit point,
 
-548
+625
 00:44:57,370 --> 00:45:01,480
 or is it possible to start relinquishing locks before your commit point.
 
-549
+626
 00:45:01,540 --> 00:45:04,390
 Okay, this is a very good question,
 
-550
-00:45:04,420 --> 00:45:09,280
-so depends, so if you only do exclusive locking
+627
+00:45:04,420 --> 00:45:06,160
+so depends,
 
-551
-00:45:09,280 --> 00:45:12,640
-as we've done so far, at least in my examples,
+628
+00:45:06,190 --> 00:45:09,280
+so if you only do exclusive locking,
 
-552
+629
+00:45:09,280 --> 00:45:11,530
+as we've done so far,
+
+630
+00:45:11,530 --> 00:45:12,640
+at least in my examples,
+
+631
 00:45:12,640 --> 00:45:14,500
 then commit point is similar to the,
 
-553
+632
 00:45:15,060 --> 00:45:17,820
 the lock point is similar to the commit point and the abort point,
 
-554
+633
 00:45:17,910 --> 00:45:19,830
 if you have read write locking,
 
-555
+634
 00:45:19,980 --> 00:45:24,570
-the locks that allow yeah both read locks and write locks,
+the locks that allow both read locks and write locks,
 
-556
+635
 00:45:24,870 --> 00:45:30,480
 then, it's possible to release read locks earlier with some restrictions.
 
-557
+636
 00:45:32,540 --> 00:45:33,230
 Okay.
 
-558
+637
 00:45:34,780 --> 00:45:39,710
 Okay, so can somebody give me one example
 
-559
+638
 00:45:39,710 --> 00:45:44,360
 of where 2-phase locking is allowing for more concurrency than simple locking,
 
-560
+639
 00:45:45,380 --> 00:45:47,540
 just to make sure we're all on the same page.
 
-561
+640
 00:45:52,360 --> 00:45:54,400
 The audit function example,
 
-562
+641
 00:45:54,400 --> 00:46:00,870
-like you can release the lock as soon as you read this person's account,
+like you can release the lock as soon as you read this person's amount,
 
-563
+642
 00:46:00,900 --> 00:46:03,120
-like you don't have to wait until you read every once.
+like you don't have to wait until you read everyone's.
 
-564
+643
 00:46:04,120 --> 00:46:07,210
 This is an example of exploiting the read read locks,
 
-565
+644
 00:46:07,210 --> 00:46:08,200
 if you have read locks.
 
-566
+645
 00:46:15,060 --> 00:46:16,080
 Any other examples?
 
-567
-00:46:19,930 --> 00:46:26,320
-If you have a transaction where there's a condition that only rarely like is true
+646
+00:46:19,930 --> 00:46:21,280
+If you have a transaction,
 
-568
+647
+00:46:21,280 --> 00:46:26,320
+where there's a condition that only rarely like is true,
+
+648
 00:46:26,320 --> 00:46:28,510
 and you read a piece of data when it's true,
 
-569
-00:46:28,510 --> 00:46:31,090
-so, at the beginning you don't need to acquire the lock
+649
+00:46:28,510 --> 00:46:31,750
+so, at the beginning, you don't need to acquire the lock for that,
 
-570
-00:46:31,090 --> 00:46:33,340
-for that only when you actually need to read it.
+650
+00:46:31,750 --> 00:46:33,340
+only when you actually need to read it.
 
-571
-00:46:33,640 --> 00:46:36,460
-Yeah, that's a great example, I personally like that example a lot,
+651
+00:46:33,640 --> 00:46:34,780
+Yeah, that's a great example,
 
-572
+652
+00:46:34,780 --> 00:46:36,460
+I personally like that example a lot,
+
+653
 00:46:36,490 --> 00:46:37,210
 that's a great one.
 
-573
-00:46:38,960 --> 00:46:44,420
-Good, okay good, so let's move on basically down to the second topic of this lecture,
+654
+00:46:38,960 --> 00:46:40,310
+Good, okay, good,
 
-574
+655
+00:46:40,310 --> 00:46:44,420
+so let's move on basically down to the second topic of this lecture,
+
+656
 00:46:44,420 --> 00:46:45,890
-which is 2-phase commit.
+which is 2-phase commit,
 
-575
+657
 00:46:49,420 --> 00:46:51,190
-This is really dealing with crashes,
+this is really dealing with crashes,
 
-576
+658
 00:46:53,670 --> 00:46:56,190
-switch back to blue and they are [wisely].
+switch back to blue and on the white.
 
-577
-00:47:01,910 --> 00:47:06,020
+659
+00:47:01,910 --> 00:47:04,640
 We can't see the slides either yet.
 
-578
-00:47:07,280 --> 00:47:12,590
-Oh let me fix that, and lold on,
+660
+00:47:05,120 --> 00:47:09,860
+Oh, let me fix that,
 
-579
+661
+00:47:10,970 --> 00:47:12,590
+and hold on,
+
+662
 00:47:15,030 --> 00:47:20,190
-share screen step to share.
+share screen, step to share,
 
-580
+663
 00:47:21,390 --> 00:47:22,620
-How about that?
+how about now?
 
-581
+664
 00:47:23,180 --> 00:47:23,690
 Okay.
 
-582
+665
 00:47:24,020 --> 00:47:25,910
 Good, thank you.
 
-583
+666
 00:47:26,800 --> 00:47:35,980
-Alright, so two-phase commit or 2PC that's popular called,
+Alright, so 2-phase commit or 2PC that's popular called,
 
-584
+667
 00:47:36,220 --> 00:47:41,590
 again this is a very well-known popular protocol,
 
-585
-00:47:41,890 --> 00:47:49,060
-I'm going to talk about that base sort of simple straightforward for the most common version of the protocol,
+668
+00:47:41,890 --> 00:47:43,690
+I'm going to talk about that,
 
-586
+669
+00:47:43,690 --> 00:47:49,060
+base sort of simple straightforward or the most common version of the protocol,
+
+670
 00:47:49,090 --> 00:47:51,430
 they're all kinds of variations of it,
 
-587
+671
 00:47:51,640 --> 00:47:58,100
 but you know in they also have the same underlying idea.
 
-588
+672
 00:47:58,840 --> 00:48:02,530
-And so again typically interface protocol
+And so again, typically in 2-phase protocol,
 
-589
+673
 00:48:02,530 --> 00:48:06,550
 and I'm going to do it in the context of the transfer transaction,
 
-590
+674
 00:48:07,000 --> 00:48:09,970
-so a client that actually wants to do a transfer
+so a client that actually wants to do a transfer,
 
-591
+675
 00:48:10,090 --> 00:48:15,070
-basically submits the transfer transaction to transaction system,
+you know basically submits the transfer transaction to transaction system,
 
-592
+676
 00:48:15,430 --> 00:48:21,070
-and the [] or the machine sort of receive transaction is called the coordinator,
+and the the machine sort of receive transaction is called the coordinator,
 
-593
+677
 00:48:23,490 --> 00:48:31,290
-and that machine is in charge of running the transaction through the transaction system
+and that machine is in charge of running the transaction through the transaction system,
 
-594
-00:48:31,860 --> 00:48:38,180
-and so the coordinator will talk in our case to two different machines, a and b,
+678
+00:48:31,860 --> 00:48:35,910
+and so the coordinator will talk in our case to two different machines,
 
-595
+679
+00:48:37,100 --> 00:48:38,180
+A and B,
+
+680
 00:48:38,960 --> 00:48:43,160
-where a holds you know x and b holds y.
+where A holds you know x and B holds y.
 
-596
+681
 00:48:45,150 --> 00:48:52,910
-And, and basically you know one way that this typically goes is that
+And and basically you know one way that this typically goes is that,
 
-597
+682
 00:48:52,910 --> 00:48:55,340
 the coordinator for a sort of does the whole transaction,
 
-598
+683
 00:48:55,340 --> 00:48:57,140
 but in a tentative way,
 
-599
+684
 00:48:57,200 --> 00:49:02,400
-so, the put x, you know results in a message to A,
+so, the put x you know results in a message to A,
 
-600
+685
 00:49:02,430 --> 00:49:06,210
 you know locking A, modifying A,
 
-601
-00:49:06,300 --> 00:49:12,540
-you know put x, except the put is not actually visible, yet in the database,
+686
+00:49:06,300 --> 00:49:09,690
+you know put x, except,
 
-602
+687
+00:49:09,690 --> 00:49:12,540
+the put is not actually visible yet in the database,
+
+688
 00:49:12,630 --> 00:49:15,510
-what what's done is putting a log
+what what's done is putting a log,
 
-603
+689
 00:49:15,780 --> 00:49:19,170
-very much like in sort of a in the frangipani style,
+very much like in sort of in the Frangipani style,
 
-604
+690
 00:49:19,170 --> 00:49:20,670
 where we have to write ahead log,
 
-605
-00:49:20,940 --> 00:49:22,560
-all the operations that we at some point,
+691
+00:49:20,940 --> 00:49:21,750
+all the operations,
 
-606
-00:49:22,560 --> 00:49:24,780
-one of materialize in the database itself,
+692
+00:49:21,750 --> 00:49:24,780
+that we at some point, one of [materialize] in the database itself,
 
-607
-00:49:24,810 --> 00:49:29,250
-we first put in the log until later in the particular case until we hit commit
+693
+00:49:24,810 --> 00:49:26,190
+we first put in the log,
 
-608
+694
+00:49:26,310 --> 00:49:29,250
+until later, in the particular case until we hit commit,
+
+695
 00:49:29,340 --> 00:49:32,610
 and then we actually will install everything in the database.
 
-609
+696
 00:49:33,280 --> 00:49:37,360
 So we do put, we do second put you know to y,
 
-610
+697
 00:49:39,810 --> 00:49:42,120
 in another same thing happens there,
 
-611
+698
 00:49:42,120 --> 00:49:44,880
 you know we got a lock on y,
 
-612
+699
 00:49:44,910 --> 00:49:46,590
-okay so just sort of being locked in x,
+okay, so this sort of being lock on x,
 
-613
+700
 00:49:47,080 --> 00:49:49,240
-and what do a put on y,
+and we do a put on y,
 
-614
+701
 00:49:50,800 --> 00:49:55,840
 and again we're gonna not actually you know really put the value in the database,
 
-615
+702
 00:49:55,840 --> 00:49:56,770
-we're gonna log,
+we're gonna using log,
 
-616
-00:49:56,890 --> 00:50:00,070
-so we're logging y and here we are log x.
+703
+00:49:56,890 --> 00:49:58,630
+so we're log y
 
-617
+704
+00:49:58,840 --> 00:50:00,070
+and here we log x.
+
+705
 00:50:01,400 --> 00:50:02,060
 Okay?
 
-618
+706
 00:50:03,440 --> 00:50:07,490
-And now the coordinate is done two you know the transactions,
+And now the coordinator is done two you know the transactions,
 
-619
+707
 00:50:07,490 --> 00:50:11,810
-that two of main operations now so ready to commit
+that two of main operations now so ready to commit,
 
-620
+708
 00:50:12,020 --> 00:50:14,660
-and here's where the two-phase part comes in.
+and here's where the 2-phase part comes in.
 
-621
+709
 00:50:15,390 --> 00:50:19,680
 And so the coordinator will send a prepare message,
 
-622
-00:50:20,410 --> 00:50:23,080
-and first gonna describe this protocol indicates
+710
+00:50:20,410 --> 00:50:22,600
+and first gonna describe this protocol,
 
-623
-00:50:23,080 --> 00:50:25,600
-there's no failures and everything works out,
+711
+00:50:22,600 --> 00:50:25,600
+indicates there's no failures and everything works out,
 
-624
+712
 00:50:26,140 --> 00:50:30,670
 you know just sort of the easy cases as will,
 
-625
+713
 00:50:31,240 --> 00:50:32,950
-sends a prepared message,
+sends a prepare message,
 
-626
-00:50:33,490 --> 00:50:41,250
-sends a prepare message to, to prepare A, you know prepare B.
+714
+00:50:33,490 --> 00:50:36,070
+sends a prepare message to,
 
-627
-00:50:45,310 --> 00:50:51,130
-And the prepared message of course includes the transaction ID that has actually used for this transaction,
+715
+00:50:37,080 --> 00:50:41,250
+to prepare A, you know prepare B,
 
-628
+716
+00:50:45,310 --> 00:50:48,730
+and the prepare message of course includes the transaction ID,
+
+717
+00:50:48,730 --> 00:50:51,130
+that actually used for this transaction,
+
+718
 00:50:51,130 --> 00:50:53,560
-so every transaction has a transaction ID
+so every transaction has a transaction ID,
 
-629
+719
 00:50:54,130 --> 00:50:57,100
 and all the message are tag with the transaction ID,
 
-630
+720
 00:50:57,100 --> 00:50:59,830
-so we always know about which transaction we're talking about.
+so we always know about which transaction we're talking about,
 
-631
+721
 00:51:00,880 --> 00:51:04,750
-When A and B receives prepare messages,
+when A and B receives prepare messages,
 
-632
+722
 00:51:05,110 --> 00:51:07,000
 you know they look at their state,
 
-633
+723
 00:51:07,060 --> 00:51:11,500
 you know see if they indeed can actually execute the transaction,
 
-634
+724
 00:51:11,500 --> 00:51:14,410
 you know they're holding the lock on x in this case,
 
-635
-00:51:14,590 --> 00:51:17,770
-the x is actually the log and so they sent back,
+725
+00:51:14,590 --> 00:51:16,660
+the x is actually the log
 
-636
+726
+00:51:16,810 --> 00:51:17,770
+and so they sent back,
+
+727
 00:51:17,770 --> 00:51:21,160
-you know saying yeah I'm ready to commit.
+you know saying yeah I'm ready to commit,
 
-637
+728
 00:51:21,990 --> 00:51:25,330
-So,yes, yes.
+So, yes, yes,
 
-638
-00:51:27,200 --> 00:51:37,940
-And at this particular point, use the crucial step is the coordinator now knows that basically both A and B are prepared to commit
+729
+00:51:27,200 --> 00:51:31,610
+and at this particular point, use the crucial step is,
 
-639
-00:51:38,240 --> 00:51:41,420
-and so and I have basically promised to commit
+730
+00:51:31,850 --> 00:51:37,940
+the coordinator now knows that basically both A and B are prepared to commit,
 
-640
-00:51:41,420 --> 00:51:44,480
-by actually responding y
+731
+00:51:38,240 --> 00:51:44,480
+and so and I have basically promised to commit by actually responding y,
 
-641
+732
 00:51:44,660 --> 00:51:49,320
-and at this point the coordinator commits.
+and at this point the coordinator commits,
 
-642
-00:51:49,930 --> 00:51:55,570
-And then you know since messages you know again to the A same commits,
+733
+00:51:49,930 --> 00:51:55,030
+and then you know sends messages you know again to the A,
 
-643
-00:51:56,920 --> 00:51:59,260
-you know the transaction TID,
+734
+00:51:55,030 --> 00:51:59,260
+saying commits you know the transaction TID,
 
-644
+735
 00:51:59,960 --> 00:52:04,070
-similar message to b you know commit TID.
+similar message to B you know commit TID,
 
-645
-00:52:07,190 --> 00:52:11,420
-And at this particular point A and B actually performed the operation,
+736
+00:52:07,190 --> 00:52:08,360
+and at this particular point,
 
-646
+737
+00:52:08,660 --> 00:52:11,420
+A and B actually perform the operation,
+
+738
 00:52:11,420 --> 00:52:13,610
 so they basically install,
 
-647
+739
 00:52:14,160 --> 00:52:19,650
-at this point you know they install you know the log version of y,
+at this point, you know they install you know the log version of y,
 
-648
+740
 00:52:19,980 --> 00:52:26,270
-here again this transaction this participants installs the x
+here again, this transaction, this participants installs the x,
 
-649
+741
 00:52:26,300 --> 00:52:27,770
 and then release the locks,
 
-650
+742
 00:52:28,100 --> 00:52:32,210
 so release y and here the release of x,
 
-651
+743
 00:52:33,010 --> 00:52:37,330
 then they respond back you know to the coordinator,
 
-652
+744
 00:52:37,420 --> 00:52:39,400
 saying like yep all done,
 
-653
+745
 00:52:40,600 --> 00:52:45,790
-and at that point the transaction is completely done,
+and at that point, the transaction is completely done,
 
-654
-00:52:45,790 --> 00:52:49,960
-in fact coordinator doesn't really have to remember anything anymore about this particular transaction.
+746
+00:52:45,790 --> 00:52:47,800
+in fact coordinator doesn't really have to
 
-655
+747
+00:52:47,800 --> 00:52:49,960
+remember anything anymore about this particular transaction.
+
+748
 00:52:50,740 --> 00:52:52,810
-And, also see later,
+And also see later,
 
-656
+749
 00:52:52,810 --> 00:52:55,690
-you know A and B you need to remember to stay a little longer
+you know A and B you know need to remember that state a little longer
 
-657
+750
 00:52:55,690 --> 00:52:57,490
 until they hear about the next transaction.
 
-658
+751
 00:52:58,410 --> 00:53:01,830
-Okay, so this is a core basic case
+Okay, so this is a core basic case,
 
-659
+752
 00:53:01,830 --> 00:53:03,300
-when there's absolutely no failures
+when there's absolutely no failures,
 
-660
+753
 00:53:03,630 --> 00:53:07,980
 and we see what we actually get the desired outcome, correct,
 
-661
+754
 00:53:08,370 --> 00:53:10,500
-you know when does the coordinated commits,
+you know when does the coordinator commits,
 
-662
+755
 00:53:10,740 --> 00:53:23,650
-coordinated commits only if A and B agree.
+coordinator commits only if A and B agree.
 
-663
+756
 00:53:28,890 --> 00:53:30,600
 Okay, it could be the case,
 
-664
+757
 00:53:30,600 --> 00:53:34,500
-that for example when the coordinator sends a message to B,
+that you know for example when the coordinator sends a message to B,
 
-665
+758
 00:53:34,500 --> 00:53:38,550
-and B decides, well I can't really commit,
+and B decides, well, I can't really commit,
 
-666
+759
 00:53:38,580 --> 00:53:41,670
-maybe there could be multiple reasons for it,
+maybe sort of could be multiple reasons for it,
 
-667
+760
 00:53:42,030 --> 00:53:45,540
-maybe the B actually is in a situation
+maybe the B actually is in a situation,
 
-668
+761
 00:53:45,540 --> 00:53:48,120
 where there's a deadlock with y,
 
-669
+762
 00:53:48,590 --> 00:53:52,280
-or you know there's no space in the log anymore
+or you know there's no space in the log anymore,
 
-670
+763
 00:53:52,280 --> 00:53:55,010
 or there's not enough money in the account of y
 
-671
+764
 00:53:55,430 --> 00:54:00,050
 and, and so you know B could respond with an no,
 
-672
-00:54:00,320 --> 00:54:06,950
-let's say in this, so the other possible outcome is you know the prepare message can actually send a no back,
+765
+00:54:00,320 --> 00:54:02,120
+let's say in this,
 
-673
-00:54:07,490 --> 00:54:13,580
-and in that case, the coordinator gets one yes you know from A, a no from B,
+766
+00:54:02,330 --> 00:54:04,070
+so the other possible outcome is
 
-674
+767
+00:54:04,070 --> 00:54:06,950
+you know the prepare message can actually send a no back,
+
+768
+00:54:07,490 --> 00:54:08,840
+and in that case,
+
+769
+00:54:08,990 --> 00:54:13,580
+the coordinator gets one yes you know from A, a no from B,
+
+770
 00:54:13,580 --> 00:54:15,230
-and so both do not agree
+and so both do not agree,
 
-675
-00:54:15,440 --> 00:54:18,320
-and in that case, you know the coordinator cannot commit the transaction
+771
+00:54:15,440 --> 00:54:16,070
+and in that case,
 
-676
+772
+00:54:16,070 --> 00:54:18,320
+you know the coordinator cannot commit the transaction,
+
+773
 00:54:18,320 --> 00:54:19,910
 and then it would actually abort the transaction,
 
-677
+774
 00:54:22,600 --> 00:54:24,670
-and then say the abort messages to A and B,
+and then sends the abort messages to A and B,
 
-678
+775
 00:54:24,670 --> 00:54:28,450
 basically discontinuing the transaction,
 
-679
+776
 00:54:28,480 --> 00:54:30,100
 so those are the two possible outcomes,
 
-680
+777
 00:54:30,100 --> 00:54:31,960
-one in the commit case one in the abort case,
+one is the commit case, one is the abort case,
 
-681
+778
 00:54:32,110 --> 00:54:34,090
 and when it is always the case,
 
-682
+779
 00:54:34,090 --> 00:54:35,770
 that the transaction only commits,
 
-683
+780
 00:54:36,010 --> 00:54:37,600
 the top level transaction only commits,
 
-684
+781
 00:54:37,600 --> 00:54:41,620
 both the participants that are involved in the transaction agreed to do so.
 
-685
+782
 00:54:44,720 --> 00:54:49,040
 Now, that's sort of the outline of the protocols,
 
-686
+783
 00:54:49,040 --> 00:54:51,110
 I want to now go through a couple of cases
 
-687
+784
 00:54:51,110 --> 00:54:54,890
-you know sort of to understand you know what can go wrong
+you know sort of to understand you know what can go wrong,
 
-688
-00:54:54,890 --> 00:55:01,580
-and how we do how we deal how two-phase commit arranges that actually still the right thing happens.
+785
+00:54:54,890 --> 00:54:56,900
+and how we do, how we deal,
 
-689
-00:55:01,970 --> 00:55:03,020
-Actually I have a question.
+786
+00:54:56,930 --> 00:55:01,580
+how 2-phase commit arranges that actually still the right thing happens.
 
-690
-00:55:03,020 --> 00:55:03,530
-Yeah.
+787
+00:55:01,970 --> 00:55:03,530
+Actually I have a question, yeah.
 
-691
+788
 00:55:03,710 --> 00:55:07,850
-So we said that like B might decide that it needs to abort,
+So we said that, like B might decide that it needs to abort,
 
-692
+789
 00:55:08,480 --> 00:55:09,590
 sends back no message,
 
-693
+790
 00:55:09,590 --> 00:55:14,300
 what if it decides it needs to abort after it replied yes,
 
-694
+791
 00:55:14,390 --> 00:55:15,740
-would that ever be possible.
+would that ever be possible?
 
-695
+792
 00:55:16,040 --> 00:55:18,110
 No, we'll talk about in a second,
 
-696
+793
 00:55:18,110 --> 00:55:19,790
 but that's absolutely not possible,
 
-697
+794
 00:55:19,940 --> 00:55:23,060
-if you promise to over commit, you have to commit.
+if you promise to commit, you have to commit.
 
-698
+795
 00:55:25,520 --> 00:55:27,290
 Or you have to be ready to commit.
 
-699
+796
 00:55:27,350 --> 00:55:28,640
 You have to be ready to commit,
 
-700
-00:55:28,640 --> 00:55:31,670
-you don't commit right away, you have to wait until the commit message of course,
+797
+00:55:28,640 --> 00:55:29,630
+you don't commit right away,
 
-701
+798
+00:55:29,630 --> 00:55:31,670
+you have to wait until the commit message of course,
+
+799
 00:55:31,670 --> 00:55:33,260
-but you can not bail out anyone,
+but you can not [] out anyone,
 
-702
-00:55:33,410 --> 00:55:38,520
-so until the compare the B can unilaterally abort the transaction,
+800
+00:55:33,410 --> 00:55:35,150
+so until the prepare,
 
-703
+801
+00:55:35,730 --> 00:55:38,520
+the B can unilaterally abort the transaction,
+
+802
 00:55:39,100 --> 00:55:40,780
-once a promise yes,
+once promise yes,
 
-704
+803
 00:55:40,930 --> 00:55:43,420
-it cannot unilaterally abort a transaction anymore.
+it cannot unilaterally abort the transaction anymore.
 
-705
+804
 00:55:44,580 --> 00:55:47,220
 So, is it possible where you in deadlock,
 
-706
+805
 00:55:47,250 --> 00:55:48,870
 but you can't get out of the deadlock,
 
-707
+806
 00:55:48,870 --> 00:55:54,460
 because everyone in that cycle has agreed to prepare commit.
 
-708
-00:55:55,680 --> 00:55:59,340
-If everybody agrees to prepare, they can definitely commit, then they will commit,
+807
+00:55:55,680 --> 00:55:57,390
+If everybody agrees to prepare,
 
-709
+808
+00:55:57,390 --> 00:55:59,340
+they can definitely commit, then they will commit,
+
+809
 00:56:00,660 --> 00:56:02,040
 and you're still holding locks.
 
-710
+810
 00:56:02,710 --> 00:56:04,090
 Right, but what if you're in a deadlock,
 
-711
-00:56:04,090 --> 00:56:07,840
-because we mentioned before one of the reasons why you might want to.
+811
+00:56:04,090 --> 00:56:05,230
+because we mentioned before,
 
-712
+812
+00:56:05,230 --> 00:56:07,840
+one of the reasons why you might want to abort.
+
+813
 00:56:07,840 --> 00:56:09,940
 You would find it out before to prepare,
 
-713
+814
 00:56:11,240 --> 00:56:12,800
 if you get the locks of y,
 
-714
+815
 00:56:13,040 --> 00:56:16,400
 if you did not succeed in getting those necessary locks for the transaction,
 
-715
+816
 00:56:16,550 --> 00:56:18,890
 then you know at that point.
 
-716
+817
 00:56:19,990 --> 00:56:20,800
 Right, thank you.
 
-717
+818
 00:56:22,680 --> 00:56:25,650
 Okay, so this is exactly the kind of discussion is going to come up,
 
-718
+819
 00:56:25,680 --> 00:56:30,330
-I'm gonna, I'm gonna take the same abort and replicate it
+I'm gonna, I'm gonna take the same board and replicate it,
 
-719
+820
 00:56:30,690 --> 00:56:33,030
 and consider a bunch of different cases,
 
-720
+821
 00:56:33,960 --> 00:56:36,480
-so here's the same abort again,
+so here's the same board again,
 
-721
+822
 00:56:36,810 --> 00:56:39,900
-nothing has changed so far, it's identical
+nothing has changed so far, it's identical,
 
-722
-00:56:40,230 --> 00:56:45,210
-and so it's the first to follow up on this question that we're just ask,
+823
+00:56:40,230 --> 00:56:41,940
+and so let's the first to sort of
 
-723
+824
+00:56:41,940 --> 00:56:45,210
+follow up on this question that we're just ask,
+
+825
 00:56:45,240 --> 00:56:52,520
-let's first consider the case where B A is in the prepared state,
+let's first consider the case where B is in the prepared state,
 
-724
+826
 00:56:54,180 --> 00:56:56,400
 and then crashes right after,
 
-725
+827
 00:56:58,050 --> 00:56:59,610
 so it is prepared,
 
-726
+828
 00:57:02,220 --> 00:57:07,060
-it pointed back set back to a coordinator
+it pointed back, send back to coordinator,
 
-727
+829
 00:57:07,060 --> 00:57:10,750
 that actually is agreeing to go along,
 
-728
-00:57:11,320 --> 00:57:17,590
-and then right after, it sends actually the prepare message okay message, it actually crashes,
+830
+00:57:11,320 --> 00:57:16,450
+and then right after it sends actually the prepare message ok message,
 
-729
+831
+00:57:16,450 --> 00:57:17,590
+it actually crashes,
+
+832
 00:57:19,040 --> 00:57:20,000
 what does that mean,
 
-730
+833
 00:57:22,500 --> 00:57:23,520
 what needs to happen,
 
-731
+834
 00:57:23,520 --> 00:57:25,170
 how we're going to resolve this,
 
-732
+835
 00:57:25,730 --> 00:57:26,870
 or what is the risk,
 
-733
+836
 00:57:28,220 --> 00:57:29,990
 so basically if B crashes.
 
-734
+837
 00:57:31,260 --> 00:57:33,990
 If B crashes, we need to abort the whole thing, right.
 
-735
+838
 00:57:34,710 --> 00:57:36,390
 Now, we cannot abort anymore, right,
 
-736
+839
 00:57:36,390 --> 00:57:38,340
 because you know B already promised,
 
-737
+840
 00:57:39,060 --> 00:57:39,990
 that is going to commit.
 
-738
+841
 00:57:41,540 --> 00:57:43,160
 We're going to use the log?
 
-739
+842
 00:57:44,410 --> 00:57:46,660
-Yeah, well okay, so B is gonna crash,
+Yeah, well, okay, so B is gonna crash,
 
-740
+843
 00:57:46,660 --> 00:57:48,550
 at some point is going to come back up, right,
 
-741
+844
 00:57:49,100 --> 00:57:50,540
 it's going to recover hopefully.
 
-742
+845
 00:57:51,210 --> 00:57:54,870
-And what state doesn't need to remember across crashes?
+And what state does need to remember across crashes?
 
-743
+846
 00:57:59,130 --> 00:58:01,410
 A needs to remember that prepared.
 
-744
-00:58:01,800 --> 00:58:07,500
-Yeah, I need to remember correct that it prepared for transaction ID, whatever the ID was,
+847
+00:58:01,800 --> 00:58:04,380
+Yeah, and need to remember correct,
 
-745
+848
+00:58:04,380 --> 00:58:07,500
+that it prepared for transaction ID, whatever the TID was,
+
+849
 00:58:08,370 --> 00:58:11,010
 and that is holding the lock on y.
 
-746
+850
 00:58:12,930 --> 00:58:14,370
 And so when it comes back up,
 
-747
-00:58:14,730 --> 00:58:17,490
-the first thing it has to do sort of look saying
+851
+00:58:14,730 --> 00:58:17,910
+the first thing it has to do sort of look, saying like how,
 
-748
-00:58:17,490 --> 00:58:23,490
-like how was I in the middle of a participant in a distributed transaction,
+852
+00:58:17,910 --> 00:58:23,490
+was I in the middle of a participant in a distributed transaction,
 
-749
+853
 00:58:23,490 --> 00:58:24,990
-and if you look at the state
+and if you look at the state,
 
-750
-00:58:24,990 --> 00:58:29,580
-and you'll see that it was actually prepared for transaction ID, TID,
+854
+00:58:24,990 --> 00:58:25,800
+and you'll see that,
 
-751
+855
+00:58:25,800 --> 00:58:29,580
+it was actually prepared for transaction ID, TID,
+
+856
 00:58:29,580 --> 00:58:33,120
 and it was and it must hold the lock for Ly,
 
-752
+857
 00:58:33,270 --> 00:58:35,280
 but the lock for y before it does anything else,
 
-753
+858
 00:58:35,280 --> 00:58:37,350
 you know before talking to anything,
 
-754
+859
 00:58:37,350 --> 00:58:39,330
 once it is in that state,
 
-755
+860
 00:58:39,600 --> 00:58:41,850
-then it is if it didn't crash right
+then it as if it didn't crash, right,
 
-756
+861
 00:58:41,940 --> 00:58:44,340
-and our things are back to normal
+and things are back to normal,
 
-757
+862
 00:58:44,490 --> 00:58:49,020
 and hopefully at some point the coordinated will retry the commit message,
 
-758
+863
 00:58:49,140 --> 00:58:53,070
 the B will get up commit message for this transaction ID,
 
-759
+864
 00:58:53,130 --> 00:58:55,290
-sees that yeah I'm indeed prepared,
+sees that, yeah I'm indeed prepared,
 
-760
+865
 00:58:55,380 --> 00:58:57,450
-and I hope the lock at y
+and I hope the lock at y,
 
-761
-00:58:57,450 --> 00:59:01,380
-and so it goes along and installs y and etc finishes the transaction.
+866
+00:58:57,450 --> 00:59:00,300
+and so it goes along and installs y and etc,
 
-762
+867
+00:59:00,300 --> 00:59:01,380
+finishes the transaction.
+
+868
 00:59:04,190 --> 00:59:04,940
 Is that makes sense?
 
-763
+869
 00:59:05,700 --> 00:59:08,700
 So basically you know there's a little bit of refinement here,
 
-764
+870
 00:59:08,730 --> 00:59:13,860
 that we actually have to write some stable you know data to stable storage,
 
-765
+871
 00:59:13,860 --> 00:59:15,390
 you know as part of the transaction,
 
-766
+872
 00:59:16,340 --> 00:59:17,990
-and which was part of two-phase commit,
+and which was part of 2-phase commit,
 
-767
+873
 00:59:18,170 --> 00:59:20,720
-this is one of the reasons the two-phase commit is limited expensive,
+this is one of the reasons the 2-phase commit is a little bit expensive,
 
-768
+874
 00:59:20,870 --> 00:59:24,110
 because not only we have to send sort of multiple round messages,
 
-769
+875
 00:59:24,320 --> 00:59:30,170
-but also a participant actually has to write things to stable storage,
+but also participant actually has to write things to stable storage,
 
-770
-00:59:30,560 --> 00:59:33,260
-and as we've talked about before writing to stable stores,
+876
+00:59:30,560 --> 00:59:32,300
+and as we've talked about before,
 
-771
-00:59:33,260 --> 00:59:34,970
-it's quite expensive, right,
+877
+00:59:32,300 --> 00:59:34,970
+writing to stable storage, it's quite expensive, right,
 
-772
+878
 00:59:34,970 --> 00:59:37,640
 like could be easily a couple milliseconds,
 
-773
+879
 00:59:37,640 --> 00:59:40,820
 you know let's say one millisecond optimistically,
 
-774
-00:59:40,910 --> 00:59:45,620
-that means basically that were immediately limited to a thousand transaction per second, no more.
+880
+00:59:40,910 --> 00:59:41,840
+that means basically,
 
-775
+881
+00:59:41,840 --> 00:59:44,630
+that were immediately limited to a thousand transaction per second,
+
+882
+00:59:44,930 --> 00:59:45,620
+no more.
+
+883
 00:59:48,080 --> 00:59:50,240
 Okay, let's consider another case,
 
-776
+884
 00:59:51,750 --> 00:59:54,630
-and so let me duplicate this slide again.
+and so let me duplicate this slide again,
 
-777
+885
 01:00:01,780 --> 01:00:06,040
-And consider yet another case.
+and consider yet another case.
 
-778
+886
 01:00:06,700 --> 01:00:12,700
-Let's say, we the coordinated crash
+Let's say, we the coordinator crashes,
 
-779
+887
 01:00:12,730 --> 01:00:17,750
-and so you know here's red again, which console
+and so you know here's red again, which pencil,
 
-780
+888
 01:00:18,110 --> 01:00:23,030
-and you know we got like one, we got prepared messages
+and you know we got like one, we got prepared messages,
 
-781
+889
 01:00:23,330 --> 01:00:26,510
-and the coordinator maybe you've setup one commit message
+and the coordinator maybe you know send one commit message,
 
-782
+890
 01:00:26,750 --> 01:00:28,700
 and then crashes right here,
 
-783
+891
 01:00:29,880 --> 01:00:34,290
 you know what, what do we need to arrange
 
-784
+892
 01:00:34,320 --> 01:00:36,300
 to make sure that the whole plan works out.
 
-785
-01:00:42,210 --> 01:00:45,240
-So the coordinator needs to store in a persistent state,
+893
+01:00:42,210 --> 01:00:47,400
+So the coordinator needs to store in a persistent storage what are what are the commands,
 
-786
-01:00:45,240 --> 01:00:49,830
-what are what are the commands that were promised to be committed but we're not committed yet.
+894
+01:00:47,400 --> 01:00:49,830
+that were promised to be committed, but we're not committed yet.
 
-787
+895
 01:00:50,430 --> 01:00:56,460
-Yeah, so the coordinator is almost the same as a in [] analysts to B's case, correct,
+Yeah, so the coordinator is almost the same as analysis, analysts to B's case, correct,
 
-788
+896
 01:00:56,670 --> 01:00:58,170
 if we commit a transaction,
 
-789
+897
 01:00:58,200 --> 01:00:59,580
 we need to write to stable storage,
 
-790
+898
 01:00:59,580 --> 01:01:00,960
 that we're actually committing the transaction,
 
-791
+899
 01:01:00,960 --> 01:01:03,960
 so we need to write to stable storage you know commit TID,
 
-792
+900
 01:01:05,660 --> 01:01:08,630
 so that when the coordinator comes back up,
 
-793
+901
 01:01:08,960 --> 01:01:11,450
 then it can actually finish the transaction
 
-794
+902
 01:01:11,450 --> 01:01:15,590
 until actually the A and B indeed transaction is committed,
 
-795
+903
 01:01:15,620 --> 01:01:16,970
-because A and A are waiting, right,
+because A and B are waiting, right,
 
-796
+904
 01:01:16,970 --> 01:01:19,910
-A and B says like yeah we're happy to go along,
+A and B says, like yeah we're happy to go along,
 
-797
-01:01:20,150 --> 01:01:23,030
-and there's waiting waiting until actually they,
+905
+01:01:20,150 --> 01:01:21,980
+and they're waiting waiting
 
-798
-01:01:23,030 --> 01:01:25,670
-here from the coordinator to decide what's done,
+906
+01:01:21,980 --> 01:01:25,670
+until actually they hear from the coordinator to decide what's done,
 
-799
-01:01:25,670 --> 01:01:31,310
-because once they decided, once they went along, once they agreed to go along,
+907
+01:01:25,670 --> 01:01:29,600
+because once they decided, once they went along,
 
-800
+908
+01:01:29,600 --> 01:01:31,310
+once they agreed to go along,
+
+909
 01:01:31,370 --> 01:01:34,580
-you know they came out unilaterally anymore bailout, correct,
+you know they cannot unilaterally anymore [], correct,
 
-801
+910
 01:01:34,580 --> 01:01:39,140
 because, let's say they actually both said that they agreed at all,
 
-802
-01:01:39,140 --> 01:01:43,730
-then it means that the coordinator and they don't know they made the coordinator
+911
+01:01:39,140 --> 01:01:40,790
+then it means that the coordinator
 
-803
-01:01:44,380 --> 01:01:46,780
-send a commit message to for example A
+912
+01:01:40,790 --> 01:01:43,070
+and they don't know they made,
 
-804
-01:01:46,780 --> 01:01:49,780
-and actually has committed transaction B hasn't heard yet,
+913
+01:01:43,070 --> 01:01:46,780
+the coordinator send a commit message to for example A
 
-805
+914
+01:01:46,780 --> 01:01:48,460
+and actually has commit transaction,
+
+915
+01:01:48,730 --> 01:01:49,780
+B hasn't heard yet,
+
+916
 01:01:49,780 --> 01:01:52,930
 maybe the message got delayed, then the coordinator got crash,
 
-806
-01:01:53,080 --> 01:01:57,760
-and at that point, it would be totally wrong for B to abort the transaction,
+917
+01:01:53,080 --> 01:01:54,430
+and you know that point,
 
-807
+918
+01:01:54,550 --> 01:01:57,760
+it would be totally wrong for B to abort the transaction,
+
+919
 01:01:57,940 --> 01:02:01,150
 it really has to wait until the coordinator comes back
 
-808
+920
 01:02:01,240 --> 01:02:04,060
-to tell when actually the outcome is of the transaction.
+to tell what actually the outcome is of the transaction.
 
-809
+921
 01:02:07,880 --> 01:02:08,600
 Okay?
 
-810
-01:02:12,880 --> 01:02:19,060
-So only, sorry the only message that the coordinator is not going to resend is prepare,
+922
+01:02:12,880 --> 01:02:13,780
+So only,
 
-811
+923
+01:02:13,780 --> 01:02:19,060
+sorry, the only message that the coordinator is not going to resend is prepare,
+
+924
 01:02:19,820 --> 01:02:23,540
-that one if it gets, like doesn't get a yes it'll just abort.
+that one if it gets, like doesn't get a yes, it'll just abort?
 
-812
+925
 01:02:24,150 --> 01:02:27,180
 Yeah, it was the next example, so let's do that.
 
-813
-01:02:28,010 --> 01:02:33,830
-Let me duplicate this board again, and talk about case.
+926
+01:02:28,010 --> 01:02:30,470
+Let me duplicate this board again,
 
-814
+927
+01:02:31,520 --> 01:02:33,830
+and talk about that case.
+
+928
 01:02:33,830 --> 01:02:37,470
-So, just for [fun], let's move it down,
+So, just for [], let's move it down,
 
-815
+929
 01:02:37,800 --> 01:02:39,000
-so lose track,
+so [],
 
-816
+930
 01:02:39,000 --> 01:02:43,710
 let's say you know following thing happens,
 
-817
+931
 01:02:44,270 --> 01:02:48,450
 the this prepare message never makes it, right,
 
-818
+932
 01:02:49,400 --> 01:02:56,510
-and then you know the coordinator can unilaterally decide to abort, right.
+and then you know the coordinator can unilaterally decide to abort, right,
 
-819
+933
 01:02:57,800 --> 01:03:00,290
-And in fact you can tell B you know to abort
+and in fact you can tell B you know to abort,
 
-820
+934
 01:03:00,410 --> 01:03:04,160
 and A doesn't really need to know anything about it [],
 
-821
+935
 01:03:04,490 --> 01:03:10,790
-the some would later, you know will come up and ask the coordinator,
+the someone later you know will come up and ask the coordinator,
 
-822
+936
 01:03:10,790 --> 01:03:13,460
 the coordinator doesn't know anything about any more about this transaction,
 
-823
+937
 01:03:13,670 --> 01:03:16,490
-you can just tell yeah that is actually abort,
+you can just tell A, that transaction is actually abort,
 
-824
+938
 01:03:16,520 --> 01:03:18,650
 because I don't have a commit record anymore,
 
-825
+939
 01:03:18,650 --> 01:03:20,990
-I was not a way to inform anybody.
+I was not waiting to inform anybody.
 
-826
+940
 01:03:22,930 --> 01:03:24,370
 So in that case, we can do an abort,
 
-827
+941
 01:03:25,520 --> 01:03:27,860
 and that means that B can release the locks, correct
 
-828
-01:03:27,860 --> 01:03:35,870
-and B can just proceed you know happily trying to the other transactions that might involve y.
+942
+01:03:27,860 --> 01:03:29,630
+and B can just proceed,
 
-829
+943
+01:03:29,990 --> 01:03:35,870
+you know happily trying to the other transactions that might involve y.
+
+944
 01:03:38,630 --> 01:03:39,260
 Okay?
 
-830
+945
 01:03:40,680 --> 01:03:44,640
 Sorry, so what will happen if the message to A gets lost,
 
-831
+946
 01:03:44,880 --> 01:03:46,500
 the coordinator aborts,
 
-832
+947
 01:03:47,110 --> 01:03:48,550
 and then B crashes,
 
-833
-01:03:48,700 --> 01:03:54,460
-but then when it comes up is going to wait for commit message from coordinator,
+948
+01:03:48,700 --> 01:03:50,080
+but then when it comes up
 
-834
+949
+01:03:50,110 --> 01:03:54,460
+is going to wait for commit message from coordinator,
+
+950
 01:03:54,520 --> 01:03:56,620
 but the transaction has aborted already.
 
-835
+951
 01:03:56,650 --> 01:03:59,980
 Yeah, or yeah so either these two cases,
 
-836
+952
 01:04:00,010 --> 01:04:04,750
 you know presumably you know the most protocols actually B will ping the coordinator,
 
-837
+953
 01:04:04,750 --> 01:04:06,190
-because it knows who's the coordinator
+because it knows who's the coordinator,
 
-838
+954
 01:04:06,850 --> 01:04:09,460
 and ask what's the outcome of that transaction.
 
-839
+955
 01:04:15,840 --> 01:04:18,060
-Okay, so one more case I want to return to one case,
+Okay, so one more case, I want to return to one case,
 
-840
+956
 01:04:18,060 --> 01:04:21,030
 there's actually sort of the most interesting case,
 
-841
+957
 01:04:21,420 --> 01:04:24,090
 one of the more tricky cases.
 
-842
+958
 01:04:24,240 --> 01:04:26,790
 So I just have a brief question.
 
-843
+959
 01:04:26,790 --> 01:04:28,050
 Yeah, hold on one second.
 
-844
+960
 01:04:28,200 --> 01:04:28,500
 Sorry.
 
-845
+961
 01:04:28,800 --> 01:04:29,340
 Yeah.
 
-846
+962
 01:04:29,700 --> 01:04:31,800
 Yeah, so the first question is that,
 
-847
+963
 01:04:32,010 --> 01:04:35,820
 so let's B let's say holds the lock on y,
 
-848
+964
 01:04:36,090 --> 01:04:39,540
-all the way through between putting y into the log
+all the way through between putting y into the log,
 
-849
+965
 01:04:39,570 --> 01:04:43,020
-and so installing y to state, so.
+and so installing y to [].
 
-850
+966
 01:04:43,020 --> 01:04:43,260
 Yes.
 
-851
+967
 01:04:43,320 --> 01:04:43,620
 Okay.
 
-852
+968
 01:04:44,080 --> 01:04:45,610
 And then the second question,
 
-853
+969
 01:04:45,610 --> 01:04:48,190
 so the locks here are distributed,
 
-854
+970
 01:04:48,550 --> 01:04:50,200
 because we are dealing with across servers,
 
-855
+971
 01:04:50,200 --> 01:04:53,530
 or I mean if y only exist on the server B,
 
-856
+972
 01:04:53,530 --> 01:04:55,300
 then maybe we don't need this to be locking,
 
-857
+973
 01:04:55,360 --> 01:04:56,830
 I'm just curious of what the setup.
 
-858
+974
 01:04:56,950 --> 01:04:58,330
-Yeah, to set up is here basically,
+Yeah, the setup is here basically,
 
-859
+975
 01:04:58,330 --> 01:05:01,780
-that A maintains to watch for all the shards that it has,
+that A maintains the lock for all the shards that it has,
 
-860
+976
 01:05:01,870 --> 01:05:04,120
 for all the variables, all the records that it has,
 
-861
+977
 01:05:04,120 --> 01:05:06,730
-B maintained block for all the records it has.
+B maintained the lock for all the records it has.
 
-862
-01:05:07,440 --> 01:05:10,530
-Okay, but if we, for example have y being on multiple servers,
+978
+01:05:07,440 --> 01:05:08,310
+Okay, but if we,
 
-863
+979
+01:05:08,310 --> 01:05:10,530
+for example have y being on multiple servers,
+
+980
 01:05:10,530 --> 01:05:12,270
-then we need some sort of distributed lock.
+then we need some sort of distributed lock?
 
-864
+981
 01:05:12,720 --> 01:05:15,780
 Yeah, like we were talking about the sharded case, right,
 
-865
+982
 01:05:15,780 --> 01:05:18,210
-where the accounts are shared across multiple servers
+where the accounts are sharded across multiple servers,
 
-866
+983
 01:05:18,360 --> 01:05:20,250
 and only one server has a particular account.
 
-867
+984
 01:05:22,560 --> 01:05:23,280
 Awesome, thank you.
 
-868
+985
 01:05:23,370 --> 01:05:25,830
-Come back to this later, actually one more time.
+I'm Come back to this later, actually one more time.
 
-869
+986
 01:05:27,060 --> 01:05:29,910
-So the first thing I wanted to point out is
+So the first thing I wanted to point out is,
 
-870
+987
 01:05:29,910 --> 01:05:36,400
-just go back to sort of the, the case
+just go back to sort of the, the case,
 
-871
+988
 01:05:36,400 --> 01:05:47,070
 where B or A you know said yes and then crashes, correct,
 
-872
+989
 01:05:47,600 --> 01:05:50,030
 or actually yeah, let me see if that's the case,
 
-873
+990
 01:05:50,610 --> 01:05:52,740
-I know I want the case of following case, right,
+no, I want the case of following case, right,
 
-874
+991
 01:05:53,570 --> 01:05:56,060
 fix this line,
 
-875
+992
 01:05:56,620 --> 01:05:58,750
-so A B promised their thing,
+so A and B promised their thing,
 
-876
+993
 01:05:59,050 --> 01:06:02,080
-but I want to go back to the case
+but I want to go back to the case,
 
-877
+994
 01:06:02,080 --> 01:06:03,700
 where that we already discussed,
 
-878
+995
 01:06:03,820 --> 01:06:07,270
 which is right after the commit point,
 
-879
+996
 01:06:07,950 --> 01:06:09,180
 the coordinator crashes.
 
-880
+997
 01:06:10,490 --> 01:06:10,940
 Okay.
 
-881
+998
 01:06:11,510 --> 01:06:18,400
 And, and we know correct this interval of time from here to there,
 
-882
+999
 01:06:18,400 --> 01:06:23,230
 basically B cannot unilaterally abort anymore, right,
 
-883
+1000
 01:06:23,230 --> 01:06:25,720
-because it promised to go along
+because it promised to go along,
 
-884
+1001
 01:06:25,900 --> 01:06:28,090
-and it might have been the case
+and it might have been the case,
 
-885
+1002
 01:06:28,090 --> 01:06:31,180
 that actually A did actually already did commit,
 
-886
+1003
 01:06:31,830 --> 01:06:35,280
-and so it cannot unilaterally abort anymore
+and so it cannot unilaterally abort anymore,
 
-887
+1004
 01:06:35,550 --> 01:06:37,980
 and so there's only one option in this case,
 
-888
+1005
 01:06:37,980 --> 01:06:38,970
 what is that one option?
 
-889
+1006
 01:06:52,380 --> 01:06:53,760
 We just wait.
 
-890
+1007
 01:06:54,030 --> 01:06:57,600
 Yeah, it's unfortunate but true,
 
-891
+1008
 01:06:59,250 --> 01:07:00,840
 the only thing that we can do is wait,
 
-892
+1009
 01:07:01,650 --> 01:07:04,530
 and it's still holding the lock on y, correct,
 
-893
-01:07:04,530 --> 01:07:08,820
-so that means that any other transaction that involves y you know cannot proceed,
+1010
+01:07:04,530 --> 01:07:05,250
+so that means that,
 
-894
+1011
+01:07:05,250 --> 01:07:08,820
+any other transaction that involves y you know cannot proceed,
+
+1012
 01:07:09,240 --> 01:07:13,680
-one has to wait you know until the coordinator comes back
+one has to wait you know until the coordinator comes back,
 
-895
-01:07:14,010 --> 01:07:20,130
-and announces or re-announces whatever decision was that actually was the outcome for that particular transaction.
+1013
+01:07:14,010 --> 01:07:18,000
+and announces or re-announces whatever decision was,
 
-896
+1014
+01:07:18,000 --> 01:07:20,130
+that actually was the outcome for that particular transaction.
+
+1015
 01:07:21,160 --> 01:07:24,310
 This is one of the sort of the two aspects,
 
-897
+1016
 01:07:24,310 --> 01:07:27,400
-you know this one of these aspects of two-phase commit,
+you know this one of these aspects of 2-phase commit,
 
-898
+1017
 01:07:27,760 --> 01:07:31,120
 that are been desirable, right,
 
-899
+1018
 01:07:31,120 --> 01:07:37,990
 where the protocol might just block until a machine comes back.
 
-900
+1019
 01:07:40,450 --> 01:07:41,350
 Does that make sense?
 
-901
+1020
 01:07:45,720 --> 01:07:48,390
 So how do people deal with this in practice,
 
-902
+1021
 01:07:48,390 --> 01:07:50,650
 well, it's a little bit unfortunate,
 
-903
+1022
 01:07:50,950 --> 01:07:55,210
 but the here's were some of our techniques from the past can come to rescue,
 
-904
+1023
 01:07:55,240 --> 01:07:57,190
 you know what could we do with the coordinator,
 
-905
+1024
 01:07:58,610 --> 01:08:00,560
 to make this scenario unlikely.
 
-906
+1025
 01:08:06,420 --> 01:08:08,310
 So we can make it fault tolerant, like.
 
-907
+1026
 01:08:08,310 --> 01:08:10,530
-Yeah, make fault tolerant, how could we do it.
+Yeah, make fault tolerant, how could we do it?
 
-908
+1027
 01:08:13,110 --> 01:08:15,570
 Well, there are multiple approaches, but,
 
-909
+1028
 01:08:17,170 --> 01:08:19,030
 you can do it maybe through raft.
 
-910
-01:08:19,700 --> 01:08:26,540
-Yeah, you know run raft to basically basically run the coordinator not on a single machine,
+1029
+01:08:19,700 --> 01:08:22,610
+Yeah, you know run raft
 
-911
+1030
+01:08:22,610 --> 01:08:26,540
+to basically basically run the coordinator not on a single machine,
+
+1031
 01:08:26,540 --> 01:08:29,960
-we basically have a replicated state machine that implements the coordinator
+we basically have a replicated state machine that implements the coordinator,
 
-912
-01:08:30,350 --> 01:08:36,140
-and you know we use raft to sort of Keep the replicated state machine
+1032
+01:08:30,350 --> 01:08:32,060
+and you know we use raft
 
-913
+1033
+01:08:32,060 --> 01:08:36,140
+to sort of keep the replicated state machine
+
+1034
 01:08:36,140 --> 01:08:38,840
-and implement the coordinator in sync
+and implement the coordinator in sync,
 
-914
+1035
 01:08:39,200 --> 01:08:43,340
 and then if one of the machines that forms the coordinator fails,
 
-915
+1036
 01:08:43,340 --> 01:08:45,200
-hopefully the two others are still there
+hopefully the two others are still there,
 
-916
+1037
 01:08:45,380 --> 01:08:47,720
-and so we can still proceed, right.
+and so we can still proceed, right,
 
-917
+1038
 01:08:49,260 --> 01:08:52,920
-And so it's potentially possible to basically
+and so it's potentially possible to basically
 
-918
-01:08:52,920 --> 01:08:57,540
-you know replicate the coordinator or actually any of the participants to you know using raft.
+1039
+01:08:52,920 --> 01:08:54,570
+you know replicate the coordinator
 
-919
+1040
+01:08:54,570 --> 01:08:57,540
+or actually any of the participants to you know using raft.
+
+1041
 01:08:59,170 --> 01:09:00,190
 So let me actually,
 
-920
+1042
 01:09:01,200 --> 01:09:04,560
-so put up this a little bit and talk a little bit more.
+so discuss this a little bit and talk a little bit more,
 
-921
+1043
 01:09:10,010 --> 01:09:10,970
-A couple of discussion points,
+a couple of discussion points,
 
-922
+1044
 01:09:10,970 --> 01:09:13,340
-which is you know we could use raft
+which is you know we could use Raft
 
-923
+1045
 01:09:17,480 --> 01:09:23,170
-to make a coordinator fault tolerant or available, if you will.
+to make a coordinator fault tolerant or available, if you will,
 
-924
+1046
 01:09:24,480 --> 01:09:26,190
-It's really different property we care about.
+it's really property we care about.
 
-925
+1047
 01:09:31,210 --> 01:09:32,110
 Does that make sense?
 
-926
-01:09:36,450 --> 01:09:40,320
-In fact, you will see if you do lab 4 instead of a project,
+1048
+01:09:36,450 --> 01:09:37,710
+In fact, you will see,
 
-927
+1049
+01:09:37,740 --> 01:09:40,320
+if you do lab 4 instead of a project,
+
+1050
 01:09:40,620 --> 01:09:42,690
 this is exactly what lab 4 does,
 
-928
+1051
 01:09:43,020 --> 01:09:45,960
-lab 4 actually has a similar scheme
+lab 4 actually has a similar scheme,
 
-929
+1052
 01:09:45,960 --> 01:09:49,380
-where there's a form of two-phase commit,
+where there's a form of 2-phase commit,
 
-930
+1053
 01:09:49,380 --> 01:09:56,970
-that you implement and move the the master shard or order master coordinator
+that you implement and move the the master shard or the master coordinator,
 
-931
+1054
 01:09:57,150 --> 01:10:01,710
 and then rebalances shards across shard servers,
 
-932
+1055
 01:10:02,040 --> 01:10:04,230
-uses raft replicated to actually replicate itself,
+uses Raft replicated to actually replicate itself,
 
-933
+1056
 01:10:04,230 --> 01:10:07,200
-to shard servers itself, also replicated itself using raft
+to shard servers itself, also replicated itself using Raft,
 
-934
+1057
 01:10:07,260 --> 01:10:10,920
-and so where many, many raft groups running in parallel.
+and so where many, many Raft groups running in parallel,
 
-935
+1058
 01:10:12,220 --> 01:10:14,290
-And also the essence of lab 4,
+and also the essence of lab 4,
 
-936
+1059
 01:10:14,500 --> 01:10:16,750
-and so this is like typically way
+and so this is like typically way,
 
-937
-01:10:16,750 --> 01:10:22,270
-you know if you're concerned about having the system being blocked for a long period of time,
+1060
+01:10:16,750 --> 01:10:19,240
+you know if you're concerned about
 
-938
-01:10:22,270 --> 01:10:26,710
-one way to do it is basically make the coordinated fault tolerance.
+1061
+01:10:19,240 --> 01:10:22,270
+having the system being blocked for a long period of time,
 
-939
+1062
+01:10:22,270 --> 01:10:23,140
+one way to do it is
+
+1063
+01:10:23,140 --> 01:10:26,710
+basically make the coordinator fault tolerance.
+
+1064
 01:10:31,460 --> 01:10:33,590
-So in amazing brings me to something else,
+So that [] brings me to something else,
 
-940
-01:10:33,590 --> 01:10:37,370
-which a lot of people ask about you know is raft,
+1065
+01:10:33,590 --> 01:10:35,630
+which a lot of people ask about,
 
-941
-01:10:38,980 --> 01:10:42,010
-or raft and two-phase commits sort of similar things.
+1066
+01:10:35,870 --> 01:10:42,010
+you know is Raft, are Raft and 2-phase commits sort of similar things,
 
-942
+1067
 01:10:46,000 --> 01:10:48,190
-What could you do two-phase commit with raft
+or could you do 2-phase commit with raft
 
-943
+1068
 01:10:48,190 --> 01:10:52,900
-or you need to have a little bit of a parallel correct,
+or you need to have a little bit of a parallel, correct,
 
-944
+1069
 01:10:52,900 --> 01:10:56,470
-like one thing is called a coordinator or raft called the leader,
+like one thing is called coordinator, raft called the leader,
 
-945
+1070
 01:10:56,740 --> 01:11:01,570
-we gotta participants you know maybe we can figure out these as followers,
+we gotta participants, you know maybe we can figure out these as followers,
 
-946
+1071
 01:11:01,930 --> 01:11:05,050
-yeah, so you know seems to have some similarities
+so you know seems to have some similarities,
 
-947
+1072
 01:11:05,050 --> 01:11:06,160
 like how do we think about it,
 
-948
+1073
 01:11:06,160 --> 01:11:09,370
-what's the relationship between raft and 2PC.
+what's the relationship between Raft and 2PC?
 
-949
-01:11:12,060 --> 01:11:16,830
-The difference is that in raft the coordinator can change essentially,
+1074
+01:11:12,060 --> 01:11:13,620
+The difference is that,
 
-950
+1075
+01:11:13,740 --> 01:11:16,830
+in Raft the coordinator can change essentially,
+
+1076
 01:11:17,070 --> 01:11:20,520
 otherwise it's like the single point of failure.
 
-951
+1077
 01:11:20,670 --> 01:11:23,080
-Yep, good point, any.
+Yep, good point, any?
 
-952
-01:11:24,900 --> 01:11:29,160
-So another difference is that the raft basically depends on the concept of a majority,
+1078
+01:11:24,900 --> 01:11:26,580
+So another difference is that,
 
-953
-01:11:29,160 --> 01:11:34,530
-whereas in two-phase commit coordinator, it needs to get a response from every single other server,
+1079
+01:11:26,580 --> 01:11:29,160
+the Raft basically depends on the concept of a majority,
 
-954
+1080
+01:11:29,160 --> 01:11:30,690
+whereas in 2-phase commit coordinator,
+
+1081
+01:11:30,690 --> 01:11:34,530
+it needs to get a response from every single other server,
+
+1082
 01:11:34,530 --> 01:11:35,970
 that is involved in the.
 
-955
-01:11:37,620 --> 01:11:40,950
-Yeah,good point, so these are almost like critical differences, right.
+1083
+01:11:37,620 --> 01:11:38,070
+Yeah, good point,
 
-956
+1084
+01:11:38,070 --> 01:11:40,950
+so these are almost like critical differences, right,
+
+1085
 01:11:41,310 --> 01:11:44,160
-And you know we're wondering if we get to a point
+and you know we're wondering if we get to a point,
 
-957
+1086
 01:11:44,160 --> 01:11:45,960
 where like if there's a conceptual difference,
 
-958
+1087
 01:11:45,960 --> 01:11:48,590
-like do they solve the same problem.
+like do they solve the same problem?
 
-959
+1088
 01:11:49,730 --> 01:11:52,820
-Oh, raft is for replicating the same thing
+Oh, Raft is for replicating the same thing,
 
-960
+1089
 01:11:53,420 --> 01:11:56,330
-and two-phase commit, when you do the opposite,
+and 2-phase commit, when you do the opposite,
 
-961
+1090
 01:11:56,330 --> 01:12:00,770
-when you instead of having one thing, you spread across different servers,
+when you instead of having one thing you spread across different servers,
 
-962
+1091
 01:12:00,800 --> 01:12:03,200
 then you have to deal with the problem.
 
-963
+1092
 01:12:03,680 --> 01:12:08,190
-Exactly, in raft, all servers do the same thing,
+Exactly, in Raft, all servers do the same thing,
 
-964
+1093
 01:12:13,880 --> 01:12:16,040
 implementing replicate state machine, right,
 
-965
+1094
 01:12:18,150 --> 01:12:23,460
-and in 2PC, actually servers were all servers operate on different data.
+and in 2PC, actually servers were all servers operate on different data,
 
-966
+1095
 01:12:35,300 --> 01:12:38,630
-The first participant was actually operating on x
+the first participant was actually operating on x,
 
-967
-01:12:38,630 --> 01:12:45,610
-and second participate was operating on y. So in 2PC, really you know solve a completely different problem than raft,
+1096
+01:12:38,630 --> 01:12:40,700
+and second participate was operating on y,
 
-968
+1097
+01:12:41,380 --> 01:12:45,610
+so in 2PC, really you know solve a completely different problem than Raft,
+
+1098
 01:12:45,610 --> 01:12:48,130
-raft is really all about high availability.
+Raft is really all about high availability,
 
-969
+1099
 01:12:54,860 --> 01:13:00,110
-And 2PC is really about atomic operations across servers,
+and 2PC is really about atomic operations across servers,
 
-970
+1100
 01:13:07,640 --> 01:13:10,220
 across data that's living on different servers.
 
-971
+1101
 01:13:10,760 --> 01:13:11,660
 Does that make sense?
 
-972
+1102
 01:13:13,700 --> 01:13:18,140
 So even though like maybe they have some internal techniques that look very similar,
 
-973
+1103
 01:13:18,350 --> 01:13:22,550
 the two protocols you knwo are designed for completely different problems,
 
-974
+1104
 01:13:23,940 --> 01:13:25,020
 and not directly related,
 
-975
+1105
 01:13:25,020 --> 01:13:26,190
 now it's interesting to see, correct,
 
-976
+1106
 01:13:26,190 --> 01:13:27,660
-but we could make a raft,
+but we could make Raft,
 
-977
+1107
 01:13:27,900 --> 01:13:30,120
-we can use raft to make the coordinator more fault tolerant
+we can use Raft to make the coordinator more fault tolerant,
 
-978
+1108
 01:13:30,120 --> 01:13:32,730
-or repetitions made more highly available,
+or participants made more highly available,
 
-979
+1109
 01:13:33,000 --> 01:13:36,270
 but they basically essentially solve different problems.
 
-980
+1110
 01:13:43,860 --> 01:13:46,470
-With that I actually wanted to end this lecture,
+With that, I actually wanted to end this lecture,
 
-981
+1111
 01:13:46,500 --> 01:13:49,440
 I'm happy to entertain more questions,
 
-982
+1112
 01:13:49,710 --> 01:13:53,310
 hopefully this will very helpful in the next two papers,
 
-983
+1113
 01:13:53,340 --> 01:13:57,000
 so the next two papers are both two transaction systems,
 
-984
+1114
 01:13:57,180 --> 01:14:00,990
 one and one from Google,
 
-985
+1115
 01:14:00,990 --> 01:14:02,400
 one from Microsoft research,
 
-986
+1116
 01:14:02,700 --> 01:14:06,330
 and second one uses optimistic transactions,
 
-987
+1117
 01:14:06,630 --> 01:14:09,090
 and you'll see when you read these papers,
 
-988
+1118
 01:14:09,090 --> 01:14:11,970
-there's a lot of machinery are pretty complex systems,
+there's a lot of machinery, are pretty complex systems,
 
-989
+1119
 01:14:12,210 --> 01:14:15,780
 but hopefully at least some of the parts that will be described,
 
-990
+1120
 01:14:15,990 --> 01:14:17,130
 you will now understand,
 
-991
+1121
 01:14:17,130 --> 01:14:18,720
-because you know what two-phase commit is
+because you know what 2-phase commit is
 
-992
+1122
 01:14:18,720 --> 01:14:19,950
 and you know what two-phase locking is.
 
-993
+1123
 01:14:21,560 --> 01:14:23,810
-Okay, with that, I'll end
+Okay, with that, I'll end,
 
-994
+1124
 01:14:23,840 --> 01:14:26,540
-and everybody needs to go can go
+and everybody needs to go can go,
 
-995
+1125
 01:14:26,540 --> 01:14:28,220
 and anybody wants to ask questions,
 
-996
+1126
 01:14:28,220 --> 01:14:29,750
 you know please feel free to do so.
 
-997
+1127
 01:14:36,720 --> 01:14:41,360
 Sorry, this might be a little, a strange question,
 
-998
-01:14:41,360 --> 01:14:46,730
-but for two-phase locking, it is also about atomic operations,
+1128
+01:14:41,360 --> 01:14:43,640
+but for 2-phase locking,
 
-999
-01:14:46,730 --> 01:14:50,140
-but there it is about one,
+1129
+01:14:44,030 --> 01:14:46,730
+it is also about atomic operations,
 
-1000
-01:14:50,170 --> 01:14:53,920
-not across servers but across one server,
+1130
+01:14:46,730 --> 01:14:53,920
+but there it is about one, not across servers, but across one server,
 
-1001
+1131
 01:14:54,580 --> 01:14:56,620
-and two-phase across multiple servers.
+and 2-phase across multiple servers.
 
-1002
+1132
 01:14:56,620 --> 01:14:59,770
-Yeah two-phase locking is irrelevant to if you have a single machine,
+Yeah, 2-phase locking is relevant too, if you have a single machine,
 
-1003
+1133
 01:14:59,770 --> 01:15:01,030
-like a multi-core machine
+like a multi-core machine,
 
-1004
+1134
 01:15:01,480 --> 01:15:04,570
 and you're implementing a transaction system on a multi-core machine,
 
-1005
-01:15:04,810 --> 01:15:06,130
-you will have to lock,
+1135
+01:15:04,810 --> 01:15:08,590
+you will have to lock you know the records that are involved in the transaction,
 
-1006
-01:15:06,130 --> 01:15:08,590
-you know the records that are involved in the transaction,
-
-1007
+1136
 01:15:08,920 --> 01:15:11,830
-and two-phase locking is a perfectly good protocol for doing so.
+and 2-phase locking is a perfectly good protocol for doing so,
 
-1008
+1137
 01:15:16,200 --> 01:15:18,540
-Where two-phase commit is really about the distributed systems.
+where 2-phase commit is really about the distributed systems.
 
-1009
+1138
 01:15:20,770 --> 01:15:25,190
-I guess my question was is two-phase two-phase locking,
+I guess my question was is 2-phase 2-phase locking,
 
-1010
+1139
 01:15:25,580 --> 01:15:28,640
-can it be part of two-phase commit.
+can it be part of 2-phase commit?
 
-1011
+1140
 01:15:30,140 --> 01:15:33,020
 I'm not sure I know what that means,
 
-1012
+1141
 01:15:33,020 --> 01:15:34,490
 the way I think about is that,
 
-1013
+1142
 01:15:34,490 --> 01:15:36,020
 you solve two different problems.
 
-1014
-01:15:38,470 --> 01:15:42,670
-Okay, it's the case that you know you you maybe this is what you mean,
+1143
+01:15:38,470 --> 01:15:39,100
+Okay.
 
-1015
+1144
+01:15:39,460 --> 01:15:40,570
+It's the case that,
+
+1145
+01:15:40,570 --> 01:15:42,670
+you know you you maybe this is what you mean,
+
+1146
 01:15:42,910 --> 01:15:46,810
 it is a case where that you know there's a coordinator,
 
-1016
-01:15:47,110 --> 01:15:52,960
-or as part of the initial setup when the initial puts are gone by the transaction,
+1147
+01:15:47,110 --> 01:15:50,710
+or as part of the initial setup,
 
-1017
+1148
+01:15:50,710 --> 01:15:52,960
+when the initial puts are done by the transaction,
+
+1149
 01:15:53,260 --> 01:15:55,870
-the that transaction will follow two-phase locking,
+the that transaction will follow 2-phase locking,
 
-1018
+1150
 01:15:57,080 --> 01:16:00,740
 here to lock on x required, to lock on B required,
 
-1019
+1151
 01:16:01,880 --> 01:16:04,640
-so we lock y is acquired
+so the lock y is required,
 
-1020
+1152
 01:16:04,640 --> 01:16:07,880
-and so did the transaction does that in the two-phase locking style,
+and so does the transaction does that in the 2-phase locking style,
 
-1021
+1153
 01:16:08,000 --> 01:16:09,890
 it could have done using strict locking too,
 
-1022
+1154
 01:16:09,890 --> 01:16:13,820
-but you know from the two-phase commit point of view,
+but you know from the 2-phase commit point of view,
 
-1023
+1155
 01:16:14,270 --> 01:16:15,290
 it doesn't really matter,
 
-1024
+1156
 01:16:15,290 --> 01:16:18,710
-at some point you know the transaction is painful to be executed
+at some point, you know the transaction is [] to be executed
 
-1025
+1157
 01:16:19,070 --> 01:16:22,640
-and the two-phase commit is really about reaching agreement,
+and the 2-phase commit is really about reaching agreement,
 
-1026
+1158
 01:16:22,940 --> 01:16:25,910
 that all parties agreed to go along.
 
-1027
+1159
 01:16:28,350 --> 01:16:30,060
 Yeah, that makes sense, thank you.
 
-1028
+1160
 01:16:30,240 --> 01:16:30,810
 You're welcome.
 
-1029
+1161
 01:16:31,290 --> 01:16:34,560
-This two-phase commit exclusively for like sharded data.
+Is 2-phase commit exclusively for like sharded data?
 
-1030
+1162
 01:16:35,100 --> 01:16:38,760
 No, actually it came out,
 
-1031
+1163
 01:16:39,150 --> 01:16:41,850
-well, oh yes or no,
+well, oh, yes or no,
 
-1032
+1164
 01:16:42,150 --> 01:16:46,920
-the original sort of two-phase commit came out of the case,
+the original sort of 2-phase commit came out of the case,
 
-1033
+1165
 01:16:46,920 --> 01:16:49,620
-where like you have different organizations
+where like you have different organizations,
 
-1034
+1166
 01:16:49,620 --> 01:16:51,150
 and they need to agree to do something,
 
-1035
+1167
 01:16:51,150 --> 01:16:55,950
 like you know you book on a travel website,
 
-1036
+1168
 01:16:55,950 --> 01:16:57,690
-you know you book a trip
+you know you book a trip,
 
-1037
+1169
 01:16:57,690 --> 01:16:59,880
-and another thing you book a hotel
+and another thing you book a hotel,
 
-1038
+1170
 01:17:00,180 --> 01:17:03,420
 and you want to commit to the whole trip,
 
-1039
-01:17:03,420 --> 01:17:14,010
-if you both hotel website and the travel website agreed to go along or sort of committed to the transaction
+1171
+01:17:03,420 --> 01:17:12,600
+if you both hotel website and the travel website agreed to go along,
 
-1040
+1172
+01:17:12,900 --> 01:17:14,010
+sort of committed to the transaction
+
+1173
 01:17:14,610 --> 01:17:18,510
 and that sort of deciding where sort of this deciding where,
 
-1041
+1174
 01:17:18,510 --> 01:17:20,940
 came up which really you know you have different organizations,
 
-1042
+1175
 01:17:21,150 --> 01:17:26,690
-they need to commit to a particular operation
+they need to commit to a particular operation,
 
-1043
-01:17:26,690 --> 01:17:30,830
-and for the reasons that that that setting
+1176
+01:17:26,690 --> 01:17:28,940
+and for the reasons that,
 
-1044
-01:17:30,830 --> 01:17:34,490
-actually basically people don't really want to use two-phase commit,
+1177
+01:17:29,000 --> 01:17:34,490
+that that setting actually basically people don't really want to use 2-phase commit,
 
-1045
+1178
 01:17:34,940 --> 01:17:36,950
 because that would mean that,
 
-1046
+1179
 01:17:37,280 --> 01:17:42,980
-the travel agency website is dependent on the hotel reservation websites
+the travel agency website is dependent on the hotel reservation websites,
 
-1047
+1180
 01:17:42,980 --> 01:17:45,560
-and these are from different organizations
+and these are from different organizations,
 
-1048
+1181
 01:17:45,560 --> 01:17:48,200
 and you know people who know the organization don't really trust each other,
 
-1049
+1182
 01:17:48,410 --> 01:17:50,690
 and if one goes down,
 
-1050
+1183
 01:17:50,690 --> 01:17:53,930
 then there's actually can't proceed and that seems all bad,
 
-1051
+1184
 01:17:54,380 --> 01:17:58,490
-so, in fact two-phase commit have a bit of a negative reputation,
+so, in fact, 2-phase commit have a bit of a negative reputation,
 
-1052
-01:17:58,860 --> 01:18:05,580
-because really you know one of the original goals of two-phase leaders to solve that problem that problem here,
+1185
+01:17:58,860 --> 01:18:00,840
+because really you know,
 
-1053
-01:18:05,580 --> 01:18:07,350
-people don't really want to solve with two-phase commit,
+1186
+01:18:01,980 --> 01:18:04,830
+one of the original goals of 2-phase commit to solve that problem,
 
-1054
+1187
+01:18:04,830 --> 01:18:07,350
+that problem here, people don't really want to solve with 2-phase commit,
+
+1188
 01:18:07,860 --> 01:18:10,770
 however in the context where you have a data center,
 
-1055
+1189
 01:18:10,770 --> 01:18:13,380
 it's a single organization and the databases sharded,
 
-1056
+1190
 01:18:13,590 --> 01:18:17,620
-two-phase commit is widely popular and typical use.
+2-phase commit is widely popular and typical use.
 
-1057
+1191
 01:18:21,000 --> 01:18:21,900
 Awesome, thank you.
 
-1058
+1192
 01:18:22,410 --> 01:18:23,130
 You're welcome.
 
-1059
+1193
 01:18:24,210 --> 01:18:26,760
-Could you go back to the first failure case
+Could you go back to the first failure case,
 
-1060
+1194
 01:18:26,760 --> 01:18:28,500
-that we talked about with two-phase a bit,
+that we talked about with 2-phase commit,
 
-1061
+1195
 01:18:28,500 --> 01:18:33,960
-where its fails B fails after responding prepared okay.
+where it fails, B fails after responding prepare ok.
 
-1062
+1196
 01:18:34,140 --> 01:18:35,700
-Yeah, is this one.
+Yeah, is this one?
 
-1063
+1197
 01:18:36,250 --> 01:18:38,770
 Yeah, I guess.
 
-1064
+1198
 01:18:39,560 --> 01:18:41,690
 I talked twice about this case, but like.
 
-1065
+1199
 01:18:41,690 --> 01:18:45,230
 Yeah, I guess I was wondering,
 
-1066
-01:18:45,740 --> 01:18:52,910
-why B used to persist or like why needs to remember that it received prepare,
+1200
+01:18:45,740 --> 01:18:48,530
+why B needs to persist
 
-1067
+1201
+01:18:48,530 --> 01:18:52,910
+or like why needs to remember that it received prepare,
+
+1202
 01:18:53,450 --> 01:18:55,700
 I guess my thinking was,
 
-1068
+1203
 01:18:56,260 --> 01:18:57,670
 when it comes back up,
 
-1069
+1204
 01:18:58,060 --> 01:19:01,360
 if it receives A commit message from the coordinator,
 
-1070
+1205
 01:19:01,360 --> 01:19:04,510
 couldn't it just assumed that it was prepared,
 
-1071
+1206
 01:19:04,510 --> 01:19:06,400
 I guess where does it use that information.
 
-1072
+1207
 01:19:06,790 --> 01:19:10,840
-Yeah, well it could have abort, right, before the crash,
+Yeah, well, it could have abort right before the crash,
 
-1073
+1208
 01:19:12,030 --> 01:19:13,650
 and B needs to remember what it did.
 
-1074
+1209
 01:19:14,430 --> 01:19:15,360
 Okay.
 
-1075
+1210
 01:19:15,690 --> 01:19:18,300
 So there's another slight variation with this protocol,
 
-1076
+1211
 01:19:18,300 --> 01:19:21,660
 where where you assume that you always commit,
 
-1077
+1212
 01:19:21,660 --> 01:19:25,110
 so presume commit one of the messages slightly different,
 
-1078
+1213
 01:19:25,200 --> 01:19:28,230
 and you know there's an optimization that you could consider,
 
-1079
+1214
 01:19:28,560 --> 01:19:31,260
-and would make sense in some settings.
+and would make sense in some settings,
 
-1080
+1215
 01:19:31,940 --> 01:19:35,000
 I I didn't really talk about that particular protocol,
 
-1081
+1216
 01:19:35,000 --> 01:19:35,990
 but just a slight different,
 
-1082
+1217
 01:19:35,990 --> 01:19:37,010
 you know sort of variation,
 
-1083
+1218
 01:19:37,010 --> 01:19:38,990
-there's quite a number of variations for two-phase commit,
+there's quite a number of variations for 2-phase commit,
 
-1084
+1219
 01:19:39,880 --> 01:19:42,040
 they change in minor ways.
 
-1085
-01:19:43,120 --> 01:19:43,900
-That makes sense.
-
-1086
+1220
 01:19:45,190 --> 01:19:45,760
 Make sense?
 
-1087
+1221
 01:19:46,030 --> 01:19:46,930
 Yep, thank you.
 
-1088
+1222
 01:19:54,270 --> 01:19:55,260
 Is that it for today?
 
-1089
+1223
 01:19:57,430 --> 01:19:59,110
 Sorry, you said that it can,
 
-1090
+1224
 01:19:59,140 --> 01:20:02,410
 it could have aborted the transaction,
 
-1091
+1225
 01:20:02,410 --> 01:20:06,190
-but if it did that it will never receive the commit.
+but if it did, that it will never receive the commit.
 
-1092
+1226
 01:20:07,380 --> 01:20:09,390
 You mean in response to the last question?
 
-1093
+1227
 01:20:09,570 --> 01:20:11,310
 Yeah.
 
-1094
-01:20:11,310 --> 01:20:15,720
-You know the the question was like why does B have to record stable storage,
+1228
+01:20:11,310 --> 01:20:12,540
+You know the the question was,
 
-1095
+1229
+01:20:12,540 --> 01:20:15,720
+like why does B have to record on stable storage,
+
+1230
 01:20:15,720 --> 01:20:16,770
 what decided to do.
 
-1096
+1231
 01:20:17,580 --> 01:20:21,600
 And the injury is that when B comes up,
 
-1097
+1232
 01:20:21,600 --> 01:20:24,360
-it knows it needs to know whether actually commit agreed to commit,
+it knows it needs to know whether actually commit, agreed to commit,
 
-1098
+1233
 01:20:24,390 --> 01:20:25,800
-we're going to agree to abort.
+or going to agree to abort,
 
-1099
+1234
 01:20:26,760 --> 01:20:31,090
-And it doesn't write anything, it doesn't know to what agree.
+and it doesn't write anything, it doesn't know to what agree.
 
-1100
+1235
 01:20:35,030 --> 01:20:36,800
-Because it could have been abort after.
+Because it could have been abort, after.
 
-1101
+1236
 01:20:36,830 --> 01:20:37,430
 Yep.
 
-1102
+1237
 01:20:37,810 --> 01:20:38,830
 Yeah.
 
-1103
-01:20:40,540 --> 01:20:44,560
-I need to know that you know what to do in the recovery stage, I see.
+1238
+01:20:40,540 --> 01:20:41,710
+I need to know that,
 
-1104
+1239
+01:20:41,710 --> 01:20:44,560
+you know what to do in the recovery stage, I see.
+
+1240
 01:20:44,860 --> 01:20:45,400
-Yes exactly.
+Yes, exactly.
 
-1105
+1241
 01:20:52,260 --> 01:20:54,330
 It also needs to record what it does,
 
-1106
+1242
 01:20:54,330 --> 01:20:56,900
 because if it like aborts,
 
-1107
+1243
 01:20:56,930 --> 01:20:58,940
-but the message never gets to the coordinator
+but the message never gets to the coordinator,
 
-1108
+1244
 01:20:58,970 --> 01:21:02,420
-needs to re-send the same message, right.
+needs to resend the same message, right.
 
-1109
+1245
 01:21:02,420 --> 01:21:06,080
-Yeah, well it need to record that actually abort that transaction ID,
+Yeah, well, it need to record that actually abort that transaction ID,
 
-1110
-01:21:06,080 --> 01:21:07,730
-so when the coordinator asks,
+1246
+01:21:06,080 --> 01:21:08,990
+so when the coordinator asks you know what did you do,
 
-1111
-01:21:07,940 --> 01:21:08,990
-you know what did you do,
-
-1112
+1247
 01:21:09,230 --> 01:21:10,820
 that actually responds with a no.
 
-1113
+1248
 01:21:11,940 --> 01:21:12,870
 Got it, thank you.
 
-1114
+1249
 01:21:17,530 --> 01:21:18,250
 Thank you.
 
-1115
+1250
 01:21:18,910 --> 01:21:19,420
 You're welcome.
 
-1116
+1251
 01:21:20,790 --> 01:21:21,720
 Thank you.
 
-1117
+1252
 01:21:24,010 --> 01:21:25,540
 Alright, see you all next week.
 
