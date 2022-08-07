@@ -29,7 +29,7 @@
 | 11      | &check; | &check; | &check; |
 | 12      | &check; | &check; |         |
 | 13      | &check; | &check; |         |
-| 14      | &check; | &check; |         |
+| 14      | &check; | &check; | &check; |
 | 15      | &check; | &check; |         |
 | 15-cont | &check; | &check; |         |
 | 16      | &check; | &check; |         |
